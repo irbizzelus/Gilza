@@ -1,11 +1,11 @@
 if not tweak_data then return end
 
--- grenade: 5000 dmg but only 60% of base game radius
+-- normal grenade
 tweak_data.projectiles.frag.damage = 500
 tweak_data.projectiles.frag.curve_pow = 0.1
 tweak_data.projectiles.frag.player_damage = 10
 tweak_data.projectiles.frag.range = 300
--- molotov: idk
+-- molotov: buff 
 tweak_data.projectiles.molotov = {
 	damage = 1,
 	player_damage = 2,
@@ -25,7 +25,7 @@ tweak_data.projectiles.molotov = {
 	alert_radius = 1500,
 	fire_alert_radius = 1500
 }
--- incendiary grenade: 1000 impact dmg + ~440 over 2 seconds
+-- incendiary grenade
 tweak_data.projectiles.fir_com = {
 	damage = 100,
 	curve_pow = 0.1,
@@ -56,7 +56,7 @@ tweak_data.projectiles.wpn_prj_four = {
 	bullet_class = "ProjectilesPoisonBulletBase",
 	sounds = {deep_clone(tweak_data.projectiles.wpn_prj_four.sounds)}
 }
--- throw cards: more impact dmg
+-- throw cards
 tweak_data.projectiles.wpn_prj_ace = {
 	damage = 55,
 	launch_speed = 1500,
@@ -177,6 +177,7 @@ tweak_data.projectiles.launcher_frag_arbiter = {
 	sound_event = "gl_explode",
 	name_id = "bm_launcher_frag"
 }
+
 -- fire nades
 tweak_data.projectiles.launcher_incendiary = {
 	damage = 1,
@@ -224,6 +225,7 @@ tweak_data.projectiles.launcher_incendiary_arbiter = {
 	burn_duration = 5,
 	burn_tick_period = 0.5
 }
+
 -- high velocity nades
 tweak_data.projectiles.launcher_velocity = {
 	damage = 400,
@@ -240,7 +242,7 @@ tweak_data.projectiles.launcher_velocity_m32 = deep_clone(tweak_data.projectiles
 tweak_data.projectiles.launcher_velocity_china = deep_clone(tweak_data.projectiles.launcher_velocity)
 tweak_data.projectiles.launcher_velocity_slap = deep_clone(tweak_data.projectiles.launcher_velocity)
 
--- РПГ СУКА
+-- СУКА РПГ
 tweak_data.projectiles.launcher_rocket = {
 	damage = 1630,
 	launch_speed = 2500,
@@ -252,6 +254,7 @@ tweak_data.projectiles.launcher_rocket = {
 	sound_event = "rpg_explode",
 	name_id = "bm_launcher_rocket"
 }
+
 -- commando
 tweak_data.projectiles.rocket_ray_frag.damage = 820
 tweak_data.projectiles.rocket_ray_frag.range = 400

@@ -6,7 +6,7 @@ function CopDamage:damage_melee(attack_data)
 		else
 			attack_data.damage = self._HEALTH_INIT * (attack_data.damage / 30) -- dozers take thrice(is that a word?) the amount of hits
 		end
-		attack_data.didweapplydamagetweakallready = "This melee function shouldnt be called in twice yet it is, i assume because of IDC mod. If not then ovkl are doing some weird shit here. Anyway, good way of preventing too much dmg caused by other mods."
+		attack_data.didweapplydamagetweakallready = "This melee function shouldnt be called in twice yet it is, i assume because of IDC mod. Whatever it is this is a good way of preventing too much dmg caused by other mods."
 	end
 	dmg_melee_orig(self, attack_data)
 end

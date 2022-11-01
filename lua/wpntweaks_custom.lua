@@ -99,6 +99,8 @@ end
 function Gilza.applyCustomAR_stats(id)
 	-- adjust damage profiles and ammo pick up based on weapons damage (after dmg increase in the init function above)
 	
+	-- if AR has lower then 100 dmg, dont apply any changes to dmg or pick up, considering that the range of breakpoints down there is way to big, let normal stats work
+	
 	-- light AR's
 	if tweak_data.weapon[id].stats.damage >= 100 and tweak_data.weapon[id].stats.damage <= 125 then
 		tweak_data.weapon[id].stats.damage = 117

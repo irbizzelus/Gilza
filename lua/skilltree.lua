@@ -98,6 +98,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		self.specializations[i][8] = deck8
 	end
 
+	-- new skills and reworks
 	self.skills.pack_mule[1].upgrades = { "player_armor_carry_bonus_1" }
 	self.skills.pack_mule[2].upgrades = { "player_sprint_any_bag" }
 	self.skills.pack_mule.icon_xy = { 6, 0 } -- 6,0
@@ -141,4 +142,6 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	self.skills.steroids[2].upgrades = { "player_melee_sprint" }
 	self.skills.steroids.icon_xy = { 11, 7 }
 	self.skills.martial_arts.icon_xy = { 1, 1 }
+	
+	self.skills.up_you_go[2].upgrades = {"player_revived_health_regain_V2"}
 end)

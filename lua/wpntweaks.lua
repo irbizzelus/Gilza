@@ -307,26 +307,16 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.l85a2.AMMO_PICKUP = {3.98,6.48}
 	
 	self.ching.stats.damage = 420
-	self.ching.timers = {
-		reload_not_empty = 2.36,
-		reload_empty = 1.12,
-		unequip = 0.6,
-		equip = 0.55
-	}
+	self.ching.stats.reload = 13
 	self.ching.AMMO_PICKUP = {0.75,1.59}
 	
 	self.new_m14.stats.damage = 420
+	self.new_m14.stats.reload = 9
 	self.new_m14.CLIP_AMMO_MAX = 15
 	self.new_m14.NR_CLIPS_MAX = 5
 	self.new_m14.AMMO_MAX = self.new_m14.CLIP_AMMO_MAX * self.new_m14.NR_CLIPS_MAX
 	self.new_m14.AMMO_PICKUP = {0.75,1.59}
-	self.new_m14.timers = {
-		reload_not_empty = 3.15,
-		reload_empty = 4.04,
-		unequip = 0.6,
-		equip = 0.55
-	}
-	
+
 	self.famas.stats.damage = 117
 	self.famas.AMMO_PICKUP = {4.9,7.64}
 	
@@ -871,7 +861,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self[gun].stats.damage = 210
 			self[gun].AMMO_MAX = 120
 			self[gun].NR_CLIPS_MAX = self[gun].AMMO_MAX / self[gun].CLIP_AMMO_MAX -- does this stat even do anything? its only used to calculate max ammo in base game, why is it so weird
-			self[gun].AMMO_PICKUP = {1.1025,2.0025}
+			self[gun].AMMO_PICKUP = {1.23,2.1}
 		end
 	end
 	
@@ -889,8 +879,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self["x_"..gun].stats.damage = 210
 			self["x_"..gun].AMMO_MAX = 150
 			self["x_"..gun].NR_CLIPS_MAX = self["x_"..gun].AMMO_MAX / self["x_"..gun].CLIP_AMMO_MAX
-			self["x_"..gun].AMMO_PICKUP[1] = self[gun].AMMO_PICKUP[1] * 1.3
-			self["x_"..gun].AMMO_PICKUP[2] = self[gun].AMMO_PICKUP[2] * 1.3
+			self["x_"..gun].AMMO_PICKUP[1] = self[gun].AMMO_PICKUP[1] * 1.4
+			self["x_"..gun].AMMO_PICKUP[2] = self[gun].AMMO_PICKUP[2] * 1.4
 		end
 	end
 	
@@ -916,7 +906,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self[gun].stats.damage = 146
 			self[gun].AMMO_MAX = 150
 			self[gun].NR_CLIPS_MAX = self[gun].AMMO_MAX / self[gun].CLIP_AMMO_MAX
-			self[gun].AMMO_PICKUP = {2.2125,3.615}
+			self[gun].AMMO_PICKUP = {2.6,4.36}
 		end
 	end
 	
@@ -935,16 +925,16 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self["x_"..gun].stats.damage = 146
 			self["x_"..gun].AMMO_MAX = 180
 			self["x_"..gun].NR_CLIPS_MAX = self["x_"..gun].AMMO_MAX / self["x_"..gun].CLIP_AMMO_MAX
-			self["x_"..gun].AMMO_PICKUP[1] = self[gun].AMMO_PICKUP[1] * 1.3
-			self["x_"..gun].AMMO_PICKUP[2] = self[gun].AMMO_PICKUP[2] * 1.3
+			self["x_"..gun].AMMO_PICKUP[1] = self[gun].AMMO_PICKUP[1] * 1.4
+			self["x_"..gun].AMMO_PICKUP[2] = self[gun].AMMO_PICKUP[2] * 1.4
 		end
 	end
 	
 	self.x_mp5.stats.damage = 146
 	self.x_mp5.AMMO_MAX = 180
 	self.x_mp5.NR_CLIPS_MAX = self.x_mp5.AMMO_MAX / self.x_mp5.CLIP_AMMO_MAX
-	self.x_mp5.AMMO_PICKUP[1] = self.new_mp5.AMMO_PICKUP[1] * 1.3
-	self.x_mp5.AMMO_PICKUP[2] = self.new_mp5.AMMO_PICKUP[2] * 1.3
+	self.x_mp5.AMMO_PICKUP[1] = self.new_mp5.AMMO_PICKUP[1] * 1.4
+	self.x_mp5.AMMO_PICKUP[2] = self.new_mp5.AMMO_PICKUP[2] * 1.4
 	
 	self.x_uzi.stats.spread = 19
 	self.x_uzi.stats.spread_moving = 17
@@ -962,7 +952,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self[gun].stats.damage = 117
 			self[gun].AMMO_MAX = 180
 			self[gun].NR_CLIPS_MAX = self[gun].AMMO_MAX / self[gun].CLIP_AMMO_MAX
-			self[gun].AMMO_PICKUP = {2.4375,3.8025}
+			self[gun].AMMO_PICKUP = {3.0,4.78}
 		end
 	end
 	
@@ -972,8 +962,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self["x_"..gun].stats.damage = 117
 			self["x_"..gun].AMMO_MAX = 210
 			self["x_"..gun].NR_CLIPS_MAX = self["x_"..gun].AMMO_MAX / self["x_"..gun].CLIP_AMMO_MAX
-			self["x_"..gun].AMMO_PICKUP[1] = self[gun].AMMO_PICKUP[1] * 1.3
-			self["x_"..gun].AMMO_PICKUP[2] = self[gun].AMMO_PICKUP[2] * 1.3
+			self["x_"..gun].AMMO_PICKUP[1] = self[gun].AMMO_PICKUP[1] * 1.4
+			self["x_"..gun].AMMO_PICKUP[2] = self[gun].AMMO_PICKUP[2] * 1.4
 		end
 	end
 	
@@ -996,7 +986,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self[gun].stats.damage = 95
 			self[gun].AMMO_MAX = 210
 			self[gun].NR_CLIPS_MAX = self[gun].AMMO_MAX / self[gun].CLIP_AMMO_MAX
-			self[gun].AMMO_PICKUP = {2.99,4.37}
+			self[gun].AMMO_PICKUP = {3.79,5.89}
 		end
 	end
 	
@@ -1009,8 +999,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self["x_"..gun].stats.damage = 95
 			self["x_"..gun].AMMO_MAX = 240
 			self["x_"..gun].NR_CLIPS_MAX = self["x_"..gun].AMMO_MAX / self["x_"..gun].CLIP_AMMO_MAX
-			self["x_"..gun].AMMO_PICKUP[1] = self[gun].AMMO_PICKUP[1] * 1.3
-			self["x_"..gun].AMMO_PICKUP[2] = self[gun].AMMO_PICKUP[2] * 1.3
+			self["x_"..gun].AMMO_PICKUP[1] = self[gun].AMMO_PICKUP[1] * 1.4
+			self["x_"..gun].AMMO_PICKUP[2] = self[gun].AMMO_PICKUP[2] * 1.4
 		end
 	end
 	
@@ -1366,7 +1356,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		dot_tick_period = 0.5
 	}
 	self.flamethrower_mk2.stats.damage = 35
-	self.flamethrower_mk2.stats.reload = 16
+	self.flamethrower_mk2.stats.reload = 17
 	self.flamethrower_mk2.CLIP_AMMO_MAX = 200
 	self.flamethrower_mk2.NR_CLIPS_MAX = 2
 	self.flamethrower_mk2.AMMO_PICKUP = {4.706,9.62}
@@ -1381,7 +1371,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		dot_tick_period = 0.5
 	}
 	self.system.stats.damage = 25
-	self.system.stats.reload = 16
+	self.system.stats.reload = 17
 	self.system.CLIP_AMMO_MAX = 150
 	self.system.NR_CLIPS_MAX = 2
 	self.system.AMMO_PICKUP = {3.2942,6.734}

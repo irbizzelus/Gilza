@@ -219,6 +219,7 @@ function PlayerStandard:_start_action_jump(t, action_start_data)
 	self:_perform_jump(jump_vec)
 end
 
+-- adjusts ammo pick up for grenades to use new amounts, otherwise can get marked as cheater
 function PlayerStandard:_find_pickups(t)
 	local pickups = World:find_units_quick("sphere", self._unit:movement():m_pos(), self._pickup_area, self._slotmask_pickups)
 	local grenade_tweak = tweak_data.blackmarket.projectiles[managers.blackmarket:equipped_grenade()]
@@ -242,7 +243,8 @@ function PlayerStandard:_find_pickups(t)
 					wpn_prj_hur = 3,
 					wpn_prj_jav = 2,
 					wpn_prj_target = 5,
-					concussion = 4
+					concussion = 4,
+					poison_gas_grenade = 2
 				}
 				function Gilza_nadepickuptweaks()
 					if not grenade_tweak.base_cooldown then
@@ -250,7 +252,6 @@ function PlayerStandard:_find_pickups(t)
 					end
 				end
 				Gilza_nadepickuptweaks()
-				
 				if data then
 					managers.player:add_coroutine("regain_throwable_from_ammo", PlayerAction.FullyLoaded, managers.player, data.chance, data.chance_inc)
 				end

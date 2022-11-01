@@ -1,3 +1,5 @@
+-- changes to all weapon mods and addition of some new ones
+
 Hooks:PostHook(WeaponFactoryTweakData, "init", "newwpnparts_breachround_andAP", function(self, params, ...)
 	self.parts.wpn_fps_upg_br_shtgn.name_id = "bm_wpn_fps_upg_br_shtgn"
 	self.parts.wpn_fps_upg_br_shtgn.desc_id = "bm_wpn_fps_upg_br_shtgn_desc"
@@ -382,6 +384,48 @@ Hooks:PostHook(WeaponFactoryTweakData, "create_ammunition", "newwpnstats_updateg
 		end
 	end
 	
+	self.parts.wpn_fps_upg_a_custom.stats.damage = 36
+	self.parts.wpn_fps_upg_a_custom_free.stats.damage = 36
+	self.parts.wpn_fps_upg_a_slug.stats = {
+		value = 5,
+		total_ammo_mod = -6
+	}
+	self.parts.wpn_fps_upg_a_explosive.stats = {
+		value = 5,
+		total_ammo_mod = -9,
+		damage = 45,
+		recoil = -11
+	}
+	self.parts.wpn_fps_upg_a_piercing.stats = {
+		value = 5
+	}
+	self.parts.wpn_fps_upg_a_dragons_breath.stats = {
+		value = 5,
+		total_ammo_mod = -9,
+		moving_spread = -7,
+		spread = -5
+	}
+	self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.fire_dot_data = {
+		dot_trigger_chance = "90",
+		dot_damage = "12",
+		dot_length = "3.1",
+		dot_trigger_max_distance = "1000",
+		dot_tick_period = "0.5"
+	}
+	self.parts.wpn_fps_upg_a_rip.stats = {
+		value = 5,
+		total_ammo_mod = -7,
+		spread = -4,
+		moving_spread = -6
+	}
+	self.parts.wpn_fps_upg_a_rip.custom_stats.dot_data.custom_data = {
+		hurt_animation_chance = 1,
+		dot_damage = 10,
+		dot_length = 2.1,
+		use_weapon_damage_falloff = true,
+		dot_tick_period = 0.5
+	}
+	self.parts.wpn_fps_upg_a_rip.desc_id = "bm_wpn_fps_upg_a_rip_desc_G"
 end)
 
 Hooks:PostHook(WeaponFactoryTweakData, "_init_content_jobs", "newwpnstats_bigmagz", function(self, ...)

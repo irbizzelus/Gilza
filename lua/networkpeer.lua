@@ -1,3 +1,4 @@
+-- override grenade anti cheat check, to use normal grenade amounts instead of our smaller ones
 function NetworkPeer:verify_grenade(value)
 	local grenade_id = self:grenade_id()
 	local tweak_entry = grenade_id and tweak_data.blackmarket.projectiles[grenade_id]

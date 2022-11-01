@@ -37,6 +37,7 @@ Hooks:Add('LocalizationManagerPostInit', 'newdescriptionsandstuff_eng', function
 		bm_wpn_fps_upg_ar_ap_rounds_desc = "Pierce enemy body armor, shields and walls.\n\nAmmo pick up is reduced, but not as much as full on AP kits.",
 		bm_wpn_fps_upg_br_shtgn = "Breaching round",
 		bm_wpn_fps_upg_br_shtgn_desc = "Allows you to breach everything that saw OVE9000 usually can. Can also penetrate shield and body armor.\nDamage drop off is significantly worse.\n", 
+		bm_wpn_fps_upg_a_rip_desc_G = "Poisoned bullet that deals damage over time and can interrupt enemies if they are close enough.\n\nDeals 400 damage over 2 seconds, with a damage tick every 0.5 seconds.",
 		bm_wpn_fps_smg_mp5_m_straight_R = "RIP rounds",
 		wpn_fps_ass_shak12_body_vks_R = "KS12 Armor Piercing Kit",
 		bm_wpn_fps_fla_mk2_mag_rare_desc = "Less direct firepower but more afterburn damage.\n75% chance to start afterburn damage that deals 700 damage over 3 seconds.\nBase flamethrower values: 25% chance for 300dmg over 2 seconds.",

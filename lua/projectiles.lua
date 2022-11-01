@@ -1,5 +1,5 @@
 function BlackMarketTweakData:get_index_from_projectile_id(projectile_id)
-	-- treat high velocity nades like normal grenades, since velocity gets sent seperately and it's the only meaningful change that this nade has
+	-- treat high velocity nades like normal grenades, so we dont send incorrect indexes to host and start throwing wrong grenades
 	if projectile_id == "launcher_velocity" then
 		projectile_id = "launcher_frag"
 	elseif projectile_id == "launcher_velocity_china" then
@@ -19,6 +19,7 @@ function BlackMarketTweakData:get_index_from_projectile_id(projectile_id)
 end
 
 Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "throwablecounters", function(self, params)
+	-- new nade amounts
 	self.projectiles.frag.max_amount = 2
 	self.projectiles.wpn_prj_four.max_amount = 6
 	self.projectiles.wpn_prj_ace.max_amount = 10

@@ -97,14 +97,19 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 	self.values.melee.stacking_hit_expire_t = {
 		4
 	}
-	-- adjust selfheal from up you go
+	-- adjust normal selfheal from up you go just in case
 	self.values.player.revived_health_regain = {
+		1
+	}
+	-- new version for self heal with up you go
+	self.values.player.health_regain_V2 = {
 		0.35
 	}
 end)
 
 Hooks:PostHook(UpgradesTweakData, "_player_definitions", "newskills3", function(self, params)	
-	-- Transporter, sprint with any bag
+
+	-- add new skills
 	self.definitions.player_sprint_any_bag = {
 		category = "feature",
 		name_id = "menu_player_sprint_any_bag",
@@ -204,9 +209,20 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "newskills3", function(
 			category = "player"
 		}
 	}
+	self.definitions.player_revived_health_regain_V2 = {
+		name_id = "revived_health_regain_V2",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "health_regain_V2",
+			category = "player"
+		}
+	}
 end)
 
 Hooks:PostHook(UpgradesTweakData, "_shotgun_definitions", "newskills4", function(self, params)	
+
+	-- add new shotgun skills
 	self.definitions.shotgun_recoil_multiplier_1 = {
 		name_id = "menu_shotgun_recoil_multiplier_1",
 		category = "feature",
