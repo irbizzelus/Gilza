@@ -257,6 +257,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_long", "newwpnstats_longbow", func
 		damage = 16,
 		total_ammo_mod = -6
 	}
+	self.parts.wpn_fps_bow_long_m_explosive.desc_id = "bm_wpn_fps_bow_long_m_explosive_desc"
 end)
 
 Hooks:PostHook(WeaponFactoryTweakData, "_init_elastic", "newwpnstats_longbow_free", function(self, ...)
@@ -349,9 +350,9 @@ Hooks:PostHook(WeaponFactoryTweakData, "create_ammunition", "newwpnstats_updateg
 	
 	-- new nade
 	self.parts.wpn_fps_upg_a_grenade_launcher_velocity = deep_clone(self.parts.wpn_fps_upg_a_grenade_launcher_incendiary)
-	self.parts.wpn_fps_upg_a_grenade_launcher_velocity.dlc = "pd2_clan"
+	self.parts.wpn_fps_upg_a_grenade_launcher_velocity.dlc = nil
 	self.parts.wpn_fps_upg_a_grenade_launcher_velocity.texture_bundle_folder = "Gilza"
-	self.parts.wpn_fps_upg_a_grenade_launcher_velocity.is_a_unlockable = true
+	self.parts.wpn_fps_upg_a_grenade_launcher_velocity.is_a_unlockable = false
 	self.parts.wpn_fps_upg_a_grenade_launcher_velocity.drop = false
 	self.parts.wpn_fps_upg_a_grenade_launcher_velocity.name_id = "bm_wp_upg_a_grenade_launcher_velocity"
 	self.parts.wpn_fps_upg_a_grenade_launcher_velocity.desc_id = "bm_wp_upg_a_grenade_launcher_velocity_desc"

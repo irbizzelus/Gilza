@@ -97,7 +97,108 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		self.specializations[i][6] = deck6
 		self.specializations[i][8] = deck8
 	end
+	
+	-- Add new Brawler perk deck
+	local brawler_deck = {
+		{
+			cost = 0,
+			desc_id = "menu_deck_brawler1_desc",
+			name_id = "menu_deck_brawler1",
+			upgrades = {
+				"player_extra_ammo_cut",
+				"player_passive_armor_movement_penalty_multiplier2",
+				"player_damage_resist_brawler1"
+			},
+			icon_xy = {
+				2,
+				4
+			}
+		},
+		deck2,
+		{
+			cost = 0,
+			desc_id = "menu_deck_brawler3_desc",
+			name_id = "menu_deck_brawler3",
+			upgrades = {
+				"player_damage_resist_brawler2",
+			},
+			icon_xy = {
+				0,
+				5
+			}
+		},
+		{-- neutral card 4
+			cost = 0,
+			desc_id = "menu_deckall_4_desc",
+			name_id = "menu_deckall_4",
+			upgrades = {
+				"passive_player_xp_multiplier",
+				"player_passive_suspicion_bonus",
+				"player_passive_armor_movement_penalty_multiplier"
+			},
+			icon_xy = {
+				3,
+				0
+			}
+		},
+		{
+			cost = 0,
+			desc_id = "menu_deck_brawler5_desc",
+			name_id = "menu_deck_brawler5",
+			texture_bundle_folder = "max",
+			upgrades = {
+				"player_passive_armor_movement_penalty_multiplier3",
+			},
+			icon_xy = {
+				1,
+				0
+			}
+		},
+		deck6,
+		{
+			cost = 0,
+			desc_id = "menu_deck_brawler7_desc",
+			name_id = "menu_deck_brawler7",
+			upgrades = {
+				"player_damage_resist_brawler3",
+			},
+			icon_xy = {
+				0,
+				5
+			}
+		},
+		deck8,
+		{
+			cost = 0,
+			desc_id = "menu_deck_brawler9_desc",
+			name_id = "menu_deck_brawler9",
+			upgrades = {
+				"player_armor_regen_brawler",
+				"player_damage_resist_faraway_brawler",
+				"player_uncover_multiplier",
+				"player_passive_loot_drop_multiplier"
+			},
+			icon_xy = {
+				6,
+				4
+			}
+		},
+		desc_id = "menu_deck_brawler_desc",
+		name_id = "menu_deck_brawler",
+		custom = true,
+		custom_id = "Gilza_brawler_perkdeck",
+	}
 
+	local j = #self.specializations + 1
+	self.specializations[j] = brawler_deck
+	Gilza.brawler_deck_index = j
+	
+	self.specializations[j][2].cost = 0
+	self.specializations[j][6].cost = 0
+	self.specializations[j][8].cost = 0
+	
+	
+	
 	-- new skills and reworks
 	self.skills.pack_mule[1].upgrades = { "player_armor_carry_bonus_1" }
 	self.skills.pack_mule[2].upgrades = { "player_sprint_any_bag" }

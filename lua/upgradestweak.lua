@@ -105,6 +105,26 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 	self.values.player.health_regain_V2 = {
 		0.35
 	}
+	-- Brawler deck stuff
+	self.values.player.extra_ammo_cut = {
+		0.2
+	}
+	self.values.player.passive_armor_movement_penalty_multiplier = {
+		0.75,
+		0.5,
+		0.25
+	}
+	self.values.player.damage_resist_brawler = {
+		0.82,
+		0.64,
+		0.46
+	}
+	self.values.player.armor_regen_brawler = {
+		true
+	}
+	self.values.player.damage_resist_faraway_brawler = {
+		0.25
+	}
 end)
 
 Hooks:PostHook(UpgradesTweakData, "_player_definitions", "newskills3", function(self, params)	
@@ -215,6 +235,78 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "newskills3", function(
 		upgrade = {
 			value = 1,
 			upgrade = "health_regain_V2",
+			category = "player"
+		}
+	}
+	self.definitions.player_extra_ammo_cut = {
+		name_id = "extra_ammo_cut",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "extra_ammo_cut",
+			category = "player"
+		}
+	}
+	self.definitions.player_passive_armor_movement_penalty_multiplier2 = {
+		name_id = "menu_passive_armor_movement_penalty_multiplier2",
+		category = "feature",
+		upgrade = {
+			value = 2,
+			upgrade = "passive_armor_movement_penalty_multiplier",
+			category = "player"
+		}
+	}
+	self.definitions.player_passive_armor_movement_penalty_multiplier3 = {
+		name_id = "menu_passive_armor_movement_penalty_multiplier3",
+		category = "feature",
+		upgrade = {
+			value = 3,
+			upgrade = "passive_armor_movement_penalty_multiplier",
+			category = "player"
+		}
+	}
+	self.definitions.player_damage_resist_brawler1 = {
+		name_id = "menu_damage_resist_brawler1",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "damage_resist_brawler",
+			category = "player"
+		}
+	}
+	self.definitions.player_damage_resist_brawler2 = {
+		name_id = "menu_damage_resist_brawler2",
+		category = "feature",
+		upgrade = {
+			value = 2,
+			upgrade = "damage_resist_brawler",
+			category = "player"
+		}
+	}
+	self.definitions.player_damage_resist_brawler3 = {
+		name_id = "menu_damage_resist_brawler3",
+		category = "feature",
+		upgrade = {
+			value = 3,
+			upgrade = "damage_resist_brawler",
+			category = "player"
+		}
+	}
+	self.definitions.player_armor_regen_brawler = {
+		name_id = "menu_armor_regen_brawler",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "armor_regen_brawler",
+			category = "player"
+		}
+	}
+	self.definitions.player_damage_resist_faraway_brawler = {
+		name_id = "damage_resist_faraway_brawler",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "damage_resist_faraway_brawler",
 			category = "player"
 		}
 	}

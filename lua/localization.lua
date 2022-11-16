@@ -30,6 +30,18 @@ Hooks:Add('LocalizationManagerPostInit', 'newdescriptionsandstuff_eng', function
 		menu_wolverine_beta_desc = "BASIC: ##$basic##\nThe lower your health, the more damage you do. When your health is below ##50%##, you will do up to ##125%## more melee and saw damage.\n\nACE: ##$pro##\nThe lower your health, the more damage you do. When your health is below ##50%##, you will do up to ##100%## more damage with ranged weapons as well.\n\nNote: Does not apply to throwables, grenade launchers or rocket launchers.\n\nEntering berserker state negates third party regeneration effects.",
 		menu_sociopathinfil_1_desc = "When you are surrounded by three enemies or more, you receive ##12%## less damage from enemies.\n\nYour second and each consecutive melee hit within ##4## seconds of the last one will deal ##50%## more damage.\n",
 		menu_up_you_go_beta_desc = "BASIC: ##$basic##\nYou take ##30%## less damage for ##10## seconds after being revived.\n\nACE: ##$pro##\nYou receive additonal ##35%## of your maximum health when revived.\n\nNote: This adds up to about ##75%## health on difficulties lower then Mayhem, and ##45%## health on all difficulties above and including Mayhem.",
+		menu_deck_brawler = "Brawler",
+		menu_deck_brawler_desc = "Gage tipped Bain off about a new shipment of experimental lightweight high power armor suits being transported by Murkywater to one of their facitilies. And who are you, if not THE fucking payday gang? Of course you had to steal it! But after properly inspecting them in your safe house, you found out that they are extremely bulky, yet still somehow comfortable to run around in.\n\nThis, is how you became... THE BRAWLER!",
+		menu_deck_brawler1 = "Armor suit upgrade",
+		menu_deck_brawler1_desc = "Using this high profile armor suit with any kind of a chest rig is pretty much imposible due to it's form and size. But who needs them, right?\n\nYour total ammo capacity is reduced by ##80%##.\n\nArmor movement penalty is reduced by ##20%##.\n\nYou gain ##18%## damage resistance.",
+		menu_deck_brawler3 = "High level armor plates",
+		menu_deck_brawler3_desc = "You gain ##18%## more damage resistance.",
+		menu_deck_brawler5 = "Lightweight armor plates",
+		menu_deck_brawler5_desc = "Armor movement penalty is reduced by additional ##20%##.",
+		menu_deck_brawler7 = "Max level armor plates",
+		menu_deck_brawler7_desc = "You gain ##18%## more damage resistance.",
+		menu_deck_brawler9 = "Meat shield",
+		menu_deck_brawler9_desc = "You gain ##34%## extra damage resistance from targets further then ##10## meters away from you.\n\nSecuring a kill with a melee weapon grants you ##75## points of armor.\n\nYou are ##15%## more likely to be targeted when you are close to your crew members.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
 		
 		bm_wpn_fps_ass_g3_b_sniper_desc = "Pierce enemy body armor, shields and walls.\nRATE OF FIRE is actually only nerfed by 20% to roughly 521RPM.\n\nDeveloper comment: for now base game rate of fire multipliers only work correctly with single fire weapons. Full-auto work as well, but value that you see above gets adjusted incorectly.",
 		bm_wpn_fps_ass_g3_b_short_desc = "Close quaters assault kit.\nRATE OF FIRE is actually buffed by 20% to roughly 782RPM.\n\nDeveloper comment: for now base game rate of fire multipliers only work correctly with single fire weapons. Full-auto work as well, but value that you see above gets adjusted incorectly.",
@@ -70,5 +82,6 @@ Hooks:Add('LocalizationManagerPostInit', 'newdescriptionsandstuff_eng', function
 		bm_grenade_poison_gas_grenade_desc = "Damage: 200 direct + 300 over 30 seconds. Cloud lasts for 20 seconds.\n",
 		bm_wp_upg_a_grenade_launcher_velocity = "High Velocity Round",
 		bm_wp_upg_a_grenade_launcher_velocity_desc = "Increases grenade velocity to 300%, but decreases blast radius to 50%.",
+		bm_wpn_fps_bow_long_m_explosive_desc = "Arrow with an explosive tip that detonates on impact.\n\nGilza comment: ok, i have no idea why it shows 32k dmg, hopefuly will figure it out later. Note that it deals only the 3200 double damage like any other explosive arrow.",
 	})
 end)

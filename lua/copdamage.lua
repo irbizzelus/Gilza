@@ -11,6 +11,9 @@ function CopDamage:damage_melee(attack_data)
 	dmg_melee_orig(self, attack_data)
 end
 
+local mvec_1 = Vector3()
+local mvec_2 = Vector3()
+
 -- override a bullet function to allow throawble weapons like axes to perice body armour. honestly, if it could be done better by just adding AP to weapons themselves, that would be 10/10, but screw me i guess
 function CopDamage:damage_bullet(attack_data)
 	if self._dead or self._invulnerable then
