@@ -101,7 +101,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	-- Add new Brawler perk deck
 	local brawler_deck = {
 		{
-			cost = 0,
+			cost = 200,
 			desc_id = "menu_deck_brawler1_desc",
 			name_id = "menu_deck_brawler1",
 			upgrades = {
@@ -116,7 +116,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		},
 		deck2,
 		{
-			cost = 0,
+			cost = 400,
 			desc_id = "menu_deck_brawler3_desc",
 			name_id = "menu_deck_brawler3",
 			upgrades = {
@@ -128,7 +128,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 			}
 		},
 		{-- neutral card 4
-			cost = 0,
+			cost = 600,
 			desc_id = "menu_deckall_4_desc",
 			name_id = "menu_deckall_4",
 			upgrades = {
@@ -142,7 +142,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 			}
 		},
 		{
-			cost = 0,
+			cost = 1000,
 			desc_id = "menu_deck_brawler5_desc",
 			name_id = "menu_deck_brawler5",
 			texture_bundle_folder = "max",
@@ -156,7 +156,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		},
 		deck6,
 		{
-			cost = 0,
+			cost = 2400,
 			desc_id = "menu_deck_brawler7_desc",
 			name_id = "menu_deck_brawler7",
 			upgrades = {
@@ -169,7 +169,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		},
 		deck8,
 		{
-			cost = 0,
+			cost = 4000,
 			desc_id = "menu_deck_brawler9_desc",
 			name_id = "menu_deck_brawler9",
 			upgrades = {
@@ -192,11 +192,6 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	local j = #self.specializations + 1
 	self.specializations[j] = brawler_deck
 	Gilza.brawler_deck_index = j
-	
-	self.specializations[j][2].cost = 0
-	self.specializations[j][6].cost = 0
-	self.specializations[j][8].cost = 0
-	
 	
 	
 	-- new skills and reworks
