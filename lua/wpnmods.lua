@@ -677,8 +677,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_c96", "newwpnstats_c96barrel", fun
 		armor_piercing_add = 1,
 		can_shoot_through_shield = true,
 		can_shoot_through_wall = true,
-		ammo_pickup_max_mul = 0.18,
-		ammo_pickup_min_mul = 0.18
+		ammo_pickup_max_mul = 0.37,
+		ammo_pickup_min_mul = 0.37
 	}
 	self.parts.wpn_fps_pis_c96_b_long.name_id = "bm_wpn_fps_pis_c96_b_long_newname"
 	self.parts.wpn_fps_pis_c96_b_long.type = "ammo"

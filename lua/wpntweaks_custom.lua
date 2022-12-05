@@ -18,7 +18,7 @@ Syntax:
  - every id should be within "" like this: "m200"
  - after every id there should be a coma like this: "m200",
 
-If you are unsure: after you got your custom gun's id, and put it into the variable bellow, it should look like this:
+If you are unsure: after you got your custom gun's id, and put it into the variable bellow, it should look something like this:
 
 Gilza.customguns ={
 	weapons = {
@@ -58,10 +58,24 @@ end
 function Gilza:Load_gunz()
 	local file = io.open(Gilza._guns_path, 'r')
 	if file then
+		local newguns = Gilza.customguns.weapons
 		for i, v in pairs(json.decode(file:read('*all')) or {}) do
 			Gilza.customguns[i] = v
 		end
 		file:close()
+		-- im not sure if i didnt wake up properly yet, or if this is the only way to check for matches in arrays in lua, which would be stupid
+		local matched = false
+		for i, v in pairs(newguns) do
+		  matched = false
+		  for j = 1, #Gilza.customguns.weapons do
+			if Gilza.customguns.weapons[j] == v then
+			  matched = true
+			end
+		  end
+		  if not matched then
+			table.insert(Gilza.customguns.weapons,newguns[i])
+		  end
+		end
 	end
 end
 
@@ -104,25 +118,25 @@ function Gilza.applyCustomAR_stats(id)
 	-- light AR's
 	if tweak_data.weapon[id].stats.damage >= 100 and tweak_data.weapon[id].stats.damage <= 125 then
 		tweak_data.weapon[id].stats.damage = 117
-		tweak_data.weapon[id].AMMO_PICKUP = {4.9,7.64}
+		tweak_data.weapon[id].AMMO_PICKUP = {4.9,7.34}
 		
 	-- low mid AR's
 	elseif tweak_data.weapon[id].stats.damage >= 126 and tweak_data.weapon[id].stats.damage <= 146 then
 		tweak_data.weapon[id].stats.damage = 146
-		tweak_data.weapon[id].AMMO_PICKUP = {3.98,6.48}
+		tweak_data.weapon[id].AMMO_PICKUP = {3.78,5.88}
 		
 	-- high mid AR's
 	elseif tweak_data.weapon[id].stats.damage >= 147 and tweak_data.weapon[id].stats.damage <= 200 then
-		tweak_data.weapon[id].AMMO_PICKUP = {4.22,6.88}
+		tweak_data.weapon[id].AMMO_PICKUP = {3.88,5.98}
 		
 	-- heavy AR's
 	elseif tweak_data.weapon[id].stats.damage >= 201 and tweak_data.weapon[id].stats.damage <= 350 then
 		tweak_data.weapon[id].stats.damage = 210
-		tweak_data.weapon[id].AMMO_PICKUP = {1.97,3.54}
+		tweak_data.weapon[id].AMMO_PICKUP = {1.85,3.12}
 		
 	-- super heavy AR's
 	elseif tweak_data.weapon[id].stats.damage >= 351 then
 		tweak_data.weapon[id].stats.damage = 420
-		tweak_data.weapon[id].AMMO_PICKUP = {0.75,1.59}
+		tweak_data.weapon[id].AMMO_PICKUP = {0.75,1.4}
 	end
 end
