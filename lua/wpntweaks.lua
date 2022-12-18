@@ -882,6 +882,17 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.scout.AMMO_MAX = self.scout.CLIP_AMMO_MAX * self.scout.NR_CLIPS_MAX
 	self.scout.fire_mode_data = {fire_rate = 60/80}
 	self.scout.single = {fire_rate = 60/80}
+	
+	-- Secondary semi-auto
+	self.victor.stats.damage = 420
+	self.victor.timers.reload_empty = 2.75
+	self.victor.stats.reload = 13
+	self.victor.CLIP_AMMO_MAX = 5
+	self.victor.stats.spread = 17
+	self.victor.stats.spread_moving = 9
+	self.victor.NR_CLIPS_MAX = 5
+	self.victor.AMMO_MAX = self.victor.CLIP_AMMO_MAX * self.victor.NR_CLIPS_MAX
+	self.victor.AMMO_PICKUP = {0.6,1.12}
 	end
 	setSNIPERs()
 
@@ -1212,6 +1223,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self[gun].AMMO_PICKUP = {2.27,3.53}
 		end
 	end
+	
+	self.c96.stats.reload = 13
+	
 	self.lemming.AMMO_MAX = 75
 	self.lemming.AMMO_PICKUP = {1.13,1.76}
 	self.lemming.fire_mode_data.fire_rate = 0.1 -- why does it even have such high base rof?
@@ -1414,9 +1428,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	}
 	self.flamethrower_mk2.stats.damage = 35
 	self.flamethrower_mk2.stats.reload = 17
-	self.flamethrower_mk2.CLIP_AMMO_MAX = 200
+	self.flamethrower_mk2.CLIP_AMMO_MAX = 300
 	self.flamethrower_mk2.NR_CLIPS_MAX = 2
-	self.flamethrower_mk2.AMMO_PICKUP = {4.706,9.62}
+	self.flamethrower_mk2.AMMO_PICKUP = {6.906,11.02}
 	self.flamethrower_mk2.AMMO_MAX = self.flamethrower_mk2.CLIP_AMMO_MAX * self.flamethrower_mk2.NR_CLIPS_MAX
 	
 	-- secondary flammenwerfer
@@ -1429,9 +1443,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	}
 	self.system.stats.damage = 25
 	self.system.stats.reload = 17
-	self.system.CLIP_AMMO_MAX = 150
+	self.system.CLIP_AMMO_MAX = 250
 	self.system.NR_CLIPS_MAX = 2
-	self.system.AMMO_PICKUP = {3.2942,6.734}
+	self.system.AMMO_PICKUP = {4.83,7.934}
 	self.system.AMMO_MAX = self.system.CLIP_AMMO_MAX * self.system.NR_CLIPS_MAX
 	end
 	setFLAMENs()

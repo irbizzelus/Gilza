@@ -1,10 +1,15 @@
 if not tweak_data then return end
 
+-- update 232 and it's projecties
+tweak_data.projectiles.xmas_snowball.damage = 40
+tweak_data.projectiles.sticky_grenade.damage = 200
+tweak_data.projectiles.sticky_grenade.range = 350
+
 -- normal grenade
 tweak_data.projectiles.frag.damage = 500
 tweak_data.projectiles.frag.curve_pow = 0.1
 tweak_data.projectiles.frag.player_damage = 10
-tweak_data.projectiles.frag.range = 300
+tweak_data.projectiles.frag.range = 350
 -- molotov: buff 
 tweak_data.projectiles.molotov = {
 	damage = 1,
@@ -101,7 +106,7 @@ tweak_data.projectiles.dynamite = {
 	damage = 250,
 	curve_pow = 0.1,
 	player_damage = 10,
-	range = 600,
+	range = 700,
 	name_id = "bm_grenade_frag",
 	effect_name = "effects/payday2/particles/explosions/dynamite_explosion"
 }
@@ -113,9 +118,9 @@ tweak_data.projectiles.wpn_gre_electric = {
 	name_id = "bm_electric_grenade",
 	sound_event = "grenade_electric_explode"
 }
---gas 200 direct + ~300
+--gas 100 direct + ~300
 tweak_data.projectiles.poison_gas_grenade = {
-	damage = 20,
+	damage = 10,
 	player_damage = 0,
 	curve_pow = 0.1,
 	range = 200,
@@ -135,7 +140,7 @@ tweak_data.projectiles.poison_gas_grenade = {
 tweak_data.projectiles.dada_com = {
 	damage = 500,
 	curve_pow = 0.1,
-	range = 300,
+	range = 350,
 	name_id = "bm_grenade_dada_com",
 	sound_event = "mtl_explosion"
 }
@@ -143,7 +148,7 @@ tweak_data.projectiles.dada_com = {
 tweak_data.projectiles.frag_com = {
 	damage = 500,
 	curve_pow = 0.1,
-	range = 300,
+	range = 350,
 	name_id = "bm_grenade_frag_com"
 }
 	

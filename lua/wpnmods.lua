@@ -889,3 +889,7 @@ end)
 Hooks:PostHook(WeaponFactoryTweakData, "_init_x_tec9", "newwpnstats_bigmagforakimbotec9", function(self, ...)
 	self.wpn_fps_smg_x_tec9.override.wpn_fps_smg_tec9_m_extended.stats.reload = -4
 end)
+
+Hooks:PostHook(WeaponFactoryTweakData, "_init_c96", "newwpnstats_bigmagforc96", function(self, ...)
+	self.parts.wpn_fps_pis_c96_m_extended.stats.reload = -3
+end)

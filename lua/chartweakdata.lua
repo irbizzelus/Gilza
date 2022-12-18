@@ -45,6 +45,7 @@ Hooks:PostHook(CharacterTweakData, "_set_overkill_145", "sethealthOVK", function
 		"tank",
 		"tank_medic", 
 		"tank_mini",
+		"tank_hw",
 		-- THE WINTERS BRIGADE
 		"phalanx_minion",
 		"phalanx_vip",
@@ -58,11 +59,19 @@ Hooks:PostHook(CharacterTweakData, "_set_overkill_145", "sethealthOVK", function
 		"hector_boss",
 		-- ERNESTO SOSA
 		"drug_lord_boss",
+		-- mountain master guy
+		"triad_boss",
+		-- yeap, this happened
+		"snowman_boss",
+		-- shield ones
+		"marshal_shield",
 	}
 	
 	for i=1, #enemies do
-		self[tostring(enemies[i])].HEALTH_INIT = self[tostring(enemies[i])].HEALTH_INIT * 1.3
-		self[tostring(enemies[i])].headshot_dmg_mul = 3
+		if self[tostring(enemies[i])] and self[tostring(enemies[i])].HEALTH_INIT then
+			self[tostring(enemies[i])].HEALTH_INIT = self[tostring(enemies[i])].HEALTH_INIT * 1.3
+			self[tostring(enemies[i])].headshot_dmg_mul = 3
+		end
 	end
 	
 	self.taser.HEALTH_INIT = self.taser.HEALTH_INIT * 0.68
@@ -120,6 +129,7 @@ Hooks:PostHook(CharacterTweakData, "_set_easy_wish", "sethealthMayhem", function
 		"tank",
 		"tank_medic", 
 		"tank_mini",
+		"tank_hw",
 		-- THE WINTERS BRIGADE
 		"phalanx_minion",
 		"phalanx_vip",
@@ -133,11 +143,19 @@ Hooks:PostHook(CharacterTweakData, "_set_easy_wish", "sethealthMayhem", function
 		"hector_boss",
 		-- ERNESTO SOSA
 		"drug_lord_boss",
+		-- mountain master guy
+		"triad_boss",
+		-- yeap, this happened
+		"snowman_boss",
+		-- shield ones
+		"marshal_shield",
 	}
 	
 	for i=1, #enemies do
-		self[tostring(enemies[i])].HEALTH_INIT = self[tostring(enemies[i])].HEALTH_INIT * 1.3
-		self[tostring(enemies[i])].headshot_dmg_mul = 3
+		if self[tostring(enemies[i])] and self[tostring(enemies[i])].HEALTH_INIT then
+			self[tostring(enemies[i])].HEALTH_INIT = self[tostring(enemies[i])].HEALTH_INIT * 1.3
+			self[tostring(enemies[i])].headshot_dmg_mul = 3
+		end
 	end
 	
 	self.taser.HEALTH_INIT = self.taser.HEALTH_INIT * 0.68
@@ -195,6 +213,7 @@ Hooks:PostHook(CharacterTweakData, "_set_overkill_290", "sethealthDW", function(
 		"tank",
 		"tank_medic", 
 		"tank_mini",
+		"tank_hw",
 		-- THE WINTERS BRIGADE
 		"phalanx_minion",
 		"phalanx_vip",
@@ -208,11 +227,18 @@ Hooks:PostHook(CharacterTweakData, "_set_overkill_290", "sethealthDW", function(
 		"hector_boss",
 		-- ERNESTO SOSA
 		"drug_lord_boss",
+		-- mountain master guy
+		"triad_boss",
+		-- yeap, this happened
+		"snowman_boss",
+		-- shield ones. they allready have like 4k health is this even needed lmao
+		"marshal_shield",
 	}
-	
 	for i=1, #enemies do
-		self[tostring(enemies[i])].HEALTH_INIT = self[tostring(enemies[i])].HEALTH_INIT * 1.3
-		self[tostring(enemies[i])].headshot_dmg_mul = 3
+		if self[tostring(enemies[i])] and self[tostring(enemies[i])].HEALTH_INIT then
+			self[tostring(enemies[i])].HEALTH_INIT = self[tostring(enemies[i])].HEALTH_INIT * 1.3
+			self[tostring(enemies[i])].headshot_dmg_mul = 3
+		end
 	end
 	
 	self.taser.HEALTH_INIT = self.taser.HEALTH_INIT * 0.68
@@ -270,6 +296,7 @@ Hooks:PostHook(CharacterTweakData, "_set_sm_wish", "sethealthDS", function(self)
 		"tank",
 		"tank_medic", 
 		"tank_mini",
+		"tank_hw",
 		-- THE WINTERS BRIGADE
 		"phalanx_minion",
 		"phalanx_vip",
@@ -283,11 +310,19 @@ Hooks:PostHook(CharacterTweakData, "_set_sm_wish", "sethealthDS", function(self)
 		"hector_boss",
 		-- ERNESTO SOSA
 		"drug_lord_boss",
+		-- mountain master guy
+		"triad_boss",
+		-- yeap, this happened
+		"snowman_boss",
+		-- shield ones. they allready have like 4k health is this even needed lmao
+		"marshal_shield",
 	}
 	
 	for i=1, #enemies do
-		self[tostring(enemies[i])].HEALTH_INIT = self[tostring(enemies[i])].HEALTH_INIT * 1.3
-		self[tostring(enemies[i])].headshot_dmg_mul = 3
+		if self[tostring(enemies[i])] and self[tostring(enemies[i])].HEALTH_INIT then
+			self[tostring(enemies[i])].HEALTH_INIT = self[tostring(enemies[i])].HEALTH_INIT * 1.3
+			self[tostring(enemies[i])].headshot_dmg_mul = 3
+		end
 	end
 	
 	self.taser.HEALTH_INIT = self.taser.HEALTH_INIT * 0.68

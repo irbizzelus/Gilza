@@ -53,8 +53,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 	-- make fully loaded aced nade pick up base kit (from perks) and buff it's aced values. nerf grenade amount to compensate
 	self.values.player.regain_throwable_from_ammo = {
 		{
-			chance = 0.025,
-			chance_inc = 1.0075
+			chance = 0.04,
+			chance_inc = 1.0085
 		},
 		{
 			chance = 0.10,
@@ -107,7 +107,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 	}
 	-- Brawler deck stuff
 	self.values.player.extra_ammo_cut = {
-		0.2
+		0.15
 	}
 	self.values.player.passive_armor_movement_penalty_multiplier = {
 		0.75,
@@ -123,7 +123,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 		true
 	}
 	self.values.player.damage_resist_faraway_brawler = {
-		0.25
+		true
 	}
 end)
 

@@ -11,10 +11,14 @@ Hooks:PreHook(PlayerDamage, "damage_bullet", "SaS_skillresist", function(self, a
 		attack_data.damage = attack_data.damage * managers.player:upgrade_value("player", "damage_resist_brawler", 1)
 	end
 	if managers.player:has_category_upgrade("player", "damage_resist_faraway_brawler") then
-		if managers.player:player_unit():position() and attack_data.attacker_unit:position() then
-			local ray = World:raycast( "ray", managers.player:player_unit():position(), attack_data.attacker_unit:position(), "slot_mask", managers.slot:get_mask( "bullet_impact_targets" ) )
-			if ray and ray.distance >= 1000 then
-				attack_data.damage = attack_data.damage * managers.player:upgrade_value("player", "damage_resist_faraway_brawler", 1)
+		if ( self:_max_health() / self:get_real_health() ) >= 2 then
+			if managers.player:player_unit():position() and attack_data.attacker_unit:position() then
+				local ray = World:raycast( "ray", managers.player:player_unit():position(), attack_data.attacker_unit:position(), "slot_mask", managers.slot:get_mask( "bullet_impact_targets" ) )
+				if ray and ray.distance >= 900 and ray.distance < 1600 then
+					attack_data.damage = attack_data.damage * 0.61
+				elseif ray and ray.distance >= 1600 then
+					attack_data.damage = attack_data.damage * 0.26
+				end
 			end
 		end
 	end
