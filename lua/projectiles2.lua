@@ -1,7 +1,7 @@
 if not tweak_data then return end
 
--- update 232 and it's projecties
-tweak_data.projectiles.xmas_snowball.damage = 40
+-- xmas update 232 and it's projecties
+--tweak_data.projectiles.xmas_snowball.damage = 40 -- might be usefull next year, if they bother to add them back again
 tweak_data.projectiles.sticky_grenade.damage = 200
 tweak_data.projectiles.sticky_grenade.range = 350
 
