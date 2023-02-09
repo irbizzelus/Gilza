@@ -121,7 +121,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		"komodo",
 		"groza",
 		"shak12",
-		-- machine guns
+		"tkb",
+		-- light machine guns
 		"hk21",
 		"mg42",
 		"m249",
@@ -129,6 +130,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		"rpk",
 		"m60",
 		"hk51b",
+		"hcar",
 		-- pistols
 		"lemming",
 		"sparrow",
@@ -200,6 +202,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		"sbl",
 		"qbu88",
 		"scout",
+		"contender",
 		-- sub machine guns
 		"tec9",
 		"m1928",
@@ -414,6 +417,16 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.g3.stats.spread = 22
 	self.g3.stats.spread_moving = 21
 	self.g3.AMMO_PICKUP = {1.85,3.12}
+	
+	self.tkb.stats.damage = 146
+	--[[
+	self.tkb.CLIP_AMMO_MAX = 20
+	self.tkb.NR_CLIPS_MAX = 5
+	self.tkb.AMMO_MAX = self.tkb.CLIP_AMMO_MAX * self.tkb.NR_CLIPS_MAX]]
+	self.tkb.AMMO_PICKUP = {3.78,5.88}
+	self.tkb.stats.recoil = 17
+	self.tkb.stats.spread = 12
+	self.tkb.stats.spread_moving = 12
 	
 	end
 	setARs()
@@ -703,11 +716,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	
 	-- Light Machine Guns --
 	local function setLMGs()
-	--no bipod one
+	--no bipod ones
 	self.hk51b.stats.spread = 11
 	self.hk51b.stats.spread_moving = 9
 	self.hk51b.stats.recoil = 9
 	self.hk51b.AMMO_PICKUP = {4.8,6.89}
+	self.hcar.stats.damage = 212
+	self.hcar.AMMO_PICKUP = {2.1,3.3}
 	
 	--heavy
 	self.hk21.AMMO_PICKUP = {5.9,8.89}
@@ -893,6 +908,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.victor.NR_CLIPS_MAX = 5
 	self.victor.AMMO_MAX = self.victor.CLIP_AMMO_MAX * self.victor.NR_CLIPS_MAX
 	self.victor.AMMO_PICKUP = {0.6,1.12}
+	
+	-- Secondary single shot
+	self.contender.stats.damage = 625
+	self.contender.fire_mode_data = {fire_rate = 60/50}
+	self.contender.single = {fire_rate = 60/50}
+	self.contender.stats_modifiers = {damage = 1}
+	
 	end
 	setSNIPERs()
 
@@ -1469,11 +1491,14 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	--light crossbow
 	self.frankish.stats.damage = 72
 	--longbow
-	self.long.stats.damage = 16
+	self.long.stats.damage = 160
+	self.long.stats_modifiers = {damage = 10}
 	--DECA compouns
-	self.elastic.stats.damage = 16
+	self.elastic.stats.damage = 160
+	self.elastic.stats_modifiers = {damage = 10}
 	--heavy crossbow
-	self.arblast.stats.damage = 16
+	self.arblast.stats.damage = 160
+	self.arblast.stats_modifiers = {damage = 10}
 	--h3h3 shit
 	self.ecp.stats.damage = 50
 end)

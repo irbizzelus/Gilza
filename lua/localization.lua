@@ -43,8 +43,8 @@ Hooks:Add('LocalizationManagerPostInit', 'newdescriptionsandstuff_eng', function
 		menu_deck_brawler9 = "Meat shield",
 		menu_deck_brawler9_desc = "You are ##15%## more likely to be targeted when you are close to your crew members.\n\nSecuring a kill with a melee weapon grants you ##75## points of armor.\n\nWhen you are under ##50%## health you recieve following bonuses:\n- Every enemy further then ##9## meters away from you deals ##18%## less damage\n- Every enemy further then ##16## meters away from you deals ##16%## less damage\n\nAll perk resistance bonuses stack, so enemies beyond ##16## meters will only deal ##12%## damage.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
 		
-		bm_wpn_fps_ass_g3_b_sniper_desc = "Pierce enemy body armor, shields and walls.\nRATE OF FIRE is actually only nerfed by 20% to roughly 521RPM.\n\nDeveloper comment: for now base game rate of fire multipliers only work correctly with single fire weapons. Full-auto work as well, but value that you see above gets adjusted incorectly.",
-		bm_wpn_fps_ass_g3_b_short_desc = "Close quaters assault kit.\nRATE OF FIRE is actually buffed by 20% to roughly 782RPM.\n\nDeveloper comment: for now base game rate of fire multipliers only work correctly with single fire weapons. Full-auto work as well, but value that you see above gets adjusted incorectly.",
+		bm_wpn_fps_ass_g3_b_sniper_desc = "Pierce enemy body armor, shields and walls. Ammo pick up decreased.",
+		bm_wpn_fps_ass_g3_b_short_desc = "Close quaters assault kit. Ammo pick up increased.",
 		bm_wpn_fps_upg_ar_ap_rounds = "AP rounds",
 		bm_wpn_fps_upg_ar_ap_rounds_desc = "Pierce enemy body armor, shields and walls.\n\nAmmo pick up is reduced, but not as much as full on AP kits.",
 		bm_wpn_fps_upg_br_shtgn = "Breaching round",
@@ -84,6 +84,8 @@ Hooks:Add('LocalizationManagerPostInit', 'newdescriptionsandstuff_eng', function
 		bm_grenade_poison_gas_grenade_desc = "Damage: 100 direct + 300 over 30 seconds. Cloud lasts for 20 seconds.\n",
 		bm_wp_upg_a_grenade_launcher_velocity = "High Velocity Round",
 		bm_wp_upg_a_grenade_launcher_velocity_desc = "Increases grenade velocity to 300%, but decreases blast radius to 50%.",
-		bm_wpn_fps_bow_long_m_explosive_desc = "Arrow with an explosive tip that detonates on impact.\n\nGilza comment: ok, i have no idea why it shows 32k dmg, hopefuly will figure it out later. Note that it deals only the 3200 double damage like any other explosive arrow.",
+		wpn_fps_ass_hcar_barrel_dmr_PEN = "Akron HC AP Kit",
+		bm_wpn_fps_ass_hcar_barrel_dmr_PEN_desc = "Allows you to penetrate enemy body armor and walls. Ammo pick up reduced.",
+		bm_wp_hcar_barrel_standard = "Standard Akron HC Barrel"
 	})
 end)

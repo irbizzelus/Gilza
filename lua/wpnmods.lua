@@ -68,13 +68,13 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_shak12", "newwpnstats_ash12", func
 			total_ammo_mod = -4,
 			concealment = -2,
 			value = 6,
-			fire_rate = 2,
+			fire_rate = 0.6,
 	}
 	self.parts.wpn_fps_ass_shak12_body_vks.type = "ammo"
 	self.parts.wpn_fps_ass_shak12_body_vks.custom_stats = {
 		ammo_pickup_max_mul = 0.7,
 		ammo_pickup_min_mul = 0.7,
-		fire_rate_multiplier = 0.8,
+		fire_rate_multiplier = 0.6,
 		armor_piercing_add = 1,
 		can_shoot_through_shield = true,
 		can_shoot_through_wall = true,
@@ -247,17 +247,16 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_long", "newwpnstats_longbow", func
 		armor_piercing_add = 1,
 	}
 	self.parts.wpn_fps_bow_long_m_poison.stats = {
-		damage = -2,
+		damage = -20,
 		total_ammo_mod = -6
 	}
 	self.parts.wpn_fps_bow_long_m_poison.custom_stats = {
 		armor_piercing_add = 1,
 	}
 	self.parts.wpn_fps_bow_long_m_explosive.stats = {
-		damage = 16,
+		damage = 100,
 		total_ammo_mod = -6
 	}
-	self.parts.wpn_fps_bow_long_m_explosive.desc_id = "bm_wpn_fps_bow_long_m_explosive_desc"
 end)
 
 Hooks:PostHook(WeaponFactoryTweakData, "_init_elastic", "newwpnstats_longbow_free", function(self, ...)
@@ -265,14 +264,14 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_elastic", "newwpnstats_longbow_fre
 		armor_piercing_add = 1,
 	}
 	self.parts.wpn_fps_bow_elastic_m_poison.stats = {
-		damage = -2,
+		damage = -20,
 		total_ammo_mod = -6
 	}
 	self.parts.wpn_fps_bow_elastic_m_poison.custom_stats = {
 		armor_piercing_add = 1,
 	}
 	self.parts.wpn_fps_bow_elastic_m_explosive.stats = {
-		damage = 16,
+		damage = 100,
 		total_ammo_mod = -6
 	}
 end)
@@ -282,14 +281,14 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_arblast", "newwpnstats_heavycrossb
 		armor_piercing_add = 1,
 	}
 	self.parts.wpn_fps_bow_arblast_m_poison.stats = {
-		damage = -2,
+		damage = -20,
 		total_ammo_mod = -6
 	}
 	self.parts.wpn_fps_bow_arblast_m_poison.custom_stats = {
 		armor_piercing_add = 1,
 	}
 	self.parts.wpn_fps_bow_arblast_m_explosive.stats = {
-		damage = 16,
+		damage = 100,
 		total_ammo_mod = -6
 	}
 end)
@@ -560,7 +559,9 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_modpack_m4_ak", "newwpnstats_m4akd
 		"wpn_fps_upg_ns_ass_smg_v6",
 		"wpn_fps_lmg_hk51b_ns_jcomp",
 		"wpn_fps_ass_shak12_ns_suppressor",
-		"wpn_fps_ass_shak12_ns_muzzle"
+		"wpn_fps_ass_shak12_ns_muzzle",
+		"wpn_fps_upg_ak_ns_jmac",
+		"wpn_fps_upg_ak_ns_tgp",
 	}
 end)
 
@@ -595,11 +596,12 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_g3", "newwpnstats_g3kits", functio
 		value = 2,
 		concealment = -3,
 		recoil = -4,
-		spread = 3
+		spread = 3,
+		fire_rate = 0.8
 	}
 	self.parts.wpn_fps_ass_g3_b_sniper.custom_stats = {
 		armor_piercing_add = 1,
-		fire_rate_multiplier = 0.4,
+		fire_rate_multiplier = 0.8,
 		can_shoot_through_shield = true,
 		can_shoot_through_wall = true,
 		ammo_pickup_max_mul = 0.3,
@@ -635,10 +637,11 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_g3", "newwpnstats_g3kits", functio
 		damage = -45,
 		value = 2,
 		concealment = 2,
-		recoil = 5
+		recoil = 5,
+		fire_rate = 1.2
 	}
 	self.parts.wpn_fps_ass_g3_b_short.custom_stats = {
-		fire_rate_multiplier = 0.6,
+		fire_rate_multiplier = 1.2,
 		ammo_pickup_max_mul = 2.6,
 		ammo_pickup_min_mul = 2.6
 	}
@@ -713,6 +716,113 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_x_basset", "newwpnstats_bigmagfora
 				reload = -5
 			}
 		}
+	}
+end)
+
+Hooks:PostHook(WeaponFactoryTweakData, "_init_hcar", "newwpnstats_hcar", function(self, ...)
+	self.parts.wpn_fps_lmg_hcar_barrel_dmr.stats = {
+			total_ammo_mod = -10,
+			concealment = -2,
+			damage = 210,
+			spread = 2,
+			value = 6,
+			fire_rate = 0.6667,
+	}
+	self.parts.wpn_fps_lmg_hcar_barrel_dmr.type = "ammo"
+	self.parts.wpn_fps_lmg_hcar_barrel_dmr.custom_stats = {
+		ammo_pickup_max_mul = 0.75,
+		ammo_pickup_min_mul = 0.75,
+		fire_rate_multiplier = 0.6667,
+		armor_piercing_add = 1,
+		can_shoot_through_wall = true,
+	}
+	self.parts.wpn_fps_lmg_hcar_barrel_dmr.name_id = "wpn_fps_ass_hcar_barrel_dmr_PEN"
+	self.parts.wpn_fps_lmg_hcar_barrel_dmr.desc_id = "bm_wpn_fps_ass_hcar_barrel_dmr_PEN_desc"
+	self.parts.wpn_fps_lmg_hcar_barrel_dmr.forbids = {
+		"wpn_fps_lmg_hcar_body_conversionkit",
+		"wpn_fps_lmg_hcar_barrel_standard",
+		"wpn_fps_lmg_hcar_barrel_short",
+		
+		"wpn_fps_lmg_hcar_m_drum",
+		
+		"wpn_fps_upg_ns_ass_smg_large",
+		"wpn_fps_upg_ns_ass_smg_medium",
+		"wpn_fps_upg_ns_ass_smg_small",
+		"wpn_fps_upg_ns_ass_smg_firepig",
+		"wpn_fps_upg_ns_ass_smg_stubby",
+		"wpn_fps_upg_ns_ass_smg_tank",
+		"wpn_fps_upg_ass_ns_jprifles",
+		"wpn_fps_upg_ass_ns_linear",
+		"wpn_fps_upg_ass_ns_surefire",
+		"wpn_fps_upg_ass_ns_battle",
+		"wpn_fps_upg_ns_ass_smg_v6",
+		"wpn_fps_lmg_hk51b_ns_jcomp",
+		"wpn_fps_ass_shak12_ns_suppressor",
+		"wpn_fps_ass_shak12_ns_muzzle",
+		"wpn_fps_lmg_hcar_suppressor"
+	}
+	
+	self.parts.wpn_fps_lmg_hcar_m_drum.stats = {
+		extra_ammo = 25,
+		value = 3,
+		concealment = -6,
+		reload = -8,
+		recoil = 7,
+		spread = -6,
+	}
+	
+	self.parts.wpn_fps_lmg_hcar_m_stick.stats = {
+		extra_ammo = 10,
+		value = 3,
+		concealment = -2,
+		reload = -3,
+		recoil = 3,
+		spread = -2,
+	}
+	
+	self.parts.wpn_fps_lmg_hcar_body_conversionkit.stats = {
+		extra_ammo = 40,
+		total_ammo_mod = 20,
+		damage = -37,
+		value = 1,
+		spread = -4,
+		recoil = 6,
+		fire_rate = 1.667,
+		reload = -6,
+	}
+	
+end)
+
+Hooks:PostHook(WeaponFactoryTweakData, "_init_tkb", "newwpnstats_tkb", function(self, ...)
+	self.parts.wpn_fps_ass_tkb_conversion.stats = {
+		value = 1,
+		spread = 4,
+		recoil = 3,
+		concealment = -3,
+		fire_rate = 0.875,
+		reload = 2,
+	}
+	self.parts.wpn_fps_ass_tkb_conversion.custom_stats = {
+		fire_rate_multiplier = 0.875
+	}
+	
+	self.parts.wpn_fps_ass_tkb_body_pouch.stats = {
+		value = 1,
+		total_ammo_mod = 5,
+		concealment = -2,
+		spread = -2,
+		recoil = 2
+	}
+end)
+
+Hooks:PostHook(WeaponFactoryTweakData, "_init_contender", "newwpnstats_contender", function(self, ...)
+	self.parts.wpn_fps_snp_contender_conversion.stats = {
+		reload = -3,
+		value = 1,
+		total_ammo_mod = -8,
+		damage = 625,
+		concealment = -9,
+		spread = 2
 	}
 end)
 
