@@ -1,5 +1,5 @@
 <mod name="Gilza" author="irbizzelus" color="Color(0,0.8,0.76)">
-	<AssetUpdates id="irbizzelus/Gilza" provider="github" release="true" version="1.5.4"/>
+	<AssetUpdates id="irbizzelus/Gilza" provider="github" release="true" version="1.5.5"/>
 	<AddFiles directory="assets">
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_br_shtgn"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_ar_ap_rounds"/>

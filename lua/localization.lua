@@ -85,7 +85,7 @@ Hooks:Add('LocalizationManagerPostInit', 'newdescriptionsandstuff_eng', function
 		bm_wp_upg_a_grenade_launcher_velocity = "High Velocity Round",
 		bm_wp_upg_a_grenade_launcher_velocity_desc = "Increases grenade velocity to 300%, but decreases blast radius to 50%.",
 		wpn_fps_ass_hcar_barrel_dmr_PEN = "Akron HC AP Kit",
-		bm_wpn_fps_ass_hcar_barrel_dmr_PEN_desc = "Allows you to penetrate enemy body armor and walls. Ammo pick up reduced.",
+		bm_wpn_fps_ass_hcar_barrel_dmr_PEN_desc = "Allows you to penetrate enemy body armor and walls.\nLimits weapon to single-fire mode.\nAmmo pick up reduced.",
 		bm_wp_hcar_barrel_standard = "Standard Akron HC Barrel"
 	})
 end)

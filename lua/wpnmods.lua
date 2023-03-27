@@ -65,15 +65,16 @@ end)
 
 Hooks:PostHook(WeaponFactoryTweakData, "_init_shak12", "newwpnstats_ash12", function(self, ...)
 	self.parts.wpn_fps_ass_shak12_body_vks.stats = {
-			total_ammo_mod = -4,
+			total_ammo_mod = -5,
 			concealment = -2,
+			recoil = -6,
 			value = 6,
 			fire_rate = 0.6,
 	}
 	self.parts.wpn_fps_ass_shak12_body_vks.type = "ammo"
 	self.parts.wpn_fps_ass_shak12_body_vks.custom_stats = {
-		ammo_pickup_max_mul = 0.7,
-		ammo_pickup_min_mul = 0.7,
+		ammo_pickup_max_mul = 0.73,
+		ammo_pickup_min_mul = 0.73,
 		fire_rate_multiplier = 0.6,
 		armor_piercing_add = 1,
 		can_shoot_through_shield = true,
@@ -481,8 +482,8 @@ end)
 Hooks:PostHook(WeaponFactoryTweakData, "_init_modpack_m4_ak", "newwpnstats_m4akdmrkits", function(self, ...)
 	--m4 dmr kit
 	self.parts.wpn_fps_upg_ass_m4_b_beowulf.stats = {
-		spread = 2,
-		total_ammo_mod = -5,
+		spread = 3,
+		total_ammo_mod = -6,
 		concealment = -5,
 		value = 1,
 		recoil = -7
@@ -491,9 +492,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_modpack_m4_ak", "newwpnstats_m4akd
 		armor_piercing_add = 1,
 		can_shoot_through_shield = true,
 		can_shoot_through_wall = true,
-		ammo_pickup_max_mul = 0.5,
-		ammo_pickup_min_mul = 0.5,
+		ammo_pickup_max_mul = 0.56,
+		ammo_pickup_min_mul = 0.56,
 	}
+	
 	self.parts.wpn_fps_upg_ass_m4_b_beowulf.name_id = "bm_wpn_fps_upg_ass_m4_b_beowulf_newname"
 	self.parts.wpn_fps_upg_ass_m4_b_beowulf.type = "ammo"
 	self.parts.wpn_fps_upg_ass_m4_b_beowulf.desc_id = "bm_wpn_fps_anynewassaultkit_desc"
@@ -521,8 +523,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_modpack_m4_ak", "newwpnstats_m4akd
 	
 	--ak dmr kit
 	self.parts.wpn_fps_upg_ass_ak_b_zastava.stats = {
-		spread = 2,
-		total_ammo_mod = -5,
+		spread = 3,
+		total_ammo_mod = -4,
 		concealment = -5,
 		value = 1,
 		recoil = -7
@@ -531,8 +533,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_modpack_m4_ak", "newwpnstats_m4akd
 		armor_piercing_add = 1,
 		can_shoot_through_shield = true,
 		can_shoot_through_wall = true,
-		ammo_pickup_max_mul = 0.5,
-		ammo_pickup_min_mul = 0.5,
+		ammo_pickup_max_mul = 0.56,
+		ammo_pickup_min_mul = 0.56,
 	}
 	self.parts.wpn_fps_upg_ass_ak_b_zastava.name_id = "bm_wpn_fps_upg_ass_ak_b_zastava_newname"
 	self.parts.wpn_fps_upg_ass_ak_b_zastava.type = "ammo"
@@ -562,6 +564,24 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_modpack_m4_ak", "newwpnstats_m4akd
 		"wpn_fps_ass_shak12_ns_muzzle",
 		"wpn_fps_upg_ak_ns_jmac",
 		"wpn_fps_upg_ak_ns_tgp",
+	}
+end)
+
+Hooks:PostHook(WeaponFactoryTweakData, "_init_ak74", "newwpnstats_ak74dmrkitoverride", function(self, ...)
+	self.wpn_fps_ass_74.override.wpn_fps_upg_ass_ak_b_zastava.stats = {
+		spread = 3,
+		total_ammo_mod = -9,
+		concealment = -5,
+		value = 1,
+		recoil = -7
+	}
+	
+	self.wpn_fps_ass_74.override.wpn_fps_upg_ass_ak_b_zastava.custom_stats = {
+		armor_piercing_add = 1,
+		can_shoot_through_shield = true,
+		can_shoot_through_wall = true,
+		ammo_pickup_max_mul = 0.56,
+		ammo_pickup_min_mul = 0.56,
 	}
 end)
 
@@ -596,7 +616,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_g3", "newwpnstats_g3kits", functio
 		value = 2,
 		concealment = -3,
 		recoil = -4,
-		spread = 3,
+		spread = 4,
 		fire_rate = 0.8
 	}
 	self.parts.wpn_fps_ass_g3_b_sniper.custom_stats = {
@@ -604,8 +624,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_g3", "newwpnstats_g3kits", functio
 		fire_rate_multiplier = 0.8,
 		can_shoot_through_shield = true,
 		can_shoot_through_wall = true,
-		ammo_pickup_max_mul = 0.3,
-		ammo_pickup_min_mul = 0.3
+		ammo_pickup_max_mul = 0.56,
+		ammo_pickup_min_mul = 0.56
 	}
 	self.parts.wpn_fps_ass_g3_b_sniper.name_id = "bm_wpn_fps_ass_g3_b_sniper_newname"
 	self.parts.wpn_fps_ass_g3_b_sniper.type = "ammo"
@@ -642,8 +662,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_g3", "newwpnstats_g3kits", functio
 	}
 	self.parts.wpn_fps_ass_g3_b_short.custom_stats = {
 		fire_rate_multiplier = 1.2,
-		ammo_pickup_max_mul = 2.6,
-		ammo_pickup_min_mul = 2.6
+		ammo_pickup_max_mul = 2.12,
+		ammo_pickup_min_mul = 2.12
 	}
 	self.parts.wpn_fps_ass_g3_b_short.type = "ammo"
 	self.parts.wpn_fps_ass_g3_b_short.desc_id = "bm_wpn_fps_ass_g3_b_short_desc"
@@ -680,8 +700,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_c96", "newwpnstats_c96barrel", fun
 		armor_piercing_add = 1,
 		can_shoot_through_shield = true,
 		can_shoot_through_wall = true,
-		ammo_pickup_max_mul = 0.37,
-		ammo_pickup_min_mul = 0.37
+		ammo_pickup_max_mul = 0.25,
+		ammo_pickup_min_mul = 0.25
 	}
 	self.parts.wpn_fps_pis_c96_b_long.name_id = "bm_wpn_fps_pis_c96_b_long_newname"
 	self.parts.wpn_fps_pis_c96_b_long.type = "ammo"
@@ -730,11 +750,14 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_hcar", "newwpnstats_hcar", functio
 	}
 	self.parts.wpn_fps_lmg_hcar_barrel_dmr.type = "ammo"
 	self.parts.wpn_fps_lmg_hcar_barrel_dmr.custom_stats = {
-		ammo_pickup_max_mul = 0.75,
-		ammo_pickup_min_mul = 0.75,
+		ammo_pickup_max_mul = 0.45,
+		ammo_pickup_min_mul = 0.45,
 		fire_rate_multiplier = 0.6667,
 		armor_piercing_add = 1,
 		can_shoot_through_wall = true,
+	}
+	self.parts.wpn_fps_lmg_hcar_barrel_dmr.perks = {
+		"fire_mode_single"
 	}
 	self.parts.wpn_fps_lmg_hcar_barrel_dmr.name_id = "wpn_fps_ass_hcar_barrel_dmr_PEN"
 	self.parts.wpn_fps_lmg_hcar_barrel_dmr.desc_id = "bm_wpn_fps_ass_hcar_barrel_dmr_PEN_desc"

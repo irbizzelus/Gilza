@@ -46,7 +46,7 @@ function CopDamage:damage_bullet(attack_data)
 	if self._has_plate and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_plate_name and not attack_data.armor_piercing then
 		local armor_pierce_roll = math.rand(1)
 		local armor_pierce_value = 0
-
+		
 		--###### GILZA THROWABLES PEIRCE START
 		local G_weapon_id = tostring(attack_data.weapon_unit:base():get_name_id())
 		local throwableswithpeirce = {
@@ -164,9 +164,13 @@ function CopDamage:damage_bullet(attack_data)
 		local add_head_shot_mul = attack_data.weapon_unit:base():get_add_head_shot_mul()
 
 		if add_head_shot_mul then
-			local tweak_headshot_mul = math.max(0, self._char_tweak.headshot_dmg_mul - 1)
-			local mul = tweak_headshot_mul * add_head_shot_mul + 1
-			damage = damage * mul
+			if self._char_tweak.headshot_dmg_mul then
+				local tweak_headshot_mul = math.max(0, self._char_tweak.headshot_dmg_mul - 1)
+				local mul = tweak_headshot_mul * add_head_shot_mul + 1
+				damage = damage * mul
+			else
+				damage = self._health * 10
+			end
 		end
 	end
 
@@ -255,8 +259,10 @@ function CopDamage:damage_bullet(attack_data)
 			if is_civilian then
 				managers.money:civilian_killed()
 			end
-		elseif attack_data.attacker_unit:in_slot(managers.slot:get_mask("criminals_no_deployables")) then
-			self:_AI_comment_death(attack_data.attacker_unit, self._unit)
+		elseif managers.groupai:state():is_unit_team_AI(attack_data.attacker_unit) then
+			local special_comment = self:_check_special_death_conditions(attack_data.variant, attack_data.col_ray.body, attack_data.attacker_unit, attack_data.weapon_unit)
+
+			self:_comment_death(attack_data.attacker_unit, self._unit, special_comment)
 		elseif attack_data.attacker_unit:base().sentry_gun then
 			if Network:is_server() then
 				local server_info = attack_data.weapon_unit:base():server_information()

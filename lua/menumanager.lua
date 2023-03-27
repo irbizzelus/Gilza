@@ -4,11 +4,11 @@ end
 
 function Gilza:changelog_message()
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.customguns.version or Gilza.customguns.version < 1.54 then
+		if not Gilza.customguns.version or Gilza.customguns.version < 1.55 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.5.4 update changelog:\n- Fixed issues with ap kits on AK platforms, KS12, Gewehr 3\n- Fixed damage values on heavy bows/crossbows\n- Added McShay weapon pack 3 support\n\nPlease sell any purchased Akron HC lmg's to avoid freezes when trying to modify them."
+			local message = "1.5.5 update changelog:\n- Fixed a crash introduced in update 235\n- Adjusted grenade launcher ammo pick ups to be similar to U235\n- Fixed an issue with AK rifle AP kit not working correctly and having wrong stats\n- Adjusted stats for all types of weapon kits"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
 			
@@ -17,7 +17,7 @@ function Gilza:changelog_message()
 				managers.skilltree:reset_specializations()
 			end
 			
-			Gilza.customguns.version = 1.54
+			Gilza.customguns.version = 1.55
 			Gilza.Save_gunz()
 		end
 	end)

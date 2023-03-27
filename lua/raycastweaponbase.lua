@@ -1,6 +1,6 @@
 Hooks:OverrideFunction(RaycastWeaponBase, "replenish", function(self)
 	local ammo_max_multiplier = managers.player:upgrade_value("player", "extra_ammo_multiplier", 1) * managers.player:upgrade_value("player", "extra_ammo_cut", 1)
-	log("[Gilza]RaycastWeaponBase called? Isn't this thing outdated? : "..tostring(ammo_max_multiplier))
+	log("[Gilza]RaycastWeaponBase : "..tostring(ammo_max_multiplier))
 	for _, category in ipairs(self:weapon_tweak_data().categories) do
 		ammo_max_multiplier = ammo_max_multiplier * managers.player:upgrade_value(category, "extra_ammo_multiplier", 1)
 	end
