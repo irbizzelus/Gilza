@@ -8,7 +8,7 @@ function Gilza:changelog_message()
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.6 update changelog:\n- Added AP round to Kobus90(P90)\n- Reduced ammo pick up for AR's with 420 dmg profile\n- Reduced ammo pick up for AP kits on Galant and M308\n- 'Fixed' Gewehr3 assault/dmr kits rate of fire\n- Rebalanced half of all AR's, for more info check the changelog"
+			local message = "1.6 update changelog:\n- Added new version of custom weapon support, weapons will now be found and adjusted automatically (only AR support for now)\n- Added AP rounds to Kobus90 (P90)\n- Reduced ammo pick up for AR's with 420 damage profile\n- Reduced ammo pick up for AP kits on Galant and M308\n- 'Fixed' Gewehr3 assault/dmr kits rate of fire\n- Rebalanced most AR's, more info in the changelog"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
 			
