@@ -1,51 +1,5 @@
---[[
-################# HOW TO ADD CUSTOM GUNS TO GILZA MOD#########################
-
-Currently supported weapon types: Assault rifles.
-
-This procedure needs to be only done once: after you boot the game, your id's will be saved in a seperate save file, so future mod updates don't remove your custom weapons id's
-If you want to add your beloved custom weapons to this mod, you will have to go to the mod folder of that weapon, most likely in assets/mod_overrides.
-
-Once you get there, go to main.xml file, and search for "<weapon " (without "", they are used here to show the empty space after the tag)
-This is a starting tag with all the values this weapon has. You will have to find weapon's ID
-Most likely it will look something like this:
-
-<weapon id="m200" based_on="model70" weapon_hold="m200" .... etc
-
-Get that id, and put it bellow into Gilza's customguns variable under weapons, and you are done! Don't forget about proper syntax though
-
-Syntax:
- - every id should be within "" like this: "m200"
- - after every id there should be a coma like this: "m200",
-
-If you are unsure: after you got your custom gun's id, and put it into the variable bellow, it should look something like this:
-
-Gilza.customguns ={
-	weapons = {
-		"ak12",
-		"bulldoge",
-		"mcx_spear",
-		"m200",
-	},
-	melee = {
-		--placeholder
-	}
-}
-
-################## IF YOUR GAME IS CRASHING OR DOESNT PROPERLY UPDATE VALUES FOR WEAPONS CHECK IF YOUR SYNTAX IS CORRECT #####################
-]]
-
--- write your ID's here
-Gilza.customguns ={
-	weapons = {
-		"ak12",
-		"bulldoge",
-		"mcx_spear",
-	},
-	melee = {
-		--placeholder
-	}
-}
+-- have to keep this file structure to support rare ocasions of people moving from older versions
+Gilza.customguns = {}
 
 function Gilza:Save_gunz()
 	local file = io.open(Gilza._guns_path, 'w+')
@@ -58,44 +12,108 @@ end
 function Gilza:Load_gunz()
 	local file = io.open(Gilza._guns_path, 'r')
 	if file then
-		local newguns = Gilza.customguns.weapons
 		for i, v in pairs(json.decode(file:read('*all')) or {}) do
 			Gilza.customguns[i] = v
 		end
 		file:close()
-		-- im not sure if i didnt wake up properly yet, or if this is the only way to check for matches in arrays in lua, which would be stupid
-		local matched = false
-		for i, v in pairs(newguns) do
-		  matched = false
-		  for j = 1, #Gilza.customguns.weapons do
-			if Gilza.customguns.weapons[j] == v then
-			  matched = true
-			end
-		  end
-		  if not matched then
-			table.insert(Gilza.customguns.weapons,newguns[i])
-		  end
-		end
 	end
 end
 
 Gilza:Load_gunz()
 Gilza:Save_gunz()
 
+local function has_value (tab, val)
+    for index, value in ipairs(tab) do
+        if value == val then
+            return true
+        end
+    end
+    return false
+end
+
+local exceptions = {
+	"npc_melee",
+	"ceiling_turret_module_longer_range",
+	"sentry_gun",
+	"ceiling_turret_module_no_idle",
+	"elastic",
+	"x_type54_underbarrel",
+	"crate_turret_module",
+	"ceiling_turret_module",
+	"type54_underbarrel",
+	"swat_van_turret_module",
+	"ranc_heavy_machine_gun",
+	"crosshair",
+	"aa_turret_module",
+	"factory",
+	"stats",
+	"groza_underbarrel",
+	"trip_mines",
+	"contraband_m203",
+}
+
+local customWeaponsList = {}
 function Gilza.initCutsomGuns()
-	for _, gun in pairs(Gilza.customguns.weapons) do
-		if tweak_data.weapon[gun] then
-		
-			-- AR check
-			for i=1, #tweak_data.weapon[gun].categories do
-				if tweak_data.weapon[gun].categories[i] == "assault_rifle" then
-					tweak_data.weapon[gun].stats.damage = math.floor(tweak_data.weapon[gun].stats.damage * 1.75)
-					Gilza.applyCustomAR_stats(gun)
-				end
+	if Gilza.defaultWeapons then
+		for gun, stats in pairs(tweak_data.weapon) do
+			if not (string.sub(gun,-5,-1) == "_crew" or string.sub(gun,-3,-1) == "npc") and not (has_value(Gilza.defaultWeapons,gun)) and not (has_value(exceptions,gun)) then
+				table.insert(customWeaponsList,gun)
 			end
-			
-			-- More to do later
 		end
+		Gilza.tryAddingNewGuns()
+	else
+		log("[Gilza] Could not load default weapon list, custom weapon stats can not be applied.")
+	end
+end
+
+function Gilza.tryAddingNewGuns()
+	if #customWeaponsList >= 1 then
+		for j=1, #customWeaponsList do
+			if tweak_data.weapon[customWeaponsList[j]] then
+				-- AR check
+				for i=1, #tweak_data.weapon[customWeaponsList[j]].categories do
+					if tweak_data.weapon[customWeaponsList[j]].categories[i] == "assault_rifle" then
+						tweak_data.weapon[customWeaponsList[j]].stats.damage = math.floor(tweak_data.weapon[customWeaponsList[j]].stats.damage * 1.75)
+						Gilza.applyCustomAR_stats(customWeaponsList[j])
+					end
+				end
+				-- add more categories checks to apply stats to more weapon types later
+			end
+		end
+	end
+end
+
+function Gilza.applyCustomAR_stats(id)
+
+	log("[Gilza] Applying custom weapon stats to AR with id: "..tostring(id))
+	
+	-- adjust damage profiles and ammo pick up based on weapons damage (after dmg increase in the init function above)
+	-- if AR has lower then 100 dmg, dont apply any changes to dmg or pick up, considering that the range of breakpoints down there is way to big, let normal stats work
+	
+	-- light AR's
+	if tweak_data.weapon[id].stats.damage >= 100 and tweak_data.weapon[id].stats.damage <= 125 then
+		tweak_data.weapon[id].stats.damage = 117
+		tweak_data.weapon[id].AMMO_PICKUP = {4.9,7.34}
+		
+	-- low mid AR's
+	elseif tweak_data.weapon[id].stats.damage >= 126 and tweak_data.weapon[id].stats.damage <= 152 then
+		tweak_data.weapon[id].stats.damage = 146
+		tweak_data.weapon[id].AMMO_PICKUP = {3.78,5.88}
+		
+	-- high mid AR's
+	elseif tweak_data.weapon[id].stats.damage >= 153 and tweak_data.weapon[id].stats.damage <= 200 then
+		tweak_data.weapon[id].stats.damage = 185
+		tweak_data.weapon[id].AMMO_PICKUP = {3.55,5.14}
+		
+	-- heavy AR's
+	elseif tweak_data.weapon[id].stats.damage >= 201 and tweak_data.weapon[id].stats.damage <= 350 then
+		tweak_data.weapon[id].stats.damage = 210
+		tweak_data.weapon[id].AMMO_PICKUP = {1.85,3.12}
+		
+	-- super heavy AR's
+	elseif tweak_data.weapon[id].stats.damage >= 351 then
+		tweak_data.weapon[id].stats.damage = 420
+		tweak_data.weapon[id].AMMO_PICKUP = {0.6937,1.294}
 	end
 end
 
@@ -109,34 +127,4 @@ function Gilza.checkforweapontweaks()
 		end)
 	end
 end
-
-function Gilza.applyCustomAR_stats(id)
-	-- adjust damage profiles and ammo pick up based on weapons damage (after dmg increase in the init function above)
-	
-	-- if AR has lower then 100 dmg, dont apply any changes to dmg or pick up, considering that the range of breakpoints down there is way to big, let normal stats work
-	
-	-- light AR's
-	if tweak_data.weapon[id].stats.damage >= 100 and tweak_data.weapon[id].stats.damage <= 125 then
-		tweak_data.weapon[id].stats.damage = 117
-		tweak_data.weapon[id].AMMO_PICKUP = {4.9,7.34}
-		
-	-- low mid AR's
-	elseif tweak_data.weapon[id].stats.damage >= 126 and tweak_data.weapon[id].stats.damage <= 146 then
-		tweak_data.weapon[id].stats.damage = 146
-		tweak_data.weapon[id].AMMO_PICKUP = {3.78,5.88}
-		
-	-- high mid AR's
-	elseif tweak_data.weapon[id].stats.damage >= 147 and tweak_data.weapon[id].stats.damage <= 200 then
-		tweak_data.weapon[id].AMMO_PICKUP = {3.88,5.98}
-		
-	-- heavy AR's
-	elseif tweak_data.weapon[id].stats.damage >= 201 and tweak_data.weapon[id].stats.damage <= 350 then
-		tweak_data.weapon[id].stats.damage = 210
-		tweak_data.weapon[id].AMMO_PICKUP = {1.85,3.12}
-		
-	-- super heavy AR's
-	elseif tweak_data.weapon[id].stats.damage >= 351 then
-		tweak_data.weapon[id].stats.damage = 420
-		tweak_data.weapon[id].AMMO_PICKUP = {0.75,1.4}
-	end
-end
+Gilza.checkforweapontweaks()

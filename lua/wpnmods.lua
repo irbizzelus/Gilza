@@ -31,8 +31,26 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "newwpnparts_breachround_andAP", 
 		armor_piercing_add = 1,
 		can_shoot_through_shield = true,
 		can_shoot_through_wall = true,
-		ammo_pickup_max_mul = 1.1, -- what kind of weird logic does this function use? for some reason it adjusts pick up based on default pick up instead of what comes after skills get applied, resulting in pick up beeing way too low. it will actually give you better pick up now if you dont have a perk deck, but lower if you have one. wtf
-		ammo_pickup_min_mul = 1.1,
+		ammo_pickup_max_mul = 0.75,
+		ammo_pickup_min_mul = 0.75,
+	}
+	
+	-- p90 AP rounds
+	self.parts.wpn_fps_upg_smg_ap_rounds.name_id = "bm_wpn_fps_upg_smg_ap_rounds"
+	self.parts.wpn_fps_upg_smg_ap_rounds.desc_id = "bm_wpn_fps_upg_smg_ap_rounds_desc"
+	self.parts.wpn_fps_upg_smg_ap_rounds.stats = {
+		value = 0,
+		total_ammo_mod = -5,
+		spread = -6,
+		damage = 22,
+		spread_moving = -6,
+		recoil = -2
+	}
+	self.parts.wpn_fps_upg_smg_ap_rounds.custom_stats = {
+		can_shoot_through_shield = true,
+		armor_piercing_add = 1,
+		ammo_pickup_max_mul = 0.5,
+		ammo_pickup_min_mul = 0.5,
 	}
 end)
 
@@ -617,11 +635,11 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_g3", "newwpnstats_g3kits", functio
 		concealment = -3,
 		recoil = -4,
 		spread = 4,
-		fire_rate = 0.8
+		fire_rate = 0.35
 	}
 	self.parts.wpn_fps_ass_g3_b_sniper.custom_stats = {
 		armor_piercing_add = 1,
-		fire_rate_multiplier = 0.8,
+		fire_rate_multiplier = 0.35,
 		can_shoot_through_shield = true,
 		can_shoot_through_wall = true,
 		ammo_pickup_max_mul = 0.56,
@@ -658,10 +676,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_g3", "newwpnstats_g3kits", functio
 		value = 2,
 		concealment = 2,
 		recoil = 5,
-		fire_rate = 1.2
+		fire_rate = 0.65
 	}
 	self.parts.wpn_fps_ass_g3_b_short.custom_stats = {
-		fire_rate_multiplier = 1.2,
+		fire_rate_multiplier = 0.65,
 		ammo_pickup_max_mul = 2.12,
 		ammo_pickup_min_mul = 2.12
 	}
