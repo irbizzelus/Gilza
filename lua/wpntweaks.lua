@@ -463,7 +463,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.tkb.stats.recoil = 17
 	self.tkb.stats.spread = 12
 	self.tkb.stats.spread_moving = 10
-	self.m1897.stats.concealment = 12
+	self.tkb.stats.concealment = 12
 	
 	self.g3.stats.damage = 230
 	self.g3.CLIP_AMMO_MAX = 25
