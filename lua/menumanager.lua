@@ -8,7 +8,7 @@ function Gilza:changelog_message()
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.7 update changelog:\n- CHANGE ME"
+			local message = "1.7 changelog:\nBiggest patch yet, all changes can not be fit here, please check all the changes on modworkshop.net\nTLDR:\n- Fixes to skills and weapon values, including some melee's\n- New pistol skills, body expertise nerf\n- New stability/recoil system for most full-auto weapons\n- Shotgun ammo rework\n- Support for custom pistols and SMG's\n- A lot of weapon stat tweaks"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
 			
