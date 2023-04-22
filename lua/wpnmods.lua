@@ -52,6 +52,23 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "newwpnparts_breachround_andAP", 
 		ammo_pickup_max_mul = 0.5,
 		ammo_pickup_min_mul = 0.5,
 	}
+	
+	-- mateba 357 ap
+	self.parts.wpn_fps_upg_pist_ap_rounds.name_id = "bm_wpn_fps_upg_pist_ap_rounds"
+	self.parts.wpn_fps_upg_pist_ap_rounds.desc_id = "bm_wpn_fps_upg_pist_ap_rounds_desc"
+	self.parts.wpn_fps_upg_pist_ap_rounds.stats = {
+		value = 0,
+		total_ammo_mod = -8,
+		spread = -3,
+		spread_moving = -3,
+		recoil = -3
+	}
+	self.parts.wpn_fps_upg_pist_ap_rounds.custom_stats = {
+		can_shoot_through_shield = true,
+		armor_piercing_add = 1,
+		ammo_pickup_max_mul = 0.5,
+		ammo_pickup_min_mul = 0.5,
+	}
 end)
 
 Hooks:PostHook(WeaponFactoryTweakData, "_init_mp5", "newwpnstats_mp5", function(self, ...)
@@ -402,41 +419,252 @@ Hooks:PostHook(WeaponFactoryTweakData, "create_ammunition", "newwpnstats_updateg
 			--table.insert(self[factory_id .. "_npc"].uses_parts, "wpn_fps_upg_a_grenade_launcher_velocity")
 		end
 	end
+
+	--###############################################################################################################################################################--
+	--####################################################################### SHOTGUN ROUNDS ########################################################################--
+	--###############################################################################################################################################################--
+	--###############################################################################################################################################################--
 	
-	self.parts.wpn_fps_upg_a_custom.stats.damage = 36
-	self.parts.wpn_fps_upg_a_custom_free.stats.damage = 36
+	local double_barrels = {
+		"wpn_fps_shot_b682",
+		"wpn_fps_shot_huntsman",
+		"wpn_fps_sho_coach"
+	}
+	local pump_action = {
+		"wpn_fps_sho_boot",
+		"wpn_fps_shot_r870",
+		"wpn_fps_sho_m590",
+		"wpn_fps_sho_ksg",
+		"wpn_fps_shot_m1897",
+		"wpn_fps_shot_serbu",
+		"wpn_fps_shot_m37"
+	}
+	local semi_auto = {
+		"wpn_fps_sho_spas12",
+		"wpn_fps_sho_ben",
+		"wpn_fps_sho_striker",
+		"wpn_fps_sho_ultima",
+		"wpn_fps_pis_judge",
+		"wpn_fps_pis_x_judge"
+	}
+	local full_auto = {
+		"wpn_fps_sho_sko12",
+		"wpn_fps_shot_saiga",
+		"wpn_fps_sho_aa12",
+		"wpn_fps_sho_rota",
+		"wpn_fps_sho_basset",
+		"wpn_fps_sho_x_sko12",
+		"wpn_fps_sho_x_rota",
+		"wpn_fps_sho_x_basset"
+	}
+	
+	-- Normal slug
 	self.parts.wpn_fps_upg_a_slug.stats = {
 		value = 5,
 		total_ammo_mod = -6
 	}
-	self.parts.wpn_fps_upg_a_explosive.stats = {
-		value = 5,
-		total_ammo_mod = -9,
-		damage = 45,
-		recoil = -11
+	self.parts.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_max_mul = 0.75
+	self.parts.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_min_mul = 0.75
+	self.parts.wpn_fps_upg_a_slug.desc_id = "bm_wpn_fps_upg_a_slug_desc_new"
+	-- HE slug
+	local HE_custom_stats = {
+		ignore_statistic = true,
+		damage_far_mul = 1,
+		damage_near_mul = 1,
+		bullet_class = "InstantExplosiveBulletBase",
+		rays = 1,
+		ammo_pickup_max_mul = 0.4,
+		ammo_pickup_min_mul = 0.4
 	}
+	
+	-- Double barrel HE convert
+	for i=1, #double_barrels do
+		self[double_barrels[i]].override.wpn_fps_upg_a_explosive.stats = {
+			value = 5,
+			total_ammo_mod = -10,
+			damage = 1350,
+			recoil = -25
+		}
+		self[double_barrels[i]].override.wpn_fps_upg_a_explosive.custom_stats = HE_custom_stats
+	end
+	
+	-- PA HE convert
+	local PAHEstats = {
+		value = 5,
+		total_ammo_mod = -10,
+		damage = 450,
+		recoil = -25
+	}
+	for i=1, #pump_action do
+		if self[pump_action[i]].override then
+			if self[pump_action[i]].override.wpn_fps_upg_a_explosive then
+				self[pump_action[i]].override.wpn_fps_upg_a_explosive.stats = PAHEstats
+				self[pump_action[i]].override.wpn_fps_upg_a_explosive.custom_stats = HE_custom_stats
+			else
+				self[pump_action[i]].override["wpn_fps_upg_a_explosive"] = {stats = PAHEstats,custom_stats = HE_custom_stats}
+			end
+		else
+			self[pump_action[i]].override = {wpn_fps_upg_a_explosive = {stats = PAHEstats,custom_stats = HE_custom_stats}}
+		end
+	end
+	
+	-- SA HE convert
+	local SAHEstats = {
+		value = 5,
+		total_ammo_mod = -10,
+		damage = 395,
+		recoil = -25
+	}
+	for i=1, #semi_auto do
+		if self[semi_auto[i]].override then
+			if self[semi_auto[i]].override.wpn_fps_upg_a_explosive then
+				self[semi_auto[i]].override.wpn_fps_upg_a_explosive.stats = SAHEstats
+				self[semi_auto[i]].override.wpn_fps_upg_a_explosive.custom_stats = HE_custom_stats
+			else
+				self[semi_auto[i]].override["wpn_fps_upg_a_explosive"] = {stats = SAHEstats,custom_stats = HE_custom_stats}
+			end
+		else
+			self[semi_auto[i]].override = {wpn_fps_upg_a_explosive = {stats = SAHEstats,custom_stats = HE_custom_stats}}
+		end
+	end
+	
+	-- FA HE convert
+	local FAHEstats = {
+		value = 5,
+		total_ammo_mod = -10,
+		damage = 130,
+		recoil = -25
+	}
+	for i=1, #full_auto do
+		if self[full_auto[i]].override then
+			if self[full_auto[i]].override.wpn_fps_upg_a_explosive then
+				self[full_auto[i]].override.wpn_fps_upg_a_explosive.stats = FAHEstats
+				self[full_auto[i]].override.wpn_fps_upg_a_explosive.custom_stats = HE_custom_stats
+			else
+				self[full_auto[i]].override["wpn_fps_upg_a_explosive"] = {stats = FAHEstats,custom_stats = HE_custom_stats}
+			end
+		else
+			self[full_auto[i]].override = {wpn_fps_upg_a_explosive = {stats = FAHEstats,custom_stats = HE_custom_stats}}
+		end
+	end
+	self.parts.wpn_fps_upg_a_explosive.desc_id = "bm_wpn_fps_upg_a_explosive_desc_new"
+	
+	-- BUCKSHOT
+	local BS_custom_stats = {
+		damage_far_mul = 1,
+		damage_near_mul = 1,
+		ammo_pickup_max_mul = 0.8,
+		ammo_pickup_min_mul = 0.8
+	}
+	self.parts.wpn_fps_upg_a_custom.desc_id = "bm_wpn_fps_upg_a_custom_desc_new"
+	self.parts.wpn_fps_upg_a_custom_free.desc_id = "bm_wpn_fps_upg_a_custom_desc_new"
+	
+	-- what a fucking shit show
+	-- Double barrel BUCKSHOT convert
+	for i=1, #double_barrels do
+		if self[double_barrels[i]].override then
+			if self[double_barrels[i]].override.wpn_fps_upg_a_custom and self[double_barrels[i]].override.wpn_fps_upg_a_custom_free then
+				self[double_barrels[i]].override.wpn_fps_upg_a_custom.stats = {damage = 350}
+				self[double_barrels[i]].override.wpn_fps_upg_a_custom.custom_stats = BS_custom_stats
+				self[double_barrels[i]].override.wpn_fps_upg_a_custom_free.stats = {damage = 350}
+				self[double_barrels[i]].override.wpn_fps_upg_a_custom_free.custom_stats = BS_custom_stats
+			else
+				self[double_barrels[i]].override["wpn_fps_upg_a_custom"] = {stats = {damage = 350},custom_stats = BS_custom_stats}
+				self[double_barrels[i]].override["wpn_fps_upg_a_custom_free"] = {stats = {damage = 350},custom_stats = BS_custom_stats}
+			end
+		else
+			self[double_barrels[i]].override = {wpn_fps_upg_a_custom = {stats = {damage = 350},custom_stats = BS_custom_stats}}
+			self[double_barrels[i]].override = {wpn_fps_upg_a_custom_free = {stats = {damage = 350},custom_stats = BS_custom_stats}}
+		end
+	end
+	
+	-- PA BUCKSHOT convert
+	for i=1, #pump_action do
+		if self[pump_action[i]].override then
+			if self[pump_action[i]].override.wpn_fps_upg_a_custom and self[pump_action[i]].override.wpn_fps_upg_a_custom_free then
+				self[pump_action[i]].override.wpn_fps_upg_a_custom.stats = {damage = 130}
+				self[pump_action[i]].override.wpn_fps_upg_a_custom.custom_stats = BS_custom_stats
+				self[pump_action[i]].override.wpn_fps_upg_a_custom_free.stats = {damage = 130}
+				self[pump_action[i]].override.wpn_fps_upg_a_custom_free.custom_stats = BS_custom_stats
+			else
+				self[pump_action[i]].override["wpn_fps_upg_a_custom"] = {stats = {damage = 130},custom_stats = BS_custom_stats}
+				self[pump_action[i]].override["wpn_fps_upg_a_custom_free"] = {stats = {damage = 130},custom_stats = BS_custom_stats}
+			end
+		else
+			self[pump_action[i]].override = {wpn_fps_upg_a_custom = {stats = {damage = 130},custom_stats = BS_custom_stats}}
+			self[pump_action[i]].override = {wpn_fps_upg_a_custom_free = {stats = {damage = 130},custom_stats = BS_custom_stats}}
+		end
+	end
+	
+	-- SA BUCKSHOT convert
+	for i=1, #semi_auto do
+		if self[semi_auto[i]].override then
+			if self[semi_auto[i]].override.wpn_fps_upg_a_custom and self[semi_auto[i]].override.wpn_fps_upg_a_custom_free then
+				self[semi_auto[i]].override.wpn_fps_upg_a_custom.stats = {damage = 90}
+				self[semi_auto[i]].override.wpn_fps_upg_a_custom.custom_stats = BS_custom_stats
+				self[semi_auto[i]].override.wpn_fps_upg_a_custom_free.stats = {damage = 90}
+				self[semi_auto[i]].override.wpn_fps_upg_a_custom_free.custom_stats = BS_custom_stats
+			else
+				self[semi_auto[i]].override["wpn_fps_upg_a_custom"] = {stats = {damage = 90},custom_stats = BS_custom_stats}
+				self[semi_auto[i]].override["wpn_fps_upg_a_custom_free"] = {stats = {damage = 90},custom_stats = BS_custom_stats}
+			end
+		else
+			self[semi_auto[i]].override = {wpn_fps_upg_a_custom = {stats = {damage = 90},custom_stats = BS_custom_stats}}
+			self[semi_auto[i]].override = {wpn_fps_upg_a_custom_free = {stats = {damage = 90},custom_stats = BS_custom_stats}}
+		end
+	end
+	
+	-- FA BUCKSHOT convert
+	for i=1, #full_auto do
+		if self[full_auto[i]].override then
+			if self[full_auto[i]].override.wpn_fps_upg_a_custom and self[full_auto[i]].override.wpn_fps_upg_a_custom_free then
+				self[full_auto[i]].override.wpn_fps_upg_a_custom.stats = {damage = 40}
+				self[full_auto[i]].override.wpn_fps_upg_a_custom.custom_stats = BS_custom_stats
+				self[full_auto[i]].override.wpn_fps_upg_a_custom_free.stats = {damage = 40}
+				self[full_auto[i]].override.wpn_fps_upg_a_custom_free.custom_stats = BS_custom_stats
+			else
+				self[full_auto[i]].override["wpn_fps_upg_a_custom"] = {stats = {damage = 40},custom_stats = BS_custom_stats}
+				self[full_auto[i]].override["wpn_fps_upg_a_custom_free"] = {stats = {damage = 40},custom_stats = BS_custom_stats}
+			end
+		else
+			self[full_auto[i]].override = {wpn_fps_upg_a_custom = {stats = {damage = 40},custom_stats = BS_custom_stats}}
+			self[full_auto[i]].override = {wpn_fps_upg_a_custom_free = {stats = {damage = 40},custom_stats = BS_custom_stats}}
+		end
+	end
+	
+	-- FLECHETTE
 	self.parts.wpn_fps_upg_a_piercing.stats = {
 		value = 5
 	}
+	self.parts.wpn_fps_upg_a_piercing.desc_id = "bm_wpn_fps_upg_a_piercing_desc_new"
+	
+	-- FIRE
 	self.parts.wpn_fps_upg_a_dragons_breath.stats = {
 		value = 5,
-		total_ammo_mod = -9,
+		total_ammo_mod = -10,
+		damage = 7,
 		moving_spread = -7,
 		spread = -5
 	}
+	self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.rays = 6
+	self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.ammo_pickup_max_mul = 0.2
+	self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.ammo_pickup_min_mul = 0.2
 	self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.fire_dot_data = {
-		dot_trigger_chance = "90",
-		dot_damage = "12",
+		dot_trigger_chance = "100",
+		dot_damage = "23",
 		dot_length = "3.1",
-		dot_trigger_max_distance = "1000",
+		dot_trigger_max_distance = "900",
 		dot_tick_period = "0.5"
 	}
+	self.parts.wpn_fps_upg_a_dragons_breath.desc_id = "bm_wpn_fps_upg_a_dragons_breath_desc_new"
+	
+	-- TOXIC SLUG
 	self.parts.wpn_fps_upg_a_rip.stats = {
 		value = 5,
 		total_ammo_mod = -7,
-		spread = -4,
-		moving_spread = -6
 	}
+	self.parts.wpn_fps_upg_a_rip.custom_stats.ammo_pickup_max_mul = 0.8
+	self.parts.wpn_fps_upg_a_rip.custom_stats.ammo_pickup_min_mul = 0.8
 	self.parts.wpn_fps_upg_a_rip.custom_stats.dot_data.custom_data = {
 		hurt_animation_chance = 1,
 		dot_damage = 10,
@@ -444,7 +672,12 @@ Hooks:PostHook(WeaponFactoryTweakData, "create_ammunition", "newwpnstats_updateg
 		use_weapon_damage_falloff = true,
 		dot_tick_period = 0.5
 	}
-	self.parts.wpn_fps_upg_a_rip.desc_id = "bm_wpn_fps_upg_a_rip_desc_G"
+	self.parts.wpn_fps_upg_a_rip.desc_id = "bm_wpn_fps_upg_a_rip_desc_new"
+	
+	--###############################################################################################################################################################--
+	--###############################################################################################################################################################--
+	--###############################################################################################################################################################--
+	--###############################################################################################################################################################--
 end)
 
 Hooks:PostHook(WeaponFactoryTweakData, "_init_content_jobs", "newwpnstats_bigmagz", function(self, ...)
@@ -630,7 +863,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_g3", "newwpnstats_g3kits", functio
 	self.parts.wpn_fps_ass_g3_b_sniper.stats = {
 		extra_ammo = -5,
 		total_ammo_mod = -8,
-		damage = 190,
+		damage = 210,
 		value = 2,
 		concealment = -3,
 		recoil = -4,
@@ -642,8 +875,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_g3", "newwpnstats_g3kits", functio
 		fire_rate_multiplier = 0.35,
 		can_shoot_through_shield = true,
 		can_shoot_through_wall = true,
-		ammo_pickup_max_mul = 0.56,
-		ammo_pickup_min_mul = 0.56
+		ammo_pickup_max_mul = 0.43,
+		ammo_pickup_min_mul = 0.34
 	}
 	self.parts.wpn_fps_ass_g3_b_sniper.name_id = "bm_wpn_fps_ass_g3_b_sniper_newname"
 	self.parts.wpn_fps_ass_g3_b_sniper.type = "ammo"
@@ -672,7 +905,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_g3", "newwpnstats_g3kits", functio
 	self.parts.wpn_fps_ass_g3_b_short.stats = {
 		spread = -9,
 		total_ammo_mod = 15,
-		damage = -45,
+		damage = -25,
 		value = 2,
 		concealment = 2,
 		recoil = 5,
@@ -680,8 +913,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_g3", "newwpnstats_g3kits", functio
 	}
 	self.parts.wpn_fps_ass_g3_b_short.custom_stats = {
 		fire_rate_multiplier = 0.65,
-		ammo_pickup_max_mul = 2.12,
-		ammo_pickup_min_mul = 2.12
+		ammo_pickup_max_mul = 1.29,
+		ammo_pickup_min_mul = 1.29
 	}
 	self.parts.wpn_fps_ass_g3_b_short.type = "ammo"
 	self.parts.wpn_fps_ass_g3_b_short.desc_id = "bm_wpn_fps_ass_g3_b_short_desc"
@@ -824,14 +1057,16 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_hcar", "newwpnstats_hcar", functio
 	self.parts.wpn_fps_lmg_hcar_body_conversionkit.stats = {
 		extra_ammo = 40,
 		total_ammo_mod = 20,
-		damage = -37,
+		damage = -27,
 		value = 1,
-		spread = -4,
+		spread = -8,
+		spread_moving = -8,
 		recoil = 6,
 		fire_rate = 1.667,
 		reload = -6,
 	}
-	
+	self.parts.wpn_fps_lmg_hcar_body_conversionkit.custom_stats.ammo_pickup_min_mul = 1.45
+	self.parts.wpn_fps_lmg_hcar_body_conversionkit.custom_stats.ammo_pickup_max_mul = 1.35
 end)
 
 Hooks:PostHook(WeaponFactoryTweakData, "_init_tkb", "newwpnstats_tkb", function(self, ...)
@@ -1043,4 +1278,10 @@ end)
 
 Hooks:PostHook(WeaponFactoryTweakData, "_init_c96", "newwpnstats_bigmagforc96", function(self, ...)
 	self.parts.wpn_fps_pis_c96_m_extended.stats.reload = -3
+end)
+
+Hooks:PostHook(WeaponFactoryTweakData, "_init_lemming", "newwpnstats_bigmagforfiveseven", function(self, ...)
+	self.parts.wpn_fps_pis_lemming_m_ext.stats.reload = -3
+	self.parts.wpn_fps_pis_lemming_m_ext.stats.extra_ammo = 3
+	self.parts.wpn_fps_pis_lemming_m_ext.stats.concealment = -2
 end)

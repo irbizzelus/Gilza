@@ -15,7 +15,7 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 		spoon = 5,
 		fork = 2,
 		spatula = 4,
-		shovel = 7,
+		shovel = 5,
 		moneybundle = 4,
 		fight = 2,
 		cutters = 6,
@@ -37,7 +37,7 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 		shock = 6,
 		baseballbat = 8,
 		oldbaton = 6,
-		hockey = 8,
+		hockey = 6,
 		meter = 7,
 		ballistic = 3,
 		pugio = 2,
@@ -96,7 +96,7 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 		-- those that i dont own
 		briefcase = 6,
 		grip = 3,
-		-- those that are not even shown
+		-- those that are not even shown (to me)
 		alien_maul = 6,
 		sword = 2,
 	}
@@ -231,6 +231,19 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 	self.melee_weapons.mining_pick.stats.charge_time = 4.5
 	self.melee_weapons.mining_pick.stats.min_damage_effect = 0.5
 	self.melee_weapons.mining_pick.stats.max_damage_effect = 0.5
+	-- animation sync issue fixes
+	self.melee_weapons.swagger.repeat_expire_t = 0.55
+	self.melee_weapons.aziz.repeat_expire_t = 0.8
+	self.melee_weapons.spatula.repeat_expire_t = 0.55
+	self.melee_weapons.moneybundle.repeat_expire_t = 0.55
+	self.melee_weapons.baseballbat.melee_damage_delay = 0.42
+	self.melee_weapons.barbedwire.melee_damage_delay = 0.42
+	self.melee_weapons.sandsteel.repeat_expire_t = 0.78
+	self.melee_weapons.pitchfork.expire_t = 0.8
+	self.melee_weapons.whiskey.melee_damage_delay = 0.40
+	self.melee_weapons.whiskey.expire_t = 0.8
+	self.melee_weapons.dingdong.melee_damage_delay = 0.45
+	self.melee_weapons.dingdong.repeat_expire_t = 1.25
 	
 	-- adding back some charge sounds:
 	-- sydney's butterfly

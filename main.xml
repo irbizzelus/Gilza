@@ -1,9 +1,10 @@
 <mod name="Gilza" author="irbizzelus" color="Color(0,0.8,0.76)">
-	<AssetUpdates id="irbizzelus/Gilza" provider="github" release="true" version="1.6"/>
+	<AssetUpdates id="irbizzelus/Gilza" provider="github" release="true" version="1.7"/>
 	<AddFiles directory="assets">
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_br_shtgn"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_ar_ap_rounds"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_smg_ap_rounds"/>
+		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_pist_ap_rounds"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_a_grenade_launcher_velocity"/>
 	</AddFiles>
 	<WeaponMod id="wpn_fps_upg_br_shtgn" based_on="wpn_fps_upg_a_custom" type="ammo" drop="false" is_a_unlockable="true" texture_bundle_folder="Gilza">
@@ -27,6 +28,12 @@
 		<weapons>
 			<value_node value="wpn_fps_smg_p90"/>
 			<value_node value="wpn_fps_smg_x_p90"/>
+		</weapons>
+	</WeaponMod>
+	<WeaponMod id="wpn_fps_upg_pist_ap_rounds" based_on="wpn_fps_upg_a_custom" type="ammo" drop="false" is_a_unlockable="true" texture_bundle_folder="Gilza">
+		<weapons>
+			<value_node value="wpn_fps_pis_2006m"/>
+			<value_node value="wpn_fps_pis_x_2006m"/>
 		</weapons>
 	</WeaponMod>
 </mod>

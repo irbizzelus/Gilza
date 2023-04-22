@@ -4,11 +4,11 @@ end
 
 function Gilza:changelog_message()
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.customguns.version or Gilza.customguns.version < 1.6 then
+		if not Gilza.customguns.version or Gilza.customguns.version < 1.7 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.6 update changelog:\n- Added new version of custom weapon support, weapons will now be found and adjusted automatically (only AR support for now)\n- Added AP rounds to Kobus90 (P90)\n- Reduced ammo pick up for AR's with 420 damage profile\n- Reduced ammo pick up for AP kits on Galant and M308\n- 'Fixed' Gewehr3 assault/dmr kits rate of fire\n- Rebalanced most AR's, more info in the changelog"
+			local message = "1.7 update changelog:\n- CHANGE ME"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
 			
@@ -17,7 +17,7 @@ function Gilza:changelog_message()
 				managers.skilltree:reset_specializations()
 			end
 			
-			Gilza.customguns.version = 1.6
+			Gilza.customguns.version = 1.7
 			Gilza.Save_gunz()
 		end
 	end)

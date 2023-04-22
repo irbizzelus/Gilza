@@ -19,9 +19,12 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 	self.values.shotgun.hip_rate_of_fire = {
 		1.25
 	}
+	-- steady grip sometimes is given for free, idk why, just make sure that it gives nothing
+	self.values.player.stability_increase_bonus_1 = {
+		0,
+	}
 	-- nerfed and tweaked steady grip to only give stability bonuses
 	self.values.player.stability_increase_bonus_2 = {
-		4,
 		1,
 		3
 	}
@@ -53,12 +56,12 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 	-- make fully loaded aced nade pick up base kit (from perks) and buff it's aced values. nerf grenade amount to compensate
 	self.values.player.regain_throwable_from_ammo = {
 		{
-			chance = 0.04,
-			chance_inc = 1.0085
+			chance = 0,
+			chance_inc = 0.015
 		},
 		{
 			chance = 0.10,
-			chance_inc = 1.02
+			chance_inc = 0.02
 		}
 	}
 	-- faster bipod deploy time
@@ -125,6 +128,17 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 	self.values.player.damage_resist_faraway_brawler = {
 		true
 	}
+	self.values.weapon.automatic_head_shot_add = {
+		0.25,
+		0.5
+	}
+	self.values.pistol.extra_ammo_multiplier = {
+		1.15,
+		1.5
+	}
+	self.values.pistol.magazine_capacity_inc = {
+		8
+	}
 end)
 
 Hooks:PostHook(UpgradesTweakData, "_player_definitions", "newskills3", function(self, params)	
@@ -140,19 +154,21 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "newskills3", function(
 		}
 	}
 	self.definitions.player_stability_increase_bonus_3 = {
+		incremental = true,
 		name_id = "menu_player_stability_increase_bonus",
 		category = "feature",
 		upgrade = {
-			value = 2,
+			value = 1,
 			upgrade = "stability_increase_bonus_2",
 			category = "player"
 		}
 	}
 	self.definitions.player_stability_increase_bonus_4 = {
+		incremental = true,
 		name_id = "menu_player_stability_increase_bonus",
 		category = "feature",
 		upgrade = {
-			value = 3,
+			value = 2,
 			upgrade = "stability_increase_bonus_2",
 			category = "player"
 		}
@@ -194,6 +210,17 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "newskills3", function(
 		}
 	}
 	self.definitions.player_regain_throwable_from_ammo_1 = {
+		incremental = true,
+		name_id = "menu_player_regain_throwable_from_ammo",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "regain_throwable_from_ammo",
+			category = "player"
+		}
+	}
+	self.definitions.player_regain_throwable_from_ammo_2 = {
+		incremental = true,
 		name_id = "menu_player_regain_throwable_from_ammo",
 		category = "feature",
 		upgrade = {
@@ -316,6 +343,7 @@ Hooks:PostHook(UpgradesTweakData, "_shotgun_definitions", "newskills4", function
 
 	-- add new shotgun skills
 	self.definitions.shotgun_recoil_multiplier_1 = {
+		incremental = true,
 		name_id = "menu_shotgun_recoil_multiplier_1",
 		category = "feature",
 		upgrade = {
@@ -325,12 +353,38 @@ Hooks:PostHook(UpgradesTweakData, "_shotgun_definitions", "newskills4", function
 		}
 	}
 	self.definitions.shotgun_recoil_multiplier_2 = {
+		incremental = true,
 		name_id = "menu_shotgun_recoil_multiplier_2",
 		category = "feature",
 		upgrade = {
 			value = 2,
 			upgrade = "recoil_multiplier",
 			category = "shotgun"
+		}
+	}
+end)
+
+Hooks:PostHook(UpgradesTweakData, "_pistol_definitions", "newskills5", function(self, params)	
+
+	-- add new pistol skills
+	self.definitions.pistol_extra_ammo_multiplier_1 = {
+		incremental = true,
+		name_id = "menu_pistol_extra_ammo_multiplier",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "extra_ammo_multiplier",
+			category = "pistol"
+		}
+	}
+	self.definitions.pistol_extra_ammo_multiplier_2 = {
+		incremental = true,
+		name_id = "menu_pistol_extra_ammo_multiplier",
+		category = "feature",
+		upgrade = {
+			value = 2,
+			upgrade = "extra_ammo_multiplier",
+			category = "pistol"
 		}
 	}
 end)

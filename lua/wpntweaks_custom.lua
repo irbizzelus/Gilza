@@ -77,7 +77,25 @@ function Gilza.tryAddingNewGuns()
 						Gilza.applyCustomAR_stats(customWeaponsList[j])
 					end
 				end
+				for i=1, #tweak_data.weapon[customWeaponsList[j]].categories do
+					if tweak_data.weapon[customWeaponsList[j]].categories[i] == "smg" then
+						tweak_data.weapon[customWeaponsList[j]].stats.damage = math.floor(tweak_data.weapon[customWeaponsList[j]].stats.damage * 1.75)
+						Gilza.applyCustomSMG_stats(customWeaponsList[j])
+					end
+				end
+				for i=1, #tweak_data.weapon[customWeaponsList[j]].categories do
+					if tweak_data.weapon[customWeaponsList[j]].categories[i] == "pistol" then
+						tweak_data.weapon[customWeaponsList[j]].stats.damage = math.floor(tweak_data.weapon[customWeaponsList[j]].stats.damage * 1.75)
+						-- im 80% positive that custom revolvers dont have this tag, but oh well
+						if tweak_data.weapon[customWeaponsList[j]].categories[i] == "revolver" then
+							Gilza.applyCustomPISTOL_stats(customWeaponsList[j],true)
+						else
+							Gilza.applyCustomPISTOL_stats(customWeaponsList[j],false)
+						end
+					end
+				end
 				-- add more categories checks to apply stats to more weapon types later
+				-- popular weapon categories on MWS that i'll have to add: melee,sniper,shotgun,lmg
 			end
 		end
 	end
@@ -93,27 +111,82 @@ function Gilza.applyCustomAR_stats(id)
 	-- light AR's
 	if tweak_data.weapon[id].stats.damage >= 100 and tweak_data.weapon[id].stats.damage <= 125 then
 		tweak_data.weapon[id].stats.damage = 117
-		tweak_data.weapon[id].AMMO_PICKUP = {4.9,7.34}
+		tweak_data.weapon[id].AMMO_PICKUP = {3.64,6.15}
 		
 	-- low mid AR's
 	elseif tweak_data.weapon[id].stats.damage >= 126 and tweak_data.weapon[id].stats.damage <= 152 then
 		tweak_data.weapon[id].stats.damage = 146
-		tweak_data.weapon[id].AMMO_PICKUP = {3.78,5.88}
+		tweak_data.weapon[id].AMMO_PICKUP = {3.111,4.35}
 		
 	-- high mid AR's
 	elseif tweak_data.weapon[id].stats.damage >= 153 and tweak_data.weapon[id].stats.damage <= 200 then
-		tweak_data.weapon[id].stats.damage = 185
-		tweak_data.weapon[id].AMMO_PICKUP = {3.55,5.14}
+		tweak_data.weapon[id].stats.damage = 183
+		tweak_data.weapon[id].AMMO_PICKUP = {2.8,3.73}
 		
 	-- heavy AR's
 	elseif tweak_data.weapon[id].stats.damage >= 201 and tweak_data.weapon[id].stats.damage <= 350 then
 		tweak_data.weapon[id].stats.damage = 210
-		tweak_data.weapon[id].AMMO_PICKUP = {1.85,3.12}
+		tweak_data.weapon[id].AMMO_PICKUP = {2.12,3.12}
 		
 	-- super heavy AR's
 	elseif tweak_data.weapon[id].stats.damage >= 351 then
 		tweak_data.weapon[id].stats.damage = 420
 		tweak_data.weapon[id].AMMO_PICKUP = {0.6937,1.294}
+	end
+end
+
+function Gilza.applyCustomSMG_stats(id)
+
+	log("[Gilza] Applying custom weapon stats to SMG with id: "..tostring(id))
+	
+	-- same as with AR's - dont touch guns with REALLY low damage
+	if tweak_data.weapon[id].stats.damage >= 77 and tweak_data.weapon[id].stats.damage <= 92 then
+		tweak_data.weapon[id].stats.damage = 77
+		tweak_data.weapon[id].AMMO_PICKUP = {4.12,6.23}
+	elseif tweak_data.weapon[id].stats.damage >= 93 and tweak_data.weapon[id].stats.damage <= 110 then
+		tweak_data.weapon[id].stats.damage = 95
+		tweak_data.weapon[id].AMMO_PICKUP = {3.534,5.437}
+	elseif tweak_data.weapon[id].stats.damage >= 111 and tweak_data.weapon[id].stats.damage <= 129 then
+		tweak_data.weapon[id].stats.damage = 117
+		tweak_data.weapon[id].AMMO_PICKUP = {3.13,4.83}
+	elseif tweak_data.weapon[id].stats.damage >= 130 and tweak_data.weapon[id].stats.damage <= 147 then
+		tweak_data.weapon[id].stats.damage = 146
+		tweak_data.weapon[id].AMMO_PICKUP = {2.24,3.16}
+	elseif tweak_data.weapon[id].stats.damage >= 148 and tweak_data.weapon[id].stats.damage <= 200 then
+		tweak_data.weapon[id].stats.damage = 183
+		tweak_data.weapon[id].AMMO_PICKUP = {1.65,2.62}
+	elseif tweak_data.weapon[id].stats.damage >= 201 then
+		tweak_data.weapon[id].stats.damage = 210
+		tweak_data.weapon[id].AMMO_PICKUP = {1.29,2.18}
+	end
+end
+
+function Gilza.applyCustomPISTOL_stats(id, isRevolver)
+
+	log("[Gilza] Applying custom weapon stats to pistol with id: "..tostring(id))
+	
+	-- same as with others - dont touch guns with REALLY low damage
+	if tweak_data.weapon[id].stats.damage >= 77 and tweak_data.weapon[id].stats.damage <= 92 then
+		tweak_data.weapon[id].stats.damage = 77
+		tweak_data.weapon[id].AMMO_PICKUP = {3.89,5.99}
+	elseif tweak_data.weapon[id].stats.damage >= 93 and tweak_data.weapon[id].stats.damage <= 110 then
+		tweak_data.weapon[id].stats.damage = 95
+		tweak_data.weapon[id].AMMO_PICKUP = {3.47,5.44}
+	elseif tweak_data.weapon[id].stats.damage >= 111 and tweak_data.weapon[id].stats.damage <= 129 then
+		tweak_data.weapon[id].stats.damage = 117
+		tweak_data.weapon[id].AMMO_PICKUP = {2.95,5.36}
+	elseif tweak_data.weapon[id].stats.damage >= 130 and tweak_data.weapon[id].stats.damage <= 147 then
+		tweak_data.weapon[id].stats.damage = 140
+		tweak_data.weapon[id].AMMO_PICKUP = {2.27,3.53}
+	elseif tweak_data.weapon[id].stats.damage >= 148 and tweak_data.weapon[id].stats.damage <= 200 then
+		tweak_data.weapon[id].stats.damage = 183
+		tweak_data.weapon[id].AMMO_PICKUP = {1.65,2.69}
+	elseif (tweak_data.weapon[id].stats.damage >= 201 and isRevolver) then
+		tweak_data.weapon[id].stats.damage = 420
+		tweak_data.weapon[id].AMMO_PICKUP = {0.45,0.84}
+	elseif tweak_data.weapon[id].stats.damage >= 201 then
+		tweak_data.weapon[id].stats.damage = 210
+		tweak_data.weapon[id].AMMO_PICKUP = {1.1094,1.88}
 	end
 end
 

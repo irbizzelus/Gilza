@@ -1,8 +1,9 @@
 Hooks:Add('LocalizationManagerPostInit', 'newdescriptionsandstuff_eng', function(loc)
 	LocalizationManager:add_localized_strings({
+		-- skills/perks
 		menu_deckall_8 = "Improved Physique",
 		menu_deckall_8_desc = "You gain ##10%## additional movement speed.\n\nYou can throw bags ##50%## further.",
-		menu_deckall_6_desc = "Unlocks an armor bag equipment for you to use. The armor bag can be used to change your armor during a heist.\n\nIncreases your ammo pickup to ##135%## of the normal rate.\n\nYou also gain a ##4%## chance to get a throwable from an ammo box. The base chance is increased by ##0.85%## for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.",
+		menu_deckall_6_desc = "Unlocks an armor bag equipment for you to use. The armor bag can be used to change your armor during a heist.\n\nIncreases your ammo pickup to ##135%## of the normal rate.\n\nYou also gain a base ##0%## chance to get a throwable from an ammo box. The base chance is increased by ##1.5%## for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.",
 		menu_deckall_2 = "Fast and Furious",
 		menu_deckall_2_desc = "Increases your doctor bag interaction speed by ##20%##",
 		menu_pack_mule_beta_desc = "BASIC: ##$basic##\nFor each ##10## armor points, the bag movement penalty is reduced by ##1%##.\n\nACE: ##$pro##\nYou can sprint with any bag.",
@@ -19,10 +20,10 @@ Hooks:Add('LocalizationManagerPostInit', 'newdescriptionsandstuff_eng', function
 		menu_sharpshooter_beta = "Slow and Steady",
 		menu_sharpshooter_beta_desc = "BASIC: ##$basic##\nYou gain ##5%## damage resistance while standing still or bipoded.\n\nACE: ##$pro##\nYou gain extra ##35%## damage resistance while bipoded.\nYour bipod deploy speed is increased by ##100%##.",
 		menu_rifleman_beta = "Agile Marksman",
-		menu_rifleman_beta_desc = "BASIC: ##$basic##\nYour snap to zoom is ##100%## faster with all weapons.\n\nYour weapon zoom level is increased by ##25%## with all weapons.\n\nACE: ##$pro##\nWhile aiming down sights your movement speed is unhindered.\nYou recieve no accuracy penalty while moving and aiming.\n\nNote: without this movement penalty you will recieve ##15%## accuracy bonus while aiming down sights.",
+		menu_rifleman_beta_desc = "BASIC: ##$basic##\nYour snap to zoom is ##100%## faster with all weapons.\n\nYour weapon zoom level is increased by ##25%## with all weapons.\n\nACE: ##$pro##\nWhile aiming down sights your movement speed is unhindered.\nYou recieve no accuracy penalty while moving and aiming.\n\nNote: without this movement penalty you will recieve ##15%## accuracy bonus while aiming down sights and moving.",
 		menu_fire_control_beta_desc = "BASIC: ##$basic##\nYou gain ##12## weapon accuracy while firing from the hip.\n\nACE: ##$pro##\nYour accuracy penalty is decreased by ##15%## when shooting while moving.",
 		menu_dance_instructor_desc = "BASIC: ##$basic##\nYour pistol magazine sizes are increased by ##5## bullets.\n\nACE: ##$pro##\nYou gain ##20%## increased rate of fire with pistols.",
-		menu_bandoliers_beta_desc = "BASIC: ##$basic##\nYour total ammo capacity is increased by ##25%##.\n\nACE: ##$pro##\nIncreases the amount of ammo you gain from ammo boxes by ##75%##.You also gain a ##10%## chance to get a throwable from an ammo box. The base chance is increased by ##2%## for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.\n\nNote: Does not stack with the perk skill 'Walk-in Closet'.",
+		menu_bandoliers_beta_desc = "BASIC: ##$basic##\nYour total ammo capacity is increased by ##25%##.\n\nACE: ##$pro##\nIncreases the amount of ammo you gain from ammo boxes by ##75%##.You also gain a base ##10%## chance to get a throwable from an ammo box. The base chance is increased by ##2%## for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.\n\nNote: Does not stack with the perk skill 'Walk-in Closet'.",
 		menu_martial_arts_beta = "Tough Guy",
 		menu_steroids_beta = "Martial Arts",
 		menu_steroids_beta_desc = "BASIC: ##$basic##\nYou charge your melee weapons ##100%## faster.\n\nACE: ##$pro##\nYou can now sprint while using melee weapons.",
@@ -30,6 +31,11 @@ Hooks:Add('LocalizationManagerPostInit', 'newdescriptionsandstuff_eng', function
 		menu_wolverine_beta_desc = "BASIC: ##$basic##\nThe lower your health, the more damage you do. When your health is below ##50%##, you will do up to ##125%## more melee and saw damage.\n\nACE: ##$pro##\nThe lower your health, the more damage you do. When your health is below ##50%##, you will do up to ##100%## more damage with ranged weapons as well.\n\nNote: Does not apply to throwables, grenade launchers or rocket launchers.\n\nEntering berserker state negates third party regeneration effects.",
 		menu_sociopathinfil_1_desc = "When you are surrounded by three enemies or more, you receive ##12%## less damage from enemies.\n\nYour second and each consecutive melee hit within ##4## seconds of the last one will deal ##50%## more damage.\n",
 		menu_up_you_go_beta_desc = "BASIC: ##$basic##\nYou take ##30%## less damage for ##10## seconds after being revived.\n\nACE: ##$pro##\nYou receive additonal ##35%## of your maximum health when revived.\n\nNote: This adds up to about ##75%## health on difficulties lower then Mayhem, and ##45%## health on all difficulties above and including Mayhem.",
+		menu_body_expertise_beta_desc = "BASIC: ##$basic##\n##25%## from the bonus headshot damage is permanently applied to hitting enemies on the body. This skill is only activated by SMGs, LMGs, Assault Rifles or Special Weapons fired in automatic mode.\n\nACE: ##$pro##\n##50%## from the bonus headshot damage is permanently applied to hitting enemies on the body. This skill is only activated by SMGs, LMGs, Assault Rifles or Special Weapons fired in automatic mode.\n\nGilza note: due to how this skill calculates additional bodyshot damage, you can think of basic version of the skill giving you ##1.5x## times the damage on bodyshots, and aced version giving you ##2x## times the damage, since normally, headshots in Gilza deal ##3x## damage to every enemy, except for cloakers and bulldozers.",
+		menu_dance_instructor_desc = "BASIC: ##$basic##\nYou gain ##20%## increased rate of fire with pistols.\n\nACE: ##$pro##\nYour pistol magazine sizes are increased by ##8## bullets.",
+		menu_gun_fighter_beta = "Bottomless pockets",
+		menu_gun_fighter_beta_desc = "BASIC: ##$basic##\nYou gain ##15%## more reserve ammunition with all pistols.\n\nACE: ##$pro##\nYou gain ##50%## more reserve ammunition with all pistols.\n\nGilza note: both versions stack with akimbo ammo reserve increasing skills.",
+		
 		menu_deck_brawler = "Brawler",
 		menu_deck_brawler_desc = "Gage tipped Bain off about a new shipment of experimental lightweight high power armor suits being transported by Murkywater to one of their facitilies. And who are you, if not THE fucking payday gang? Of course you had to steal it! But after properly inspecting them in your safe house, you found out that they are extremely bulky, yet still somehow comfortable to run around in.\n\nThis, is how you became... THE BRAWLER!",
 		menu_deck_brawler1 = "Armor suit upgrade",
@@ -43,15 +49,25 @@ Hooks:Add('LocalizationManagerPostInit', 'newdescriptionsandstuff_eng', function
 		menu_deck_brawler9 = "Meat shield",
 		menu_deck_brawler9_desc = "You are ##15%## more likely to be targeted when you are close to your crew members.\n\nSecuring a kill with a melee weapon grants you ##75## points of armor.\n\nWhen you are under ##50%## health you recieve following bonuses:\n- Every enemy further then ##9## meters away from you deals ##18%## less damage\n- Every enemy further then ##16## meters away from you deals ##16%## less damage\n\nAll perk resistance bonuses stack, so enemies beyond ##16## meters will only deal ##12%## damage.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
 		
+		-- weaponary
+		-- shotgun ammo 
+		bm_wpn_fps_upg_a_rip_desc_new = "Poisoned bullet that deals damage over time and can interrupt enemies if they are close enough.\n\nDeals 400 damage over 2 seconds, with a damage tick every 0.5 seconds.\n\nAmmo pick up reduced by 20%",
+		bm_wpn_fps_upg_a_custom_desc_new = "Bigger pellets with more impact.\nAmmo pick up reduced by 20%",
+		bm_wpn_fps_upg_a_explosive_desc_new = "Fires one explosive charge that kills or stuns targets.\nNo extra headshot damage.\nAmmo pick up reduced by 60%",
+		bm_wpn_fps_upg_a_piercing_desc_new = "Peirces enemy body armor. Damage range increased.",
+		bm_wpn_fps_upg_a_slug_desc_new = "Fires a single lead slug that penetrates body armor, enemies, shields and walls.\nAmmo pick up reduced by 25%",
+		bm_wpn_fps_upg_a_dragons_breath_desc_new = "Fires pellets that go up in sparks and flames. Burns through shields and body armor.\nNo extra headshot damage.\nDeals 1180 in fire damage.\nAmmo pick up reduced by 80%",
+		
 		bm_wpn_fps_ass_g3_b_sniper_desc = "ACTUAL RATE OF FIRE: 450\nPierce enemy body armor, shields and walls. Ammo pick up decreased.",
 		bm_wpn_fps_ass_g3_b_short_desc = "ACTUAL RATE OF FIRE: 850\nClose quaters assault kit. Ammo pick up increased.",
 		bm_wpn_fps_upg_ar_ap_rounds = "AP rounds",
 		bm_wpn_fps_upg_ar_ap_rounds_desc = "Pierce enemy body armor, shields and walls.\n\nAmmo pick up is reduced, but not as much as full on AP kits.",
 		bm_wpn_fps_upg_smg_ap_rounds = "AP rounds",
 		bm_wpn_fps_upg_smg_ap_rounds_desc = "Pierce enemy shields and body armor.\nAmmo pick up reduced.",
+		bm_wpn_fps_upg_pist_ap_rounds = "AP rounds",
+		bm_wpn_fps_upg_pist_ap_rounds_desc = "Pierce enemy shields and body armor.\nAmmo pick up reduced.",
 		bm_wpn_fps_upg_br_shtgn = "Breaching round",
 		bm_wpn_fps_upg_br_shtgn_desc = "Allows you to breach everything that saw OVE9000 usually can. Can also penetrate shield and body armor.\nDamage drop off is significantly worse.\n", 
-		bm_wpn_fps_upg_a_rip_desc_G = "Poisoned bullet that deals damage over time and can interrupt enemies if they are close enough.\n\nDeals 400 damage over 2 seconds, with a damage tick every 0.5 seconds.",
 		bm_wpn_fps_smg_mp5_m_straight_R = "RIP rounds",
 		wpn_fps_ass_shak12_body_vks_R = "KS12 Armor Piercing Kit",
 		bm_wpn_fps_fla_mk2_mag_rare_desc = "Less direct firepower but more afterburn damage.\n75% chance to start afterburn damage that deals 700 damage over 3 seconds.\nBase flamethrower values: 25% chance for 300dmg over 2 seconds.",

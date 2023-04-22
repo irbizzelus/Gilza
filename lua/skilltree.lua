@@ -21,7 +21,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 			upgrades = {
 				"armor_kit",
 				"player_pick_up_ammo_multiplier",
-				"regain_throwable_from_ammo"
+				"player_regain_throwable_from_ammo_1"
 			},
 			icon_xy = {
 				5,
@@ -195,6 +195,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	
 	
 	-- new skills and reworks
+	
 	self.skills.pack_mule[1].upgrades = { "player_armor_carry_bonus_1" }
 	self.skills.pack_mule[2].upgrades = { "player_sprint_any_bag" }
 	self.skills.pack_mule.icon_xy = { 6, 0 } -- 6,0
@@ -225,14 +226,16 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	self.skills.sharpshooter[2].upgrades = { "player_not_moving_damage_reduction_bonus_bipoded", "player_bipod_deploy_speed" }
 	
 	self.skills.rifleman[1].upgrades = {
-	"weapon_enter_steelsight_speed_multiplier",
-	"assault_rifle_zoom_increase",
-	"snp_zoom_increase",
-	"smg_zoom_increase",
-	"lmg_zoom_increase",
-	"pistol_zoom_increase",
+		"weapon_enter_steelsight_speed_multiplier",
+		"assault_rifle_zoom_increase",
+		"snp_zoom_increase",
+		"smg_zoom_increase",
+		"lmg_zoom_increase",
+		"pistol_zoom_increase",
 	}
 	self.skills.rifleman[2].upgrades = { "player_steelsight_normal_movement_speed", "player_weapon_movement_accuracy_nullifier" }
+	
+	self.skills.bandoliers[2].upgrades = { "player_regain_throwable_from_ammo_2"}
 	
 	self.skills.steroids[1].upgrades = { "player_melee_faster_charge" }
 	self.skills.steroids[2].upgrades = { "player_melee_sprint" }
@@ -240,4 +243,12 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	self.skills.martial_arts.icon_xy = { 1, 1 }
 	
 	self.skills.up_you_go[2].upgrades = {"player_revived_health_regain_V2"}
+	
+	self.skills.gun_fighter[1].upgrades = {"pistol_extra_ammo_multiplier_1"}
+	self.skills.gun_fighter[2].upgrades = {"pistol_extra_ammo_multiplier_2"}
+	self.skills.gun_fighter.icon_xy = {11,0}
+	
+	self.skills.dance_instructor[1].upgrades = {"pistol_fire_rate_multiplier"}
+	self.skills.dance_instructor[2].upgrades = {"pistol_magazine_capacity_inc_1"}
+	self.skills.dance_instructor.icon_xy = {7,11}
 end)
