@@ -54,7 +54,7 @@ Hooks:Add('LocalizationManagerPostInit', 'newdescriptionsandstuff_eng', function
 		bm_wpn_fps_upg_a_rip_desc_new = "Poisoned bullet that deals damage over time and can interrupt enemies if they are close enough.\n\nDeals 400 damage over 2 seconds, with a damage tick every 0.5 seconds.\n\nAmmo pick up reduced by 20%",
 		bm_wpn_fps_upg_a_custom_desc_new = "Bigger pellets with more impact.\nAmmo pick up reduced by 20%",
 		bm_wpn_fps_upg_a_explosive_desc_new = "Fires one explosive charge that kills or stuns targets.\nNo extra headshot damage.\nAmmo pick up reduced by 60%",
-		bm_wpn_fps_upg_a_piercing_desc_new = "Peirces enemy body armor. Damage range increased.",
+		bm_wpn_fps_upg_a_piercing_desc_new = "Peirces enemy body armor. Damage range increased.\nAmount of darts per shell - 5",
 		bm_wpn_fps_upg_a_slug_desc_new = "Fires a single lead slug that penetrates body armor, enemies, shields and walls.\nAmmo pick up reduced by 25%",
 		bm_wpn_fps_upg_a_dragons_breath_desc_new = "Fires pellets that go up in sparks and flames. Burns through shields and body armor.\nNo extra headshot damage.\nDeals 1180 in fire damage.\nAmmo pick up reduced by 80%",
 		

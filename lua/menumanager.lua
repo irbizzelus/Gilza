@@ -8,7 +8,7 @@ function Gilza:changelog_message()
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.7.1 changelog:\n- bla\n- bla bla"
+			local message = "1.7.1 changelog:\n- Compatibility with update 236 and McShay weapon pack 4\n- Weapon inaccuracy and recoil bonuses were reworked\n- Flechette shotgun ammuntion 'pellet' count reduced\n\nFor more info on new weapon handling and new DLC weapon stats check the changelog."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
 			
