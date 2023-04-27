@@ -8,8 +8,15 @@ function NewRaycastWeaponBase:conditional_accuracy_multiplier(current_state)
 
 	local pm = managers.player
 	
+	-- Gilza start
+	-- 30% inaccuracy for some weapon types in full auto
 	if not self:is_single_shot() then
-		mul = mul - 0.3
+		for _, category in ipairs(self:categories()) do
+			-- assuming there are no weird weapon hybrids that have both smg and ar category
+			if category == "smg" or category == "assault_rifle" or category == "lmg" then
+				mul = mul - 0.3
+			end
+		end
 	end
 	
 	if managers.player:current_state() == "bipod" then
@@ -19,6 +26,8 @@ function NewRaycastWeaponBase:conditional_accuracy_multiplier(current_state)
 	if current_state:in_steelsight() and current_state._moving then
 		mul = mul + 1 - pm:upgrade_value("player", "weapon_movement_accuracy_nullifier", 1)
 	end
+	
+	-- bellow is base game code
 
 	if current_state:in_steelsight() and self:is_single_shot() then
 		mul = mul + 1 - pm:upgrade_value("player", "single_shot_accuracy_inc", 1)
@@ -38,7 +47,7 @@ function NewRaycastWeaponBase:conditional_accuracy_multiplier(current_state)
 
 	return self:_convert_add_to_mul(mul)
 end
--- adjust recoil in single fire
+
 function NewRaycastWeaponBase:recoil_multiplier()
 	local is_moving = false
 	local user_unit = self._setup and self._setup.user_unit
@@ -47,11 +56,23 @@ function NewRaycastWeaponBase:recoil_multiplier()
 		is_moving = alive(user_unit) and user_unit:movement() and user_unit:movement()._current_state and user_unit:movement()._current_state._moving
 	end
 	
-	if self:is_single_shot() then
-		return managers.blackmarket:recoil_multiplier(self._name_id, self:weapon_tweak_data().categories, self._silencer, self._blueprint, is_moving) * 0.6
-	else
-		return managers.blackmarket:recoil_multiplier(self._name_id, self:weapon_tweak_data().categories, self._silencer, self._blueprint, is_moving) 
+	local multiplier = managers.blackmarket:recoil_multiplier(self._name_id, self:weapon_tweak_data().categories, self._silencer, self._blueprint, is_moving)
+
+	if self._alt_fire_active and self._alt_fire_data then
+		multiplier = multiplier * (self._alt_fire_data.recoil_mul or 1)
 	end
+	
+	-- 50% extra recoil for some weapon types in single fire
+	if self:is_single_shot() then
+		for _, category in ipairs(self:categories()) do
+			if category == "smg" or category == "assault_rifle" or category == "lmg" then
+				multiplier = multiplier * 0.5
+			end
+		end
+	end
+	
+	return multiplier
+	
 end
 
 function NewRaycastWeaponBase:replenish()

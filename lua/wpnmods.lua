@@ -437,7 +437,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "create_ammunition", "newwpnstats_updateg
 		"wpn_fps_sho_ksg",
 		"wpn_fps_shot_m1897",
 		"wpn_fps_shot_serbu",
-		"wpn_fps_shot_m37"
+		"wpn_fps_shot_m37",
+		"wpn_fps_sho_supernova"
 	}
 	local semi_auto = {
 		"wpn_fps_sho_spas12",
@@ -457,15 +458,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "create_ammunition", "newwpnstats_updateg
 		"wpn_fps_sho_x_rota",
 		"wpn_fps_sho_x_basset"
 	}
-	
-	-- Normal slug
-	self.parts.wpn_fps_upg_a_slug.stats = {
-		value = 5,
-		total_ammo_mod = -6
-	}
-	self.parts.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_max_mul = 0.75
-	self.parts.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_min_mul = 0.75
-	self.parts.wpn_fps_upg_a_slug.desc_id = "bm_wpn_fps_upg_a_slug_desc_new"
+
 	-- HE slug
 	local HE_custom_stats = {
 		ignore_statistic = true,
@@ -632,10 +625,20 @@ Hooks:PostHook(WeaponFactoryTweakData, "create_ammunition", "newwpnstats_updateg
 		end
 	end
 	
+	-- SLUG
+	self.parts.wpn_fps_upg_a_slug.stats = {
+		value = 5,
+		total_ammo_mod = -6
+	}
+	self.parts.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_max_mul = 0.75
+	self.parts.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_min_mul = 0.75
+	self.parts.wpn_fps_upg_a_slug.desc_id = "bm_wpn_fps_upg_a_slug_desc_new"
+	
 	-- FLECHETTE
 	self.parts.wpn_fps_upg_a_piercing.stats = {
 		value = 5
 	}
+	self.parts.wpn_fps_upg_a_piercing.custom_stats.rays = 5
 	self.parts.wpn_fps_upg_a_piercing.desc_id = "bm_wpn_fps_upg_a_piercing_desc_new"
 	
 	-- FIRE
@@ -755,7 +758,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_modpack_m4_ak", "newwpnstats_m4akd
 		"wpn_fps_m4_uupg_b_sd",
 		"wpn_fps_m4_uupg_b_long",
 		"wpn_fps_m4_uupg_b_sd",
-
+		
 		"wpn_fps_upg_ns_ass_smg_large",
 		"wpn_fps_upg_ns_ass_smg_medium",
 		"wpn_fps_upg_ns_ass_smg_small",
@@ -769,7 +772,9 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_modpack_m4_ak", "newwpnstats_m4akd
 		"wpn_fps_upg_ns_ass_smg_v6",
 		"wpn_fps_lmg_hk51b_ns_jcomp",
 		"wpn_fps_ass_shak12_ns_suppressor",
-		"wpn_fps_ass_shak12_ns_muzzle"
+		"wpn_fps_ass_shak12_ns_muzzle",
+		"wpn_fps_lmg_kacchainsaw_ns_muzzle",
+		"wpn_fps_lmg_kacchainsaw_ns_suppressor"
 	}
 	
 	--ak dmr kit
@@ -815,6 +820,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_modpack_m4_ak", "newwpnstats_m4akd
 		"wpn_fps_ass_shak12_ns_muzzle",
 		"wpn_fps_upg_ak_ns_jmac",
 		"wpn_fps_upg_ak_ns_tgp",
+		"wpn_fps_lmg_kacchainsaw_ns_muzzle",
+		"wpn_fps_lmg_kacchainsaw_ns_suppressor"
 	}
 end)
 
@@ -898,7 +905,9 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_g3", "newwpnstats_g3kits", functio
 		"wpn_fps_upg_ns_ass_smg_v6",
 		"wpn_fps_lmg_hk51b_ns_jcomp",
 		"wpn_fps_ass_shak12_ns_suppressor",
-		"wpn_fps_ass_shak12_ns_muzzle"
+		"wpn_fps_ass_shak12_ns_muzzle",
+		"wpn_fps_lmg_kacchainsaw_ns_muzzle",
+		"wpn_fps_lmg_kacchainsaw_ns_suppressor",
 	}
 	
 	--assault kit
@@ -935,7 +944,9 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_g3", "newwpnstats_g3kits", functio
 		"wpn_fps_upg_ns_ass_smg_v6",
 		"wpn_fps_lmg_hk51b_ns_jcomp",
 		"wpn_fps_ass_shak12_ns_suppressor",
-		"wpn_fps_ass_shak12_ns_muzzle"
+		"wpn_fps_ass_shak12_ns_muzzle",
+		"wpn_fps_lmg_kacchainsaw_ns_muzzle",
+		"wpn_fps_lmg_kacchainsaw_ns_suppressor",
 	}
 end)
 
@@ -1033,7 +1044,9 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_hcar", "newwpnstats_hcar", functio
 		"wpn_fps_lmg_hk51b_ns_jcomp",
 		"wpn_fps_ass_shak12_ns_suppressor",
 		"wpn_fps_ass_shak12_ns_muzzle",
-		"wpn_fps_lmg_hcar_suppressor"
+		"wpn_fps_lmg_hcar_suppressor",
+		"wpn_fps_lmg_kacchainsaw_ns_muzzle",
+		"wpn_fps_lmg_kacchainsaw_ns_suppressor",
 	}
 	
 	self.parts.wpn_fps_lmg_hcar_m_drum.stats = {
@@ -1284,4 +1297,71 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_lemming", "newwpnstats_bigmagforfi
 	self.parts.wpn_fps_pis_lemming_m_ext.stats.reload = -3
 	self.parts.wpn_fps_pis_lemming_m_ext.stats.extra_ammo = 3
 	self.parts.wpn_fps_pis_lemming_m_ext.stats.concealment = -2
+end)
+
+Hooks:PostHook(WeaponFactoryTweakData, "_init_kacchainsaw", "newwpnstats_mcshay4lmg", function(self, ...)
+	self.parts.wpn_fps_lmg_kacchainsaw_flamethrower.stats = {
+		concealment = -9,
+		spread = -5,
+		value = 1,
+		recoil = 2
+	}
+	self.parts.wpn_fps_lmg_kacchainsaw_flamethrower.custom_stats = {
+		ammo_pickup_max_mul = 0.8,
+		ammo_pickup_min_mul = 0.8,
+	}
+	self.parts.wpn_fps_lmg_kacchainsaw_conversionkit.stats = {
+		extra_ammo = 50,
+		total_ammo_mod = 20,
+		damage = -22,
+		value = 1,
+		spread = 1,
+		recoil = 4,
+		fire_rate = 1.667
+	}
+	self.parts.wpn_fps_lmg_kacchainsaw_conversionkit.custom_stats = {
+		ammo_pickup_max_mul = 1.75,
+		ammo_pickup_min_mul = 1.35,
+		fire_rate_multiplier = 1.667
+	}
+end)
+
+Hooks:PostHook(WeaponFactoryTweakData, "_init_awp", "newwpnstats_mcshay4awp", function(self, ...)
+	self.parts.wpn_fps_snp_awp_conversion_dragonlore.stats = {
+		extra_ammo = -1,
+		total_ammo_mod = -6,
+		damage = 68,
+		spread = 2,
+		value = 8,
+		concealment = -6
+	}
+	self.parts.wpn_fps_snp_awp_conversion_dragonlore.custom_stats = {
+		ammo_pickup_max_mul = 0.9,
+		ammo_pickup_min_mul = 0.9
+	}
+	self.parts.wpn_fps_snp_awp_conversion_wildlands.stats = {
+		concealment = 2,
+		total_ammo_mod = 13,
+		damage = -120,
+		spread = -2,
+		value = 8,
+		recoil = 4
+	}
+	self.parts.wpn_fps_snp_awp_conversion_wildlands.custom_stats = {
+		fire_rate_multiplier = 1.7,
+		ammo_pickup_max_mul = 2,
+		ammo_pickup_min_mul = 1.4
+	}
+	self.parts.wpn_fps_snp_awp_ext_shellrack.stats.total_ammo_mod = 7
+end)
+
+Hooks:PostHook(WeaponFactoryTweakData, "_init_supernova", "newwpnstats_mcshay4shotty", function(self, ...)
+	self.parts.wpn_fps_sho_supernova_conversion.stats = {
+		value = 1,
+		total_ammo_mod = 3,
+		concealment = 3,
+		spread = -3,
+		recoil = 3
+	}
+	self.parts.wpn_fps_sho_supernova_shell_rack.stats.total_ammo_mod = 3
 end)

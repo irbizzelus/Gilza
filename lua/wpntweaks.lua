@@ -130,6 +130,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		"m60",
 		"hk51b",
 		"hcar",
+		"kacchainsaw",
 		-- pistols
 		"lemming",
 		"sparrow",
@@ -177,6 +178,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		"m1897",
 		"m590",
 		"sko12",
+		"supernova",
 		-- secondary shotguns
 		"basset",
 		"m37",
@@ -203,6 +205,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		"scout",
 		"contender",
 		"victor",
+		"awp",
 		-- sub machine guns
 		"tec9",
 		"m1928",
@@ -537,6 +540,40 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.ksg.fire_mode_data = {fire_rate = 60/90}
 	self.ksg.single = {fire_rate = 60/90}
 	
+	-- mcshay 4
+	self.supernova.stats.damage = 420
+	self.supernova.NR_CLIPS_MAX = 7
+	self.supernova.AMMO_MAX = self.supernova.CLIP_AMMO_MAX * self.supernova.NR_CLIPS_MAX
+	self.supernova.AMMO_PICKUP = {0.74,1.23}
+	self.supernova.stats.spread = 16
+	self.supernova.stats.spread_moving = 14
+	self.supernova.fire_mode_data = {
+		fire_rate = 60/70
+	}
+	self.supernova.single = {
+		fire_rate = 60/70
+	}
+	self.supernova.alt_fire_data = {
+		fire_rate = 60/280,
+		spread_mul = 1,
+		damage_mul = 1,
+		shell_ejection = "effects/payday2/particles/weapons/shells/shell_slug",
+		recoil_mul = 2,
+		animations = {
+			fire_steelsight = "recoil_steelsight_alt",
+			fire = "recoil_alt"
+		}
+	}
+	
+	self.supernova.kick.standing = {
+		1.9,
+		2.1,
+		-0.15,
+		0.15
+	}
+	self.supernova.kick.crouching = self.supernova.kick.standing
+	self.supernova.kick.steelsight = self.supernova.kick.standing
+	
 	-- Semi-auto --
 	self.benelli.stats.damage = 305
 	self.benelli.CLIP_AMMO_MAX = 8
@@ -765,6 +802,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.hcar.stats.damage = 210
 	self.hcar.AMMO_PICKUP = {2.1,3.3}
 	
+	
 	--heavy
 	self.hk21.AMMO_PICKUP = {3.18,5.92}
 	self.hk21.stats.spread = 8
@@ -791,6 +829,22 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.par.stats.spread = 8
 	self.par.stats.spread_moving = 6
 	self.par.stats.recoil = 10
+	-- mcshay pack 4
+	self.kacchainsaw.stats.damage = 117
+	self.kacchainsaw.AMMO_PICKUP = {5.78,8.99}
+	self.kacchainsaw_flamethrower.CLIP_AMMO_MAX = 125
+	self.kacchainsaw_flamethrower.NR_CLIPS_MAX = 2
+	self.kacchainsaw_flamethrower.AMMO_MAX = self.kacchainsaw_flamethrower.CLIP_AMMO_MAX * self.kacchainsaw_flamethrower.NR_CLIPS_MAX
+	self.kacchainsaw_flamethrower.AMMO_PICKUP = {1.7,3.5}
+	self.kacchainsaw_flamethrower.stats.damage = 60
+	self.kacchainsaw_flamethrower.fire_dot_data = {
+		dot_trigger_chance = 5,
+		dot_damage = 3,
+		dot_length = 1.1,
+		dot_trigger_max_distance = 3000,
+		dot_tick_period = 0.25
+	}
+	
 	end
 	setLMGs()
 	
@@ -932,6 +986,15 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.r700.stats.spread_moving = 20
 	self.r700.fire_mode_data = {fire_rate = 60/50}
 	self.r700.single = {fire_rate = 60/50}
+	
+	--mcshay 4
+	self.awp.stats.damage = 1260/5
+	self.awp.NR_CLIPS_MAX = 3
+	self.awp.AMMO_MAX = self.awp.CLIP_AMMO_MAX * self.awp.NR_CLIPS_MAX
+	self.awp.AMMO_PICKUP = {0.7,1}
+	self.awp.stats_modifiers = {
+		damage = 5
+	}
 
 	-- Ze big dick gun
 	self.m95.stats.damage = 230
@@ -1706,7 +1769,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			"rpk",
 			"m60",
 			"hk51b",
-			"hcar"
+			"hcar",
+			"kacchainsaw",
 		}
 		
 		local recoil
