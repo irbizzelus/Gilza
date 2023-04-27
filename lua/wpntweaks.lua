@@ -545,8 +545,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.supernova.NR_CLIPS_MAX = 7
 	self.supernova.AMMO_MAX = self.supernova.CLIP_AMMO_MAX * self.supernova.NR_CLIPS_MAX
 	self.supernova.AMMO_PICKUP = {0.74,1.23}
-	self.supernova.stats.spread = 16
-	self.supernova.stats.spread_moving = 14
+	self.supernova.stats.spread = 13
+	self.supernova.stats.spread_moving = 11
 	self.supernova.fire_mode_data = {
 		fire_rate = 60/70
 	}
@@ -555,10 +555,10 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	}
 	self.supernova.alt_fire_data = {
 		fire_rate = 60/280,
-		spread_mul = 1,
+		spread_mul = 3,
 		damage_mul = 1,
 		shell_ejection = "effects/payday2/particles/weapons/shells/shell_slug",
-		recoil_mul = 2,
+		recoil_mul = 1.5,
 		animations = {
 			fire_steelsight = "recoil_steelsight_alt",
 			fire = "recoil_alt"
@@ -566,10 +566,10 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	}
 	
 	self.supernova.kick.standing = {
-		1.9,
-		2.1,
-		-0.15,
-		0.15
+		2.3,
+		2.5,
+		-0.45,
+		0.45
 	}
 	self.supernova.kick.crouching = self.supernova.kick.standing
 	self.supernova.kick.steelsight = self.supernova.kick.standing
