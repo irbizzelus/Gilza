@@ -1359,9 +1359,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_supernova", "newwpnstats_mcshay4sh
 	self.parts.wpn_fps_sho_supernova_conversion.stats = {
 		value = 1,
 		total_ammo_mod = 3,
-		concealment = 3,
+		concealment = 2,
 		spread = -3,
-		recoil = 3
+		recoil = 2,
+		extra_ammo = 1
 	}
 	self.parts.wpn_fps_sho_supernova_shell_rack.stats.total_ammo_mod = 3
 end)

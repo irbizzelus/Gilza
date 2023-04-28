@@ -49,7 +49,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 	self.values.player.weapon_movement_accuracy_nullifier = {
 		0.7
 	}
-	-- gun nut ROF changed from 50 to 25, bcuz all pistols have higher base ROF now
+	-- gun nut ROF changed from 50 to 20, bcuz all pistols have higher base ROF now
 	self.values.pistol.fire_rate_multiplier = {
 		1.20
 	}
@@ -93,8 +93,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 	}
 	-- sociopath/infiltrator melee dmg boosts adjustments
 	self.values.melee.stacking_hit_damage_multiplier = {
-		0.5,
-		0.5
+		0.75,
+		0.75
 	}
 	-- adjusted hidden infiltrator duration buff to be present on both decks but shorter
 	self.values.melee.stacking_hit_expire_t = {
