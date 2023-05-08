@@ -244,6 +244,7 @@ function PlayerStandard:_find_pickups(t)
 					wpn_prj_jav = 2,
 					wpn_prj_target = 5,
 					concussion = 4,
+					sticky_grenade = 3,
 					poison_gas_grenade = 2
 				}
 				function Gilza_nadepickuptweaks()

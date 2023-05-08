@@ -120,7 +120,7 @@ function Gilza.applyCustomAR_stats(id)
 		
 	-- high mid AR's
 	elseif tweak_data.weapon[id].stats.damage >= 153 and tweak_data.weapon[id].stats.damage <= 200 then
-		tweak_data.weapon[id].stats.damage = 183
+		tweak_data.weapon[id].stats.damage = 177
 		tweak_data.weapon[id].AMMO_PICKUP = {2.8,3.73}
 		
 	-- heavy AR's
@@ -142,22 +142,22 @@ function Gilza.applyCustomSMG_stats(id)
 	-- same as with AR's - dont touch guns with REALLY low damage
 	if tweak_data.weapon[id].stats.damage >= 77 and tweak_data.weapon[id].stats.damage <= 92 then
 		tweak_data.weapon[id].stats.damage = 77
-		tweak_data.weapon[id].AMMO_PICKUP = {4.12,6.23}
+		tweak_data.weapon[id].AMMO_PICKUP = {4.26,7.1}
 	elseif tweak_data.weapon[id].stats.damage >= 93 and tweak_data.weapon[id].stats.damage <= 110 then
 		tweak_data.weapon[id].stats.damage = 95
-		tweak_data.weapon[id].AMMO_PICKUP = {3.534,5.437}
+		tweak_data.weapon[id].AMMO_PICKUP = {3.98,6.83}
 	elseif tweak_data.weapon[id].stats.damage >= 111 and tweak_data.weapon[id].stats.damage <= 129 then
 		tweak_data.weapon[id].stats.damage = 117
-		tweak_data.weapon[id].AMMO_PICKUP = {3.13,4.83}
+		tweak_data.weapon[id].AMMO_PICKUP = {2.79,4.72}
 	elseif tweak_data.weapon[id].stats.damage >= 130 and tweak_data.weapon[id].stats.damage <= 147 then
 		tweak_data.weapon[id].stats.damage = 146
-		tweak_data.weapon[id].AMMO_PICKUP = {2.24,3.16}
+		tweak_data.weapon[id].AMMO_PICKUP = {2.39,3.34}
 	elseif tweak_data.weapon[id].stats.damage >= 148 and tweak_data.weapon[id].stats.damage <= 200 then
 		tweak_data.weapon[id].stats.damage = 183
-		tweak_data.weapon[id].AMMO_PICKUP = {1.65,2.62}
+		tweak_data.weapon[id].AMMO_PICKUP = {2.15,2.99}
 	elseif tweak_data.weapon[id].stats.damage >= 201 then
 		tweak_data.weapon[id].stats.damage = 210
-		tweak_data.weapon[id].AMMO_PICKUP = {1.29,2.18}
+		tweak_data.weapon[id].AMMO_PICKUP = {1.62,2.39}
 	end
 end
 
@@ -168,26 +168,37 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 	-- same as with others - dont touch guns with REALLY low damage
 	if tweak_data.weapon[id].stats.damage >= 77 and tweak_data.weapon[id].stats.damage <= 92 then
 		tweak_data.weapon[id].stats.damage = 77
-		tweak_data.weapon[id].AMMO_PICKUP = {3.89,5.99}
+		tweak_data.weapon[id].AMMO_PICKUP = {4.26,7.1}
 	elseif tweak_data.weapon[id].stats.damage >= 93 and tweak_data.weapon[id].stats.damage <= 110 then
 		tweak_data.weapon[id].stats.damage = 95
-		tweak_data.weapon[id].AMMO_PICKUP = {3.47,5.44}
+		tweak_data.weapon[id].AMMO_PICKUP = {3.98,6.83}
 	elseif tweak_data.weapon[id].stats.damage >= 111 and tweak_data.weapon[id].stats.damage <= 129 then
 		tweak_data.weapon[id].stats.damage = 117
-		tweak_data.weapon[id].AMMO_PICKUP = {2.95,5.36}
+		tweak_data.weapon[id].AMMO_PICKUP = {2.79,4.72}
 	elseif tweak_data.weapon[id].stats.damage >= 130 and tweak_data.weapon[id].stats.damage <= 147 then
 		tweak_data.weapon[id].stats.damage = 140
-		tweak_data.weapon[id].AMMO_PICKUP = {2.27,3.53}
+		tweak_data.weapon[id].AMMO_PICKUP = {2.39,3.34}
 	elseif tweak_data.weapon[id].stats.damage >= 148 and tweak_data.weapon[id].stats.damage <= 200 then
 		tweak_data.weapon[id].stats.damage = 183
-		tweak_data.weapon[id].AMMO_PICKUP = {1.65,2.69}
-	elseif (tweak_data.weapon[id].stats.damage >= 201 and isRevolver) then
+		tweak_data.weapon[id].AMMO_PICKUP = {2.15,2.99}
+	elseif tweak_data.weapon[id].stats.damage >= 201 and isRevolver then
 		tweak_data.weapon[id].stats.damage = 420
-		tweak_data.weapon[id].AMMO_PICKUP = {0.45,0.84}
+		tweak_data.weapon[id].AMMO_PICKUP = {0.53,0.99}
 	elseif tweak_data.weapon[id].stats.damage >= 201 then
 		tweak_data.weapon[id].stats.damage = 210
-		tweak_data.weapon[id].AMMO_PICKUP = {1.1094,1.88}
+		tweak_data.weapon[id].AMMO_PICKUP = {1.62,2.39}
 	end
+	
+	if tweak_data.weapon[id].fire_mode_data then
+		tweak_data.weapon[id].fire_mode_data.fire_rate = tweak_data.weapon[id].fire_mode_data.fire_rate * 1.5
+	end
+	if tweak_data.weapon[id].single then
+		tweak_data.weapon[id].single.fire_rate = tweak_data.weapon[id].single.fire_rate * 1.5
+	end
+	if tweak_data.weapon[id].auto then
+		tweak_data.weapon[id].auto.fire_rate = tweak_data.weapon[id].auto.fire_rate * 1.5
+	end
+	
 end
 
 function Gilza.checkforweapontweaks()

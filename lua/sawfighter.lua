@@ -13,7 +13,6 @@ function SawHit:on_collision(col_ray, weapon_unit, user_unit, damage)
 
 	if hit_unit and hit_unit:character_damage() then
 		damage = damage * 9.2
-		log(tostring(damage))
 	end
 
 	local result = InstantBulletBase.on_collision(self, col_ray, weapon_unit, user_unit, damage)

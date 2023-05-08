@@ -69,18 +69,38 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "newwpnparts_breachround_andAP", 
 		ammo_pickup_max_mul = 0.5,
 		ammo_pickup_min_mul = 0.5,
 	}
+	
+	-- little friend 762's 556 conversion kit
+	self.parts.wpn_fps_upg_762_to_556_kit.name_id = "bm_wpn_fps_upg_762_to_556_kit"
+	self.parts.wpn_fps_upg_762_to_556_kit.desc_id = "bm_wpn_fps_upg_762_to_556_kit_desc"
+	self.parts.wpn_fps_upg_762_to_556_kit.stats = {
+		value = 0,
+		total_ammo_mod = 8,
+		extra_ammo = 5,
+		damage = -243,
+		spread = -2,
+		recoil = -4
+	}
+	self.parts.wpn_fps_upg_762_to_556_kit.custom_stats = {
+		ammo_pickup_min_mul = 4.52,
+		ammo_pickup_max_mul = 3.05
+	}
 end)
 
 Hooks:PostHook(WeaponFactoryTweakData, "_init_mp5", "newwpnstats_mp5", function(self, ...)
 	self.parts.wpn_fps_smg_mp5_m_straight.stats = {
 		extra_ammo = -2.5,
-		damage = 65,
+		damage = 64,
 		spread = -8,
 		spread_moving = -8,
 		recoil = -14,
-		total_ammo_mod = -8,
+		total_ammo_mod = -6,
 		reload = 2,
 		concealment = -6,
+	}
+	self.parts.wpn_fps_smg_mp5_m_straight.custom_stats = {
+		ammo_pickup_min_mul = 0.8,
+		ammo_pickup_max_mul = 0.8
 	}
 	self.parts.wpn_fps_smg_mp5_m_straight.name_id = "bm_wpn_fps_smg_mp5_m_straight_R"
 end)
@@ -88,11 +108,11 @@ end)
 Hooks:PostHook(WeaponFactoryTweakData, "_init_x_mp5", "newwpnstats_x_mp5", function(self, ...)
 	self.wpn_fps_smg_x_mp5.override.wpn_fps_smg_mp5_m_straight.stats = {
 		extra_ammo = -5,
-		damage = 65,
+		damage = 64,
 		spread = -8,
 		spread_moving = -8,
 		recoil = -14,
-		total_ammo_mod = -6,
+		total_ammo_mod = -5,
 		reload = 2,
 		concealment = -6,
 	}
@@ -914,7 +934,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_g3", "newwpnstats_g3kits", functio
 	self.parts.wpn_fps_ass_g3_b_short.stats = {
 		spread = -9,
 		total_ammo_mod = 15,
-		damage = -25,
+		damage = -33,
 		value = 2,
 		concealment = 2,
 		recoil = 5,
@@ -1070,7 +1090,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_hcar", "newwpnstats_hcar", functio
 	self.parts.wpn_fps_lmg_hcar_body_conversionkit.stats = {
 		extra_ammo = 40,
 		total_ammo_mod = 20,
-		damage = -27,
+		damage = -33,
 		value = 1,
 		spread = -8,
 		spread_moving = -8,
@@ -1348,9 +1368,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_awp", "newwpnstats_mcshay4awp", fu
 		recoil = 4
 	}
 	self.parts.wpn_fps_snp_awp_conversion_wildlands.custom_stats = {
-		fire_rate_multiplier = 1.7,
-		ammo_pickup_max_mul = 2,
-		ammo_pickup_min_mul = 1.4
+		fire_rate_multiplier = 1.7
 	}
 	self.parts.wpn_fps_snp_awp_ext_shellrack.stats.total_ammo_mod = 7
 end)

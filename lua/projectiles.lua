@@ -34,6 +34,9 @@ Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "throwablecounters", f
 	self.projectiles.molotov.max_amount = 2
 	self.projectiles.wpn_gre_electric.max_amount = 3
 	
+	-- Change Sicario smoke grenade cooldown from 60 to 40
+	self.projectiles.smoke_screen_grenade.base_cooldown = 40
+	
 	-- new launcher nade
 	self.projectiles.launcher_velocity = {
 		name_id = "bm_launcher_frag",

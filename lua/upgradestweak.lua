@@ -41,13 +41,13 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 	self.values.player.not_moving_damage_reduction_bonus_bipoded = {
 		0.631 -- this value is a bit dumb, because we apply both the base 5% bonus and the pro bipod bonus one after another, this is close enough to 40%, cuz idk right now how to make those values additive
 	}
-	-- fire control hip fire 20->15
+	-- fire control hip fire 20->25% full removal
 	self.values.player.weapon_movement_stability = {
-		0.85
+		1
 	}
 	-- new agile marksman skill, nullifies weapon inaccuarcy while moving and ADS'ing
 	self.values.player.weapon_movement_accuracy_nullifier = {
-		0.7
+		1
 	}
 	-- gun nut ROF changed from 50 to 20, bcuz all pistols have higher base ROF now
 	self.values.pistol.fire_rate_multiplier = {

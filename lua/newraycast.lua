@@ -23,8 +23,12 @@ function NewRaycastWeaponBase:conditional_accuracy_multiplier(current_state)
 		mul = mul + 1 - 0.5
 	end
 	
-	if current_state:in_steelsight() and current_state._moving then
-		mul = mul + 1 - pm:upgrade_value("player", "weapon_movement_accuracy_nullifier", 1)
+	if current_state._moving then
+		if current_state:in_steelsight() then 
+			mul = mul - (1 - pm:upgrade_value("player", "weapon_movement_accuracy_nullifier", 0.75))
+		else
+			mul = mul - (1 - pm:upgrade_value("player", "weapon_movement_stability", 0.75))
+		end
 	end
 	
 	-- bellow is base game code
@@ -39,10 +43,11 @@ function NewRaycastWeaponBase:conditional_accuracy_multiplier(current_state)
 		end
 	end
 
+	--[[ fire control skill, moved above
 	if current_state._moving then
 		mul = mul + 1 - pm:upgrade_value("player", "weapon_movement_stability", 1)
 	end
-
+	]]
 	mul = mul + 1 - pm:get_property("desperado", 1)
 
 	return self:_convert_add_to_mul(mul)
