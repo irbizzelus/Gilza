@@ -8,7 +8,7 @@ function Gilza:changelog_message()
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.8 changelog:\n- blah."
+			local message = "1.8 changelog:\n- Some skill/perk changes\n- 5.56 conversion kit for 7.62 Little friend AR\n- Major changes to accuracy and recoil systems\n- HUGE amount of rebalances for ALL AR's, SMG's, LMG's, Snipers, Pistols, some shotguns and some specials"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
 			
