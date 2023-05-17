@@ -1,27 +1,3 @@
--- have to keep this file structure to support rare ocasions of people moving from older versions
-Gilza.customguns = {}
-
-function Gilza:Save_gunz()
-	local file = io.open(Gilza._guns_path, 'w+')
-	if file then
-		file:write(json.encode(Gilza.customguns))
-		file:close()
-	end
-end
-
-function Gilza:Load_gunz()
-	local file = io.open(Gilza._guns_path, 'r')
-	if file then
-		for i, v in pairs(json.decode(file:read('*all')) or {}) do
-			Gilza.customguns[i] = v
-		end
-		file:close()
-	end
-end
-
-Gilza:Load_gunz()
-Gilza:Save_gunz()
-
 local function has_value (tab, val)
     for index, value in ipairs(tab) do
         if value == val then
@@ -176,7 +152,7 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 		tweak_data.weapon[id].stats.damage = 117
 		tweak_data.weapon[id].AMMO_PICKUP = {2.79,4.72}
 	elseif tweak_data.weapon[id].stats.damage >= 130 and tweak_data.weapon[id].stats.damage <= 147 then
-		tweak_data.weapon[id].stats.damage = 140
+		tweak_data.weapon[id].stats.damage = 146
 		tweak_data.weapon[id].AMMO_PICKUP = {2.39,3.34}
 	elseif tweak_data.weapon[id].stats.damage >= 148 and tweak_data.weapon[id].stats.damage <= 200 then
 		tweak_data.weapon[id].stats.damage = 183

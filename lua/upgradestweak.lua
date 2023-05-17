@@ -128,16 +128,57 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 	self.values.player.damage_resist_faraway_brawler = {
 		true
 	}
+	-- Body expertise
 	self.values.weapon.automatic_head_shot_add = {
 		0.25,
 		0.5
 	}
+	-- new ammo stuff
 	self.values.pistol.extra_ammo_multiplier = {
 		1.15,
 		1.5
 	}
+	-- gunt nut ACED
 	self.values.pistol.magazine_capacity_inc = {
 		8
+	}
+	-- agressive reload for ar smg and sniper
+	self.values.assault_rifle.reload_speed_multiplier = {
+		1.25
+	}
+	self.values.smg.reload_speed_multiplier = {
+		1.25
+	}
+	self.values.snp.reload_speed_multiplier = {
+		1.25
+	}
+	-- new saw skill
+	self.values.player.saw_ammo_pick_up = {
+		true
+	}
+	-- gambler change
+	self.values.player.gain_life_per_players = {
+		0.35
+	}
+	-- adding 4th dodge chance for rogue buff
+	self.values.player.passive_dodge_chance = {
+		0.15,
+		0.3,
+		0.45,
+		0.55
+	}
+	-- roruge armour piercing buff
+	self.values.weapon.armor_piercing_chance = {
+		0.5
+	}
+	-- rogue extra 15% move speed
+	self.values.player.movement_speed_multiplier = {
+		1.1,
+		1.25
+	}
+	-- rogue extra 25% stamina
+	self.values.player.stamina_multiplier = {
+		1.25
 	}
 end)
 
@@ -334,6 +375,25 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "newskills3", function(
 		upgrade = {
 			value = 1,
 			upgrade = "damage_resist_faraway_brawler",
+			category = "player"
+		}
+	}
+	self.definitions.player_saw_ammo_pick_up = {
+		name_id = "saw_ammo_pick_up",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "saw_ammo_pick_up",
+			category = "player"
+		}
+	}
+	self.definitions.player_movement_speed_multiplier_2 = {
+		incremental = true,
+		name_id = "menu_player_movement_speed_multiplier",
+		category = "feature",
+		upgrade = {
+			value = 2,
+			upgrade = "movement_speed_multiplier",
 			category = "player"
 		}
 	}

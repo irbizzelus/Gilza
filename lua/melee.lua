@@ -2,38 +2,40 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 	-- list in order of appearance in my game, im only missing hotline miami 1, raid community knifes, john wick promo pencil and alienware melee, they are all at the end
 	local melee_ids = {
 		weapon = 1,
-		fists = 2,
-		brass_knuckles = 2,
+		fists = 4,
+		brass_knuckles = 4,
 		kabartanto = 3,
 		toothbrush = 2,
 		kabar = 3,
 		swagger = 4,
-		aziz = 4,
+		aziz = 2,
 		clean = 2,
-		spoon_gold = 5,
-		nin = 5,
-		spoon = 5,
+		spoon_gold = 7,
+		nin = 4,
+		spoon = 7,
 		fork = 2,
-		spatula = 4,
-		shovel = 5,
+		spatula = 5,
+		shovel = 6,
 		moneybundle = 4,
-		fight = 2,
+		
+		fight = 4,
 		cutters = 6,
 		shawn = 2,
-		boxcutter = 3,
-		microphone = 4,
-		selfie = 4,
+		boxcutter = 5,
+		microphone = 6,
+		selfie = 5,
 		bayonet = 3,
 		gator = 5,
-		road = 5,
+		road = 8,
 		zeus = "tazer",
-		iceaxe = 3,
+		iceaxe = 5,
 		oxide = 5,
-		baton = 4,
+		baton = 6,
 		slot_lever = 4,
 		chac = 4,
 		fear = "poison",
-		hauteur = 5,
+		
+		hauteur = 3,
 		shock = 6,
 		baseballbat = 8,
 		oldbaton = 6,
@@ -47,54 +49,58 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 		buck = 8,
 		wing = 5,
 		branding_iron = 4,
-		detector = 4,
+		detector = 6,
 		croupier_rake = 4,
-		ostry = 5,
-		bullseye = 5,
+		
+		ostry = 4,
+		bullseye = 4,
 		cs = 6,
 		brick = 5,
 		model24 = 6,
 		scalper = 5,
 		switchblade = 2,
-		boxing_gloves = 3,
-		push = 3,
-		sap = 4,
-		meat_cleaver = 5,
-		sandsteel = 5,
-		twins = 5,
-		pitchfork = 8,
-		bowie = 3,
+		boxing_gloves = 4,
+		push = 4,
+		sap = 5,
+		meat_cleaver = 4,
+		sandsteel = 4,
+		twins = 3,
+		pitchfork = 7,
+		bowie = 5,
 		micstand = 6,
+		
 		chef = 2,
 		x46 = 3,
-		tiger = 2,
+		tiger = 3,
 		beardy = 7,
-		catch = 3,
-		cleaver = 5,
+		catch = 2,
+		cleaver = 4,
 		taser = "tazer",
 		mining_pick = 7,
 		hammer = 6,
-		shillelagh = 5,
+		shillelagh = 6,
 		stick = 5,
 		scoutknife = 2,
 		gerber = 3,
 		fairbair = 2,
 		tomahawk = 5,
-		morning = 5,
+		morning = 4,
+		
 		poker = 5,
 		barbedwire = 8,
 		great = 7,
 		whiskey = 8,
 		freedom = 6,
-		dingdong = 8,
-		tenderizer = 4,
+		dingdong = 7,
+		tenderizer = 6,
 		machete = 5,
 		becker = 3,
 		cqc = "poison",
-		rambo = 5,
+		rambo = 4,
 		fireaxe = 7,
+		
 		-- those that i dont own
-		briefcase = 6,
+		briefcase = 7,
 		grip = 3,
 		-- those that are not even shown (to me)
 		alien_maul = 6,
@@ -109,8 +115,6 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 4
 				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 4
 				self.melee_weapons[tostring(weapon)].stats.charge_time = 0
-				--self.melee_weapons[tostring(weapon)].stats.range = 0
-				--self.melee_weapons[tostring(weapon)].stats.concealment = 0
 				self.melee_weapons[tostring(weapon)].melee_damage_delay = 0
 				self.melee_weapons[tostring(weapon)].repeat_expire_t = 0.6
 			end
@@ -137,8 +141,8 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 			if profile == 4 then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 2.5
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 5
-				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 10
-				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 9
+				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 30
+				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 25
 				self.melee_weapons[tostring(weapon)].stats.charge_time = 2
 				self.melee_weapons[tostring(weapon)].melee_damage_delay = 0.1
 				self.melee_weapons[tostring(weapon)].repeat_expire_t = 0.7
@@ -157,8 +161,8 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 			if profile == 6 then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 3.5
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 7.5
-				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 300/35
-				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 6
+				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 1000/35
+				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 1750/75
 				self.melee_weapons[tostring(weapon)].stats.charge_time = 3.5
 				self.melee_weapons[tostring(weapon)].melee_damage_delay = 0.2
 				self.melee_weapons[tostring(weapon)].repeat_expire_t = 1
@@ -177,8 +181,8 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 			if profile == 8 then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 5
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 10
-				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 9
-				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 7
+				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 26
+				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 22.5
 				self.melee_weapons[tostring(weapon)].stats.charge_time = 4.5
 				self.melee_weapons[tostring(weapon)].melee_damage_delay = 0.5
 				self.melee_weapons[tostring(weapon)].repeat_expire_t = 1.4
@@ -217,8 +221,8 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 	
 	-- gold spoon extra penalties
 	self.melee_weapons.spoon_gold.stats.charge_time = 6
-	self.melee_weapons.spoon_gold.stats.concealment = 24
-	self.melee_weapons.spoon_gold.repeat_expire_t = 1
+	self.melee_weapons.spoon_gold.stats.concealment = 23
+	self.melee_weapons.spoon_gold.melee_damage_delay = 0.42
 	-- psycho myers knife changes and sounds
 	self.melee_weapons.chef.stats.min_damage = 1.7
 	self.melee_weapons.chef.stats.max_damage = 15
@@ -226,24 +230,51 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 	self.melee_weapons.chef.stats.min_damage_effect = 1
 	self.melee_weapons.chef.stats.max_damage_effect = 1
 	self.melee_weapons.chef.sounds.charge = "halloween_charge"
-	-- mine pick less delay but more time and less knock
+	-- mine pick less delay but less knock and no charged dmg
 	self.melee_weapons.mining_pick.melee_damage_delay = 0.3
-	self.melee_weapons.mining_pick.stats.charge_time = 4.5
+	self.melee_weapons.mining_pick.stats.max_damage = 5
+	self.melee_weapons.mining_pick.stats.charge_time = 1
 	self.melee_weapons.mining_pick.stats.min_damage_effect = 0.5
-	self.melee_weapons.mining_pick.stats.max_damage_effect = 0.5
+	self.melee_weapons.mining_pick.stats.max_damage_effect = 1
+	-- glen bottle faster attacks no charge dmg
+	self.melee_weapons.whiskey.melee_damage_delay = 0.33
+	self.melee_weapons.whiskey.repeat_expire_t = 0.9
+	self.melee_weapons.whiskey.stats.charge_time = 3
+	self.melee_weapons.whiskey.stats.max_damage = 5
+	self.melee_weapons.whiskey.stats.min_damage_effect = 3
+	self.melee_weapons.whiskey.stats.max_damage_effect = 12
+	self.melee_weapons.whiskey.expire_t = 0.85
 	-- animation sync issue fixes
-	self.melee_weapons.swagger.repeat_expire_t = 0.55
-	self.melee_weapons.aziz.repeat_expire_t = 0.8
-	self.melee_weapons.spatula.repeat_expire_t = 0.55
-	self.melee_weapons.moneybundle.repeat_expire_t = 0.55
+	self.melee_weapons.buck.repeat_expire_t = 1.1
 	self.melee_weapons.baseballbat.melee_damage_delay = 0.42
 	self.melee_weapons.barbedwire.melee_damage_delay = 0.42
-	self.melee_weapons.sandsteel.repeat_expire_t = 0.78
-	self.melee_weapons.pitchfork.expire_t = 0.8
-	self.melee_weapons.whiskey.melee_damage_delay = 0.40
-	self.melee_weapons.whiskey.expire_t = 0.8
-	self.melee_weapons.dingdong.melee_damage_delay = 0.45
-	self.melee_weapons.dingdong.repeat_expire_t = 1.25
+	self.melee_weapons.dingdong.repeat_expire_t = 1.15
+	self.melee_weapons.swagger.expire_t = 0.55
+	self.melee_weapons.spoon.melee_damage_delay = 0.42
+	self.melee_weapons.spoon.repeat_expire_t = 1.1
+	self.melee_weapons.spatula.expire_t = 0.58
+	self.melee_weapons.moneybundle.expire_t = 0.58
+	self.melee_weapons.shawn.expire_t = 1.25
+	self.melee_weapons.microphone.expire_t = 0.65
+	self.melee_weapons.chac.expire_t = 0.65
+	self.melee_weapons.shock.expire_t = 0.9
+	self.melee_weapons.oldbaton.expire_t = 0.9
+	self.melee_weapons.wing.expire_t = 0.9
+	self.melee_weapons.branding_iron.expire_t = 0.75
+	self.melee_weapons.detector.expire_t = 0.9
+	self.melee_weapons.bullseye.expire_t = 0.75
+	self.melee_weapons.model24.expire_t = 0.9
+	self.melee_weapons.meat_cleaver.expire_t = 0.75
+	self.melee_weapons.twins.expire_t = 1
+	self.melee_weapons.pitchfork.melee_damage_delay = 0.42
+	self.melee_weapons.pitchfork.expire_t = 1
+	self.melee_weapons.hammer.expire_t = 1
+	self.melee_weapons.shillelagh.expire_t = 1
+	self.melee_weapons.stick.expire_t = 1
+	self.melee_weapons.tomahawk.expire_t = 0.7
+	self.melee_weapons.morning.expire_t = 0.9
+	self.melee_weapons.dingdong.stats.range = 325
+	self.melee_weapons.tenderizer.expire_t = 1
 	
 	-- adding back some charge sounds:
 	-- sydney's butterfly

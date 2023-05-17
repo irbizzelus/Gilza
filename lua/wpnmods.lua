@@ -595,17 +595,17 @@ Hooks:PostHook(WeaponFactoryTweakData, "create_ammunition", "newwpnstats_updateg
 	for i=1, #pump_action do
 		if self[pump_action[i]].override then
 			if self[pump_action[i]].override.wpn_fps_upg_a_custom and self[pump_action[i]].override.wpn_fps_upg_a_custom_free then
-				self[pump_action[i]].override.wpn_fps_upg_a_custom.stats = {damage = 130}
+				self[pump_action[i]].override.wpn_fps_upg_a_custom.stats = {damage = 140}
 				self[pump_action[i]].override.wpn_fps_upg_a_custom.custom_stats = BS_custom_stats
-				self[pump_action[i]].override.wpn_fps_upg_a_custom_free.stats = {damage = 130}
+				self[pump_action[i]].override.wpn_fps_upg_a_custom_free.stats = {damage = 140}
 				self[pump_action[i]].override.wpn_fps_upg_a_custom_free.custom_stats = BS_custom_stats
 			else
-				self[pump_action[i]].override["wpn_fps_upg_a_custom"] = {stats = {damage = 130},custom_stats = BS_custom_stats}
-				self[pump_action[i]].override["wpn_fps_upg_a_custom_free"] = {stats = {damage = 130},custom_stats = BS_custom_stats}
+				self[pump_action[i]].override["wpn_fps_upg_a_custom"] = {stats = {damage = 140},custom_stats = BS_custom_stats}
+				self[pump_action[i]].override["wpn_fps_upg_a_custom_free"] = {stats = {damage = 140},custom_stats = BS_custom_stats}
 			end
 		else
-			self[pump_action[i]].override = {wpn_fps_upg_a_custom = {stats = {damage = 130},custom_stats = BS_custom_stats}}
-			self[pump_action[i]].override = {wpn_fps_upg_a_custom_free = {stats = {damage = 130},custom_stats = BS_custom_stats}}
+			self[pump_action[i]].override = {wpn_fps_upg_a_custom = {stats = {damage = 140},custom_stats = BS_custom_stats}}
+			self[pump_action[i]].override = {wpn_fps_upg_a_custom_free = {stats = {damage = 140},custom_stats = BS_custom_stats}}
 		end
 	end
 	

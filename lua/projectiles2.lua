@@ -8,7 +8,6 @@ tweak_data.projectiles.sticky_grenade.range = 350
 -- normal grenade
 tweak_data.projectiles.frag.damage = 500
 tweak_data.projectiles.frag.curve_pow = 0.1
-tweak_data.projectiles.frag.player_damage = 10
 tweak_data.projectiles.frag.range = 350
 -- molotov: buff 
 tweak_data.projectiles.molotov = {
@@ -49,7 +48,7 @@ tweak_data.projectiles.fir_com = {
 }
 -- shurikens: a bit more impact dmg
 tweak_data.projectiles.wpn_prj_four = {
-	damage = 20,
+	damage = 25,
 	launch_speed = 1500,
 	adjust_z = 0,
 	mass_look_up_modifier = 1,
@@ -63,7 +62,7 @@ tweak_data.projectiles.wpn_prj_four = {
 }
 -- throw cards
 tweak_data.projectiles.wpn_prj_ace = {
-	damage = 55,
+	damage = 56,
 	launch_speed = 1500,
 	adjust_z = 0,
 	mass_look_up_modifier = 1,
@@ -138,9 +137,9 @@ tweak_data.projectiles.poison_gas_grenade = {
 }
 --matryoshka
 tweak_data.projectiles.dada_com = {
-	damage = 500,
+	damage = 250,
 	curve_pow = 0.1,
-	range = 350,
+	range = 700,
 	name_id = "bm_grenade_dada_com",
 	sound_event = "mtl_explosion"
 }
@@ -151,7 +150,8 @@ tweak_data.projectiles.frag_com = {
 	range = 350,
 	name_id = "bm_grenade_frag_com"
 }
-	
+
+-- LAUNCHERS
 -- normal nades
 tweak_data.projectiles.launcher_frag = {
 	damage = 400,
@@ -377,9 +377,9 @@ tweak_data.projectiles.arblast_arrow_exp.launch_speed = tweak_data.projectiles.f
 tweak_data.projectiles.arblast_arrow_exp.adjust_z = tweak_data.projectiles.frankish_arrow.adjust_z
 ]]
 -- airbow
-tweak_data.projectiles.ecp_arrow.damage = 50.0
-tweak_data.projectiles.ecp_arrow_poison.damage = 50.0
-tweak_data.projectiles.ecp_arrow_exp.damage = 100.0
+tweak_data.projectiles.ecp_arrow.damage = 56.0
+tweak_data.projectiles.ecp_arrow_poison.damage = 56.0
+tweak_data.projectiles.ecp_arrow_exp.damage = 112.0
 --[[
 tweak_data.projectiles.arblast_arrow.launch_speed = tweak_data.projectiles.frankish_arrow.launch_speed
 tweak_data.projectiles.arblast_arrow.adjust_z = tweak_data.projectiles.frankish_arrow.adjust_z

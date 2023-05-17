@@ -1,0 +1,33 @@
+{
+	"menu_id": "Gilza_menu",
+	"parent_menu_id": "blt_options",
+	"title": "Gilza_title",
+	"description": "Gilza_desc",
+	"back_callback": "Gilza_save",
+	"items":
+	[
+		{
+			"type" : "slider",
+			"id" : "v_fov",
+			"title" : "Gilza_v_fov",
+			"description" : "Gilza_v_fov_desc",
+			"callback" : "Gilza_v_fov",
+			"value" : "v_fov",
+			"default_value" : 90,
+			"min" : 75,
+			"max" : 110,
+			"step" : 1
+		},
+		{
+			"type" : "divider",
+			"size" : 22
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_page",
+			"title" : "Gilza_page",
+			"description" : "Gilza_page_desc",
+			"callback" : "Gilza_page"
+		},
+	]
+}

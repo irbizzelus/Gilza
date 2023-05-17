@@ -1,15 +1,17 @@
-local dmg_melee_orig = CopDamage.damage_melee
-function CopDamage:damage_melee(attack_data)
+Hooks:PreHook(CopDamage, "damage_melee", "Gilza_melee_new_damage", function(self,attack_data)
 	if not attack_data.didweapplydamagetweakallready then
-		if self._char_tweak.access ~= "tank" then
-			attack_data.damage = self._HEALTH_INIT * (attack_data.damage / 10)
+		if self._char_tweak.Gilza_boss_tag then
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 50)) -- bosses take 5x the amount of hits
+		elseif self._char_tweak.Gilza_winters_tag then
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 15)) -- winters takes 1.5x the amount of hits
+		elseif self._char_tweak.access == "tank" then
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 30)) -- dozers take thrice(is that a word?) the amount of hits
 		else
-			attack_data.damage = self._HEALTH_INIT * (attack_data.damage / 30) -- dozers take thrice(is that a word?) the amount of hits
+			attack_data.damage = self._HEALTH_INIT * (attack_data.damage / 10) + 0.1 -- +1 dmg is needed due to calculations rounding up values for low hp targets slightly incorrectly and leaving enemies with 0.1 hp instead of beeing dead
 		end
 		attack_data.didweapplydamagetweakallready = "This melee function shouldnt be called in twice yet it is, i assume because of IDC mod. Whatever it is this is a good way of preventing too much dmg caused by other mods."
 	end
-	dmg_melee_orig(self, attack_data)
-end
+end)
 
 local mvec_1 = Vector3()
 local mvec_2 = Vector3()

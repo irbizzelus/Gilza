@@ -193,12 +193,21 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	self.specializations[j] = brawler_deck
 	Gilza.brawler_deck_index = j
 	
+	-- rogue
+	self.specializations[4][9].upgrades = {
+		"player_passive_loot_drop_multiplier",
+		"weapon_passive_armor_piercing_chance",
+		"weapon_passive_swap_speed_multiplier_1",
+		"player_movement_speed_multiplier_2",
+		"player_stamina_multiplier",
+		"player_passive_dodge_chance_4"
+	}
 	
 	-- new skills and reworks
 	
 	self.skills.pack_mule[1].upgrades = { "player_armor_carry_bonus_1" }
 	self.skills.pack_mule[2].upgrades = { "player_sprint_any_bag" }
-	self.skills.pack_mule.icon_xy = { 6, 0 } -- 6,0
+	self.skills.pack_mule.icon_xy = { 6, 0 }
 	
 	self.skills.awareness[1].upgrades = { "player_climb_speed_multiplier_1", "player_can_free_run", }
 	self.skills.awareness[2].upgrades = { "player_run_and_reload" }
@@ -251,4 +260,6 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	self.skills.dance_instructor[1].upgrades = {"pistol_fire_rate_multiplier"}
 	self.skills.dance_instructor[2].upgrades = {"pistol_magazine_capacity_inc_1"}
 	self.skills.dance_instructor.icon_xy = {7,11}
+	
+	self.skills.carbon_blade[2].upgrades = {"saw_ignore_shields_1","saw_panic_when_kill_1","player_saw_ammo_pick_up"}
 end)

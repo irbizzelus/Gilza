@@ -1,9 +1,36 @@
 Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", function(self, tweak_data)
 	if not Gilza then 
-		_G.Gilza = {}
-		Gilza._path = "mods/Gilza/"
-		Gilza._guns_path = "mods/saves/Gilza_customguns.txt"
+		_G.Gilza = {
+			_path = "mods/Gilza/",
+			_save_path = "mods/saves/Gilza_save.txt",
+			settings = {
+				v_fov = 90
+			}
+		}
+		
+		function Gilza:Save()
+			local file = io.open(Gilza._save_path, 'w+')
+			if file then
+				file:write(json.encode(Gilza.settings))
+				file:close()
+			end
+		end
+
+		function Gilza:Load()
+			local file = io.open(Gilza._save_path, 'r')
+			if file then
+				for i, v in pairs(json.decode(file:read('*all')) or {}) do
+					Gilza.settings[i] = v
+				end
+				file:close()
+			end
+		end
+
+		Gilza:Load()
+		Gilza:Save()
+		
 		dofile("mods/Gilza/lua/wpntweaks_custom.lua")
+		dofile("mods/Gilza/lua/vehicles.lua")
 	end
 	
 	local special_weapon_ids = { -- not used but handy to have
@@ -287,6 +314,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.s552.stats.spread = 12
 	self.s552.fire_mode_data = {fire_rate = 60/735}
 	self.s552.auto = {fire_rate = 60/735}
+	self.s552.stats.reload = 14
 	
 	self.scar.stats.damage = 420
 	self.scar.CLIP_AMMO_MAX = 25
@@ -834,7 +862,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	-- Snipers --
 	local function setSNIPERs()
 	-- Semi autos
-	self.qbu88.stats.damage = 550
+	self.qbu88.stats.damage = 560
 	self.qbu88.CLIP_AMMO_MAX = 10
 	self.qbu88.NR_CLIPS_MAX = 4
 	self.qbu88.AMMO_MAX = self.qbu88.CLIP_AMMO_MAX * self.qbu88.NR_CLIPS_MAX
@@ -845,7 +873,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.qbu88.single = {fire_rate = 60/260}
 	
 	-- svd
-	self.siltstone.stats.damage = 550
+	self.siltstone.stats.damage = 560
 	self.siltstone.CLIP_AMMO_MAX = 10
 	self.siltstone.NR_CLIPS_MAX = 4
 	self.siltstone.AMMO_MAX = self.siltstone.CLIP_AMMO_MAX * self.siltstone.NR_CLIPS_MAX
@@ -856,7 +884,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.siltstone.single = {fire_rate = 60/260}
 	
 	-- 308
-	self.tti.stats.damage = 550
+	self.tti.stats.damage = 560
 	self.tti.CLIP_AMMO_MAX = 20
 	self.tti.NR_CLIPS_MAX = 2
 	self.tti.AMMO_MAX = self.tti.CLIP_AMMO_MAX * self.tti.NR_CLIPS_MAX
@@ -866,7 +894,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.tti.fire_mode_data = {fire_rate = 60/260}
 	self.tti.single = {fire_rate = 60/260}
 	
-	self.wa2000.stats.damage = 550
+	self.wa2000.stats.damage = 560
 	self.wa2000.CLIP_AMMO_MAX = 15
 	self.wa2000.NR_CLIPS_MAX = 3
 	self.wa2000.AMMO_MAX = self.wa2000.CLIP_AMMO_MAX * self.wa2000.NR_CLIPS_MAX
@@ -1512,7 +1540,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	
 	for _, gun in ipairs(upper_mid_pistol_ids) do
 		if self[gun] then
-			self[gun].stats.damage = 140
+			self[gun].stats.damage = 146
 			self[gun].NR_CLIPS_MAX = 6
 			if self[gun].fire_mode_data then
 				self[gun].fire_mode_data.fire_rate = self[gun].fire_mode_data.fire_rate * 1.5
@@ -1547,7 +1575,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	-- akimbo versions
 	for _, gun in ipairs(upper_mid_pistol_ids) do
 		if self["x_"..gun] then
-			self["x_"..gun].stats.damage = 140
+			self["x_"..gun].stats.damage = 146
 			self["x_"..gun].NR_CLIPS_MAX = 4
 			if self["x_"..gun].fire_mode_data then
 				self["x_"..gun].fire_mode_data.fire_rate = self["x_"..gun].fire_mode_data.fire_rate * 1.5
@@ -1577,7 +1605,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.x_c96.CLIP_AMMO_MAX = 20
 	self.x_c96.NR_CLIPS_MAX = self.x_c96.AMMO_MAX / self.x_c96.CLIP_AMMO_MAX
 	
-	self.x_1911.stats.damage = 140
+	self.x_1911.stats.damage = 146
 	self.x_1911.stats.concealment = 29
 	self.x_1911.CLIP_AMMO_MAX = 16
 	self.x_1911.NR_CLIPS_MAX = 7

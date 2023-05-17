@@ -9,6 +9,7 @@
 	"priority" : 19,
 
 	"hooks" : [
+		{"hook_id": "lib/managers/menumanager", "script_path": "lua/menumanager.lua"},
 		{"hook_id": "lib/units/weapons/sawweaponbase", "script_path" : "lua/sawfighter.lua"},
 		{"hook_id" : "lib/tweak_data/vehicletweakdata", "script_path" : "lua/vehicles.lua"},
 		{"hook_id": "lib/tweak_data/blackmarket/projectilestweakdata", "script_path" : "lua/projectiles.lua"},
@@ -34,6 +35,6 @@
 		{"hook_id": "lib/utils/inventorydescription", "script_path" : "lua/inventorydescription.lua"},
 		{"hook_id": "lib/units/weapons/raycastweaponbase", "script_path" : "lua/raycastweaponbase.lua"},
 		{"hook_id": "lib/managers/playermanager", "script_path" : "lua/playermanager.lua"},
-		{"hook_id": "lib/managers/menumanager", "script_path": "lua/menumanager.lua"},
+		{"hook_id": "lib/units/pickups/ammoclip", "script_path" : "lua/ammoclip.lua"},
 	],
 }
