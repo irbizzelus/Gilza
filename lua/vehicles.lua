@@ -1,6 +1,6 @@
 if Gilza then
 
-	local newFOV = math.clamp(Gilza.settings.v_fov, 75, 110)
+	local newFOV = math.clamp(Gilza.settings.v_fov, 75, 105)
 
 	Hooks:PostHook( VehicleTweakData , "_init_data_falcogini" , "gib_falcofov" , function( self , params )
 		self.falcogini.fov = newFOV

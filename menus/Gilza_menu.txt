@@ -15,7 +15,7 @@
 			"value" : "v_fov",
 			"default_value" : 90,
 			"min" : 75,
-			"max" : 110,
+			"max" : 105,
 			"step" : 1
 		},
 		{

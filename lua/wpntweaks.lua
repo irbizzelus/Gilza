@@ -1882,7 +1882,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.arblast.stats.damage = 160
 	self.arblast.stats_modifiers = {damage = 10}
 	--h3h3 shit
-	self.ecp.stats.damage = 50
+	self.ecp.stats.damage = 56
 	
 	local function setNewRecoil() 
 		local recoil_ARs = {

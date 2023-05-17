@@ -4,14 +4,14 @@ end
 
 function Gilza:changelog_message()
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 1.8 then
+		if not Gilza.settings.version or Gilza.settings.version < 1.81 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.8 changelog:\n- Some skill/perk changes\n- 5.56 conversion kit for 7.62 Little friend AR\n- Major changes to accuracy and recoil systems\n- HUGE amount of rebalances for ALL AR's, SMG's, LMG's, Snipers, Pistols, some shotguns and some specials"
+			local message = "1.8.1 changelog:\n- Added menu options including vehicle FOV\n- Reduced headshot multipliers for cloakers and bulldozers across all difficulties\n- Buffs to gambler and rogue perk decks\n- Saw massacre and aggressive reload skills buffed\n- A LOT of melee fixes, tweaks and improvements\n- A few minor weapon changes"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 1.8
+			Gilza.settings.version = 1.81
 			Gilza.Save()
 		end
 	end)

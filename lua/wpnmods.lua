@@ -360,7 +360,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_ecp", "newwpnstats_h3h3garbage", f
 		armor_piercing_add = 1,
 	}
 	self.parts.wpn_fps_bow_ecp_m_arrows_explosive.stats = {
-		damage = 50,
+		damage = 56,
 		total_ammo_mod = -6
 	}
 end)

@@ -2,7 +2,7 @@
 	"Gilza_title": "Gilza",
 	"Gilza_desc": "",
 	"Gilza_v_fov": "Vehicle FOV",
-	"Gilza_v_fov_desc": "Change vehicle FOV. Works in-game, but you will have to re-enter the vehicle to see the change. Range: 75-110",
-	"Gilza_page": "Gilza page",
+	"Gilza_v_fov_desc": "Change vehicle FOV. Works in-game, but you will have to re-enter the vehicle to see the change. Range: 75-105",
+	"Gilza_page": "Gilza MWS page",
 	"Gilza_page_desc": "Click this button to open Gilza's modworkshop mod page."
 }
