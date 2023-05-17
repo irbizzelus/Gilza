@@ -79,7 +79,7 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self,unit)
 						-- old version
 						--local percent_inc = player_manager:upgrade_value("player", "gain_life_per_players", 0) * num_more_hp + 1
 						-- new one
-						local percent_inc = player_manager:upgrade_value("player", "gain_life_per_players", 0) * 1 + 1
+						local percent_inc = player_manager:upgrade_value("player", "gain_life_per_players", 0) * math.clamp(num_more_hp, 0, 1) + 1
 
 						print("[AmmoClip:_pickup] Percent increase for health pickup is: ", percent_inc - 1)
 
