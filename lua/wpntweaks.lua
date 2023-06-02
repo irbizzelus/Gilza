@@ -351,8 +351,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.new_m4.auto = {fire_rate = 60/570}
 	
 	self.aug.stats.damage = 210
-	self.aug.stats.recoil = 9
-	self.aug.stats.spread = 15
+	self.aug.stats.recoil = 10
+	self.aug.stats.spread = 16
 	self.aug.fire_mode_data = {fire_rate = 60/680}
 	self.aug.auto = {fire_rate = 60/680}
 	self.aug.AMMO_PICKUP = {2.12,3.12}
@@ -1337,7 +1337,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	
 	-- 3-6 headshot kill
 	self.beer.stats.damage = 77
-	self.beer.stats.recoil = 11
+	self.beer.stats.recoil = 13
 	self.beer.CLIP_AMMO_MAX = 16
 	self.beer.NR_CLIPS_MAX = 10
 	self.beer.AMMO_MAX = self.beer.NR_CLIPS_MAX * self.beer.CLIP_AMMO_MAX
@@ -1346,7 +1346,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.beer.fire_mode_data.fire_rate = self.beer.fire_mode_data.fire_rate * 0.8
 	
 	self.x_beer.stats.damage = 77
-	self.x_beer.stats.recoil = 11
+	self.x_beer.stats.recoil = 13
 	self.x_beer.CLIP_AMMO_MAX = 32
 	self.x_beer.NR_CLIPS_MAX = 6
 	self.x_beer.AMMO_MAX = self.x_beer.NR_CLIPS_MAX * self.x_beer.CLIP_AMMO_MAX
@@ -1378,11 +1378,11 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		end
 	end
 	
-	self.glock_18c.stats.recoil = 8
+	self.glock_18c.stats.recoil = 10
 	
 	self.czech.NR_CLIPS_MAX = 10
 	self.czech.stats.spread = 14
-	self.czech.stats.recoil = 9
+	self.czech.stats.recoil = 11
 	self.czech.AMMO_MAX = self.czech.NR_CLIPS_MAX * self.czech.CLIP_AMMO_MAX
 	
 	-- akimbo versions
@@ -1408,11 +1408,11 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.x_czech.NR_CLIPS_MAX = 7
 	self.x_czech.AMMO_MAX = self.x_czech.NR_CLIPS_MAX * self.x_czech.CLIP_AMMO_MAX
 	self.x_czech.stats.spread = 14
-	self.x_czech.stats.recoil = 9
+	self.x_czech.stats.recoil = 11
 	
 	-- some akimbos have slighlty different names such as this glock 18, so will have to override them seperatly
 	self.x_g18c.stats.damage = 95
-	self.x_g18c.stats.recoil = 8
+	self.x_g18c.stats.recoil = 10
 	self.x_g18c.NR_CLIPS_MAX = 5
 	self.x_g18c.fire_mode_data.fire_rate = self.x_g18c.fire_mode_data.fire_rate * 0.8
 	self.x_g18c.single.fire_rate = self.x_g18c.single.fire_rate * 0.8
@@ -1454,7 +1454,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.g26.AMMO_MAX = self.g26.NR_CLIPS_MAX * self.g26.CLIP_AMMO_MAX
 	
 	self.stech.stats.damage = 117
-	self.stech.stats.recoil = 6
+	self.stech.stats.recoil = 8
 	self.stech.NR_CLIPS_MAX = 7
 	self.stech.fire_mode_data.fire_rate = self.stech.fire_mode_data.fire_rate * 0.8
 	self.stech.auto.fire_rate = self.stech.auto.fire_rate * 0.8

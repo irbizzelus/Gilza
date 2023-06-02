@@ -21,7 +21,7 @@ if Gilza then
 	Hooks:PostHook( VehicleTweakData , "_init_data_box_truck_1" , "gib_boxtruckfov" , function( self , params )
 		self.box_truck_1.fov = newFOV
 	end)
-
+	-- unused vehicle
 	Hooks:PostHook( VehicleTweakData , "mower_1" , "gib_lawnmemerfov" , function( self , params )
 		self.mower_1.fov = newFOV
 	end)
@@ -46,6 +46,14 @@ if Gilza then
 		self.bike_2.camera_limits = {
 			driver = { yaw = 170, pitch = 45 }
 		}
+	end)
+	-- is this breakfast in tihuana escape car??
+	Hooks:PostHook( VehicleTweakData , "_init_data_wanker" , "gib_wanker" , function( self , params )
+		self.wanker.fov = newFOV
+	end)
+	
+	Hooks:PostHook( VehicleTweakData , "_init_data_golfcart" , "gib_golfcart" , function( self , params )
+		self.golfcart.fov = newFOV
 	end)
 
 end

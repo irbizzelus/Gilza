@@ -5,12 +5,12 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		-- perks
 		menu_deckall_8 = "Improved Physique",
 		menu_deckall_8_desc = "You gain ##10%## additional movement speed.\n\nYou can throw bags ##50%## further.",
-		menu_deckall_6_desc = "Unlocks an armor bag equipment for you to use. The armor bag can be used to change your armor during a heist.\n\nIncreases your ammo pickup to ##135%## of the normal rate.\n\nYou also gain a base ##0%## chance to get a throwable from an ammo box. The base chance is increased by ##1.5%## for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.",
+		menu_deckall_6_desc = "Unlocks an armor bag equipment for you to use. The armor bag can be used to change your armor during a heist.\n\nIncreases your ammo pickup to ##135%## of the normal rate.\n\nYou also gain a base ##0%## chance to get a throwable from an ammo box. The base chance is increased by ##1.2%## for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.",
 		menu_deckall_2 = "Fast and Furious",
 		menu_deckall_2_desc = "Increases your doctor bag interaction speed by ##20%##",
 		menu_deck18_1_desc = "Unlocks and equips the throwable Smoke Bomb.\n\nChanging to another perk deck will make the Smoke Bomb unavailable again. The Smoke Bomb replaces your current throwable, is equipped in your throwable slot and can be switched out if desired.\n\nWhile in game you can use throwable key to deploy the Smoke Bomb.\n\nWhen deployed, the smoke bomb creates a smoke screen that lasts for ##10## seconds. While standing inside the smoke screen, you and any of your allies automatically avoid ##50%## of all bullets. Any enemies that stand in the smoke will see their accuracy reduced by ##50%##.\n\nAfter the smoke screen dissipates, the Smoke Bomb is on a cooldown for ##40## seconds, but killing enemies will reduce this cooldown by ##1## second.",
 		menu_deck10_1_desc = "Ammo packs you pick up also yield medical supplies and heal you for ##16## to ##24## health.\n\nCannot occur more than once every ##3## seconds.\n\nIf the Gambler's current health is lower than another player's, the heal effect on the Gambler is increased by ##35%##. Does not stack.",
-		menu_deck4_9_desc = "Your chance to dodge is increased by an additional ##10%##.\nYour movement speed is increased by ##15%##.\nYour stamina is increased by ##25%##.\n\nAll your weapons have a ##50%## chance to pierce enemy armor.\nIncreases weapon swapping speed by ##80%##.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by 10%.",
+		menu_deck4_9_desc = "Your chance to dodge is increased by an additional ##5%##.\nYour chance to dodge while crouched is increased by ##5%##.\nYour movement speed is increased by ##15%##.\nYour stamina is increased by ##25%##.\n\nAll your weapons have a ##50%## chance to pierce enemy armor.\nIncreases weapon swapping speed by ##80%##.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
 		
 		-- skills
 		menu_pack_mule_beta_desc = "BASIC: ##$basic##\nFor each ##10## armor points, the bag movement penalty is reduced by ##1%##.\n\nACE: ##$pro##\nYou can sprint with any bag.",
@@ -59,6 +59,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		menu_deck_brawler9 = "Meat shield",
 		menu_deck_brawler9_desc = "You are ##15%## more likely to be targeted when you are close to your crew members.\n\nSecuring a kill with a melee weapon grants you ##75## points of armor.\n\nWhen you are under ##50%## health you recieve following bonuses:\n- Every enemy further then ##9## meters away from you deals ##18%## less damage\n- Every enemy further then ##16## meters away from you deals ##16%## less damage\n\nAll perk resistance bonuses stack, so enemies beyond ##16## meters will only deal ##12%## damage.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
 		
+		-- Weapon Mods
 		-- shotgun ammo 
 		bm_wpn_fps_upg_a_rip_desc_new = "Poisoned bullet that deals damage over time and can interrupt enemies if they are close enough.\n\nDeals 400 damage over 2 seconds, with a damage tick every 0.5 seconds.\n\nAmmo pick up reduced by 20%",
 		bm_wpn_fps_upg_a_custom_desc_new = "Bigger pellets with more impact.\nAmmo pick up reduced by 20%",
@@ -93,6 +94,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		wpn_fps_ass_hcar_barrel_dmr_PEN = "Akron HC AP Kit",
 		bm_wpn_fps_ass_hcar_barrel_dmr_PEN_desc = "Allows you to penetrate enemy body armor and walls.\nLimits weapon to single-fire mode.\nAmmo pick up reduced.",
 		bm_wp_hcar_barrel_standard = "Standard Akron HC Barrel",
+		wpn_fps_upg_m4_hp_rounds = "HP rounds",
+		wpn_fps_upg_m4_hp_rounds_desc = "Lead core hollow-point bullet with a bimetallic jacket in a steel case. Intended for hunting.\n\nAmmo pick up reduced.",
 		
 		-- flamethrower 'ammo'
 		bm_wpn_fps_fla_mk2_mag_rare_desc = "Less direct firepower but more afterburn damage.\n75% chance to start afterburn damage that deals 700 damage over 3 seconds.\nBase flamethrower values: 25% chance for 300dmg over 2 seconds.",

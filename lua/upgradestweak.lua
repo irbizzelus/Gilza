@@ -57,7 +57,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 	self.values.player.regain_throwable_from_ammo = {
 		{
 			chance = 0,
-			chance_inc = 0.015
+			chance_inc = 0.012
 		},
 		{
 			chance = 0.10,
@@ -165,7 +165,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 		0.15,
 		0.3,
 		0.45,
-		0.55
+		0.5
 	}
 	-- roruge armour piercing buff
 	self.values.weapon.armor_piercing_chance = {

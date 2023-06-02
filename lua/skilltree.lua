@@ -200,7 +200,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		"weapon_passive_swap_speed_multiplier_1",
 		"player_movement_speed_multiplier_2",
 		"player_stamina_multiplier",
-		"player_passive_dodge_chance_4"
+		"player_passive_dodge_chance_4",
+		"player_crouch_dodge_chance_1"
 	}
 	
 	-- new skills and reworks

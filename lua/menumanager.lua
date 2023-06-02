@@ -4,14 +4,14 @@ end
 
 function Gilza:changelog_message()
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 1.81 then
+		if not Gilza.settings.version or Gilza.settings.version < 1.82 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.8.1 changelog:\n- Added menu options including vehicle FOV\n- Reduced headshot multipliers for cloakers and bulldozers across all difficulties\n- Buffs to gambler and rogue perk decks\n- Saw massacre and aggressive reload skills buffed\n- A LOT of melee fixes, tweaks and improvements\n- A few minor weapon changes"
+			local message = "1.8.2 changelog: TBA"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 1.81
+			Gilza.settings.version = 1.82
 			Gilza.Save()
 		end
 	end)
@@ -50,7 +50,9 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init', function(menu_manager)
 		tweak_data.vehicle.mower_1.fov = tonumber(item:value())
 		tweak_data.vehicle.blackhawk_1.fov = tonumber(item:value())
 		tweak_data.vehicle.bike_1.fov = tonumber(item:value())
-		tweak_data.vehicle.bike_2.fov = tonumber(item:value())	
+		tweak_data.vehicle.bike_2.fov = tonumber(item:value())
+		tweak_data.vehicle.wanker.fov = tonumber(item:value())	
+		tweak_data.vehicle.golfcart.fov = tonumber(item:value())	
 	end
 	
 	MenuCallbackHandler.Gilza_page = function(this, item)
