@@ -1,3 +1,7 @@
+if not Gilza then
+	dofile("mods/Gilza/lua/wpntweaks.lua")
+end
+
 Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats", function(self, tweak_data)
 	-- list in order of appearance in my game, im only missing hotline miami 1, raid community knifes, john wick promo pencil and alienware melee, they are all at the end
 	local melee_ids = {
@@ -106,8 +110,10 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 		alien_maul = 6,
 		sword = 2,
 	}
-
+	
+	Gilza.default_melee_weapons = {}
 	for weapon, profile in pairs(melee_ids) do
+		table.insert(Gilza.default_melee_weapons,tostring(weapon))
 		if self.melee_weapons[tostring(weapon)] then
 			if profile == 1 then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 2.5
