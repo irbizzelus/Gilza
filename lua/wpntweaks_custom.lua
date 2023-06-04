@@ -860,7 +860,7 @@ end
 
 function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 
-	log("[Gilza] Applying custom weapon stats to pistol with id: "..tostring(id))
+	log("[Gilza] Applying custom weapon stats to PISTOL with id: "..tostring(id))
 	
 	-- same as with others - dont touch guns with REALLY low damage
 	if tweak_data.weapon[id].stats.damage >= 77 and tweak_data.weapon[id].stats.damage <= 92 then
