@@ -264,6 +264,6 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	
 	self.skills.carbon_blade[2].upgrades = {"saw_ignore_shields_1","saw_panic_when_kill_1","player_saw_ammo_pick_up"}
 	
-	self.skills.wolverine[1].upgrades = {"player_new_berserk_melee_damage_multiplier_1","player_melee_damage_multiplier"}
+	self.skills.wolverine[1].upgrades = {"player_new_berserk_melee_damage_multiplier_1","player_melee_damage_newzerk_addin"}
 	self.skills.wolverine[2].upgrades = {"player_new_berserk_melee_damage_multiplier_2","player_new_berserk_weapon_damage_multiplier"}
 end)

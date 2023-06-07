@@ -212,8 +212,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 			15
 		}
 	}
-	-- base berserk dmg 'multiplier'
-	self.values.player.melee_damage_multiplier = {
+	-- base berserk dmg addition
+	self.values.player.melee_damage_newzerk_addin = {
 		0.5
 	}
 end)
@@ -458,6 +458,15 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "newskills3", function(
 			value = 1,
 			upgrade = "new_berserk_weapon_damage_multiplier",
 			category = "temporary"
+		}
+	}
+	self.definitions.player_melee_damage_newzerk_addin = {
+		name_id = "melee_damage_newzerk_addin",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "melee_damage_newzerk_addin",
+			category = "player"
 		}
 	}
 end)

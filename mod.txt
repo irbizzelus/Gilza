@@ -3,7 +3,7 @@
 	"description" : "Rebalances all weapons, some skills and perk decks.",
 	"author" : "irbizzelus",
 	"contact" : "Steam profile link is on my modworkshop account",
-	"version" : "1.8.4",
+	"version" : "1.8.41",
 	"color" : "0 204 193",
 	"blt_version" : 2,
 	"priority" : 19,

@@ -9,7 +9,7 @@ Hooks:PreHook(CopDamage, "damage_melee", "Gilza_melee_new_damage", function(self
 			dmg_multiplier = dmg_multiplier * managers.player:temporary_upgrade_value("temporary", "new_berserk_melee_damage_multiplier_1", 1)
 		end
 		
-		dmg_multiplier = dmg_multiplier + managers.player:upgrade_value("player", "melee_damage_multiplier", 0)
+		dmg_multiplier = dmg_multiplier + managers.player:upgrade_value("player", "melee_damage_newzerk_addin", 0)
 		
 		attack_data.damage = attack_data.damage * dmg_multiplier
 	

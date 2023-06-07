@@ -4,14 +4,14 @@ end
 
 function Gilza:changelog_message()
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 1.84 then
+		if not Gilza.settings.version or Gilza.settings.version < 1.841 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.8.4 changelog:\n- Reworked Graze and Berserker skills. Berserker has a new flash effect that you can tweak in Gilza's mod options\n- Reduced ammo pick up for 117 and 95 damage AR's and SMG's\n- Added automatic support for primary SMG and Pistol custom weapons\n- Added automatic support for custom melee weapons with fire/poison/electric effect"
+			local message = "1.8.41\n- Fixed an issue where special enemies would receive lower then intended damage with either version of berserker equipped\n\n1.8.4 changelog:\n- Reworked Graze and Berserker skills. Berserker has a new flash effect that you can tweak in Gilza's mod options\n- Reduced ammo pick up for 117 and 95 damage AR's and SMG's\n- Added automatic support for primary SMG and Pistol custom weapons\n- Added automatic support for custom melee weapons with fire/poison/electric effect"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 1.84
+			Gilza.settings.version = 1.841
 			Gilza.Save()
 		end
 	end)
