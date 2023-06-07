@@ -4,14 +4,14 @@ end
 
 function Gilza:changelog_message()
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 1.83 then
+		if not Gilza.settings.version or Gilza.settings.version < 1.84 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.8.3 changelog:\n- Added 'basic' support for custom melee weapons\n- Added 'advanced' support for custom weapon categories: AR's, SMG's, pistols, LMG's, snipers.\nMore details on custom weapon support categories can be found on MWS.\n\n1.8.2 changelog:\n- Added support for 250+ weapon mods made by FrenchyAu, i highly recommend getting some (preferably all) of the tacticool packs, to have more weapon build variety\n- Rogue deck minor nerf\n- CAR-4 HP rounds that convert it into a 210 damage rifle\n- Removed breaching rounds from secondary shotguns\n- Adjustments to a few weapon attachments and ALL scopes\n- Some additional minor fixes/adjustments"
+			local message = "1.8.4 changelog:\n- Reworked Graze and Berserker skills. Berserker has a new flash effect that you can tweak in Gilza's mod options\n- Reduced ammo pick up for 117 and 95 damage AR's and SMG's\n- Added automatic support for primary SMG and Pistol custom weapons\n- Added automatic support for custom melee weapons with fire/poison/electric effect"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 1.83
+			Gilza.settings.version = 1.84
 			Gilza.Save()
 		end
 	end)
