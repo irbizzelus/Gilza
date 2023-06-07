@@ -1487,6 +1487,11 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "newwpnparts_breachround_andAP", 
 	end
 	FrenchyAU_packs_stat_adjustments()
 	
+	-- barret m107cq
+	if self.parts.wpn_fps_upg_m107cq_ammo_416 then
+		self.parts.wpn_fps_upg_m107cq_ammo_416.stats.damage = -4025
+	end
+	
 	-- VANILLA GAME WEAPON MODS
 	
 	-- vanilla non dlc muzzle devices

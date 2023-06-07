@@ -36,6 +36,10 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init', function(menu_manager)
 	MenuCallbackHandler.Gilza_save = function(this, item)
 		Gilza:Save()
 	end
+	
+	MenuCallbackHandler.Gilza_donothing = function(this, item)
+		-- warm, primordial blackness
+	end
 
 	MenuCallbackHandler.Gilza_v_fov = function(this, item)
 		Gilza.settings.v_fov = tonumber(item:value())
@@ -53,6 +57,31 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init', function(menu_manager)
 		tweak_data.vehicle.bike_2.fov = tonumber(item:value())
 		tweak_data.vehicle.wanker.fov = tonumber(item:value())	
 		tweak_data.vehicle.golfcart.fov = tonumber(item:value())	
+	end
+	
+	MenuCallbackHandler.Gilza_flash_trigger = function(this, item)
+		Gilza.settings.flash_trigger = tonumber(item:value())
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_flash_type = function(this, item)
+		Gilza.settings.flash_type = tonumber(item:value())
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_flash_color_R = function(this, item)
+		Gilza.settings.flash_color_R = tonumber(item:value())
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_flash_color_G = function(this, item)
+		Gilza.settings.flash_color_G = tonumber(item:value())
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_flash_color_B = function(this, item)
+		Gilza.settings.flash_color_B = tonumber(item:value())
+		Gilza:Save()
 	end
 	
 	MenuCallbackHandler.Gilza_page = function(this, item)

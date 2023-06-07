@@ -180,6 +180,42 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "newskills2", function(sel
 	self.values.player.stamina_multiplier = {
 		1.25
 	}
+	-- new graze values, they should be 1/3 and 2/3 but i dont trust damage calculation's rounding up values correctly
+	self.values.snp.graze_damage = {
+		{
+			radius = 75,
+			damage_factor = 0.34,
+			damage_factor_headshot = 0
+		},
+		{
+			radius = 150,
+			damage_factor = 0.67,
+			damage_factor_headshot = 0
+		}
+	}
+	-- new berserk
+	self.values.temporary.new_berserk_melee_damage_multiplier_1 = {
+		{
+			1.5,
+			20
+		}
+	}
+	self.values.temporary.new_berserk_melee_damage_multiplier_2 = {
+		{
+			1.5,
+			40
+		}
+	}
+	self.values.temporary.new_berserk_weapon_damage_multiplier = {
+		{
+			2,
+			15
+		}
+	}
+	-- base berserk dmg 'multiplier'
+	self.values.player.melee_damage_multiplier = {
+		0.5
+	}
 end)
 
 Hooks:PostHook(UpgradesTweakData, "_player_definitions", "newskills3", function(self, params)	
@@ -395,6 +431,33 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "newskills3", function(
 			value = 2,
 			upgrade = "movement_speed_multiplier",
 			category = "player"
+		}
+	}
+	self.definitions.player_new_berserk_melee_damage_multiplier_1 = {
+		name_id = "menu_player_new_berserk_melee_damage_multiplier_1",
+		category = "temporary",
+		upgrade = {
+			value = 1,
+			upgrade = "new_berserk_melee_damage_multiplier_1",
+			category = "temporary"
+		}
+	}
+	self.definitions.player_new_berserk_melee_damage_multiplier_2 = {
+		name_id = "menu_player_new_berserk_melee_damage_multiplier_2",
+		category = "temporary",
+		upgrade = {
+			value = 1,
+			upgrade = "new_berserk_melee_damage_multiplier_2",
+			category = "temporary"
+		}
+	}
+	self.definitions.player_new_berserk_weapon_damage_multiplier = {
+		name_id = "menu_player_new_berserk_weapon_damage_multiplier",
+		category = "temporary",
+		upgrade = {
+			value = 1,
+			upgrade = "new_berserk_weapon_damage_multiplier",
+			category = "temporary"
 		}
 	}
 end)

@@ -77,6 +77,7 @@ function Gilza.tryAddingNewGuns()
 		end
 	end
 	Gilza.applyCustomMELEE_stats()
+	Gilza.applyCustomGunsIndividualStats()
 end
 
 function Gilza.applyCustomAR_stats(id)
@@ -101,7 +102,7 @@ function Gilza.applyCustomAR_stats(id)
 	-- light AR's
 	if tweak_data.weapon[id].stats.damage >= 100 and tweak_data.weapon[id].stats.damage <= 125 then
 		tweak_data.weapon[id].stats.damage = 117
-		tweak_data.weapon[id].AMMO_PICKUP = {3.64,6.15}
+		tweak_data.weapon[id].AMMO_PICKUP = {3.64,4.93}
 		dmg_type = "117"
 	-- low mid AR's
 	elseif tweak_data.weapon[id].stats.damage >= 126 and tweak_data.weapon[id].stats.damage <= 152 then
@@ -462,17 +463,24 @@ function Gilza.applyCustomSMG_stats(id)
 	-- same as with AR's
 	local dmg_type = "nil"
 	
+	local primary = false
+	if tweak_data.weapon[id].use_data and tweak_data.weapon[id].use_data.selection_index then
+		if tweak_data.weapon[id].use_data.selection_index == 2 then
+			primary = true
+		end
+	end
+	
 	if tweak_data.weapon[id].stats.damage >= 77 and tweak_data.weapon[id].stats.damage <= 92 then
 		tweak_data.weapon[id].stats.damage = 77
-		tweak_data.weapon[id].AMMO_PICKUP = {4.26,7.1}
+		tweak_data.weapon[id].AMMO_PICKUP = {4.0,5.43}
 		dmg_type = "77"
 	elseif tweak_data.weapon[id].stats.damage >= 93 and tweak_data.weapon[id].stats.damage <= 110 then
 		tweak_data.weapon[id].stats.damage = 95
-		tweak_data.weapon[id].AMMO_PICKUP = {3.98,6.83}
+		tweak_data.weapon[id].AMMO_PICKUP = {3.88,5.25}
 		dmg_type = "95"
 	elseif tweak_data.weapon[id].stats.damage >= 111 and tweak_data.weapon[id].stats.damage <= 129 then
 		tweak_data.weapon[id].stats.damage = 117
-		tweak_data.weapon[id].AMMO_PICKUP = {2.79,4.72}
+		tweak_data.weapon[id].AMMO_PICKUP = {2.79,3.79}
 		dmg_type = "117"
 	elseif tweak_data.weapon[id].stats.damage >= 130 and tweak_data.weapon[id].stats.damage <= 147 then
 		tweak_data.weapon[id].stats.damage = 146
@@ -492,6 +500,12 @@ function Gilza.applyCustomSMG_stats(id)
 		dmg_type = "super_light"
 		tweak_data.weapon[id].AMMO_PICKUP[1] = tweak_data.weapon[id].AMMO_PICKUP[1] * 0.6
 		tweak_data.weapon[id].AMMO_PICKUP[2] = tweak_data.weapon[id].AMMO_PICKUP[2] * 0.75
+	end
+	
+	-- akimbo or primary smgs
+	if primary then
+		tweak_data.weapon[id].AMMO_PICKUP[1] = tweak_data.weapon[id].AMMO_PICKUP[1] * 1.3
+		tweak_data.weapon[id].AMMO_PICKUP[2] = tweak_data.weapon[id].AMMO_PICKUP[2] * 1.3
 	end
 	
 	-- new SMG recoil
@@ -865,13 +879,13 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 	-- same as with others - dont touch guns with REALLY low damage
 	if tweak_data.weapon[id].stats.damage >= 77 and tweak_data.weapon[id].stats.damage <= 92 then
 		tweak_data.weapon[id].stats.damage = 77
-		tweak_data.weapon[id].AMMO_PICKUP = {4.26,7.1}
+		tweak_data.weapon[id].AMMO_PICKUP = {4.0,5.43}
 	elseif tweak_data.weapon[id].stats.damage >= 93 and tweak_data.weapon[id].stats.damage <= 110 then
 		tweak_data.weapon[id].stats.damage = 95
-		tweak_data.weapon[id].AMMO_PICKUP = {3.98,6.83}
+		tweak_data.weapon[id].AMMO_PICKUP = {3.88,5.25}
 	elseif tweak_data.weapon[id].stats.damage >= 111 and tweak_data.weapon[id].stats.damage <= 129 then
 		tweak_data.weapon[id].stats.damage = 117
-		tweak_data.weapon[id].AMMO_PICKUP = {2.79,4.72}
+		tweak_data.weapon[id].AMMO_PICKUP = {2.79,3.79}
 	elseif tweak_data.weapon[id].stats.damage >= 130 and tweak_data.weapon[id].stats.damage <= 147 then
 		tweak_data.weapon[id].stats.damage = 146
 		tweak_data.weapon[id].AMMO_PICKUP = {2.39,3.34}
@@ -884,6 +898,18 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 	elseif tweak_data.weapon[id].stats.damage >= 201 then
 		tweak_data.weapon[id].stats.damage = 210
 		tweak_data.weapon[id].AMMO_PICKUP = {1.62,2.39}
+	end
+	
+	-- akimbo or primary pistols
+	local primary = false
+	if tweak_data.weapon[id].use_data and tweak_data.weapon[id].use_data.selection_index then
+		if tweak_data.weapon[id].use_data.selection_index == 2 then
+			primary = true
+		end
+	end
+	if primary then
+		tweak_data.weapon[id].AMMO_PICKUP[1] = tweak_data.weapon[id].AMMO_PICKUP[1] * 1.3
+		tweak_data.weapon[id].AMMO_PICKUP[2] = tweak_data.weapon[id].AMMO_PICKUP[2] * 1.3
 	end
 	
 	local ROF = "decrease"
@@ -910,6 +936,42 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 		end
 		if tweak_data.weapon[id].auto then
 			tweak_data.weapon[id].auto.fire_rate = tweak_data.weapon[id].auto.fire_rate * 0.8
+		end
+		-- new full-auto pistol recoil
+		local recoil = tweak_data.weapon[id].stats.recoil * 4 - 4
+		local tenth = math.floor(recoil / 10)
+		local recoil_weight = 1 - (recoil/100)
+		local UPrecoil = 0.3 + (recoil_weight * 0.8)
+		local DOWNrecoil
+		local LEFTrecoil
+		local RIGHTrecoil
+		if UPrecoil >= 0.7 then
+			DOWNrecoil = UPrecoil * 0.8
+		else
+			DOWNrecoil = UPrecoil
+		end
+		if math.fmod(tenth,2) == 0 or tenth < 1 then
+			LEFTrecoil = 0.4 + (recoil_weight * 0.75)
+			RIGHTrecoil = LEFTrecoil * 0.73
+		else
+			RIGHTrecoil = 0.4 + (recoil_weight * 0.75)
+			LEFTrecoil = RIGHTrecoil * 0.73
+		end
+		LEFTrecoil = LEFTrecoil * -1
+		tweak_data.weapon[id].kick = {
+			standing = {
+				UPrecoil,
+				DOWNrecoil,
+				LEFTrecoil,
+				RIGHTrecoil
+			}
+		}
+		tweak_data.weapon[id].kick.steelsight = tweak_data.weapon[id].kick.standing
+		tweak_data.weapon[id].kick.crouching = tweak_data.weapon[id].kick.standing
+		
+		-- dont allow for full auto pistols to go over this amount of base stability
+		if tweak_data.weapon[id].stats.recoil > 14 then
+			tweak_data.weapon[id].stats.recoil = 14
 		end
 	end
 	
@@ -1269,8 +1331,104 @@ function Gilza.applyCustomMELEE_stats()
 					tweak_data.blackmarket.melee_weapons[melee].stats.max_damage_effect = 22.5
 				end
 			end
+			-- fire. sometimes this might cuck over actually balanced custom melees, but in that case lets hope that i've tweaked it invididually
+			if tweak_data.blackmarket.melee_weapons[melee].fire_dot_data then
+				tweak_data.blackmarket.melee_weapons[melee].stats.charge_time = tweak_data.blackmarket.melee_weapons[melee].stats.charge_time + 2
+				tweak_data.blackmarket.melee_weapons[melee].stats.concealment = tweak_data.blackmarket.melee_weapons[melee].stats.concealment - 2
+				tweak_data.blackmarket.melee_weapons[melee].melee_damage_delay = tweak_data.blackmarket.melee_weapons[melee].melee_damage_delay + 1 
+			end
+			-- poison
+			if tweak_data.blackmarket.melee_weapons[melee].dot_data then
+				tweak_data.blackmarket.melee_weapons[melee].stats.min_damage = 1.5
+				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 3.5
+				tweak_data.blackmarket.melee_weapons[melee].stats.min_damage_effect = 2
+				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage_effect = 2
+				tweak_data.blackmarket.melee_weapons[melee].stats.charge_time = 2
+				tweak_data.blackmarket.melee_weapons[melee].dot_data = {
+					type = "poison",
+					custom_data = {
+						dot_length = 1,
+						hurt_animation_chance = 0.75
+					}
+				}
+			end
+			-- tazer
+			if tweak_data.blackmarket.melee_weapons[melee].tase_data then
+				tweak_data.blackmarket.melee_weapons[melee].stats.min_damage = 0.1
+				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 1
+				tweak_data.blackmarket.melee_weapons[melee].stats.min_damage_effect = 1
+				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage_effect = 1
+				tweak_data.blackmarket.melee_weapons[melee].stats.charge_time = 0.5
+			end
 		end
 	end
+end
+
+-- this will go through every single custom weapon that i had time to tweak, executed after normal custom gun tweaks
+function Gilza.applyCustomGunsIndividualStats()
+	
+	-- McMilan CS5
+	if tweak_data.weapon.cs5 then
+		tweak_data.weapon.cs5.stats.damage = 1260
+	end
+	
+	-- VSS
+	if tweak_data.weapon.vss then
+		tweak_data.weapon.vss.fire_mode_data = {fire_rate = 60/700}
+		tweak_data.weapon.vss.single = {fire_rate = 60/700}
+		tweak_data.weapon.vss.stats.damage = 210
+		tweak_data.weapon.vss.stats.reload = 10
+		tweak_data.weapon.vss.AMMO_PICKUP = {1.06,1.56}
+	end
+	
+	-- Winchester 1894
+	if tweak_data.weapon.winchester1894 then
+		tweak_data.weapon.winchester1894.stats.damage = 630
+	end
+	
+	-- Mossberg 464 SPX
+	if tweak_data.weapon.moss464spx then
+		tweak_data.weapon.moss464spx.stats.damage = 630
+	end
+	
+	-- kar98k
+	if tweak_data.weapon.kar98k then
+		tweak_data.weapon.kar98k.stats.damage = 1260
+		local HE_custom_stats = {
+			ignore_statistic = true,
+			damage_far_mul = 1,
+			damage_near_mul = 1,
+			bullet_class = "InstantExplosiveBulletBase",
+			rays = 1,
+			ammo_pickup_max_mul = 0.4,
+			ammo_pickup_min_mul = 0.4
+		}
+		local PAHEstats = {
+			value = 5,
+			total_ammo_mod = -10,
+			damage = 450,
+			recoil = -25
+		}
+		local BS_custom_stats = {
+			damage_far_mul = 1,
+			damage_near_mul = 1,
+			ammo_pickup_max_mul = 0.8,
+			ammo_pickup_min_mul = 0.8
+		}
+		local PABS_stats = {
+			damage = 355
+		}
+		tweak_data.weapon.factory.wpn_fps_snp_kar98k.override = {
+			wpn_fps_upg_a_explosive = {stats = PAHEstats,custom_stats = HE_custom_stats},
+			wpn_fps_upg_a_german12 = {stats = PABS_stats,custom_stats = BS_custom_stats},
+		}
+	end
+	
+	-- Marlin model 1894
+	if tweak_data.weapon.m1894 then
+		tweak_data.weapon.m1894.AMMO_PICKUP = {0.341,0.626}
+	end
+	
 end
 
 

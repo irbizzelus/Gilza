@@ -7,8 +7,12 @@
 	"items":
 	[
 		{
+			"type" : "divider",
+			"size" : 22
+		},
+		{
 			"type" : "slider",
-			"id" : "v_fov",
+			"id" : "Gilza_v_fov",
 			"title" : "Gilza_v_fov",
 			"description" : "Gilza_v_fov_desc",
 			"callback" : "Gilza_v_fov",
@@ -16,6 +20,87 @@
 			"default_value" : 90,
 			"min" : 75,
 			"max" : 105,
+			"step" : 1
+		},
+		{
+			"type" : "divider",
+			"size" : 22
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_flash_header",
+			"title" : "Gilza_flash_header",
+			"description" : "Gilza_blank",
+			"callback" : "Gilza_donothing"
+		},
+		{
+			"type" : "divider",
+			"size" : 22
+		},
+		{
+			"type" : "multiple_choice",
+			"id" : "Gilza_flash_trigger",
+			"title" : "Gilza_flash_trigger",
+			"description" : "Gilza_flash_trigger_desc",
+			"callback" : "Gilza_flash_trigger",
+			"items" : [
+				"Gilza_flash_trigger_1",
+				"Gilza_flash_trigger_2",
+				"Gilza_flash_trigger_3",
+				"Gilza_flash_trigger_4",
+			],
+			"value" : "flash_trigger",
+			"default_value" : 2
+		},
+		{
+			"type" : "multiple_choice",
+			"id" : "Gilza_flash_type",
+			"title" : "Gilza_flash_type",
+			"description" : "Gilza_flash_type_desc",
+			"callback" : "Gilza_flash_type",
+			"items" : [
+				"Gilza_flash_type_1",
+				"Gilza_flash_type_2",
+				"Gilza_flash_type_3",
+				"Gilza_flash_type_4",
+			],
+			"value" : "flash_type",
+			"default_value" : 1
+		},
+		{
+			"type" : "slider",
+			"id" : "Gilza_flash_color_R",
+			"title" : "Gilza_flash_color_R",
+			"description" : "Gilza_flash_color_R_desc",
+			"callback" : "Gilza_flash_color_R",
+			"value" : "flash_color_R",
+			"default_value" : 255,
+			"min" : 0,
+			"max" : 255,
+			"step" : 1
+		},
+		{
+			"type" : "slider",
+			"id" : "Gilza_flash_color_G",
+			"title" : "Gilza_flash_color_G",
+			"description" : "Gilza_blank",
+			"callback" : "Gilza_flash_color_G",
+			"value" : "flash_color_G",
+			"default_value" : 0,
+			"min" : 0,
+			"max" : 255,
+			"step" : 1
+		},
+		{
+			"type" : "slider",
+			"id" : "Gilza_flash_color_B",
+			"title" : "Gilza_flash_color_B",
+			"description" : "Gilza_blank",
+			"callback" : "Gilza_flash_color_B",
+			"value" : "flash_color_B",
+			"default_value" : 0,
+			"min" : 0,
+			"max" : 255,
 			"step" : 1
 		},
 		{

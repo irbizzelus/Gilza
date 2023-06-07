@@ -1,5 +1,18 @@
 Hooks:PreHook(CopDamage, "damage_melee", "Gilza_melee_new_damage", function(self,attack_data)
 	if not attack_data.didweapplydamagetweakallready then
+	
+		local dmg_multiplier = 1
+		
+		if managers.player:has_category_upgrade("temporary", "new_berserk_melee_damage_multiplier_2") then
+			dmg_multiplier = dmg_multiplier * managers.player:temporary_upgrade_value("temporary", "new_berserk_melee_damage_multiplier_2", 1)
+		elseif managers.player:has_category_upgrade("temporary", "new_berserk_melee_damage_multiplier_1") then
+			dmg_multiplier = dmg_multiplier * managers.player:temporary_upgrade_value("temporary", "new_berserk_melee_damage_multiplier_1", 1)
+		end
+		
+		dmg_multiplier = dmg_multiplier + managers.player:upgrade_value("player", "melee_damage_multiplier", 0)
+		
+		attack_data.damage = attack_data.damage * dmg_multiplier
+	
 		if self._char_tweak.Gilza_boss_tag then
 			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 50)) -- bosses take 5x the amount of hits
 		elseif self._char_tweak.Gilza_winters_tag then
@@ -49,7 +62,7 @@ function CopDamage:damage_bullet(attack_data)
 		local armor_pierce_roll = math.rand(1)
 		local armor_pierce_value = 0
 		
-		--###### GILZA THROWABLES PEIRCE START
+		--########################################################## GILZA THROWABLES PEIRCE START
 		local G_weapon_id = tostring(attack_data.weapon_unit:base():get_name_id())
 		local throwableswithpeirce = {
 			wpn_prj_four = true,
@@ -61,7 +74,7 @@ function CopDamage:damage_bullet(attack_data)
 		if throwableswithpeirce[G_weapon_id] then
 			armor_pierce_value = 1
 		end
-		--##### GILZA THROWABLES PEIRCE END. rest is base game code
+		--######################################################### GILZA THROWABLES PEIRCE END. rest is base game code
 
 		if attack_data.attacker_unit == managers.player:player_unit() and not attack_data.weapon_unit:base().thrower_unit then
 			armor_pierce_value = armor_pierce_value + attack_data.weapon_unit:base():armor_piercing_chance()

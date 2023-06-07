@@ -4,7 +4,12 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			_path = "mods/Gilza/",
 			_save_path = "mods/saves/Gilza_save.txt",
 			settings = {
-				v_fov = 90
+				v_fov = 90,
+				flash_color_R = 255,
+				flash_color_G = 0,
+				flash_color_B = 0,
+				flash_type = 1,
+				flash_trigger = 2
 			}
 		}
 		
@@ -428,7 +433,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.new_m14.single = {fire_rate = 60/600}
 
 	self.famas.stats.damage = 117
-	self.famas.AMMO_PICKUP = {3.64,6.15}
+	self.famas.AMMO_PICKUP = {3.64,4.93}
 	self.famas.stats.recoil = 18
 	self.famas.stats.spread = 6
 	
@@ -451,7 +456,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.asval.fire_mode_data = {fire_rate = 60/900}
 	
 	self.ak5.stats.damage = 117
-	self.ak5.AMMO_PICKUP = {3.64,6.15}
+	self.ak5.AMMO_PICKUP = {3.64,4.93}
 	self.ak5.stats.recoil = 19
 	self.ak5.stats.spread = 19
 	
@@ -469,7 +474,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.komodo.stats.spread = 15
 	self.komodo.NR_CLIPS_MAX = 6
 	self.komodo.AMMO_MAX = self.komodo.CLIP_AMMO_MAX * self.komodo.NR_CLIPS_MAX
-	self.komodo.AMMO_PICKUP = {3.64,6.15}
+	self.komodo.AMMO_PICKUP = {3.64,4.93}
 	
 	self.m16.stats.damage = 177
 	self.m16.NR_CLIPS_MAX = 5
@@ -842,7 +847,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.par.stats.recoil = 10
 	-- mcshay pack 4
 	self.kacchainsaw.stats.damage = 117
-	self.kacchainsaw.AMMO_PICKUP = {5.78,8.99}
+	self.kacchainsaw.AMMO_PICKUP = {5.78,7.5}
 	self.kacchainsaw_flamethrower.CLIP_AMMO_MAX = 125
 	self.kacchainsaw_flamethrower.NR_CLIPS_MAX = 2
 	self.kacchainsaw_flamethrower.AMMO_MAX = self.kacchainsaw_flamethrower.CLIP_AMMO_MAX * self.kacchainsaw_flamethrower.NR_CLIPS_MAX
@@ -1216,7 +1221,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self[gun].stats.damage = 117
 			self[gun].AMMO_MAX = 180
 			self[gun].NR_CLIPS_MAX = self[gun].AMMO_MAX / self[gun].CLIP_AMMO_MAX
-			self[gun].AMMO_PICKUP = {2.79,4.72}
+			self[gun].AMMO_PICKUP = {2.79,3.79}
 		end
 	end
 	
@@ -1262,7 +1267,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self[gun].stats.damage = 95
 			self[gun].AMMO_MAX = 210
 			self[gun].NR_CLIPS_MAX = self[gun].AMMO_MAX / self[gun].CLIP_AMMO_MAX
-			self[gun].AMMO_PICKUP =  {3.98,6.83}
+			self[gun].AMMO_PICKUP =  {3.88,5.25}
 		end
 	end
 	
@@ -1341,7 +1346,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.beer.CLIP_AMMO_MAX = 16
 	self.beer.NR_CLIPS_MAX = 10
 	self.beer.AMMO_MAX = self.beer.NR_CLIPS_MAX * self.beer.CLIP_AMMO_MAX
-	self.beer.AMMO_PICKUP = {4.26,7.1}
+	self.beer.AMMO_PICKUP = {4.0,5.43}
 	self.beer.auto.fire_rate = self.beer.auto.fire_rate * 0.8
 	self.beer.fire_mode_data.fire_rate = self.beer.fire_mode_data.fire_rate * 0.8
 	
@@ -1374,7 +1379,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				self[gun].auto.fire_rate = self[gun].auto.fire_rate * 0.8
 			end
 			self[gun].AMMO_MAX = self[gun].NR_CLIPS_MAX * self[gun].CLIP_AMMO_MAX
-			self[gun].AMMO_PICKUP = {3.98,6.83}
+			self[gun].AMMO_PICKUP = {3.88,5.25}
 		end
 	end
 	
@@ -1445,7 +1450,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				self[gun].auto.fire_rate = self[gun].auto.fire_rate * 1.5
 			end
 			self[gun].AMMO_MAX = self[gun].NR_CLIPS_MAX * self[gun].CLIP_AMMO_MAX
-			self[gun].AMMO_PICKUP = {2.79,4.72}
+			self[gun].AMMO_PICKUP = {2.79,3.79}
 		end
 	end
 	
@@ -1459,7 +1464,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.stech.fire_mode_data.fire_rate = self.stech.fire_mode_data.fire_rate * 0.8
 	self.stech.auto.fire_rate = self.stech.auto.fire_rate * 0.8
 	self.stech.AMMO_MAX = self.stech.NR_CLIPS_MAX * self.stech.CLIP_AMMO_MAX
-	self.stech.AMMO_PICKUP = {2.79,4.72}
+	self.stech.AMMO_PICKUP = {2.79,3.79}
 	
 	-- akimbo versions
 	for _, gun in ipairs(mid_pistol_ids) do
