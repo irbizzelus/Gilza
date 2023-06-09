@@ -18,7 +18,7 @@ function Gilza:changelog_message()
 end
 
 function Gilza_linkchangelog()
-	Steam:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases/latest")
+	managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases/latest")
 end
 
 Hooks:PostHook(MenuManager, "_node_selected", "Gilza_changelog", function(self, menu_name, node)
@@ -85,7 +85,7 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init', function(menu_manager)
 	end
 	
 	MenuCallbackHandler.Gilza_page = function(this, item)
-		Steam:overlay_activate("url", "https://modworkshop.net/mod/39854")
+		managers.network.account:overlay_activate("url", "https://modworkshop.net/mod/39854")
 	end
 
 	Gilza:Load()
