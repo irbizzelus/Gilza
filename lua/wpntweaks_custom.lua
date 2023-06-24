@@ -101,9 +101,9 @@ function Gilza.applyCustomAR_stats(id)
 	
 	-- light AR's
 	if tweak_data.weapon[id].stats.damage >= 100 and tweak_data.weapon[id].stats.damage <= 125 then
-		tweak_data.weapon[id].stats.damage = 117
+		tweak_data.weapon[id].stats.damage = 110
 		tweak_data.weapon[id].AMMO_PICKUP = {3.64,4.93}
-		dmg_type = "117"
+		dmg_type = "110"
 	-- low mid AR's
 	elseif tweak_data.weapon[id].stats.damage >= 126 and tweak_data.weapon[id].stats.damage <= 152 then
 		tweak_data.weapon[id].stats.damage = 146
@@ -178,7 +178,7 @@ function Gilza.applyCustomAR_stats(id)
 	local max_stat_points = 150
 	
 	-- allocation of max amount of stab+accuracy stats based on ammo/rof
-	if dmg_type == "117" then
+	if dmg_type == "110" then
 		if wpn_AMMO <= 90 then
 			max_stat_points = max_stat_points + 10
 		end
@@ -479,9 +479,9 @@ function Gilza.applyCustomSMG_stats(id)
 		tweak_data.weapon[id].AMMO_PICKUP = {3.88,5.25}
 		dmg_type = "95"
 	elseif tweak_data.weapon[id].stats.damage >= 111 and tweak_data.weapon[id].stats.damage <= 129 then
-		tweak_data.weapon[id].stats.damage = 117
+		tweak_data.weapon[id].stats.damage = 110
 		tweak_data.weapon[id].AMMO_PICKUP = {2.79,3.79}
-		dmg_type = "117"
+		dmg_type = "110"
 	elseif tweak_data.weapon[id].stats.damage >= 130 and tweak_data.weapon[id].stats.damage <= 147 then
 		tweak_data.weapon[id].stats.damage = 146
 		tweak_data.weapon[id].AMMO_PICKUP = {2.39,3.34}
@@ -624,7 +624,7 @@ function Gilza.applyCustomSMG_stats(id)
 		if wpn_ROF >= 1200 then
 			max_stat_points = max_stat_points - 25
 		end
-	elseif dmg_type == "117" then
+	elseif dmg_type == "110" then
 		if wpn_AMMO <= 90 then
 			max_stat_points = max_stat_points + 10
 		end
@@ -884,7 +884,7 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 		tweak_data.weapon[id].stats.damage = 95
 		tweak_data.weapon[id].AMMO_PICKUP = {3.88,5.25}
 	elseif tweak_data.weapon[id].stats.damage >= 111 and tweak_data.weapon[id].stats.damage <= 129 then
-		tweak_data.weapon[id].stats.damage = 117
+		tweak_data.weapon[id].stats.damage = 110
 		tweak_data.weapon[id].AMMO_PICKUP = {2.79,3.79}
 	elseif tweak_data.weapon[id].stats.damage >= 130 and tweak_data.weapon[id].stats.damage <= 147 then
 		tweak_data.weapon[id].stats.damage = 146
@@ -984,9 +984,9 @@ function Gilza.applyCustomLMG_stats(id)
 	local dmg_type = "nil"
 	
 	if tweak_data.weapon[id].stats.damage >= 114 and tweak_data.weapon[id].stats.damage < 130 then
-		tweak_data.weapon[id].stats.damage = 117
-		tweak_data.weapon[id].AMMO_PICKUP = {6.19,10.2}
-		dmg_type = "117"
+		tweak_data.weapon[id].stats.damage = 110
+		tweak_data.weapon[id].AMMO_PICKUP = {5.71,8.2}
+		dmg_type = "110"
 	-- avg
 	elseif tweak_data.weapon[id].stats.damage >= 130 and tweak_data.weapon[id].stats.damage < 180 then
 		tweak_data.weapon[id].stats.damage = 140

@@ -42,7 +42,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "newwpnparts_breachround_andAP", 
 		value = 0,
 		total_ammo_mod = -5,
 		spread = -6,
-		damage = 22,
+		damage = 15,
 		spread_moving = -6,
 		recoil = -2
 	}
@@ -455,7 +455,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "newwpnparts_breachround_andAP", 
 			self.parts.wpn_fps_upg_m4_fg_strike.stats.concealment = 4
 		end
 		if self.parts.wpn_fps_upg_m4_fg_lvoac then
-			self.parts.wpn_fps_upg_m4_fg_lvoac.stats.spread = 2
+			self.parts.wpn_fps_upg_m4_fg_lvoac.stats.damage = -3
+			self.parts.wpn_fps_upg_m4_fg_lvoac.stats.spread = 1
 			self.parts.wpn_fps_upg_m4_fg_lvoac.stats.recoil = 4
 			self.parts.wpn_fps_upg_m4_fg_lvoac.stats.concealment = -5
 		end
@@ -651,7 +652,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "newwpnparts_breachround_andAP", 
 			self.parts.wpn_fps_upg_m4_fg_skele.stats.concealment = 4
 		end
 		if self.parts.wpn_fps_upg_m4_fg_sail then
-			self.parts.wpn_fps_upg_m4_fg_sail.stats.damage = -2
+			self.parts.wpn_fps_upg_m4_fg_sail.stats.damage = -1
 			self.parts.wpn_fps_upg_m4_fg_sail.stats.spread = 0
 			self.parts.wpn_fps_upg_m4_fg_sail.stats.recoil = 4
 			self.parts.wpn_fps_upg_m4_fg_sail.stats.concealment = -5
@@ -768,7 +769,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "newwpnparts_breachround_andAP", 
 			self.parts.wpn_fps_smg_polymer_barrel_barlong.stats.concealment = -3
 		end
 		if self.parts.wpn_fps_smg_polymer_barrel_barsil then
-			-- WE CANT PUT A SUPRESSOR INSIDE OF ANOTHER SUPRESSOR FRENCY
+			-- WE CANT PUT A SUPRESSOR INSIDE OF ANOTHER SUPRESSOR FRENCHY
 			table.insert(self.parts.wpn_fps_smg_polymer_barrel_barsil.forbids, "wpn_fps_ass_ns_g_aac")
 			table.insert(self.parts.wpn_fps_smg_polymer_barrel_barsil.forbids, "wpn_fps_ass_ns_g_sfn")
 			table.insert(self.parts.wpn_fps_smg_polymer_barrel_barsil.forbids, "wpn_fps_ass_ns_g_srd")
@@ -1518,6 +1519,13 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "newwpnparts_breachround_andAP", 
 		value = 1,
 		concealment = 1,
 		recoil = -1
+	}
+	-- mg42 barrel that is lighter but better in every way?
+	self.parts.wpn_fps_lmg_mg42_b_mg34.stats = {
+		value = 1,
+		recoil = -1,
+		damage = -1,
+		spread = 3
 	}
 	-- so, this "taktika" AK foregrip is visually bigger then the 'keymod rail' yet has better concealment and worse stability? wtf
 	-- moved their stats around because this is dumb
@@ -2484,7 +2492,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_c96", "newwpnstats_c96barrel", fun
 		value = 2,
 		total_ammo_mod = -10,
 		concealment = -5,
-		damage = 70,
+		damage = 64,
 		recoil = -6
 	}
 	self.parts.wpn_fps_pis_c96_b_long.custom_stats = {
@@ -2836,8 +2844,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_kacchainsaw", "newwpnstats_mcshay4
 		recoil = 2
 	}
 	self.parts.wpn_fps_lmg_kacchainsaw_flamethrower.custom_stats = {
-		ammo_pickup_max_mul = 0.8,
-		ammo_pickup_min_mul = 0.8,
+		ammo_pickup_min_mul = 0.637,
+		ammo_pickup_max_mul = 0.602,
 	}
 	self.parts.wpn_fps_lmg_kacchainsaw_conversionkit.stats = {
 		extra_ammo = 50,
@@ -2846,12 +2854,12 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_kacchainsaw", "newwpnstats_mcshay4
 		value = 1,
 		spread = 1,
 		recoil = 4,
-		fire_rate = 1.667
+		fire_rate = 1.334
 	}
 	self.parts.wpn_fps_lmg_kacchainsaw_conversionkit.custom_stats = {
-		ammo_pickup_max_mul = 1.75,
-		ammo_pickup_min_mul = 1.35,
-		fire_rate_multiplier = 1.667
+		ammo_pickup_min_mul = 1.2,
+		ammo_pickup_max_mul = 1.24,
+		fire_rate_multiplier = 1.334
 	}
 end)
 

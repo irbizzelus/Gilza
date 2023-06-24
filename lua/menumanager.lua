@@ -4,14 +4,14 @@ end
 
 function Gilza:changelog_message()
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 1.842 then
+		if not Gilza.settings.version or Gilza.settings.version < 1.85 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.8.42 - Minor fix for U237, more fixes likely to come.\n\n1.8.41\n- Fixed an issue where special enemies would receive lower then intended damage with either version of berserker equipped\n\n1.8.4 changelog:\n- Reworked Graze and Berserker skills. Berserker has a new flash effect that you can tweak in Gilza's mod options\n- Reduced ammo pick up for 117 and 95 damage AR's and SMG's\n- Added automatic support for primary SMG and Pistol custom weapons\n- Added automatic support for custom melee weapons with fire/poison/electric effect"
+			local message = "1.8.5 changelog:\n- \n- \n- \n- "
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 1.842
+			Gilza.settings.version = 1.85
 			Gilza.Save()
 		end
 	end)
@@ -25,11 +25,6 @@ Hooks:PostHook(MenuManager, "_node_selected", "Gilza_changelog", function(self, 
 	if type(node) == "table" and node._parameters.name == "main" then
 		Gilza.changelog_message()
 	end
-end)
-
-Hooks:Add('LocalizationManagerPostInit', 'Gilza_loc', function(loc)
-	Gilza:Load()
-	loc:load_localization_file(Gilza._path .. 'menus/lang/Gilza_en.txt', false)
 end)
 
 Hooks:Add('MenuManagerInitialize', 'Gilza_init', function(menu_manager)

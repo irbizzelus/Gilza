@@ -20,7 +20,7 @@ function NewRaycastWeaponBase:conditional_accuracy_multiplier(current_state)
 	end
 	
 	if managers.player:current_state() == "bipod" then
-		mul = mul + 1 - 0.5
+		mul = mul + 0.7
 	end
 	
 	if current_state._moving then
@@ -49,7 +49,7 @@ function NewRaycastWeaponBase:conditional_accuracy_multiplier(current_state)
 	end
 	]]
 	mul = mul + 1 - pm:get_property("desperado", 1)
-
+	
 	return self:_convert_add_to_mul(mul)
 end
 

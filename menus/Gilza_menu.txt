@@ -2,7 +2,7 @@
 	"menu_id": "Gilza_menu",
 	"parent_menu_id": "blt_options",
 	"title": "Gilza_title",
-	"description": "Gilza_desc",
+	"description": "Gilza_blank",
 	"back_callback": "Gilza_save",
 	"items":
 	[

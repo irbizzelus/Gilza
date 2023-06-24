@@ -210,6 +210,8 @@ Hooks:PostHook(CharacterTweakData, "_set_overkill_145", "sethealthOVK", function
 	self.tank_mini.headshot_dmg_mul = 10.5
 	self.tank_medic.headshot_dmg_mul = 10.5
 	self.tank.headshot_dmg_mul = 10.5
+	self.phalanx_minion.headshot_dmg_mul = 4
+	self.phalanx_vip.headshot_dmg_mul = 4
 	
 	self.phalanx_minion.Gilza_winters_tag = true
 	self.phalanx_vip.Gilza_winters_tag = true
@@ -312,6 +314,8 @@ Hooks:PostHook(CharacterTweakData, "_set_easy_wish", "sethealthMayhem", function
 	self.tank_mini.headshot_dmg_mul = 10.5
 	self.tank_medic.headshot_dmg_mul = 10.5
 	self.tank.headshot_dmg_mul = 10.5
+	self.phalanx_minion.headshot_dmg_mul = 4
+	self.phalanx_vip.headshot_dmg_mul = 4
 	
 	self.phalanx_minion.Gilza_winters_tag = true
 	self.phalanx_vip.Gilza_winters_tag = true
@@ -413,6 +417,8 @@ Hooks:PostHook(CharacterTweakData, "_set_overkill_290", "sethealthDW", function(
 	self.tank_mini.headshot_dmg_mul = 8.5
 	self.tank_medic.headshot_dmg_mul = 8.5
 	self.tank.headshot_dmg_mul = 8.5
+	self.phalanx_minion.headshot_dmg_mul = 4
+	self.phalanx_vip.headshot_dmg_mul = 4
 	
 	self.phalanx_minion.Gilza_winters_tag = true
 	self.phalanx_vip.Gilza_winters_tag = true
@@ -517,6 +523,8 @@ Hooks:PostHook(CharacterTweakData, "_set_sm_wish", "sethealthDS", function(self)
 	self.tank_mini.headshot_dmg_mul = 8.5
 	self.tank_medic.headshot_dmg_mul = 8.5
 	self.tank.headshot_dmg_mul = 8.5
+	self.phalanx_minion.headshot_dmg_mul = 4
+	self.phalanx_vip.headshot_dmg_mul = 4
 	
 	self.phalanx_minion.Gilza_winters_tag = true
 	self.phalanx_vip.Gilza_winters_tag = true
