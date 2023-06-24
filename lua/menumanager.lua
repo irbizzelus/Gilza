@@ -8,7 +8,7 @@ function Gilza:changelog_message()
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.8.5 changelog:\n- \n- \n- \n- "
+			local message = "1.8.5 changelog:\n- Added full russian localization\n- Tweaks to most LMG's\n- Campbell lmg tweaks\n- New damage profile for snipers added\n- Additional small fixes"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
 			Gilza.settings.version = 1.85

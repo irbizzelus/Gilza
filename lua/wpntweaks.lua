@@ -5,7 +5,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			_save_path = "mods/saves/Gilza_save.txt",
 			settings = {
 				v_fov = 90,
-				language = "en",
 				flash_color_R = 255,
 				flash_color_G = 0,
 				flash_color_B = 0,
