@@ -4,14 +4,14 @@ end
 
 function Gilza:changelog_message()
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 1.85 then
+		if not Gilza.settings.version or Gilza.settings.version < 1.86 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.8.5 changelog:\n- Added full russian localization\n- Tweaks to most LMG's\n- Campbell lmg tweaks\n- New damage profile for snipers added\n- Additional small fixes"
+			local message = "1.8.6 changelog:\n-Compatibility with updates 238 and 238.1\n- Enemy health is now the same across all difficulties, some enemies had their health tweaked a bit\n- Tweaks to some shotgun rounds\n- Minor damage value reductions with no breakpoint chages\n- HUGE changes to most weapon's damage drop-off values\n- Minor additional rebalances\n\nThis is pretty much the 'damage drop-off patch', most weapon classes now behave slighlty differently at certain ranges, go to changelog, or even better - get 'More weapon stats' for more info."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 1.85
+			Gilza.settings.version = 1.86
 			Gilza.Save()
 		end
 	end)
