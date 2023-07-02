@@ -123,10 +123,54 @@ local heavy_swat_hurts = {
 	}
 }
 
---difficulties easier then ovkl are probably never played, and even if they are, they are pointless to adjust, cuz everything will be overpowered there regardless of stat changes
-Hooks:PostHook(CharacterTweakData, "_set_overkill_145", "sethealthOVK", function(self)
+local function Gilza_set_new_health(self)
+	self.gangster.HEALTH_INIT = 62
+	self.biker.HEALTH_INIT = 62
+	self.captain.HEALTH_INIT = 10
+	self.biker_escape.HEALTH_INIT = 62
+	self.mobster.HEALTH_INIT = 10
+	self.bolivian.HEALTH_INIT = 62
+	self.bolivian_indoors.HEALTH_INIT = 62
+	self.triad.HEALTH_INIT = 62
+	self.ranchmanager.HEALTH_INIT = 62
+	self.security.HEALTH_INIT = 10
+	self.security_undominatable.HEALTH_INIT = 10
+	self.mute_security_undominatable.HEALTH_INIT = 10
+	self.gensec.HEALTH_INIT = 10
+	self.cop.HEALTH_INIT = 10
+	self.cop_scared.HEALTH_INIT = 10
+	self.cop_female.HEALTH_INIT = 10
+	self.fbi.HEALTH_INIT = 62
+	self.swat.HEALTH_INIT = 62
+	self.fbi_swat.HEALTH_INIT = 62
+	self.city_swat.HEALTH_INIT = 62
+	self.heavy_swat.HEALTH_INIT = 124
+	self.heavy_swat_sniper.HEALTH_INIT = 124
+	self.fbi_heavy_swat.HEALTH_INIT = 124
+	self.shield.HEALTH_INIT = 62
+	self.sniper.HEALTH_INIT = 31
+	self.taser.HEALTH_INIT = 158
+	self.medic.HEALTH_INIT = 158
+	self.spooc.HEALTH_INIT = 468
+	self.shadow_spooc.HEALTH_INIT = 780
+	self.tank.HEALTH_INIT = 1600
+	self.tank_medic.HEALTH_INIT = 1600
+	self.tank_mini.HEALTH_INIT = 3200
+	self.tank_hw.HEALTH_INIT = 1600
+	self.phalanx_minion.HEALTH_INIT = 500
+	self.phalanx_vip.HEALTH_INIT = 1000
+	self.mobster_boss.HEALTH_INIT = 1200
+	self.biker_boss.HEALTH_INIT = 3900
+	self.chavez_boss.HEALTH_INIT = 1200
+	self.hector_boss.HEALTH_INIT = 1200
+	self.drug_lord_boss.HEALTH_INIT = 2700
+	self.triad_boss.HEALTH_INIT = 4200
+	self.snowman_boss.HEALTH_INIT = 3400
+	self.marshal_marksman.HEALTH_INIT = 158
+	self.marshal_shield.HEALTH_INIT = 124
+	self.deep_boss.HEALTH_INIT = 14000
+	
 	local enemies = {
-		-- crooks
 		"gangster",
 		"biker",
 		"captain",
@@ -135,290 +179,51 @@ Hooks:PostHook(CharacterTweakData, "_set_overkill_145", "sethealthOVK", function
 		"bolivian",
 		"bolivian_indoors",
 		"triad",
-		-- security guards
 		"security",
 		"security_undominatable",
 		"mute_security_undominatable",
 		"gensec",
-		-- the boys in blue
 		"cop",
 		"cop_scared",
 		"cop_female",
-		-- FBIs, whiteshirtblackguy
 		"fbi",
-		-- blues, HRTs
 		"swat",
-		-- greens
 		"fbi_swat",
-		-- grays
 		"city_swat",
-		-- whiteheads
 		"heavy_swat",
 		"heavy_swat_sniper",
-		-- tans
 		"fbi_heavy_swat",
-		-- SHIELD
 		"shield",
-		-- SNIPER
 		"sniper",
-		-- TASER
 		"taser",
-		-- MEDIC
 		"medic",
-		-- CLOAKER
-		"spooc",
 		"shadow_spooc",
-		-- BULLDOZER
-		"tank",
-		"tank_medic", 
-		"tank_mini",
 		"tank_hw",
-		-- THE WINTERS BRIGADE
-		"phalanx_minion",
-		"phalanx_vip",
-		-- THE COMMISSAR
 		"mobster_boss",
-		-- LIEUTENANT WHO?
 		"biker_boss",
-		-- CHAVEZ
 		"chavez_boss",
-		-- HECTOR
 		"hector_boss",
-		-- ERNESTO SOSA
 		"drug_lord_boss",
-		-- mountain master guy
 		"triad_boss",
-		-- yeap, this happened
 		"snowman_boss",
-		-- marshals
 		"marshal_marksman",
-		-- shield ones
-		"marshal_shield",
+		"marshal_shield"
 	}
 	
 	for i=1, #enemies do
 		if self[tostring(enemies[i])] and self[tostring(enemies[i])].HEALTH_INIT then
-			self[tostring(enemies[i])].HEALTH_INIT = self[tostring(enemies[i])].HEALTH_INIT * 1.3
 			self[tostring(enemies[i])].headshot_dmg_mul = 3
 		end
 	end
 	
-	self.taser.HEALTH_INIT = self.taser.HEALTH_INIT * 0.68
-	self.medic.HEALTH_INIT = self.medic.HEALTH_INIT * 0.68
-	self.marshal_marksman.HEALTH_INIT = self.marshal_marksman.HEALTH_INIT * 0.68
-	self.spooc.headshot_dmg_mul = 11.25
-	self.tank_mini.headshot_dmg_mul = 10.5
-	self.tank_medic.headshot_dmg_mul = 10.5
-	self.tank.headshot_dmg_mul = 10.5
-	self.phalanx_minion.headshot_dmg_mul = 4
-	self.phalanx_vip.headshot_dmg_mul = 4
-	
-	self.phalanx_minion.Gilza_winters_tag = true
-	self.phalanx_vip.Gilza_winters_tag = true
-	
-	self.mobster_boss.Gilza_boss_tag = true
-	self.biker_boss.Gilza_boss_tag = true
-	self.chavez_boss.Gilza_boss_tag = true
-	self.hector_boss.Gilza_boss_tag = true
-	self.drug_lord_boss.Gilza_boss_tag = true
-	self.triad_boss.Gilza_boss_tag = true
-	self.snowman_boss.Gilza_boss_tag = true
-	
-	self.city_swat.damage.hurt_severity = city_swat_hurts
-	self.fbi_heavy_swat.damage.hurt_severity = heavy_swat_hurts
-end)
-
-Hooks:PostHook(CharacterTweakData, "_set_easy_wish", "sethealthMayhem", function(self)
-	local enemies = {
-		-- crooks
-		"gangster",
-		"biker",
-		"captain",
-		"biker_escape",
-		"mobster",
-		"bolivian",
-		"bolivian_indoors",
-		"triad",
-		-- security guards
-		"security",
-		"security_undominatable",
-		"mute_security_undominatable",
-		"gensec",
-		-- the boys in blue
-		"cop",
-		"cop_scared",
-		"cop_female",
-		-- FBIs, whiteshirtblackguy
-		"fbi",
-		-- blues, HRTs
-		"swat",
-		-- greens
-		"fbi_swat",
-		-- grays
-		"city_swat",
-		-- whiteheads
-		"heavy_swat",
-		"heavy_swat_sniper",
-		-- tans
-		"fbi_heavy_swat",
-		-- SHIELD
-		"shield",
-		-- SNIPER
-		"sniper",
-		-- TASER
-		"taser",
-		-- MEDIC
-		"medic",
-		-- CLOAKER
-		"spooc",
-		"shadow_spooc",
-		-- BULLDOZER
-		"tank",
-		"tank_medic", 
-		"tank_mini",
-		"tank_hw",
-		-- THE WINTERS BRIGADE
-		"phalanx_minion",
-		"phalanx_vip",
-		-- THE COMMISSAR
-		"mobster_boss",
-		-- LIEUTENANT WHO?
-		"biker_boss",
-		-- CHAVEZ
-		"chavez_boss",
-		-- HECTOR
-		"hector_boss",
-		-- ERNESTO SOSA
-		"drug_lord_boss",
-		-- mountain master guy
-		"triad_boss",
-		-- yeap, this happened
-		"snowman_boss",
-		-- marshals
-		"marshal_marksman",
-		-- shield ones
-		"marshal_shield",
-	}
-	
-	for i=1, #enemies do
-		if self[tostring(enemies[i])] and self[tostring(enemies[i])].HEALTH_INIT then
-			self[tostring(enemies[i])].HEALTH_INIT = self[tostring(enemies[i])].HEALTH_INIT * 1.3
-			self[tostring(enemies[i])].headshot_dmg_mul = 3
-		end
-	end
-	
-	self.taser.HEALTH_INIT = self.taser.HEALTH_INIT * 0.68
-	self.medic.HEALTH_INIT = self.medic.HEALTH_INIT * 0.68
-	self.marshal_marksman.HEALTH_INIT = self.marshal_marksman.HEALTH_INIT * 0.68
-	self.spooc.headshot_dmg_mul = 9
-	self.tank_mini.headshot_dmg_mul = 10.5
-	self.tank_medic.headshot_dmg_mul = 10.5
-	self.tank.headshot_dmg_mul = 10.5
-	self.phalanx_minion.headshot_dmg_mul = 4
-	self.phalanx_vip.headshot_dmg_mul = 4
-	
-	self.phalanx_minion.Gilza_winters_tag = true
-	self.phalanx_vip.Gilza_winters_tag = true
-	
-	self.mobster_boss.Gilza_boss_tag = true
-	self.biker_boss.Gilza_boss_tag = true
-	self.chavez_boss.Gilza_boss_tag = true
-	self.hector_boss.Gilza_boss_tag = true
-	self.drug_lord_boss.Gilza_boss_tag = true
-	self.triad_boss.Gilza_boss_tag = true
-	self.snowman_boss.Gilza_boss_tag = true
-	
-	self.city_swat.damage.hurt_severity = city_swat_hurts
-	self.fbi_heavy_swat.damage.hurt_severity = heavy_swat_hurts
-end)
-
-Hooks:PostHook(CharacterTweakData, "_set_overkill_290", "sethealthDW", function(self)
-	local enemies = {
-		-- crooks
-		"gangster",
-		"biker",
-		"captain",
-		"biker_escape",
-		"mobster",
-		"bolivian",
-		"bolivian_indoors",
-		"triad",
-		-- security guards
-		"security",
-		"security_undominatable",
-		"mute_security_undominatable",
-		"gensec",
-		-- the boys in blue
-		"cop",
-		"cop_scared",
-		"cop_female",
-		-- FBIs, whiteshirtblackguy
-		"fbi",
-		-- blues, HRTs
-		"swat",
-		-- greens
-		"fbi_swat",
-		-- grays
-		"city_swat",
-		-- whiteheads
-		"heavy_swat",
-		"heavy_swat_sniper",
-		-- tans
-		"fbi_heavy_swat",
-		-- SHIELD
-		"shield",
-		-- SNIPER
-		"sniper",
-		-- TASER
-		"taser",
-		-- MEDIC
-		"medic",
-		-- CLOAKER
-		"spooc",
-		"shadow_spooc",
-		-- BULLDOZER
-		"tank",
-		"tank_medic", 
-		"tank_mini",
-		"tank_hw",
-		-- THE WINTERS BRIGADE
-		"phalanx_minion",
-		"phalanx_vip",
-		-- THE COMMISSAR
-		"mobster_boss",
-		-- LIEUTENANT WHO?
-		"biker_boss",
-		-- CHAVEZ
-		"chavez_boss",
-		-- HECTOR
-		"hector_boss",
-		-- ERNESTO SOSA
-		"drug_lord_boss",
-		-- mountain master guy
-		"triad_boss",
-		-- yeap, this happened
-		"snowman_boss",
-		-- marshals
-		"marshal_marksman",
-		-- shield ones. they allready have like 4k health is this even needed lmao
-		"marshal_shield",
-	}
-	for i=1, #enemies do
-		if self[tostring(enemies[i])] and self[tostring(enemies[i])].HEALTH_INIT then
-			self[tostring(enemies[i])].HEALTH_INIT = self[tostring(enemies[i])].HEALTH_INIT * 1.3
-			self[tostring(enemies[i])].headshot_dmg_mul = 3
-		end
-	end
-	
-	self.taser.HEALTH_INIT = self.taser.HEALTH_INIT * 0.68
-	self.medic.HEALTH_INIT = self.medic.HEALTH_INIT * 0.68
-	self.marshal_marksman.HEALTH_INIT = self.marshal_marksman.HEALTH_INIT * 0.68
 	self.spooc.headshot_dmg_mul = 8.5
 	self.tank_mini.headshot_dmg_mul = 8.5
 	self.tank_medic.headshot_dmg_mul = 8.5
 	self.tank.headshot_dmg_mul = 8.5
 	self.phalanx_minion.headshot_dmg_mul = 4
 	self.phalanx_vip.headshot_dmg_mul = 4
+	-- this guy has 1x HS mul in base game + 1.25 bonus from perk decks, so this is fair, if you take into account worse pick up. TTK should be about 30% faster then vanilla
+	self.deep_boss.headshot_dmg_mul = 1.5
 	
 	self.phalanx_minion.Gilza_winters_tag = true
 	self.phalanx_vip.Gilza_winters_tag = true
@@ -430,113 +235,40 @@ Hooks:PostHook(CharacterTweakData, "_set_overkill_290", "sethealthDW", function(
 	self.drug_lord_boss.Gilza_boss_tag = true
 	self.triad_boss.Gilza_boss_tag = true
 	self.snowman_boss.Gilza_boss_tag = true
+	self.deep_boss.Gilza_boss_tag_deep = true
 	
 	self.city_swat.damage.hurt_severity = city_swat_hurts
 	self.fbi_heavy_swat.damage.hurt_severity = heavy_swat_hurts
+end
+
+Hooks:PostHook(CharacterTweakData, "_set_normal", "Gilza_set_health_normal", function(self)
+	Gilza_set_new_health(self)
 end)
 
-Hooks:PostHook(CharacterTweakData, "_set_sm_wish", "sethealthDS", function(self)
-	local enemies = {
-		-- crooks
-		"gangster",
-		"biker",
-		"captain",
-		"biker_escape",
-		"mobster",
-		"bolivian",
-		"bolivian_indoors",
-		"triad",
-		-- idek which one this is
-		"ranchmanager",
-		-- security guards
-		"security",
-		"security_undominatable",
-		"mute_security_undominatable",
-		"gensec",
-		-- the boys in blue
-		"cop",
-		"cop_scared",
-		"cop_female",
-		-- FBIs, whiteshirtblackguy
-		"fbi",
-		-- blues, HRTs
-		"swat",
-		-- greens
-		"fbi_swat",
-		-- grays
-		"city_swat",
-		-- whiteheads
-		"heavy_swat",
-		"heavy_swat_sniper",
-		-- tans
-		"fbi_heavy_swat",
-		-- SHIELD
-		"shield",
-		-- SNIPER
-		"sniper",
-		-- TASER
-		"taser",
-		-- MEDIC
-		"medic",
-		-- CLOAKER
-		"spooc",
-		"shadow_spooc",
-		-- BULLDOZER
-		"tank",
-		"tank_medic", 
-		"tank_mini",
-		"tank_hw",
-		-- THE WINTERS BRIGADE
-		"phalanx_minion",
-		"phalanx_vip",
-		-- THE COMMISSAR
-		"mobster_boss",
-		-- LIEUTENANT WHO?
-		"biker_boss",
-		-- CHAVEZ
-		"chavez_boss",
-		-- HECTOR
-		"hector_boss",
-		-- ERNESTO SOSA
-		"drug_lord_boss",
-		-- mountain master guy
-		"triad_boss",
-		-- yeap, this happened
-		"snowman_boss",
-		-- marshals
-		"marshal_marksman",
-		-- shield ones. they allready have like 4k health is this even needed lmao
-		"marshal_shield",
-	}
-	
-	for i=1, #enemies do
-		if self[tostring(enemies[i])] and self[tostring(enemies[i])].HEALTH_INIT then
-			self[tostring(enemies[i])].HEALTH_INIT = self[tostring(enemies[i])].HEALTH_INIT * 1.3
-			self[tostring(enemies[i])].headshot_dmg_mul = 3
-		end
-	end
-	
-	self.taser.HEALTH_INIT = self.taser.HEALTH_INIT * 0.68
-	self.medic.HEALTH_INIT = self.medic.HEALTH_INIT * 0.68
-	self.marshal_marksman.HEALTH_INIT = self.marshal_marksman.HEALTH_INIT * 0.68
-	self.spooc.headshot_dmg_mul = 8.5
-	self.tank_mini.headshot_dmg_mul = 8.5
-	self.tank_medic.headshot_dmg_mul = 8.5
-	self.tank.headshot_dmg_mul = 8.5
-	self.phalanx_minion.headshot_dmg_mul = 4
-	self.phalanx_vip.headshot_dmg_mul = 4
-	
-	self.phalanx_minion.Gilza_winters_tag = true
-	self.phalanx_vip.Gilza_winters_tag = true
-	
-	self.mobster_boss.Gilza_boss_tag = true
-	self.biker_boss.Gilza_boss_tag = true
-	self.chavez_boss.Gilza_boss_tag = true
-	self.hector_boss.Gilza_boss_tag = true
-	self.drug_lord_boss.Gilza_boss_tag = true
-	self.triad_boss.Gilza_boss_tag = true
-	self.snowman_boss.Gilza_boss_tag = true
-	
-	self.city_swat.damage.hurt_severity = city_swat_hurts
-	self.fbi_heavy_swat.damage.hurt_severity = heavy_swat_hurts
+Hooks:PostHook(CharacterTweakData, "_set_hard", "Gilza_set_health_hard", function(self)
+	Gilza_set_new_health(self)
+end)
+
+Hooks:PostHook(CharacterTweakData, "_set_overkill", "Gilza_set_health_veryHard", function(self)
+	Gilza_set_new_health(self)
+end)
+
+Hooks:PostHook(CharacterTweakData, "_set_overkill_145", "Gilza_set_health_OVERKILL", function(self)
+	Gilza_set_new_health(self)
+end)
+
+Hooks:PostHook(CharacterTweakData, "_set_easy_wish", "Gilza_set_health_mayhem", function(self)
+	Gilza_set_new_health(self)
+end)
+
+Hooks:PostHook(CharacterTweakData, "_set_overkill_290", "Gilza_set_health_deathWish", function(self)
+	Gilza_set_new_health(self)
+end)
+
+Hooks:PostHook(CharacterTweakData, "_set_sm_wish", "Gilza_set_health_deathSentence", function(self)
+	Gilza_set_new_health(self)
+	self.tank.HEALTH_INIT = 3200
+	self.tank_medic.HEALTH_INIT = 3200
+	self.tank_mini.HEALTH_INIT = 6400
+	self.marshal_marksman.HEALTH_INIT = 220
 end)

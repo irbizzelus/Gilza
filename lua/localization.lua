@@ -78,11 +78,11 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		bm_wpn_fps_upg_a_rip_desc_new = "Пуля заставляющая противников безконтрольно мучаться от отравляющего урона после попадания, если стрелок находится достаточно близко.\n\nНаносит 400 урона в течение 2 секунд, с 'тиком' урона раз в 0.5 секунды.\nПодбор патронов уменьшен на 20%",
 		bm_wpn_fps_upg_a_custom_desc_new = "Большая дробь с увеличенным уроном.\nПодбор патронов уменьшен на 20%",
 		bm_wpn_fps_upg_a_explosive_desc_new = "Выстреливает один взрывной заряд, который убивает или оглушает цели.\nОтсутствует дополнительный урон при попадании в голову.\nПодбор патронов уменьшен на 60%",
-		bm_wpn_fps_upg_a_piercing_desc_new = "Пробивает насквозь нательную броню врагов. Увеличена дистанция урона.\nКоличество дротиков в гильзе - 5",
-		bm_wpn_fps_upg_a_slug_desc_new = "Выстреливает один свинцовый снаряд, пробивающий насквозь нательную броню, щиты и стены.\nПодбор патронов уменьшен на 25%",
+		bm_wpn_fps_upg_a_piercing_desc_new = "Пробивает насквозь нательную броню врагов. Дистанция на которой оружие нанесёт свой максимавльный урон увеличина на 50%.\nПодбор патронов уменьшен на 10%\nКоличество дротиков в гильзе - 5",
+		bm_wpn_fps_upg_a_slug_desc_new = "Выстреливает один свинцовый снаряд, пробивающий насквозь нательную броню, щиты и стены. Дистанция на которой оружие нанесёт свой максимавльный урон увеличина на 20%\nПодбор патронов уменьшен на 25%",
 		bm_wpn_fps_upg_a_dragons_breath_desc_new = "Выстреливает пули, превращающиеся в искры и пламя. Прожигает щиты и нательную броню врагов.\nОтсутствует дополнительный урон при попадании в голову.\nНаносит 1180 урона огнем.\nПодбор патронов уменьшен на 80%",
 		bm_wpn_fps_upg_br_shtgn = "Пробивной патрон",
-		bm_wpn_fps_upg_br_shtgn_desc = "Позволяет вам пробивать все, что обычно может пробить пила OVE9000. Также может пробивать насквозь щиты и нательную броню врагов.\nКоличество потерянного урона на дистанции существенно увеличено.\n",
+		bm_wpn_fps_upg_br_shtgn_desc = "Позволяет вам пробивать все, что обычно может пробить пила OVE9000. Также может пробивать насквозь щиты и нательную броню врагов.\nДистанция на которой оружие нанесёт свой максимавльный урон уменьшенна до 33%.\n",
 		
 		-- weapon parts
 		bm_wpn_fps_ass_g3_b_sniper_desc = "ДЕЙСТВИТЕЛЬНАЯ СКОРОСТРЕЛЬНОСТЬ: 450\nПробивает нательную броню, щиты и стены. Подбор патронов уменьшен.\n\nКомент от гильзы: скорострельность на экране не соответсвует скорострельности в игре тк код связанный с модификацией этих параметров, как бы так оно сказать... ебанутый.",
@@ -207,11 +207,11 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		bm_wpn_fps_upg_a_rip_desc_new = "Poisoned bullet that deals damage over time and can interrupt enemies if they are close enough.\n\nDeals 400 damage over 2 seconds, with a damage tick every 0.5 seconds.\n\nAmmo pick up reduced by 20%",
 		bm_wpn_fps_upg_a_custom_desc_new = "Bigger pellets with more impact.\nAmmo pick up reduced by 20%",
 		bm_wpn_fps_upg_a_explosive_desc_new = "Fires one explosive charge that kills or stuns targets.\nNo extra headshot damage.\nAmmo pick up reduced by 60%",
-		bm_wpn_fps_upg_a_piercing_desc_new = "Peirces enemy body armor. Damage range increased.\nAmount of darts per shell - 5",
-		bm_wpn_fps_upg_a_slug_desc_new = "Fires a single lead slug that penetrates body armor, enemies, shields and walls.\nAmmo pick up reduced by 25%",
+		bm_wpn_fps_upg_a_piercing_desc_new = "Peirces enemy body armor. Damage range increased by 50%.\nAmount of darts per shell - 5\nAmmo pick up reduced by 10%",
+		bm_wpn_fps_upg_a_slug_desc_new = "Fires a single lead slug that penetrates body armor, enemies, shields and walls. Damage range increased by 20%\nAmmo pick up reduced by 25%",
 		bm_wpn_fps_upg_a_dragons_breath_desc_new = "Fires pellets that go up in sparks and flames. Burns through shields and body armor.\nNo extra headshot damage.\nDeals 1180 in fire damage.\nAmmo pick up reduced by 80%",
 		bm_wpn_fps_upg_br_shtgn = "Breaching round",
-		bm_wpn_fps_upg_br_shtgn_desc = "Allows you to breach everything that saw OVE9000 usually can. Can also penetrate shield and body armor.\nDamage drop off is significantly worse.\n", 
+		bm_wpn_fps_upg_br_shtgn_desc = "Allows you to breach everything that saw OVE9000 usually can. Can also penetrate shield and body armor.\nDamage range reduced to only 33%\n", 
 		
 		-- weapon parts
 		bm_wpn_fps_ass_g3_b_sniper_desc = "ACTUAL RATE OF FIRE: 450\nPierce enemy body armor, shields and walls. Ammo pick up decreased.",

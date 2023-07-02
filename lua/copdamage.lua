@@ -15,6 +15,8 @@ Hooks:PreHook(CopDamage, "damage_melee", "Gilza_melee_new_damage", function(self
 	
 		if self._char_tweak.Gilza_boss_tag then
 			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 50)) -- bosses take 5x the amount of hits
+		elseif self._char_tweak.Gilza_boss_tag_deep then
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 90)) -- crude awakening boss takes 9x the amount of hits, because this fucker is tanky and techically last boss of the game
 		elseif self._char_tweak.Gilza_winters_tag then
 			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 15)) -- winters takes 1.5x the amount of hits
 		elseif self._char_tweak.access == "tank" then
@@ -119,12 +121,15 @@ function CopDamage:damage_bullet(attack_data)
 
 	damage = damage * (self._marked_dmg_mul or 1)
 
-	if self._marked_dmg_mul and self._marked_dmg_dist_mul then
-		local dst = mvector3.distance(attack_data.origin, self._unit:position())
+	if self._marked_dmg_dist_mul then
 		local spott_dst = tweak_data.upgrades.values.player.marked_inc_dmg_distance[self._marked_dmg_dist_mul]
 
-		if spott_dst[1] < dst then
-			damage = damage * spott_dst[2]
+		if spott_dst then
+			local dst = mvector3.distance(attack_data.origin, self._unit:position())
+
+			if spott_dst[1] < dst then
+				damage = damage * spott_dst[2]
+			end
 		end
 	end
 

@@ -11,11 +11,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "newwpnparts_breachround_andAP", 
 		spread_moving = -23,
 	}
 	self.parts.wpn_fps_upg_br_shtgn.custom_stats = {
-		damage_near_mul = 0,
-		damage_far_mul = 0,
+		damage_near_mul = 0.33,
+		damage_far_mul = 0.33,
 		armor_piercing_add = 1,
 		can_shoot_through_shield = true,
-		can_shoot_through_wall = true,
 		can_breach = true,
 	}
 	
@@ -2167,13 +2166,30 @@ Hooks:PostHook(WeaponFactoryTweakData, "create_ammunition", "newwpnstats_updateg
 		value = 5,
 		total_ammo_mod = -6
 	}
-	self.parts.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_max_mul = 0.75
-	self.parts.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_min_mul = 0.75
+	self.parts.wpn_fps_upg_a_slug.custom_stats = {
+		armor_piercing_add = 1,
+		can_shoot_through_shield = true,
+		can_shoot_through_wall = true,
+		damage_far_mul = 1.2,
+		damage_near_mul = 1.2,
+		can_shoot_through_enemy = true,
+		rays = 1,
+		check_additional_achievements = true,
+		ammo_pickup_min_mul = 0.75,
+		ammo_pickup_max_mul = 0.75
+	}
 	self.parts.wpn_fps_upg_a_slug.desc_id = "bm_wpn_fps_upg_a_slug_desc_new"
 	
 	-- FLECHETTE
 	self.parts.wpn_fps_upg_a_piercing.stats = {
 		value = 5
+	}
+	self.parts.wpn_fps_upg_a_piercing.custom_stats = {
+		armor_piercing_add = 1,
+		damage_near_mul = 1.5,
+		damage_far_mul = 1.5,
+		ammo_pickup_max_mul = 0.9,
+		ammo_pickup_min_mul = 0.9
 	}
 	self.parts.wpn_fps_upg_a_piercing.custom_stats.rays = 5
 	self.parts.wpn_fps_upg_a_piercing.desc_id = "bm_wpn_fps_upg_a_piercing_desc_new"
