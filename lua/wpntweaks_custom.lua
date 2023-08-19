@@ -1377,7 +1377,6 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 end
 
 function Gilza.applyCustomMELEE_stats()
-	--log("[Gilza] Applying custom weapon stats to SHOTGUN with id: "..tostring(id))
 	for melee, stats in pairs(tweak_data.blackmarket.melee_weapons) do
 		if has_value (Gilza.default_melee_weapons, melee) then
 			-- default weapon, dont do anything

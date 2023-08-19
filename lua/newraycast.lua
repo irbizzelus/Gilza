@@ -20,7 +20,7 @@ function NewRaycastWeaponBase:conditional_accuracy_multiplier(current_state)
 	end
 	
 	if managers.player:current_state() == "bipod" then
-		mul = mul + 0.7
+		mul = mul + 0.8
 	end
 	
 	if current_state._moving then

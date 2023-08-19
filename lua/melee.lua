@@ -103,6 +103,8 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 		rambo = 4,
 		fireaxe = 7,
 		
+		-- U239
+		piggy_hammer = 2,
 		-- those that i dont own
 		briefcase = 7,
 		grip = 3,
@@ -225,6 +227,14 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 		end
 	end
 	
+	--U239 hammer, i might as well keep it fun and OP
+	self.melee_weapons.piggy_hammer.stats.min_damage_effect = 10
+	self.melee_weapons.piggy_hammer.stats.max_damage_effect = 10
+	self.melee_weapons.piggy_hammer.stats.charge_time = 2.5
+	self.melee_weapons.piggy_hammer.repeat_expire_t = 0.9
+	self.melee_weapons.piggy_hammer.expire_t = 1.2
+	-- new functionallity, huh, might play around with this later
+	self.melee_weapons.piggy_hammer.stats.special_damage_multiplier = 1.5
 	-- gold spoon extra penalties
 	self.melee_weapons.spoon_gold.stats.charge_time = 6
 	self.melee_weapons.spoon_gold.stats.concealment = 23

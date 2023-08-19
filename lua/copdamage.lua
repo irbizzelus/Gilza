@@ -163,6 +163,10 @@ function CopDamage:damage_bullet(attack_data)
 
 		if tweak_data.character[self._unit:base()._tweak_table].priority_shout then
 			damage = damage * managers.player:upgrade_value("weapon", "special_damage_taken_multiplier", 1)
+			
+			if attack_data.weapon_unit:base().weapon_tweak_data then
+				damage = damage * (attack_data.weapon_unit:base():weapon_tweak_data().special_damage_multiplier or 1)
+			end
 		end
 
 		if head then
