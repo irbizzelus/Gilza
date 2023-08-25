@@ -62,7 +62,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		"hunter",
 		"system",
 		"ms3gl",
-		"money"
 	}
 	local weapon_ids = {
 		--akimbo
@@ -239,7 +238,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		"contender",
 		"victor",
 		"awp",
-		"bessy",
 		-- sub machine guns
 		"tec9",
 		"m1928",
@@ -1134,11 +1132,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.m95.stats.damage = 230
 	self.m95.AMMO_PICKUP = {0.03,0.68}
 	self.m95.damage_falloff = new_sniper_damage_falloff
-	
-	-- ze big dick gun #2
-	self.bessy.stats.damage = 320
-	self.bessy.AMMO_PICKUP = {0.03,0.38}
-	self.bessy.damage_falloff = new_sniper_damage_falloff
 
 	-- Secondary bolty
 	self.scout.stats.damage = 630/2
@@ -2022,11 +2015,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.system.AMMO_MAX = self.system.CLIP_AMMO_MAX * self.system.NR_CLIPS_MAX
 	end
 	setFLAMENs()
-	
-	-- Event moneythrower, only dmg increase since its op as fuck anyways, bringing it up to health values, just to keep the fun
-	if self.money then -- since it will be removed, crashproof it
-		self.money.stats.damage = 120
-	end
 	
 	--Miniguns--
 	
