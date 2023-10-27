@@ -4,9 +4,11 @@ function SawWeaponBase:can_reload()
 end
 
 -- show actual ammo count instead of remaining sawblades
+-- as of U240 seems to have been implemented in the base game? most likely to work with the new ammo reserve option
+--[[
 function SawWeaponBase:ammo_info()
 	return self:get_ammo_max_per_clip(), self:get_ammo_remaining_in_clip(), self:get_ammo_total(), self:get_ammo_max()
-end
+end]]
 
 function SawHit:on_collision(col_ray, weapon_unit, user_unit, damage)
 	local hit_unit = col_ray.unit
