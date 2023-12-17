@@ -8,7 +8,7 @@ function Gilza:changelog_message()
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.8.7 changelog:\n- tba."
+			local message = "1.8.7 changelog:\n- Compatibility with patches 240-240.5\n- Flamethrowers and dragon's breath shotgun rounds can now do headshot damage, their damage values were nerfed accordingly\n- Added 'chainsaw damage' mehcanic while holding chainsaw-like melee weapons (Kazaguruma, Lumber Lite L2)\n- Berserler flash size can now be customized\n- Most poision weapons now stun-lock enemies in the vomitting animation during the poision effect\n- All DOT weapnos had their description updated to reflect their stats better\n\nThis patch is quite big, you might wanna check the full changelog."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
 			Gilza.settings.version = 1.87

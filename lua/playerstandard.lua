@@ -552,6 +552,10 @@ function PlayerStandard:_check_action_primary_attack(t, input, params)
 						if managers.player:has_category_upgrade("temporary", "new_berserk_weapon_damage_multiplier") then
 							dmg_mul = dmg_mul * managers.player:temporary_upgrade_value("temporary", "new_berserk_weapon_damage_multiplier", 1)
 						end
+						
+						if managers.player:has_category_upgrade("temporary", "new_berserk_weapon_damage_multiplier") then
+							dmg_mul = dmg_mul * managers.player:temporary_upgrade_value("temporary", "new_berserk_weapon_damage_multiplier", 1)
+						end
 
 						local health_ratio = self._ext_damage:health_ratio()
 						local damage_health_ratio = managers.player:get_damage_health_ratio(health_ratio, primary_category)

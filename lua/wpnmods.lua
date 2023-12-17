@@ -1583,22 +1583,22 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "newwpnparts_breachround_andAP", 
 	
 	-- secondary sights
 	self.parts.wpn_fps_upg_o_45rds_v2.stats.spread = 0
-	self.parts.wpn_fps_upg_o_45rds_v2.stats.recoil = 1
+	self.parts.wpn_fps_upg_o_45rds_v2.stats.recoil = 0
 	self.parts.wpn_fps_upg_o_45rds_v2.stats.concealment = -1
 	
-	self.parts.wpn_fps_upg_o_xpsg33_magnifier.stats.spread = 1
+	self.parts.wpn_fps_upg_o_xpsg33_magnifier.stats.spread = 0
 	self.parts.wpn_fps_upg_o_xpsg33_magnifier.stats.recoil = 0
 	self.parts.wpn_fps_upg_o_xpsg33_magnifier.stats.concealment = -1
 	
 	self.parts.wpn_fps_upg_o_45rds.stats.spread = 0
-	self.parts.wpn_fps_upg_o_45rds.stats.recoil = 1
+	self.parts.wpn_fps_upg_o_45rds.stats.recoil = 0
 	self.parts.wpn_fps_upg_o_45rds.stats.concealment = -1
 	
 	self.parts.wpn_fps_upg_o_45steel.stats.spread = 0
-	self.parts.wpn_fps_upg_o_45steel.stats.recoil = -1
+	self.parts.wpn_fps_upg_o_45steel.stats.recoil = 0
 	self.parts.wpn_fps_upg_o_45steel.stats.concealment = 0
 	
-	self.parts.wpn_fps_upg_o_sig.stats.spread = 1
+	self.parts.wpn_fps_upg_o_sig.stats.spread = 0
 	self.parts.wpn_fps_upg_o_sig.stats.recoil = 0
 	self.parts.wpn_fps_upg_o_sig.stats.concealment = -1
 end)

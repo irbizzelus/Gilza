@@ -241,9 +241,6 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 	self.melee_weapons.ostry.stats.max_damage_effect = 15
 	self.melee_weapons.ostry.info_id = "bm_melee_ostry_info"
 
-	
-	--self.melee_weapons.cs.stance_mod = {translation = Vector3(-20, 0, 0), rotation = Rotation(0, 0, 0)}
-	self.melee_weapons.cs.stance_mod = {translation = Vector3(-15, 10, 5), rotation = Rotation(10, -35, 0)}
 	-- gold spoon extra penalties
 	self.melee_weapons.spoon_gold.stats.charge_time = 6
 	self.melee_weapons.spoon_gold.stats.concealment = 23
