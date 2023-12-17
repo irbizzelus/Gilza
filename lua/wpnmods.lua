@@ -1655,59 +1655,23 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_shak12", "newwpnstats_ash12", func
 	self.parts.wpn_fps_ass_shak12_body_vks.desc_id = "bm_wpn_fps_anynewassaultkit_desc"
 end)
 
-Hooks:PostHook(WeaponFactoryTweakData, "_init_flamethrower_mk2", "newwpnstats_flamenprimary", function(self, ...)
-	--we will make different mags have different afterburn damage on top of other stuff
-	--so we have to make base flamethrower have no afterburn, and add those stats to it's deafault mag
-	
+Hooks:PostHook(WeaponFactoryTweakData, "_init_flamethrower_mk2", "newwpnstats_flamenprimary", function(self, ...)	
 	-- rare mag
-	self.parts.wpn_fps_fla_mk2_mag_rare.type = "ammo"
+	self.parts.wpn_fps_fla_mk2_mag_rare.type = "ammo" -- we declare it as ammo to add description, cuz i cant be bothered to make changes to blackmarket UI to add desc's to all mod types yet
 	self.parts.wpn_fps_fla_mk2_mag_rare.desc_id = "bm_wpn_fps_fla_mk2_mag_rare_desc"
-	self.parts.wpn_fps_fla_mk2_mag_rare.custom_stats = {
-		bullet_class = "FlameBulletBase",
-		fire_dot_data = {
-				dot_trigger_chance = "75",
-				dot_damage = "14",
-				dot_length = "3.1",
-				dot_trigger_max_distance = "3000",
-				dot_tick_period = "0.25"
-			}
-	}
 	self.parts.wpn_fps_fla_mk2_mag_rare.stats = {
 		value = 1,
 		total_ammo_mod = 10,
-		damage = -34
-	}
-	
-	-- base mag
-	self.parts.wpn_fps_fla_mk2_mag.type = "ammo"
-	self.parts.wpn_fps_fla_mk2_mag.custom_stats = {
-		bullet_class = "FlameBulletBase",
-		fire_dot_data = {
-				dot_trigger_chance = "25",
-				dot_damage = "6",
-				dot_length = "2.1",
-				dot_trigger_max_distance = "3000",
-				dot_tick_period = "0.25"
-			}
+		damage = -14
 	}
 	
 	--well done mag
 	self.parts.wpn_fps_fla_mk2_mag_welldone.type = "ammo"
 	self.parts.wpn_fps_fla_mk2_mag_welldone.desc_id = "bm_wpn_fps_fla_mk2_mag_welldone_desc"
-	self.parts.wpn_fps_fla_mk2_mag_welldone.custom_stats = {
-		bullet_class = "FlameBulletBase",
-		fire_dot_data = {
-				dot_trigger_chance = "5",
-				dot_damage = "3",
-				dot_length = "1.1",
-				dot_trigger_max_distance = "3000",
-				dot_tick_period = "0.25"
-			}
-	}
 	self.parts.wpn_fps_fla_mk2_mag_welldone.stats = {
 		value = 1,
 		total_ammo_mod = -5,
-		damage = 35
+		damage = 15
 	}
 end)
 
@@ -1715,55 +1679,23 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_system", "newwpnstats_flamensecond
 	--high temp mix
 	self.parts.wpn_fps_fla_system_m_high.type = "ammo"
 	self.parts.wpn_fps_fla_system_m_high.desc_id = "bm_wpn_fps_fla_mk2_mag_welldone_desc" -- has same stats so use same description
-	self.parts.wpn_fps_fla_system_m_high.custom_stats = {
-		bullet_class = "FlameBulletBase",
-		fire_dot_data = {
-				dot_trigger_chance = "5",
-				dot_damage = "3",
-				dot_length = "1.1",
-				dot_trigger_max_distance = "3000",
-				dot_tick_period = "0.25"
-			}
-	}
 	self.parts.wpn_fps_fla_system_m_high.stats = {
 		value = 1,
 		total_ammo_mod = -5,
-		damage = 25
+		damage = 10
 	}
 	--low temp mix
 	self.parts.wpn_fps_fla_system_m_low.type = "ammo"
 	self.parts.wpn_fps_fla_system_m_low.desc_id = "bm_wpn_fps_fla_mk2_mag_rare_desc"
-	self.parts.wpn_fps_fla_system_m_low.custom_stats = {
-		bullet_class = "FlameBulletBase",
-		fire_dot_data = {
-				dot_trigger_chance = "75",
-				dot_damage = "14",
-				dot_length = "3.1",
-				dot_trigger_max_distance = "3000",
-				dot_tick_period = "0.25"
-			}
-	}
 	self.parts.wpn_fps_fla_system_m_low.stats = {
 		value = 1,
 		total_ammo_mod = 10,
-		damage = -24
-	}
-	-- base mag
-	self.parts.wpn_fps_fla_system_m_standard.type = "ammo"
-	self.parts.wpn_fps_fla_system_m_standard.custom_stats = {
-		bullet_class = "FlameBulletBase",
-		fire_dot_data = {
-				dot_trigger_chance = "25",
-				dot_damage = "6",
-				dot_length = "2.1",
-				dot_trigger_max_distance = "3000",
-				dot_tick_period = "0.25"
-			}
+		damage = -9
 	}
 end)
 
 Hooks:PostHook(WeaponFactoryTweakData, "_init_ms3gl", "newwpnstats_3rburstGL", function(self, ...)
-	self.parts.wpn_fps_gre_ms3gl_conversion.stats.damage = -366
+	self.parts.wpn_fps_gre_ms3gl_conversion.stats.damage = -390
 end)
 
 Hooks:PostHook(WeaponFactoryTweakData, "_init_hunter", "newwpnstats_pistolcrossbow", function(self, ...)
@@ -1771,11 +1703,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_hunter", "newwpnstats_pistolcrossb
 		armor_piercing_add = 1,
 	}
 	self.parts.wpn_fps_upg_a_crossbow_poison.stats = {
-		total_ammo_mod = -6
+		total_ammo_mod = -12
 	}
-	self.parts.wpn_fps_upg_a_crossbow_poison.custom_stats = {
-		armor_piercing_add = 1,
-	}
+	self.parts.wpn_fps_upg_a_crossbow_poison.custom_stats.armor_piercing_add = 1
+	self.parts.wpn_fps_upg_a_crossbow_poison.desc_id = "bm_wpn_fps_upg_a_crossbow_poison_desc_new"
 	self.parts.wpn_fps_upg_a_crossbow_explosion.stats = {
 		damage = 72,
 		total_ammo_mod = -6
@@ -1787,11 +1718,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_frankish", "newwpnstats_lightcross
 		armor_piercing_add = 1,
 	}
 	self.parts.wpn_fps_bow_frankish_m_poison.stats = {
-		total_ammo_mod = -6
+		total_ammo_mod = -12
 	}
-	self.parts.wpn_fps_bow_frankish_m_poison.custom_stats = {
-		armor_piercing_add = 1,
-	}
+	self.parts.wpn_fps_bow_frankish_m_poison.custom_stats.armor_piercing_add = 1
+	self.parts.wpn_fps_bow_frankish_m_poison.desc_id = "bm_wpn_fps_upg_a_crossbow_poison_desc_new"
 	self.parts.wpn_fps_bow_frankish_m_explosive.stats = {
 		damage = 72,
 		total_ammo_mod = -6
@@ -1803,11 +1733,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_plainsrider", "newwpnstats_lightbo
 		armor_piercing_add = 1,
 	}
 	self.parts.wpn_fps_upg_a_bow_poison.stats = {
-		total_ammo_mod = -6,
+		total_ammo_mod = -12,
 	}
-	self.parts.wpn_fps_upg_a_bow_poison.custom_stats = {
-		armor_piercing_add = 1
-	}
+	self.parts.wpn_fps_upg_a_bow_poison.custom_stats.armor_piercing_add = 1
+	self.parts.wpn_fps_upg_a_bow_poison.desc_id = "bm_wpn_fps_upg_a_crossbow_poison_desc_new"
 	self.parts.wpn_fps_upg_a_bow_explosion.stats = {
 		damage = 72,
 		total_ammo_mod = -6
@@ -1820,11 +1749,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_long", "newwpnstats_longbow", func
 	}
 	self.parts.wpn_fps_bow_long_m_poison.stats = {
 		damage = -20,
-		total_ammo_mod = -6
+		total_ammo_mod = -12
 	}
-	self.parts.wpn_fps_bow_long_m_poison.custom_stats = {
-		armor_piercing_add = 1,
-	}
+	self.parts.wpn_fps_bow_long_m_poison.custom_stats.armor_piercing_add = 1
+	self.parts.wpn_fps_bow_long_m_poison.desc_id = "bm_wpn_fps_upg_a_crossbow_poison_desc_new"
 	self.parts.wpn_fps_bow_long_m_explosive.stats = {
 		damage = 100,
 		total_ammo_mod = -6
@@ -1837,11 +1765,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_elastic", "newwpnstats_longbow_fre
 	}
 	self.parts.wpn_fps_bow_elastic_m_poison.stats = {
 		damage = -20,
-		total_ammo_mod = -6
+		total_ammo_mod = -12
 	}
-	self.parts.wpn_fps_bow_elastic_m_poison.custom_stats = {
-		armor_piercing_add = 1,
-	}
+	self.parts.wpn_fps_bow_elastic_m_poison.custom_stats.armor_piercing_add = 1
+	self.parts.wpn_fps_bow_elastic_m_poison.desc_id = "bm_wpn_fps_upg_a_crossbow_poison_desc_new"
 	self.parts.wpn_fps_bow_elastic_m_explosive.stats = {
 		damage = 100,
 		total_ammo_mod = -6
@@ -1854,11 +1781,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_arblast", "newwpnstats_heavycrossb
 	}
 	self.parts.wpn_fps_bow_arblast_m_poison.stats = {
 		damage = -20,
-		total_ammo_mod = -6
+		total_ammo_mod = -12
 	}
-	self.parts.wpn_fps_bow_arblast_m_poison.custom_stats = {
-		armor_piercing_add = 1,
-	}
+	self.parts.wpn_fps_bow_arblast_m_poison.custom_stats.armor_piercing_add = 1
+	self.parts.wpn_fps_bow_arblast_m_poison.desc_id = "bm_wpn_fps_upg_a_crossbow_poison_desc_new"
 	self.parts.wpn_fps_bow_arblast_m_explosive.stats = {
 		damage = 100,
 		total_ammo_mod = -6
@@ -1870,11 +1796,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "_init_ecp", "newwpnstats_h3h3garbage", f
 		armor_piercing_add = 1,
 	}
 	self.parts.wpn_fps_bow_ecp_m_arrows_poison.stats = {
-		total_ammo_mod = -6
+		total_ammo_mod = -12
 	}
-	self.parts.wpn_fps_bow_ecp_m_arrows_poison.custom_stats = {
-		armor_piercing_add = 1,
-	}
+	self.parts.wpn_fps_bow_ecp_m_arrows_poison.custom_stats.armor_piercing_add = 1
+	self.parts.wpn_fps_bow_ecp_m_arrows_poison.desc_id = "bm_wpn_fps_upg_a_crossbow_poison_desc_new"
 	self.parts.wpn_fps_bow_ecp_m_arrows_explosive.stats = {
 		damage = 56,
 		total_ammo_mod = -6
@@ -2198,20 +2123,14 @@ Hooks:PostHook(WeaponFactoryTweakData, "create_ammunition", "newwpnstats_updateg
 	self.parts.wpn_fps_upg_a_dragons_breath.stats = {
 		value = 5,
 		total_ammo_mod = -10,
-		damage = 7,
 		moving_spread = -7,
 		spread = -5
 	}
+	self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.damage_near_mul = 0.35
+	self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.damage_far_mul = 2
 	self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.rays = 6
 	self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.ammo_pickup_max_mul = 0.2
 	self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.ammo_pickup_min_mul = 0.2
-	self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.fire_dot_data = {
-		dot_trigger_chance = "100",
-		dot_damage = "23",
-		dot_length = "3.1",
-		dot_trigger_max_distance = "900",
-		dot_tick_period = "0.5"
-	}
 	self.parts.wpn_fps_upg_a_dragons_breath.desc_id = "bm_wpn_fps_upg_a_dragons_breath_desc_new"
 	
 	-- TOXIC SLUG
@@ -2221,13 +2140,6 @@ Hooks:PostHook(WeaponFactoryTweakData, "create_ammunition", "newwpnstats_updateg
 	}
 	self.parts.wpn_fps_upg_a_rip.custom_stats.ammo_pickup_max_mul = 0.8
 	self.parts.wpn_fps_upg_a_rip.custom_stats.ammo_pickup_min_mul = 0.8
-	self.parts.wpn_fps_upg_a_rip.custom_stats.dot_data.custom_data = {
-		hurt_animation_chance = 1,
-		dot_damage = 10,
-		dot_length = 2.1,
-		use_weapon_damage_falloff = true,
-		dot_tick_period = 0.5
-	}
 	self.parts.wpn_fps_upg_a_rip.desc_id = "bm_wpn_fps_upg_a_rip_desc_new"
 	
 	--###############################################################################################################################################################--

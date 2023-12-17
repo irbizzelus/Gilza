@@ -20,7 +20,7 @@ Hooks:PreHook(CopDamage, "damage_melee", "Gilza_melee_new_damage", function(self
 		elseif self._char_tweak.Gilza_winters_tag then
 			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 15)) -- winters takes 1.5x the amount of hits
 		elseif self._char_tweak.access == "tank" then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 30)) -- dozers take thrice(is that a word?) the amount of hits
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 30)) -- dozers take thrice the amount of hits
 		else
 			attack_data.damage = self._HEALTH_INIT * (attack_data.damage / 10) + 0.1 -- +1 dmg is needed due to calculations rounding up values for low hp targets slightly incorrectly and leaving enemies with 0.1 hp instead of beeing dead
 		end
@@ -32,6 +32,7 @@ local mvec_1 = Vector3()
 local mvec_2 = Vector3()
 
 -- override a bullet function to allow throawble weapons like axes to perice body armour. honestly, if it could be done better by just adding AP to weapons themselves, that would be 10/10, but screw me i guess
+-- @68
 function CopDamage:damage_bullet(attack_data)
 	if self._dead or self._invulnerable then
 		return
@@ -144,8 +145,7 @@ function CopDamage:damage_bullet(attack_data)
 		local damage_scale = nil
 
 		if alive(attack_data.weapon_unit) and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_weak_hit then
-			local weak_hit = attack_data.weapon_unit:base():is_weak_hit(attack_data.col_ray and attack_data.col_ray.distance, attack_data.attacker_unit)
-			damage_scale = weak_hit and 0.5 or 1
+			damage_scale = attack_data.weapon_unit:base():is_weak_hit(attack_data.col_ray and attack_data.col_ray.distance, attack_data.attacker_unit) or 1
 		end
 
 		local critical_hit, crit_damage = self:roll_critical_hit(attack_data, damage)
@@ -161,9 +161,9 @@ function CopDamage:damage_bullet(attack_data)
 
 		headshot_multiplier = managers.player:upgrade_value("weapon", "passive_headshot_damage_multiplier", 1)
 
-		if tweak_data.character[self._unit:base()._tweak_table].priority_shout then
+		if managers.groupai:state():is_enemy_special(self._unit) then
 			damage = damage * managers.player:upgrade_value("weapon", "special_damage_taken_multiplier", 1)
-			
+
 			if attack_data.weapon_unit:base().weapon_tweak_data then
 				damage = damage * (attack_data.weapon_unit:base():weapon_tweak_data().special_damage_multiplier or 1)
 			end
@@ -218,14 +218,11 @@ function CopDamage:damage_bullet(attack_data)
 		else
 			if head then
 				managers.player:on_lethal_headshot_dealt(attack_data.attacker_unit, attack_data)
-
-				if math.random(10) < damage then
-					self:_spawn_head_gadget({
-						position = attack_data.col_ray.body:position(),
-						rotation = attack_data.col_ray.body:rotation(),
-						dir = attack_data.col_ray.ray
-					})
-				end
+				self:_spawn_head_gadget({
+					position = attack_data.col_ray.body:position(),
+					rotation = attack_data.col_ray.body:rotation(),
+					dir = attack_data.col_ray.ray
+				})
 			end
 
 			attack_data.damage = self._health

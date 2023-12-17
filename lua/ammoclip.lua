@@ -1,4 +1,4 @@
--- this file is only here for the gambler buff, and that's it. @line 82
+-- this file is only here for the gambler buff, and that's it. @line 81
 
 local CABLE_TIE_GET_CHANCE = 0.2
 local CABLE_TIE_GET_AMOUNT = 1

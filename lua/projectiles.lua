@@ -1,5 +1,5 @@
 function BlackMarketTweakData:get_index_from_projectile_id(projectile_id)
-	-- treat high velocity nades like normal grenades, so we dont send incorrect indexes to host and start throwing wrong grenades
+	-- treat high velocity nades like normal grenades, so we dont send incorrect indexes to host and start throwing wrong grenades or crash them idk
 	if projectile_id == "launcher_velocity" then
 		projectile_id = "launcher_frag"
 	elseif projectile_id == "launcher_velocity_china" then

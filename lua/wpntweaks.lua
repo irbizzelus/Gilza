@@ -9,7 +9,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				flash_color_G = 0,
 				flash_color_B = 0,
 				flash_type = 1,
-				flash_trigger = 2
+				flash_trigger = 2,
+				flash_size = 1
 			}
 		}
 		
@@ -919,14 +920,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.kacchainsaw_flamethrower.NR_CLIPS_MAX = 250/150
 	self.kacchainsaw_flamethrower.AMMO_MAX = self.kacchainsaw_flamethrower.CLIP_AMMO_MAX * self.kacchainsaw_flamethrower.NR_CLIPS_MAX
 	self.kacchainsaw_flamethrower.AMMO_PICKUP = {1.7,3.5}
-	self.kacchainsaw_flamethrower.stats.damage = 60
-	self.kacchainsaw_flamethrower.fire_dot_data = {
-		dot_trigger_chance = 5,
-		dot_damage = 3,
-		dot_length = 1.1,
-		dot_trigger_max_distance = 3000,
-		dot_tick_period = 0.25
-	}
+	self.kacchainsaw_flamethrower.stats.damage = 25
 	
 	--heavy
 	self.hk21.AMMO_PICKUP = {3.18,5.92}
@@ -1152,6 +1146,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	self.victor.AMMO_MAX = self.victor.CLIP_AMMO_MAX * self.victor.NR_CLIPS_MAX
 	self.victor.AMMO_PICKUP = {0.474,0.88}
 	self.victor.damage_falloff = new_sniper_damage_falloff
+	self.victor.fire_mode_data = {fire_rate = 60/260}
+	self.victor.single = {fire_rate = 60/260}
+	self.victor.auto = {fire_rate = 60/260}
 	
 	-- Secondary single shot
 	self.contender.stats.damage = 625
@@ -1983,36 +1980,25 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	
 	-- Flammenwerfers --
 	local function setFLAMENs()
-	
-	-- flamethrower afterburn changes, more details in weapon mods file
-	self.flamethrower_mk2.fire_dot_data = {
-		dot_trigger_chance = 0,
-		dot_damage = 30,
-		dot_length = 1.6,
-		dot_trigger_max_distance = 3000,
-		dot_tick_period = 0.5
-	}
-	self.flamethrower_mk2.stats.damage = 35
+	self.flamethrower_mk2.stats.damage = 15
 	self.flamethrower_mk2.stats.reload = 17
 	self.flamethrower_mk2.CLIP_AMMO_MAX = 300
 	self.flamethrower_mk2.NR_CLIPS_MAX = 2
 	self.flamethrower_mk2.AMMO_PICKUP = {6.906,11.02}
 	self.flamethrower_mk2.AMMO_MAX = self.flamethrower_mk2.CLIP_AMMO_MAX * self.flamethrower_mk2.NR_CLIPS_MAX
 	
-	-- secondary flammenwerfer
-	self.system.fire_dot_data = {
-		dot_trigger_chance = 0,
-		dot_damage = 30,
-		dot_length = 1.6,
-		dot_trigger_max_distance = 3000,
-		dot_tick_period = 0.5
-	}
-	self.system.stats.damage = 25
+	self.system.stats.damage = 10
 	self.system.stats.reload = 17
 	self.system.CLIP_AMMO_MAX = 250
 	self.system.NR_CLIPS_MAX = 2
 	self.system.AMMO_PICKUP = {4.83,7.934}
 	self.system.AMMO_MAX = self.system.CLIP_AMMO_MAX * self.system.NR_CLIPS_MAX
+	
+	-- Event moneythrower, only dmg increase since its op as fuck anyways and dot data wont change much, so just bring it up to new health values
+	if self.money then
+		self.money.stats.damage = 60
+	end
+	
 	end
 	setFLAMENs()
 	

@@ -9,7 +9,7 @@ Hooks:PreHook(PlayerManager, "on_killshot", "Gilza_brawler_armor_regen", functio
 		return
 	end
 	
-	if player_unit:character_damage() and managers.player:has_category_upgrade("player", "damage_resist_brawler") and variant == "melee" then
+	if player_unit:character_damage() and managers.player:has_category_upgrade("player", "armor_regen_brawler") and variant == "melee" then
 		player_unit:character_damage():restore_armor(7.5)
 	end
 end)

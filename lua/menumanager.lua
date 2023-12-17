@@ -4,14 +4,14 @@ end
 
 function Gilza:changelog_message()
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 1.863 then
+		if not Gilza.settings.version or Gilza.settings.version < 1.87 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.8.63 changelog:\n- U240.2 compatilibty."
+			local message = "1.8.7 changelog:\n- tba."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 1.863
+			Gilza.settings.version = 1.87
 			Gilza.Save()
 		end
 	end)
@@ -76,6 +76,11 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init', function(menu_manager)
 	
 	MenuCallbackHandler.Gilza_flash_color_B = function(this, item)
 		Gilza.settings.flash_color_B = tonumber(item:value())
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_flash_size = function(this, item)
+		Gilza.settings.flash_size = tonumber(item:value())
 		Gilza:Save()
 	end
 	

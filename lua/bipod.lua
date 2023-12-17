@@ -1,4 +1,5 @@
 -- speed up bipod deploy speed if skill is used
+-- changes @15 and 27
 function PlayerBipod:_enter(enter_data)
 	local player = managers.player:player_unit()
 

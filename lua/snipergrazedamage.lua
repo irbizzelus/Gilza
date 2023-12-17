@@ -47,7 +47,6 @@ function SniperGrazeDamage:on_weapon_fired(weapon_unit, result)
 				-- use raw_damage instead of whatever damage we dealt to the enemy, so that hitting low hp targets is not worse then hitting dozers
 				local damage = attack_data.raw_damage * damage_mul
 				
-				-- this is not really needed anymore because we always use raw damage without headshot multipliers
 				if best_damage < damage then
 					best_damage = damage
 				end

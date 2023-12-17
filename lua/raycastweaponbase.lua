@@ -1,3 +1,4 @@
+-- brawler overrides towards ammo pick ups @3
 Hooks:OverrideFunction(RaycastWeaponBase, "replenish", function(self)
 	local ammo_max_multiplier = managers.player:upgrade_value("player", "extra_ammo_multiplier", 1) * managers.player:upgrade_value("player", "extra_ammo_cut", 1)
 	
@@ -21,6 +22,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "replenish", function(self)
 	self:update_damage()
 end)
 
+-- saw ammo pick up @52
 Hooks:OverrideFunction(RaycastWeaponBase, "add_ammo", function(self, ratio, add_amount_override)
 	local mul_1 = managers.player:upgrade_value("player", "pick_up_ammo_multiplier", 1) - 1
 	local mul_2 = managers.player:upgrade_value("player", "pick_up_ammo_multiplier_2", 1) - 1

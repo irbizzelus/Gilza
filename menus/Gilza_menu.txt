@@ -68,6 +68,20 @@
 			"default_value" : 1
 		},
 		{
+			"type" : "multiple_choice",
+			"id" : "Gilza_flash_size",
+			"title" : "Gilza_flash_size",
+			"description" : "Gilza_flash_size_desc",
+			"callback" : "Gilza_flash_size",
+			"items" : [
+				"Gilza_flash_size_1",
+				"Gilza_flash_size_2",
+				"Gilza_flash_size_3"
+			],
+			"value" : "flash_size",
+			"default_value" : 1
+		},
+		{
 			"type" : "slider",
 			"id" : "Gilza_flash_color_R",
 			"title" : "Gilza_flash_color_R",

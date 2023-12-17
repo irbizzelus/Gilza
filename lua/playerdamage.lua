@@ -36,10 +36,18 @@ Hooks:PreHook(PlayerDamage, "_calc_armor_damage", "new_berserk_trigger", functio
 				
 				local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_FULLSCREEN_PD2)
 				if not hud.panel:child("Gilza_new_berserk") then
+				
+					local textureSize = "guis/textures/berserk_flash"
+					if Gilza.settings.flash_size == 2 then
+						textureSize = "guis/textures/berserk_flash_bigger"
+					elseif Gilza.settings.flash_size == 3 then
+						textureSize = "guis/textures/berserk_flash_biggest"
+					end
+					
 					local Gilza_new_berserk = hud.panel:bitmap({
 						name = "Gilza_new_berserk",
 						visible = false,
-						texture = "guis/textures/berserk_flash",
+						texture = textureSize,
 						layer = 0,
 						color = Color((Gilza.settings.flash_color_R / 255), (Gilza.settings.flash_color_G / 255), (Gilza.settings.flash_color_B / 255)),
 						blend_mode = "add",

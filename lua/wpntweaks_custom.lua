@@ -1,12 +1,3 @@
-local function has_value (tab, val)
-    for index, value in ipairs(tab) do
-        if value == val then
-            return true
-        end
-    end
-    return false
-end
-
 local exceptions = {
 	"npc_melee",
 	"ceiling_turret_module_longer_range",
@@ -32,7 +23,7 @@ local customWeaponsList = {}
 function Gilza.initCutsomGuns()
 	if Gilza.defaultWeapons then
 		for gun, stats in pairs(tweak_data.weapon) do
-			if not (string.sub(gun,-5,-1) == "_crew" or string.sub(gun,-3,-1) == "npc") and not (has_value(Gilza.defaultWeapons,gun)) and not (has_value(exceptions,gun)) then
+			if not (string.sub(gun,-5,-1) == "_crew" or string.sub(gun,-3,-1) == "npc") and not (table.contains(Gilza.defaultWeapons,gun)) and not (table.contains(exceptions,gun)) then
 				table.insert(customWeaponsList,gun)
 			end
 		end
@@ -42,8 +33,10 @@ function Gilza.initCutsomGuns()
 	end
 end
 
+local customWeaponsUpdated = {Assault_Rifles={}, Sub_Machine_guns={}, Pistols={}, Light_Machine_guns={}, Snipers={}, Shotguns={}, Melee={}}
 function Gilza.tryAddingNewGuns()
 	if #customWeaponsList >= 1 then
+		log("[Gilza] Applying custom weapon tweaks...")
 		for j=1, #customWeaponsList do
 			if tweak_data.weapon[customWeaponsList[j]] then
 				for i=1, #tweak_data.weapon[customWeaponsList[j]].categories do
@@ -77,12 +70,23 @@ function Gilza.tryAddingNewGuns()
 		end
 	end
 	Gilza.applyCustomMELEE_stats()
+	for category, tbl in pairs(customWeaponsUpdated) do
+		local str = ""
+		for _, id in pairs(customWeaponsUpdated[tostring(category)]) do
+			str = str..tostring(id)..", "
+		end
+		str = str:sub(1, -3)
+		if str ~= "" then
+			log("[Gilza] Updated stats for "..tostring(category).." ("..str..")")
+		end
+	end
 	Gilza.applyCustomGunsIndividualStats()
+	log("[Gilza] Custom weapon stats applied.")
 end
 
 function Gilza.applyCustomAR_stats(id)
 
-	log("[Gilza] Applying custom weapon stats to AR with id: "..tostring(id))
+	table.insert(customWeaponsUpdated.Assault_Rifles, id)
 	
 	-- adjust damage profiles and ammo pick up based on weapons damage (after dmg increase in the init function above)
 	-- if AR has lower then 100 dmg(so, lower then ~57 in vanilla values), only apply changes to pick up, considering that the range of breakpoints down there is way to big, let whatever stats work
@@ -96,7 +100,7 @@ function Gilza.applyCustomAR_stats(id)
 		"kurisumasu",
 		"xeno"
 	}
-	local has_gl = has_value(custom_ARs_with_GL,id)
+	local has_gl = table.contains(custom_ARs_with_GL,id)
 	local dmg_type = "nil"
 	
 	-- light AR's
@@ -133,7 +137,6 @@ function Gilza.applyCustomAR_stats(id)
 	end
 	
 	if has_gl then
-		log("[Gilza] "..tostring(id).." has an underbarrel GL")
 		tweak_data.weapon[id].AMMO_PICKUP[1] = tweak_data.weapon[id].AMMO_PICKUP[1] * 0.69
 		tweak_data.weapon[id].AMMO_PICKUP[2] = tweak_data.weapon[id].AMMO_PICKUP[2] * 0.69
 	end
@@ -458,7 +461,7 @@ end
 
 function Gilza.applyCustomSMG_stats(id)
 
-	log("[Gilza] Applying custom weapon stats to SMG with id: "..tostring(id))
+	table.insert(customWeaponsUpdated.Sub_Machine_guns, id)
 	
 	-- same as with AR's
 	local dmg_type = "nil"
@@ -883,7 +886,7 @@ end
 
 function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 
-	log("[Gilza] Applying custom weapon stats to PISTOL with id: "..tostring(id))
+	table.insert(customWeaponsUpdated.Pistols, id)
 	
 	-- same as with others - dont touch guns with REALLY low damage
 	if tweak_data.weapon[id].stats.damage >= 77 and tweak_data.weapon[id].stats.damage <= 92 then
@@ -997,7 +1000,7 @@ end
 
 function Gilza.applyCustomLMG_stats(id)
 
-	log("[Gilza] Applying custom weapon stats to LMG with id: "..tostring(id))
+	table.insert(customWeaponsUpdated.Light_Machine_guns, id)
 	
 	local dmg_type = "nil"
 	
@@ -1094,7 +1097,7 @@ end
 
 function Gilza.applyCustomSNIPER_stats(id)
 
-	log("[Gilza] Applying custom weapon stats to SNIPER with id: "..tostring(id))
+	table.insert(customWeaponsUpdated.Snipers, id)
 	
 	if tweak_data.weapon[id].stats_modifiers then
 		if tweak_data.weapon[id].stats_modifiers.damage then
@@ -1158,7 +1161,7 @@ end
 
 function Gilza.applyCustomSHOTGUN_stats(id)
 
-	log("[Gilza] Applying custom weapon stats to SHOTGUN with id: "..tostring(id))
+	table.insert(customWeaponsUpdated.Shotguns, id)
 	
 	if tweak_data.weapon[id].stats_modifiers then
 		if tweak_data.weapon[id].stats_modifiers.damage then
@@ -1378,10 +1381,10 @@ end
 
 function Gilza.applyCustomMELEE_stats()
 	for melee, stats in pairs(tweak_data.blackmarket.melee_weapons) do
-		if has_value (Gilza.default_melee_weapons, melee) then
+		if table.contains (Gilza.default_melee_weapons, melee) then
 			-- default weapon, dont do anything
 		else
-			log("[Gilza] Applying custom weapon stats to MELEE with id: "..tostring(melee))
+			table.insert(customWeaponsUpdated.Melee, melee)
 			if stats.repeat_expire_t <= 0.5 then
 				tweak_data.blackmarket.melee_weapons[melee].stats.min_damage = 2
 				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 3.5

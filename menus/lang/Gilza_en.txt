@@ -21,12 +21,18 @@
 	"Gilza_flash_type_3": "Only Calm",
 	"Gilza_flash_type_4": "Only flash",
 	
+	"Gilza_flash_size": "Berserk flash size",
+	"Gilza_flash_size_desc": "Choose how big the berserker screen flash will be. Small is default. Requires heist restart for changes to apply.",
+	"Gilza_flash_size_1": "Small",
+	"Gilza_flash_size_2": "Medium",
+	"Gilza_flash_size_3": "Huge",
+	
 	"Gilza_flash_color_R": "Flash red colour",
-	"Gilza_flash_color_R_desc": "Change amount of red colour in berserket flash. This is an RGB value from 0 to 255. Requires heist restart to take effect.",
+	"Gilza_flash_color_R_desc": "Change amount of red colour in berserket flash. This is an RGB value from 0 to 255. Requires heist restart for changes to apply.",
 	"Gilza_flash_color_G": "Flash green colour",
-	"Gilza_flash_color_G_desc": "Change amount of green colour in berserket flash. This is an RGB value from 0 to 255. Requires heist restart to take effect.",
+	"Gilza_flash_color_G_desc": "Change amount of green colour in berserket flash. This is an RGB value from 0 to 255. Requires heist restart for changes to apply.",
 	"Gilza_flash_color_B": "Flash blue colour",
-	"Gilza_flash_color_B_desc": "Change amount of blue colour in berserket flash. This is an RGB value from 0 to 255. Requires heist restart to take effect.",
+	"Gilza_flash_color_B_desc": "Change amount of blue colour in berserket flash. This is an RGB value from 0 to 255. Requires heist restart for changes to apply.",
 	
 	"Gilza_page": "Gilza MWS page",
 	"Gilza_page_desc": "Click this button to open Gilza's modworkshop mod page."

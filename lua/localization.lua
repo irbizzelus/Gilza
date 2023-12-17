@@ -75,12 +75,12 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		
 		-- Weapon Mods
 		-- shotgun ammo 	
-		bm_wpn_fps_upg_a_rip_desc_new = "Пуля заставляющая противников безконтрольно мучаться от отравляющего урона после попадания, если стрелок находится достаточно близко.\n\nНаносит 400 урона в течение 2 секунд, с 'тиком' урона раз в 0.5 секунды.\nПодбор патронов уменьшен на 20%",
+		bm_wpn_fps_upg_a_rip_desc_new = "Пуля заставляющая противников безконтрольно мучаться от отравляющего урона после попадания, если стрелок находится достаточно близко.\n\nНаносит 400 урона в течение 2 секунд, с 'тиком' урона раз в 0.25 секунды.\nПодбор патронов уменьшен на 20%",
 		bm_wpn_fps_upg_a_custom_desc_new = "Большая дробь с увеличенным уроном.\nПодбор патронов уменьшен на 20%",
 		bm_wpn_fps_upg_a_explosive_desc_new = "Выстреливает один взрывной заряд, который убивает или оглушает цели.\nОтсутствует дополнительный урон при попадании в голову.\nПодбор патронов уменьшен на 60%",
 		bm_wpn_fps_upg_a_piercing_desc_new = "Пробивает насквозь нательную броню врагов. Дистанция на которой оружие нанесёт свой максимавльный урон увеличина на 50%.\nПодбор патронов уменьшен на 10%\nКоличество дротиков в гильзе - 5",
 		bm_wpn_fps_upg_a_slug_desc_new = "Выстреливает один свинцовый снаряд, пробивающий насквозь нательную броню, щиты и стены. Дистанция на которой оружие нанесёт свой максимавльный урон увеличина на 20%\nПодбор патронов уменьшен на 25%",
-		bm_wpn_fps_upg_a_dragons_breath_desc_new = "Выстреливает пули, превращающиеся в искры и пламя. Прожигает щиты и нательную броню врагов.\nОтсутствует дополнительный урон при попадании в голову.\nНаносит 1180 урона огнем.\nПодбор патронов уменьшен на 80%",
+		bm_wpn_fps_upg_a_dragons_breath_desc_new = "Выстреливает пули, превращающиеся в искры и пламя. Прожигает щиты и нательную броню врагов.\nДистанция на которой оружие нанесёт свой максимавльный урон уменьшена на 70%.\nНаносит 1000 урона огнем.\nПодбор патронов уменьшен на 80%",
 		bm_wpn_fps_upg_br_shtgn = "Пробивной патрон",
 		bm_wpn_fps_upg_br_shtgn_desc = "Позволяет вам пробивать все, что обычно может пробить пила OVE9000. Также может пробивать насквозь щиты и нательную броню врагов.\nДистанция на которой оружие нанесёт свой максимавльный урон уменьшенна до 33%.\n",
 		
@@ -112,8 +112,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		wpn_fps_upg_m4_hp_rounds_desc = "Патрон с экспансивной пулей со свинцовым сердечником, с биметаллической оболочкой в стальной гильзе. Предназначены для охоты.\n\nПодбор патронов уменьшен.",
 		
 		-- flamethrower 'ammo'
-		bm_wpn_fps_fla_mk2_mag_rare_desc = "Меньшая непосредственная огневая мощь, но увеличинный урон во время анимации горения.\n75% шанс начала анимации горения во время которой противник получает 700 единиц урона в течение 3 секунд.\nБазовые значения огнемета: 25% шанс на 300 урона в течение 2 секунд.",
-		bm_wpn_fps_fla_mk2_mag_welldone_desc = "Большая непосредственная огневая мощь, но уменьшенный урон во время анимации горения.\n5% шанс начала анимации горения во время которой противник получает 150 единиц урона в течение 1 секунды.\nБазовые значения огнемета: 25% шанс на 300 урона в течение 2 секунд.",
+		bm_wpn_fps_fla_mk2_mag_rare_desc = "Меньшая непосредственная огневая мощь, но увеличинный урон во время анимации горения.\n50% шанс начала анимации горения во время которой противник получает 720 единиц урона в течение 3 секунд.\nБазовые значения огнемета: 20% шанс на 300 урона в течение 2 секунд.",
+		bm_wpn_fps_fla_mk2_mag_welldone_desc = "Большая непосредственная огневая мощь, но уменьшенный урон во время анимации горения.\n10% шанс начала анимации горения во время которой противник получает 150 единиц урона в течение 1 секунды.\nБазовые значения огнемета: 20% шанс на 300 урона в течение 2 секунд.",
 		
 		-- throwables
 		bm_wpn_prj_ace_desc = "Урон: 560\nМожет убить кого угодно, кроме дозеров, попаданием в голову на сложности ЖС.\n",
@@ -122,25 +122,31 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		bm_wpn_prj_hur_desc = "Урон: 1300\nМожет убить тяжелого сотрудника SWAT одним попаданием в тело на сложности ЖС.\n",
 		bm_wpn_prj_jav_desc = "Урон: 8000\nМожет убить миниган дозеров двумя попаданиями в тело на сложности ЖС.\n",
 		bm_wpn_prj_target_desc = "Урон: 700\nМожет убить легкого сотрудника SWAT одним попаданием в тело на сложности ЖС.\n",
-		bm_concussion_desc = "МОИ ГЛАЗА!!!\nНет изменений по сравнению с базовой игрой, кроме максимального количества.\n",
+		bm_concussion_desc = "МОИ ГЛАЗА!!!",
 		bm_dynamite_desc = "Урон: 2500\nРадиус: 700",
 		bm_grenade_frag_com_desc = "Урон: 5000\nРадиус: 350\n\nСтандартные характеристики гранаты в PD2:\nУрон 1600\nРадиус 500\n",
 		bm_grenade_sticky_grenade_desc = "Урон: 2000\nРадиус: 350\n\nУрон и радиус липучей гранаты в базовой игре: 1200 и 500\nДолжна быть немного более сложной в использовании. Количество остается неизменным для компенсации новой статистики.",
-		bm_grenade_xmas_snowball_desc = "Урон: 400\nРадиус: 100\n\nУрон снежка в базовой игре: 280\nДолжно чувствоваться примерно так же с учетом изменений здоровья врагов Гилзы.",
-		bm_grenade_fir_com_desc = "Урон взрыва: 1000 + 1500 урона от последующего горениея в течение 2 секунд.\n",
+		bm_grenade_xmas_snowball_desc = "Урон: 450\nРадиус: 100\n\nУрон снежка в базовой игре: 280\nДолжно чувствоваться примерно так же с учетом изменений здоровья врагов Гильзы.",
+		bm_grenade_fir_com_desc = "Урон взрыва: 500 + 2000 урона от последующего горениея в течение 5 секунд.\n",
 		bm_grenade_dada_com_desc = "Урон: 2500\nРадиус: 700",
-		bm_grenade_molotov_desc = "Урона от взрыва нет, создает огненное кольцо на 15 секунд. Любой враг, попавший в контакт с огнем, получает 700 урона в течение 3 секунд.\nЕсли враг не выйдет из круга, он получит примерно 8000 урона в общей сложности.\n",
-		bm_grenade_electric_desc = "Зап-зап.\nНет изменений по сравнению с базовой игрой, за исключением максимального количества.\n",
-		bm_grenade_poison_gas_grenade_desc = "Урон: 100 от взрыва + 300 в течение 30 секунд. Облако длится 20 секунд.\n",
+		bm_grenade_molotov_desc = "Создает огненное кольцо на 15 секунд. Любой враг, попавший в контакт с огнем, получает 500 урона в секунду.\nЕсли враг выйдет из радиуса поражения огня, он продолжит получать такой же У/С в течении еще 2 секунд.\n",
+		bm_grenade_electric_desc = "Зап-зап.\nУрон: 1200\nРадиус: 900\n",
+		bm_grenade_poison_gas_grenade_desc = "Первоначальный взрыв наносит 100 урона, после чего создается газовое облако (9м радиуса) на 15 секунд. Данный газ вызывает безконтрольную рвоту у протвника на 15 секунд (что блокирует их передвижение). В течении отравления противник в общей сложности получит 300 урона.\n",
 		
 		-- launcher nades
 		bm_wp_upg_a_grenade_launcher_velocity = "Высокоскоростной снаряд",
 		bm_wp_upg_a_grenade_launcher_velocity_desc = "Увеличивает скорость снаряда до 300%, при этом уменьшая радиус взрыва до 50%.",
-		bm_wpn_fps_upg_a_grenade_launcher_incendiary_desc = "После детонации создает огненное поле горящее 10 секунд.\nВраги попавшие в это поле получают 1000 ед. урона в течении 3 секунд и еще больше, если враг остается в радиусе поля.\nПодбор патронов существенно уменьшен.",
-		bm_wpn_fps_upg_a_grenade_launcher_poison_desc = "Во время детонации наносит 100 ед. урона и затем создает газовое облако на 10 секунд.\nВраги попавшие в это поле получают максимум 500 ед. урона в течении 30 секунд.\nШансы убить врага минимальны, но данный снаряд эффективно ослабивает врагов, особенно тех которые далеко от вас.\n\nНа заметку: наносит 'тик' урона каждые 0.25 сек.",
-		bm_wpn_fps_upg_a_grenade_launcher_incendiary_arbiter_desc = "После детонации создает огненное поле горящее 5 секунд.\nВраги попавшие в это поле получают 800 ед. урона в течении 3 секунд и еще больше, если враг остается в радиусе поля.\nПодбор патронов существенно уменьшен.",
-		bm_wpn_fps_upg_a_grenade_launcher_poison_arbiter_desc = "Во время детонации наносит 100 ед. урона и затем создает (уменьшенное по сравнению с другими гранатометами) газовое облако на 10 секунд..\nВраги попавшие в это поле получают максимум 500 ед. урона в течении 11 секунд.\nШансы убить врага минимальны, но данный снаряд эффективно ослабивает врагов, особенно тех которые далеко от вас.",
+		bm_wpn_fps_upg_a_grenade_launcher_incendiary_desc = "После детонации создает огненное поле горящее 10 секунд.\nВраги попавшие в это поле получают 330 урона в секунду. Если противник покинул радиус поражения, он продолжит получать урон еще 1.5 секунды.\nПодбор патронов существенно уменьшен.",
+		bm_wpn_fps_upg_a_grenade_launcher_poison_desc = "Во время детонации наносит 100 ед. урона и затем создает газовое облако (6м радиус) на 10 секунд.\nДанный газ вызывает безконтрольную рвоту у протвника на 10 секунд (что блокирует их передвижение). В течении отравления противник в общей сложности получит 300 урона.",
+		bm_wpn_fps_upg_a_grenade_launcher_incendiary_arbiter_desc = "После детонации создает огненное поле горящее 5 секунд.\nВраги попавшие в это поле получают 250 урона в секунду. Если противник покинул радиус поражения, он продолжит получать урон еще 1.5 секунды.\nПодбор патронов существенно уменьшен.",
+		bm_wpn_fps_upg_a_grenade_launcher_poison_arbiter_desc = "Во время детонации наносит 100 ед. урона и затем создает газовое облако (3,5м радиус) на 5 секунд.\nДанный газ вызывает безконтрольную рвоту у протвника на 10 секунд (что блокирует их передвижение). В течении отравления противник в общей сложности получит 300 урона.",
 		
+		-- poison bow arrow
+		bm_wpn_fps_upg_a_crossbow_poison_desc_new = "Стрела с ядовитым наконечником, наносящая минимальный урон, но блокирующая врагов совершать какие либо действия пока эффект отравления не прекратится (6 секунд).",
+		
+		-- melee
+		bm_melee_cs_info = "Удерживайте кнопку ближнего боя дабы наносить непрерывный урон.\n\nСтатистика эффекта бензопилы:\nЗадержка перед началом эффекта: 1 сек.\nУрон: 66% здоровья в секунду\n\nНа заметку: данная механика не работает с навыками увеличивающими урон, но позволяет использовать навыки восполняющие здоровье от оружия ближнего боя, как например перк социопат.",
+		bm_melee_ostry_info = "Удерживайте кнопку ближнего боя дабы наносить непрерывный урон.\n\nСтатистика эффекта бензопилы:\nЗадержка перед началом эффекта: 0.7 сек.\nУрон: 50% здоровья в секунду\n\nНа заметку: данная механика не работает с навыками увеличивающими урон, но позволяет использовать навыки восполняющие здоровье от оружия ближнего боя, как например перк социопат.",
 	})
 	else
 		loc:load_localization_file(Gilza._path .. 'menus/lang/Gilza_en.txt', false)
@@ -204,12 +210,12 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		
 		-- Weapon Mods
 		-- shotgun ammo 
-		bm_wpn_fps_upg_a_rip_desc_new = "Poisoned bullet that deals damage over time and can interrupt enemies if they are close enough.\n\nDeals 400 damage over 2 seconds, with a damage tick every 0.5 seconds.\n\nAmmo pick up reduced by 20%",
+		bm_wpn_fps_upg_a_rip_desc_new = "Poisoned bullet that deals damage over time and can interrupt enemies if they are close enough.\n\nDeals 400 damage over 2 seconds, with a damage tick every 0.25 seconds.\n\nAmmo pick up reduced by 20%",
 		bm_wpn_fps_upg_a_custom_desc_new = "Bigger pellets with more impact.\nAmmo pick up reduced by 20%",
 		bm_wpn_fps_upg_a_explosive_desc_new = "Fires one explosive charge that kills or stuns targets.\nNo extra headshot damage.\nAmmo pick up reduced by 60%",
 		bm_wpn_fps_upg_a_piercing_desc_new = "Peirces enemy body armor. Damage range increased by 50%.\nAmount of darts per shell - 5\nAmmo pick up reduced by 10%",
 		bm_wpn_fps_upg_a_slug_desc_new = "Fires a single lead slug that penetrates body armor, enemies, shields and walls. Damage range increased by 20%\nAmmo pick up reduced by 25%",
-		bm_wpn_fps_upg_a_dragons_breath_desc_new = "Fires pellets that go up in sparks and flames. Burns through shields and body armor.\nNo extra headshot damage.\nDeals 1180 in fire damage.\nAmmo pick up reduced by 80%",
+		bm_wpn_fps_upg_a_dragons_breath_desc_new = "Fires pellets that go up in sparks and flames. Burns through shields and body armor.\nDamage range decreased by 70%.\nDeals 1000 fire damage.\nAmmo pick up reduced by 80%",
 		bm_wpn_fps_upg_br_shtgn = "Breaching round",
 		bm_wpn_fps_upg_br_shtgn_desc = "Allows you to breach everything that saw OVE9000 usually can. Can also penetrate shield and body armor.\nDamage range reduced to only 33%\n", 
 		
@@ -241,8 +247,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		wpn_fps_upg_m4_hp_rounds_desc = "Lead core hollow-point bullet with a bimetallic jacket in a steel case. Intended for hunting.\n\nAmmo pick up reduced.",
 		
 		-- flamethrower 'ammo'
-		bm_wpn_fps_fla_mk2_mag_rare_desc = "Less direct firepower but more afterburn damage.\n75% chance to start afterburn damage that deals 700 damage over 3 seconds.\nBase flamethrower values: 25% chance for 300dmg over 2 seconds.",
-		bm_wpn_fps_fla_mk2_mag_welldone_desc = "More direct firepower but less afterburn damage.\n5% chance to start afterburn damage that deals 150 damage over 1 second.\nBase flamethrower values: 25% chance for 300dmg over 2 seconds.",
+		bm_wpn_fps_fla_mk2_mag_rare_desc = "Less direct firepower but more afterburn damage.\n50% chance to start afterburn damage that deals 720 damage over 3 seconds.\nBase flamethrower values: 20% chance for 300dmg over 2 seconds.",
+		bm_wpn_fps_fla_mk2_mag_welldone_desc = "More direct firepower but less afterburn damage.\n10% chance to start afterburn damage that deals 150 damage over 1 second.\nBase flamethrower values: 20% chance for 300dmg over 2 seconds.",
 		
 		-- throwables
 		bm_wpn_prj_ace_desc = "Damage: 560\nCan one-shot anyone other then dozers in the head on DW difficulty.\n",
@@ -251,25 +257,31 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		bm_wpn_prj_hur_desc = "Damage: 1300\nCan one-shot heavy swat in the body on DW difficulty.\n",
 		bm_wpn_prj_jav_desc = "Damage: 8000\nCan two-shot non-minigun dozers on DW difficulty.\n",
 		bm_wpn_prj_target_desc = "Damage: 700\nCan one-shot normal swat in the body on DW difficulty.\n",
-		bm_concussion_desc = "MY EYES!!!\nNo changes compared to base game other then the max amount.\n",
+		bm_concussion_desc = "MY EYES!!!",
 		bm_dynamite_desc = "Damage: 2500\nRadius: 700",
 		bm_grenade_frag_com_desc = "Damage: 5000\nRadius: 350\n\nVanilla PD2 grenade stats: 1600 damage\n500 radius\n",
 		bm_grenade_sticky_grenade_desc = "Damage: 2000\nRadius: 350\n\nBase game sticky damage and radius: 1200 and 500\nShould be a bit more of a skill shot nade. Amounts are kept the same to compensate.",
-		bm_grenade_xmas_snowball_desc = "Damage: 400\nRadius: 100\n\nBase game snowball damage: 280\nShould feel roughly the same considering Gilza's health pool changes.",
-		bm_grenade_fir_com_desc = "Damage: 1000 direct + 1500 with afterburn over 2 seconds.\n",
+		bm_grenade_xmas_snowball_desc = "Damage: 450\nRadius: 100\n\nBase game snowball damage: 280\nShould feel roughly the same considering Gilza's health pool changes.",
+		bm_grenade_fir_com_desc = "Damage: 500 direct + 2000 from afterburn over 5 seconds.\n",
 		bm_grenade_dada_com_desc = "Damage: 2500\nRadius: 700",
-		bm_grenade_molotov_desc = "No direct damage, creates a fire ring for 15 seconds. Any enemy that comes in contact with fire recieves 700 damage over 3 seconds.\nIf enemy doesn't get out of the circle they will recieve roughly 8000 damage overall.\n",
-		bm_grenade_electric_desc = "Zap-zap.\nNo changes compared to base game other then the max amount.\n",
-		bm_grenade_poison_gas_grenade_desc = "Damage: 100 direct + 300 over 30 seconds. Cloud lasts for 20 seconds.\n",
+		bm_grenade_molotov_desc = "Creates a fire ring for 15 seconds. Any enemy that comes in contact with fire recieves 500 damage per second.\nIf enemy leaves the ground fire area, they continue to recieve same DPS for 2 extra seconds.\n",
+		bm_grenade_electric_desc = "Zap-zap.\nDamage: 1200\nRadius: 900",
+		bm_grenade_poison_gas_grenade_desc = "Initial explosion deals 100 damage, after which a gas cloud (9m radius) appears for 15 seconds. Enemies that come in contact with said cloud will begin uncontrollably vomiting for 15 seconds (stun-locking them from moving). They also recieve about 300 damage over their poison duration.",
 		
 		-- launcher nades
 		bm_wp_upg_a_grenade_launcher_velocity = "High Velocity Round",
 		bm_wp_upg_a_grenade_launcher_velocity_desc = "Increases grenade velocity to 300%, but decreases blast radius to 50%.",
-		bm_wpn_fps_upg_a_grenade_launcher_incendiary_desc = "Upon impact creates a fire field that lasts for 10 seconds.\nEnemies that come in contact with fire, recieve 1000dmg over 3 seconds, or even more if they stay inside the ring of fire.\nAmmo pick-up is drastically reduced.",
-		bm_wpn_fps_upg_a_grenade_launcher_poison_desc = "Upon impact deals 100dmg and creates a gas field that lasts for 10 seconds.\nEnemies that come in contact with gas, recieve at max 500dmg over 30 seconds.\nLow kill potential, but is really effective at weakening enemies who haven't come close to you yet.\n\nNote: deals ticks of damage every 0.25s.",
-		bm_wpn_fps_upg_a_grenade_launcher_incendiary_arbiter_desc = "Upon impact creates a fire field that lasts for 5 seconds.\nEnemies that come in contact with fire, recieve 800dmg over 3 seconds, or even more if they stay inside the ring of fire.\nAmmo pick-up is drastically reduced.",
-		bm_wpn_fps_upg_a_grenade_launcher_poison_arbiter_desc = "Upon impact deals 100dmg and creates a (smaller compared to other launchers) gas field that lasts for 10 seconds.\nEnemies that come in contact with gas, recieve at max 500dmg over 11 seconds.\nLow kill potential, but is really effective at weakening enemies who haven't come close to you yet.",
+		bm_wpn_fps_upg_a_grenade_launcher_incendiary_desc = "Upon impact creates a fire field that lasts for 10 seconds.\nEnemies that come in contact with fire, recieve 330 damage per second. If enemies leave the fire area, they will continue to take damage for 1.5 seconds.\nAmmo pick-up is drastically reduced.",
+		bm_wpn_fps_upg_a_grenade_launcher_poison_desc = "Upon impact deals 100 damage, after which a gas cloud (6m radius) appears for 10 seconds. Enemies that come in contact with said cloud will begin uncontrollably vomiting for 10 seconds (stun-locking them from moving). They also recieve about 300 damage over their poison duration.",
+		bm_wpn_fps_upg_a_grenade_launcher_incendiary_arbiter_desc = "Upon impact creates a fire field that lasts for 5 seconds.\nEnemies that come in contact with fire, recieve 250 damage per second. If enemies leave the fire area, they will continue to take damage for 1.5 seconds.\nAmmo pick-up is drastically reduced.",
+		bm_wpn_fps_upg_a_grenade_launcher_poison_arbiter_desc = "Upon impact deals 100 damage, after which a gas cloud (3.5m radius) appears for 5 seconds. Enemies that come in contact with said cloud will begin uncontrollably vomiting for 5 seconds (stun-locking them from moving). They also recieve about 300 damage over their poison duration.",
 		
+		-- poison bow arrow
+		bm_wpn_fps_upg_a_crossbow_poison_desc_new = "Arrow with a poisoned tip that does minimal damage over time but interrupts enemies during it's poison duration (6 seconds).",
+		
+		-- melee
+		bm_melee_cs_info = "Hold melee button to deal continuous damage.\n\nChainsaw effect stats:\nDelay before effect begins: 1s\nDamage: 66% health per second\n\nNote: this mechanic doesn't interact with damage skills, but allows for melee-heal skills like sociopath perk deck.",
+		bm_melee_ostry_info = "Hold melee button to deal continuous damage.\n\nChainsaw effect stats:\nDelay before effect begins: 0.7s\nDamage: 50% health per second\n\nNote: this mechanic doesn't interact with damage skills, but allows for melee-heal skills like sociopath perk deck.",
 	})	
 	end
 

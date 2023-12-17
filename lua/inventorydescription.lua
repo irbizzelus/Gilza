@@ -1,3 +1,4 @@
+-- update total ammo amounts if we have brawler deck equipeed in blackmarket UI @4 and 62
 Hooks:OverrideFunction(WeaponDescription, "get_weapon_ammo_info", function(weapon_id, extra_ammo, total_ammo_mod, self)
 	local weapon_tweak_data = tweak_data.weapon[weapon_id]
 	local ammo_max_multiplier = managers.player:upgrade_value("player", "extra_ammo_multiplier", 1) * managers.player:upgrade_value("player", "extra_ammo_cut", 1)

@@ -214,17 +214,36 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 				self.melee_weapons[tostring(weapon)].repeat_expire_t = 0.475
 				self.melee_weapons[tostring(weapon)].expire_t = 1.2
 				self.melee_weapons[tostring(weapon)].sounds.charge = nil
-				self.melee_weapons[tostring(weapon)].dot_data = {
-					type = "poison",
-					custom_data = {
-						dot_length = 1,
-						hurt_animation_chance = 0.75
-					}
-				}
 			end
 		end
 	end
 	
+	
+	self.melee_weapons.cs.chainsaw_delay = 1.00
+	self.melee_weapons.cs.repeat_chainsaw_delay = 0.2
+	self.melee_weapons.cs.stats.tick_damage = 1.32
+	self.melee_weapons.cs.chainsaw = true
+	self.melee_weapons.cs.stats.charge_time = 1
+	self.melee_weapons.cs.stats.min_damage = 2.5
+	self.melee_weapons.cs.stats.max_damage = 2.5
+	self.melee_weapons.cs.stats.min_damage_effect = 750/25
+	self.melee_weapons.cs.stats.max_damage_effect = 750/25
+	self.melee_weapons.cs.info_id = "bm_melee_cs_info"
+	
+	self.melee_weapons.ostry.chainsaw_delay = 0.70
+	self.melee_weapons.ostry.repeat_chainsaw_delay = 0.2
+	self.melee_weapons.ostry.stats.tick_damage = 1.0
+	self.melee_weapons.ostry.chainsaw = true
+	self.melee_weapons.ostry.stats.charge_time = 1
+	self.melee_weapons.ostry.stats.min_damage = 1
+	self.melee_weapons.ostry.stats.max_damage = 1
+	self.melee_weapons.ostry.stats.min_damage_effect = 15
+	self.melee_weapons.ostry.stats.max_damage_effect = 15
+	self.melee_weapons.ostry.info_id = "bm_melee_ostry_info"
+
+	
+	--self.melee_weapons.cs.stance_mod = {translation = Vector3(-20, 0, 0), rotation = Rotation(0, 0, 0)}
+	self.melee_weapons.cs.stance_mod = {translation = Vector3(-15, 10, 5), rotation = Rotation(10, -35, 0)}
 	-- gold spoon extra penalties
 	self.melee_weapons.spoon_gold.stats.charge_time = 6
 	self.melee_weapons.spoon_gold.stats.concealment = 23

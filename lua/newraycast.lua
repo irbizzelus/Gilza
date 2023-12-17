@@ -1,4 +1,4 @@
--- adjust acc in single fire
+-- adjust acc in single fire @12-34
 function NewRaycastWeaponBase:conditional_accuracy_multiplier(current_state)
 	local mul = 1
 
@@ -12,13 +12,14 @@ function NewRaycastWeaponBase:conditional_accuracy_multiplier(current_state)
 	-- 30% inaccuracy for some weapon types in full auto
 	if not self:is_single_shot() then
 		for _, category in ipairs(self:categories()) do
-			-- assuming there are no weird weapon hybrids that have both smg and ar category
+			-- assuming there are no weird weapon hybrids that can have these categories at the same time
 			if category == "smg" or category == "assault_rifle" or category == "lmg" then
 				mul = mul - 0.3
 			end
 		end
 	end
 	
+	-- 50% bonus if still in full auto, which player should be in
 	if managers.player:current_state() == "bipod" then
 		mul = mul + 0.8
 	end
@@ -30,7 +31,6 @@ function NewRaycastWeaponBase:conditional_accuracy_multiplier(current_state)
 			mul = mul - (1 - pm:upgrade_value("player", "weapon_movement_stability", 0.75))
 		end
 	end
-	
 	-- bellow is base game code
 
 	if current_state:in_steelsight() and self:is_single_shot() then
@@ -43,16 +43,12 @@ function NewRaycastWeaponBase:conditional_accuracy_multiplier(current_state)
 		end
 	end
 
-	--[[ fire control skill, moved above
-	if current_state._moving then
-		mul = mul + 1 - pm:upgrade_value("player", "weapon_movement_stability", 1)
-	end
-	]]
 	mul = mul + 1 - pm:get_property("desperado", 1)
-	
+
 	return self:_convert_add_to_mul(mul)
 end
 
+-- @66
 function NewRaycastWeaponBase:recoil_multiplier()
 	local is_moving = false
 	local user_unit = self._setup and self._setup.user_unit
@@ -60,13 +56,13 @@ function NewRaycastWeaponBase:recoil_multiplier()
 	if user_unit then
 		is_moving = alive(user_unit) and user_unit:movement() and user_unit:movement()._current_state and user_unit:movement()._current_state._moving
 	end
-	
+
 	local multiplier = managers.blackmarket:recoil_multiplier(self._name_id, self:weapon_tweak_data().categories, self._silencer, self._blueprint, is_moving)
 
 	if self._alt_fire_active and self._alt_fire_data then
 		multiplier = multiplier * (self._alt_fire_data.recoil_mul or 1)
 	end
-	
+
 	-- 50% extra recoil for some weapon types in single fire
 	if self:is_single_shot() then
 		for _, category in ipairs(self:categories()) do
@@ -75,11 +71,12 @@ function NewRaycastWeaponBase:recoil_multiplier()
 			end
 		end
 	end
-	
+
 	return multiplier
-	
+
 end
 
+-- ammo cut for brawler deck @81
 function NewRaycastWeaponBase:replenish()
 	local ammo_max_multiplier = managers.player:upgrade_value("player", "extra_ammo_multiplier", 1) * managers.player:upgrade_value("player", "extra_ammo_cut", 1)
 	for _, category in ipairs(self:weapon_tweak_data().categories) do
