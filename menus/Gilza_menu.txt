@@ -27,6 +27,19 @@
 			"size" : 22
 		},
 		{
+			"type" : "toggle",
+			"id" : "Gilza_shotgun_skill_notification",
+			"title" : "Gilza_shotgun_skill_notification",
+			"description" : "Gilza_shotgun_skill_notification_desc",
+			"callback" : "Gilza_shotgun_skill_notification",
+			"value" : "shotgun_skill_notification",
+			"default_value" : true
+		},
+		{
+			"type" : "divider",
+			"size" : 22
+		},
+		{
 			"type" : "button",
 			"id" : "Gilza_flash_header",
 			"title" : "Gilza_flash_header",

@@ -5,6 +5,9 @@
 	"Gilza_v_fov": "Vehicle FOV",
 	"Gilza_v_fov_desc": "Change vehicle FOV for both driver and passenger. Works in-game, but you will have to re-enter the vehicle to see the change. Range: 75-105",
 	
+	"Gilza_shotgun_skill_notification": "Fearmonger notification",
+	"Gilza_shotgun_skill_notification_desc": "Adds a pop up notification when you recieve a speed bonus from 'fearmonger' skill.",
+	
 	"Gilza_flash_header": "-- Berserker flashing effect --",
 	
 	"Gilza_flash_trigger": "Berserk flash trigger",

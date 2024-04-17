@@ -1,5 +1,5 @@
--- new berserk
-Hooks:PreHook(PlayerDamage, "_calc_armor_damage", "new_berserk_trigger", function(self, attack_data)
+-- new berserker - when armor breaks under half health gain damage bonuses and activate HUD flash
+Hooks:PreHook(PlayerDamage, "_calc_armor_damage", "Gilza_new_berserk_trigger", function(self, attack_data)
 	-- on armor break
 	if self:get_real_armor() > 0 and attack_data.damage >= self:get_real_armor() then
 		-- and under half health
@@ -162,40 +162,47 @@ Hooks:PreHook(PlayerDamage, "_calc_armor_damage", "new_berserk_trigger", functio
 	end
 end)
 
--- Slow and steady skill damage multipliers
-Hooks:PreHook(PlayerDamage, "damage_bullet", "SaS_skillresist", function(self, attack_data)
-	if managers.network:session():local_peer():unit():movement()._current_state._moving == false then
-		attack_data.damage = attack_data.damage * managers.player:upgrade_value("player", "not_moving_damage_reduction_bonus", 1)
+-- new damage reduction skills + brawler deck
+Hooks:PreHook(PlayerDamage, "damage_bullet", "Gilza_player_damage_bullet", function(self, attack_data)
+	local damage_resistance_mul = 1
+	
+	if managers.network:session():local_peer():unit():movement()._current_state._moving == false or managers.player:current_state() == "bipod" then
+		damage_resistance_mul = damage_resistance_mul - managers.player:upgrade_value("player", "not_moving_damage_reduction_bonus", 0)
 	end
+	
 	if managers.player:current_state() == "bipod" then
-		attack_data.damage = attack_data.damage * managers.player:upgrade_value("player", "not_moving_damage_reduction_bonus", 1) -- apply basic skill version reduction if bipoded
-		attack_data.damage = attack_data.damage * managers.player:upgrade_value("player", "not_moving_damage_reduction_bonus_bipoded", 1)
+		damage_resistance_mul = damage_resistance_mul - managers.player:upgrade_value("player", "not_moving_damage_reduction_bonus_bipoded", 0)
 	end
+	
 	if managers.player:has_category_upgrade("player", "damage_resist_brawler") then
-		attack_data.damage = attack_data.damage * managers.player:upgrade_value("player", "damage_resist_brawler", 1)
+		damage_resistance_mul = damage_resistance_mul - managers.player:upgrade_value("player", "damage_resist_brawler", 0)
 	end
+	
 	if managers.player:has_category_upgrade("player", "damage_resist_faraway_brawler") then
 		if ( self:_max_health() / self:get_real_health() ) >= 2 then
 			if managers.player:player_unit():position() and attack_data.attacker_unit:position() then
 				local ray = World:raycast( "ray", managers.player:player_unit():position(), attack_data.attacker_unit:position(), "slot_mask", managers.slot:get_mask( "bullet_impact_targets" ) )
 				if ray and ray.distance >= 900 and ray.distance < 1600 then
-					attack_data.damage = attack_data.damage * 0.61
+					damage_resistance_mul = damage_resistance_mul - 0.16
 				elseif ray and ray.distance >= 1600 then
-					attack_data.damage = attack_data.damage * 0.26
+					damage_resistance_mul = damage_resistance_mul - 0.15
 				end
 			end
 		end
 	end
+	
+	attack_data.damage = attack_data.damage * damage_resistance_mul
 end)
 
-local Gilz_arrested = "CBT"
--- check for arrest when beeing revived
-Hooks:PreHook(PlayerDamage, "revive", "Gilza_UYGBuffpt1", function(self)
-	Gilz_arrested = self:arrested()
+-- check if local player is arrested when beeing revived
+local Gilza_arrested = "CBT"
+Hooks:PreHook(PlayerDamage, "revive", "Gilza_newUpYouGoPart1", function(self)
+	Gilza_arrested = self:arrested()
 end)
--- if not arrested and we have Up you go, get more health + sync
-Hooks:PostHook(PlayerDamage, "revive", "Gilza_UYGBuffpt2", function(self)
-	if not Gilz_arrested and managers.player:has_category_upgrade("player", "health_regain_V2") then
+
+-- if not arrested and we have new Up you go skill, get more health + sync
+Hooks:PostHook(PlayerDamage, "revive", "Gilza_newUpYouGoPart2", function(self)
+	if not Gilza_arrested and managers.player:has_category_upgrade("player", "health_regain_V2") then
 		self:set_health(self:get_real_health() + (self:_max_health() * managers.player:upgrade_value("player", "health_regain_V2", 0)))
 		managers.hud:set_player_health({
 			current = self:get_real_health(),
@@ -204,4 +211,35 @@ Hooks:PostHook(PlayerDamage, "revive", "Gilza_UYGBuffpt2", function(self)
 		})
 		self:_send_set_health()
 	end
+end)
+
+-- allow counterstrike skill to deal damage
+Hooks:PreHook(PlayerDamage, "damage_melee", "Gilza_player_damage_melee", function(self, attack_data)
+	local can_counter_strike = managers.player:has_category_upgrade("player", "counter_strike_melee")
+	if can_counter_strike and self._unit:movement():current_state().in_melee and self._unit:movement():current_state():in_melee() then
+		managers.player:player_unit():movement():current_state():_do_melee_damage(managers.player:player_timer():time(), nil)
+	end
+end)
+
+Hooks:PostHook(PlayerDamage, "_on_enter_swansong_event", "Gilza_newSwanSong", function(self)
+	
+	if not managers.network or not managers.network:session() or not managers.network:session().peers then
+		return
+	end
+	
+	for _, peer in pairs(managers.network:session():peers()) do
+		if peer then
+			local player_unit = peer and peer:unit() or nil
+			if player_unit and alive(player_unit) then
+				if player_unit:interaction():active() and player_unit:movement():need_revive() then
+					tweak_data.upgrades.berserker_movement_speed_multiplier = 1
+					DelayedCalls:Add("Gilza_reset_swan_song_speed", 3, function()
+						tweak_data.upgrades.berserker_movement_speed_multiplier = 0.4
+					end)
+					break
+				end
+			end
+		end
+	end
+	
 end)

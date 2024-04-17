@@ -1,9 +1,9 @@
--- this file is only here for the gambler buff, and that's it. @line 81
+-- this file is only here for the gambler buff, and that's it. @line 78
 
 local CABLE_TIE_GET_CHANCE = 0.2
 local CABLE_TIE_GET_AMOUNT = 1
 
-Hooks:OverrideFunction(AmmoClip, "_pickup", function(self,unit)
+Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 	if self._picked_up then
 		return
 	end
@@ -76,9 +76,6 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self,unit)
 						local base = tweak_data.upgrades.loose_ammo_restore_health_values.base
 						local sync_value = math.round(math.clamp(restore_value - base, 0, 13))
 						restore_value = restore_value * (tweak_data.upgrades.loose_ammo_restore_health_values.multiplier or 0.1)
-						-- old version
-						--local percent_inc = player_manager:upgrade_value("player", "gain_life_per_players", 0) * num_more_hp + 1
-						-- new one
 						local percent_inc = player_manager:upgrade_value("player", "gain_life_per_players", 0) * math.clamp(num_more_hp, 0, 1) + 1
 
 						print("[AmmoClip:_pickup] Percent increase for health pickup is: ", percent_inc - 1)

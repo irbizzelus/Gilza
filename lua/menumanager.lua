@@ -1,29 +1,10 @@
 if not Gilza then
-	dofile("mods/Gilza/lua/wpntweaks.lua")
+	dofile("mods/Gilza/lua/1_GilzaBase.lua")
 end
 
-function Gilza:changelog_message()
-	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 1.87 then
-			local menu_options = {}
-			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
-			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "1.8.7 changelog:\n- Compatibility with patches 240-240.5\n- Flamethrowers and dragon's breath shotgun rounds can now do headshot damage, their damage values were nerfed accordingly\n- Added 'chainsaw damage' mehcanic while holding chainsaw-like melee weapons (Kazaguruma, Lumber Lite L2)\n- Berserler flash size can now be customized\n- Most poision weapons now stun-lock enemies in the vomitting animation during the poision effect\n- All DOT weapnos had their description updated to reflect their stats better\n\nThis patch is quite big, you might wanna check the full changelog."
-			local menu = QuickMenu:new("Gilza", message, menu_options)
-			menu:Show()
-			Gilza.settings.version = 1.87
-			Gilza.Save()
-		end
-	end)
-end
-
-function Gilza_linkchangelog()
-	managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases/latest")
-end
-
-Hooks:PostHook(MenuManager, "_node_selected", "Gilza_changelog", function(self, menu_name, node)
+Hooks:PostHook(MenuManager, "_node_selected", "Gilza_patch_notification", function(self, menu_name, node)
 	if type(node) == "table" and node._parameters.name == "main" then
-		Gilza.changelog_message()
+		Gilza:changelog_message()
 	end
 end)
 
@@ -35,23 +16,29 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init', function(menu_manager)
 	MenuCallbackHandler.Gilza_donothing = function(this, item)
 		-- warm, primordial blackness
 	end
+	
+	MenuCallbackHandler.Gilza_shotgun_skill_notification = function(this, item)
+		Gilza.settings.shotgun_skill_notification = item:value() == 'on'
+		Gilza:Save()
+	end
 
 	MenuCallbackHandler.Gilza_v_fov = function(this, item)
 		Gilza.settings.v_fov = tonumber(item:value())
 		Gilza:Save()
-		
-		tweak_data.vehicle.falcogini.fov = tonumber(item:value())
-		tweak_data.vehicle.muscle.fov = tonumber(item:value())
-		tweak_data.vehicle.forklift.fov = tonumber(item:value())
-		tweak_data.vehicle.forklift_2.fov = tonumber(item:value())
-		tweak_data.vehicle.box_truck_1.fov = tonumber(item:value())
-		tweak_data.vehicle.boat_rib_1.fov = tonumber(item:value())
-		tweak_data.vehicle.mower_1.fov = tonumber(item:value())
-		tweak_data.vehicle.blackhawk_1.fov = tonumber(item:value())
-		tweak_data.vehicle.bike_1.fov = tonumber(item:value())
-		tweak_data.vehicle.bike_2.fov = tonumber(item:value())
-		tweak_data.vehicle.wanker.fov = tonumber(item:value())	
-		tweak_data.vehicle.golfcart.fov = tonumber(item:value())	
+		if tweak_data and tweak_data.vehicle then
+			tweak_data.vehicle.falcogini.fov = tonumber(item:value())
+			tweak_data.vehicle.muscle.fov = tonumber(item:value())
+			tweak_data.vehicle.forklift.fov = tonumber(item:value())
+			tweak_data.vehicle.forklift_2.fov = tonumber(item:value())
+			tweak_data.vehicle.box_truck_1.fov = tonumber(item:value())
+			tweak_data.vehicle.boat_rib_1.fov = tonumber(item:value())
+			tweak_data.vehicle.mower_1.fov = tonumber(item:value())
+			tweak_data.vehicle.blackhawk_1.fov = tonumber(item:value())
+			tweak_data.vehicle.bike_1.fov = tonumber(item:value())
+			tweak_data.vehicle.bike_2.fov = tonumber(item:value())
+			tweak_data.vehicle.wanker.fov = tonumber(item:value())	
+			tweak_data.vehicle.golfcart.fov = tonumber(item:value())
+		end
 	end
 	
 	MenuCallbackHandler.Gilza_flash_trigger = function(this, item)

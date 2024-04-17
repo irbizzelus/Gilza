@@ -1,7 +1,5 @@
-function SniperGrazeDamage:on_weapon_fired(weapon_unit, result)
-
-	-- for some reason this crashes if we use Hooks:OverrideFunction. ah well 
-	
+-- new version of graze
+Hooks:OverrideFunction(SniperGrazeDamage, "on_weapon_fired", function (self, weapon_unit, result)
 	if not alive(weapon_unit) then
 		return
 	end
@@ -28,6 +26,7 @@ function SniperGrazeDamage:on_weapon_fired(weapon_unit, result)
 	local best_damage = 0
 	local sentry_mask = managers.slot:get_mask("sentry_gun")
 	local ally_mask = managers.slot:get_mask("all_criminals")
+	-- new requirment
 	local max_distance = 0
 
 	for i, hit in ipairs(result.rays) do
@@ -104,4 +103,4 @@ function SniperGrazeDamage:on_weapon_fired(weapon_unit, result)
 			attack_dir = -hit.normal
 		})
 	end
-end
+end)

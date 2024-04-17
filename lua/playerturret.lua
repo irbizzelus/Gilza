@@ -1,5 +1,5 @@
--- new berserk dmg increase @line 42
-function PlayerTurret:_check_action_primary_attack(t, input)
+-- new berserk dmg increase @42; also, why would this skill even affect turret mode?
+Hooks:OverrideFunction(PlayerTurret, "_check_action_primary_attack", function (self, t, input)
 	local new_action = nil
 	local weap_base = self._turret_unit:base()
 	local weapon_tweak_data = weap_base:weapon_tweak_data()
@@ -87,4 +87,4 @@ function PlayerTurret:_check_action_primary_attack(t, input)
 	end
 
 	return new_action
-end
+end)
