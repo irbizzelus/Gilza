@@ -722,7 +722,7 @@ if Gilza.BTAW_enabled then
 end
 
 -- if we are boosting another player with basic inspire, we get it ourselves as well
-Hooks:PreHook(PlayerStandard, "_get_intimidation_action", "Gilza_PlayerStandard_inspire", function(self, prime_target, char_table, amount, primary_only, detect_only, secondary)
+Hooks:PreHook(PlayerStandard, "_get_intimidation_action", "Gilza_PlayerStandard_new_inspire", function(self, prime_target, char_table, amount, primary_only, detect_only, secondary)
 	local mvec3_dis_sq = mvector3.distance_sq
 	if prime_target and prime_target.unit_type == 2 then
 		

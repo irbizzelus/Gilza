@@ -1,13 +1,13 @@
-FPCameraPlayerBase._Gilza_shot_counter = 0 -- used to count how many shotf were fired while user holds M1
+FPCameraPlayerBase._Gilza_shot_counter = 0 -- used to count how many shots were fired while user holds M1
 
 -- when we start holding m1 again, reset the counter
-Hooks:PreHook(FPCameraPlayerBase, "start_shooting", "GilzaCameraRecoil_2", function(self, ...)
+Hooks:PreHook(FPCameraPlayerBase, "start_shooting", "GilzaCameraRecoil_start", function(self, ...)
 	self._Gilza_shot_counter = 0
 end)
 
--- Completely removes camera recoil compensation for shotguns, semi-auto weapons, and if your recoil is too high.
+-- Completely removes camera recoil compensation for shotguns, semi-auto weapons, and if recoil is high.
 -- Keep compensation if total recoil is not that high, or we fired a 3 or less round burst that doesnt have high recoil
-Hooks:PostHook(FPCameraPlayerBase, "stop_shooting", "GilzaCameraRecoil_1", function(self, ...)
+Hooks:PostHook(FPCameraPlayerBase, "stop_shooting", "GilzaCameraRecoil_stop", function(self, ...)
 	if (self._Gilza_shot_counter <= 3 and self._recoil_kick.accumulated <= 2.5) or self._recoil_kick.accumulated <= 2 then
 		self._recoil_kick.to_reduce = self._recoil_kick.accumulated
 		self._recoil_kick.h.to_reduce = self._recoil_kick.h.accumulated

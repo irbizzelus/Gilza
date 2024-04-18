@@ -221,7 +221,7 @@ Hooks:PreHook(PlayerDamage, "damage_melee", "Gilza_player_damage_melee", functio
 	end
 end)
 
-Hooks:PostHook(PlayerDamage, "_on_enter_swansong_event", "Gilza_newSwanSong", function(self)
+Hooks:PostHook(PlayerDamage, "_on_enter_swansong_event", "Gilza_on_enter_SwanSong", function(self)
 	
 	if not managers.network or not managers.network:session() or not managers.network:session().peers then
 		return

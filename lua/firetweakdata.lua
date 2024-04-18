@@ -1,4 +1,4 @@
--- new fire damage stats - UPDATE ME
+-- new fire damage stats
 Hooks:PostHook(FireTweakData, "_init_dot_entries_fire", "Gilza_new_fire_dot", function(self)
 	-- flammenwerfers
 	self.dot_entries.fire.weapon_flamethrower_mk2 = {

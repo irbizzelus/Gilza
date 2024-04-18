@@ -8,7 +8,7 @@ Hooks:PostHook(MenuManager, "_node_selected", "Gilza_patch_notification", functi
 	end
 end)
 
-Hooks:Add('MenuManagerInitialize', 'Gilza_init', function(menu_manager)
+Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 	MenuCallbackHandler.Gilza_save = function(this, item)
 		Gilza:Save()
 	end
@@ -71,8 +71,12 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init', function(menu_manager)
 		Gilza:Save()
 	end
 	
-	MenuCallbackHandler.Gilza_page = function(this, item)
+	MenuCallbackHandler.Gilza_MWS_page = function(this, item)
 		managers.network.account:overlay_activate("url", "https://modworkshop.net/mod/39854")
+	end
+	
+	MenuCallbackHandler.Gilza_Weapons_page = function(this, item)
+		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/random-noncode-stuff/blob/main/Gilza%20txts/Weapons.md")
 	end
 
 	Gilza:Load()

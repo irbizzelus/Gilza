@@ -4,7 +4,7 @@ Hooks:PreHook(CopDamage, "damage_melee", "Gilza_new_melee_damage", function(self
 	
 		local dmg_multiplier = 1
 		
-		-- new zerk skills
+		-- new zerk melee skills
 		if managers.player:has_category_upgrade("temporary", "new_berserk_melee_damage_multiplier_2") then
 			dmg_multiplier = dmg_multiplier * managers.player:temporary_upgrade_value("temporary", "new_berserk_melee_damage_multiplier_2", 1)
 		elseif managers.player:has_category_upgrade("temporary", "new_berserk_melee_damage_multiplier_1") then
@@ -43,9 +43,9 @@ local first_pellet_headshot_bonus = {}
 Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 	
 	-- new shotgun damage
-	if (attack_data.weapon_unit:base():is_category("shotgun") or attack_data.weapon_unit:base():is_category("grenade_launcher")) and attack_data.weapon_unit:base()._rays and attack_data.weapon_unit:base()._rays >= 2 then
+	if attack_data and attack_data.weapon_unit and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_category and (attack_data.weapon_unit:base():is_category("shotgun") or attack_data.weapon_unit:base():is_category("grenade_launcher")) and attack_data.weapon_unit:base()._rays and attack_data.weapon_unit:base()._rays >= 2 then
 		
-		-- as of 19.03.2024 weapon lib makes each shotgun pellet deal full shotgun damage instead of dealing a % of the total damage per pellet
+		-- as of 18.04.2024 weapon lib makes each shotgun pellet deal full shotgun damage instead of dealing a % of the total damage per pellet
 		-- this actually helps with the new shotgun damage mechanic, but if it ever gets fixed, we need to increase it's damage back to full
 		if not Gilza.isWeaponLibBroken then
 			attack_data.damage = attack_data.damage * attack_data.weapon_unit:base()._rays
@@ -438,8 +438,9 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 	return result
 end)
 
+-- same as the bullet function, but for fire damage. this is only used by the dragon's breath rounds, and it is a complete copy of the new shotgun damage mechanic
 Hooks:PreHook(CopDamage, "damage_fire", "Gilza_fire_shotgun_fix", function(self, attack_data)
-	if attack_data and attack_data.weapon_unit and attack_data.weapon_unit:base() and (attack_data.weapon_unit:base():is_category("shotgun") or attack_data.weapon_unit:base():is_category("grenade_launcher")) and attack_data.weapon_unit:base()._rays and attack_data.weapon_unit:base()._rays >= 2 then
+	if attack_data and attack_data.weapon_unit and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_category and (attack_data.weapon_unit:base():is_category("shotgun") or attack_data.weapon_unit:base():is_category("grenade_launcher")) and attack_data.weapon_unit:base()._rays and attack_data.weapon_unit:base()._rays >= 2 then
 		if not Gilza.isWeaponLibBroken then
 			attack_data.damage = attack_data.damage * attack_data.weapon_unit:base()._rays
 		end

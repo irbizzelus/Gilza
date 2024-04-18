@@ -106,7 +106,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	
 	local deck4 = {
 		cost = 600,
-		desc_id = "menu_deckall_4_desc",
+		desc_id = "menu_deckall_4_desc_new",
 		name_id = "menu_deckall_4",
 		upgrades = {
 			"passive_player_xp_multiplier",

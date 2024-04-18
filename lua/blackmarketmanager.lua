@@ -1,6 +1,6 @@
 -- add new akimbo skill
 
--- this func updates blackmarket GUI numbers; @11-33
+-- this func updates blackmarket GUI numbers; @11-33 for the new akimbo skill
 Hooks:OverrideFunction(BlackMarketManager, "accuracy_addend", function (self, name, categories, spread_index, silencer, current_state, fire_mode, blueprint, is_moving, is_single_shot)
 	local addend = 0
 
@@ -59,7 +59,7 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_addend", function (self, na
 	return addend
 end)
 
--- this func actually adds the stat to the gun; @67-89
+-- this func actually adds the stat to the gun; @67-89 for the new akimbo skill
 Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (self, name, categories, silencer, current_state, fire_mode, blueprint)
 	local index = 0
 	index = index + managers.player:upgrade_value("player", "weapon_accuracy_increase", 0)
@@ -105,7 +105,7 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 	return index
 end)
 
--- same as 2 funcs above but for recoil - updates both GUI and the stats; @119-136
+-- same as 2 funcs above but for recoil - updates both GUI and the stats; @119-136, yeap the akimbo skill again
 Hooks:OverrideFunction(BlackMarketManager, "recoil_addend", function (self, name, categories, recoil_index, silencer, blueprint, current_state, is_single_shot)
 	local addend = 0
 

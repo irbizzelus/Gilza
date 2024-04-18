@@ -1,4 +1,4 @@
--- healthpool update and knockdown effect for grey swats
+-- healthpool updates and knockdown effect for grey swats
 
 local city_swat_hurts = {
 	tase = true,
@@ -244,7 +244,7 @@ local function Gilza_set_new_health(self)
 	self.tank.headshot_dmg_mul = 6.5
 	self.phalanx_minion.headshot_dmg_mul = 4
 	self.phalanx_vip.headshot_dmg_mul = 4
-	-- this guy has 1x HS mul in base game, so we keepin it, TTK might be a bit faster due to higher dmg, but higher base health should compensate it
+	-- this guy has 1x HS mul in base game, so we keepin it, TTK might be a bit faster due to higher overall dmg, but higher base health should compensate it
 	self.deep_boss.headshot_dmg_mul = 1
 	
 	-- tags used for melee damage adjustments

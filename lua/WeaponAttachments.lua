@@ -2082,7 +2082,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_fla_mk2_mag_rare.stats = {
 			value = 1,
 			total_ammo_mod = 10,
-			damage = -14
+			damage = -22
 		}
 		-- well done mag
 		self.parts.wpn_fps_fla_mk2_mag_welldone.has_description = true
@@ -2090,7 +2090,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_fla_mk2_mag_welldone.stats = {
 			value = 1,
 			total_ammo_mod = -5,
-			damage = 15
+			damage = 23
 		}
 		-- secondary
 		-- high temp mix
@@ -2100,7 +2100,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_fla_system_m_high.stats = {
 			value = 1,
 			total_ammo_mod = -5,
-			damage = 10
+			damage = 15
 		}
 		-- low temp mix
 		self.parts.wpn_fps_fla_system_m_low.type = "ammo"
@@ -2108,7 +2108,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_fla_system_m_low.stats = {
 			value = 1,
 			total_ammo_mod = 10,
-			damage = -9
+			damage = -14
 		}
 		
 		-- GL's INCLUDES UNDERBARRELS

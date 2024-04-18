@@ -136,10 +136,17 @@
 		},
 		{
 			"type" : "button",
-			"id" : "Gilza_page",
-			"title" : "Gilza_page",
-			"description" : "Gilza_page_desc",
-			"callback" : "Gilza_page"
+			"id" : "Gilza_MWS_page",
+			"title" : "Gilza_MWS_page",
+			"description" : "Gilza_MWS_page_desc",
+			"callback" : "Gilza_MWS_page"
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_Weapons_page",
+			"title" : "Gilza_Weapons_page",
+			"description" : "Gilza_Weapons_page_desc",
+			"callback" : "Gilza_Weapons_page"
 		},
 	]
 }

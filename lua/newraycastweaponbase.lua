@@ -1,4 +1,4 @@
--- accuracy adjustments
+-- accuracy adjustments @11-26
 Hooks:OverrideFunction(NewRaycastWeaponBase, "conditional_accuracy_multiplier", function (self, current_state)
 	local mul = 1
 
@@ -40,7 +40,7 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "conditional_accuracy_multiplier", 
 	return self:_convert_add_to_mul(mul)
 end)
 
--- recoil adjustments @67-73
+-- recoil adjustments @67-70
 Hooks:OverrideFunction(NewRaycastWeaponBase, "recoil_multiplier", function (self)
 	local is_moving = false
 	local user_unit = self._setup and self._setup.user_unit
@@ -73,7 +73,7 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "recoil_multiplier", function (self
 
 end)
 
--- ammo cut for brawler deck @84. code is based on WeaponLib's newraycast hook
+-- ammo cut for brawler deck @81. code is based on WeaponLib's newraycast hook
 Hooks:PostHook(NewRaycastWeaponBase, "replenish", "Gilza_replenish", function(self)
 	local original_tweak_data = tweak_data.weapon[self._name_id]
 	local weapon_tweak_data = self:weapon_tweak_data()
@@ -105,7 +105,7 @@ Hooks:PostHook(NewRaycastWeaponBase, "replenish", "Gilza_replenish", function(se
 	self._ammo_pickup = weapon_tweak_data.AMMO_PICKUP
 end)
 
--- new reload speeds from tweaked 'overkill' and new akimbo skill; @119-140
+-- new reload speeds from tweaked 'overkill' and new akimbo skill; @116-137
 Hooks:OverrideFunction(NewRaycastWeaponBase, "reload_speed_multiplier", function (self)
 	if self._current_reload_speed_multiplier then
 		return self._current_reload_speed_multiplier

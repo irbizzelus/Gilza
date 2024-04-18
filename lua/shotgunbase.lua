@@ -1,5 +1,5 @@
 -- add ammo breaching property to the weapon
-Hooks:PostHook(ShotgunBase, "_update_stats_values", "Gilza_addBreachRound", function(self, params)
+Hooks:PostHook(ShotgunBase, "_update_stats_values", "Gilza_addBreachRoundToShotgun", function(self, params)
 	self._can_breach = self._can_breach or false
 	self._is_buckshot = self._is_buckshot or false
 	if self._ammo_data then
@@ -13,7 +13,7 @@ Hooks:PostHook(ShotgunBase, "_update_stats_values", "Gilza_addBreachRound", func
 end)
 
 -- if weapon can breach, open locks. Also keep track of our shotgun's shot number, we need it for new shotgun damage calculations, because copDamage doesnt know if shotgun collision rays belong to the same trigger pull
-Hooks:PreHook(ShotgunBase, "_fire_raycast", "Gilza_shotgunShotAndLockerCheck", function(self, user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, shoot_through_data)
+Hooks:PreHook(ShotgunBase, "_fire_raycast", "Gilza_shotgunShotCountAndLockerCheck", function(self, user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, shoot_through_data)
 	
 	if self:is_category("shotgun") or self:is_category("grenade_launcher") then
 		

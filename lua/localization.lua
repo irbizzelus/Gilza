@@ -13,11 +13,12 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
         file:close()
     end
 	
-	local skill_values = tweak_data.upgrades.values
-	
-	--skill_values.player.melee_faster_charge
+	local chosen_language = "eng"
+	if lang == "ru" then
+		chosen_language = "ru"
+	end
 
-	if lang ~= "ru" then
+	if chosen_language == "eng" then
 		loc:load_localization_file(Gilza._path .. 'menus/lang/Gilza_en.txt', false)
 		LocalizationManager:add_localized_strings({
 		
@@ -39,6 +40,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		menu_deck_brawler1_desc = "Using this high profile armor suit with any kind of a chest rig is pretty much imposible due to it's form and size. But who needs them, right?\n\nYour total ammo capacity is reduced by ##90%##.\n\nArmor movement penalty is reduced by ##20%##.\n\nYou gain ##18%## bullet damage resistance.",
 		menu_deck_brawler3 = "High level armor plates",
 		menu_deck_brawler3_desc = "You gain ##18%## more bullet damage resistance.",
+		menu_deckall_4_desc_new = "You gain ##+1## increased concealment.\n\nWhen wearing armor, your movement speed is ##15%## less affected.\n\nYou gain ##45%## more experience when you complete days and jobs.",
 		menu_deck_brawler5 = "Lightweight armor plates",
 		menu_deck_brawler5_desc = "Armor movement penalty is reduced by additional ##20%##.",
 		menu_deck_brawler7 = "Max level armor plates",
@@ -233,7 +235,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		bm_melee_cs_info = "Hold melee button to deal continuous damage.\n\nChainsaw effect stats:\nDelay before effect begins: 1s\nDamage: 66% health per second\n\nNote: this mechanic doesn't interact with damage skills, but allows for melee-heal skills like sociopath perk deck.",
 		bm_melee_ostry_info = "Hold melee button to deal continuous damage.\n\nChainsaw effect stats:\nDelay before effect begins: 0.7s\nDamage: 50% health per second\n\nNote: this mechanic doesn't interact with damage skills, but allows for melee-heal skills like sociopath perk deck.",
 	})
-	else
+	elseif chosen_language == "ru" then
 		loc:load_localization_file(Gilza._path .. 'menus/lang/Gilza_ru.txt', false)
 		LocalizationManager:add_localized_strings({
 		
@@ -255,6 +257,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		menu_deck_brawler1_desc = "Использование этой высококачественной силовой брони с каким-либо нагрудным снаряжением практически невозможно из-за ее формы и размера. Но кому оно нахуй нужно?\n\nВаш запас боеприпасов уменьшен на ##90%##.\n\nШтраф к скорости передвижения в броне уменьшен на ##20%##.\n\nВы получаете сопротивление к пулевому урону в размере ##18%##.",
 		menu_deck_brawler3 = "Улучшение пластин для бронекостюмов",
 		menu_deck_brawler3_desc = "Вы получаете дополнительное сопротивление к пулевому урону в размере ##18%##.",
+		menu_deckall_4_desc_new = "Параметр скрытности увеличен на ##+1##.\n\nНошение брони влияет на скорость передвижения на ##15%## меньше.\n\nКоличество очков опыта при завершении дней и контрактов увеличено на ##45%##.",
 		menu_deck_brawler5 = "Облегченные бронепластины",
 		menu_deck_brawler5_desc = "Штраф к скорости передвижения в броне уменьшен дополнительно на ##20%##.",
 		menu_deck_brawler7 = "Улучшение пластин для бронекостюмов №2",
