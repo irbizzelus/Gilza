@@ -187,6 +187,11 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 		allow_pen = true
 	end
 	
+	-- allow saws to pen body armor
+	if attack_data.weapon_unit:base().name_id == "saw" or attack_data.weapon_unit:base().name_id == "saw_secondary" then
+		allow_pen = true
+	end
+	
 	if not allow_pen then
 		return
 	end

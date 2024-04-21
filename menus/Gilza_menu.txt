@@ -148,5 +148,12 @@
 			"description" : "Gilza_Weapons_page_desc",
 			"callback" : "Gilza_Weapons_page"
 		},
+		{
+			"type" : "button",
+			"id" : "Gilza_patch_notes",
+			"title" : "Gilza_patch_notes",
+			"description" : "Gilza_patch_notes_desc",
+			"callback" : "Gilza_patch_notes"
+		},
 	]
 }

@@ -78,6 +78,10 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 	MenuCallbackHandler.Gilza_Weapons_page = function(this, item)
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/random-noncode-stuff/blob/main/Gilza%20txts/Weapons.md")
 	end
+	
+	MenuCallbackHandler.Gilza_patch_notes = function(this, item)
+		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
+	end
 
 	Gilza:Load()
 

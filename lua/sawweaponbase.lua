@@ -21,7 +21,7 @@ Hooks:OverrideFunction(SawHit, "on_collision", function (self, col_ray, weapon_u
 	end
 
 	if hit_unit and hit_unit:character_damage() then
-		damage = damage * 9.2
+		damage = damage * 9
 	end
 
 	local result = InstantBulletBase.on_collision(self, col_ray, weapon_unit, user_unit, damage)
@@ -112,7 +112,21 @@ local mvec_to = Vector3()
 local mvec_spread_direction = Vector3()
 local mvec3_add = mvector3.add
 
--- more saw range @125
+local function ray_copy(table, ray)
+	for i, hit in pairs(table) do
+		if hit.unit == ray.unit then
+			hit.body = ray.body
+			hit.distance = ray.distance
+
+			mvector3.set(hit.hit_position, ray.hit_position)
+			mvector3.set(hit.normal, ray.normal)
+			mvector3.set(hit.position, ray.position)
+			mvector3.set(hit.ray, ray.ray)
+		end
+	end
+end
+
+-- more saw range @139
 Hooks:OverrideFunction(SawWeaponBase, "_fire_raycast", function (self, user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul)
 	local result = {}
 	local hit_unit = nil

@@ -469,7 +469,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_upg_ak_m_quick.stats.spread = -2
 			-- glock mag
 			self.parts.wpn_fps_pis_g18c_m_mag_33rnd.stats.reload = -4
-			self.wpn_fps_pis_x_g17.override.wpn_fps_pis_g18c_m_mag_33rnd.stats.reload = -8
+			self.wpn_fps_pis_x_g17.override.wpn_fps_pis_g18c_m_mag_33rnd.stats.reload = -4
+			self.wpn_fps_pis_x_g18c.override.wpn_fps_pis_g18c_m_mag_33rnd.stats.reload = -4
+			self.wpn_fps_pis_x_g22c.override.wpn_fps_pis_g18c_m_mag_33rnd.stats.reload = -4
+			self.wpn_fps_jowi.override.wpn_fps_pis_g18c_m_mag_33rnd.stats.reload = -4
 		end
 		general_mags()
 		
@@ -2019,7 +2022,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		
 		-- MINIGUN
 		self.parts.wpn_fps_lmg_m134_barrel_extreme.stats.spread = 2
-		self.parts.wpn_fps_lmg_m134_barrel_extreme.stats.recoil = -2
+		self.parts.wpn_fps_lmg_m134_barrel_extreme.stats.recoil = -1
 		self.parts.wpn_fps_lmg_m134_body_upper_light.stats.spread = 2
 		self.parts.wpn_fps_lmg_m134_body_upper_light.stats.recoil = 1
 		self.parts.wpn_fps_lmg_m134_body_upper_light.stats.reload = 7
@@ -2082,7 +2085,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_fla_mk2_mag_rare.stats = {
 			value = 1,
 			total_ammo_mod = 10,
-			damage = -22
+			damage = -14
 		}
 		-- well done mag
 		self.parts.wpn_fps_fla_mk2_mag_welldone.has_description = true
@@ -2090,7 +2093,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_fla_mk2_mag_welldone.stats = {
 			value = 1,
 			total_ammo_mod = -5,
-			damage = 23
+			damage = 15
 		}
 		-- secondary
 		-- high temp mix
@@ -2100,7 +2103,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_fla_system_m_high.stats = {
 			value = 1,
 			total_ammo_mod = -5,
-			damage = 15
+			damage = 10
 		}
 		-- low temp mix
 		self.parts.wpn_fps_fla_system_m_low.type = "ammo"
@@ -2108,7 +2111,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_fla_system_m_low.stats = {
 			value = 1,
 			total_ammo_mod = 10,
-			damage = -14
+			damage = -9
 		}
 		
 		-- GL's INCLUDES UNDERBARRELS
@@ -2465,6 +2468,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		---- SHREW ----
 		local function Gilza_init_shrew()
 			self.parts.wpn_fps_pis_shrew_m_extended.stats.extra_ammo = 1
+			self.wpn_fps_pis_x_shrew.override.wpn_fps_pis_shrew_m_extended.stats.extra_ammo = 2
 		end
 		Gilza_init_shrew()
 		
@@ -2496,6 +2500,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		local function Gilza_init_beer()
 			self.parts.wpn_fps_pis_beer_m_extended.stats.extra_ammo = 4
 			self.parts.wpn_fps_pis_beer_m_extended.stats.reload = -2
+			self.wpn_fps_pis_x_beer.override.wpn_fps_pis_beer_m_extended.stats.extra_ammo = 8
+			self.wpn_fps_pis_x_beer.override.wpn_fps_pis_beer_m_extended.stats.reload = -2
 		end
 		Gilza_init_beer()
 		
@@ -4235,12 +4241,19 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_upg_m_sgmt.stats.recoil = 3
 					self.parts.wpn_fps_upg_m_sgmt.stats.concealment = -4
 					self.parts.wpn_fps_upg_m_sgmt.stats.reload = -9
+					self.wpn_fps_pis_x_g18c.override.wpn_fps_upg_m_sgmt = {override_weapon = {_meta = "override_weapon",CLIP_AMMO_MAX = 100},stats = {spread = -3,recoil = 3,concealment = -4,reload = -9}}
+					self.wpn_fps_jowi.override.wpn_fps_upg_m_sgmt = {override_weapon = {_meta = "override_weapon",CLIP_AMMO_MAX = 100},stats = {spread = -3,recoil = 3,concealment = -4,reload = -9}}
+					self.wpn_fps_pis_x_g17.override.wpn_fps_upg_m_sgmt = {override_weapon = {_meta = "override_weapon",CLIP_AMMO_MAX = 100},stats = {spread = -3,recoil = 3,concealment = -4,reload = -9}}
 				end
 				if self.parts.wpn_fps_upg_m_celerity then
 					self.parts.wpn_fps_upg_m_celerity.stats.spread = 0
 					self.parts.wpn_fps_upg_m_celerity.stats.recoil = 0
 					self.parts.wpn_fps_upg_m_celerity.stats.concealment = -1
 					self.parts.wpn_fps_upg_m_celerity.stats.reload = -2
+					self.wpn_fps_pis_x_g18c.override.wpn_fps_upg_m_celerity = {override_weapon = {_meta = "override_weapon",CLIP_AMMO_MAX = 60},stats = {spread = 0,recoil = 0,concealment = -1,reload = -3}}
+					self.wpn_fps_jowi.override.wpn_fps_upg_m_celerity = {override_weapon = {_meta = "override_weapon",CLIP_AMMO_MAX = 60},stats = {spread = 0,recoil = 0,concealment = -1,reload = -5}}
+					self.wpn_fps_pis_x_g17.override.wpn_fps_upg_m_celerity = {override_weapon = {_meta = "override_weapon",CLIP_AMMO_MAX = 60},stats = {spread = 0,recoil = 0,concealment = -1,reload = -5}}
+					self.wpn_fps_pis_x_g22c.override.wpn_fps_upg_m_celerity = {override_weapon = {_meta = "override_weapon",CLIP_AMMO_MAX = 60},stats = {spread = 0,recoil = 0,concealment = -1,reload = -5}}
 				end
 				if self.parts.wpn_fps_upg_m_vecsgmt then
 					self.parts.wpn_fps_upg_m_vecsgmt.stats.spread = -4

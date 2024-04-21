@@ -41,5 +41,8 @@
 	"Gilza_MWS_page_desc": "Click this button to open Gilza's ModWorkshop mod page.",
 	
 	"Gilza_Weapons_page": "Gilza Weapon page",
-	"Gilza_Weapons_page_desc": "Click this button to open Gilza's weapon info page."
+	"Gilza_Weapons_page_desc": "Click this button to open Gilza's weapon info page.",
+	
+	"Gilza_patch_notes": "Patch Notes",
+	"Gilza_patch_notes_desc": "Press this button to open latest patch notes in your overlay browser."
 }

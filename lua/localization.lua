@@ -132,6 +132,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		bm_combined_gadget_module = "Combined module that includes both laser and flashlight.",
 		bm_laser_gadget_module = "Laser module used for easier target acquisition while hip-firing.",
 		bm_flashlight_gadget_module = "Flashlight for all the dark places you may find.",
+		--frenchy forgot this one - don't translate it
+		bm_wp_wpn_fps_upg_m_celerity = "\"Big Stick\" 30-round mag",
 		-- New Gilza weapon mods
 		bm_wpn_fps_upg_br_shtgn = "Breaching round",
 		bm_wpn_fps_upg_br_shtgn_desc = "Fires a single round that allows you to breach everything that saw OVE9000 usually can. Also penetrates shield and body armor.\n\nDamage range decreased by 50%.",
@@ -181,7 +183,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		bm_wpn_fps_upg_lmg_kacchainsaw_conversionkit_desc = "Increases ammo pick up by 25%",
 		bm_wpn_fps_lmg_hcar_body_conversionkit_desc = "Increases ammo pick up to match new damage class.",
 		-- Shotgun mods
-		bm_wpn_fps_upg_a_rip_desc_new = "Poisoned bullet that causes enemies to vomit uncontrollably, preventing then from making any actions.\n\nDeals 120 poison damage over 3 seconds.\nAmmo pick up reduced by 20%",
+		bm_wpn_fps_upg_a_rip_desc_new = "Poisoned bullet that causes enemies to vomit uncontrollably, preventing then from making any actions.\n\nDeals 300 poison damage over 6 seconds.\nAmmo pick up reduced by 20%",
 		bm_wpn_fps_upg_a_custom_desc_new = "8 big pellets with triple the impact.\n\nDisables bonus damage from headshots.\nDamage range reduced by 20%.\nAmmo pick up reduced by 50%",
 		bm_wpn_fps_upg_a_explosive_desc_new = "Fires one explosive charge that kills or stuns targets.\n\nDisables bonus damage from headshots.\nAmmo pick up reduced by 65%",
 		bm_wpn_fps_upg_a_piercing_desc_new = "Peirces enemy body armor.\nDamage range increased by 40%.\n\nAmount of darts per shell - 6.\nAmmo pick up reduced by 10%",
@@ -349,6 +351,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		bm_combined_gadget_module = "Двойной модуль - позволяет пользоваться одновременно лазером и фонариком.",
 		bm_laser_gadget_module = "Лазерный модуль помогающий стрелку целиться при стрельбе от бедра.",
 		bm_flashlight_gadget_module = "Фонарик для освещения темных закаулков.",
+		--frenchy forgot this one - don't translate it
+		bm_wp_wpn_fps_upg_m_celerity = "\"Big Stick\" 30-round mag",
 		-- New Gilza weapon mods
 		bm_wpn_fps_upg_br_shtgn = "Пробивной патрон",
 		bm_wpn_fps_upg_br_shtgn_desc = "Позволяет вам пробивать все, что обычно может пробить пила OVE9000. Также может пробивать насквозь щиты и нательную броню врагов.\nЭффективная дистанция оружия уменьшена на 50%.\n",
@@ -398,7 +402,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		bm_wpn_fps_upg_lmg_kacchainsaw_conversionkit_desc = "Подбор боеприпасов увеличен на 25%.",
 		bm_wpn_fps_lmg_hcar_body_conversionkit_desc = "Подбор боеприпасов увеличен для соответствия новому классу урона.",
 		-- Shotgun mods
-		bm_wpn_fps_upg_a_rip_desc_new = "Пуля вызывающая у протвника неконтролируемую рвоту, блокируя их возможность делать какие либо действия.\n\nНаносит 120 урона в течение 3 секунд.\nПодбор боеприпасов уменьшен на 20%",
+		bm_wpn_fps_upg_a_rip_desc_new = "Пуля вызывающая у протвника неконтролируемую рвоту, блокируя их возможность делать какие либо действия.\n\nНаносит 300 урона в течение 6 секунд.\nПодбор боеприпасов уменьшен на 20%",
 		bm_wpn_fps_upg_a_custom_desc_new = "8 Больших дробинок с утроенным уроном.\n\nОтключает возможность наносить увеличенный урон при попадании в голову.\nЭффективная дистанция оружия уменьшена на 20%.\nПодбор боеприпасов уменьшен на 50%.",
 		bm_wpn_fps_upg_a_explosive_desc_new = "Выстреливает один взрывной заряд, который убивает или оглушает цели.\nОтключает возможность наносить увеличенный урон при попадании в голову.\nПодбор боеприпасов уменьшен на 65%.",
 		bm_wpn_fps_upg_a_piercing_desc_new = "Пробивает нательную броню.\nЭффективная дистанция оружия увеличина на 40%.\n\nВыстреливает 6 дротиков за выстрел.\nПодбор боеприпасов уменьшен на 10%.",

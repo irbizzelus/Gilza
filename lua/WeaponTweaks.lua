@@ -2219,7 +2219,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.lemming.CLIP_AMMO_MAX = 20
 			self.lemming.NR_CLIPS_MAX = 3
 			self.lemming.AMMO_MAX = self.lemming.NR_CLIPS_MAX * self.lemming.CLIP_AMMO_MAX
-			self.lemming.AMMO_PICKUP = {((avg_155_pickup * 0.9) / 1.35) * 0.5,((avg_155_pickup * 1.1) / 1.35) * 0.5}
+			self.lemming.AMMO_PICKUP = {((avg_155_pickup * 0.9) / 1.35) * 0.5 * secondary_mul,((avg_155_pickup * 1.1) / 1.35) * 0.5 * secondary_mul}
 			self.lemming.fire_mode_data.fire_rate = 60/400 -- why does it even have such high base rof?
 			self.lemming.single.fire_rate = 60/400
 			
@@ -2466,7 +2466,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_model3.AMMO_MAX = self.x_model3.NR_CLIPS_MAX * self.x_model3.CLIP_AMMO_MAX
 			
 			self.rsh12.stats.spread = 16
-			self.rsh12.AMMO_PICKUP = {((avg_450_pickup * 0.9) / 1.35) * 0.5,((avg_450_pickup * 1.1) / 1.35) * 0.5}
+			self.rsh12.AMMO_PICKUP = {((avg_450_pickup * 0.9) / 1.35) * 0.5 * secondary_mul,((avg_450_pickup * 1.1) / 1.35) * 0.5 * secondary_mul}
 			self.rsh12.NR_CLIPS_MAX = 5
 			self.rsh12.AMMO_MAX = self.rsh12.NR_CLIPS_MAX * self.rsh12.CLIP_AMMO_MAX
 			self.rsh12.stats_modifiers = {damage = 1}
@@ -2547,14 +2547,14 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	-- Flammenwerfers --
 	local function setFLAMENs()
 		
-		self.flamethrower_mk2.stats.damage = 23
+		self.flamethrower_mk2.stats.damage = 15
 		self.flamethrower_mk2.stats.reload = 18
 		self.flamethrower_mk2.CLIP_AMMO_MAX = 400
 		self.flamethrower_mk2.NR_CLIPS_MAX = 2
 		self.flamethrower_mk2.AMMO_PICKUP = {(15 * 0.9) / 1.35,(15 * 1.1) / 1.35}
 		self.flamethrower_mk2.AMMO_MAX = self.flamethrower_mk2.CLIP_AMMO_MAX * self.flamethrower_mk2.NR_CLIPS_MAX
 		
-		self.system.stats.damage = 15
+		self.system.stats.damage = 10
 		self.system.stats.reload = 18
 		self.system.CLIP_AMMO_MAX = 300
 		self.system.NR_CLIPS_MAX = 2
@@ -2573,7 +2573,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	local function setMINIGUNs()
 		--the ovkl one
 		self.m134.stats.damage = 46
-		self.m134.stats.recoil = 18
+		self.m134.stats.recoil = 19
 		self.m134.stats.spread = 10
 		self.m134.CLIP_AMMO_MAX = 600
 		self.m134.NR_CLIPS_MAX = 1.5
@@ -2585,7 +2585,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.shuno.NR_CLIPS_MAX = 1.5
 		self.shuno.AMMO_MAX = self.shuno.CLIP_AMMO_MAX * self.shuno.NR_CLIPS_MAX
 		self.shuno.stats.damage = 68
-		self.shuno.stats.recoil = 12
+		self.shuno.stats.recoil = 13
 		self.shuno.stats.spread = 10
 		self.shuno.stats.reload = 14
 		self.shuno.AMMO_PICKUP = {(11 * 0.7) / 1.35,(11 * 1.3) / 1.35}
