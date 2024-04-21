@@ -234,8 +234,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		bm_grenade_poison_gas_grenade_desc = "Damage: 1000\nRadius: 200\nPick up multiplier: "..tostring(Gilza.grenade_multipliers.poison_gas_grenade).."\n\nCreates a gas cloud for 20 seconds. Enemies caught in the cloud become poisoned and begin to vomit uncontrollably, preventing them from making any other actions.\n\nPoison stats:\n -Duration: 15 seconds\n -Damage per second: 30",
 		
 		---- MELEE ----
-		bm_melee_cs_info = "Hold melee button to deal continuous damage.\n\nChainsaw effect stats:\nDelay before effect begins: 1s\nDamage: 66% health per second\n\nNote: this mechanic doesn't interact with damage skills, but allows for melee-heal skills like sociopath perk deck.",
-		bm_melee_ostry_info = "Hold melee button to deal continuous damage.\n\nChainsaw effect stats:\nDelay before effect begins: 0.7s\nDamage: 50% health per second\n\nNote: this mechanic doesn't interact with damage skills, but allows for melee-heal skills like sociopath perk deck.",
+		bm_melee_cs_info = "Hold melee button to deal continuous damage.\n\nChainsaw effect stats:\nDelay before effect begins: 1s\nDamage: 100% health per second\n\nNote: this mechanic doesn't interact with damage skills, but allows for melee-heal skills like sociopath perk deck.",
+		bm_melee_ostry_info = "Hold melee button to deal continuous damage.\n\nChainsaw effect stats:\nDelay before effect begins: 0.7s\nDamage: 75% health per second\n\nNote: this mechanic doesn't interact with damage skills, but allows for melee-heal skills like sociopath perk deck.",
 	})
 	elseif chosen_language == "ru" then
 		loc:load_localization_file(Gilza._path .. 'menus/lang/Gilza_ru.txt', false)
@@ -453,8 +453,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		bm_grenade_poison_gas_grenade_desc = "Урон: 1000\nРадиус: 200\nМножитель подбора: "..tostring(Gilza.grenade_multipliers.poison_gas_grenade).."\n\nСоздает облако газа на 20 секунд. Враги попавшие в данное облако поучат отравление вызывающее неконтролируемую рвоту, блокируя их возможность делать какие либо действия.\n\nСтата отравления:\n -Продолжительность: 15 секунд\n -Урон в секунду: 30",
 		
 		---- MELEE ----
-		bm_melee_cs_info = "Удерживайте кнопку ближнего боя дабы наносить непрерывный урон.\n\nСтатистика эффекта бензопилы:\nЗадержка перед началом эффекта: 1 сек.\nУрон: 66% здоровья в секунду\n\nНа заметку: данная механика не работает с навыками увеличивающими урон, но позволяет использовать навыки восполняющие здоровье от оружия ближнего боя, как например перк социопат.",
-		bm_melee_ostry_info = "Удерживайте кнопку ближнего боя дабы наносить непрерывный урон.\n\nСтатистика эффекта бензопилы:\nЗадержка перед началом эффекта: 0.7 сек.\nУрон: 50% здоровья в секунду\n\nНа заметку: данная механика не работает с навыками увеличивающими урон, но позволяет использовать навыки восполняющие здоровье от оружия ближнего боя, как например перк социопат.",
+		bm_melee_cs_info = "Удерживайте кнопку ближнего боя дабы наносить непрерывный урон.\n\nСтатистика эффекта бензопилы:\nЗадержка перед началом эффекта: 1 сек.\nУрон: 100% здоровья в секунду\n\nНа заметку: данная механика не работает с навыками увеличивающими урон, но позволяет использовать навыки восполняющие здоровье от оружия ближнего боя, как например перк социопат.",
+		bm_melee_ostry_info = "Удерживайте кнопку ближнего боя дабы наносить непрерывный урон.\n\nСтатистика эффекта бензопилы:\nЗадержка перед началом эффекта: 0.7 сек.\nУрон: 75% здоровья в секунду\n\nНа заметку: данная механика не работает с навыками увеличивающими урон, но позволяет использовать навыки восполняющие здоровье от оружия ближнего боя, как например перк социопат.",
 	})
 	end
 
