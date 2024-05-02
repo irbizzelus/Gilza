@@ -82,7 +82,7 @@ function Gilza:changelog_message()
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.0.20 changelog:\n\n1Blabla\n2bla\n3bla"
+			local message = "2.0.20 changelog:\n\nThis patch includes a few fixes, melee blackmarket UI improvements and a few balance changes. For detailed information check full changelog. Most important bits:\n - Trigger happy skill nerfed\n - Akron HC LMG's conversion kit no longer accepts FrenchyAU's stocks - remove them to prevent a crash\n - Melee efficiency against dozers and bosses was nerfed\n - Viper launcher grenade - poison duration reduced"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
 			Gilza.settings.version = 2.02
