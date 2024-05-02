@@ -107,14 +107,14 @@ Hooks:PostHook(DOTTweakData, "_init_dot_entries_poison", "Gilza_new_poison_dot",
 	self.dot_entries.poison.proj_launcher_cloud = {
 		apply_hurt_once = false,
 		dot_damage = 0.35,
-		dot_length = 30.01,
+		dot_length = 20.01,
 		dot_tick_period = 1
 	}
 	-- arbiter
 	self.dot_entries.poison.proj_launcher_arbiter_cloud = {
 		apply_hurt_once = false,
 		dot_damage = 0.7,
-		dot_length = 15,
+		dot_length = 10.01,
 		dot_tick_period = 1
 	}
 end)

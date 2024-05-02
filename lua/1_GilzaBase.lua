@@ -78,14 +78,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.02 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.0 changelog:\nThis patch has reworked most of the parts of Gilza, including recoil, enemy health, half the skills and more.\n\nFor anyone updating from versions 1.8.7 or older: YOU NEED TO COMPLETELY RE-INSTALL THIS MOD. Otherwise your would crash. Instructions on how to do that, and all the changes compared to 1.8.7 can be found in the full changelog.\n\nFor everyone else: Welcome to Gilza!"
+			local message = "2.0.20 changelog:\n\n1Blabla\n2bla\n3bla"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2
+			Gilza.settings.version = 2.02
 			Gilza.Save()
 		end
 	end)

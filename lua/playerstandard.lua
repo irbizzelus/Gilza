@@ -13,7 +13,7 @@ Hooks:OverrideFunction(PlayerStandard, "_get_melee_charge_lerp_value", function 
 	end
 
 	local original_result = math.clamp(t - self._state_data.melee_start_t - offset, 0, max_charge_time) / max_charge_time
-	return math.clamp(original_result * managers.player:upgrade_value("player", "melee_faster_charge", 1), 0, 1)
+	return math.clamp(original_result / managers.player:upgrade_value("player", "melee_faster_charge", 1), 0, 1)
 end)
 
 -- sprint while melee'ing @38-51, @77-93

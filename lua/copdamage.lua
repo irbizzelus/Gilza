@@ -16,13 +16,13 @@ Hooks:PreHook(CopDamage, "damage_melee", "Gilza_new_melee_damage", function(self
 		attack_data.damage = attack_data.damage * dmg_multiplier
 	
 		if self._char_tweak.Gilza_boss_tag then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 50)) -- bosses take 5x the amount of hits
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 60)) -- bosses take 6x the amount of hits
 		elseif self._char_tweak.Gilza_boss_tag_deep then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 100)) -- crude awakening boss takes 10x the amount of hits, because this fucker is tanky and techically last boss of the game
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 120)) -- crude awakening boss takes 12x the amount of hits, because this fucker is tanky and techically last boss of the game
 		elseif self._char_tweak.Gilza_winters_tag then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 15)) -- winters takes 1.5x the amount of hits
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 20)) -- winters takes 2x the amount of hits
 		elseif self._char_tweak.access == "tank" then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 30)) -- dozers take thrice the amount of hits
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 40)) -- dozers take 4x the amount of hits
 		else
 			attack_data.damage = self._HEALTH_INIT * (attack_data.damage / 10) + 0.1 -- +1 dmg is needed due to rounding calculations with low hp targets, like street cops, that leave them with 0.1 hp instead of killing them
 		end

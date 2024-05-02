@@ -173,13 +173,13 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		self.values.pistol.stacking_hit_damage_multiplier = {
 			{
 				max_stacks = 1,
-				max_time = 3,
-				damage_bonus = 2
+				max_time = 1.5,
+				damage_bonus = 1.8
 			},
 			{
 				max_stacks = 1,
-				max_time = 3,
-				damage_bonus = 2
+				max_time = 1.5,
+				damage_bonus = 1.8
 			}
 		}
 		-- new desperado
@@ -239,7 +239,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		}
 		-- faster melee charge skill
 		self.values.player.melee_faster_charge = {
-			2
+			0.5
 		}
 		-- base berserk melee damage buff
 		self.values.player.melee_damage_newzerk_addin = {

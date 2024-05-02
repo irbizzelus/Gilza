@@ -926,7 +926,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.rota.NR_CLIPS_MAX = 10
 			self.rota.AMMO_MAX = self.rota.CLIP_AMMO_MAX * self.rota.NR_CLIPS_MAX
 			self.rota.stats.recoil = 8
-			self.rota.stats.spread = 18
+			self.rota.stats.spread = 20
 			self.rota.stats.reload = 16
 			self.rota.fire_mode_data = {fire_rate = 60/310}
 			self.rota.single = {fire_rate = 60/310}
@@ -945,7 +945,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.basset.stats.spread = 4
 			
 			self.x_basset.CLIP_AMMO_MAX = 14
-			self.x_basset.NR_CLIPS_MAX = 7
+			self.x_basset.NR_CLIPS_MAX = 4.5
 			self.x_basset.AMMO_MAX = self.x_basset.CLIP_AMMO_MAX * self.x_basset.NR_CLIPS_MAX
 			self.x_basset.stats.recoil = 14
 			self.x_basset.stats.spread = 4
@@ -980,6 +980,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.hk51b.AMMO_MAX = self.hk51b.CLIP_AMMO_MAX * self.hk51b.NR_CLIPS_MAX
 		self.hk51b.AMMO_PICKUP = {(5.26 * 0.9) / 1.35,(5.26 * 1.1) / 1.35}
 		self.hk51b.damage_falloff = deep_clone(new_lmg_damage_falloff)
+		self.hk51b.damage_falloff.far_multiplier = 1
+		self.hk51b.damage_falloff.near_multiplier = 1
 		
 		self.hcar.stats.damage = 250
 		self.hcar.NR_CLIPS_MAX = 10
@@ -987,11 +989,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.hcar.AMMO_PICKUP = {(3.16 * 0.9) / 1.35,(3.16 * 1.1) / 1.35}
 		self.hcar.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.hcar.damage_falloff.far_multiplier = 1
+		self.hcar.damage_falloff.near_multiplier = 1
 		
 		self.kacchainsaw.stats.damage = 120
 		self.kacchainsaw.AMMO_PICKUP = {(8.66 * 0.9) / 1.35,(8.66 * 1.1) / 1.35}
 		self.kacchainsaw.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.kacchainsaw.damage_falloff.far_multiplier = 1
+		self.kacchainsaw.damage_falloff.near_multiplier = 1
 		self.kacchainsaw_flamethrower.CLIP_AMMO_MAX = 150
 		self.kacchainsaw_flamethrower.NR_CLIPS_MAX = 250/150
 		self.kacchainsaw_flamethrower.AMMO_MAX = self.kacchainsaw_flamethrower.CLIP_AMMO_MAX * self.kacchainsaw_flamethrower.NR_CLIPS_MAX
@@ -1154,7 +1158,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.winchester1874.fire_mode_data = {fire_rate = 60/100}
 			self.winchester1874.single = {fire_rate = 60/100}
 			
-			self.scout.stats.spread = 18
+			self.scout.stats.spread = 19
 			self.scout.fire_mode_data = {fire_rate = 60/70}
 			self.scout.single = {fire_rate = 60/70}
 			
@@ -1454,8 +1458,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			
 			self.x_sr2.stats.spread = 6
 			self.x_sr2.stats.recoil = 20
-			self.x_sr2.CLIP_AMMO_MAX = 30
-			self.x_sr2.NR_CLIPS_MAX = 5
+			self.x_sr2.CLIP_AMMO_MAX = 60
+			self.x_sr2.NR_CLIPS_MAX = 2.5
 			self.x_sr2.AMMO_MAX = self.x_sr2.CLIP_AMMO_MAX * self.x_sr2.NR_CLIPS_MAX
 			self.x_sr2.fire_mode_data = {fire_rate = 60/950}
 			self.x_sr2.single = {fire_rate = 60/950}
@@ -2573,7 +2577,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	local function setMINIGUNs()
 		--the ovkl one
 		self.m134.stats.damage = 46
-		self.m134.stats.recoil = 19
+		self.m134.stats.recoil = 21
 		self.m134.stats.spread = 10
 		self.m134.CLIP_AMMO_MAX = 600
 		self.m134.NR_CLIPS_MAX = 1.5
@@ -2585,7 +2589,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.shuno.NR_CLIPS_MAX = 1.5
 		self.shuno.AMMO_MAX = self.shuno.CLIP_AMMO_MAX * self.shuno.NR_CLIPS_MAX
 		self.shuno.stats.damage = 68
-		self.shuno.stats.recoil = 13
+		self.shuno.stats.recoil = 17
 		self.shuno.stats.spread = 10
 		self.shuno.stats.reload = 14
 		self.shuno.AMMO_PICKUP = {(11 * 0.7) / 1.35,(11 * 1.3) / 1.35}
@@ -2596,6 +2600,14 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.hailstorm.stats.damage = 71
 		self.hailstorm.stats.recoil = 20
 		self.hailstorm.AMMO_PICKUP = {(8.1 * 0.9) / 1.35,(8.1 * 1.1) / 1.35}
+		self.hailstorm.damage_falloff = {
+			optimal_distance = 100,
+			optimal_range = 100,
+			near_falloff = 100,
+			far_falloff = 100,
+			near_multiplier = 1,
+			far_multiplier = 1
+		}
 	end
 	setMINIGUNs()
 	

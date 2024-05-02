@@ -33,6 +33,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_upg_smg_p90_ap_rounds.desc_id = "bm_wpn_fps_upg_smg_p90_ap_rounds_desc"
 		self.parts.wpn_fps_upg_smg_p90_ap_rounds.stats = {value = 0,total_ammo_mod = -5,spread = -5,recoil = -3}
 		self.parts.wpn_fps_upg_smg_p90_ap_rounds.custom_stats = {can_shoot_through_shield = true,armor_piercing_add = 1,ammo_pickup_max_mul = 0.5,ammo_pickup_min_mul = 0.5}
+		self.wpn_fps_smg_x_p90.override.wpn_fps_upg_smg_p90_ap_rounds = {stats = {value = 0,total_ammo_mod = -4,spread = -5,recoil = -3}}
 		-- mateba 357 ap
 		self.parts.wpn_fps_upg_pist_mateba_ap_rounds.name_id = "bm_wpn_fps_upg_pist_mateba_ap_rounds"
 		self.parts.wpn_fps_upg_pist_mateba_ap_rounds.desc_id = "bm_wpn_fps_upg_pist_mateba_ap_rounds_desc"
@@ -43,15 +44,17 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_upg_contraband_762_to_556_kit.desc_id = "bm_wpn_fps_upg_contraband_762_to_556_kit_desc"
 		self.parts.wpn_fps_upg_contraband_762_to_556_kit.stats = {value = 0,total_ammo_mod = 8,extra_ammo = 5,damage = -250,spread = -1,recoil = 3}
 		self.parts.wpn_fps_upg_contraband_762_to_556_kit.custom_stats = {ammo_pickup_min_mul = 2.65,ammo_pickup_max_mul = 2.64}
-		-- m4 250 damage profile kit
+		-- akm's 450 damage profile kit
 		self.parts.wpn_fps_upg_ak_hp_rounds.name_id = "wpn_fps_upg_ak_hp_rounds"
 		self.parts.wpn_fps_upg_ak_hp_rounds.desc_id = "wpn_fps_upg_ak_hp_rounds_desc"
 		self.parts.wpn_fps_upg_ak_hp_rounds.stats = {value = 0,damage = 200,spread = -2,recoil = -3}
+		self.parts.wpn_fps_upg_ak_hp_rounds.override_weapon = {_meta = "override_weapon", AMMO_MAX = 120}
 		self.parts.wpn_fps_upg_ak_hp_rounds.custom_stats = {ammo_pickup_min_mul = 0.613,ammo_pickup_max_mul = 0.618}
-		-- akm's 450 damage profile kit
+		-- m4 250 damage profile kit
 		self.parts.wpn_fps_upg_m4_hp_rounds.name_id = "wpn_fps_upg_m4_hp_rounds"
 		self.parts.wpn_fps_upg_m4_hp_rounds.desc_id = "wpn_fps_upg_m4_hp_rounds_desc"
 		self.parts.wpn_fps_upg_m4_hp_rounds.stats = {value = 0,damage = 95,spread = -4,recoil = -3}
+		self.parts.wpn_fps_upg_m4_hp_rounds.override_weapon = {_meta = "override_weapon", AMMO_MAX = 180}
 		self.parts.wpn_fps_upg_m4_hp_rounds.custom_stats = {ammo_pickup_min_mul = 0.551,ammo_pickup_max_mul = 0.55}
 		-- groza's 762 to 5.45 conversion kit
 		self.parts.wpn_fps_upg_groza_762_to_545_kit.name_id = "bm_wpn_fps_upg_groza_762_to_545_kit"
@@ -1650,6 +1653,20 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_lmg_hcar_body_conversionkit.custom_stats.ammo_pickup_max_mul = 1.664
 		self.parts.wpn_fps_lmg_hcar_body_conversionkit.has_description = true
 		self.parts.wpn_fps_lmg_hcar_body_conversionkit.desc_id = "bm_wpn_fps_lmg_hcar_body_conversionkit_desc"
+		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_a2")
+		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_bus")
+		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_cmmg")
+		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_core")
+		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_ddun")
+		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_ds150")
+		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_gen2")
+		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_hke1")
+		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_hkslim")
+		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_moe")
+		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_prs2")
+		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_prs3")
+		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_troy")
+		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_viper")
 		
 		-- MG42
 		self.parts.wpn_fps_lmg_mg42_b_vg38.stats.spread = 3
@@ -2386,6 +2403,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_pis_c96_b_long.name_id = "bm_wpn_fps_pis_c96_b_long_newname"
 			self.parts.wpn_fps_pis_c96_b_long.has_description = true
 			self.parts.wpn_fps_pis_c96_b_long.desc_id = "bm_wpn_fps_pis_c96_b_long_newdesc"
+			self.wpn_fps_pis_x_c96.override.wpn_fps_pis_c96_b_long = {stats = {value = 1,concealment = -3,damage = 48,spread = 5,recoil = -4}, override_weapon = {_meta = "override_weapon", AMMO_MAX = 80}}
 			self.parts.wpn_fps_pis_c96_m_extended.stats.reload = -5
 		end
 		Gilza_init_c96()
@@ -2750,6 +2768,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		table.insert(self.parts.wpn_fps_snp_victor_sbr_kit.forbids, "wpn_fps_upg_m4_s_troy")
 		self.parts.wpn_fps_snp_victor_sbr_kit.stats.spread = 1
 		self.parts.wpn_fps_snp_victor_sbr_kit.stats.recoil = 4
+		self.parts.wpn_fps_snp_victor_ns_omega.stats.spread = 1
 		
 	end
 	init_Sniper_mods()
