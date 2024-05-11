@@ -1,5 +1,5 @@
 <mod name="Gilza" author="irbizzelus" color="Color(0,0.8,0.76)">
-	<AssetUpdates id="irbizzelus/Gilza" provider="github" release="true" version="2.0.20"/>
+	<AssetUpdates id="irbizzelus/Gilza" provider="github" release="true" version="2.1"/>
 	<GlobalValue id="Gilza" color="Color(0,0.8,0.76)"/>
 	<AddFiles directory="assets">
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_br_shtgn"/>
@@ -14,6 +14,9 @@
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_ak_hp_rounds"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_a_grenade_launcher_velocity"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_a_underbarrel_velocity_frag"/>
+		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_gre_ms3gl_ml_single_round"/>
+		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_gre_ms3gl_ml_double_round"/>
+		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_fal_sp_rounds"/>
 		<texture path="guis/textures/berserk_flash"/>
 		<texture path="guis/textures/berserk_flash_bigger"/>
 		<texture path="guis/textures/berserk_flash_biggest"/>
@@ -65,6 +68,21 @@
 		<weapons>
 			<value_node value="wpn_fps_ass_akm"/>
 			<value_node value="wpn_fps_ass_akm_gold"/>
+		</weapons>
+	</WeaponMod>
+	<WeaponMod id="wpn_fps_gre_ms3gl_ml_single_round" based_on="wpn_fps_lmg_hcar_barrel_standard" type="mag_limiter" a_obj="a_body" unit="units/payday2/weapons/wpn_upg_dummy/wpn_upg_dummy" drop="false" global_value="Gilza" is_a_unlockable="true" texture_bundle_folder="Gilza" ver="2">
+		<weapons>
+			<value_node value="wpn_fps_gre_ms3gl"/>
+		</weapons>
+	</WeaponMod>
+	<WeaponMod id="wpn_fps_gre_ms3gl_ml_double_round" based_on="wpn_fps_lmg_hcar_barrel_standard" type="mag_limiter" a_obj="a_body" unit="units/payday2/weapons/wpn_upg_dummy/wpn_upg_dummy" drop="false" global_value="Gilza" is_a_unlockable="true" texture_bundle_folder="Gilza" ver="2">
+		<weapons>
+			<value_node value="wpn_fps_gre_ms3gl"/>
+		</weapons>
+	</WeaponMod>
+	<WeaponMod id="wpn_fps_upg_fal_sp_rounds" based_on="wpn_fps_upg_a_custom" type="ammo" drop="false" global_value="Gilza" is_a_unlockable="true" texture_bundle_folder="Gilza">
+		<weapons>
+			<value_node value="wpn_fps_ass_fal"/>
 		</weapons>
 	</WeaponMod>
 </mod>

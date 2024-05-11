@@ -272,8 +272,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	self.skills.chameleon[1].upgrades = { "player_buy_spotter_asset", "player_suspicion_bonus", "player_sec_camera_highlight_mask_off", "player_special_enemy_highlight_mask_off" }
 	self.skills.chameleon[2].upgrades = { "player_standstill_omniscience" }
 	
-	self.skills.awareness[1].upgrades = { "player_climb_speed_multiplier_1", "player_can_free_run", }
-	self.skills.awareness[2].upgrades = { "player_run_and_reload" }
+	self.skills.awareness[1].upgrades = { "player_climb_speed_multiplier_1", "player_extra_jump_height" }
+	self.skills.awareness[2].upgrades = { "player_can_free_run", "player_run_and_reload" }
 	
 	---- FUGITIVE
 	

@@ -4,9 +4,9 @@ Hooks:PostHook(DOTTweakData, "_init_dot_entries_poison", "Gilza_new_poison_dot",
 	self.dot_entries.poison.ammo_rip = {
 		hurt_animation_chance = 1,
 		apply_hurt_once = false,
-		dot_damage = 2.5,
+		dot_damage = 2.1,
 		dot_length = 6.001,
-		use_weapon_damage_falloff = true,
+		use_weapon_damage_falloff = false,
 		dot_tick_period = 0.5
 	}
 	-- plainsrider
@@ -107,14 +107,14 @@ Hooks:PostHook(DOTTweakData, "_init_dot_entries_poison", "Gilza_new_poison_dot",
 	self.dot_entries.poison.proj_launcher_cloud = {
 		apply_hurt_once = false,
 		dot_damage = 0.35,
-		dot_length = 20.01,
+		dot_length = 16.01,
 		dot_tick_period = 1
 	}
 	-- arbiter
 	self.dot_entries.poison.proj_launcher_arbiter_cloud = {
 		apply_hurt_once = false,
 		dot_damage = 0.7,
-		dot_length = 10.01,
+		dot_length = 8.01,
 		dot_tick_period = 1
 	}
 end)

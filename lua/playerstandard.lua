@@ -758,3 +758,15 @@ Hooks:PreHook(PlayerStandard, "_get_intimidation_action", "Gilza_PlayerStandard_
 		end
 	end
 end)
+
+-- new jump skill from basic parkour
+Hooks:PreHook(PlayerStandard, "_start_action_jump", "Gilza_PlayerStandard_start_action_jump", function(self, t, action_start_data)
+	if action_start_data and managers.player:has_category_upgrade("player", "extra_jump_height") then
+		if action_start_data.jump_vel_z then
+			action_start_data.jump_vel_z = action_start_data.jump_vel_z * managers.player:upgrade_value("player", "extra_jump_height", 1)
+		end
+		if action_start_data.jump_vel_xy then
+			action_start_data.jump_vel_xy = action_start_data.jump_vel_xy * managers.player:upgrade_value("player", "extra_jump_height", 1)
+		end
+	end
+end)

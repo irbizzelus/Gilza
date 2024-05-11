@@ -16,13 +16,13 @@ Hooks:PreHook(CopDamage, "damage_melee", "Gilza_new_melee_damage", function(self
 		attack_data.damage = attack_data.damage * dmg_multiplier
 	
 		if self._char_tweak.Gilza_boss_tag then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 60)) -- bosses take 6x the amount of hits
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 100)) -- bosses take 10x the amount of hits
 		elseif self._char_tweak.Gilza_boss_tag_deep then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 120)) -- crude awakening boss takes 12x the amount of hits, because this fucker is tanky and techically last boss of the game
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 200)) -- crude awakening boss takes 20x the amount of hits, because this fucker is tanky and techically last boss of the game
 		elseif self._char_tweak.Gilza_winters_tag then
 			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 20)) -- winters takes 2x the amount of hits
 		elseif self._char_tweak.access == "tank" then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 40)) -- dozers take 4x the amount of hits
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 50)) -- dozers take 5x the amount of hits
 		else
 			attack_data.damage = self._HEALTH_INIT * (attack_data.damage / 10) + 0.1 -- +1 dmg is needed due to rounding calculations with low hp targets, like street cops, that leave them with 0.1 hp instead of killing them
 		end
@@ -37,73 +37,10 @@ local local_shotgun_shot_id = -1
 local was_first_pellet_proccessed = {}
 local first_pellet_headshot_bonus = {}
 
--- override damage_bullet function to add new armor pen skills and allow throawble weapons like axes to perice body armour @168-192
--- shotgun changes @46-106
--- add buckshot tweak @199
+-- override damage_bullet function to add new armor pen skills and allow throawble weapons like axes to perice body armour @104-134
+-- shotgun changes @136-197
+-- add buckshot tweak @202
 Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
-	
-	-- new shotgun damage
-	if attack_data and attack_data.weapon_unit and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_category and (attack_data.weapon_unit:base():is_category("shotgun") or attack_data.weapon_unit:base():is_category("grenade_launcher")) and attack_data.weapon_unit:base()._rays and attack_data.weapon_unit:base()._rays >= 2 then
-		
-		-- as of 18.04.2024 weapon lib makes each shotgun pellet deal full shotgun damage instead of dealing a % of the total damage per pellet
-		-- this actually helps with the new shotgun damage mechanic, but if it ever gets fixed, we need to increase it's damage back to full
-		if not Gilza.isWeaponLibBroken then
-			attack_data.damage = attack_data.damage * attack_data.weapon_unit:base()._rays
-		end
-		
-		-- how new shotgun damage works:
-		-- every shotgun can now have a minimal damage multiplier per shot
-		-- if a shotgun has a minimal multiplier of 0.35, it would always deal at least 35% of it's max damage per hit target
-		-- this damage can get multiplied by headshot damage, if at least 1 pellet from the same shotgun shot (trigger pull) hit a headshot
-		-- other additional pellets deal additional damage calculated as 'leftover damage/amount of pellets'
-		-- so, based on example above, all additional pellets will deal '65% of the shotgun max damage / how many pellets shotgun currently has (depends on the shotgun itself and used ammo)'
-		-- this code is a bit of a mess, but the beauty of it is that its fully adaptable to shotgun pellet amount, and every shotgun can be tweaked with it's own base multiplier
-		-- and it can also handle multiple enemy units per shotgun trigger pull, so if you hit 5 enemies with 1 shot, they will all take at least 35% of damage, or whatever that shotgun's value is
-		-- it can also work as a prehook since attackdata's type is a list, but we still need the buckshot headshot override, so keep it like this for now.
-		
-		local shotgun_mul = Gilza.shotgun_minimal_damage_multipliers[attack_data.weapon_unit:base()._name_id] or (1 / attack_data.weapon_unit:base()._rays)
-		local is_headshot = self._head_body_name and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
-		
-		-- 'Gilza.current_shotgun_shot_id' value gets updated when we pull the trigger of our shotgun in fire_raycast function,
-		-- so if this value is newer then the local one, the col_ray we are handling right now came from a new shotgun shot, so we reset all the temp values and update the local shot_id value
-		if Gilza.current_shotgun_shot_id > local_shotgun_shot_id then
-			local_shotgun_shot_id = Gilza.current_shotgun_shot_id
-			was_first_pellet_proccessed = {}
-			first_pellet_headshot_bonus = {}
-		end
-		
-		-- if first pellet from the shot was not proccessed yet, we make this pellet deal the minimal weapon damage
-		if not was_first_pellet_proccessed[self._unit:id()] then
-			attack_data.damage = attack_data.damage * shotgun_mul
-			was_first_pellet_proccessed[self._unit:id()] = true
-			first_pellet_headshot_bonus[self._unit:id()] = is_headshot
-		else
-			-- this value checks if our current shotgun shot managed to deal a headshot with at least 1 pellet yet, if we allready did, then pellet damage is calculated normally
-			if first_pellet_headshot_bonus[self._unit:id()] then
-				attack_data.damage = (attack_data.damage * (1 - shotgun_mul)) / (attack_data.weapon_unit:base()._rays - 1)
-			-- if we still did not land a headshot with any of our pellets, check if the currently proccessed pellet would hit a headshot
-			else
-				-- if we would, this pellet's damage is set to the same as the first pellet, but it's damage is multiplied by the headshot multiplier of the enemy that we will hit - 1 (-1 because we allready dealt bodyshot damage to them on our first pellet)
-				-- hs_mul calculations are based on headshot calulation bellow, aka vanilla pd2 fucntion
-				if is_headshot then
-					local hs_mul = 1
-					if not self._char_tweak.ignore_headshot and not self._damage_reduction_multiplier then
-						if self._char_tweak.headshot_dmg_mul then
-							hs_mul = self._char_tweak.headshot_dmg_mul
-						else
-							hs_mul = 10
-						end
-					end
-					-- since this is an additional pellet that comes after the first, it should deal it's personal damage as well as the compensation for the first pellet
-					attack_data.damage = (attack_data.damage * shotgun_mul * (hs_mul - 1)) + (attack_data.damage * (1 - shotgun_mul)) / (attack_data.weapon_unit:base()._rays - 1)
-					first_pellet_headshot_bonus[self._unit:id()] = true
-				else
-					-- if not, same normal calculation
-					attack_data.damage = (attack_data.damage * (1 - shotgun_mul)) / (attack_data.weapon_unit:base()._rays - 1)
-				end
-			end
-		end
-	end
 	
 	if self._dead or self._invulnerable then
 		return
@@ -194,6 +131,69 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 	
 	if not allow_pen then
 		return
+	end
+	
+	-- new shotgun damage
+	if attack_data and attack_data.weapon_unit and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_category and (attack_data.weapon_unit:base():is_category("shotgun") or attack_data.weapon_unit:base():is_category("grenade_launcher")) and attack_data.weapon_unit:base()._rays and attack_data.weapon_unit:base()._rays >= 2 then
+		
+		-- as of 07.05.2024 weapon lib makes each shotgun pellet deal full shotgun damage instead of dealing a % of the total damage per pellet
+		-- this actually helps with the new shotgun damage mechanic, but if it ever gets fixed, we need to increase it's damage back to full
+		if not Gilza.isWeaponLibBroken then
+			attack_data.damage = attack_data.damage * attack_data.weapon_unit:base()._rays
+		end
+		
+		-- how new shotgun damage works:
+		-- every shotgun can now have a minimal damage multiplier per shot
+		-- if a shotgun has a minimal multiplier of 0.35, it would always deal at least 35% of it's max damage per hit target
+		-- this damage can get multiplied by headshot damage, if at least 1 pellet from the same shotgun shot (trigger pull) hit a headshot
+		-- other additional pellets deal additional damage calculated as 'leftover damage/amount of pellets'
+		-- so, based on example above, all additional pellets will deal '65% of the shotgun max damage / how many pellets shotgun currently has (depends on the shotgun itself and used ammo)'
+		-- this code is a bit of a mess, but the beauty of it is that its fully adaptable to shotgun pellet amount, and every shotgun can be tweaked with it's own base multiplier
+		-- and it can also handle multiple enemy units per shotgun trigger pull, so if you hit 5 enemies with 1 shot, they will all take at least 35% of damage, or whatever that shotgun's value is
+		-- it can also work as a prehook since attackdata's type is a list, but we still need the buckshot headshot override, so keep it like this for now.
+		
+		local shotgun_mul = Gilza.shotgun_minimal_damage_multipliers[attack_data.weapon_unit:base()._name_id] or (1 / attack_data.weapon_unit:base()._rays)
+		local is_headshot = self._head_body_name and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
+		
+		-- 'Gilza.current_shotgun_shot_id' value gets updated when we pull the trigger of our shotgun in fire_raycast function,
+		-- so if this value is newer then the local one, the col_ray we are handling right now came from a new shotgun shot, so we reset all the temp values and update the local shot_id value
+		if Gilza.current_shotgun_shot_id > local_shotgun_shot_id then
+			local_shotgun_shot_id = Gilza.current_shotgun_shot_id
+			was_first_pellet_proccessed = {}
+			first_pellet_headshot_bonus = {}
+		end
+		
+		-- if first pellet from the shot was not proccessed yet, we make this pellet deal the minimal weapon damage
+		if not was_first_pellet_proccessed[self._unit:id()] then
+			attack_data.damage = attack_data.damage * shotgun_mul
+			was_first_pellet_proccessed[self._unit:id()] = true
+			first_pellet_headshot_bonus[self._unit:id()] = is_headshot
+		else
+			-- this value checks if our current shotgun shot managed to deal a headshot with at least 1 pellet yet, if we allready did, then pellet damage is calculated normally
+			if first_pellet_headshot_bonus[self._unit:id()] then
+				attack_data.damage = (attack_data.damage * (1 - shotgun_mul)) / (attack_data.weapon_unit:base()._rays - 1)
+			-- if we still did not land a headshot with any of our pellets, check if the currently proccessed pellet would hit a headshot
+			else
+				-- if we would, this pellet's damage is set to the same as the first pellet, but it's damage is multiplied by the headshot multiplier of the enemy that we will hit - 1 (-1 because we allready dealt bodyshot damage to them on our first pellet)
+				-- hs_mul calculations are based on headshot calulation bellow, aka vanilla pd2 fucntion
+				if is_headshot then
+					local hs_mul = 1
+					if not self._char_tweak.ignore_headshot and not self._damage_reduction_multiplier then
+						if self._char_tweak.headshot_dmg_mul then
+							hs_mul = self._char_tweak.headshot_dmg_mul
+						else
+							hs_mul = 10
+						end
+					end
+					-- since this is an additional pellet that comes after the first, it should deal it's personal damage as well as the compensation for the first pellet
+					attack_data.damage = (attack_data.damage * shotgun_mul * (hs_mul - 1)) + (attack_data.damage * (1 - shotgun_mul)) / (attack_data.weapon_unit:base()._rays - 1)
+					first_pellet_headshot_bonus[self._unit:id()] = true
+				else
+					-- if not, same normal calculation
+					attack_data.damage = (attack_data.damage * (1 - shotgun_mul)) / (attack_data.weapon_unit:base()._rays - 1)
+				end
+			end
+		end
 	end
 	
 	local result = nil

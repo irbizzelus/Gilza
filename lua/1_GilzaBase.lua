@@ -17,7 +17,7 @@ _G.Gilza = {
 	},
 	grenade_multipliers = {
 		dada_com = 0.9,
-		fir_com = 0.7,
+		fir_com = 0.6,
 		frag_com = 0.9,
 		wpn_prj_ace = 2.5,
 		concussion = 0.5,
@@ -78,14 +78,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.02 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.1 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.0.20 changelog:\n\nThis patch includes a few fixes, melee blackmarket UI improvements and a few balance changes. For detailed information check full changelog. Most important bits:\n - Trigger happy skill nerfed\n - Akron HC LMG's conversion kit no longer accepts FrenchyAU's stocks - remove them to prevent a crash\n - Melee efficiency against dozers and bosses was nerfed\n - Viper launcher grenade - poison duration reduced"
+			local message = "2.1 changelog:\n\nThis patch brings 3 new weapon mods, one major code-sided rework, a few fixes and rebalances.\n\nImportant balance parts:\n - New skill added to basic parkour\n - New weapon mod for Falcon rifle and 2 mods for Basilisk 3v\n - Nerfed poision launcher grenades\n - Fixed and improved shotguns in a few ways\n - Melee nerfed against bosses and bulldozers (again)"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.02
+			Gilza.settings.version = 2.1
 			Gilza.Save()
 		end
 	end)

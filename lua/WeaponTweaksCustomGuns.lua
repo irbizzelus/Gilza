@@ -36,7 +36,7 @@ function Gilza.tryAddingNewGuns()
 	if #customWeaponsList >= 1 then
 		log("[Gilza] Applying custom weapon tweaks...")
 		for j=1, #customWeaponsList do
-			if tweak_data.weapon[customWeaponsList[j]] then
+			if tweak_data.weapon[customWeaponsList[j]] and tweak_data.weapon[customWeaponsList[j]].categories then
 				for i=1, #tweak_data.weapon[customWeaponsList[j]].categories do
 					if tweak_data.weapon[customWeaponsList[j]].categories[i] == "assault_rifle" then
 						tweak_data.weapon[customWeaponsList[j]].stats.damage = math.floor(tweak_data.weapon[customWeaponsList[j]].stats.damage * 2)
@@ -122,7 +122,7 @@ function Gilza.applyCustomAR_stats(id)
 	-- high mid AR's
 	elseif tweak_data.weapon[id].stats.damage >= 175 and tweak_data.weapon[id].stats.damage <= 229 then
 		tweak_data.weapon[id].stats.damage = 200
-		tweak_data.weapon[id].AMMO_PICKUP = {((avg_155_pickup * 0.9) / 1.35) * 0.9,((avg_155_pickup * 1.1) / 1.35) * 0.9}
+		tweak_data.weapon[id].AMMO_PICKUP = {((avg_155_pickup * 0.9) / 1.35) * 0.85,((avg_155_pickup * 1.1) / 1.35) * 0.85}
 		dmg_type = "175"
 	-- heavy AR's
 	elseif tweak_data.weapon[id].stats.damage >= 230 and tweak_data.weapon[id].stats.damage <= 400 then
@@ -518,7 +518,7 @@ function Gilza.applyCustomSMG_stats(id)
 		dmg_type = "146"
 	elseif tweak_data.weapon[id].stats.damage >= 180 and tweak_data.weapon[id].stats.damage <= 264 then
 		tweak_data.weapon[id].stats.damage = 200
-		tweak_data.weapon[id].AMMO_PICKUP = {((avg_250_pickup * 0.9) / 1.35) * 0.9 * secondary_mul,((avg_250_pickup * 1.1) / 1.35) * 0.9 * secondary_mul}
+		tweak_data.weapon[id].AMMO_PICKUP = {((avg_250_pickup * 0.9) / 1.35) * 0.85 * secondary_mul,((avg_250_pickup * 1.1) / 1.35) * 0.85 * secondary_mul}
 		dmg_type = "175"
 	elseif tweak_data.weapon[id].stats.damage >= 265 then
 		tweak_data.weapon[id].stats.damage = 250
@@ -526,7 +526,7 @@ function Gilza.applyCustomSMG_stats(id)
 		dmg_type = "210"
 	end
 	
-	tweak_data.weapon[id].damage_falloff = {optimal_distance = 250,optimal_range = 550,near_falloff = 0,far_falloff = 3500,near_multiplier = 1.25,far_multiplier = 0.5}
+	tweak_data.weapon[id].damage_falloff = {optimal_distance = 200,optimal_range = 700,near_falloff = 0,far_falloff = 1200,near_multiplier = 1.25,far_multiplier = 0.5}
 	
 	if dmg_type == "nil" then
 		dmg_type = "super_light"
@@ -1080,7 +1080,7 @@ function Gilza.applyCustomLMG_stats(id)
 		tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9) / 1.35,(weapon_avg_pickup * 1.1) / 1.35}
 	end
 
-	tweak_data.weapon[id].damage_falloff = {optimal_distance = 200,optimal_range = 1200,near_falloff = 0,far_falloff = 1200,near_multiplier = 0.5,far_multiplier = 1.65}
+	tweak_data.weapon[id].damage_falloff = {optimal_distance = 200,optimal_range = 1000,near_falloff = 0,far_falloff = 1000,near_multiplier = 0.5,far_multiplier = 1.65}
 	
 	if dmg_type == "super_light" or dmg_type == "105" then
 		tweak_data.weapon[id].damage_falloff.far_multiplier = 2.1
@@ -1333,17 +1333,17 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 		end
 	end
 	
-	if tweak_data.weapon[id].rays < 12 then
-		tweak_data.weapon[id].rays = 12
+	if tweak_data.weapon[id].rays < 10 then
+		tweak_data.weapon[id].rays = 10
 	end
 	
 	if category == 1 then
 		tweak_data.weapon[id].stats.damage = 100
 		tweak_data.weapon[id].damage_falloff = {
 			optimal_distance = 0,
-			optimal_range = 900,
+			optimal_range = 1000,
 			near_falloff = 0,
-			far_falloff = 1500,
+			far_falloff = 1000,
 			near_multiplier = 1,
 			far_multiplier = 0.5
 		}
@@ -1357,11 +1357,11 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 		tweak_data.weapon[id].stats.damage = 325
 		tweak_data.weapon[id].damage_falloff = {
 			optimal_distance = 0,
-			optimal_range = 1150,
+			optimal_range = 1250,
 			near_falloff = 0,
-			far_falloff = 150,
+			far_falloff = 1000,
 			near_multiplier = 1,
-			far_multiplier = 0.35
+			far_multiplier = 0.5
 		}
 		Gilza.shotgun_minimal_damage_multipliers[id] = 0.5
 		if secondary == false then
@@ -1375,9 +1375,9 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 			optimal_distance = 0,
 			optimal_range = 1500,
 			near_falloff = 0,
-			far_falloff = 150,
+			far_falloff = 1000,
 			near_multiplier = 1,
-			far_multiplier = 0.25
+			far_multiplier = 0.5
 		}
 		Gilza.shotgun_minimal_damage_multipliers[id] = 0.67
 		if secondary == false then
@@ -1389,9 +1389,9 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 		tweak_data.weapon[id].stats.damage = 1250
 		tweak_data.weapon[id].damage_falloff = {
 			optimal_distance = 0,
-			optimal_range = 2000,
+			optimal_range = 1850,
 			near_falloff = 0,
-			far_falloff = 150,
+			far_falloff = 1000,
 			near_multiplier = 1,
 			far_multiplier = 0.5
 		}

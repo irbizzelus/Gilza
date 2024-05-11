@@ -158,7 +158,11 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 	New_Technician_Skills()
 	
 	local function New_Ghost_Skills()
-		-- no value adjustments here yet, just moved skills around a bit
+		---- ARTFUL DODGER
+		-- new jump skill
+		self.values.player.extra_jump_height = {
+			1.2
+		}
 	end
 	New_Ghost_Skills()
 	
@@ -481,6 +485,17 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 		upgrade = {
 			value = 2,
 			upgrade = "pick_up_ammo_reduction",
+			category = "player"
+		}
+	}
+	
+	---- GHOST
+	self.definitions.player_extra_jump_height = {
+		name_id = "extra_jump_height",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "extra_jump_height",
 			category = "player"
 		}
 	}

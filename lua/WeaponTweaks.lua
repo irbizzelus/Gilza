@@ -434,7 +434,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			for id, status in pairs(ARs_200) do
 				if self[id] then
 					self[id].stats.damage = 200
-					self[id].AMMO_PICKUP = {((avg_155_pickup * 0.9) / 1.35) * 0.9,((avg_155_pickup * 1.1) / 1.35) * 0.9}
+					self[id].AMMO_PICKUP = {((avg_155_pickup * 0.9) / 1.35) * 0.85,((avg_155_pickup * 1.1) / 1.35) * 0.85}
 				end
 			end
 			
@@ -622,9 +622,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		
 		local new_DB_shotgun_damage_falloff = {
 			optimal_distance = 0,
-			optimal_range = 2000,
+			optimal_range = 1850,
 			near_falloff = 0,
-			far_falloff = 150,
+			far_falloff = 1000,
 			near_multiplier = 1,
 			far_multiplier = 0.5
 		}
@@ -632,23 +632,23 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			optimal_distance = 0,
 			optimal_range = 1500,
 			near_falloff = 0,
-			far_falloff = 150,
+			far_falloff = 1000,
 			near_multiplier = 1,
-			far_multiplier = 0.25
+			far_multiplier = 0.5
 		}
 		local new_semi_shotgun_damage_falloff = {
 			optimal_distance = 0,
-			optimal_range = 1150,
+			optimal_range = 1250,
 			near_falloff = 0,
-			far_falloff = 150,
+			far_falloff = 1000,
 			near_multiplier = 1,
-			far_multiplier = 0.35
+			far_multiplier = 0.5
 		}
 		local new_auto_shotgun_damage_falloff = {
 			optimal_distance = 0,
-			optimal_range = 900,
+			optimal_range = 1000,
 			near_falloff = 0,
-			far_falloff = 1500,
+			far_falloff = 1000,
 			near_multiplier = 1,
 			far_multiplier = 0.5
 		}
@@ -667,7 +667,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 					self[id].stats.damage = 1000
 					self[id].stats.recoil = 21
 					self[id].stats.spread = 22
-					self[id].rays = 12
+					self[id].rays = 10
 					Gilza.shotgun_minimal_damage_multipliers[id] = 1
 					if status == "secondary" then
 						self[id].AMMO_PICKUP = {((avg_1000_pickup * 0.9) / 1.35) * secondary_mul,((avg_1000_pickup * 1.1) / 1.35) * secondary_mul}
@@ -715,8 +715,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			for id, status in pairs(PA_shotguns) do
 				if self[id] then
 					self[id].stats.damage = 450
-					self[id].rays = 12
-					Gilza.shotgun_minimal_damage_multipliers[id] = 0.67
+					self[id].rays = 10
+					Gilza.shotgun_minimal_damage_multipliers[id] = 0.8
 					if status == "secondary" then
 						self[id].AMMO_PICKUP = {((avg_450_pickup * 0.9) / 1.35) * secondary_mul,((avg_450_pickup * 1.1) / 1.35) * secondary_mul}
 					else
@@ -810,8 +810,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			for id, status in pairs(SA_shotguns) do
 				if self[id] then
 					self[id].stats.damage = 325
-					self[id].rays = 12
-					Gilza.shotgun_minimal_damage_multipliers[id] = 0.5
+					self[id].rays = 10
+					Gilza.shotgun_minimal_damage_multipliers[id] = 0.67
 					self[id].fire_mode_data = {fire_rate = 60/320}
 					self[id].single = {fire_rate = 60/320}
 					if status == "secondary" then
@@ -841,6 +841,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.striker.NR_CLIPS_MAX = 4.5
 			self.striker.AMMO_MAX = self.striker.CLIP_AMMO_MAX * self.striker.NR_CLIPS_MAX
 			self.striker.stats.recoil = 13
+			self.striker.stats.reload = 13
 			self.striker.stats.spread = 10
 			self.striker.fire_mode_data = {fire_rate = 60/380}
 			self.striker.single = {fire_rate = 60/380}
@@ -854,6 +855,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			
 			self.judge.stats.recoil = 7
 			self.judge.stats.spread = 1
+			self.judge.stats.reload = 9
 			self.judge.fire_mode_data = {fire_rate = 60/250}
 			self.judge.single = {fire_rate = 60/250}
 			
@@ -882,8 +884,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			for id, status in pairs(FA_shotguns) do
 				if self[id] then
 					self[id].stats.damage = 100
-					self[id].rays = 12
-					Gilza.shotgun_minimal_damage_multipliers[id] = 0.35
+					self[id].rays = 10
+					Gilza.shotgun_minimal_damage_multipliers[id] = 0.5
 					self[id].fire_mode_data = {fire_rate = 60/350}
 					self[id].single = {fire_rate = 60/350}
 					if status == "secondary" then
@@ -965,9 +967,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		
 		local new_lmg_damage_falloff = {
 			optimal_distance = 200,
-			optimal_range = 1200,
+			optimal_range = 1000,
 			near_falloff = 0,
-			far_falloff = 1200,
+			far_falloff = 1000,
 			near_multiplier = 0.5,
 			far_multiplier = 1.65
 		}
@@ -978,7 +980,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.hk51b.stats.recoil = 10
 		self.hk51b.NR_CLIPS_MAX = 4
 		self.hk51b.AMMO_MAX = self.hk51b.CLIP_AMMO_MAX * self.hk51b.NR_CLIPS_MAX
-		self.hk51b.AMMO_PICKUP = {(5.26 * 0.9) / 1.35,(5.26 * 1.1) / 1.35}
+		self.hk51b.AMMO_PICKUP = {(4.93 * 0.9) / 1.35,(4.93 * 1.1) / 1.35}
 		self.hk51b.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.hk51b.damage_falloff.far_multiplier = 1
 		self.hk51b.damage_falloff.near_multiplier = 1
@@ -992,7 +994,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.hcar.damage_falloff.near_multiplier = 1
 		
 		self.kacchainsaw.stats.damage = 120
-		self.kacchainsaw.AMMO_PICKUP = {(8.66 * 0.9) / 1.35,(8.66 * 1.1) / 1.35}
+		self.kacchainsaw.AMMO_PICKUP = {(avg_120_pickup * 0.9) / 1.35,(avg_120_pickup * 1.1) / 1.35}
 		self.kacchainsaw.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.kacchainsaw.damage_falloff.far_multiplier = 1
 		self.kacchainsaw.damage_falloff.near_multiplier = 1
@@ -1281,7 +1283,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		local avg_155_pickup = 4.8
 		local avg_250_pickup = 2.63
 		
-		local new_smg_damage_falloff = {optimal_distance = 250,optimal_range = 550,near_falloff = 0,far_falloff = 3500,near_multiplier = 1.25,far_multiplier = 0.5}
+		local new_smg_damage_falloff = {optimal_distance = 200,optimal_range = 700,near_falloff = 0,far_falloff = 1200,near_multiplier = 1.25,far_multiplier = 0.5}
 		
 		-- 1-2 headshot kill
 		local function init_heavy()
@@ -1387,7 +1389,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			for id, status in pairs(SMGs_200) do
 				if self[id] then
 					self[id].stats.damage = 200
-					self[id].AMMO_PICKUP = {((avg_155_pickup * 0.9) / 1.35) * 0.9 * secondary_mul,((avg_155_pickup * 1.1) / 1.35) * 0.9 * secondary_mul}
+					self[id].AMMO_PICKUP = {((avg_155_pickup * 0.9) / 1.35) * 0.85 * secondary_mul,((avg_155_pickup * 1.1) / 1.35) * 0.85 * secondary_mul}
 					self[id].damage_falloff = new_smg_damage_falloff
 				end
 			end
@@ -2510,6 +2512,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.slap.stats.recoil = 19
 		self.china.stats.recoil = 17
 		self.arbiter.stats.recoil = 21
+		self.ms3gl.stats.spread = 14
+		self.ms3gl.stats.recoil = 13
+		self.ms3gl.stats.spread = 18
 		
 		local gl_1300_avg_pickup = 0.26
 		
@@ -2522,13 +2527,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.gre_m79.AMMO_PICKUP = {gl_1300_avg_pickup * 0.9 / 1.35, gl_1300_avg_pickup * 1.1 / 1.35}
 		Gilza.shotgun_minimal_damage_multipliers.gre_m79 = 0.75
 		
-		self.china.AMMO_PICKUP = {((0.32 * 0.9) / 1.35) * secondary_mul,((0.34 * 1.1) / 1.35) * secondary_mul}
+		self.china.AMMO_PICKUP = {((0.32 * 0.9) / 1.35) * secondary_mul,((0.32 * 1.1) / 1.35) * secondary_mul}
 		Gilza.shotgun_minimal_damage_multipliers.china = 0.75
 		
-		self.ms3gl.AMMO_PICKUP = {((0.7 * 0.9) / 1.35) * secondary_mul,((0.7 * 1.1) / 1.35) * secondary_mul}
+		self.ms3gl.AMMO_PICKUP = {((0.62 * 0.9) / 1.35) * secondary_mul,((0.62 * 1.1) / 1.35) * secondary_mul}
 		Gilza.shotgun_minimal_damage_multipliers.ms3gl = 0.75
 		
-		self.arbiter.AMMO_PICKUP = {((0.6 * 0.9) / 1.35) * secondary_mul,((0.6 * 1.1) / 1.35) * secondary_mul}
+		self.arbiter.AMMO_PICKUP = {((0.56 * 0.9) / 1.35) * secondary_mul,((0.56 * 1.1) / 1.35) * secondary_mul}
 		Gilza.shotgun_minimal_damage_multipliers.arbiter = 0.75
 		
 		self.slap.projectile_types.launcher_velocity = "launcher_velocity_slap"
