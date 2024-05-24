@@ -78,14 +78,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.1 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.2 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.1 changelog:\n\nThis patch brings 3 new weapon mods, one major code-sided rework, a few fixes and rebalances.\n\nImportant balance parts:\n - New skill added to basic parkour\n - New weapon mod for Falcon rifle and 2 mods for Basilisk 3v\n - Nerfed poision launcher grenades\n - Fixed and improved shotguns in a few ways\n - Melee nerfed against bosses and bulldozers (again)"
+			local message = "2.2 changelog:\n\nThis patch brings a few balance updates for some weapons and skills, including new functionality for 2 skills.\n(!) But most importantly it reduces total ammo capacity for most weapons by about 1 magazine or roughly 15%, with categories like shotguns and akimbos getting even bigger reductions. If you want to know why, check the full changelog.\n\nImportant balance parts:\n - New functionality for Technician's \"Heavy Impact\" skill - stagger chances are now dependent on weapon's threat as well as damage\n - New functionality for Fugitive's skill \"Tough Guy\" - now it reduces camera shake in addition to previous bonuses\n - Most single fire low damage class pistols received buffs to their base stability stats to improve recoil when you fire rapidly\n - Added missing AP rounds upgrade for akimbo version of Matever revolvers"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.1
+			Gilza.settings.version = 2.2
 			Gilza.Save()
 		end
 	end)
