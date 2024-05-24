@@ -149,10 +149,10 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		self.values.player.ap_bullets_aced = {
 			true
 		}
-		-- ammo pick up reduction for BE; numbers are fucky, because i wanted to make it so it reduced pick up by 20% and 40% after the 35% buff from a perk deck skill
+		-- ammo pick up reduction for BE; numbers are fucky, because i wanted to make it so it reduced pick up by 20% and 35% after the 35% buff from a perk deck skill
 		self.values.player.pick_up_ammo_reduction = {
 			0.73,
-			0.46
+			0.5275
 		}
 	end
 	New_Technician_Skills()
@@ -225,6 +225,10 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		-- adjust normal selfheal from up you go just in case
 		self.values.player.revived_health_regain = {
 			1
+		}
+		self.values.player.melee_shake_reduction = {
+			0.7,
+			0.1
 		}
 		-- swan song change
 		self.values.temporary.berserker_damage_multiplier = { {1,3}, {1.5,9} }
@@ -507,6 +511,24 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 		upgrade = {
 			value = 1,
 			upgrade = "health_regain_V2",
+			category = "player"
+		}
+	}
+	self.definitions.player_melee_shake_reduction_1 = {
+		name_id = "menu_player_melee_shake_reduction_1",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "melee_shake_reduction",
+			category = "player"
+		}
+	}
+	self.definitions.player_melee_shake_reduction_2 = {
+		name_id = "menu_player_melee_shake_reduction_2",
+		category = "feature",
+		upgrade = {
+			value = 2,
+			upgrade = "melee_shake_reduction",
 			category = "player"
 		}
 	}

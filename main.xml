@@ -47,6 +47,7 @@
 	<WeaponMod id="wpn_fps_upg_pist_mateba_ap_rounds" based_on="wpn_fps_upg_a_custom" type="ammo" drop="false" global_value="Gilza" is_a_unlockable="true" texture_bundle_folder="Gilza">
 		<weapons>
 			<value_node value="wpn_fps_pis_2006m"/>
+			<value_node value="wpn_fps_pis_x_2006m"/>
 		</weapons>
 	</WeaponMod>
 	<WeaponMod id="wpn_fps_upg_contraband_762_to_556_kit" based_on="wpn_fps_upg_a_custom" type="ammo" drop="false" global_value="Gilza" is_a_unlockable="true" texture_bundle_folder="Gilza">

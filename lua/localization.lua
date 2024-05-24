@@ -59,7 +59,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		menu_sharpshooter_beta = "Slow and Steady",
 		menu_sharpshooter_beta_desc = "BASIC: ##$basic##\nYou gain ##7.5%## damage resistance while standing still or bipoded.\n\nACE: ##$pro##\nYou gain additional ##35%## damage resistance while bipoded.\nYour bipod deploy speed is increased by ##100%##.",
 		menu_speedy_reload_beta_desc = "BASIC: ##$basic##\nIncreases your reload speed with SMGs, Assault Rifles and Sniper Rifles by ##20%##.\n\nACE: ##$pro##\nAny killing headshot will increase your reload speed by ##100%## for ##4## seconds. Can only be triggered by SMGs, Assault Rifles and Sniper Rifles fired in single shot fire mode.",
-		menu_sniper_graze_damage_desc = "BASIC: ##$basic##\nSniper rifles that hit targets further then ##7.5m## away deal ##33%## of the their damage in a ##75cm## radius around the bullet trajectory.\n\nDamage in the bullet trajectory does not increase if initial target was shot in the head, but can be increased by other skills.\n\nACE: ##$pro##\nDamage radius is increased to ##150cm##, damage in this radius is increased to ##66%## of your Sniper rifle damage.",
+		menu_sniper_graze_damage_desc = "BASIC: ##$basic##\nSniper rifles that hit targets further then ##7.5m## away, will deal ##33%## of their damage in a ##75cm## radius around the bullet trajectory.\n\nDamage in the bullet trajectory does not increase if initial target was shot in the head, but can be increased by other skills.\n\nACE: ##$pro##\nDamage radius is increased to ##150cm##, damage in the radius is increased to ##66%## of your Sniper's damage.",
 		
 		-- Enforcer
 		-- E1
@@ -80,10 +80,10 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		-- Technician
 		-- T3
 		menu_steady_grip_beta_desc = "BASIC: ##$basic##\nYou gain ##4## weapon Stability.\n\nACE: ##$pro##\nYou gain ##8## more weapon Stability.",
-		menu_heavy_impact_beta_desc = "BASIC: ##$basic##\nYour shots have a ##4-6%##* chance to stagger all enemies except Bulldozers and Captain Winters.\n\nACE: ##$pro##\nIncreases your stagger chance to ##20-30%##*.\n\n* Stagger chance scales with weapon damage. Lowest chance is used when weapon damage is less or equal to ##100##, and highest chance is used when weapon damage is more or equal to ##400## damage. Damage increasing skills and headshots don't affect this chance.",
+		menu_heavy_impact_beta_desc = "BASIC: ##$basic##\nYour shots can now stagger all enemies except Bulldozers and Captain Winters. Your base stagger chance is ##2-4%##, which is then multiplied by the ##threat modifier##.\n\nACE: ##$pro##\nIncreases your base stagger chance to ##10-20%##.\n\nNote: Base stagger chance is scaled with damage. With ##100## or less damage, lower base chance value is used. This chance is gradually increased with higher weapon damage, up to it's max chance value at ##400## or more damage.\nThreat modifier scales with weapon's threat: having ##0## threat provides you a ##1x## multiplier, with up to ##2x## multiplier at ##40## or higher threat.",
 		menu_fire_control_beta_desc = "BASIC: ##$basic##\nYour ##40%## recoil penalty while firing from the hip is removed.\n\nACE: ##$pro##\nYour ##25%## accuracy penalty while firing from the hip is removed.",
 		menu_fast_fire_beta_desc = "BASIC: ##$basic##\nYour SMGs, LMGs and Assault Rifles gain ##15## more bullets in their magazines. This does not affect the 'Lock n' Load' Ace skill.\n\nACE: ##$pro##\nYour ranged weapons can now pierce enemy body armor, but any damage that goes through armor gets cut by ##50%##.",
-		menu_body_expertise_beta_desc = "BASIC: ##$basic##\n##50%## from the bonus headshot damage is permanently applied to hitting enemies on the body. This skill is only activated by SMGs, LMGs, Assault Rifles or Special Weapons fired in automatic mode.\n\nYour ammo pick up is reduced by ##20%##.\n\nYour ranged weapons can now pierce enemy body armor, but any damage that goes through armor gets cut by ##50%##.\nCan be combined with 'Surefire' Aced, to completely negate damage penalties when shooting through body armor.\n\nACE: ##$pro##\nHitting enemies on the body now grants ##100%## of the bonus damage from headshots.\n\nAmmo pick up reduction from this skill is now ##40%##.",
+		menu_body_expertise_beta_desc = "BASIC: ##$basic##\n##50%## from the bonus headshot damage is permanently applied to hitting enemies on the body. This skill is only activated by SMGs, LMGs, Assault Rifles or Special Weapons fired in automatic mode.\n\nYour ammo pick up is reduced by ##20%##.\n\nYour ranged weapons can now pierce enemy body armor, but any damage that goes through armor gets cut by ##50%##.\nCan be combined with 'Surefire' Aced, to completely negate damage penalties when shooting through body armor.\n\nACE: ##$pro##\nHitting enemies on the body now grants ##100%## of the bonus damage from headshots.\n\nAmmo pick up reduction from this skill is now ##35%##.",
 		
 		-- GHOST
 		-- G1
@@ -112,6 +112,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		menu_perseverance_beta_desc = "BASIC: ##$basic##\nInstead of getting downed instantly, you gain the ability to keep on fighting for ##3## seconds with a ##60%## movement penalty before going down.\nDoes not trigger on fall of fire damage.\n\nYour Swan Song speed penalty will be ignored for ##3## seconds, if at the moment of skill activation or at any point during it's duration, one of your crew members is downed.\n\nACE: ##$pro##\nIncreases Swan Song's duration to ##9## seconds.\n\nWhile the effect is active, ammuntion will be depleted directly from your total ammo reserve, instead of your magazine, and any damage you deal is increased by ##50%##.",
 		-- F3
 		menu_martial_arts_beta = "Tough Guy",
+		menu_martial_arts_beta_desc = "BASIC: ##$basic##\nYou are ##50%## more likely to knock down enemies with a melee strike.\nYour camera shake when hit by a melee attack is reduced by ##30%##.\n\nACE: ##$pro##\nYou take ##50%## less damage from all melee attacks.\nYour camera shake when hit by a melee attack is now reduced by ##90%##.\nBecause of training.",
 		menu_bloodthirst_desc = "BASIC: ##$basic##\nEvery kill you get will increase your next melee attack damage by ##25%##, up to a maximum of ##500%##. This effect gets reset when you kill an enemy with a melee attack.\n\nACE: ##$pro##\nWhenever you kill an enemy with a melee attack, you will gain a ##50%## increase in reload speed for ##10## seconds.",
 		menu_steroids_beta = "Martial Arts",
 		menu_steroids_beta_desc = "BASIC: ##$basic##\nYou can now sprint while using melee weapons.\n\nACE: ##$pro##\nYou charge your melee weapons ##100%## faster.",
@@ -132,8 +133,9 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		bm_combined_gadget_module = "Combined module that includes both laser and flashlight.",
 		bm_laser_gadget_module = "Laser module used for easier target acquisition while hip-firing.",
 		bm_flashlight_gadget_module = "Flashlight for all the dark places you may find.",
-		--frenchy forgot this one - don't translate it
+		-- frenchy forgot these ones - no translations required
 		bm_wp_wpn_fps_upg_m_celerity = "\"Big Stick\" 30-round mag",
+		bm_wp_wpn_fps_upg_m_308dmmag = "Lightweight 30-round mag",
 		-- New Gilza weapon mods
 		bm_wpn_fps_upg_br_shtgn = "Breaching round",
 		bm_wpn_fps_upg_br_shtgn_desc = "Fires a single round that allows you to breach everything that saw OVE9000 usually can. Also penetrates shield and body armor.\n\nDamage range decreased by 50%.",
@@ -175,20 +177,20 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		-- Pistol mods
 		bm_wpn_fps_pis_c96_b_long_newname = "C96 AP Kit",
 		bm_wpn_fps_pis_c96_b_long_newdesc = "Allows you to penetrate shields, walls and enemy body armor.\nAmmo pick up reduced by 70%.",
-		bm_wpn_fps_pis_type54_underbarrel_desc = "Underbarrel shotgun. Stats:\n -Damage: 660\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.41-0.5, with Walk-in Closet perk skill.",
-		bm_wpn_fps_pis_type54_underbarrel_slug_desc = "Underbarrel shotgun slug. Pierces shields, walls and enemy body armor. Increases damage range by 15%. Stats:\n -Damage: 660\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.3-0.375, with Walk-in Closet perk skill.",
-		bm_wpn_fps_pis_type54_underbarrel_ap_desc = "Underbarrel shotgun flechette. Pierces enemy body armor. Shoots 6 darts. Damage range increased by 40%. Stats:\n -Damage: 660\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.36-0.45, with Walk-in Closet perk skill.",
-		bm_wpn_fps_pis_x_type54_underbarrel_desc = "Underbarrel shotgun. Stats:\n -Damage: 330\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.82-1, with Walk-in Closet perk skill.",
-		bm_wpn_fps_pis_x_type54_underbarrel_slug_desc = "Underbarrel shotgun slug. Pierces shields, walls and enemy body armor. Increases damage range by 15%. Stats:\n -Damage: 330\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.6-0.75, with Walk-in Closet perk skill.",
-		bm_wpn_fps_pis_x_type54_underbarrel_ap_desc = "Underbarrel shotgun flechette. Pierces enemy body armor. Shoots 6 darts. Damage range increased by 40%. Stats:\n -Damage: 330\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.72-0.9, with Walk-in Closet perk skill.",
+		bm_wpn_fps_pis_type54_underbarrel_desc = "Underbarrel shotgun. Stats:\n -Damage: 660\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.33-0.4, with Walk-in Closet perk skill.",
+		bm_wpn_fps_pis_type54_underbarrel_slug_desc = "Underbarrel shotgun slug. Pierces shields, walls and enemy body armor. Increases damage range by 15%. Stats:\n -Damage: 660\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.25-0.3, with Walk-in Closet perk skill.",
+		bm_wpn_fps_pis_type54_underbarrel_ap_desc = "Underbarrel shotgun flechette. Pierces enemy body armor. Shoots 6 darts. Damage range increased by 40%. Stats:\n -Damage: 660\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.29-0.36, with Walk-in Closet perk skill.",
+		bm_wpn_fps_pis_x_type54_underbarrel_desc = "Underbarrel shotgun. Stats:\n -Damage: 330\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.66-0.8, with Walk-in Closet perk skill.",
+		bm_wpn_fps_pis_x_type54_underbarrel_slug_desc = "Underbarrel shotgun slug. Pierces shields, walls and enemy body armor. Increases damage range by 15%. Stats:\n -Damage: 330\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.5-0.6, with Walk-in Closet perk skill.",
+		bm_wpn_fps_pis_x_type54_underbarrel_ap_desc = "Underbarrel shotgun flechette. Pierces enemy body armor. Shoots 6 darts. Damage range increased by 40%. Stats:\n -Damage: 330\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.58-0.72, with Walk-in Closet perk skill.",
 		-- SMG mods
 		bm_wpn_fps_smg_mp5_m_straight_R = "RIP rounds",
 		bm_wpn_fps_smg_mp5_m_straight_R_desc = "Ammo pick up reduced to match new damage class.",
 		-- LMG mods
 		wpn_fps_lmg_hcar_barrel_dmr_PEN = "Akron HC AP Kit",
 		bm_wpn_fps_lmg_hcar_barrel_dmr_PEN_desc = "Allows you to penetrate shiels, body armor and walls.\nLimits weapon to single-fire mode.\nAmmo pick up reduced by 50%.",
-		bm_wpn_fps_upg_lmg_kacchainsaw_underbarrel_flamethrower_desc = "Underbarrel flamethrower. Deals 25 direct damage with 2000 rate of fire. Has 25% chance to apply afterburn.\nAfterburn deals 100 damage over 2 seconds.\n\nReduces ammo pick up for LMG itself by 35%.",
-		bm_wpn_fps_upg_lmg_kacchainsaw_conversionkit_desc = "Increases ammo pick up by 25%",
+		bm_wpn_fps_upg_lmg_kacchainsaw_underbarrel_flamethrower_desc = "Underbarrel flamethrower. Deals 25 direct damage with 2000 rate of fire. Has 25% chance to apply afterburn.\nAfterburn deals 100 damage over 2 seconds.\n\nReduces ammo pick up for LMG itself by 30%.",
+		bm_wpn_fps_upg_lmg_kacchainsaw_conversionkit_desc = "Increases ammo pick up by 15%",
 		bm_wpn_fps_lmg_hcar_body_conversionkit_desc = "Increases ammo pick up to match new damage class.",
 		-- Shotgun mods
 		bm_wpn_fps_upg_a_rip_desc_new = "Poisoned bullet that causes enemies to vomit uncontrollably, preventing then from making any actions.\n\nDeals 250 poison damage over 6 seconds.\nAmmo pick up reduced by 20%",
@@ -307,10 +309,10 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		-- Technician
 		-- T3
 		menu_steady_grip_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВаше оружие стабильнее на ##4## единицы.\n\nПРО: ##$pro;##\nВаше оружие стабильнее на еще ##8## единиц.",
-		menu_heavy_impact_beta_desc = "БАЗОВЫЙ: ##$basic##\nУ ваших выстрелов есть ##4-6%##* шанс оглушить любого противника за исключением бульдозера и Капитана Уинтерса.\n\nПРО: ##$pro##\nУвеличивает шанс оглушения до ##20-30%##*.\n\n* Шанс оглушения напрямую зависит от урона оружия. Минимальный шанс используется когда оружие наносит урон меньший или равный ##100##, а максимальный шанс используется когда оружие наносит урон больший или равный ##400##. Увеличенный урон от попадания в голову или других навыков не влияет на этот шанс.",
+		menu_heavy_impact_beta_desc = "БАЗОВЫЙ: ##$basic##\nВаши выстрелы теперь могут оглушать всех противников за исключением бульдозера и Капитана Уинтерса сбивая их с ног. Ваш базовый шанс оглушения ##2-4%##, который затем множится на ##модификатор подавления##.\n\nПРО: ##$pro##\nУвеличивает базовый шанс оглушения до ##10-20%##.\n\nНа заметку: базовый шанс оглушения напрямую зависит от урона оружия. С уроном меньшим или равным ##100## используется меньший шанс, который постепенно увеличивается с уроном оружия, вплоть до максимального значения шанса когда урон выше или равен ##400##.\nМодификатор подавления напрямую зависит от подавления оружия: при показателе подавления ##0## ваш шанс умножается на ##1x##, увеличиавясь вплоть до ##2x## когда подавление выше или равно ##40##.",
 		menu_fire_control_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВаш ##40%## штраф к отдаче во время стрельбы от бедра аннулируется.\n\nПРО: ##$pro;##\nВаш ##25%## штраф к точности во время стрельбы от бедра аннулируется.",
 		menu_fast_fire_beta_desc = "БАЗОВЫЙ: ##$basic##\nВаши пистолеты-пулеметы, пулеметы и штурмовые винтовки получают прибавку в виде ##15## патронов в магазинах. Данный навык не работает с ПРО версией навыка 'Оружие к бою'.\n\nПРО: ##$pro##\nВаше оружие получает возможность пробивать вражескую нательную броню, но урон при таком попадании уменьшается на ##50%##.",
-		menu_body_expertise_beta_desc = "БАЗОВЫЙ: ##$basic;##\nМножитель попадания в голову применяется к телу противника с эффективностью в ##50%##. Этот навык работает только с пистолетами-пулемётами, пулемётами и штурмовыми винтовками в режиме автоматической стрельбы.\n\nВраги оставляют на ##20%## меньше боеприпасов.\n\nВаше оружие получает возможность пробивать вражескую нательную броню, но урон при таком попадании уменьшается на ##50%##.\nПри совмещении с ПРО версией навыка 'Шквальный огонь' штраф к урону при стрельбе по нательной броне аннулируется.\n\nПРО: ##$pro;##\nБонусный урон при попадании в тело увеличен до ##100%##.\n\nВраги теперь оставляют на ##40%## меньше боеприпасов.",
+		menu_body_expertise_beta_desc = "БАЗОВЫЙ: ##$basic;##\nМножитель попадания в голову применяется к телу противника с эффективностью в ##50%##. Этот навык работает только с пистолетами-пулемётами, пулемётами и штурмовыми винтовками в режиме автоматической стрельбы.\n\nВраги оставляют на ##20%## меньше боеприпасов.\n\nВаше оружие получает возможность пробивать вражескую нательную броню, но урон при таком попадании уменьшается на ##50%##.\nПри совмещении с ПРО версией навыка 'Шквальный огонь' штраф к урону при стрельбе по нательной броне аннулируется.\n\nПРО: ##$pro;##\nБонусный урон при попадании в тело увеличен до ##100%##.\n\nВраги теперь оставляют на ##35%## меньше боеприпасов.",
 		
 		-- GHOST
 		-- G1
@@ -339,6 +341,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		menu_perseverance_beta_desc = "БАЗОВЫЙ: ##$basic##\nВместо того чтобы сразу упасть, вы сможете сражаться ещё ##3## секунды. Скорость передвижения при этом будет уменьшена на ##60%##.\nДанный навык не срабатывает при падении с высоты или если вы упали под воздействием огня.\n\nШтраф к скорости передвижения Лебединой Песни будет проигнорирован на ##3## секунды, если в момент активации навыка, или на протяжении его действия, ваш союзник упал.\n\nПРО: ##$pro##\nВремя действия навыка увеличено до ##9## секунд.\n\nВо время действия навыка ваш боезопас будет исчерпываться напрямую из вашего запаса, вместо магазина, а ваш урон будет увеличен на ##50%##.",
 		-- F3
 		menu_martial_arts_beta = "КРЕПКИЙ ПАРЕНЬ",
+		menu_martial_arts_beta_desc = "BASIC: ##$basic##\nПовышает шанс сбить врага с ног рукопашной атакой на ##50%##.\nТряска камеры при получении урона в ближнем бою снижена на ##30%##.\n\nACE: ##$pro##\nБлагодаря интенсивным тренировкам, вы получаете на ##50%## меньше урона в рукопашном бою.\nТряска камеры при получении урона в ближнем бою теперь снижена на ##90%##.",
 		menu_bloodthirst_desc = "БАЗОВЫЙ: ##$basic;##\nКаждый раз, когда вы убиваете врага, урон от оружия ближнего боя будет увеличен на ##25%##, до максимума в ##500%##. Внимание: прибавка к урону работает до тех пор, пока вы не убьёте врага оружием ближнего боя.\n\nПРО: ##$pro;##\nПри убийстве врага оружием ближнего боя, скорость вашей перезарядки будет увеличена на ##50%## в течение ##10## секунд.",
 		menu_steroids_beta = "БОЕВЫЕ ИСКУССТВА",
 		menu_steroids_beta_desc = "БАЗОВЫЙ: ##$basic##\nВы теперь можете бегать когда используете оружие ближнего боя.\n\nПРО: ##$pro##\nСкорость заряда оружия ближнего боя увеличена на ##100%##.",
@@ -359,8 +362,9 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		bm_combined_gadget_module = "Двойной модуль - позволяет пользоваться одновременно лазером и фонариком.",
 		bm_laser_gadget_module = "Лазерный модуль помогающий стрелку целиться при стрельбе от бедра.",
 		bm_flashlight_gadget_module = "Фонарик для освещения темных закаулков.",
-		--frenchy forgot this one - don't translate it
+		-- frenchy forgot these ones - no translations required
 		bm_wp_wpn_fps_upg_m_celerity = "\"Big Stick\" 30-round mag",
+		bm_wp_wpn_fps_upg_m_308dmmag = "Lightweight 30-round mag",
 		-- New Gilza weapon mods
 		bm_wpn_fps_upg_br_shtgn = "Пробивной патрон",
 		bm_wpn_fps_upg_br_shtgn_desc = "Позволяет вам пробивать все, что обычно может пробить пила OVE9000. Также может пробивать насквозь щиты и нательную броню врагов.\nЭффективная дистанция оружия уменьшена на 50%.\n",
@@ -402,20 +406,20 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		-- Pistol mods
 		bm_wpn_fps_pis_c96_b_long_newname = "Бронебойный набор для C96",
 		bm_wpn_fps_pis_c96_b_long_newdesc = "Пробивает нательную броню, щиты и стены.\nПодбор боеприпасов уменьшен на 70%.",
-		bm_wpn_fps_pis_type54_underbarrel_desc = "Подствольный дробовик. Стата:\n -Урон: 660\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.41-0.5, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
-		bm_wpn_fps_pis_type54_underbarrel_slug_desc = "Подствольный дробовик со свинцовой пулей. Пробивает щиты, стены и нательную броню. Эффективная дистанция оружия увеличина на 15% Стата:\n -Урон: 660\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.3-0.375, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
-		bm_wpn_fps_pis_type54_underbarrel_ap_desc = "Подствольный дробовик со флешеттой, пробивающей нательную броню. Выстреливает 6 дротиков. Эффективная дистанция оружия увеличина на 40%.  Стата:\n -Урон: 660\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.36-0.45, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
-		bm_wpn_fps_pis_x_type54_underbarrel_desc = "Подствольный дробовик. Стата:\n -Урон: 330\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.82-1, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
-		bm_wpn_fps_pis_x_type54_underbarrel_slug_desc = "Подствольный дробовик со свинцовой пулей. Пробивает щиты, стены и нательную броню. Эффективная дистанция оружия увеличина на 15% Стата:\n -Урон: 330\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.6-0.75, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
-		bm_wpn_fps_pis_x_type54_underbarrel_ap_desc = "Подствольный дробовик со флешеттой, пробивающей нательную броню. Выстреливает 6 дротиков. Эффективная дистанция оружия увеличина на 40%. Стата:\n -Урон: 330\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.72-0.9, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
+		bm_wpn_fps_pis_type54_underbarrel_desc = "Подствольный дробовик. Стата:\n -Урон: 660\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.33-0.4, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
+		bm_wpn_fps_pis_type54_underbarrel_slug_desc = "Подствольный дробовик со свинцовой пулей. Пробивает щиты, стены и нательную броню. Эффективная дистанция оружия увеличина на 15% Стата:\n -Урон: 660\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.25-0.3, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
+		bm_wpn_fps_pis_type54_underbarrel_ap_desc = "Подствольный дробовик со флешеттой, пробивающей нательную броню. Выстреливает 6 дротиков. Эффективная дистанция оружия увеличина на 40%.  Стата:\n -Урон: 660\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.29-0.36, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
+		bm_wpn_fps_pis_x_type54_underbarrel_desc = "Подствольный дробовик. Стата:\n -Урон: 330\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.66-0.8, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
+		bm_wpn_fps_pis_x_type54_underbarrel_slug_desc = "Подствольный дробовик со свинцовой пулей. Пробивает щиты, стены и нательную броню. Эффективная дистанция оружия увеличина на 15% Стата:\n -Урон: 330\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.5-0.6, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
+		bm_wpn_fps_pis_x_type54_underbarrel_ap_desc = "Подствольный дробовик со флешеттой, пробивающей нательную броню. Выстреливает 6 дротиков. Эффективная дистанция оружия увеличина на 40%. Стата:\n -Урон: 330\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.58-0.72, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
 		-- SMG mods
 		bm_wpn_fps_smg_mp5_m_straight_R = "Патроны RIP",
 		bm_wpn_fps_smg_mp5_m_straight_R_desc = "Подбор боеприпасов уменьшен для соответствия новому классу урона.",
 		-- LMG mods
 		wpn_fps_lmg_hcar_barrel_dmr_PEN = "Бронебойный набор Akron HC",
 		bm_wpn_fps_lmg_hcar_barrel_dmr_PEN_desc = "Пробивает нательную броню, щиты и стены.\nОграничивает режим огня используя только одиночный.\nПодбор боеприпасов уменьшен на 50%.",
-		bm_wpn_fps_upg_lmg_kacchainsaw_underbarrel_flamethrower_desc = "Подствольный огнемет. Наносит 25 урона напрямую со скорострельностью в 2000. Имеет 25% шанс поджечь врага.\nПодожженные враги получают 100 урона в течении 2 секунд.\n\nПодбор боеприпасов уменьшен на 35% для самого пулемета.",
-		bm_wpn_fps_upg_lmg_kacchainsaw_conversionkit_desc = "Подбор боеприпасов увеличен на 25%.",
+		bm_wpn_fps_upg_lmg_kacchainsaw_underbarrel_flamethrower_desc = "Подствольный огнемет. Наносит 25 урона напрямую со скорострельностью в 2000. Имеет 25% шанс поджечь врага.\nПодожженные враги получают 100 урона в течении 2 секунд.\n\nПодбор боеприпасов уменьшен на 30% для самого пулемета.",
+		bm_wpn_fps_upg_lmg_kacchainsaw_conversionkit_desc = "Подбор боеприпасов увеличен на 15%.",
 		bm_wpn_fps_lmg_hcar_body_conversionkit_desc = "Подбор боеприпасов увеличен для соответствия новому классу урона.",
 		-- Shotgun mods
 		bm_wpn_fps_upg_a_rip_desc_new = "Пуля вызывающая у протвника неконтролируемую рвоту, блокируя их возможность делать какие либо действия.\n\nНаносит 250 урона в течение 6 секунд.\nПодбор боеприпасов уменьшен на 20%",

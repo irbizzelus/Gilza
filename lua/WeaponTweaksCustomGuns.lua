@@ -526,7 +526,7 @@ function Gilza.applyCustomSMG_stats(id)
 		dmg_type = "210"
 	end
 	
-	tweak_data.weapon[id].damage_falloff = {optimal_distance = 200,optimal_range = 700,near_falloff = 0,far_falloff = 1200,near_multiplier = 1.25,far_multiplier = 0.5}
+	tweak_data.weapon[id].damage_falloff = {optimal_distance = 200,optimal_range = 700,near_falloff = 0,far_falloff = 1200,near_multiplier = 1.2,far_multiplier = 0.5}
 	
 	if dmg_type == "nil" then
 		dmg_type = "super_light"
@@ -1053,9 +1053,9 @@ function Gilza.applyCustomLMG_stats(id)
 
 	table.insert(customWeaponsUpdated.Light_Machine_guns, id)
 	
-	local avg_250_pickup = 3.48
-	local avg_155_pickup = 5.8
-	local avg_120_pickup = 7.82
+	local avg_250_pickup = 3.29
+	local avg_155_pickup = 5.95
+	local avg_120_pickup = 8.85
 	
 	local dmg_type = "nil"
 	
@@ -1289,7 +1289,7 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 	local avg_1000_pickup = 0.65
 	local avg_450_pickup = 0.87
 	local avg_310_pickup = 1.77
-	local avg_110_pickup = 6
+	local avg_110_pickup = 5.78
 	
 	if tweak_data.weapon[id].stats_modifiers then
 		if tweak_data.weapon[id].stats_modifiers.damage then
@@ -1403,7 +1403,7 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 		end
 	elseif category == 5 then
 		local dmg = tweak_data.weapon[id].stats.damage
-		local weapon_avg_pickup = (((math.ceil(250/dmg) + math.ceil(450/dmg))/0.4)/2)*0.7
+		local weapon_avg_pickup = (((math.ceil(250/dmg) + math.ceil(450/dmg))/0.4)/2)*0.65
 		if secondary == false then
 			tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9) / 1.35,(weapon_avg_pickup * 1.1) / 1.35}
 		else

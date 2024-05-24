@@ -295,6 +295,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	
 	self.skills.up_you_go[2].upgrades = {"player_revived_health_regain_V2"}
 	
+	self.skills.martial_arts[1].upgrades = {"player_melee_knockdown_mul", "player_melee_shake_reduction_1"}
+	self.skills.martial_arts[2].upgrades = {"player_melee_damage_dampener", "player_melee_shake_reduction_2"}
 	self.skills.martial_arts.icon_xy = { 1, 1 }
 	
 	self.skills.steroids[1].upgrades = { "player_melee_sprint" }

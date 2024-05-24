@@ -24,7 +24,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "replenish", function (self)
 	self:update_damage()
 end)
 
--- body expertise ammo penalty @29&31; all HV GL rounds will use standard ammo pick up if user is a network client @46; saw ammo pick up skill @79
+-- body expertise ammo penalty @31&33; all HV GL rounds will use standard ammo pick up if user is a network client @48; saw ammo pick up skill @81
 Hooks:OverrideFunction(RaycastWeaponBase, "add_ammo", function (self, ratio, add_amount_override)
 	local mul_1 = managers.player:upgrade_value("player", "pick_up_ammo_multiplier", 1) - 1
 	local mul_2 = managers.player:upgrade_value("player", "pick_up_ammo_multiplier_2", 1) - 1
@@ -157,12 +157,14 @@ Hooks:OverrideFunction(RaycastWeaponBase, "is_knock_down", function (self)
 	-- for everything in between we scale it based on damage
 	local new_knock_down_chance = 0
 	if self._damage >= 10 and self._damage <= 40 then
-		new_knock_down_chance = 0.20 + ((self._damage - 10) / 3 / 100)
+		new_knock_down_chance = 0.1 + ((self._damage - 10) / 30 * 0.1)
 	elseif self._damage < 10 then
-		new_knock_down_chance = 0.20
+		new_knock_down_chance = 0.1
 	elseif self._damage > 40 then
-		new_knock_down_chance = 0.30
+		new_knock_down_chance = 0.2
 	end
+	
+	new_knock_down_chance = new_knock_down_chance * (((self._suppression - 0.2) / 4) + 1)
 	
 	-- if we only have the basic skill, use 1/5 the chance, according to skill power
 	if self._knock_down == 0.05 then
@@ -172,7 +174,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "is_knock_down", function (self)
 	return self._knock_down > 0 and math.random() < new_knock_down_chance
 end)
 
--- new reload speed from the akimbo skill @177-190 and also buffed overkill @192-198
+-- new reload speed from the akimbo skill @181-194 and also buffed overkill @196-202
 Hooks:OverrideFunction(RaycastWeaponBase, "reload_speed_multiplier", function (self)
 	local multiplier = 1
 
