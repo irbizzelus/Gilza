@@ -1,5 +1,14 @@
 -- convert melee damage to % based on the weapon's stat
 Hooks:PreHook(CopDamage, "damage_melee", "Gilza_new_melee_damage", function(self,attack_data)
+	if attack_data.bullet_taze == true then
+		local head = self._head_body_name and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
+		if not self._char_tweak.ignore_headshot and not self._damage_reduction_multiplier and head then
+			if self._char_tweak.headshot_dmg_mul then
+				attack_data.damage = attack_data.damage * self._char_tweak.headshot_dmg_mul
+			end
+		end
+		return
+	end
 	if not attack_data.Gilza_melee_damage_tweak_applied then
 	
 		local dmg_multiplier = 1
@@ -37,9 +46,9 @@ local local_shotgun_shot_id = -1
 local was_first_pellet_proccessed = {}
 local first_pellet_headshot_bonus = {}
 
--- override damage_bullet function to add new armor pen skills and allow throawble weapons like axes to perice body armour @104-134
--- shotgun changes @136-197
--- add buckshot tweak @202
+-- override damage_bullet function to add new armor pen skills and allow throawble weapons like axes to perice body armour @113-143
+-- shotgun changes @145-206
+-- add buckshot tweak @211
 Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 	
 	if self._dead or self._invulnerable then
@@ -131,6 +140,10 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 	
 	if not allow_pen then
 		return
+	end
+	
+	if managers.player:has_category_upgrade("temporary", "new_berserk_weapon_damage_multiplier") then
+		attack_data.damage = attack_data.damage * managers.player:temporary_upgrade_value("temporary", "new_berserk_weapon_damage_multiplier", 1)
 	end
 	
 	-- new shotgun damage
@@ -445,6 +458,9 @@ end)
 
 -- same as the bullet function, but for fire damage. this is only used by the dragon's breath rounds, and it is a complete copy of the new shotgun damage mechanic
 Hooks:PreHook(CopDamage, "damage_fire", "Gilza_fire_shotgun_fix", function(self, attack_data)
+	if managers.player:has_category_upgrade("temporary", "new_berserk_weapon_damage_multiplier") then
+		attack_data.damage = attack_data.damage * managers.player:temporary_upgrade_value("temporary", "new_berserk_weapon_damage_multiplier", 1)
+	end
 	if attack_data and attack_data.weapon_unit and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_category and (attack_data.weapon_unit:base():is_category("shotgun") or attack_data.weapon_unit:base():is_category("grenade_launcher")) and attack_data.weapon_unit:base()._rays and attack_data.weapon_unit:base()._rays >= 2 then
 		if not Gilza.isWeaponLibBroken then
 			attack_data.damage = attack_data.damage * attack_data.weapon_unit:base()._rays

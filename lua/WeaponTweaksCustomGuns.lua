@@ -92,7 +92,7 @@ function Gilza.applyCustomAR_stats(id)
 	-- adjust damage profiles and ammo pick up based on weapons damage (after dmg increase in the init function above)
 	-- if AR has lower then 115 dmg(so, lower then ~57 in vanilla values), only apply changes to pick up, considering that the range of breakpoints down there is way to big, let whatever stats work
 	
-	local avg_120_pickup = 7.08
+	local avg_120_pickup = 6.89
 	local avg_155_pickup = 4.76
 	local avg_250_pickup = 2.63
 	local avg_450_pickup = 1.62
@@ -489,9 +489,9 @@ function Gilza.applyCustomSMG_stats(id)
 
 	table.insert(customWeaponsUpdated.Sub_Machine_guns, id)
 	
-	local avg_95_pickup = 8.1
-	local avg_120_pickup = 7.1
-	local avg_155_pickup = 4.8
+	local avg_95_pickup = 7.88
+	local avg_120_pickup = 6.89
+	local avg_155_pickup = 4.76
 	local avg_250_pickup = 2.63
 	
 	-- same as with AR's
@@ -1055,7 +1055,7 @@ function Gilza.applyCustomLMG_stats(id)
 	
 	local avg_250_pickup = 3.29
 	local avg_155_pickup = 5.95
-	local avg_120_pickup = 8.85
+	local avg_120_pickup = 8.61
 	
 	local dmg_type = "nil"
 	
@@ -1588,8 +1588,8 @@ function Gilza.applyCustomMELEE_stats()
 				end
 			end
 			local additional_wpn_range = tweak_data.blackmarket.melee_weapons[melee].stats.range - 150
-			if additional_wpn_range >= 20 then
-				local knock = math.clamp(additional_wpn_range/20, 1, 6)
+			if additional_wpn_range >= 5 then
+				local knock = (math.clamp(additional_wpn_range/5, 1, 24)) * 0.25
 				tweak_data.blackmarket.melee_weapons[melee].stats.min_damage_effect = 7 - knock
 				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage_effect = 7 - knock
 			end

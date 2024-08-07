@@ -44,7 +44,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_upg_contraband_762_to_556_kit.name_id = "bm_wpn_fps_upg_contraband_762_to_556_kit"
 		self.parts.wpn_fps_upg_contraband_762_to_556_kit.desc_id = "bm_wpn_fps_upg_contraband_762_to_556_kit_desc"
 		self.parts.wpn_fps_upg_contraband_762_to_556_kit.stats = {value = 0,total_ammo_mod = 8,extra_ammo = 5,damage = -250,spread = -1,recoil = 3}
-		self.parts.wpn_fps_upg_contraband_762_to_556_kit.custom_stats = {ammo_pickup_min_mul = 2.65,ammo_pickup_max_mul = 2.64}
+		self.parts.wpn_fps_upg_contraband_762_to_556_kit.custom_stats = {ammo_pickup_min_mul = 2.498,ammo_pickup_max_mul = 2.492}
 		-- akm's 450 damage profile kit
 		self.parts.wpn_fps_upg_ak_hp_rounds.name_id = "wpn_fps_upg_ak_hp_rounds"
 		self.parts.wpn_fps_upg_ak_hp_rounds.desc_id = "wpn_fps_upg_ak_hp_rounds_desc"
@@ -65,6 +65,27 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_upg_fal_sp_rounds.desc_id = "wpn_fps_upg_fal_sp_rounds_desc"
 		self.parts.wpn_fps_upg_fal_sp_rounds.stats = {value = 0,damage = -200,spread = 1,recoil = 5,total_ammo_mod = 10}
 		self.parts.wpn_fps_upg_fal_sp_rounds.custom_stats = {ammo_pickup_min_mul = 1.624,ammo_pickup_max_mul = 1.62}
+		-- amcar's 120 damage profile kit
+		self.parts.wpn_fps_upg_amcar_rrlp_rounds.name_id = "wpn_fps_upg_amcar_rrlp_rounds"
+		self.parts.wpn_fps_upg_amcar_rrlp_rounds.desc_id = "wpn_fps_upg_amcar_rrlp_rounds_desc"
+		self.parts.wpn_fps_upg_amcar_rrlp_rounds.stats = {value = 0,damage = -80,spread = -2,recoil = 5,total_ammo_mod = 6.67}
+		self.parts.wpn_fps_upg_amcar_rrlp_rounds.custom_stats = {ammo_pickup_min_mul = 1.703,ammo_pickup_max_mul = 1.703}
+		-- baby deagle/white streak AP rounds
+		self.parts.wpn_fps_upg_pis_mid_ap_rounds.name_id = "bm_wpn_fps_upg_pis_mid_ap_rounds"
+		self.parts.wpn_fps_upg_pis_mid_ap_rounds.desc_id = "bm_wpn_fps_upg_pis_mid_ap_rounds_desc"
+		self.parts.wpn_fps_upg_pis_mid_ap_rounds.stats = {value = 0,total_ammo_mod = -5,spread = -2}
+		self.parts.wpn_fps_upg_pis_mid_ap_rounds.custom_stats = {can_shoot_through_shield = true,armor_piercing_add = 1,ammo_pickup_max_mul = 0.5,ammo_pickup_min_mul = 0.5}
+		self.wpn_fps_pis_x_sparrow.override = self.wpn_fps_pis_x_sparrow.override or {}
+		self.wpn_fps_pis_x_pl14.override = self.wpn_fps_pis_x_sparrow.override or {}
+		self.wpn_fps_pis_x_sparrow.override.wpn_fps_upg_pis_mid_ap_rounds = {stats = {value = 0,total_ammo_mod = -5,spread = -2}}
+		self.wpn_fps_pis_x_pl14.override.wpn_fps_upg_pis_mid_ap_rounds = {stats = {value = 0,total_ammo_mod = -5,spread = -2}}
+		-- baby deagle/white streak AP rounds - low velocity version
+		self.parts.wpn_fps_upg_pis_mid_ap_rounds_lv.name_id = "bm_wpn_fps_upg_pis_mid_ap_rounds_lv"
+		self.parts.wpn_fps_upg_pis_mid_ap_rounds_lv.desc_id = "bm_wpn_fps_upg_pis_mid_ap_rounds_lv_desc"
+		self.parts.wpn_fps_upg_pis_mid_ap_rounds_lv.stats = {value = 0,damage = -50,total_ammo_mod = -5,spread = -3,recoil = 2}
+		self.parts.wpn_fps_upg_pis_mid_ap_rounds_lv.custom_stats = {can_shoot_through_shield = true,armor_piercing_add = 1,ammo_pickup_max_mul = 0.7,ammo_pickup_min_mul = 0.7}
+		self.wpn_fps_pis_x_sparrow.override.wpn_fps_upg_pis_mid_ap_rounds_lv = {stats = {value = 0,damage = -25,total_ammo_mod = -5,spread = -3,recoil = 2}}
+		self.wpn_fps_pis_x_pl14.override.wpn_fps_upg_pis_mid_ap_rounds_lv = {stats = {value = 0,damage = -25,total_ammo_mod = -5,spread = -3,recoil = 2}}
 		-- new mag limiter mods for ms3gl
 		self.parts.wpn_fps_gre_ms3gl_ml_double_round.desc_id = "bm_wp_wpn_fps_gre_ms3gl_ml_double_round_desc"
 		self.parts.wpn_fps_gre_ms3gl_ml_double_round.has_description = true
@@ -1053,7 +1074,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					concealment = -4,
 					spread = 1,
 					recoil = 1,
-					total_ammo_mod = -8
+					total_ammo_mod = -6.67
 				}
 			}
 		end
@@ -1527,7 +1548,9 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		
 		---- AA12 ----
 		local function Gilza_init_aa12()
-			self.parts.wpn_fps_sho_aa12_mag_drum.stats.reload = -6
+			self.parts.wpn_fps_sho_aa12_mag_drum.stats.spread = -2
+			self.parts.wpn_fps_sho_aa12_mag_drum.stats.recoil = 3
+			self.parts.wpn_fps_sho_aa12_mag_drum.stats.reload = -7
 			self.parts.wpn_fps_sho_aa12_barrel_long.stats.spread = 1
 			self.parts.wpn_fps_sho_aa12_barrel_silenced.stats.damage = nil
 			self.parts.wpn_fps_sho_aa12_barrel_silenced.stats.spread = -2
@@ -2049,6 +2072,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_hailstorm_conversion.stats.recoil = 3
 		self.parts.wpn_fps_hailstorm_conversion.stats.total_ammo_mod = nil
 		self.parts.wpn_fps_hailstorm_conversion.stats.reload = 2
+		
+		-- SAWS
+		self.parts.wpn_fps_saw_body_speed.stats.damage = 4
+		self.parts.wpn_fps_saw_m_blade_sharp.stats.damage = 4
 		
 		-- PISTOL CROSSBOW
 		self.parts.wpn_fps_bow_hunter_m_standard.custom_stats = {armor_piercing_add = 1}
@@ -4553,6 +4580,41 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		end
 		FrenchyAU_packs_stat_adjustments()
 		
+		local function PlayBONK_offhand_knives()
+			
+			local knife_list = {
+				wpn_fps_pis_usp_knife_rambo = true,
+				wpn_fps_pis_usp_knife_bayonet = true,
+				wpn_fps_pis_usp_knife_sword = true,
+				wpn_fps_pis_usp_knife_oxide = true,
+				wpn_fps_pis_usp_knife_freedom = true,
+				wpn_fps_pis_usp_knife_kabar_tanto = true,
+				wpn_fps_pis_usp_knife_kabar = true,
+				wpn_fps_pis_usp_knife_wing = true,
+				wpn_fps_pis_usp_knife_km2000 = true,
+				wpn_fps_pis_usp_knife_ballistic = true,
+				wpn_fps_pis_usp_knife_switchblade = true,
+				wpn_fps_pis_usp_knife_x46 = true,
+				wpn_fps_pis_usp_knife_chef = true,
+				wpn_fps_pis_usp_knife_fairbair = true,
+				wpn_fps_pis_usp_knife_aziz = true,
+				wpn_fps_pis_usp_knife_toothbrush_shiv = true,
+			}
+			
+			for id, _ in pairs(knife_list) do
+				if self.parts[id] then
+					self.parts[id].stats.min_damage = 5
+					self.parts[id].stats.max_damage = 5
+					self.parts[id].stats.min_damage_effect = 8
+					self.parts[id].stats.max_damage_effect = 8
+					self.parts[id].stats.concealment = -1
+					self.parts[id].desc_id = "bm_wp_wpn_fps_offhandknif_Gilza_desc"
+					self.parts[id].has_description = true
+				end
+			end
+			
+		end
+		PlayBONK_offhand_knives()
 	end
 	customWeaponMods()
 	

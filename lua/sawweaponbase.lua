@@ -16,12 +16,12 @@ Hooks:OverrideFunction(SawHit, "on_collision", function (self, col_ray, weapon_u
 	local hit_unit = col_ray.unit
 	local base_ext = hit_unit:base() 
 
-	if base_ext and base_ext.has_tag and base_ext:has_tag("tank") then
-		damage = damage + 10
-	end
+	-- if base_ext and base_ext.has_tag and base_ext:has_tag("tank") then
+		-- damage = damage + 10
+	-- end
 
 	if hit_unit and hit_unit:character_damage() then
-		damage = damage * 9
+		damage = damage * 10
 	end
 
 	local result = InstantBulletBase.on_collision(self, col_ray, weapon_unit, user_unit, damage)

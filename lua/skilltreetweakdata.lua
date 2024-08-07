@@ -4,7 +4,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	-- PERKS
 	------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	-- Change headshot multiplier to 8th card lame doc bag bonus
+	-- Changed headshot multiplier to the lame doc bag bonus from 8th card
 	local deck2 = {
 		cost = 300,
 		desc_id = "menu_deckall_2_desc",
@@ -18,7 +18,23 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		}
 	}
 	
-	-- Add fully loaded nade pick up as base kit, but make it kinda weak
+	-- unchanged, used for new decks
+	local deck4 = {
+		cost = 600,
+		desc_id = "menu_deckall_4_desc_new",
+		name_id = "menu_deckall_4",
+		upgrades = {
+			"passive_player_xp_multiplier",
+			"player_passive_suspicion_bonus",
+			"player_passive_armor_movement_penalty_multiplier"
+		},
+		icon_xy = {
+			3,
+			0
+		}
+	}
+	
+	-- Added fully loaded nade pick up as base kit, but made it kinda weak
 	local deck6 = {
 		cost = 1600,
 		desc_id = "menu_deckall_6_desc",
@@ -34,7 +50,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		}
 	}
 	
-	-- Remove pathetic extra 5% damage and replace with base transporter+parkour
+	-- Removed pathetic extra 5% damage and replace with basic transporter and basic parkour
 	local deck8 = {
 		cost = 3200,
 		desc_id = "menu_deckall_8_desc",
@@ -56,134 +72,190 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		self.specializations[i][8] = deck8
 	end
 	
-	-- update sociopath melee related card
-	local deck_0_socio = {
-		cost = 200,
-		desc_id = "menu_sociopathinfil_1_desc",
-		name_id = "menu_deck9_1",
-		upgrades = {
-			"player_damage_dampener_outnumbered_strong",
-			"melee_stacking_hit_damage_multiplier_1",
-			"melee_stacking_hit_expire_t",
-		},
-		icon_xy = {
-			6,
-			4
+	-- Sociopath
+	local function Sociopath_updates()
+		-- update melee related card
+		self.specializations[9][1] = {
+			cost = 200,
+			desc_id = "menu_sociopathinfil_1_desc",
+			name_id = "menu_deck9_1",
+			upgrades = {
+				"player_damage_dampener_outnumbered_strong",
+				"melee_stacking_hit_damage_multiplier_1",
+				"melee_stacking_hit_expire_t",
+			},
+			icon_xy = {
+				6,
+				4
+			}
 		}
-	}
-	self.specializations[9][1] = deck_0_socio
+	end
+	Sociopath_updates()
 	
-	-- update infiltrator melee related cards
-	local deck_0_infil = {
-		cost = 200,
-		desc_id = "menu_sociopathinfil_1_desc",
-		name_id = "menu_deck8_7",
-		upgrades = {
-			"player_damage_dampener_outnumbered_strong",
-			"melee_stacking_hit_damage_multiplier_1",
-			"melee_stacking_hit_expire_t",
-		},
-		icon_xy = {
-			6,
-			4
+	-- Infiltrator
+	local function Infiltrator_updates()
+		-- update melee related cards
+		self.specializations[8][1] = {
+			cost = 200,
+			desc_id = "menu_sociopathinfil_1_desc",
+			name_id = "menu_deck8_7",
+			upgrades = {
+				"player_damage_dampener_outnumbered_strong",
+				"melee_stacking_hit_damage_multiplier_1",
+				"melee_stacking_hit_expire_t",
+			},
+			icon_xy = {
+				6,
+				4
+			}
 		}
-	}
-	local deck_4_infil = {
-		cost = 1000,
-		desc_id = "menu_deck8_3_desc",
-		name_id = "menu_deck8_3",
-		upgrades = {
-			"player_damage_dampener_close_contact_2",
-			"melee_stacking_hit_damage_multiplier_1"
-		},
-		icon_xy = {
-			4,
-			4
+		self.specializations[8][5] = {
+			cost = 1000,
+			desc_id = "menu_deck8_3_desc",
+			name_id = "menu_deck8_3",
+			upgrades = {
+				"player_damage_dampener_close_contact_2",
+				"melee_stacking_hit_damage_multiplier_1"
+			},
+			icon_xy = {
+				4,
+				4
+			}
 		}
-	}
-	self.specializations[8][1] = deck_0_infil
-	self.specializations[8][5] = deck_4_infil
+	end
+	Infiltrator_updates()
 	
-	local deck4 = {
-		cost = 600,
-		desc_id = "menu_deckall_4_desc_new",
-		name_id = "menu_deckall_4",
-		upgrades = {
-			"passive_player_xp_multiplier",
-			"player_passive_suspicion_bonus",
-			"player_passive_armor_movement_penalty_multiplier"
-		},
-		icon_xy = {
-			3,
-			0
+	-- Hitman
+	local function Hitman_updates()
+		self.specializations[5][1].upgrades = {
+			"player_perk_armor_regen_timer_multiplier_1",
+			"player_new_hitman_regen"
 		}
-	}
+	end
+	Hitman_updates()
 	
-	-- Add new Brawler perk deck
+	-- Yakuza
+	local function Yakuza_updates()
+		self.specializations[12][9].upgrades = {
+			"player_passive_loot_drop_multiplier",
+			"player_armor_regen_damage_health_ratio_threshold_multiplier",
+			"player_movement_speed_damage_health_ratio_threshold_multiplier",
+			"player_AP_damage_resist_brawler",
+			"player_yakuza_suppression_resist",
+		}
+	end
+	Yakuza_updates()
+	
+	-- Rogue
+	local function Rogue_updates()
+		self.specializations[4][9].upgrades = {
+			"player_passive_loot_drop_multiplier",
+			"weapon_passive_armor_piercing_chance",
+			"weapon_passive_swap_speed_multiplier_1",
+			"player_movement_speed_multiplier_2",
+			"player_stamina_multiplier",
+			"player_passive_dodge_chance_4",
+			"player_crouch_dodge_chance_1"
+		}
+	end
+	Rogue_updates()
+	
+	-- Gambler
+	local function Gambler_updates()
+		self.specializations[10][1].upgrades = {
+			"temporary_loose_ammo_restore_health_1",
+			"player_gain_life_per_players",
+			"player_increased_pickup_area_2"
+		}
+	end
+	Gambler_updates()
+	
+	-- Brawler perk deck
 	local brawler_deck = {
 		{
 			cost = 200,
 			desc_id = "menu_deck_brawler1_desc",
+			short_id = "menu_deck_brawler1_desc_short",
 			name_id = "menu_deck_brawler1",
 			upgrades = {
 				"player_extra_ammo_cut",
-				"player_passive_armor_movement_penalty_multiplier2",
-				"player_damage_resist_brawler1"
+				"player_damage_resist_brawler1",
+				"player_perk_armor_regen_timer_multiplier_1", -- when perk is unequipped, it resets to a weaker version of the same skills, instead of removing upgrades completely
+				"player_perk_armor_regen_timer_multiplier_2", -- so now this perk adds lower upgrades as well to avoid this issue
+				"player_perk_armor_regen_timer_multiplier_3",
+				"player_perk_armor_regen_timer_multiplier_4",
+				"player_perk_armor_regen_timer_multiplier_5",
+				"player_perk_armor_regen_timer_multiplier_6" -- important one
 			},
 			icon_xy = {
 				2,
 				4
 			}
 		},
+		
 		deck2,
+		
 		{
 			cost = 400,
 			desc_id = "menu_deck_brawler3_desc",
+			short_id = "menu_deck_brawler3_desc_short",
 			name_id = "menu_deck_brawler3",
 			upgrades = {
 				"player_damage_resist_brawler2",
+				"player_uncover_multiplier",
+				"player_passive_armor_movement_penalty_multiplier2",
 			},
 			icon_xy = {
 				0,
 				5
 			}
 		},
+		
 		deck4,
+		
 		{
 			cost = 1000,
 			desc_id = "menu_deck_brawler5_desc",
+			short_id = "menu_deck_brawler5_desc_short",
 			name_id = "menu_deck_brawler5",
 			texture_bundle_folder = "max",
 			upgrades = {
+				"player_damage_resist_brawler3",
 				"player_passive_armor_movement_penalty_multiplier3",
+				"player_AP_damage_resist_brawler",
+				"player_stamina_on_melee_kill_brawler"
 			},
 			icon_xy = {
 				1,
 				0
 			}
 		},
+		
 		deck6,
+		
 		{
 			cost = 2400,
 			desc_id = "menu_deck_brawler7_desc",
+			short_id = "menu_deck_brawler7_desc_short",
 			name_id = "menu_deck_brawler7",
 			upgrades = {
-				"player_damage_resist_brawler3",
+				"player_damage_resist_faraway_brawler",
 			},
 			icon_xy = {
 				0,
 				5
 			}
 		},
+		
 		deck8,
+		
 		{
 			cost = 4000,
 			desc_id = "menu_deck_brawler9_desc",
+			short_id = "menu_deck_brawler9_desc_short",
 			name_id = "menu_deck_brawler9",
 			upgrades = {
 				"player_armor_regen_brawler",
-				"player_damage_resist_faraway_brawler",
-				"player_uncover_multiplier",
 				"player_passive_loot_drop_multiplier"
 			},
 			icon_xy = {
@@ -196,20 +268,111 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		custom = true,
 		custom_id = "Gilza_brawler_perkdeck",
 	}
-
+	
+	-- Add Brawler
 	local j = #self.specializations + 1
 	self.specializations[j] = brawler_deck
+	Gilza.custom_specialization_indexes = {brawler = j}
 	
-	-- rogue
-	self.specializations[4][9].upgrades = {
-		"player_passive_loot_drop_multiplier",
-		"weapon_passive_armor_piercing_chance",
-		"weapon_passive_swap_speed_multiplier_1",
-		"player_movement_speed_multiplier_2",
-		"player_stamina_multiplier",
-		"player_passive_dodge_chance_4",
-		"player_crouch_dodge_chance_1"
+	-- Speed junkie perk deck
+	local speed_junkie_deck = {
+		{
+			cost = 200,
+			texture_bundle_folder = "Gilza",
+			desc_id = "menu_deck_SJ_1_desc",
+			short_id = "menu_deck_SJ_1_desc_short",
+			name_id = "menu_deck_SJ_1",
+			upgrades = {
+				"player_speed_junkie_meter",
+				"player_pause_armor_recovery_when_moving",
+				"player_health_decrease_1", -- when perk is unequipped, it resets to a weaker version of the same skills, instead of removing upgrades completely
+				"player_health_decrease_2", -- this is the important one
+				"player_armor_increase_1", -- so now this perk adds lower upgrades as well to avoid this issue
+				"player_armor_increase_2",
+				"player_armor_increase_3",
+				"player_armor_increase_4" -- this is the important one
+			},
+			icon_xy = {
+				1,
+				0
+			}
+		},
+		deck2,
+		{
+			cost = 400,
+			texture_bundle_folder = "Gilza",
+			desc_id = "menu_deck_SJ_3_desc",
+			short_id = "menu_deck_SJ_3_desc_short",
+			name_id = "menu_deck_SJ_3",
+			upgrades = {
+				"player_passive_dodge_chance_1",
+				"player_armor_increase_5",
+				"player_speed_junkie_stamina_on_kill"
+			},
+			icon_xy = {
+				2,
+				0
+			}
+		},
+		deck4,
+		{
+			cost = 1000,
+			texture_bundle_folder = "Gilza",
+			desc_id = "menu_deck_SJ_5_desc",
+			short_id = "menu_deck_SJ_5_desc_short",
+			name_id = "menu_deck_SJ_5",
+			upgrades = {
+				"player_speed_junkie_meter_on_kill",
+				"player_armor_increase_6"
+			},
+			icon_xy = {
+				3,
+				0
+			}
+		},
+		deck6,
+		{
+			cost = 2400,
+			texture_bundle_folder = "max",
+			desc_id = "menu_deck_SJ_7_desc",
+			short_id = "menu_deck_SJ_7_desc_short",
+			name_id = "menu_deck_SJ_7",
+			upgrades = {
+				"player_speed_junkie_armor_on_dodge"
+			},
+			icon_xy = {
+				3,
+				0
+			}
+		},
+		deck8,
+		{
+			cost = 4000,
+			texture_bundle_folder = "Gilza",
+			desc_id = "menu_deck_SJ_9_desc",
+			short_id = "menu_deck_SJ_9_desc_short",
+			name_id = "menu_deck_SJ_9",
+			upgrades = {
+				"player_speed_junkie_armor_berserk",
+				"player_speed_junkie_meter_boost_agility",
+				"player_passive_loot_drop_multiplier"
+			},
+			icon_xy = {
+				1,
+				1
+			}
+		},
+		desc_id = "menu_deck_SJ_desc",
+		name_id = "menu_deck_SJ",
+		custom = true,
+		custom_id = "Gilza_SJ_perkdeck",
 	}
+
+	-- Speed junkie
+	j = #self.specializations + 1
+	self.specializations[j] = speed_junkie_deck
+	Gilza.custom_specialization_indexes.junkie = j
+	
 	
 	------------------------------------------------------------------------------------------------------------------------------------------------------
 	-- SKILLS
@@ -274,6 +437,17 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	
 	self.skills.awareness[1].upgrades = { "player_climb_speed_multiplier_1", "player_extra_jump_height" }
 	self.skills.awareness[2].upgrades = { "player_can_free_run", "player_run_and_reload" }
+	
+	self.skills.dire_need[1].upgrades = {"player_detection_risk_add_dodge_chance_1"}
+	self.skills.dire_need[2].upgrades = {"player_detection_risk_add_dodge_chance_2"}
+	self.skills.dire_need.icon_xy = {1,12}
+	
+	self.skills.insulation[1].upgrades = {"player_armor_depleted_stagger_shot_1", "player_armor_depleted_stagger_shot_2"}
+	self.skills.insulation[2].upgrades = {"player_taser_self_shock","player_escape_taser_1","player_tased_electric_bullets"}
+	
+	self.skills.jail_diet[1].upgrades = {"player_dodge_armor_regen_1"}
+	self.skills.jail_diet[2].upgrades = {"player_dodge_armor_regen_2"}
+	self.skills.jail_diet.icon_xy = {10,8}
 	
 	---- FUGITIVE
 	

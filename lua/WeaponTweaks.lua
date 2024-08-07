@@ -270,7 +270,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		
 		-- all reload timer overrides check if the reload speed is default, in case user runs custom animations that allready change the reload timers
 		
-		local avg_120_pickup = 7.08
+		local avg_120_pickup = 6.89
 		local avg_155_pickup = 4.76
 		local avg_250_pickup = 2.63
 		local avg_450_pickup = 1.62
@@ -491,8 +491,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				new_m4 = true,			
 				g36 = true,	
 				flint = true,
-				tecci = true,
-				m16 = true,			
+				tecci = true,		
 				tkb = true,
 			}
 
@@ -554,13 +553,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.tecci.fire_mode_data = {fire_rate = 60/600}
 			self.tecci.auto = {fire_rate = 60/600}
 			
-			self.m16.NR_CLIPS_MAX = 5
-			self.m16.AMMO_MAX = self.m16.CLIP_AMMO_MAX * self.m16.NR_CLIPS_MAX
-			self.m16.stats.recoil = 1
-			self.m16.stats.spread = 22
-			self.m16.fire_mode_data = {fire_rate = 60/900}
-			self.m16.auto = {fire_rate = 60/900}
-			
 			self.tkb.NR_CLIPS_MAX = 2.5
 			self.tkb.AMMO_MAX = self.tkb.CLIP_AMMO_MAX * self.tkb.NR_CLIPS_MAX
 			self.tkb.stats.spread = 5
@@ -574,7 +566,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			local ARs_120 = {
 				famas = true,
 				ak5 = true,
-				komodo = true
+				komodo = true,
+				m16 = true
 			}
 
 			for id, status in pairs(ARs_120) do
@@ -600,6 +593,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.komodo.stats.spread = 15
 			self.komodo.NR_CLIPS_MAX = 6
 			self.komodo.AMMO_MAX = self.komodo.CLIP_AMMO_MAX * self.komodo.NR_CLIPS_MAX
+			
+			self.m16.NR_CLIPS_MAX = 6
+			self.m16.AMMO_MAX = self.m16.CLIP_AMMO_MAX * self.m16.NR_CLIPS_MAX
+			self.m16.stats.recoil = 1
+			self.m16.stats.spread = 22
+			self.m16.fire_mode_data = {fire_rate = 60/900}
+			self.m16.auto = {fire_rate = 60/900}
 		
 		end
 		
@@ -918,7 +918,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			
 			self.aa12.NR_CLIPS_MAX = 7
 			self.aa12.AMMO_MAX = self.aa12.CLIP_AMMO_MAX * self.aa12.NR_CLIPS_MAX
-			self.aa12.stats.recoil = 5
+			self.aa12.stats.recoil = 7
 			self.aa12.stats.spread = 9
 			self.aa12.stats.reload = 14
 			self.aa12.stats.concealment = 20
@@ -966,7 +966,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		-- +25% compared to AR, should incentivize defence playstyle by allowing to pick up less often, and reducing dmg up close
 		local avg_250_pickup = 3.29
 		local avg_155_pickup = 5.95
-		local avg_120_pickup = 8.85
+		local avg_120_pickup = 8.61
 		
 		local new_lmg_damage_falloff = {
 			optimal_distance = 200,
@@ -997,7 +997,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.hcar.damage_falloff.near_multiplier = 1
 		
 		self.kacchainsaw.stats.damage = 120
-		self.kacchainsaw.AMMO_PICKUP = {(8.14 * 0.9) / 1.35,(8.14 * 1.1) / 1.35}
+		self.kacchainsaw.AMMO_PICKUP = {(7.92 * 0.9) / 1.35,(7.92 * 1.1) / 1.35}
 		self.kacchainsaw.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.kacchainsaw.damage_falloff.far_multiplier = 1
 		self.kacchainsaw.damage_falloff.near_multiplier = 1
@@ -1284,9 +1284,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	-- Sub machine guns --
 	local function setSMGs()
 		
-		local avg_95_pickup = 8.1
-		local avg_120_pickup = 7.1
-		local avg_155_pickup = 4.8
+		local avg_95_pickup = 7.88
+		local avg_120_pickup = 6.89
+		local avg_155_pickup = 4.76
 		local avg_250_pickup = 2.63
 		
 		local new_smg_damage_falloff = {optimal_distance = 200,optimal_range = 700,near_falloff = 0,far_falloff = 1200,near_multiplier = 1.2,far_multiplier = 0.5}
@@ -2676,6 +2676,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.elastic.stats.recoil = 15
 	end
 	setBOWs()
+	
+	--Saws--
+	local function setSAWs()
+		self.saw.stats.damage = 22
+		self.saw_secondary.stats.damage = 22
+	end
+	setSAWs()
 	
 	local function setNewRecoil()
 		

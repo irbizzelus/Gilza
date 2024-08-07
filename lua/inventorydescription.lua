@@ -197,6 +197,15 @@ Hooks:OverrideFunction(WeaponDescription, "_get_skill_stats", function (name, ca
 						end
 					end
 					
+					if managers.player:has_category_upgrade("player", "speed_junkie_meter_boost_agility") then
+						local counter = managers.player._Gilza_junkie_counter or 0
+						local skill = managers.player:upgrade_value("player", "speed_junkie_meter_boost_agility")
+						if skill and type(skill) ~= "number" then
+							local mul = (skill.reload - 1) * (counter / 100) + 1
+							mult = mult + 1 - mul
+						end	
+					end
+					
 					if managers.player:has_category_upgrade("temporary", "overkill_damage_multiplier") and managers.player:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 then
 						if managers.player:has_category_upgrade("player", "overkill_all_weapons") then
 							mult = mult - 0.5

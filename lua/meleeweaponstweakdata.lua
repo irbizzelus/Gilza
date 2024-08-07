@@ -6,112 +6,112 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 	-- list in order of appearance in my game, im only missing hotline miami 1 and alienware melee, they are all at the end
 	-- also the event hammer is hidden outside of the event, so its at the end as well
 	local melee_ids = {
-		weapon = {class = 1, knock_power = false},
-		fists = {class = 3, knock_power = 5},
-		brass_knuckles = {class = 3, knock_power = 5},
-		kabartanto = {class = 3, knock_power = 3},
-		toothbrush = {class = 2, knock_power = false},
-		kabar = {class = 3, knock_power = 3},
-		swagger = {class = 4, knock_power = 5},
-		aziz = {class = 3, knock_power = 5},
-		clean = {class = 2, knock_power = false},
-		spoon_gold = {class = 5, knock_power = false},
-		nin = {class = 3, knock_power = 3},
-		spoon = {class = 5, knock_power = false},
-		fork = {class = 2, knock_power = false},
-		spatula = {class = 4, knock_power = 7},
-		shovel = {class = 4, knock_power = 2},
-		moneybundle = {class = 3, knock_power = 5},
+		weapon = {class = 1},
+		fists = {class = 3},
+		brass_knuckles = {class = 3},
+		kabartanto = {class = 3},
+		toothbrush = {class = 2},
+		kabar = {class = 3},
+		swagger = {class = 4},
+		aziz = {class = 3},
+		clean = {class = 2},
+		spoon_gold = {class = 5},
+		nin = {class = 3},
+		spoon = {class = 5},
+		fork = {class = 2},
+		spatula = {class = 4},
+		shovel = {class = 4},
+		moneybundle = {class = 3},
 		
-		fight = {class = 3, knock_power = 5},
-		cutters = {class = 4, knock_power = false},
-		shawn = {class = 2, knock_power = false},
-		boxcutter = {class = 4, knock_power = 7},
-		microphone = {class = 4, knock_power = 8},
-		selfie = {class = 4, knock_power = 2},
-		bayonet = {class = 3, knock_power = 3},
-		gator = {class = 4, knock_power = 3},
-		road = {class = 5, knock_power = 9},
-		zeus = {class = "tazer", knock_power = false},
-		iceaxe = {class = 4, knock_power = 2},
-		oxide = {class = 4, knock_power = 3},
-		sword = {class = 2, knock_power = false},
-		baton = {class = 4, knock_power = 2},
-		slot_lever = {class = 4, knock_power = 3},
-		chac = {class = 3, knock_power = 5},
+		fight = {class = 3},
+		cutters = {class = 4},
+		shawn = {class = 2},
+		boxcutter = {class = 4},
+		microphone = {class = 4},
+		selfie = {class = 4},
+		bayonet = {class = 3},
+		gator = {class = 4},
+		road = {class = 5},
+		zeus = {class = "tazer"},
+		iceaxe = {class = 4},
+		oxide = {class = 4},
+		sword = {class = 2},
+		baton = {class = 4},
+		slot_lever = {class = 4},
+		chac = {class = 3},
 		
-		fear = {class = "poison", knock_power = false},
-		hauteur = {class = 3, knock_power = 5},
-		shock = {class = 4, knock_power = 7},
-		baseballbat = {class = 5, knock_power = 3},
-		oldbaton = {class = 4, knock_power = 2},
-		hockey = {class = 4, knock_power = 2},
-		meter = {class = 6, knock_power = 3},
-		ballistic = {class = 3, knock_power = 5},
-		pugio = {class = 2, knock_power = false},
-		agave = {class = 4, knock_power = 5},
-		happy = {class = 3, knock_power = false},
-		kampfmesser = {class = 3, knock_power = 3},
-		buck = {class = 5, knock_power = 7},
-		wing = {class = 4, knock_power = 7},
-		branding_iron = {class = 4, knock_power = 5},
-		detector = {class = 4, knock_power = 5},
+		fear = {class = "poison"},
+		hauteur = {class = 3},
+		shock = {class = 4},
+		baseballbat = {class = 5},
+		oldbaton = {class = 4},
+		hockey = {class = 4},
+		meter = {class = 6},
+		ballistic = {class = 3},
+		pugio = {class = 2},
+		agave = {class = 4},
+		happy = {class = 3},
+		kampfmesser = {class = 3},
+		buck = {class = 5},
+		wing = {class = 4},
+		branding_iron = {class = 4},
+		detector = {class = 4},
 		
-		croupier_rake = {class = 4, knock_power = 2},
-		ostry = {class = 3, knock_power = false},
-		bullseye = {class = 3, knock_power = 3},
-		cs = {class = 4, knock_power = false},
-		brick = {class = 5, knock_power = 9},
-		model24 = {class = 4, knock_power = 7},
-		scalper = {class = 4, knock_power = 6},
-		switchblade = {class = 2, knock_power = false},
-		grip = {class = 3, knock_power = 5},
-		boxing_gloves = {class = 3, knock_power = 5},
-		push = {class = 3, knock_power = 5},
-		sap = {class = 4, knock_power = 6},
-		meat_cleaver = {class = 3, knock_power = 2},
-		sandsteel = {class = 3, knock_power = false},
-		twins = {class = 3, knock_power = 5},
-		pitchfork = {class = 4, knock_power = 5},
+		croupier_rake = {class = 4},
+		ostry = {class = 3},
+		bullseye = {class = 3},
+		cs = {class = 4},
+		brick = {class = 5},
+		model24 = {class = 4},
+		scalper = {class = 4},
+		switchblade = {class = 2},
+		grip = {class = 3},
+		boxing_gloves = {class = 3},
+		push = {class = 3},
+		sap = {class = 4},
+		meat_cleaver = {class = 3},
+		sandsteel = {class = 3},
+		twins = {class = 3},
+		pitchfork = {class = 4},
 		
-		bowie = {class = 4, knock_power = 5},
-		micstand = {class = 4, knock_power = 2},
-		chef = {class = 2, knock_power = false},
-		x46 = {class = 3, knock_power = 2},
-		tiger = {class = 3, knock_power = 3},
-		beardy = {class = 6, knock_power = 5},
-		catch = {class = 2, knock_power = false},
-		cleaver = {class = 3, knock_power = 2},
-		taser = {class = "tazer", knock_power = false},
-		mining_pick = {class = 4, knock_power = 5},
-		hammer = {class = 4, knock_power = 7},
-		shillelagh = {class = 4, knock_power = 7},
-		stick = {class = 4, knock_power = 5},
-		scoutknife = {class = 2, knock_power = false},
-		gerber = {class = 3, knock_power = 3},
-		fairbair = {class = 2, knock_power = false},
+		bowie = {class = 4},
+		micstand = {class = 4},
+		chef = {class = 2},
+		x46 = {class = 3},
+		tiger = {class = 3},
+		beardy = {class = 6},
+		catch = {class = 2},
+		cleaver = {class = 3},
+		taser = {class = "tazer"},
+		mining_pick = {class = 4},
+		hammer = {class = 4},
+		shillelagh = {class = 4},
+		stick = {class = 4},
+		scoutknife = {class = 2},
+		gerber = {class = 3},
+		fairbair = {class = 2},
 		
-		tomahawk = {class = 4, knock_power = 5},
-		morning = {class = 3, knock_power = false},
-		poker = {class = 4, knock_power = 7},
-		barbedwire = {class = 5, knock_power = false},
-		great = {class = 6, knock_power = 3},
-		whiskey = {class = 4, knock_power = 7},
-		freedom = {class = 5, knock_power = false},
-		dingdong = {class = 4, knock_power = false},
-		tenderizer = {class = 4, knock_power = 7},
-		machete = {class = 4, knock_power = 5},
-		becker = {class = 3, knock_power = 2},
-		cqc = {class = "poison", knock_power = false},
-		rambo = {class = 3, knock_power = 2},
-		fireaxe = {class = 6, knock_power = 3},
+		tomahawk = {class = 4},
+		morning = {class = 3},
+		poker = {class = 4},
+		barbedwire = {class = 5},
+		great = {class = 6},
+		whiskey = {class = 4},
+		freedom = {class = 5},
+		dingdong = {class = 4},
+		tenderizer = {class = 4},
+		machete = {class = 4},
+		becker = {class = 3},
+		cqc = {class = "poison"},
+		rambo = {class = 3},
+		fireaxe = {class = 6},
 		
 		-- this one i dont own
-		briefcase = {class = 5, knock_power = false},
+		briefcase = {class = 5},
 		-- this one is not even shown
-		alien_maul = {class = 4, knock_power = false},
+		alien_maul = {class = 4},
 		-- event special
-		piggy_hammer = {class = 5, knock_power = false}
+		piggy_hammer = {class = 5}
 	}
 	
 	Gilza.default_melee_weapons = {}
@@ -126,53 +126,33 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 			elseif stats.class == 2 then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 2
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 3.5
-				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 1
-				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 1
+				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 7
+				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 7
 				self.melee_weapons[tostring(weapon)].stats.charge_time = 1
 			elseif stats.class == 3 then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 2.5
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 5
+				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 7
+				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 7
 				self.melee_weapons[tostring(weapon)].stats.charge_time = 1.5
-				if stats.knock_power then
-					self.melee_weapons[tostring(weapon)].stats.min_damage_effect = stats.knock_power
-					self.melee_weapons[tostring(weapon)].stats.max_damage_effect = stats.knock_power
-				else
-					self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 1
-					self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 1
-				end
 			elseif stats.class == 4 then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 3.5
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 7.5
+				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 7
+				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 7
 				self.melee_weapons[tostring(weapon)].stats.charge_time = 2.5
-				if stats.knock_power then
-					self.melee_weapons[tostring(weapon)].stats.min_damage_effect = stats.knock_power
-					self.melee_weapons[tostring(weapon)].stats.max_damage_effect = stats.knock_power
-				else
-					self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 1
-					self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 1
-				end
 			elseif stats.class == 5 then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 5
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 10
+				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 7
+				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 7
 				self.melee_weapons[tostring(weapon)].stats.charge_time = 3.5
-				if stats.knock_power then
-					self.melee_weapons[tostring(weapon)].stats.min_damage_effect = stats.knock_power
-					self.melee_weapons[tostring(weapon)].stats.max_damage_effect = stats.knock_power
-				else
-					self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 1
-					self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 1
-				end
 			elseif stats.class == 6 then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 7.5
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 15
+				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 7
+				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 7
 				self.melee_weapons[tostring(weapon)].stats.charge_time = 4.5
-				if stats.knock_power then
-					self.melee_weapons[tostring(weapon)].stats.min_damage_effect = stats.knock_power
-					self.melee_weapons[tostring(weapon)].stats.max_damage_effect = stats.knock_power
-				else
-					self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 1
-					self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 1
-				end
 			elseif stats.class == "tazer" then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 0.5
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 1
@@ -188,31 +168,37 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 			end
 			self.melee_weapons[tostring(weapon)].sounds.charge = nil
 		end
+		local additional_wpn_range = self.melee_weapons[tostring(weapon)].stats.range - 150
+		if additional_wpn_range >= 5 and not (stats.class == "poison" or stats.class == "tazer" or stats.class == 1) then
+			local knock = (math.clamp(additional_wpn_range/5, 1, 24)) * 0.25
+			self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 7 - knock
+			self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 7 - knock
+		end
 	end
 	
 	-- chainsaw
 	self.melee_weapons.cs.chainsaw_delay = 1.00
 	self.melee_weapons.cs.repeat_chainsaw_delay = 0.2
-	self.melee_weapons.cs.stats.tick_damage = 2
+	self.melee_weapons.cs.stats.tick_damage = 1.6
 	self.melee_weapons.cs.chainsaw = true
 	self.melee_weapons.cs.stats.charge_time = 1
 	self.melee_weapons.cs.stats.min_damage = 3.5
 	self.melee_weapons.cs.stats.max_damage = 3.5
-	self.melee_weapons.cs.stats.min_damage_effect = 20
-	self.melee_weapons.cs.stats.max_damage_effect = 20
+	self.melee_weapons.cs.stats.min_damage_effect = 6
+	self.melee_weapons.cs.stats.max_damage_effect = 6
 	self.melee_weapons.cs.info_id = "bm_melee_cs_info"
 	self.melee_weapons.cs.sounds.charge = "cs_charge"
 	
 	-- fidget spinners
 	self.melee_weapons.ostry.chainsaw_delay = 0.70
 	self.melee_weapons.ostry.repeat_chainsaw_delay = 0.2
-	self.melee_weapons.ostry.stats.tick_damage = 1.5
+	self.melee_weapons.ostry.stats.tick_damage = 1.2
 	self.melee_weapons.ostry.chainsaw = true
 	self.melee_weapons.ostry.stats.charge_time = 1
 	self.melee_weapons.ostry.stats.min_damage = 2.5
 	self.melee_weapons.ostry.stats.max_damage = 2.5
-	self.melee_weapons.ostry.stats.min_damage_effect = 16
-	self.melee_weapons.ostry.stats.max_damage_effect = 16
+	self.melee_weapons.ostry.stats.min_damage_effect = 5
+	self.melee_weapons.ostry.stats.max_damage_effect = 5
 	self.melee_weapons.ostry.info_id = "bm_melee_ostry_info"
 	self.melee_weapons.ostry.sounds.charge = "ostry_charge"
 
@@ -228,6 +214,9 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 	self.melee_weapons.chef.stats.min_damage_effect = 1
 	self.melee_weapons.chef.stats.max_damage_effect = 1
 	self.melee_weapons.chef.sounds.charge = "halloween_charge"
+	
+	-- hotline miami fireaxe
+	self.melee_weapons.fireaxe.repeat_expire_t = 1.2
 	
 	-- charge sounds too good
 	self.melee_weapons.wing.sounds.charge = "wing_charge"

@@ -24,7 +24,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "replenish", function (self)
 	self:update_damage()
 end)
 
--- body expertise ammo penalty @31&33; all HV GL rounds will use standard ammo pick up if user is a network client @48; saw ammo pick up skill @81
+-- body expertise ammo penalty @31&33; all HV GL rounds will use standard ammo pick up if user is a network client @48; saw ammo pick up skill @81; brawler pick up @79
 Hooks:OverrideFunction(RaycastWeaponBase, "add_ammo", function (self, ratio, add_amount_override)
 	local mul_1 = managers.player:upgrade_value("player", "pick_up_ammo_multiplier", 1) - 1
 	local mul_2 = managers.player:upgrade_value("player", "pick_up_ammo_multiplier_2", 1) - 1
@@ -74,7 +74,8 @@ Hooks:OverrideFunction(RaycastWeaponBase, "add_ammo", function (self, ratio, add
 				min_pickup = min_pickup * (ammo_base._ammo_data.ammo_pickup_min_mul or 1)
 				max_pickup = max_pickup * (ammo_base._ammo_data.ammo_pickup_max_mul or 1)
 			end
-
+			
+			pickup_mul = pickup_mul * managers.player:upgrade_value("player", "extra_ammo_cut", 1)
 			add_amount = math.lerp(min_pickup * pickup_mul, max_pickup * pickup_mul, math.random())
 			
 			-- saw pick up skill
@@ -174,7 +175,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "is_knock_down", function (self)
 	return self._knock_down > 0 and math.random() < new_knock_down_chance
 end)
 
--- new reload speed from the akimbo skill @181-194 and also buffed overkill @196-202
+-- new reload speed from the akimbo skill @182-195 and also buffed overkill @197-203
 Hooks:OverrideFunction(RaycastWeaponBase, "reload_speed_multiplier", function (self)
 	local multiplier = 1
 
@@ -193,11 +194,20 @@ Hooks:OverrideFunction(RaycastWeaponBase, "reload_speed_multiplier", function (s
 		end
 	end
 	
+	if managers.player:has_category_upgrade("player", "speed_junkie_meter_boost_agility") then
+		local counter = managers.player._Gilza_junkie_counter or 0
+		local skill = managers.player:upgrade_value("player", "speed_junkie_meter_boost_agility")
+		if skill and type(skill) ~= "number" then
+			local mul = (skill.reload - 1) * (counter / 100) + 1
+			multiplier = multiplier * mul
+		end	
+	end
+	
 	if managers.player:has_category_upgrade("temporary", "overkill_damage_multiplier") and managers.player:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 then
 		if managers.player:has_category_upgrade("player", "overkill_all_weapons") then
-			multiplier = multiplier * 0.5
+			multiplier = multiplier * 1.5
 		elseif simplified_categories.shotgun or simplified_categories.saw then
-			multiplier = multiplier * 0.5
+			multiplier = multiplier * 1.5
 		end
 	end
 
@@ -279,5 +289,57 @@ Hooks:PostHook(RaycastWeaponBase, "fire", "Gilza_swan_song_ammo", function(self,
 			self:use_ammo(base, ammo_usage)
 		end
 		
+	end
+end)
+
+-- electric bullets + saw no headshot
+local instantbullet_give_impact_dmg_orig = InstantBulletBase.give_impact_damage
+Hooks:OverrideFunction(InstantBulletBase, "give_impact_damage", function (self, col_ray, weapon_unit, user_unit, damage, armor_piercing, shield_knock, knock_down, stagger, variant)
+	
+	-- don't do anything on bows and crossbows due to crashes. also they are not boolets
+	if weapon_unit:base():is_category("bow") or weapon_unit:base():is_category("crossbow") then
+		return instantbullet_give_impact_dmg_orig(self, col_ray, weapon_unit, user_unit, damage, armor_piercing, shield_knock, knock_down, stagger, variant)
+	end
+	
+	local hit_unit = col_ray.unit
+	local is_valid_target = hit_unit and hit_unit:character_damage() and hit_unit:character_damage()._char_tweak and hit_unit:character_damage()._char_tweak.access
+	local is_target_tank = is_valid_target and hit_unit:character_damage()._char_tweak.access == "tank"
+	
+	-- remove saw's headshot damage for non-dozer enemies
+	if weapon_unit:base():is_category("saw") then
+		if is_valid_target and not is_target_tank then
+			local head = hit_unit:character_damage()._head_body_name and col_ray.body and col_ray.body:name() == hit_unit:character_damage()._ids_head_body_name
+			if not hit_unit:character_damage()._char_tweak.ignore_headshot and not hit_unit:character_damage()._damage_reduction_multiplier and head and hit_unit:character_damage()._char_tweak.headshot_dmg_mul then
+				damage = damage / hit_unit:character_damage()._char_tweak.headshot_dmg_mul
+			end
+		end
+	end
+	
+	-- adds new electric bullets skill, for x seconds after getting tazed
+	if user_unit == managers.player:player_unit() and managers.player:has_activate_temporary_upgrade("temporary", "tased_electric_bullets") and not is_target_tank then
+		local action_data = {}
+		action_data.weapon_unit = weapon_unit
+		action_data.attacker_unit = user_unit
+		action_data.col_ray = col_ray
+		action_data.armor_piercing = armor_piercing
+		action_data.attack_dir = col_ray.ray
+		action_data.variant = "taser_tased"
+		action_data.damage = damage
+		action_data.damage_effect = 1
+		action_data.name_id = "taser"
+		action_data.charge_lerp_value = 0
+		action_data.bullet_taze = true
+		
+		defense_data = hit_unit and hit_unit:character_damage().damage_tase and hit_unit:character_damage().damage_melee and hit_unit:character_damage():damage_melee(action_data)
+		if defense_data and hit_unit and hit_unit:character_damage().damage_tase then
+			action_data.damage = 0
+			action_data.damage_effect = nil
+			hit_unit:character_damage():damage_tase(action_data)
+			return defense_data
+		else
+			return instantbullet_give_impact_dmg_orig(self, col_ray, weapon_unit, user_unit, damage, armor_piercing, shield_knock, knock_down, stagger, variant)
+		end
+	else
+		return instantbullet_give_impact_dmg_orig(self, col_ray, weapon_unit, user_unit, damage, armor_piercing, shield_knock, knock_down, stagger, variant)
 	end
 end)

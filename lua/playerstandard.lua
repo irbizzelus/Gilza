@@ -328,7 +328,26 @@ function PlayerStandard:_do_chainsaw_damage(t)
 			local target_dead = character_unit:character_damage().dead and not character_unit:character_damage():dead()
 			local target_hostile = managers.enemy:is_enemy(character_unit) and not tweak_data.character[character_unit:base()._tweak_table].is_escort and character_unit:brain():is_hostile()
 			local life_leach_available = managers.player:has_category_upgrade("temporary", "melee_life_leech") and not managers.player:has_activate_temporary_upgrade("temporary", "melee_life_leech")
+			
+			-- bloodthirst base
+			dmg_multiplier = dmg_multiplier * managers.player:get_melee_dmg_multiplier()
+			
+			-- sociopath/infil damage
+			if managers.player:has_category_upgrade("melee", "stacking_hit_damage_multiplier") then
+				self._state_data.stacking_dmg_mul = self._state_data.stacking_dmg_mul or {}
+				self._state_data.stacking_dmg_mul.melee = self._state_data.stacking_dmg_mul.melee or {
+					nil,
+					0
+				}
+				local stack = self._state_data.stacking_dmg_mul.melee
 
+				if stack[1] and t < stack[1] then
+					dmg_multiplier = dmg_multiplier * (1 + managers.player:upgrade_value("melee", "stacking_hit_damage_multiplier", 0) * stack[2])
+				else
+					stack[2] = 0
+				end
+			end
+			
 			if target_dead and target_hostile and life_leach_available then
 				managers.player:activate_temporary_upgrade("temporary", "melee_life_leech")
 				self._unit:character_damage():restore_health(managers.player:temporary_upgrade_value("temporary", "melee_life_leech", 1))
@@ -363,6 +382,24 @@ function PlayerStandard:_do_chainsaw_damage(t)
 
 			self:_check_melee_special_damage(col_ray, character_unit, defense_data, melee_entry)
 			self:_perform_sync_melee_damage(hit_unit, col_ray, action_data.damage)
+			
+			-- sociopath/infil timer
+			if managers.player:has_category_upgrade("melee", "stacking_hit_damage_multiplier") then
+				self._state_data.stacking_dmg_mul = self._state_data.stacking_dmg_mul or {}
+				self._state_data.stacking_dmg_mul.melee = self._state_data.stacking_dmg_mul.melee or {
+					nil,
+					0
+				}
+				local stack = self._state_data.stacking_dmg_mul.melee
+
+				if character_unit:character_damage().dead and not character_unit:character_damage():dead() then
+					stack[1] = t + managers.player:upgrade_value("melee", "stacking_hit_expire_t", 1)
+					stack[2] = math.min(stack[2] + 1, tweak_data.upgrades.max_melee_weapon_dmg_mul_stacks or 5)
+				else
+					stack[1] = nil
+					stack[2] = 0
+				end
+			end
 
 			return defense_data
 		else
@@ -399,280 +436,6 @@ Hooks:OverrideFunction(PlayerStandard, "_interupt_action_melee", function (self,
 	self._equipped_unit:base():tweak_data_anim_play("equip", speed_multiplier)
 end)
 
--- override based on weaponlib's override. adds new berserk damage increase @519-521
-Hooks:OverrideFunction(PlayerStandard, "_check_action_primary_attack", function (self, t, input, params)
-	if not self._equipped_unit then return false end
-
-	local new_action = nil
-	local action_wanted = input.btn_primary_attack_state or input.btn_primary_attack_release
-	action_wanted = action_wanted or self:is_shooting_count()
-	action_wanted = action_wanted or self:_is_charging_weapon()
-
-	if action_wanted then
-		local weap_base = self._equipped_unit:base()
-		local weapon_tweak_data = weap_base:weapon_tweak_data()
-
-		local action_forbidden =
-			self:_is_reloading() or
-			self:_changing_weapon() or
-			self:_is_meleeing() or
-			self._use_item_expire_t or
-			self:_interacting() or
-			self:_is_throwing_projectile() or
-			self:_is_deploying_bipod() or
-			self._menu_closed_fire_cooldown > 0 or
-			self:is_switching_stances() or
-			weapon_tweak_data.bipod_fire_only and not self:_is_using_bipod()
-
-		if not action_forbidden then
-			self._queue_reload_interupt = nil
-			local start_shooting = false
-
-			self._ext_inventory:equip_selected_primary(false)
-
-			local fire_mode = weap_base:fire_mode()
-			local animation_firemode = fire_mode == "auto" and "auto" or "single"
-			if fire_mode ~= "auto" and weapon_tweak_data.fake_singlefire_anim then
-				animation_firemode = "auto"
-			elseif fire_mode == "auto" and weapon_tweak_data.fake_autofire_anim then
-				animation_firemode = "single"
-			end
-
-			local fire_on_release = weap_base:fire_on_release()
-
-			if weap_base:out_of_ammo() then
-				if input.btn_primary_attack_press then
-					weap_base:dryfire()
-				end
-			elseif weap_base.clip_empty and weap_base:clip_empty() then
-				if self:_is_using_bipod() then
-					if input.btn_primary_attack_press then
-						weap_base:dryfire()
-					end
-
-					self._equipped_unit:base():tweak_data_anim_stop("fire")
-				elseif fire_mode == "single" then
-					if input.btn_primary_attack_press or self._equipped_unit:base().should_reload_immediately and self._equipped_unit:base():should_reload_immediately() then
-						self:_start_action_reload_enter(t)
-					end
-				else
-					new_action = true
-
-					self:_start_action_reload_enter(t)
-				end
-			elseif self._running and not self._equipped_unit:base():run_and_shoot_allowed() then
-				self:_interupt_action_running(t)
-			else
-				local firing_animation_state = nil
-
-				if not self._shooting then
-					if weap_base:start_shooting_allowed() then
-						local start = fire_mode == "single" and input.btn_primary_attack_press
-						start = start or fire_mode == "auto" and input.btn_primary_attack_state
-						start = start or fire_mode == "burst" and input.btn_primary_attack_press
-						start = start or fire_mode == "volley" and input.btn_primary_attack_press
-						start = start and not fire_on_release
-						start = start or fire_on_release and input.btn_primary_attack_release
-
-						if start then
-							weap_base:start_shooting()
-							self._camera_unit:base():start_shooting()
-
-							self._shooting = true
-							self._shooting_t = t
-							start_shooting = true
-
-							if animation_firemode == "auto" then
-								self._recoil_enter = true
-								self._recoil_end_t = self._shooting_t + (weapon_tweak_data.timers and weapon_tweak_data.timers.fake_singlefire or 0.1)
-
-								firing_animation_state = self._unit:camera():play_redirect(self:get_animation("recoil_enter"))
-							end
-
-							if fire_mode == "auto" then
-								if (not weap_base.akimbo or weapon_tweak_data.allow_akimbo_autofire) and (not weap_base.third_person_important or weap_base.third_person_important and not weap_base:third_person_important()) then
-									self._ext_network:send("sync_start_auto_fire_sound", 0)
-								end
-							end
-						end
-					else
-						self:_check_stop_shooting()
-
-						return false
-					end
-				end
-
-				local suppression_ratio = self._unit:character_damage():effective_suppression_ratio()
-				local spread_mul = math.lerp(1, tweak_data.player.suppression.spread_mul, suppression_ratio)
-				local autohit_mul = math.lerp(1, tweak_data.player.suppression.autohit_chance_mul, suppression_ratio)
-				local suppression_mul = managers.blackmarket:threat_multiplier()
-				local dmg_mul = 1
-				local primary_category = weapon_tweak_data.categories[1]
-
-				if not weapon_tweak_data.ignore_damage_multipliers then
-					dmg_mul = dmg_mul * managers.player:temporary_upgrade_value("temporary", "dmg_multiplier_outnumbered", 1)
-
-					if managers.player:has_category_upgrade("player", "overkill_all_weapons") or weap_base:is_category("shotgun", "saw") then
-						dmg_mul = dmg_mul * managers.player:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1)
-					end
-					
-					if managers.player:has_category_upgrade("temporary", "new_berserk_weapon_damage_multiplier") then
-						dmg_mul = dmg_mul * managers.player:temporary_upgrade_value("temporary", "new_berserk_weapon_damage_multiplier", 1)
-					end
-
-					local health_ratio = self._ext_damage:health_ratio()
-					local damage_health_ratio = managers.player:get_damage_health_ratio(health_ratio, primary_category)
-
-					if damage_health_ratio > 0 then
-						local upgrade_name = weap_base:is_category("saw") and "melee_damage_health_ratio_multiplier" or "damage_health_ratio_multiplier"
-						local damage_ratio = damage_health_ratio
-						dmg_mul = dmg_mul * (1 + managers.player:upgrade_value("player", upgrade_name, 0) * damage_ratio)
-					end
-
-					dmg_mul = dmg_mul * managers.player:temporary_upgrade_value("temporary", "berserker_damage_multiplier", 1)
-					dmg_mul = dmg_mul * managers.player:get_property("trigger_happy", 1)
-				end
-
-				local fired = nil
-
-				if fire_mode == "single" then
-					if input.btn_primary_attack_press and start_shooting then
-						fired = weap_base:trigger_pressed(self:get_fire_weapon_position(), self:get_fire_weapon_direction(), dmg_mul, nil, spread_mul, autohit_mul, suppression_mul)
-					elseif fire_on_release then
-						if input.btn_primary_attack_release then
-							fired = weap_base:trigger_released(self:get_fire_weapon_position(), self:get_fire_weapon_direction(), dmg_mul, nil, spread_mul, autohit_mul, suppression_mul)
-						elseif input.btn_primary_attack_state then
-							weap_base:trigger_held(self:get_fire_weapon_position(), self:get_fire_weapon_direction(), dmg_mul, nil, spread_mul, autohit_mul, suppression_mul)
-						end
-					end
-				elseif fire_mode == "burst" then
-					fired = weap_base:trigger_held(self:get_fire_weapon_position(), self:get_fire_weapon_direction(), dmg_mul, nil, spread_mul, autohit_mul, suppression_mul)
-				elseif fire_mode == "volley" then
-					if self._shooting then
-						fired = weap_base:trigger_held(self:get_fire_weapon_position(), self:get_fire_weapon_direction(), dmg_mul, nil, spread_mul, autohit_mul, suppression_mul)
-					end
-				elseif input.btn_primary_attack_state then
-					fired = weap_base:trigger_held(self:get_fire_weapon_position(), self:get_fire_weapon_direction(), dmg_mul, nil, spread_mul, autohit_mul, suppression_mul)
-				end
-
-				if weap_base.manages_steelsight and weap_base:manages_steelsight() then
-					if weap_base:wants_steelsight() and not self._state_data.in_steelsight then
-						self:_start_action_steelsight(t)
-					elseif not weap_base:wants_steelsight() and self._state_data.in_steelsight then
-						self:_end_action_steelsight(t)
-					end
-				end
-
-				local charging_weapon = weap_base:charging()
-
-				if not self._state_data.charging_weapon and charging_weapon then
-					self:_start_action_charging_weapon(t)
-				elseif self._state_data.charging_weapon and not charging_weapon then
-					self:_end_action_charging_weapon(t)
-				end
-
-				new_action = true
-
-				if fired then
-					managers.rumble:play("weapon_fire")
-
-					local clip_empty = weap_base:ammo_base():get_ammo_remaining_in_clip() <= (weap_base.AKIMBO and 1 or 0)
-					self._camera_unit:anim_state_machine():set_global("is_empty", clip_empty and 1 or 0)
-
-					local weap_tweak_data = weap_base:weapon_tweak_data()
-					local shake_tweak_data = weap_tweak_data.shake[fire_mode] or weap_tweak_data.shake
-					local shake_multiplier = shake_tweak_data[self._state_data.in_steelsight and "fire_steelsight_multiplier" or "fire_multiplier"]
-
-					self._ext_camera:play_shaker("fire_weapon_rot", 1 * shake_multiplier)
-					self._ext_camera:play_shaker("fire_weapon_kick", 1 * shake_multiplier, 1, 0.15)
-
-					if animation_firemode == "single" and weap_base:get_name_id() ~= "saw" then
-						local redirect = self:get_animation("recoil")
-						if self._state_data.in_steelsight and weap_tweak_data.animations.recoil_steelsight and not weap_base:is_second_sight_on() then
-							redirect = self:get_animation("recoil_steelsight")
-						end
-
-						firing_animation_state = self._ext_camera:play_redirect(redirect, weap_base:fire_rate_multiplier())
-					end
-
-					local recoil_multiplier = (weap_base:recoil() + weap_base:recoil_addend()) * weap_base:recoil_multiplier()
-
-					local kick_tweak_data = weap_tweak_data.kick[fire_mode] or weap_tweak_data.kick
-					local up, down, left, right = unpack(kick_tweak_data[self._state_data.in_steelsight and "steelsight" or self._state_data.ducking and "crouching" or "standing"])
-
-					self._camera_unit:base():recoil_kick(up * recoil_multiplier, down * recoil_multiplier, left * recoil_multiplier, right * recoil_multiplier)
-
-					if self._shooting_t then
-						local time_shooting = t - self._shooting_t
-						local achievement_data = tweak_data.achievement.never_let_you_go
-
-						if achievement_data and weap_base:get_name_id() == achievement_data.weapon_id and achievement_data.timer <= time_shooting then
-							managers.achievment:award(achievement_data.award)
-
-							self._shooting_t = nil
-						end
-					end
-
-					if managers.player:has_category_upgrade(primary_category, "stacking_hit_damage_multiplier") then
-						self._state_data.stacking_dmg_mul = self._state_data.stacking_dmg_mul or {}
-						self._state_data.stacking_dmg_mul[primary_category] = self._state_data.stacking_dmg_mul[primary_category] or {
-							nil,
-							0
-						}
-						local stack = self._state_data.stacking_dmg_mul[primary_category]
-
-						if fired.hit_enemy then
-							stack[1] = t + managers.player:upgrade_value(primary_category, "stacking_hit_expire_t", 1)
-							stack[2] = math.min(stack[2] + 1, tweak_data.upgrades.max_weapon_dmg_mul_stacks or 5)
-						else
-							stack[1] = nil
-							stack[2] = 0
-						end
-					end
-
-					if weap_base.set_recharge_clbk then
-						weap_base:set_recharge_clbk(callback(self, self, "weapon_recharge_clbk_listener"))
-					end
-
-					managers.hud:set_ammo_amount(weap_base:selection_index(), weap_base:ammo_info())
-
-					local impact = not fired.hit_enemy
-
-					if weap_base.third_person_important and weap_base:third_person_important() then
-						self._ext_network:send("shot_blank_reliable", impact, 0)
-					elseif fire_mode ~= "auto" or weap_base.akimbo and not weapon_tweak_data.allow_akimbo_autofire then
-						self._ext_network:send("shot_blank", impact, 0)
-					end
-
-					if fire_mode == "volley" then
-						self:_check_stop_shooting()
-					end
-				elseif fire_mode == "single" then
-					new_action = false
-				elseif fire_mode == "burst" then
-					if weap_base:shooting_count() == 0 then
-						new_action = false
-					end
-				elseif fire_mode == "volley" then
-					new_action = self:_is_charging_weapon()
-				end
-
-				if firing_animation_state then
-					self._camera_unit:anim_state_machine():set_parameter(firing_animation_state, "alt_weight", self._equipped_unit:base():alt_fire_active() and 1 or 0)
-				end
-			end
-		elseif self:_is_reloading() and self._equipped_unit:base():reload_interuptable() and input.btn_primary_attack_press then
-			self._queue_reload_interupt = true
-		end
-	end
-
-	if not new_action then
-		self:_check_stop_shooting()
-	end
-
-	return new_action
-end)
-
 -- new akimbo swap speed bonus @683-700
 Hooks:OverrideFunction(PlayerStandard, "_get_swap_speed_multiplier", function (self)
 	local multiplier = 1
@@ -700,6 +463,15 @@ Hooks:OverrideFunction(PlayerStandard, "_get_swap_speed_multiplier", function (s
 	end
 
 	multiplier = multiplier * managers.player:upgrade_value("team", "crew_faster_swap", 1)
+
+	if managers.player:has_category_upgrade("player", "speed_junkie_meter_boost_agility") then
+		local counter = managers.player._Gilza_junkie_counter or 0
+		local skill = managers.player:upgrade_value("player", "speed_junkie_meter_boost_agility")
+		if skill and type(skill) ~= "number" then
+			local mul = (skill.swap_speed - 1) * (counter / 100) + 1
+			multiplier = multiplier * mul
+		end	
+	end
 
 	if managers.player:has_activate_temporary_upgrade("temporary", "swap_weapon_faster") then
 		multiplier = multiplier * managers.player:temporary_upgrade_value("temporary", "swap_weapon_faster", 1)
@@ -768,5 +540,63 @@ Hooks:PreHook(PlayerStandard, "_start_action_jump", "Gilza_PlayerStandard_start_
 		if action_start_data.jump_vel_xy then
 			action_start_data.jump_vel_xy = action_start_data.jump_vel_xy * managers.player:upgrade_value("player", "extra_jump_height", 1)
 		end
+	end
+end)
+
+local hide_int_state = {
+	["bleed_out"] = true,
+	["fatal"] = true,
+	["incapacitated"] = true,
+	["arrested"] = true,
+	["jerry1"] = true
+}
+-- melee gui 1
+Hooks:PostHook(PlayerStandard, "_start_action_melee", "Gilza_PlayerStandard_start_action_melee_GUI", function(self, t, input, instant)
+	if not instant then
+		if true and self._state_data.meleeing and not hide_int_state[managers.player:current_state()] then
+			self._state_data._Gilza_showing_melee = true
+			self._state_data._Gilza_melee_charge_duration = tweak_data.blackmarket.melee_weapons[managers.blackmarket:equipped_melee_weapon()].stats.charge_time or 1
+			managers.hud:show_interaction_bar(0, self._state_data._Gilza_melee_charge_duration)
+		end
+	end
+end)
+
+-- melee gui 2
+Hooks:PostHook(PlayerStandard, "enter", "Gilza_PlayerStandard_enter_GUI", function(self, ...)
+	if hide_int_state[managers.player:current_state()] and self._state_data._Gilza_showing_melee then
+		managers.hud:hide_interaction_bar(false)
+		self._state_data._Gilza_showing_melee = false
+	end
+end)
+
+-- melee gui 3
+Hooks:PostHook(PlayerStandard, "_update_melee_timers", "Gilza_PlayerStandard_update_melee_timers_GUI", function(self, t, input)
+	if true and self._state_data.meleeing and self._state_data._Gilza_showing_melee then
+		local melee_lerp = self:_get_melee_charge_lerp_value(t)
+		if hide_int_state[managers.player:current_state()] then
+			managers.hud:hide_interaction_bar()
+			self._state_data._Gilza_showing_melee = false
+		elseif melee_lerp < 1 or self._state_data.chainsaw_t then
+			managers.hud:set_interaction_bar_width(self._state_data._Gilza_melee_charge_duration * melee_lerp, self._state_data._Gilza_melee_charge_duration)
+		elseif self._state_data._Gilza_showing_melee then
+			managers.hud:hide_interaction_bar()
+			self._state_data._Gilza_showing_melee = false
+		end
+	end
+end)
+
+-- melee gui 4
+Hooks:PostHook(PlayerStandard, "_do_melee_damage", "Gilza_PlayerStandard_do_melee_damage_GUI", function(self, ...)
+	if self._state_data._Gilza_showing_melee then
+		managers.hud:hide_interaction_bar()
+		self._state_data._Gilza_showing_melee = false
+	end
+end)
+
+-- melee gui 5
+Hooks:PostHook(PlayerStandard, "_interupt_action_melee", "Gilza_PlayerStandard_interupt_action_melee_GUI", function(self, t)
+	if self._state_data._Gilza_showing_melee then
+		managers.hud:hide_interaction_bar()
+		self._state_data._Gilza_showing_melee = false
 	end
 end)
