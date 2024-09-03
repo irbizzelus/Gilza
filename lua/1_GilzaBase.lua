@@ -106,14 +106,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.3 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.31 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.3 changelog:\n\nThis patch is BIG, and has a heavy focus on perks and skills:\n- New Custom Perk added: Speed Junkie.\n- Updated perks: Brawler (full rework), Yakuza, Hitman, Hacker, Tag Team, Gambler.\n- Updated skills in the Ghost's Artful Dodger sub-tree with skills that add new functionality.\n- Other updated skills: Berserk, Counterstrike, Shotgun Expert, Bloodthirst.\n- All skill/perk grenade pick ups were reduced by 20%.\n\nIn addition to all the perk and skill rebalances mentioned above a few fixes and QOL updates were added, such as ability to spoof custom perk decks (to avoid being kicked), ability to reset your perk decks (without loosing perk points), and new melee GUI to make using melee weapons better and easier. A few weapon balance updates and fixes are also included. Reading full changelog is recommended. GL HF!"
+			local message = "2.3.1 changelog:\n\nThis patch includes a minor rebalance for the Speed Junkie perk, and a fix for it's armor amount calculation. For the most part this rebalance is a buff, like the new adrenaline spike ability, but a few values were nerfed. For an overview of this minor rebalance, as always, check the full changelog."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.3
+			Gilza.settings.version = 2.31
 			Gilza.Save()
 		end
 	end)
