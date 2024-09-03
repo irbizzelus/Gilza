@@ -18,10 +18,22 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_on_killshot", function(self,
 			local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
 			if hud.panel:child("Gilza_speed_junkie_GUI_icon") then
 				self._Gilza_junkie_counter = self._Gilza_junkie_counter or 0
+				local amount_to_add = managers.player:upgrade_value("player", "speed_junkie_meter_on_kill", 0)
 				if not headshot then -- x3
-					self._Gilza_junkie_counter = self._Gilza_junkie_counter + (managers.player:upgrade_value("player", "speed_junkie_meter_on_kill", 0) * 3)
-				else
-					self._Gilza_junkie_counter = self._Gilza_junkie_counter + managers.player:upgrade_value("player", "speed_junkie_meter_on_kill", 0)
+					amount_to_add = amount_to_add * 3
+				end
+				if self._Gilza_junkie_counter < 90 and amount_to_add + self._Gilza_junkie_counter >= 90 then
+					amount_to_add = 90 - self._Gilza_junkie_counter
+				elseif self._Gilza_junkie_counter > 90 then
+					amount_to_add = amount_to_add * -1
+					if self._Gilza_junkie_counter + amount_to_add < 90 then
+						amount_to_add = (self._Gilza_junkie_counter - 90) * -1
+					end
+				end
+				self._Gilza_junkie_counter = self._Gilza_junkie_counter + amount_to_add
+				-- 10% chance to enter adrenaline mode on kill if eligible
+				if self._Gilza_junkie_eligible_for_spike and math.random() <= 0.1 then
+					self._Gilza_junkie_adrenaline_spike = true
 				end
 			end
 		end
@@ -164,28 +176,30 @@ end)
 local ticks_since_stopped_moving = 0
 local ticks_moving_in_air = 0
 local ticks_since_reached_high_stacks = 0
+local ticks_since_entered_adrenaline_spike_range = 0
+local spike_flash_timer = 0
 local junkie_exhausted = false
 local function Gilza_update_junkie_loop(self)
 	DelayedCalls:Add("Gilza_update_junkie_loop", 0.05, function()
 		
-		-- speed related updates
+		-- speed and movement state related value updates
 		if managers.player:current_state() == "standard" or managers.player:current_state() == "carry" then
 			if self and self.local_player and alive(self:local_player()) and self:local_player().movement and self:local_player():movement().current_state and self:local_player():movement():current_state()._get_max_walk_speed then
 				if self:local_player():movement():current_state()._moving and not self:local_player():movement():current_state()._state_data.in_air then
 					-- if moving, update junkie stacks based on movement speed, higher speed = higher gain; low speed = lose stacks
 					local player_speed = self:local_player():movement():current_state():_get_max_walk_speed(managers.player:player_timer():time(),false)
-					local junkie_power_adust_mul = player_speed / 590 -- 590 speed is the 'you dont loose meter' point
-					local junkie_adjustment = -0.54 + (0.54 * junkie_power_adust_mul)
+					local junkie_power_adust_mul = player_speed / 580 -- speed value where you dont loose the meter
+					local junkie_adjustment = -0.75 + (0.75 * junkie_power_adust_mul)
 					self._Gilza_junkie_counter = self._Gilza_junkie_counter + junkie_adjustment
-					-- tracks how many 'tics' have passed since we stopped moving, a tick for this loop is 1/20 of a second
+					-- tracks how many 'ticks' have passed since we stopped moving, a tick for this loop is 1/20 of a second
 					ticks_since_stopped_moving = 0
 					ticks_moving_in_air = 0
 				elseif self:local_player():movement():current_state()._state_data.in_air then
 					-- if we are in air, mostly from jumping, deplete really slowly
 					ticks_moving_in_air = ticks_moving_in_air + 1
 					if self._Gilza_junkie_counter > 0 then
-						if ticks_moving_in_air >= 30 then
-							-- if a jump takes longer then 1.5 secs freeze the depletion
+						if ticks_moving_in_air >= 20 then
+							-- if a jump takes longer then 1 sec freeze the depletion
 						else
 							self._Gilza_junkie_counter = self._Gilza_junkie_counter - 0.1
 						end
@@ -195,10 +209,10 @@ local function Gilza_update_junkie_loop(self)
 					ticks_since_stopped_moving = ticks_since_stopped_moving + 1
 					if self._Gilza_junkie_counter > 0 then
 						-- first 1 second of not moving counter depletes at a stable rate, later it speeds up
-						if ticks_since_stopped_moving <= 30 then
-							self._Gilza_junkie_counter = self._Gilza_junkie_counter - 0.3
+						if ticks_since_stopped_moving <= 20 then
+							self._Gilza_junkie_counter = self._Gilza_junkie_counter - 0.4
 						else
-							self._Gilza_junkie_counter = self._Gilza_junkie_counter - (ticks_since_stopped_moving * 0.01)
+							self._Gilza_junkie_counter = self._Gilza_junkie_counter - (ticks_since_stopped_moving * 0.02)
 						end
 					end
 				end
@@ -216,35 +230,36 @@ local function Gilza_update_junkie_loop(self)
 			self._Gilza_junkie_counter = 0
 		end
 		
-		-- flash the player figure icon if we are at 96 or above stacks and apply penalties if we maintain it for long enough
+		-- this chunk applies exhaust if stacks are high and updates the icon flash animation based on current status
 		local info_hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
 		local icon = info_hud.panel:child("Gilza_speed_junkie_GUI_icon")
-		if self._Gilza_junkie_counter > 96 then
+		if self._Gilza_junkie_counter > 90 and not self._Gilza_junkie_adrenaline_spike then
 			icon:animate(info_hud.flash_icon, 999999)
 			ticks_since_reached_high_stacks = ticks_since_reached_high_stacks + 1
-			-- if we reach high stacks and maintain them for over 2 seconds, stamina gets drained to 0, for at least 4 seconds
-			if ticks_since_reached_high_stacks >= 40 then
-				self._Gilza_junkie_counter = self._Gilza_junkie_counter * math.random(450,650)/1000 -- rand value between 0.45 and 0.65
-				if self:get_current_state()._unit and alive(self:get_current_state()._unit) then
+			-- if we reach high stacks and maintain them for over 4 seconds, stamina gets drained to 0
+			if ticks_since_reached_high_stacks >= 80 then
+				self._Gilza_junkie_counter = self._Gilza_junkie_counter * math.random(550,700)/1000 -- rand value between 0.55 and 0.7
+				if self:get_current_state()._unit and alive(self:get_current_state()._unit) and self:get_current_state()._unit:movement() then
 					junkie_exhausted = true
-					self:get_current_state()._unit:movement():_change_stamina(self:get_current_state()._unit:movement():_max_stamina() * 0.96 * -1)
+					self:get_current_state()._unit:movement():_change_stamina(-999999)
 				end
-				DelayedCalls:Add("Gilza_remove_junkie_penalty", 6, function()
+				DelayedCalls:Add("Gilza_remove_junkie_status", 4, function()
 					junkie_exhausted = false
 				end)
 			end
 		else
-			if junkie_exhausted and self:get_current_state()._unit and alive(self:get_current_state()._unit) then
-				-- this would've been easier if player movement had a func that allowed to set stamina to a set value instead of only allowing to 'add' values to curr stamina
-				if self:get_current_state()._unit:movement() then
-					local cur_stamina = self:get_current_state()._unit:movement():stamina()
-					local max_stamina = self:get_current_state()._unit:movement():_max_stamina()
-					if cur_stamina > max_stamina * 0.04 then
-						self:get_current_state()._unit:movement():_change_stamina( (cur_stamina - max_stamina * 0.04) * -1 )
-					end
+			if self._Gilza_junkie_counter > 70 and not self._Gilza_junkie_eligible_for_spike and not self._Gilza_junkie_adrenaline_spike then
+				self._Gilza_junkie_eligible_for_spike = self._Gilza_junkie_eligible_for_spike or false
+				ticks_since_entered_adrenaline_spike_range = ticks_since_entered_adrenaline_spike_range + 1
+				if ticks_since_entered_adrenaline_spike_range >= 400 then -- 20 seconds total
+					self._Gilza_junkie_eligible_for_spike = true
 				end
 			end
-			icon:stop()
+			if self._Gilza_junkie_adrenaline_spike then
+				icon:animate(info_hud.flash_icon, 999999)
+			else
+				icon:stop()
+			end
 			ticks_since_reached_high_stacks = 0
 		end
 		
@@ -256,16 +271,60 @@ local function Gilza_update_junkie_loop(self)
 		if self._Gilza_junkie_counter > 100 then
 			self._Gilza_junkie_counter = 100
 		end
+		-- avoid going away from 999 during a spike
+		if self._Gilza_junkie_adrenaline_spike then
+			self._Gilza_junkie_counter = 999
+		end
 		
-		-- color adjustments, goes from white to yelow to green to red
-		if junkie_exhausted then -- dark purple if we have the high meter debuff
+		-- adrenaline spike stuff
+		-- if eligible and it was activated, maintain 999 stacks during the spike
+		if self._Gilza_junkie_eligible_for_spike and self._Gilza_junkie_adrenaline_spike then
+			self._Gilza_junkie_counter = 999
+			junkie_exhausted = false
+			-- restore max stamina for the spike
+			if self:get_current_state()._unit and alive(self:get_current_state()._unit) and self:get_current_state()._unit:movement() then
+				self:get_current_state()._unit:movement():_change_stamina(999999)
+			end
+			-- prevent this chunk from looping indefinetely
+			self._Gilza_junkie_eligible_for_spike = false
+			ticks_since_entered_adrenaline_spike_range = 0
+			DelayedCalls:Add("Gilza_remove_junkie_spike", 8, function()
+				-- after spike is complete remove eligibility, reset values, and apply harsher version of exhaustion
+				ticks_since_entered_adrenaline_spike_range = 0
+				self._Gilza_junkie_adrenaline_spike = false
+				self._Gilza_junkie_counter = math.random(1500,2500)/100
+				junkie_exhausted = true
+				if self:get_current_state()._unit and alive(self:get_current_state()._unit) and self:get_current_state()._unit:movement() then
+					self:get_current_state()._unit:movement():_change_stamina(-999999)
+				end
+				DelayedCalls:Add("Gilza_remove_junkie_spike_pt2", 4, function()
+					junkie_exhausted = false
+				end)
+			end)
+		end
+		
+		-- color adjustments, UI element goes from white to yelow then to green then to red; blue for the spike
+		if self._Gilza_junkie_adrenaline_spike then -- adrenaline spike
+			-- spike will flash from blue to white color to indicate the "FUCKING RUN" feeling
+			spike_flash_timer = spike_flash_timer + 1
+			if spike_flash_timer >= 4 then
+				self._Gilza_junkie_counter_GUI:set_color(Color(1, 1, 1, 1))
+				icon:set_color(Color(1, 1, 1, 1))
+				if spike_flash_timer >= 5 then
+					spike_flash_timer = 0
+				end
+			else
+				self._Gilza_junkie_counter_GUI:set_color(Color(1, 0.1, 0.4, 0.84))
+				icon:set_color(Color(1, 0.1, 0.4, 0.84))
+			end
+		elseif junkie_exhausted then -- dark purple if we have the high meter debuff
 			self._Gilza_junkie_counter_GUI:set_color(Color(1, 0.6, 0, 0.6))
 			icon:set_color(Color(1, 0.6, 0, 0.6))
-		elseif self._Gilza_junkie_counter < 42 then -- white to yellow
+		elseif self._Gilza_junkie_counter < 38 then -- white to yellow
 			local color = math.lerp(Color(1, 1, 1, 1), Color(1, 1, 1, 0.4), self._Gilza_junkie_counter / 42)
 			self._Gilza_junkie_counter_GUI:set_color(color)
 			icon:set_color(color)
-		elseif self._Gilza_junkie_counter < 96 then -- yellow to green
+		elseif self._Gilza_junkie_counter < 90 then -- yellow to green
 			local color = math.lerp(Color(1, 1, 1, 0.4), Color(1, 0, 1, 0), (self._Gilza_junkie_counter - 42) / 54)
 			self._Gilza_junkie_counter_GUI:set_color(color)
 			icon:set_color(color)
@@ -274,11 +333,17 @@ local function Gilza_update_junkie_loop(self)
 			icon:set_color(Color(1, 1, 0, 0))
 		end
 		
+		if not self._Gilza_junkie_adrenaline_spike then
+			spike_flash_timer = 0
+		end
+		
 		-- 2 numbers after decimal at most for GUI
 		local text = tostring(math.floor(self._Gilza_junkie_counter * 100) / 100)
 		self._Gilza_junkie_counter_GUI:set_text(text)
 		self._Gilza_junkie_counter_GUI:set_outlines_visible(true)
 		self._Gilza_junkie_counter_GUI:show()
+		
+		-- loop
 		Gilza_update_junkie_loop(self)
 		
 	end)
@@ -359,3 +424,24 @@ function PlayerManager:_attempt_tag_team(...)
 	
 	return success
 end
+
+-- updated the way armor is updated with anarchist/speed junkie deck to make it work properly, since skill health multipliers are additive instead of multiplicative for some fucking reason
+Hooks:OverrideFunction(PlayerManager, "body_armor_skill_addend", function (self, override_armor)
+	local addend = 0
+	addend = addend + self:upgrade_value("player", tostring(override_armor or managers.blackmarket:equipped_armor(true, true)) .. "_armor_addend", 0)
+
+	if self:has_category_upgrade("player", "armor_increase") then
+		local default_health = (PlayerDamage._HEALTH_INIT + self:health_skill_addend())
+		local health_multiplier = self:health_skill_multiplier()
+		local anarch_health_decrease = self:upgrade_value("player", "health_decrease", 0)
+		
+		local perk_health_update = default_health - default_health * (1 - anarch_health_decrease)
+		local skills_health_update = (health_multiplier + anarch_health_decrease) * default_health - default_health
+		
+		addend = addend + (perk_health_update + skills_health_update) * self:upgrade_value("player", "armor_increase", 1)
+	end
+
+	addend = addend + self:upgrade_value("team", "crew_add_armor", 0)
+
+	return addend
+end)

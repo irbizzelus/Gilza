@@ -415,9 +415,9 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			1,
 			1.1,
 			1.2,
-			3.78,
-			4.14,
-			4.68
+			0.42,
+			0.46,
+			0.52
 		}
 		-- anarchist health decrease, extended for new junkie perk
 		self.values.player.health_decrease = {
@@ -431,10 +431,10 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			true
 		}
 		self.values.player.speed_junkie_stamina_on_kill = {
-			0.08
+			0.05
 		}
 		self.values.player.speed_junkie_meter_on_kill = {
-			2
+			3
 		}
 		self.values.temporary.player_speed_junkie_armor_on_dodge = {
 			{
