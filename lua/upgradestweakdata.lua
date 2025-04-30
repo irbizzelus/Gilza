@@ -9,23 +9,37 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 	self.explosive_bullet.feedback_range = self.explosive_bullet.range
 	
 	local function New_Mastermind_Skills()
+		---- MEDIC
+		-- new on revive bonus
+		self.values.player.revive_action_self_heal = {
+			0.35
+		}
+		---- CONTROLLER
+		-- new murder hobo skill
+		self.values.player.menace_panic_spread = {
+			{
+				chance = 0.1,
+				area = 1000,
+				amount = 75
+			}
+		}
 		---- SHARPSHOOTER
 		-- tweaked stable shot to only give accuracy bonuses
 		self.values.player.weapon_accuracy_increase = {
 			1,
-			3
+			4
 		}
-		-- new designated marksman skill aced - 35% better recoil with first 5 shots
+		-- new designated marksman skill aced - 50% better recoil with first 5 shots
 		self.values.player.less_start_recoil = {
-			0.65
+			0.5
 		}
-		-- new slow and steady skill - dmg resist if not moving or bipoded
+		-- new slow and steady skill - dmg resist if not moving
 		self.values.player.not_moving_damage_reduction_bonus = {
-			0.075
+			0.9
 		}
 		-- slow and steady pro - extra dmg resist if bipoded
 		self.values.player.not_moving_damage_reduction_bonus_bipoded = {
-			0.35
+			0.75
 		}
 		-- slow and steady pro - faster bipod deploy time
 		self.values.player.bipod_deploy_speed = {
@@ -43,15 +57,22 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		self.values.snp.reload_speed_multiplier = {
 			1.25
 		}
+		-- agressive reload aced buff from 100% to 200% reload
+		self.values.temporary.single_shot_fast_reload = {
+			{
+				2.5,
+				4
+			}
+		}
 		-- new graze values, they should be 1/3 and 2/3 but i dont trust damage calculation's rounding up values correctly
 		self.values.snp.graze_damage = {
 			{
-				radius = 75,
+				radius = 80,
 				damage_factor = 0.34,
 				damage_factor_headshot = 0
 			},
 			{
-				radius = 150,
+				radius = 160,
 				damage_factor = 0.67,
 				damage_factor_headshot = 0
 			}
@@ -66,17 +87,20 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			0.8,
 			0.50
 		}
+		self.values.shotgun.steelsight_accuracy_inc = {
+			0.7
+		}
 		-- new blast away skill - suprisingly still has native support, and does not require any code on my part
 		self.values.shotgun.consume_no_ammo_chance = {
-			0.075,
-			0.20
+			0.06,
+			0.18
 		}
 		-- fearmonger's shotgun panic spread
 		self.values.shotgun.panic_when_kill = {
 			{
 				chance = 0.75,
 				area = 1500,
-				amount = 500
+				amount = 750
 			}
 		}
 		-- shotgun panic - speed boost
@@ -102,21 +126,52 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		self.values.player.saw_ammo_pick_up = {
 			true
 		}
+		-- fully loaded aced pickup buff 75->85
+		self.values.player.pick_up_ammo_multiplier = {
+			1.35,
+			1.85
+		}
 		-- make old fully loaded aced grenade pick up base kit with perks, buff the skill values. nerf grenade pick ups depending on the grenade
 		self.values.player.regain_throwable_from_ammo = {
 			{
 				chance = 0,
-				chance_inc = 0.008
+				chance_inc = 0.01
 			},
 			{
 				chance = 0.10,
-				chance_inc = 0.016
+				chance_inc = 0.03
 			}
 		}	
 	end
 	New_Enforcer_Skills()
 	
 	local function New_Technician_Skills()
+		---- ENGINEER
+		-- sentry guns tower defense - less sentries
+		self.values.sentry_gun.quantity = {
+			3,
+			2
+		}
+		-- sentry guns tower defense - 10% dmg resist
+		self.values.player.sentry_proximity_damage_resist = {
+			0.9,
+		}
+		-- sentry guns tower defense - refil ammo for every sentry gun kill. ratio is for a standard ammo pick up
+		self.values.player.sentry_kills_refill_ammo = {
+			0.25,
+		}
+		---- BREACHER
+		-- buff firetraps a bit
+		self.values.trip_mine.fire_trap = {
+			{
+				0,
+				1
+			},
+			{
+				20,
+				1.75
+			}
+		}
 		---- OPPRESSOR
 		-- base steady grip sometimes can be gained for no reason, idk why, just make sure that it gives nothing
 		self.values.player.stability_increase_bonus_1 = {
@@ -125,7 +180,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		-- tweaked steady grip to only give stability bonuses
 		self.values.player.stability_increase_bonus_2 = {
 			1,
-			3
+			4
 		}
 		-- heavy impact
 		self.values.weapon.knock_down = {
@@ -134,25 +189,35 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		}
 		-- new fire control basic - removed 40% recoil penalty while hipfiring
 		self.values.player.hipfire_less_recoil = {
-			1
+			0
 		}
-		-- new fire control aced - removes 25% acc penalty while hipfiring
+		-- new fire control aced - removes acc penalty while hipfiring
 		self.values.player.hipfire_no_accuracy_penalty = {
 			0
 		}
+		-- lock n load aced, new version
+		self.values.player.automatic_faster_reload = {
+			{
+				min_reload_increase = 1.35,
+				penalty = 1.01,
+				target_enemies = 3,
+				min_bullets = 15,
+				max_reload_increase = 2.25
+			}
+		}
 		-- Body expertise muls
 		self.values.weapon.automatic_head_shot_add = {
-			0.5,
-			1
+			1,
+			1.25
 		}
 		-- new ap bullets from BE basic
 		self.values.player.ap_bullets_aced = {
 			true
 		}
-		-- ammo pick up reduction for BE; numbers are fucky, because i wanted to make it so it reduced pick up by 20% and 35% after the 35% buff from a perk deck skill
+		-- ammo pick up reduction for BE
 		self.values.player.pick_up_ammo_reduction = {
-			0.73,
-			0.5275
+			0.8,
+			1
 		}
 	end
 	New_Technician_Skills()
@@ -173,17 +238,17 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		-- moved to the anti-tazer skill, with reduced duration
 		self.values.player.armor_depleted_stagger_shot = {
 			0,
-			3
+			2
 		}
 		-- new dodge armor regen skill
 		self.values.temporary.player_dodge_armor_regen = {
 			{
 				1,
-				20
+				25
 			},
 			{
 				4,
-				14
+				10
 			}
 		}
 	end
@@ -199,22 +264,22 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		-- new nerfed trigger happy
 		self.values.pistol.stacking_hit_damage_multiplier = {
 			{
-				max_stacks = 1,
-				max_time = 1.5,
-				damage_bonus = 1.8
+				max_stacks = 2,
+				max_time = 10,
+				damage_bonus = 1.4
 			},
 			{
-				max_stacks = 1,
-				max_time = 1.5,
-				damage_bonus = 1.8
+				max_stacks = 2,
+				max_time = 10,
+				damage_bonus = 1.4
 			}
 		}
 		-- new desperado
 		self.values.pistol.stacked_accuracy_bonus = {
 			{
-				max_stacks = 3,
-				accuracy_bonus = 0.9,
-				max_time = 15
+				max_stacks = 2,
+				accuracy_bonus = 0.84,
+				max_time = 10
 			}
 		}	
 		-- new akimbo skill
@@ -231,8 +296,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		}
 		-- new bottomless pockets skill
 		self.values.pistol.extra_ammo_multiplier = {
-			1.4,
-			2
+			1.5,
+			2.5
 		}
 		-- new bottomless pockets skill
 		self.values.smg.extra_ammo_multiplier = {
@@ -249,14 +314,38 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		self.values.player.revived_health_regain = {
 			1
 		}
+		-- running from death buffs
+		self.values.temporary.swap_weapon_faster = {
+			{
+				2,
+				30
+			}
+		}
+		self.values.temporary.reload_weapon_faster = {
+			{
+				2,
+				30
+			}
+		}
+		self.values.temporary.increased_movement_speed = {
+			{
+				1.3,
+				30
+			}
+		}
+		-- messiah inf bleedout health
+		self.values.player.bleed_out_health_multiplier = {
+			1.5,
+			999
+		}
+		-- swan song change
+		self.values.temporary.berserker_damage_multiplier = { {1,4}, {1.5,8} }
+		
+		---- BRAWLER
 		self.values.player.melee_shake_reduction = {
 			0.7,
 			0.1
 		}
-		-- swan song change
-		self.values.temporary.berserker_damage_multiplier = { {1,3}, {1.5,9} }
-		
-		---- BRAWLER
 		-- blotdthirst basic adjustment to new melee system
 		self.values.player.melee_damage_stacking = {
 			{
@@ -280,13 +369,6 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		self.values.temporary.new_berserk_melee_damage_multiplier_1 = {
 			{
 				1.5,
-				20
-			}
-		}
-		-- new berserk melee aced
-		self.values.temporary.new_berserk_melee_damage_multiplier_2 = {
-			{
-				1.5,
 				40
 			}
 		}
@@ -294,7 +376,14 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		self.values.temporary.new_berserk_weapon_damage_multiplier = {
 			{
 				2,
-				20
+				30
+			}
+		}
+		-- new berserk weapon cooldown
+		self.values.temporary.new_berserk_weapon_damage_multiplier_cooldown = {
+			{
+				1,
+				45
 			}
 		}
 	end
@@ -374,6 +463,14 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				max = 3.2
 			}
 		}
+		-- copycat nerf from 15 to 20, because this card was fixed to only activate invlun if armor is <0
+		self.values.temporary.mrwi_health_invulnerable = {
+			{
+				0.5,
+				2,
+				30
+			}
+		}
 		---- Brawler deck stuff
 		-- why make new code that makes more sense, when old code will do?
 		self.values.player.perk_armor_regen_timer_multiplier = {
@@ -393,9 +490,9 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			0.25
 		}
 		self.values.player.damage_resist_brawler = {
-			0.1,
-			0.2,
-			0.3
+			0.9,
+			0.8,
+			0.7
 		}
 		self.values.player.stamina_on_melee_kill_brawler = {
 			0.1
@@ -452,6 +549,81 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				interaction = 1.4
 			}
 		}
+		---- Guardian deck stuff
+		self.values.player.guardian_movement_penalty = {
+			0.8
+		}
+		self.values.player.guardian_interaction_speed_penalty = {
+			1.5
+		}
+		self.values.player.guardian_armor_remover = {
+			true
+		}
+		self.values.player.guardian_area_passive = {
+			true
+		}
+		self.values.player.guardian_area_range = {
+			300,
+			500
+		}
+		self.values.player.guardian_area_passive_activation_timer = {
+			5,
+			3
+		}
+		self.values.player.guardian_area_passive_health_regen = {
+			1,
+			2,
+			3
+		}
+		self.values.player.guardian_damage_clamp_inside_1 = {
+			{
+				minimum = 8,
+				maximum = 16,
+			}
+		}
+		self.values.player.guardian_damage_clamp_outside_1 = {
+			{
+				minimum = 10,
+				maximum = 20,
+			}
+		}
+		self.values.player.guardian_damage_clamp_inside_2 = {
+			{
+				minimum = 6,
+				maximum = 12,
+			}
+		}
+		self.values.player.guardian_damage_clamp_outside_2 = {
+			{
+				minimum = 8,
+				maximum = 16,
+			}
+		}
+		self.values.player.passive_health_multiplier = {
+			1.1,
+			1.2,
+			1.4,
+			1.8,
+			2,
+			2.5
+		}
+		-- for 10 points of armor you get a chance multiplier for ricochet. so for 216 armor with current mul you get 21 x 2 = 42%
+		self.values.player.guardian_heavy_armor_ricochet = {
+			2
+		}
+		self.values.player.guardian_activate_area_on_kill = {
+			true
+		}
+		self.values.player.guardian_auto_ammo_pickup_on_kill = {
+			true
+		}
+		self.values.player.guardian_health_on_kill = {
+			2
+		}
+		self.values.player.guardian_reduce_equipment_heal = {
+			0.5
+		}
+		
 	end
 	New_Perks()
 	
@@ -460,6 +632,15 @@ end)
 Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definitions_1", function(self)	
 	
 	---- MASTERMIND
+	self.definitions.player_revive_action_self_heal = {
+		name_id = "menu_player_revive_action_self_heal",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "revive_action_self_heal",
+			category = "player"
+		}
+	}
 	self.definitions.player_weapon_accuracy_increase_2 = {
 		name_id = "menu_player_weapon_accuracy_increase",
 		category = "feature",
@@ -611,6 +792,24 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 			category = "player"
 		}
 	}
+	self.definitions.player_sentry_proximity_damage_resist = {
+		name_id = "menu_player_sentry_proximity_damage_resist",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "sentry_proximity_damage_resist",
+			category = "player"
+		}
+	}
+	self.definitions.player_sentry_kills_refill_ammo = {
+		name_id = "menu_player_sentry_kills_refill_ammo",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "sentry_kills_refill_ammo",
+			category = "player"
+		}
+	}
 	
 	---- GHOST
 	self.definitions.player_extra_jump_height = {
@@ -657,6 +856,15 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 		upgrade = {
 			value = 1,
 			upgrade = "health_regain_V2",
+			category = "player"
+		}
+	}
+	self.definitions.player_bleed_out_health_multiplier_2 = {
+		name_id = "menu_player_bleed_out_health_multiplier_2",
+		category = "feature",
+		upgrade = {
+			value = 2,
+			upgrade = "bleed_out_health_multiplier",
 			category = "player"
 		}
 	}
@@ -714,21 +922,21 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 			category = "temporary"
 		}
 	}
-	self.definitions.player_new_berserk_melee_damage_multiplier_2 = {
-		name_id = "menu_player_new_berserk_melee_damage_multiplier_2",
-		category = "temporary",
-		upgrade = {
-			value = 1,
-			upgrade = "new_berserk_melee_damage_multiplier_2",
-			category = "temporary"
-		}
-	}
 	self.definitions.player_new_berserk_weapon_damage_multiplier = {
 		name_id = "menu_player_new_berserk_weapon_damage_multiplier",
 		category = "temporary",
 		upgrade = {
 			value = 1,
 			upgrade = "new_berserk_weapon_damage_multiplier",
+			category = "temporary"
+		}
+	}
+	self.definitions.player_new_berserk_weapon_damage_multiplier_cooldown = {
+		name_id = "menu_player_new_berserk_weapon_damage_multiplier_cooldown",
+		category = "temporary",
+		upgrade = {
+			value = 1,
+			upgrade = "new_berserk_weapon_damage_multiplier_cooldown",
 			category = "temporary"
 		}
 	}
@@ -987,6 +1195,206 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 			category = "player"
 		}
 	}
+	-- Guardian
+	self.definitions.player_guardian_interaction_speed_penalty = {
+		name_id = "menu_player_guardian_interaction_speed_penalty",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_interaction_speed_penalty",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_movement_penalty = {
+		name_id = "menu_player_guardian_movement_penalty",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_movement_penalty",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_armor_remover = {
+		name_id = "menu_player_guardian_armor_remover",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_armor_remover",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_area_passive = {
+		name_id = "menu_player_guardian_area_passive",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_area_passive",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_area_range_1 = {
+		name_id = "menu_player_guardian_area_range_1",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_area_range",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_area_range_2 = {
+		name_id = "menu_player_guardian_area_range_2",
+		category = "feature",
+		upgrade = {
+			value = 2,
+			upgrade = "guardian_area_range",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_area_passive_activation_timer_1 = {
+		name_id = "menu_player_guardian_area_passive_activation_timer_1",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_area_passive_activation_timer",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_area_passive_activation_timer_2 = {
+		name_id = "menu_player_guardian_area_passive_activation_timer_2",
+		category = "feature",
+		upgrade = {
+			value = 2,
+			upgrade = "guardian_area_passive_activation_timer",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_area_passive_health_regen_1 = {
+		name_id = "menu_player_guardian_area_passive_health_regen_1",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_area_passive_health_regen",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_area_passive_health_regen_2 = {
+		name_id = "menu_player_guardian_area_passive_health_regen_2",
+		category = "feature",
+		upgrade = {
+			value = 2,
+			upgrade = "guardian_area_passive_health_regen",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_area_passive_health_regen_3 = {
+		name_id = "menu_player_guardian_area_passive_health_regen_3",
+		category = "feature",
+		upgrade = {
+			value = 3,
+			upgrade = "guardian_area_passive_health_regen",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_damage_clamp_inside_1 = {
+		name_id = "menu_player_guardian_damage_clamp_inside_1",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_damage_clamp_inside_1",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_damage_clamp_inside_2 = {
+		name_id = "menu_player_guardian_damage_clamp_inside_2",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_damage_clamp_inside_2",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_damage_clamp_outside_1 = {
+		name_id = "menu_player_guardian_damage_clamp_outside_1",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_damage_clamp_outside_1",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_damage_clamp_outside_2 = {
+		name_id = "menu_player_guardian_damage_clamp_outside_2",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_damage_clamp_outside_2",
+			category = "player"
+		}
+	}
+	self.definitions.player_passive_health_multiplier_6 = {
+		name_id = "menu_player_health_multiplier",
+		category = "feature",
+		upgrade = {
+			value = 6,
+			upgrade = "passive_health_multiplier",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_heavy_armor_ricochet = {
+		name_id = "menu_player_guardian_heavy_armor_ricochet",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_heavy_armor_ricochet",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_activate_area_on_kill = {
+		name_id = "menu_player_guardian_activate_area_on_kill",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_activate_area_on_kill",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_auto_ammo_pickup_on_kill = {
+		name_id = "menu_player_guardian_auto_ammo_pickup_on_kill",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_auto_ammo_pickup_on_kill",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_health_on_kill = {
+		name_id = "menu_player_guardian_health_on_kill",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_health_on_kill",
+			category = "player"
+		}
+	}
+	self.definitions.player_guardian_reduce_equipment_heal = {
+		name_id = "menu_player_guardian_reduce_equipment_heal",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "guardian_reduce_equipment_heal",
+			category = "player"
+		}
+	}
+	self.definitions.player_menace_panic_spread = {
+		name_id = "menu_player_menace_panic_spread",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "menace_panic_spread",
+			category = "player"
+		}
+	}
+	
 end)
 
 Hooks:PostHook(UpgradesTweakData, "_shotgun_definitions", "Gilza_skill_definitions_2", function(self)	

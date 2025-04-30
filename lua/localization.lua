@@ -27,7 +27,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			menu_deckall_2_desc = "Increases your doctor bag interaction speed by ##20%##",
 			-- Fix for custom perk decks for 4th card missing reference values
 			menu_deckall_4_desc_new = "You gain ##+1## increased concealment.\n\nWhen wearing armor, your movement speed is ##15%## less affected.\n\nYou gain ##45%## more experience when you complete days and jobs.",
-			menu_deckall_6_desc = "Unlocks an armor bag equipment for you to use. The armor bag can be used to change your armor during a heist.\n\nIncreases your ammo pickup to ##135%## of the normal rate.\n\nYou also gain a base ##0%## chance to get a throwable from an ammo box. The base chance is increased by ##0.8% * x## (where x - throwable pick up multiplier) for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.\n\nNote: Throwable pick up multipliers are different for each throwable - you can find them under throwable descriptions.",
+			menu_deckall_6_desc = "Unlocks an armor bag equipment for you to use. The armor bag can be used to change your armor during a heist.\n\nIncreases your ammo pickup to ##135%## of the normal rate.\n\nYou also gain a base ##0%## chance to get a throwable from an ammo box. The base chance is increased by ##1% * x## (where x - throwable pick up multiplier) for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.\n\nNote: Throwable pick up multipliers are different for each throwable - you can find them under throwable descriptions.",
 			menu_deckall_8 = "Improved Physique",
 			menu_deckall_8_desc = "You gain ##10%## additional movement speed.\n\nYou can throw bags ##50%## further.",
 			
@@ -37,7 +37,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			menu_sociopathinfil_1_desc = "When you are surrounded by three enemies or more, you receive ##12%## less damage from enemies.\n\nYour second and each consecutive melee hit within ##4## seconds of the last one will deal ##75%## more damage.\n",
 			menu_deck10_1_desc = "Ammo packs you pick up also yield medical supplies and heal you for ##16## to ##24## health.\n\nCannot occur more than once every ##3## seconds.\n\nIf the Gambler's current health is lower than another player's, the heal effect on the Gambler is increased by ##40%##. Does not stack.\n\nYour ammo box pick up range is increased by ##50%##.",
 			menu_deck12_9_desc = "All berserker state effects in this perk deck will start at ##50%## health instead of ##25%##.\n\nEntering berserker state makes you immune to armor piercing and armor suppression effects.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
-			menu_deck18_1_desc = "Unlocks and equips the throwable Smoke Bomb.\n\nChanging to another perk deck will make the Smoke Bomb unavailable again. The Smoke Bomb replaces your current throwable, is equipped in your throwable slot and can be switched out if desired.\n\nWhile in game you can use throwable key ##$BTN_ABILITY;## to deploy the Smoke Bomb.\n\nWhen deployed, the smoke bomb creates a smoke screen that lasts for ##10## seconds. While standing inside the smoke screen, you and any of your allies automatically avoid ##50%## of all bullets. Any enemies that stand in the smoke will see their accuracy reduced by ##50%##.\n\nAfter the smoke screen dissipates, the Smoke Bomb is on a cooldown for ##40## seconds, but killing enemies will reduce this cooldown by ##1## second.",	
+			menu_deck18_1_desc = "Unlocks and equips the throwable Smoke Bomb.\n\nChanging to another perk deck will make the Smoke Bomb unavailable again. The Smoke Bomb replaces your current throwable, is equipped in your throwable slot and can be switched out if desired.\n\nWhile in game you can use throwable key ##$BTN_ABILITY;## to deploy the Smoke Bomb.\n\nWhen deployed, the smoke bomb creates a smoke screen that lasts for ##10## seconds. While standing inside the smoke screen, you and any of your allies automatically avoid ##50%## of all bullets. Any enemies that stand in the smoke will see their accuracy reduced by ##50%##.\n\nAfter the smoke screen dissipates, the Smoke Bomb is on a cooldown for ##45## seconds, but killing enemies will reduce this cooldown by ##1## second.",	
 			menu_deck20_1_desc = "Unlocks and equips the Gas Dispenser.\n\nChanging to another perk deck will make the Gas Dispenser unavailable again. The Gas Dispenser replaces your current throwable, it can be switched out if desired.\n\nTo activate the Gas Dispenser you need to look at another allied unit within a ##24## meter radius and press the throwable key ##$BTN_ABILITY;## to tag them.\n\nEach enemy you or the tagged unit kills will now heal you for ##15## health and the tagged unit for ##7.5## health.\n\nEach enemy you kill will now extend the duration by ##1.7## seconds and reduce the cooldown timer by ##2## seconds.\n\nThe effect will last for a duration of ##12## seconds and has a cooldown of ##60## seconds.",
 			menu_deck20_5_desc = "Each enemy you or the tagged unit kills will now grant you ##4## absorption up to a maximum of ##32##.\n\nThis effect will last until the perk deck item goes out of cooldown.",
 			menu_deck21_1_desc = "Unlocks and equips the Pocket ECM Device.\n\nChanging to another perk deck will make the Pocket ECM Device unavailable again. The Pocket ECM Device replaces your current throwable, it can be switched out if desired.\n\nWhile in game you can use the throwable key ##$BTN_ABILITY;## to activate the Pocket ECM.\n\nActivating the Pocket ECM Device before the alarm is raised will trigger the jamming effect, disabling all electronics and pagers for a ##6## second duration.\n\nActivating the Pocket ECM Device after the alarm is raised will trigger the feedback effect, granting a chance to stun enemies on the map every second for a ##12## second duration.\n\nThe Pocket ECM Device has ##2## charges with a ##140## second cooldown timer, but each kill you perform will shorten the cooldown timer by ##4## seconds.",
@@ -54,19 +54,20 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			menu_deck21_1_desc_short = "Unlocks and equips the Pocket ECM.",
 			menu_deck21_5_desc_short = "Killing an enemy while the feedback effect is active will regenerate ##40## health. Your chance to dodge is increased by ##15%##.",
 			menu_deck21_7_desc_short = "Killing at least ##3## enemies while the feedback or jamming effect is active will grant ##20## dodge for ##50## seconds.",
+			menu_deck23_7_desc = "If you receive damage that brings your health below ##50%##, you will gain health damage immunity for ##2## seconds.\nYou will still receive damage from the triggering hit.\nThis skill will only trigger when you have no armor.\n\nThis skill cannot occur more than once every ##30## seconds.",
 			
 			---- Custom decks:
 			-- Brawler
 			menu_deck_brawler = "Brawler",
 			menu_deck_brawler_desc = "Gage tipped Bain off about a shipment of experimental lightweight high power armor suits being transported by Murkywater to one of their facitilies. And who are you, if not THE fucking payday gang? Of course you had to steal it! But after properly inspecting them in your safehouse, you found out that they are extremely bulky, yet still somehow comfortable to run around in.\n\nThis, is how you became... THE BRAWLER!",
 			menu_deck_brawler1 = "Armor suit upgrade",
-			menu_deck_brawler1_desc = "Using this high profile armor suit with any kind of a chest rig is pretty much imposible due to it's form and size. But who needs them, right?\n\nYour total ammo capacity and ammo pick up rate are reduced by ##80%##.\n\nYour armor recovery rate is reduced by ##300%##.\n\nYour armor has ##10%## bullet damage resistance.",
+			menu_deck_brawler1_desc = "Using this high profile armor suit with any kind of a chest rig is pretty much imposible due to it's form and size. But who needs them, right?\n\nYour ammo capacity and ammo pick up rate are reduced by ##80%##. Note that this reduction is applied after all other ammo related skills, as a ##0.2## multiplier, which means you can't effectively counter this effect with other skills.\nIf you are using bows/crossbows, you only have a ##20%## chance for bolts to return when you try to pick them up.\n\nYour armor recovery rate is reduced by ##300%##.\n\nYour armor has ##10%## bullet damage resistance.",
 			menu_deck_brawler3 = "Meat shield",
 			menu_deck_brawler3_desc = "You are ##15%## more likely to be targeted when you are close to your crew members.\n\nYour armor now has ##10%## more bullet damage resistance.\n\nArmor movement speed penalty is reduced by ##20%##.",
 			menu_deck_brawler5 = "Reflective armor plates",
 			menu_deck_brawler5_desc = "Your armor can no longer be penetrated by armor piercing ammunition.\n\nYour armor now has ##10%## more bullet damage resistance.\n\nArmor movement penalty is reduced by additional ##20%##.\n\nSecuring a kill with a melee weapon restores ##10%## of your stamina.",
 			menu_deck_brawler7 = "Fear inducing",
-			menu_deck_brawler7_desc = "While you are under ##50%## health, you receive following bonuses:\n- Enemies within ##18## meters of you deal ##7%## less bullet damage to your armor\n- Enemies within ##10## meters of you deal ##16%## less bullet damage to your armor\n- Enemies within ##5## meters of you deal ##27%## less bullet damage to your armor\n\nDamage resistance bonuses from this perk card are ##doubled## on Death Sentence difficulty.",
+			menu_deck_brawler7_desc = "While you are under ##50%## health, you receive following bonuses:\n- Enemies within ##18## meters of you deal ##4%## less bullet damage to your armor\n- Enemies within ##10## meters of you deal ##9%## less bullet damage to your armor\n- Enemies within ##5## meters of you deal ##16%## less bullet damage to your armor\nDamage resistances from this perk card are additive, so enemy within ##5## meters deals ##29%## less bullet damage total.\n\nDamage resistance bonuses from this perk card are ##doubled## on Death Sentence difficulty.",
 			menu_deck_brawler9 = "Bloodlust",
 			menu_deck_brawler9_desc = "Securing a kill with a melee weapon starts regenerating ##100## points of armor over a period of ##6## seconds, with a \"tick\" of regeneration every ##0.75## seconds.\nYou can have up to ##3## armor regeneration effects from this perk card at the same time.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
 			-- Short descs for Brawler
@@ -86,7 +87,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			menu_deck_SJ_5 = "OUT OF MY WAY! ",
 			menu_deck_SJ_5_desc = "Securing a kill adds ##3## stacks of adrenaline, but if that kill was a bodyshot you will get ##9## stacks instead.\nSecuring kills while your adrenaline stack amount is higher then ##90## will instead remove your adrenaline stacks at the same rate.\n\nNew ability: adrenaline spike.\nWhile your adrenaline stack amount is over ##70## you gain ##1## adrenaline spike point every second. When your reach ##20## adrenaline spike points, you become eligible for an adrenaline spike. While you are eligible for an adrenaline spike you have a ##10%## chance to activate it by securing a kill by any means. Adrenaline spike overdoses your adrenaline stacks for ##8## seconds. After adrenaline spike is over you become exhausted and your adrenaline spike points are reset to ##0##.\n\nYou convert ##90%## of your health to ##52%## of armor.",
 			menu_deck_SJ_7 = "somebody.. STOP ME! ",
-			menu_deck_SJ_7_desc = "You gain ##6## points of armor when you dodge. If you have no armor remaining, you will recieve ##24## armor points instead. This can not occur more often then once every ##1.5## seconds.",
+			menu_deck_SJ_7_desc = "You gain ##6## points of armor when you dodge. If you have no armor remaining, you will receive ##24## armor points instead. This can not occur more often then once every ##1.5## seconds.",
 			menu_deck_SJ_9 = "Overdose",
 			menu_deck_SJ_9_desc = "You can gain up to ##25%## more movement speed if your armor is damaged - lower your armor percentage is, higher the movement speed.\n\nAdrenaline stacks will now provide additional bonuses that scale with amount of adrenaline stacks, this includes:\n- Up to ##40%## faster weapon reload speed\n- Up to ##100%## faster weapon swap speed\n- Up to ##40%## faster interaction speeds, excluding pager answers and crew member revives.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
 			-- Short descs for junkie
@@ -95,29 +96,55 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			menu_deck_SJ_5_desc_short = "Kills provide ##2-6## adrenaline stacks. Convert ##90%## health for ##52%## armor.",
 			menu_deck_SJ_7_desc_short = "Dodging provides ##6-24## points of armor.",
 			menu_deck_SJ_9_desc_short = "Move up to ##25%## faster lower your armor is. Adrenaline stacks now provide faster reload, interaction and weapon swap speeds.",
+			
+			-- Guardian
+			menu_deck_Gilza_guardian = "Guardian",
+			menu_deck_Gilza_guardian_desc = "Guardian. A true defender.\nAll the heisting experience you've gathered over the years led you to a simple, yet truthful conclustion - the better you can defend that 'broke dick piece of shit drill', the faster you will get to the riches that it's trying to uncover, and to the escape van after all the goodies are in the bag. And now that you have learned all the defensive techniques you could, you have become the wall. No match for any force that tries to move you. If only you didn't forget a few things along the learning way...",
+			menu_deck_Gilza_guardian_1 = "Hunkering down",
+			menu_deck_Gilza_guardian_1_desc = "Your movement speed is reduced by ##20%##.\nAll interaction speeds, exluding player revives and pager answering, are now ##50%## slower.\n\nWhile in game, you will have ##0## armor.\n\nYou gain an ability to create a personal defensive area by standing perfectly still for ##5## seconds. This area has a ##3m## radius. If you stay outside of your defensive area for more then ##8## seconds, area will be removed. You would have to wait ##8## more seconds after your last area was removed before a new defensive area could be created.\n\nWhile standing inside of your defensive area you regenerate ##10## points of health every ##2## seconds.",
+			menu_deck_Gilza_guardian_3 = "Personal limits",
+			menu_deck_Gilza_guardian_3_desc = "While inside of your defensive area you can not receive more then ##160## damage per hit, but you also can not receive less then ##80## damage per hit.\nWhile outside of your defensive area you can not receive more then ##200## damage per hit, but but you also can not receive less then ##100## damage per hit.\n\nYou gain ##100%## extra health.\n\nYou now regenerate ##20## points of health every ##2## seconds while inside of your defensive area.",
+			menu_deck_Gilza_guardian_5 = "I am the wall afterall",
+			menu_deck_Gilza_guardian_5_desc = "You gain ##150%## more health.\n\nSecuring a kill by any means while inside of the defensive area heals you for ##20## points of health. Healing amount is ##tripled## while playing on Death Sentence difficulty.\n\nYou now regenerate ##30## points of health every ##2## seconds while inside of your defensive area.\n\nYour defensive area now has a range of ##5m##.\n\nDoctor bags and first aid kits can now heal you only for ##50%## of your health.",
+			menu_deck_Gilza_guardian_7 = "Porcupine",
+			menu_deck_Gilza_guardian_7_desc = "For every ##10## armor points your equipped armor has, you gain a ##2%## chance for any bullet damage to be mirrored back at the target who damaged you.\n\nIt now only takes ##3## seconds of standing still to activate a defensive area.",
+			menu_deck_Gilza_guardian_9 = "Best defence...",
+			menu_deck_Gilza_guardian_9_desc = "If you have no active defensive area, and area's re-activation cooldown has ended, you can create a defensive area at your position by securing a kill.\n\nWhile inside of your defensive area you will automatically pick up ammo boxes from any enemy you kill.*\n\nWhile inside of your defensive area you can not receive more then ##120## damage per hit, but you also can not receive less then ##60## damage per hit.\nWhile outside of your defensive area you can not receive more then ##160## damage per hit, but you also can not receive less then ##80## damage per hit.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.\n\n*Gilza note: due to the way this feature is implemented, while playing as a client, you may have a delay of up to 3 seconds (depends on ping) before ammo from the kill is picked up.",
+			-- Short descs for Guardian
+			menu_deck_Gilza_guardian_1_desc_short = "You loose movement speed and all of your armor. You can create a personal defense area that allows you to regenerate health. Defense area will be removed if you stay away from it for too long.",
+			menu_deck_Gilza_guardian_3_desc_short = "Any damage you receive will be clamped to ##80-160## while inside of your defensive area, and ##100-200## while outiside of it. You gain more health and more health regeneration inside the defensive area.",
+			menu_deck_Gilza_guardian_5_desc_short = "You gain even more health and health regeneration while inside of your defensive area, and your defensive area gains bigger radius.",
+			menu_deck_Gilza_guardian_7_desc_short = "You can now automaticaly mirror back damage at enemies, higher armor provides higher chances. Pasive activation of the defense area takes less time.",
+			menu_deck_Gilza_guardian_9_desc_short = "You automatically pick up ammo from your kills while inside of the defensive area. Any damage you receive will be clamped to ##60-120## while inside of your defensive area, and ##80-160## while outiside of it.",
 		})
 		
 		---- SKILLS ----
 		LocalizationManager:add_localized_strings({
 			-- Mastermind
 			-- M1
+			menu_combat_medic_beta_desc = "BASIC: ##$basic;##\nYou gain a ##30%## damage reduction for ##5## seconds both after and during reviving another player.\n\nACE: ##$pro;##\nReviving a crew member restores ##35%## of your maximum armor.\n\nIf you have Stoic or Guardian perk deck equiped, and upgraded to the level that completely removes your armor, you restore ##35%## of your maximum health instead.\n\nThis skill does not apply to ACED Inspire skill.",
 			menu_inspire_beta_desc = "BASIC: ##$basic##\nYou revive crew members ##100%## faster. Shouting at your teammates grants both you and your teammate a morale boost for ##10## seconds. This boost increases movement and reload speed by ##20%## for your teammate, and by ##10%## for you.\n\nACE: ##$pro##\nThere is a ##100%## chance that you can revive crew members at a distance of up to ##9## meters by shouting at them. This cannon occur more than once every ##20## seconds.",
+			-- M2
+			menu_triathlete_beta_desc = "BASIC: ##$basic;##\nIncreases your supply of cable ties by ##4##. You can cable tie hostages ##75%## faster.\n\nYou and your crew gain ##0.5## damage absorption for each hostage you have. This effect stacks with up to a maximum of ##8## hostages.\n\nNote: This skill does not stack with other players Forced Friendship skill.\n\nACE: ##$pro;##\nYou can convert a non-special enemy to fight on your side.\nThis can not be done during stealth and the enemy must have surrendered in order for you to convert them.\nYou can only convert one non-special enemy at a time.",
+			menu_joker_beta_desc = "BASIC: ##$basic;##\nYour converted enemy's damage penalty of ##35%## is removed. The time to convert an enemy is reduced by ##65%##.\n\nACE: ##$pro;##\nYou can now have ##2## converted enemies at the same time.",
+			menu_cable_guy_beta_desc = "BASIC: ##$basic;##\nThe power and range of your intimidation is increased by ##50%##\n\nACE: ##$pro;##\nCivilians are intimidated by the noise you make and remain intimidated ##50%## longer.",
+			menu_stockholm_syndrome_beta_desc = "BASIC: ##$basic;##\nKilling a civilian grants you ##1## menace points. Killing a law enforcer after they have surrendered grants you ##0.2## menace points. You can not have more then ##4## menace points. Menace points are set to ##0## when you get into custody.\n\nWhen you kill an enemy, you have a ##10%## chance to cause enemies in a ##10m## radius around you to panic. Panic can make enemies go into short bursts of uncontrollable fear.\nYour menace points increase your panic spread chances by ##10%## for ##1## full point, and increase amount of panic caused, raising chances for enemies to panic for longer.\n\nACE: ##$pro;##\nYour hostages will not flee when they have been rescued by law enforcers. Whenever you get into custody, your hostages will trade themselves for your safe return. This effect can occur during assaults, but only ##1## time during a single heist day.",
 			-- M3
-			menu_stable_shot_beta_desc = "BASIC: ##$basic##\nYou gain ##4## weapon Accuracy.\n\nACE: ##$pro##\nYou gain ##8## more weapon Accuracy.",
+			menu_stable_shot_beta_desc = "BASIC: ##$basic##\nYou gain ##4## weapon Accuracy.\n\nACE: ##$pro##\nYou gain ##12## more weapon Accuracy.",
 			menu_rifleman_beta = "Designated Marksman",
-			menu_rifleman_beta_desc = "BASIC: ##$basic##\nYour snap to zoom is ##100%## faster with all weapons.\n\nYour weapon zoom level is increased by ##25%## with all weapons.\n\nACE: ##$pro##\nWhile aiming down sights your movement speed is unhindered.\n\nWhenever you start firing your weapon, first ##5## bullets fired gain additional ##35%## recoil reduction. Does not apply to Shotguns, Snipers and single shot fire mode Pistols.",
+			menu_rifleman_beta_desc = "BASIC: ##$basic##\nYour snap to zoom is ##100%## faster with all weapons.\n\nYour weapon zoom level is increased by ##25%## with all weapons.\n\nACE: ##$pro##\nWhile aiming down sights your movement speed is unhindered.\n\nWhenever you start firing your weapon, first ##5## bullets fired gain additional ##50%## recoil reduction. Does not apply to Shotguns, Snipers and single shot fire mode Pistols.",
 			menu_sharpshooter_beta = "Slow and Steady",
-			menu_sharpshooter_beta_desc = "BASIC: ##$basic##\nYou gain ##7.5%## damage resistance while standing still or bipoded.\n\nACE: ##$pro##\nYou gain additional ##35%## damage resistance while bipoded.\nYour bipod deploy speed is increased by ##100%##.",
-			menu_speedy_reload_beta_desc = "BASIC: ##$basic##\nIncreases your reload speed with SMGs, Assault Rifles and Sniper Rifles by ##20%##.\n\nACE: ##$pro##\nAny killing headshot will increase your reload speed by ##100%## for ##4## seconds. Can only be triggered by SMGs, Assault Rifles and Sniper Rifles fired in single shot fire mode.",
-			menu_sniper_graze_damage_desc = "BASIC: ##$basic##\nSniper rifles that hit targets further then ##7.5m## away, will deal ##33%## of their damage in a ##75cm## radius around the bullet trajectory.\n\nDamage in the bullet trajectory does not increase if initial target was shot in the head, but can be increased by other skills.\n\nACE: ##$pro##\nDamage radius is increased to ##150cm##, damage in the radius is increased to ##66%## of your Sniper's damage.",
+			menu_sharpshooter_beta_desc = "BASIC: ##$basic##\nYou gain ##10%## damage resistance while standing still or bipoded.\n\nACE: ##$pro##\nYou gain additional ##25%## damage resistance while bipoded.\nYour bipod deploy speed is increased by ##100%##.",
+			menu_speedy_reload_beta_desc = "BASIC: ##$basic##\nIncreases your reload speed with SMGs, Assault Rifles and Sniper Rifles by ##20%##.\n\nACE: ##$pro##\nAny killing headshot will increase your reload speed by ##150%## for ##4## seconds. Can only be triggered by SMGs, Assault Rifles and Sniper Rifles fired in single shot fire mode.",
+			menu_sniper_graze_damage_desc = "BASIC: ##$basic##\nWhenever your shot hits an enemy further then ##6m## away, all enemies in a ##80cm## radius around the bullet trajectory, will also receive grazing damage.\nGrazing damage is equal to your weapon's base damage + relevant damage increasing skills multiplied by ##0.33##. Grazing damage is not affected by bonus headshot damage.\n\nThis skill can only be activated by Sniper Rifles, Assault Rifles and SMGs fired in single shot fire mode.\n\nACE: ##$pro##\nGrazing damage radius is increased to ##160cm##, and damage multiplier is increased to ##0.66##.",
 			
 			-- Enforcer
 			-- E1
 			menu_shotgun_cqb_beta_desc = "BASIC: ##$basic##\nYour Shotgun reload speed is now ##15%## faster.\n\nACE: ##$pro##\nYour Shotgun reload speed is now ##35%## faster.",
 			menu_shotgun_impact_beta = "Shotgun expert",
-			menu_shotgun_impact_beta_desc = "BASIC: ##$basic##\nYou gain ##125%## increased steel sight zoom speed when using shotguns.\nYou gain ##20%## better stability with all shotguns.\n\nACE: ##$pro##\nYou gain ##50%## better stability with all shotguns.\n\nNote: Stability increase can push your shotgun stability beyond ##100##.",
+			menu_shotgun_impact_beta_desc = "BASIC: ##$basic##\nYou gain ##125%## increased steel sight zoom speed when using shotguns.\nYou gain ##20%## better stability with all shotguns.\n\nACE: ##$pro##\nYou gain ##30%## more stability with all shotguns.\nYou gain ##30%## accuracy while aiming down sights with shotguns.",
 			menu_far_away_beta = "BLAST AWAY",
-			menu_far_away_beta_desc = "BASIC: ##$basic##\nEvery time you fire any Shotgun you get ##7.5%## chance to not consume any ammo.\n\nACE: ##$pro##\nYour chances to not consume any ammo increase to ##20%##.",
+			menu_far_away_beta_desc = "BASIC: ##$basic##\nEvery time you fire any Shotgun you get ##6%## chance to not consume any ammo.\n\nACE: ##$pro##\nYour chances to not consume any ammo increase to ##18%##.\n\nNote: This skill will prevent ammo from depleting both from your ammo reserves and your magazine.",
 			menu_close_by_beta = "Fearmonger",
 			menu_close_by_beta_desc = "BASIC: ##$basic##\nYou can now hip-fire with your Shotguns while sprinting.\n\nACE: ##$pro##\nIf you kill an enemy with a Shotgun that has more then ##35## threat, you have a ##75%## chance to cause enemies in a ##12m## radius around you to panic. Panic can make enemies go into short bursts of uncontrollable fear.\n\nKilling enemies during their bursts of fear fully restores your stamina and grants you ##25%## movement speed bonus for ##20## seconds.\n\nNote: Upon activation this skill creates a pop up notification. You can disable it in Gilza mod options.",
 			-- Fearmonger's in-game pop up notification
@@ -126,22 +153,28 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			-- E2
 			menu_pack_mule_beta_desc = "BASIC: ##$basic##\nFor each ##10## armor points, the bag movement penalty is reduced by ##1%##.\n\nACE: ##$pro##\nYou can sprint with any bag.",
 			-- E3
-			menu_carbon_blade_beta_desc = "BASIC: ##$basic##\nReducing the wear down of the blades on enemies by ##50%##.\n\nACE: ##$pro##\nYou can now saw through shield enemies with your OVER9000 portable saw. When killing an enemy with the saw, you have a ##50%## chance to cause nearby enemies in a ##10## m radius to panic. Panic will make enemies go into short bursts of uncontrollable fear.\n\nYou can now gain ammunition for the saw from dropped ammo boxes. This pick up can not be affected by other skills.",
-			menu_bandoliers_beta_desc = "BASIC: ##$basic##\nYour total ammo capacity is increased by ##25%##.\n\nACE: ##$pro##\nIncreases the amount of ammo you gain from ammo boxes by ##75%##. You also gain a base ##10%## chance to get a throwable from an ammo box. The base chance is increased by ##1.6% * x## (where x - throwable pick up multiplier) for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.\n\nNotes:\nThis skill does not stack with the perk skill 'Walk-in Closet'.\n\nThrowable pick up multipliers are different for each throwable - you can find them under throwable descriptions.",
+			menu_ammo_2x_beta_desc = "BASIC: ##$basic;##\nEach ammo bag now contains ##50%## more ammunition.\n\nACE: ##$pro;##\nYou can now place ##2## ammo bags instead of just one.",
+			menu_carbon_blade_beta_desc = "BASIC: ##$basic##\nReducing the wear down of the blades on enemies by ##50%##.\n\nACE: ##$pro##\nYou can now saw through shield enemies with your OVER9000 portable saw. When killing an enemy with the saw, you have a ##50%## chance to cause nearby enemies in a ##10## m radius to panic. Panic will make enemies go into short bursts of uncontrollable fear.\n\nYou can now gain ammunition for the saw from dropped ammo boxes. Saw ammo pick up can't be increased/decreased by other ammo pick up related skills.",
+			menu_bandoliers_beta_desc = "BASIC: ##$basic##\nYour total ammo capacity is increased by ##25%##.\n\nACE: ##$pro##\nIncreases the amount of ammo you gain from ammo boxes by ##85%##. You also gain a base ##10%## chance to get a throwable from an ammo box. The base chance is increased by ##3% * x## (where x - throwable pick up multiplier) for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.\n\nNotes:\nThis skill does not stack with the perk skill 'Walk-in Closet'.\n\nThrowable pick up multipliers are different for each throwable - you can find them under throwable descriptions.",
 			
 			-- Technician
+			-- T1
+			menu_tower_defense_beta_desc = "BASIC: ##$basic;##\nYou can now carry ##3## extra sentry gun.\n\nACE: ##$pro;##\nYour sentry gun carry capacity is reduced by ##1##.\nIf your sentry gun is destroyed, you will be able to pick it back up, but any remaining ammo that sentry gun had will not return back to you.\n\nWhile standing withing ##8m## of a sentry gun, you gain ##10%## damage resistance.\n\nIf your sentry gun gets a kill, you will receive ammo equal to ##25%## of one ammo box pick up. This bonus does not affect grenade pick up rates.\nEnemies killed by your sentry gun, will still drop ammo boxes you can come and collect at a standard pick up rate.",
+			-- T2
+			menu_fire_trap_beta_desc = "BASIC: ##$basic;##\nYour trip mines now spread fire around the area of detonation for ##10## seconds in a ##4## meter diameter.\n\nACE: ##$pro;##\nIncreases the fire effect duration to ##30## seconds and increases the fire effect radius by ##75%##.",
 			-- T3
-			menu_steady_grip_beta_desc = "BASIC: ##$basic##\nYou gain ##4## weapon Stability.\n\nACE: ##$pro##\nYou gain ##8## more weapon Stability.",
-			menu_heavy_impact_beta_desc = "BASIC: ##$basic##\nYour shots can now stagger all enemies except Bulldozers and Captain Winters. Your base stagger chance is ##2-4%##, which is then multiplied by the ##threat modifier##.\n\nACE: ##$pro##\nIncreases your base stagger chance to ##10-20%##.\n\nNote: Base stagger chance is scaled with damage. With ##100## or less damage, lower base chance value is used. This chance is gradually increased with higher weapon damage, up to it's max chance value at ##400## or more damage.\nThreat modifier scales with weapon's threat: having ##0## threat provides you a ##1x## multiplier, with up to ##2x## multiplier at ##40## or higher threat.",
-			menu_fire_control_beta_desc = "BASIC: ##$basic##\nYour ##40%## recoil penalty while firing from the hip is removed.\n\nACE: ##$pro##\nYour ##25%## accuracy penalty while firing from the hip is removed.",
+			menu_steady_grip_beta_desc = "BASIC: ##$basic##\nYou gain ##4## weapon Stability.\n\nACE: ##$pro##\nYou gain ##12## more weapon Stability.",
+			menu_heavy_impact_beta_desc = "BASIC: ##$basic##\nYour shots can now stagger all enemies except Bulldozers and Captain Winters. Your base stagger chance is ##2-4%##, which is then multiplied by the ##threat modifier##.\n\nACE: ##$pro##\nIncreases your base stagger chance to ##10-20%##.\n\nNote: Base stagger chance is scaled with damage. With ##100## or less damage, lower base chance value is used. This chance is gradually increased with higher weapon damage, up to it's max chance value at ##300## or more damage.\nThreat modifier scales with weapon's threat: having ##0## threat provides you a ##1x## multiplier, with up to ##3x## multiplier at ##40## or higher threat.",
+			menu_fire_control_beta_desc = "BASIC: ##$basic##\nYour ##36## point recoil penalty while firing from the hip is removed.\n\nACE: ##$pro##\nYour ##28## point accuracy penalty while firing from the hip is removed.",
+			menu_shock_and_awe_beta_desc = "BASIC: ##$basic;##\nYou can now hip-fire with your weapons while sprinting.\n\nACE: ##$pro;##\nKilling ##3## enemies with SMGs, LMGs, Assault Rifles or Special Weapons set on automatic fire mode will increase your next reload speed.\nReload speed bonus starts at ##35%##, and is increased by ##1%## for every bullet that you have fired before initiating the reload. First ##15## bullets you fire do not increase the reload speed bonus. Maximum bonus that you can get is ##125%##.\n\nNote: Skills that allow you to fire your weapon without depleting ammo, and basic 'Surefire' skill, are ignored when calulating bonus reload speed from fired bullets.",
 			menu_fast_fire_beta_desc = "BASIC: ##$basic##\nYour SMGs, LMGs and Assault Rifles gain ##15## more bullets in their magazines. This does not affect the 'Lock n' Load' Ace skill.\n\nACE: ##$pro##\nYour ranged weapons can now pierce enemy body armor, but any damage that goes through armor gets cut by ##50%##.",
-			menu_body_expertise_beta_desc = "BASIC: ##$basic##\n##50%## from the bonus headshot damage is permanently applied to hitting enemies on the body. This skill is only activated by SMGs, LMGs, Assault Rifles or Special Weapons fired in automatic mode.\n\nYour ammo pick up is reduced by ##20%##.\n\nYour ranged weapons can now pierce enemy body armor, but any damage that goes through armor gets cut by ##50%##.\nCan be combined with 'Surefire' Aced, to completely negate damage penalties when shooting through body armor.\n\nACE: ##$pro##\nHitting enemies on the body now grants ##100%## of the bonus damage from headshots.\n\nAmmo pick up reduction from this skill is now ##35%##.",
+			menu_body_expertise_beta_desc = "BASIC: ##$basic##\n##100%## from the bonus headshot damage is permanently applied to hitting enemies on the body. This skill is only activated by SMGs, LMGs, Assault Rifles or Special Weapons fired in automatic mode, and does not apply to Bulldozers and Captain Winters.\n\nYour ammo pick up is reduced by ##20%##.\n\nYour ranged weapons can now pierce enemy body armor, but any damage that goes through armor gets cut by ##50%##.\nWhen combined with 'Surefire' Aced, damage penalties when shooting through body armor are completely negated.\n\nACE: ##$pro##\nHitting enemies on the body now grants ##125%## of the bonus damage from headshots.\n\nThis skill does not affect ammo pick up anymore.",
 			
 			-- GHOST
 			-- G1
 			menu_jail_workout_beta = "Inside man",
-			menu_jail_workout_beta_desc = "BASIC: ##$basic##\nYou can pick up items while in casing mode. You also gain ##30%## more value to items and cash that you pick up.\n\nACE: ##$pro##\nYou gain access to additional insider assets.",
-			menu_asset_lock_additional_assets = "Requires the 'inside man' aced skill to unlock",
+			menu_jail_workout_beta_desc = "BASIC: ##$basic##\nYou gain access to additional insider assets.\n\nACE: ##$pro##\nYou can pick up items while in casing mode. You also gain ##30%## more value to items and cash that you pick up.",
+			menu_asset_lock_additional_assets = "Requires the 'inside man' basic skill to unlock",
 			menu_cleaner_beta_desc = "BASIC: ##$basic##\nYou gain ##1## additional body bag in your inventory. Also increases the body bag inventory space to ##3##.\nCleaning costs after killing a civilian is reduced by ##75%##.\n\nACE: ##$pro##\nYou gain the ability to place ##2## body bag cases.\nYou gain access to the body bag asset.",
 			menu_asset_lock_buy_bodybags_asset = "Requires the 'cleaner' aced skill to unlock",
 			menu_chameleon_beta = "Awareness",
@@ -152,22 +185,25 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			menu_dire_need_beta = "Sneaky Bastard",
 			menu_dire_need_beta_desc = "BASIC: ##$basic##\nYou gain a ##1%## dodge chance for every ##3## points of detection rate under ##35## up to ##10%##.\n\nACE: ##$pro##\nYou gain a ##1%## dodge chance for every ##1## point of detection rate under ##35## up to ##10%##.",
 			menu_insulation_beta = "Backfire",
-			menu_insulation_beta_desc = "BASIC: ##$basic##\nWhen your armor breaks, the first shot on every enemy will cause that enemy to stagger. This effect persists for ##3## seconds after your armor has recovered.\n\nACE: ##$pro##\nWhen tased, you are able to instantly free yourself from the taser by interacting with it within ##2## seconds of getting tased. After the ##2## seconds window expires, shock effect will be backfired onto taser automatically.\n\nIf you get tased by any means your bullets will become electrified for ##20## seconds allowing you to shock enemies, except for Bulldozers and Captain Winters, from any distance.",
+			menu_insulation_beta_desc = "BASIC: ##$basic##\nWhen your armor breaks, the first shot on every enemy will cause that enemy to stagger. This effect persists for ##2## seconds after your armor has recovered.\n\nACE: ##$pro##\nWhen tased, you are able to instantly free yourself from the taser by interacting with it within ##2## seconds of getting tased. After the ##2## seconds window expires, shock effect will be backfired onto taser automatically.\n\nIf you get tased by any means your bullets will become electrified for ##20## seconds allowing you to shock enemies, except for Bulldozers and Captain Winters, from any distance.",
 			menu_jail_diet_beta = "Revitalized",
-			menu_jail_diet_beta_desc = "BASIC: ##$basic##\nSuccessfully dodging while you have no armor remaining restores ##10## points of armor. This cannot occur more often then once every ##20## seconds.\n\nACE: ##$pro##\nArmor gain from this skill is increased to ##40## points.\nCooldown for this skill is reduced to ##14## seconds.",
+			menu_jail_diet_beta_desc = "BASIC: ##$basic##\nSuccessfully dodging while you have no armor remaining restores ##10## points of armor. This cannot occur more often then once every ##25## seconds.\n\nACE: ##$pro##\nArmor gain from this skill is increased to ##40## points.\nCooldown for this skill is reduced to ##10## seconds.",
+			menu_backstab_beta_desc = "BASIC: ##$basic;##\nYou gain a ##3%## critical hit chance for every ##3## points of detection rate under ##35## up to ##30%##.\n\nACE: ##$pro;##\nYou gain ##3%## critical hit chance for every ##1## point of detection rate under ##35## up to ##30%##.\n\nNotes: \n-Landing a critical hit multiplies your damage by ##2.5x##\n-Critical hits can't be triggered by Grenade Launchers",
 			
 			-- FUGITIVE
 			-- F1
 			menu_dance_instructor_desc = "BASIC: ##$basic##\nYou gain ##20%## increased rate of fire with pistols.\n\nACE: ##$pro##\nYou reload all pistols ##33%## faster.",
 			menu_gun_fighter_beta = "Trigger happy",
-			menu_gun_fighter_beta_desc = "BASIC: ##$basic##\nEach successful pistol hit gives you a ##10%## increased accuracy bonus for ##15## seconds and can stack ##3## times.\n\nACE: ##$pro##\nEach successful pistol hit gives you a ##80%## damage boost for ##1.5## seconds. Does not stack with itself.",
+			menu_gun_fighter_beta_desc = "BASIC: ##$basic##\nEach successful pistol hit gives you a ##16%## increased accuracy bonus for ##10## seconds and can stack ##2## times.\n\nACE: ##$pro##\nEach successful pistol hit gives you a ##40%## damage boost for ##10## seconds and can stack ##2## times.",
 			menu_expert_handling = "Double trouble",
 			menu_expert_handling_desc = "BASIC: ##$basic##\nYour akimbo pistols receive following bonuses:\n - ##16## more stability\n - ##12## more accuracy\n - ##35%## faster reload speed\n - ##2x## faster weapon swap speed\n\nACE: ##$pro##\nYour akimbo SMGs now receive same bonuses.",
 			menu_trigger_happy_beta = "Bottomless pockets",
-			menu_trigger_happy_beta_desc = "BASIC: ##$basic##\nYou gain ##40%## more reserve ammunition with all Pistols and SMGs.\n\nACE: ##$pro##\nYou gain ##100%## more reserve ammunition with all Pistols and SMGs.",
+			menu_trigger_happy_beta_desc = "BASIC: ##$basic##\nYou gain ##50%## more reserve ammunition with all Pistols and SMGs.\n\nACE: ##$pro##\nYou gain ##150%## more reserve ammunition with all Pistols and SMGs.",
 			-- F2
+			menu_running_from_death_beta_desc = "BASIC: ##$basic;##\nYou reload and swap weapons ##100%## faster for ##30## seconds after being revived.\n\nACE: ##$pro;##\nYou move ##30%## faster for ##30## seconds after being revived.",
 			menu_up_you_go_beta_desc = "BASIC: ##$basic##\nYou take ##30%## less damage for ##10## seconds after being revived.\n\nACE: ##$pro##\nYou receive additonal ##25%## of your maximum health when revived.",
-			menu_perseverance_beta_desc = "BASIC: ##$basic##\nInstead of getting downed instantly, you gain the ability to keep on fighting for ##3## seconds with a ##60%## movement penalty before going down.\nDoes not trigger on fall of fire damage.\n\nYour Swan Song speed penalty will be ignored for ##3## seconds, if at the moment of skill activation or at any point during it's duration, one of your crew members is downed.\n\nACE: ##$pro##\nIncreases Swan Song's duration to ##9## seconds.\n\nWhile the effect is active, ammuntion will be depleted directly from your total ammo reserve, instead of your magazine, and any damage you deal is increased by ##50%##.",
+			menu_perseverance_beta_desc = "BASIC: ##$basic##\nInstead of getting downed instantly, you gain the ability to keep on fighting for ##4## seconds with a ##60%## movement penalty before going down.\nDoes not trigger on fall of fire damage.\n\nYour Swan Song speed penalty will be ignored for ##3## seconds, if at the moment of skill activation or at any point during it's duration, one of your crew members is downed.\n\nACE: ##$pro##\nIncreases Swan Song's duration to ##8## seconds.\n\nWhile the effect is active, ammuntion will be depleted directly from your total ammo reserve, instead of your magazine, and any damage you deal is increased by ##50%##.",
+			menu_pistol_beta_messiah_desc = "BASIC: ##$basic;##\nWhile in bleedout, you can revive yourself if you kill an enemy. You only have ##1## charge.\n\nYou gain near infinite health while in bleedout.\n\nACE: ##$pro;##\nYour messiah charge is replenished whenever you use a doctor bag.",
 			-- F3
 			menu_martial_arts_beta = "Tough Guy",
 			menu_martial_arts_beta_desc = "BASIC: ##$basic##\nYou are ##50%## more likely to knock down enemies with a melee strike.\nYour camera shake when hit by a melee attack is reduced by ##30%##.\n\nACE: ##$pro##\nYou take ##50%## less damage from all melee attacks.\nYour camera shake when hit by a melee attack is now reduced by ##90%##.\nBecause of training.",
@@ -175,7 +211,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			menu_steroids_beta = "Martial Arts",
 			menu_steroids_beta_desc = "BASIC: ##$basic##\nYou can now sprint while using melee weapons.\n\nACE: ##$pro##\nYou charge your melee weapons ##100%## faster.",
 			menu_drop_soap_beta_desc = "BASIC: ##$basic##\nWhen charging your melee weapon you will counter-attack enemies that try to strike you, damaging and knocking them down.\n\nCounter-attack damage is identical to your melee weapon's damage and scales with charge time.\n\nSuccessfull counter-attacks instantly uneqiup your melee weapon.\n\nACE: ##$pro##\nYou gain the ability to counter-attack cloakers and their kicks.\nCounter-attacks will now deal ##doubled## damage.",
-			menu_wolverine_beta_desc = "BASIC: ##$basic##\nYou deal ##50%## more melee damage.\n\nIf your armor breaks while your health is below ##50%## you gain ##50%## more melee damage for ##20## seconds.\n\nACE: ##$pro##\nIf your armor breaks while your health is below ##50%## you gain ##100%## more damage with ranged weapons for ##20## seconds, and your ##50%## melee damage increase now lasts for ##40## seconds.\n\nNote: Does not apply to throwables, grenade launchers or rocket launchers.\n\nGilza note: entering berserker state will enable visual screen flash. You can customize or completely disable it in Gilza's mod options.",
+			menu_wolverine_beta_desc = "BASIC: ##$basic##\nYour melee damage is increased by ##50%##.\n\nIf your armor breaks while your health is below ##50%## you will gain ##50%## more melee damage for ##40## seconds.\n\nACE: ##$pro##\nIf your armor breaks while your health is below ##50%## you will gain ##100%## more damage with ranged weapons for ##30## seconds.\nIncreased ranged weapon damage has a ##15## second cooldown in-between activations, and it does not increase damage of Throwables, Grenade Launchers and Rocket Launchers.\n\nGilza note: entering berserker state will enable visual screen flash that indicates skill duration. You can customize or completely disable it in Gilza's mod options.",
 		})
 		
 		---- WEAPON MODS ----
@@ -196,10 +232,13 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			bm_wp_wpn_fps_upg_m_celerity = "\"Big Stick\" 30-round mag",
 			bm_wp_wpn_fps_upg_m_308dmmag = "Lightweight 30-round mag",
 			
+			-- Custom weapon descriptions
+			bm_w_supernova_desc = "Alt-fire: gain 4x rate of fire, but 3x worse accuracy and 1.5x worse stability.",
+			
 			-- New weapon mods added by Gilza, no specific order
 			menu_l_global_value_Gilza = "This is a Gilza Item!",
 			bm_wpn_fps_upg_br_shtgn = "Breaching round",
-			bm_wpn_fps_upg_br_shtgn_desc = "Fires a single round that allows you to breach everything that saw OVE9000 usually can. Also penetrates shield and body armor.\n\nDamage range decreased by 50%.",
+			bm_wpn_fps_upg_br_shtgn_desc = "Fires a single slug round that allows you to breach everything that saw OVE9000 usually can. Also penetrates shield and body armor.\n\nDamage range decreased by 50%.\nAmmo pick up reduced by 20%.",
 			bm_wpn_fps_upg_ar_dmr_ap_rounds = "DMR AP rounds",
 			bm_wpn_fps_upg_ar_dmr_ap_rounds_desc = "Pierce enemy body armor, shields and walls.\n\nAmmo pick up reduced by 50%.",
 			bm_wpn_fps_upg_ap_kit_ap_rounds = "AP ammunition", -- hidden
@@ -222,7 +261,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			bm_wpn_fps_upg_pis_mid_ap_rounds = "AP rounds",
 			bm_wpn_fps_upg_pis_mid_ap_rounds_desc = "Pierce enemy shields and body armor.\nAmmo pick up reduced by 50%.\n",
 			bm_wpn_fps_upg_pis_mid_ap_rounds_lv = "Low velocity AP rounds",
-			bm_wpn_fps_upg_pis_mid_ap_rounds_lv_desc = "Pierce enemy shields and body armor.\nAmmo pick up reduced by 30%.\n",
+			bm_wpn_fps_upg_pis_mid_ap_rounds_lv_desc = "Pierce enemy shields and body armor.\nAmmo pick up reduced by 10%.\n",
 			
 			-- New custom GL mods
 			bm_wp_upg_a_grenade_launcher_velocity = "High Velocity Round",
@@ -248,7 +287,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			
 			-- Pistol mods
 			bm_wpn_fps_pis_c96_b_long_newname = "C96 AP Kit",
-			bm_wpn_fps_pis_c96_b_long_newdesc = "Allows you to penetrate shields, walls and enemy body armor.\nAmmo pick up reduced by 70%.",
+			bm_wpn_fps_pis_c96_b_long_newdesc = "Allows you to penetrate shields, walls and enemy body armor.\nAmmo pick up reduced by 75%.",
 			bm_wpn_fps_pis_type54_underbarrel_desc = "Underbarrel shotgun. Stats:\n -Damage: 660\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.33-0.4, with Walk-in Closet perk skill.",
 			bm_wpn_fps_pis_type54_underbarrel_slug_desc = "Underbarrel shotgun slug. Pierces shields, walls and enemy body armor. Increases damage range by 15%. Stats:\n -Damage: 660\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.25-0.3, with Walk-in Closet perk skill.",
 			bm_wpn_fps_pis_type54_underbarrel_ap_desc = "Underbarrel shotgun flechette. Pierces enemy body armor. Shoots 6 darts. Damage range increased by 40%. Stats:\n -Damage: 660\n -Minimal shotgun damage multiplier: 1\n -Ammo pick up: 0.29-0.36, with Walk-in Closet perk skill.",
@@ -264,28 +303,28 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			wpn_fps_lmg_hcar_barrel_dmr_PEN = "Akron HC AP Kit",
 			bm_wpn_fps_lmg_hcar_barrel_dmr_PEN_desc = "Allows you to penetrate shiels, body armor and walls.\nLimits weapon to single-fire mode.\nAmmo pick up reduced by 50%.",
 			bm_wpn_fps_upg_lmg_kacchainsaw_underbarrel_flamethrower_desc = "Underbarrel flamethrower. Deals 25 direct damage with 2000 rate of fire. Has 25% chance to apply afterburn.\nAfterburn deals 100 damage over 2 seconds.\n\nReduces ammo pick up for LMG itself by 30%.",
-			bm_wpn_fps_upg_lmg_kacchainsaw_conversionkit_desc = "Increases ammo pick up by 15%",
+			bm_wpn_fps_upg_lmg_kacchainsaw_conversionkit_desc = "Increases ammo pick up by 36%",
 			bm_wpn_fps_lmg_hcar_body_conversionkit_desc = "Increases ammo pick up to match new damage class.",
 			
 			-- Shotgun mods
 			bm_wpn_fps_upg_a_rip_desc_new = "Poisoned bullet that causes enemies to vomit uncontrollably, preventing then from making any actions.\n\nDeals 250 poison damage over 6 seconds.\nAmmo pick up reduced by 20%",
-			bm_wpn_fps_upg_a_custom_desc_new = "8 big pellets with triple the impact.\n\nDisables bonus damage from headshots.\nDamage range reduced by 20%.\nAmmo pick up reduced by 50%",
-			bm_wpn_fps_upg_a_explosive_desc_new = "Fires one explosive charge that kills or stuns targets.\n\nDisables bonus damage from headshots.\nAmmo pick up reduced by 65%",
-			bm_wpn_fps_upg_a_piercing_desc_new = "Peirces enemy body armor.\nDamage range increased by 40%.\n\nAmount of darts per shell - 6.\nAmmo pick up reduced by 10%",
-			bm_wpn_fps_upg_a_slug_desc_new = "Fires a single lead slug that penetrates body armor, enemies, shields and walls.\n\nDamage range increased by 15%\nAmmo pick up reduced by 25%",
+			bm_wpn_fps_upg_a_custom_desc_new = "12 pellets with stronger impact.\n\nPeirces enemy body armor.\nDisables bonus damage from headshots.\nDamage range reduced by 25%.\nAmmo pick up reduced by 15%",
+			bm_wpn_fps_upg_a_explosive_desc_new = "Fires one explosive charge that kills or stuns targets.\n\nDisables bonus damage from headshots.\nAmmo pick up reduced by 55%",
+			bm_wpn_fps_upg_a_piercing_desc_new = "Peirces enemy body armor.\nDamage range increased by 25%.\n\nAmount of darts per shell - 5.\nAmmo pick up reduced by 15%",
+			bm_wpn_fps_upg_a_slug_desc_new = "Fires a single lead slug that penetrates body armor, enemies, shields and walls.\n\nDamage range increased by 20%\nAmmo pick up reduced by 25%",
 			bm_wpn_fps_upg_a_dragons_breath_desc_new = "Fires 8 pellets that go up in sparks and flames. Burns through shields and body armor.\n\nDeals 350 fire damage over 2.5 seconds.\nDamage range decreased by 20%.\nAmmo pick up reduced by 30%",
 			wpn_fps_upg_ns_duck_desc = "Reduces vertical pellet spread to 50%, increases horizontal pellet spread to 225%",
 			
 			-- Flamethrower mods
-			bm_wpn_fps_fla_mk2_mag_rare_desc = "Less direct firepower but more afterburn damage.\n50% chance to start afterburn damage that deals 720 damage over 3 seconds.\nBase flamethrower values: 20% chance for 300dmg over 2 seconds.",
-			bm_wpn_fps_fla_mk2_mag_welldone_desc = "More direct firepower but less afterburn damage.\n10% chance to start afterburn damage that deals 150 damage over 1 second.\nBase flamethrower values: 20% chance for 300dmg over 2 seconds.",
+			bm_wpn_fps_fla_mk2_mag_rare_desc = "Less direct firepower but more afterburn damage.\n50% chance to start afterburn damage that deals 720 damage over 3 seconds. This afterburn deals damage in smaller chunks but more times per second.\nBase flamethrower values: 20% chance for 300dmg over 2 seconds.\nAmmo pick up reduced by 60%",
+			bm_wpn_fps_fla_mk2_mag_welldone_desc = "More direct firepower but less afterburn damage.\n10% chance to start afterburn damage that deals 150 damage over 1 second.\nBase flamethrower values: 20% chance for 300dmg over 2 seconds.\nAmmo pick up increased by 45%",
 			
 			-- Launcher mods
 			bm_wpn_fps_upg_a_grenade_launcher_poison_default_desc = "Upon impact deals damage in a 6m radius, then creates a 6m wide gas cloud for 15 seconds. Enemies that come in contact with said cloud will vomit uncontrollably for 16 seconds, preventing them from making any other actions. Enemies receive 3.5 damage per second while poisoned.\n\nAmmo pick up reduced by 70%.",
-			bm_wpn_fps_upg_a_grenade_launcher_poison_ms3gl_desc = "Upon impact deals damage in a 3m radius, then creates a 6m wide gas cloud for 15 seconds. Enemies that come in contact with said cloud will vomit uncontrollably for 16 seconds, preventing them from making any other actions. Enemies receive 3.5 damage per second while poisoned.\n\nAmmo pick up reduced by 82%.",
-			bm_wpn_fps_upg_a_grenade_launcher_poison_ms3gl_CK_desc = "Upon impact deals damage in a 3m radius, then creates a 8m wide gas cloud for 15 seconds. Enemies that come in contact with said cloud will vomit uncontrollably for 16 seconds, preventing them from making any other actions. Enemies receive 3.5 damage per second while poisoned.\n\nAmmo pick up reduced by 82%.",
+			bm_wpn_fps_upg_a_grenade_launcher_poison_ms3gl_desc = "Upon impact deals damage in a 3m radius, then creates a 6m wide gas cloud for 15 seconds. Enemies that come in contact with said cloud will vomit uncontrollably for 16 seconds, preventing them from making any other actions. Enemies receive 3.5 damage per second while poisoned.\n\nAmmo pick up reduced by 85%.",
+			bm_wpn_fps_upg_a_grenade_launcher_poison_ms3gl_CK_desc = "Upon impact deals damage in a 3m radius, then creates a 8m wide gas cloud for 15 seconds. Enemies that come in contact with said cloud will vomit uncontrollably for 16 seconds, preventing them from making any other actions. Enemies receive 3.5 damage per second while poisoned.\n\nAmmo pick up reduced by 85%.",
 			bm_wpn_fps_upg_a_grenade_launcher_poison_underbarrel_desc = "Upon impact deals 860 damage in a 6m radius, then creates a 6m wide gas cloud for 15 seconds. Enemies that come in contact with said cloud will vomit uncontrollably for 16 seconds, preventing them from making any other actions. Enemies receive 3.5 damage per second while poisoned.\n\nAmmo pick up for the underbarrel launcher reduced by 70%.",
-			bm_wpn_fps_upg_a_grenade_launcher_poison_arbiter_desc = "Upon impact deals damage in a 3m radius, then creates a 4m wide gas cloud for 15 seconds. Enemies that come in contact with said cloud will vomit uncontrollably for 8 seconds, preventing them from making any other actions. Enemies receive 7 damage per second while poisoned.\n\nAmmo pick up reduced by 70%.",
+			bm_wpn_fps_upg_a_grenade_launcher_poison_arbiter_desc = "Upon impact deals damage in a 3m radius, then creates a 4m wide gas cloud for 15 seconds. Enemies that come in contact with said cloud will vomit uncontrollably for 8 seconds, preventing them from making any other actions. Enemies receive 7 damage per second while poisoned.\n\nAmmo pick up reduced by 85%.",
 			bm_wpn_fps_upg_a_grenade_launcher_incendiary_desc = "Upon impact creates a fire field for 6 seconds. Enemies that walk through it, receive afterburn.\n\nAfterburn stats:\n -Duration: 6 seconds\n -Damage per second: 250\nWhile enemy is standing inside the fire field, they receive triple damage per second.\n\nAmmo pick up reduced by 50%.",
 			bm_wpn_fps_upg_a_grenade_launcher_incendiary_ms3gl_desc = "Upon impact creates a fire field for 6 seconds. Enemies that walk through it, receive afterburn.\n\nAfterburn stats:\n -Duration: 6 seconds\n -Damage per second: 250\nWhile enemy is standing inside the fire field, they receive triple damage per second.\n\nAmmo pick up reduced by 75%.",
 			bm_wpn_fps_upg_a_grenade_launcher_incendiary_arbiter_desc = "Upon impact creates a fire field for 3 seconds. Enemies that walk through it, receive afterburn.\n\nAfterburn stats:\n -Duration: 3 seconds\n -Damage per second: 250\nWhile enemy is standing inside the fire field, they receive triple damage per second.\n\nAmmo pick up reduced by 50%.",
@@ -351,7 +390,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			menu_deckall_2_desc = "Увеличивает скорость взаимодействия с медицинскими сумками на ##20%##",
 			-- Fix for custom perk decks for 4th card missing reference values
 			menu_deckall_4_desc_new = "Параметр скрытности увеличен на ##+1##.\n\nНошение брони влияет на скорость передвижения на ##15%## меньше.\n\nКоличество очков опыта при завершении дней и контрактов увеличено на ##45%##.",
-			menu_deckall_6_desc = "Открывает сумку с броней, содержимое которой можно надеть во время ограбления.\n\nВраги оставляют на ##35%## больше патронов.\n\nВы также получаете базовый шанс ##0%## найти метательное оружие в оставленных врагами боеприпасах. Шанс увеличивается на ##0.8% * x## (где x - метательный множитель) за каждый подобранный боеприпас, в котором не было метательного оружия. Когда метательное оружие будет найдено в боеприпасах, шанс будет сброшен до базового значения.\n\nПометка: метательный множитель зависит от используемого вами метательного оружия, а его значение можно узнать в описании каждого метательного оружия.",
+			menu_deckall_6_desc = "Открывает сумку с броней, содержимое которой можно надеть во время ограбления.\n\nВраги оставляют на ##35%## больше патронов.\n\nВы также получаете базовый шанс ##0%## найти метательное оружие в оставленных врагами боеприпасах. Шанс увеличивается на ##1% * x## (где x - метательный множитель) за каждый подобранный боеприпас, в котором не было метательного оружия. Когда метательное оружие будет найдено в боеприпасах, шанс будет сброшен до базового значения.\n\nПометка: метательный множитель зависит от используемого вами метательного оружия, а его значение можно узнать в описании каждого метательного оружия.",
 			menu_deckall_8 = "Улучшенная физическая подготовка",
 			menu_deckall_8_desc = "Вы получаете дополнительную скорость передвижения в размере ##10%##.\n\nВы можете бросать сумки на ##50%## дальше.",
 			
@@ -372,25 +411,26 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			menu_deck5_1_desc_short = "Получение урона во время регенерации брони отныне будет ставить таймер регенерации брони на паузу вместо сброса таймера до максимального значения. Время восстановления брони уменьшено на ##5%##.",
 			menu_deck10_1_desc_short = "Боеприпасы оставленные врагами, восстанавливают ваше здоровье. Радиус с которого вы можете поднимать патроны увеличен на ##50%##.",
 			menu_deck12_9_desc_short = " Теперь все эффекты берсерка в этом наборе перков активируется не на ##25%## уровне здоровья, а на ##50%##. При входе в режим берсерка вы получаете иммунитет к эффекту подавления и ваша броня больше не может быть пробита насквозь бронебойными выстрелами.",
-			menu_deck18_1_desc_short = "Разблокирует и позволяет взять с собой дымовую шашку. При использовании, дымовая шашка создаёт завесу, которая длится ##10## секунд. Вы и ваши напарники стоя в завесе,  уворачиваетесь от ##50%## всех пуль. Любой враг, находящийся в дыму, будет менее точен при стрельбе на ##50%##. Как дым рассеется, вы не сможете использовать дымовую шашку в течение ##40## секунд. Тем не менее, убийство врагов сокращает время восстановления на ##1## секунду.",
+			menu_deck18_1_desc_short = "Разблокирует и позволяет взять с собой дымовую шашку. При использовании, дымовая шашка создаёт завесу, которая длится ##10## секунд. Вы и ваши напарники стоя в завесе,  уворачиваетесь от ##50%## всех пуль. Любой враг, находящийся в дыму, будет менее точен при стрельбе на ##50%##. Как дым рассеется, вы не сможете использовать дымовую шашку в течение ##45## секунд. Тем не менее, убийство врагов сокращает время восстановления на ##1## секунду.",
 			menu_deck20_1_desc_short = "Разблокирует и позволяет взять с собой «Парилку». Чтобы использовать парилку, достаточно посмотреть на союзника в ##24## метровом радиусе и нажать на кнопку метательного ##$BTN_ABILITY;##, чтобы пометить его. Каждый убитый вами или вашим выбранным союзником противник восстановит ##15## единиц здоровья для вас и ##7.5## единиц здоровья для помеченного союзника. Каждый убитый вами противник продолжит время действия парилки на ##1.7## секунд и снизит время восстановления самой парилки на ##2## секунды. Эффект парилки длится ##12## секунд и имеет время восстановления в ##60## секунд.",
 			menu_deck20_5_desc_short = "Убитый вами или выбранным вами напарником противник гарантирует вам ##4## единицы поглощения урона из максимальных ##32##. Данный эффект длится до тех пор, пока восстанавливается «Парилка».",
 			menu_deck21_1_desc_short = "Разблокирует и позволяет взять с собой карманный генератор помех.",
 			menu_deck21_5_desc_short = "При убийстве противников во время действия Звуковой петли будет возвращаться ##40## единиц здоровья. Шанс увернуться увеличен на ##15%##.",
 			menu_deck21_7_desc_short = "При убийстве как минимум ##3## противников во время Звуковой петли вам дается ##20## единиц уклонения на ##50## секунд.",
+			menu_deck23_7_desc = "При получении урона который снижает ваще здоровье до ##50%## или меньше, вы получете ##2## секунды неуязвимости к урону здоровья.\nВы все еще получите урон от такого попадания.\nДанный навык активируется только если у вас не осталось брони.\n\nДанный навык не может быть активирован чаще чем раз в ##30## секунд.",
 			
 			---- Custom decks:
 			-- Brawler
 			menu_deck_brawler = "Дебошир",
 			menu_deck_brawler_desc = "Гейдж подкинул Бейну наводку о поставке экспериментальных облегченных силовых бронекостюмов, которые Murkywater перевозили на один из своих складов. Как бы вы себя называли если б упустили такую возможность? Конечно же вы их все спиздили! Но после тщательного осмотра в своем убежище вы обнаружили, что они крайне громоздкие, но все равно каким-то образом удобны для беготни.\n\nВот так вы и преобразились в... ДЕБОШИРА!",
 			menu_deck_brawler1 = "Улучшение бронекостюмов",
-			menu_deck_brawler1_desc = "Использование этой высококачественной силовой брони с каким-либо нагрудным снаряжением практически невозможно из-за ее формы и размера. Но кому оно нахуй нужно?\n\nВаш запас и подбираемое количество боеприпасов уменьшены на ##80%##.\n\nВремя восстановления брони замедлено на ##300%##.\n\nВаша броня получает сопротивление к пулевому урону в размере ##10%##.",
+			menu_deck_brawler1_desc = "Использование этой высококачественной силовой брони с каким-либо нагрудным снаряжением практически невозможно из-за ее формы и размера. Но кому оно нахуй нужно?\n\nВаш запас и подбираемое количество боеприпасов уменьшены на ##80%##. Заметьте что данное снижение накладывается после всех других навыков связанных с боезапасом/подбором как множитель ##0.2##, что не повзолит вам контрить данный эффект другими навыками.\nПри использовании арбалета/лука подбирая обратно стрелу вы имеете только ##20%## шанс вернуть стрелу в боезапас.\n\nВремя восстановления брони замедлено на ##300%##.\n\nВаша броня получает сопротивление к пулевому урону в размере ##10%##.",
 			menu_deck_brawler3 = "Мясной щит",
 			menu_deck_brawler3_desc = "Повышает вероятность того, что по вам начнут стрелять, когда вы будете рядом с напарниками на ##15%##.\n\nВаша броня получает дополнительное сопротивление к пулевому урону в размере ##10%##.\n\nШтраф к скорости передвижения в броне уменьшен на ##20%##",
 			menu_deck_brawler5 = "Отражающие бронепластины",
 			menu_deck_brawler5_desc = "Вашу броню теперь невозможно пробить насквозь бронебойными выстрелами.\n\nВаша броня получает дополнительное сопротивление к пулевому урону в размере ##10%##.\n\nШтраф к скорости передвижения в броне уменьшен на еще ##20%##.\n\nУбийство противника в рукопашном бою восстанавливает ##10%## вашей выносливости.",
 			menu_deck_brawler7 = "Внушая страх",
-			menu_deck_brawler7_desc = "Когда ваше здоровье ниже ##50%##, вы получаете следующие бонусы:\n- Каждый враг находящийся в пределах ##18## метров от вас наносит на ##7%## меньше пулевого урона по вашей броне\n- Каждый враг находящийся в пределах ##10## метров от вас наносит на ##16%## меньше пулевого урона по вашей броне\n- Каждый враг находящийся в пределах ##5## метров от вас наносит на ##27%## меньше пулевого урона по вашей броне\n\nСопротивления к пулевому урону от данной карточки перка ##удваивается## при игре на сложности Смертный Приговор.",
+			menu_deck_brawler7_desc = "Когда ваше здоровье ниже ##50%##, вы получаете следующие бонусы:\n- Каждый враг находящийся в пределах ##18## метров от вас наносит на ##4%## меньше пулевого урона по вашей броне\n- Каждый враг находящийся в пределах ##10## метров от вас наносит на ##9%## меньше пулевого урона по вашей броне\n- Каждый враг находящийся в пределах ##5## метров от вас наносит на ##16%## меньше пулевого урона по вашей броне\nСопротивления урону данной карточки могут складываться, означая что враги в пределах ##5м## от вас наносят на ##29%## меньше пулевого урона.\n\nСопротивления к пулевому урону от данной карточки перка ##удваивается## при игре на сложности Смертный Приговор.",
 			menu_deck_brawler9 = "Страстность крови",
 			menu_deck_brawler9_desc = "Убийство противника в ближнем бою начинает восполнять ##100## единиц вашей брони в течении ##6## секунд, с \"тиком\" регенерации раз в ##0.75## секунд.\nВы можете иметь вплоть до ##3## эффектов регенрации от данной карточки перка одновременно.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличина на ##10%##.",
 			-- Short descs for Brawler
@@ -419,29 +459,55 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			menu_deck_SJ_5_desc_short = "Убийсива предоставляют ##2-6## стаков адреналина. Преобразует здоровье в больше брони.",
 			menu_deck_SJ_7_desc_short = "Уклонение предоставляет ##6-24## единиц брони.",
 			menu_deck_SJ_9_desc_short = "Вы двигаетесь вплоть до ##25%## быстрее, в зависимости от повреженности брони. Стаки адреналина теперь ускоряют скорость взаимодействия, перезарядки и смены оружия.",
+			
+			-- Guardian
+			menu_deck_Gilza_guardian = "Страж",
+			menu_deck_Gilza_guardian_desc = "Страж. Настоящий защитник.\nЗа свои годы ограблений вы заметили одну закономерность - чем лучше вы можете удерживать позицию, тем легче у вас получается защищать эту ебучую дрель, и быстрее уматывать обратно в убежище. После самообучения себя всем известным способам создавать оборону, вы превратились в неодолимую стену. Никто и ничто не способно вас сдвинуть. Если бы вы только не забыли о некоторых вещах во время своего обучения...",
+			menu_deck_Gilza_guardian_1 = "Время окопаться",
+			menu_deck_Gilza_guardian_1_desc = "Ваша скорость передвижения уменьшена на ##20%##.\nВремя взаимодействия с любыми предметами, кроме пейджеров и окозания помощи напарникам, замедлены на ##50%##.\n\nБудучи в игре ваша броня не может быть выше ##0##.\n\nВы получаете возможность создать личную оборонную позицию, если вы будете неподвижно стоять в течении ##5## секунд. Данная позиция имеет ##3м## радиус. Если вы будете находиться вне зоны вашей позиции дольше ##8## секунд, позиция будет удалена. Вам придется подождать еще ##8## секунд, перед тем как вы сможете создать новую позицию.\n\nПока вы стоите внутри вашей оборонной позиции, вы восполняете ##10## единиц здоровья раз в ##2## секунды.",
+			menu_deck_Gilza_guardian_3 = "Личные границы",
+			menu_deck_Gilza_guardian_3_desc = "Пока вы находитесь внутри своей оборонной позиции вы не можете получить больше чем ##160## урона за попадание, но вы так же не можете получить меньше чем ##80## урона за попадание.\nПока вы находитесь вне своей оборонной позиции вы не можете получить больше чем ##200## урона за попадание, но вы так же не можете получить меньше чем ##100## урона за попадание.\n\nВы получаете ##100%## бонусного здоровья.\n\nПока вы стоите внутри вашей оборонной позиции, вы теперь будете восполнять ##20## единиц здоровья раз в ##2## секунды.",
+			menu_deck_Gilza_guardian_5 = "Я непробиваем",
+			menu_deck_Gilza_guardian_5_desc = "Вы получаете еще ##150%## бонусного здоровья.\n\nСовершая убийство находясь внутри вашей оборонной позиции вы восполняете ##20## единиц здоровья. Количество восполняемого здоровья ##множится на 3## если вы играете на сложности Смертный Приговор.\n\nПока вы стоите внутри вашей оборонной позиции, вы теперь будете восполнять ##30## единиц здоровья раз в ##2## секунды.\n\nВаша оборонная позиция теперь имеет ##5m## радиус.\n\nМедицинская сумка и Аптечка первой помощи теперь восполняют только ##50%## вашего здоровья.",
+			menu_deck_Gilza_guardian_7 = "Дикобраз",
+			menu_deck_Gilza_guardian_7_desc = "За каждые ##10## единиц надетой вами брони вы получаете ##2%## шанс автоматически нанести урон врагу который выстрелил по вам. Данный урон идентичен полученому вами урону.\n\nВы теперь можете создать вашу оборонную позицию стоя на месте только ##3## секунды.",
+			menu_deck_Gilza_guardian_9 = "От обороны до атаки..",
+			menu_deck_Gilza_guardian_9_desc = "Если вы не имеете оборонной позиции, и вы уже можете создать новую позицию, вы можете создать ее убив врага.\n\nПока вы находитесь внутри вашей оборонной позиции вы автоматически подбираете боеприпасы оставленные врагами.*\n\nПока вы находитесь внутри своей оборонной позиции вы не можете получить больше чем ##120## урона за попадание, но вы так же не можете получить меньше чем ##60## урона за попадание.\nПока вы находитесь вне своей оборонной позиции вы не можете получить больше чем ##160## урона за попадание, но вы так же не можете получить меньше чем ##80## урона за попадание.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличина на ##10%##.\n\n*Гильза: из-за того как данный навык работает, может пройти вплоть до 3 секунд (зависит от пинга), перед тем как вы подберете патроны, будучи клиентом лобби.",
+			-- Short descs for Guardian
+			menu_deck_Gilza_guardian_1_desc_short = "Вы теряете скорость передвижения и взаимодействия. Вы можете создать оборонную позицию внутри которой вы восполняете здоровье. Данная позиция будет удалена если вы надолго выйдете из нее.",
+			menu_deck_Gilza_guardian_3_desc_short = "Урон который вы получаете будет зажат в радиусе ##80-160## пока вы внутри позиции, и в радиусе ##100-200## пока вы вне позиции. Вы получаете больше здоровься и больше восполнения здоровья будучи в радиусе позиции.",
+			menu_deck_Gilza_guardian_5_desc_short = "Вы получаете еще больше здоровься и еще больше восполнения здоровья будучи в радиусе позиции, а радиус позиции увеличен.",
+			menu_deck_Gilza_guardian_7_desc_short = "Вы теперь имеете шанс автоматически нанести урон противнику который по вам выстрелил. Тяжелая броня увеличивает шансы. Пассивная активация позиции занимает меньше времени.",
+			menu_deck_Gilza_guardian_9_desc_short = "Вы автоматически подбираете патроны с убитых вами врагов, будучи в радиусе позиции. Урон который вы получаете будет зажат в радиусе ##60-120## пока вы внутри позиции, и в радиусе ##80-160## пока вы вне позиции",
 		})
 		
 		---- SKILLS ----
 		LocalizationManager:add_localized_strings({
 			-- Mastermind
 			-- M1
+			menu_combat_medic_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВы получаете на ##30%## меньше урона во время поднятия напарника и в течение ##5## секунд после окончания помощи.\n\nПРО: ##$pro;##\nПосле успешной помощи напарнику, вы получаете ##35%## вашей максимальной брони.\n\nЕсли вы используете перк Стоик или Страж, улучшенный до навыка убирающий вашу броню, вы получите ##35%## здоровья вместо брони.\n\nДанный навык не распространяется на ПРО версию навыка Вдохновление.",
 			menu_inspire_beta_desc = "БАЗОВЫЙ: ##$basic##\nВы поднимаете напарников быстрее на ##100%##. Если вы крикните на вашего напарника, вы и ваш напарник получите моральный буст на ##10## секунд. Данный буст увеличивает скорость передвижения и перезарядки на ##20%## для вашего напарника и на ##10%## для вас.\n\nПРО: ##$pro##\nВы можете поднять напарника с вероятностью ##100%##, крича на него в ##9## метровом радиусе. Навык срабатывает раз в ##20## секунд.",
+			-- M2
+			menu_triathlete_beta_desc = "БАЗОВЫЙ: ##$basic;##\nКоличество переносимых кабельных стяжек увеличено на ##4##. Скорость связывания заложников увеличена на ##75%##.\n\nВы и ваши напарники будете получать на ##0.5## меньше урона за каждого связанного заложника. Данный эффект складывается до максимума в ##8## заложников. ВНИМАНИЕ: Данный навык не складывается если ваши напарники тоже его используют.\n\nПРО: ##$pro;##\nВзятого в заложники врага можно уговорить сражаться на вашей стороне. Вы можете перевести только одного врага на свою сторону. Навык работает только после поднятия тревоги.",
+			menu_joker_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВраг сражающийся на вашей стороне больше не наносит на ##35%## меньше урона.\nВремя затрачиваемое на уговор противника уменьшено на ##65%##.\n\nПРО: ##$pro;##\nТеперь вы можете перевести на свою сторону до ##2## врагов одновременно.",
+			menu_cable_guy_beta_desc = "БАЗОВЫЙ: ##$basic;##\nУбедительность и дальность вашего запугивания увеличена на ##50%## \n\nПРО: ##$pro;##\nГражданские остаются запуганными на ##50%## дольше. Шум, создаваемый вами, устрашает гражданских.",
+			menu_stockholm_syndrome_beta_desc = "БАЗОВЫЙ: ##$basic;##\nУбийство гражданского дает вам ##1## очко запугивания. Убийство взятого в заложники врага дает вам ##0.2## очка запугивания. Вы не можете имешь больше ##4## очков запугивания. При попадании в тюрьму ваши очки запугивания збрасываются до ##0##.\n\nПри убийстве противника у вас есть ##10%## шанс посеять панику в ##10## метровом радиусе от вас. Паника будет подавлять противника, периодически заставляя его испытывать приступы неконтролируемого страха.\nЗа каждое ##1## очко запугивания вы увеличиваете свой шанс посеять панику на ##10%##, и увеличиваете количество создаваемой паники, что увеличит шансы врагов оставаться в паническом состоянии дольше.\n\nПРО: ##$pro;##\nВаши заложники не станут убегать с места, если были освобождены полицией. Как только вы попадёте в тюрьму, они попытаются обменять себя на вас. Этот эффект может сработать даже во время полицейского штурма, но только ##1## раз за день ограбления.",
 			-- M3
-			menu_stable_shot_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВаше оружие точнее на ##4## единицы.\n\nПРО: ##$pro;##\nВаше оружие точнее на еще ##8## единиц.",
+			menu_stable_shot_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВаше оружие точнее на ##4## единицы.\n\nПРО: ##$pro;##\nВаше оружие точнее на еще ##12## единиц.",
 			menu_rifleman_beta = "СТРЕЛОК В ОТСТАВКЕ",
-			menu_rifleman_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВы прицеливаетесь на ##100%## быстрее с любым оружием.\nПриближение (зум) прицела у всего оружия увеличен на ##25%##.\n\nПРО: ##$pro;##\nВо время прицеливания вы двигаетесь без штрафа к скорости передвижения.\n\nКогда вы начиаете стрелять из своего оружия, первые ##5## пуль имеют на ##35%## меньше отдачи. Не распространяется на Дробовики, Снайперские винтовки и Пистолеты стреляющие в одиночном режиме стрельбы.",
+			menu_rifleman_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВы прицеливаетесь на ##100%## быстрее с любым оружием.\nПриближение (зум) прицела у всего оружия увеличен на ##25%##.\n\nПРО: ##$pro;##\nВо время прицеливания вы двигаетесь без штрафа к скорости передвижения.\n\nКогда вы начиаете стрелять из своего оружия, первые ##5## пуль имеют на ##50%## меньше отдачи. Не распространяется на Дробовики, Снайперские винтовки и Пистолеты стреляющие в одиночном режиме стрельбы.",
 			menu_sharpshooter_beta = "Медленно но верно",
-			menu_sharpshooter_beta_desc = "БАЗОВЫЙ: ##$basic##\nВы получаете ##7.5%## сопротивления урону если вы не двигаетесь или если важе оружие стоит на сошках.\n\nПРО: ##$pro##\nВы получаете дополнительные ##35%## сопротивления урону если ваше оружие стоит на сошках.\nВаша скорость установки сошек увеличина на ##100%##.",
-			menu_speedy_reload_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает скорость перезарядки штурмовых винтовок, пистолетов-пулемётов и снайперских винтовок на ##20%##.\n\nПРО: ##$pro;##\nУбийство в голову увеличивает вашу скорость перезарядки на ##100%## в течение ##4## секунд. Навык срабатывает только для штурмовых винтовок, пистолетов-пулемётов и снайперских винтовок в одиночном режиме стрельбы. ",
-			menu_sniper_graze_damage_desc = "БАЗОВЫЙ: ##$basic;##\nЕсли выстрел из снайперской винтовки попал по противнику находившемуся дальше чем ##7.5м## от стрелка, то этот выстрел нанесёт ##33%## от урона винтовки противникам в ##75см## радиусе полёта пули.\n\nУрон в радиусе полета пули не увеличивается, если выстрел приземлится в голову первоначальной цели, но может быть увеличен с помощью других навыков.\n\nПРО: ##$pro;##\nРадиус урона увеличен до ##150см## а урон увеличен до ##66%## от урона оружия.",
+			menu_sharpshooter_beta_desc = "БАЗОВЫЙ: ##$basic##\nВы получаете ##10%## сопротивления урону если вы не двигаетесь.\n\nПРО: ##$pro##\nВы получаете дополнительные ##25%## сопротивления урону если ваше оружие стоит на сошках.\nВаша скорость установки сошек увеличина на ##100%##.",
+			menu_speedy_reload_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает скорость перезарядки штурмовых винтовок, пистолетов-пулемётов и снайперских винтовок на ##20%##.\n\nПРО: ##$pro;##\nУбийство в голову увеличивает вашу скорость перезарядки на ##150%## в течение ##4## секунд. Навык срабатывает только для штурмовых винтовок, пистолетов-пулемётов и снайперских винтовок в одиночном режиме стрельбы.",
+			menu_sniper_graze_damage_desc = "БАЗОВЫЙ: ##$basic;##\nЕсли выстрел попал по противнику находившемуся дальше чем ##6м## от вас, все противники в ##80см## радиусе полёта пули получат зацепляющий урон.\nЗацепляющий урон равен урону вашего оружия + доступные вам навыки увеличивающие урон, умноженный на ##0.33##. Зацепляющий урон не увеличивается при попадании в голову.\n\nДанный навык может быть активирован только штурмовыми винтовоками, пистолетами-пулемётами и снайперскими винтовоками в одиночном режиме стрельбы.\n\nПРО: ##$pro;##\nЗацепляющий урон теперь имеет радиус ##160см## а множитель урона увеличен до ##0.66%##.",
 			
 			-- Enforcer
 			-- E1
 			menu_shotgun_cqb_beta_desc = "БАЗОВЫЙ: ##$basic##\nПовышает скорость перезарядки дробовиков на ##15%##.\n\nПРО: ##$pro##\nПовышает бонус к скорости перезарядки до ##35%##.",
 			menu_shotgun_impact_beta = "Эксперт по дробовикам",
-			menu_shotgun_impact_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает скорость прецеливания с дробовиками до ##125%##\nПовышает стабильность при стрельбе из дробовиков на ##20%##.\n\nПРО: ##$pro;##\nПовышает стабильность при стрельбе из дробовиков до ##50%##.\n\nПометка: увеличение стабильности с помощью данного навыка может предоставить показатель стабильности выше ##100##.",
+			menu_shotgun_impact_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает скорость прецеливания с дробовиками до ##125%##\nПовышает стабильность при стрельбе из дробовиков на ##20%##.\n\nПРО: ##$pro;##\nПовышает стабильность при стрельбе из дробовиков на еще ##30%##.\nВы получаете ##30%## бонус к точности при прицеливании с дробовиками.",
 			menu_far_away_beta = "БЕЗДУМНЫЙ РАЗНОС",
-			menu_far_away_beta_desc = "БАЗОВЫЙ: ##$basic##\nПри каждом выстреле из Дробовика вы имеете ##7.5%## шанс выстрелить не потратив боезапас.\n\nПРО: ##$pro##\nВаши шансы выстрела без траты боезапаса увеличины до ##20%##.",
+			menu_far_away_beta_desc = "БАЗОВЫЙ: ##$basic##\nПри каждом выстреле из Дробовика вы имеете ##6%## шанс выстрелить не потратив боезапас.\n\nПРО: ##$pro##\nВаши шансы выстрела без траты боезапаса увеличины до ##18%##.\n\nПометка: данный навык распространяется как на ваш общий боезапас, так и на оружейный магазин.",
 			menu_close_by_beta = "РАЗЖИГАТЕЛЬ СТРАХА",
 			menu_close_by_beta_desc = "БАЗОВЫЙ: ##$basic;##\nСтрельба на бегу: вы можете стрелять из дробовиков от бедра во время бега.\n\nПРО: ##$pro;##\nУбив противника Дробовиком, с подавлением ##35## и выше, у вас есть ##75%## шанс посеять панику в ##12## метровом радиусе от вас. Паника будет подавлять противника, периодически заставляя его испытывать приступы неконтролируемого страха.\n\nУбийство противника испытывающего приступ страха, полностью восстанавливает вашу выносливость и дает ##25%## бонус к скорости передвижения на ##20## секунд.\n\nПометка: при активации данный навык показывает оповещение на экране. Вы можете отключить его в настройках Гильзы.",
 			-- Fearmonger's in-game pop up notification
@@ -450,22 +516,28 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			-- E2
 			menu_pack_mule_beta_desc = "БАЗОВЫЙ: ##$basic;##\nЗа каждые ##10## единиц брони штраф к скорости переноса добычи уменьшен на ##1%##.\n\nПРО: ##$pro;##\nВы теперь можете бегать с любой сумкой.",
 			-- E3
-			menu_carbon_blade_beta_desc = "БАЗОВЫЙ: ##$basic;##\nАтака врагов портативной пилой OVE9000 изнашивает лезвия на ##50%## меньше.\n\nПРО: ##$pro;##\nТеперь вы можете прорезать щитовиков своей пилой OVE9000. Убив противника пилой, у вас есть ##50%## шанс посеять панику в ##10## метровом радиусе. Паника будет подавлять противника, заставляя его испытывать страх.\n\nВраги теперь оставляют боезапас к пиле. Подбор боезапаса пилы не может быть увеличен используюя дополнительные навыки на подбор боезапаса.",
-			menu_bandoliers_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает количество переносимых боеприпасов на ##25%##.\n\nПРО: ##$pro;##\nВраги оставляют на ##75%## больше боеприпасов. У вас есть ##10%## шанс найти метательное оружие в оставленных врагами боеприпасах. Шанс увеличивается на ##1.6% * x## (где x - метательный множитель) за каждый подобранный боеприпас, в котором не было метательного оружия. Когда метательное оружие будет найдено в боеприпасах, шанс будет сброшен к стандартному значению.\n\nПометки: навык не складывается с бонусом 'Тяжёлый пехотинец' из набора перков.\n\nМетательный множитель зависит от используемого вами метательного оружия, а его значение можно узнать в описании каждого метательного оружия.",
+			menu_ammo_2x_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВ каждой сумке с патронами на ##50%## больше патронов.\n\nПРО: ##$pro;##\nПозволяет устанавливать ##2## сумки с патронами вместо одной.",
+			menu_carbon_blade_beta_desc = "БАЗОВЫЙ: ##$basic;##\nАтака врагов портативной пилой OVE9000 изнашивает лезвия на ##50%## меньше.\n\nПРО: ##$pro;##\nТеперь вы можете прорезать щитовиков своей пилой OVE9000. Убив противника пилой, у вас есть ##50%## шанс посеять панику в ##10## метровом радиусе. Паника будет подавлять противника, заставляя его испытывать страх.\n\nВраги теперь оставляют боезапас к пиле. Подбор боезапаса пилы не может быть увеличен/уменьшен другими навыками влияющими на подбор боезапаса.",
+			menu_bandoliers_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает количество переносимых боеприпасов на ##25%##.\n\nПРО: ##$pro;##\nВраги оставляют на ##85%## больше боеприпасов. У вас есть ##10%## шанс найти метательное оружие в оставленных врагами боеприпасах. Шанс увеличивается на ##3% * x## (где x - метательный множитель) за каждый подобранный боеприпас, в котором не было метательного оружия. Когда метательное оружие будет найдено в боеприпасах, шанс будет сброшен к стандартному значению.\n\nПометки: навык не складывается с бонусом 'Тяжёлый пехотинец' из набора перков.\n\nМетательный множитель зависит от используемого вами метательного оружия, а его значение можно узнать в описании каждого метательного оружия.",
 			
 			-- Technician
+			-- T1
+			menu_tower_defense_beta_desc = "БАЗОВЫЙ: ##$basic;##\nТеперь у вас есть ещё ##3## дополнительные турели.\n\nПРО: ##$pro;##\nКоличество турелей которые вы можете переносить теперь уменьшено на ##1##.\nЕсли ваша турель будет уничтожена, вы можете подобрать ее обратно, но патроны оставшиеся в туреле не будут восполнены.\n\nПока вы находитесь в ##8м## от турели, вы получаете ##10%## сопротивления урону.\n\nЕсли ваша турель совершает убийство, вы получаете патроны, равные ##25%## стандартной пачки боезапаса которые оставляют враги после смерти. Данный бонус не увеличивает шансы подбора гранат.\nВраги все еще будут оставлять боезапас после смерти, который вы можете поднять со стандартным количеством патронов.",
+			-- T2
+			menu_fire_trap_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВаши мины оставляют на месте взрыва огненную ловушку в течение ##10## секунд в ##4## метровом радиусе.\n\nПРО: ##$pro;##\nДлительность огненной ловушки увеличена до ##30## секунд. Радиус поражения увеличен на ##75%##.",
 			-- T3
-			menu_steady_grip_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВаше оружие стабильнее на ##4## единицы.\n\nПРО: ##$pro;##\nВаше оружие стабильнее на еще ##8## единиц.",
-			menu_heavy_impact_beta_desc = "БАЗОВЫЙ: ##$basic##\nВаши выстрелы теперь могут оглушать всех противников за исключением бульдозера и Капитана Уинтерса сбивая их с ног. Ваш базовый шанс оглушения ##2-4%##, который затем множится на ##модификатор подавления##.\n\nПРО: ##$pro##\nУвеличивает базовый шанс оглушения до ##10-20%##.\n\nНа заметку: базовый шанс оглушения напрямую зависит от урона оружия. С уроном меньшим или равным ##100## используется меньший шанс, который постепенно увеличивается с уроном оружия, вплоть до максимального значения шанса когда урон выше или равен ##400##.\nМодификатор подавления напрямую зависит от подавления оружия: при показателе подавления ##0## ваш шанс умножается на ##1x##, увеличиавясь вплоть до ##2x## когда подавление выше или равно ##40##.",
-			menu_fire_control_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВаш ##40%## штраф к отдаче во время стрельбы от бедра аннулируется.\n\nПРО: ##$pro;##\nВаш ##25%## штраф к точности во время стрельбы от бедра аннулируется.",
+			menu_steady_grip_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВаше оружие стабильнее на ##4## единицы.\n\nПРО: ##$pro;##\nВаше оружие стабильнее на еще ##12## единиц.",
+			menu_heavy_impact_beta_desc = "БАЗОВЫЙ: ##$basic##\nВаши выстрелы теперь могут оглушать всех противников за исключением бульдозера и Капитана Уинтерса сбивая их с ног. Ваш базовый шанс оглушения ##2-4%##, который затем множится на ##модификатор подавления##.\n\nПРО: ##$pro##\nУвеличивает базовый шанс оглушения до ##10-20%##.\n\nНа заметку: базовый шанс оглушения напрямую зависит от урона оружия. С уроном меньшим или равным ##100## используется меньший шанс, который постепенно увеличивается с уроном оружия, вплоть до максимального значения шанса когда урон выше или равен ##300##.\nМодификатор подавления напрямую зависит от подавления оружия: при показателе подавления ##0## ваш шанс умножается на ##1x##, увеличиавясь вплоть до ##3x## когда подавление выше или равно ##40##.",
+			menu_fire_control_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВаш ##36## единичный штраф к отдаче во время стрельбы от бедра аннулируется.\n\nПРО: ##$pro;##\nВаш ##28## единичный штраф к точности во время стрельбы от бедра аннулируется.",
+			menu_shock_and_awe_beta_desc = "БАЗОВЫЙ: ##$basic;##\nСтрельба на бегу: вы можете стрелять от бедра во время бега.\n\nПРО: ##$pro;##\nУбив ##3## противников с пистолета-пулемета, пулемета, штурм.винтовки или особого оружия в режиме автомат.стрельбы, скорость вашей следующей перезарядки будет увеличена.\nМинимальный бонус к скорости перезарядки равен ##35%##. Данный бонус увеличивается на ##1%## за каждую выстреленную вами пулю перед началом перезарядки. Первые отстреленные ##15## пуль не увеличивают данный бонус. Максимальный бонус перезарядки данного навыка равен ##125%##.\n\nВажно: Навыки повозляющие вам стрелять не тратя боезапас, и базовая версия навыка 'Шквальный Огонь' не учитываются при вычислении бонуса скорости перезарядки данного навыка.",
 			menu_fast_fire_beta_desc = "БАЗОВЫЙ: ##$basic##\nВаши пистолеты-пулеметы, пулеметы и штурмовые винтовки получают прибавку в виде ##15## патронов в магазинах. Данный навык не работает с ПРО версией навыка 'Оружие к бою'.\n\nПРО: ##$pro##\nВаше оружие получает возможность пробивать вражескую нательную броню, но урон при таком попадании уменьшается на ##50%##.",
-			menu_body_expertise_beta_desc = "БАЗОВЫЙ: ##$basic;##\nМножитель попадания в голову применяется к телу противника с эффективностью в ##50%##. Этот навык работает только с пистолетами-пулемётами, пулемётами и штурмовыми винтовками в режиме автоматической стрельбы.\n\nВраги оставляют на ##20%## меньше боеприпасов.\n\nВаше оружие получает возможность пробивать вражескую нательную броню, но урон при таком попадании уменьшается на ##50%##.\nПри совмещении с ПРО версией навыка 'Шквальный огонь' штраф к урону при стрельбе по нательной броне аннулируется.\n\nПРО: ##$pro;##\nБонусный урон при попадании в тело увеличен до ##100%##.\n\nВраги теперь оставляют на ##35%## меньше боеприпасов.",
+			menu_body_expertise_beta_desc = "БАЗОВЫЙ: ##$basic;##\nМножитель попадания в голову применяется к телу противника с эффективностью в ##100%##. Этот навык работает только с пистолетами-пулемётами, пулемётами и штурмовыми винтовками в режиме автоматической стрельбы, и не имеет эффекта на Бульдозера и Капитана Винтерса.\n\nВраги оставляют на ##20%## меньше боеприпасов.\n\nВаше оружие получает возможность пробивать вражескую нательную броню, но урон при таком попадании уменьшается на ##50%##.\nПри совмещении с ПРО версией навыка 'Шквальный огонь' штраф к урону при стрельбе по нательной броне аннулируется.\n\nПРО: ##$pro;##\nБонусный урон при попадании в тело увеличен до ##125%##.\n\nДанный навык больше не влияет на оставленные врагами боеприпасы.",
 			
 			-- GHOST
 			-- G1
 			menu_jail_workout_beta = "Свой человек",
-			menu_jail_workout_beta_desc = "БАЗОВЫЙ: ##$basic##\nВы можете подбирать предметы в режиме исследования. Мелкие ценные предметы, украденные вами, стоят на ##30%## дороже.\n\nПРО: ##$pro##\nТеперь вы можете приобрести услуги 'своего человека'.",
-			menu_asset_lock_additional_assets = "Необходима ПРО версия навыка 'Свой Человек'",
+			menu_jail_workout_beta_desc = "БАЗОВЫЙ: ##$basic##\nТеперь вы можете приобрести услуги 'своего человека'.\n\nПРО: ##$pro##\nВы можете подбирать предметы в режиме исследования. Мелкие ценные предметы, украденные вами, стоят на ##30%## дороже.",
+			menu_asset_lock_additional_assets = "Необходима БАЗОВАЯ версия навыка 'Свой Человек'",
 			menu_cleaner_beta_desc = "БАЗОВЫЙ: ##$basic##\nВы можете носить с собой ##1## дополнительный мешок для трупов. Теперь у вас будет ##3## мешка для трупов.\nПомимо этого, денежный штраф за убийство гражданских уменьшен на ##75%##.\n\nПРО: ##$pro##\nВы можете устанавливать ##2## кейса с мешками для трупов.\nТеперь вы можете приобрести услугу 'кейс с мешками для трупов.'",
 			menu_asset_lock_buy_bodybags_asset = "Необходима ПРО версия навыка 'Чистильщик'",
 			menu_chameleon_beta = "Осведомленность",
@@ -476,30 +548,32 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			menu_dire_need_beta = "Подлый ублюдок",
 			menu_dire_need_beta_desc = "БАЗОВЫЙ: ##$basic;##\nШанс увернуться от вражеского огня увеличивается на ##1%## за каждые ##3## пункта риска обнаружения меньше ##35##. Навык складывается вплоть до ##10%##.\n\nПРО: ##$pro;##\nШанс увернуться от вражеского огня увеличивается на ##1%## за каждый ##1## пункт риска обнаружения меньше ##35##. Навык складывается вплоть до ##10%##.",
 			menu_insulation_beta = "Обратный эффект",
-			menu_insulation_beta_desc = "БАЗОВЫЙ: ##$basic##\nКогда вы остались без брони, первый выстрел по противнику отбросит его назад. Эффект работает до тех пор, пока ваша броня не восстановилась и затем еще ##3## секунды.\n\nПРО: ##$pro##\nКогда тэйзер оглушил вас током, у вас есть ##2## секунды, чтобы вырваться из его плена. После ##2## секунд эффект шока будет автоматически направлен обратно на тэйзера.\n\nЕсли вас ударило током каким-либо образом, ваши пули заряжаются электричеством на ##20## секунд, что позваляет вам оглушать током всех противников, кроме бульдозера и Капитана Уинтерса, на расстоянии.",
+			menu_insulation_beta_desc = "БАЗОВЫЙ: ##$basic##\nКогда вы остались без брони, первый выстрел по противнику отбросит его назад. Эффект работает до тех пор, пока ваша броня не восстановилась и затем еще ##2## секунды.\n\nПРО: ##$pro##\nКогда тэйзер оглушил вас током, у вас есть ##2## секунды, чтобы вырваться из его плена. После ##2## секунд эффект шока будет автоматически направлен обратно на тэйзера.\n\nЕсли вас ударило током каким-либо образом, ваши пули заряжаются электричеством на ##20## секунд, что позваляет вам оглушать током всех противников, кроме бульдозера и Капитана Уинтерса, на расстоянии.",
 			menu_jail_diet_beta = "Оживленный",
-			menu_jail_diet_beta_desc = "БАЗОВЫЙ: ##$basic##\nУдачный уворот от урона предоставит вам ##10## единиц брони если ваша броня полностью разбита. Данный эффект не может срабатывать чаще чем раз в ##20## секунд.\n\nПРО: ##$pro##\nКоличество получаемой брони от данного навыка увеличено до ##40## единиц.\nВремя восставновления навыка уменьшено до ##14## секунд.",
-			
+			menu_jail_diet_beta_desc = "БАЗОВЫЙ: ##$basic##\nУдачный уворот от урона предоставит вам ##10## единиц брони если ваша броня полностью разбита. Данный эффект не может срабатывать чаще чем раз в ##25## секунд.\n\nПРО: ##$pro##\nКоличество получаемой брони от данного навыка увеличено до ##40## единиц.\nВремя восставновления навыка уменьшено до ##10## секунд.",
+			menu_backstab_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВы можете нанести критический урон с вероятностью ##3%## за каждые ##3## пункта риска обнаружения меньше ##35##. Навык складывается вплоть до ##30%##.\n\nПРО: ##$pro;##\nВы можете нанести критический урон с вероятностью ##3%## за каждый ##1## пункт риска обнаружения меньше ##35##. Навык складывается вплоть до ##30%##.\n\nПометки:\n-Успешный крит увеличивает ваш урон в ##2.5x## раза.\n-Действие навыка не распространяется на гранатомёты.",
 			-- FUGITIVE
 			-- F1
 			menu_dance_instructor_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает скорострельность пистолетов на ##20%##.\n\nПРО: ##$pro;##\nВы перезаряжаете пистолеты на ##33%## быстрее",
 			menu_gun_fighter_beta = "Однорукий бандит",
-			menu_gun_fighter_beta_desc = "БАЗОВЫЙ: ##$basic##\nКаждое попадание из пистолета увеличивает вашу точность на ##10%## в течение ##15## секунд и может складываться до ##3## раз.\n\nПРО: ##$pro##\nКаждое попадание из пистолета даёт ##80%## к наносимому урону на ##1.5## секунды. Пиковый навык не может складываться сам с собой.",
+			menu_gun_fighter_beta_desc = "БАЗОВЫЙ: ##$basic##\nКаждое попадание из пистолета увеличивает вашу точность с пистолетами на ##16%## в течение ##10## секунд и может складываться до ##2## раз.\n\nПРО: ##$pro##\nКаждое попадание из пистолета даёт ##40%## к наносимому урону пистолетов на ##10## секунд и может складываться до ##2## раз.",
 			menu_expert_handling = "Вдвоем веселей",
 			menu_expert_handling_desc = "БАЗОВЫЙ: ##$basic##\nВаши парные пистолеты получают следующие бонусы:\n - ##16## стабильности\n - ##12## точности\n - ##35%## бонус с скорости перезарядки\n - ##удвоенная## скорость смены оружия\n\nПРО: ##$pro##\nВаши парные пистолет-пулеметы теперь тоже получают эти бонусы.",
 			menu_trigger_happy_beta = "БЕЗДОННЫЕ КАРМАНЫ",
-			menu_trigger_happy_beta_desc = "БАЗОВЫЙ: ##$basic##\nВы получаете на ##40%## больше боезапаса для пистолетов и пистолет-пулеметов.\n\nПРО: ##$pro##\nВы получаете на ##100%## больше боезапаса для пистолетов и пистолет-пулеметов.",
+			menu_trigger_happy_beta_desc = "БАЗОВЫЙ: ##$basic##\nВы получаете на ##50%## больше боезапаса для пистолетов и пистолет-пулеметов.\n\nПРО: ##$pro##\nВы получаете на ##150%## больше боезапаса для пистолетов и пистолет-пулеметов.",
 			-- F2
+			menu_running_from_death_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВы перезаряжаете и переключаетесь между оружием на ##100%## быстрее в течение ##30## секунд после того, как вас подняли.\n\nПРО: ##$pro;##\nСкорость вашего передвижения увеличена на ##30%## в течение ##30## секунд после того, как вас подняли.",
 			menu_up_you_go_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВы получаете на ##30%## меньше урона в течение ##10## секунд после того, как вас подняли.\n\nПРО: ##$pro;##\nВы получаете дополнительные ##25%## от своего максимального здоровья когда вас подняли.",
-			menu_perseverance_beta_desc = "БАЗОВЫЙ: ##$basic##\nВместо того чтобы сразу упасть, вы сможете сражаться ещё ##3## секунды. Скорость передвижения при этом будет уменьшена на ##60%##.\nДанный навык не срабатывает при падении с высоты или если вы упали под воздействием огня.\n\nШтраф к скорости передвижения Лебединой Песни будет проигнорирован на ##3## секунды, если в момент активации навыка, или на протяжении его действия, ваш союзник упал.\n\nПРО: ##$pro##\nВремя действия навыка увеличено до ##9## секунд.\n\nВо время действия навыка ваш боезопас будет исчерпываться напрямую из вашего запаса, вместо магазина, а ваш урон будет увеличен на ##50%##.",
+			menu_perseverance_beta_desc = "БАЗОВЫЙ: ##$basic##\nВместо того чтобы сразу упасть, вы сможете сражаться ещё ##4## секунды. Скорость передвижения при этом будет уменьшена на ##60%##.\nДанный навык не срабатывает при падении с высоты или если вы упали под воздействием огня.\n\nШтраф к скорости передвижения Лебединой Песни будет проигнорирован на ##3## секунды, если в момент активации навыка, или на протяжении его действия, ваш союзник упал.\n\nПРО: ##$pro##\nВремя действия навыка увеличено до ##8## секунд.\n\nВо время действия навыка ваш боезопас будет исчерпываться напрямую из вашего запаса, вместо магазина, а ваш урон будет увеличен на ##50%##.",
+			menu_pistol_beta_messiah_desc = "БАЗОВЫЙ: ##$basic;##\nВы самостоятельно подниметесь на ноги, если убьёте врага когда вы лежите. Навык срабатывает только ##1## раз.\n\nКогда вы лежите, вы имеете почти бесконечное здоровье.\n\nПРО: ##$pro;##\nВы сможете снова использовать навык, если воспользуетесь медицинской сумкой.",
 			-- F3
 			menu_martial_arts_beta = "КРЕПКИЙ ПАРЕНЬ",
-			menu_martial_arts_beta_desc = "BASIC: ##$basic##\nПовышает шанс сбить врага с ног рукопашной атакой на ##50%##.\nТряска камеры при получении урона в ближнем бою снижена на ##30%##.\n\nACE: ##$pro##\nБлагодаря интенсивным тренировкам, вы получаете на ##50%## меньше урона в рукопашном бою.\nТряска камеры при получении урона в ближнем бою теперь снижена на ##90%##.",
+			menu_martial_arts_beta_desc = "БАЗОВЫЙ: ##$basic##\nПовышает шанс сбить врага с ног рукопашной атакой на ##50%##.\nТряска камеры при получении урона в ближнем бою снижена на ##30%##.\n\nПРО: ##$pro##\nБлагодаря интенсивным тренировкам, вы получаете на ##50%## меньше урона в рукопашном бою.\nТряска камеры при получении урона в ближнем бою теперь снижена на ##90%##.",
 			menu_bloodthirst_desc = "БАЗОВЫЙ: ##$basic;##\nКаждый раз, когда вы убиваете врага, урон от оружия ближнего боя будет увеличен на ##20%##, до максимума в ##300%##. Внимание: прибавка к урону работает до тех пор, пока вы не убьёте врага оружием ближнего боя.\n\nПРО: ##$pro;##\nПри убийстве врага оружием ближнего боя, скорость вашей перезарядки будет увеличена на ##50%## в течение ##10## секунд.",
 			menu_steroids_beta = "БОЕВЫЕ ИСКУССТВА",
 			menu_steroids_beta_desc = "БАЗОВЫЙ: ##$basic##\nВы теперь можете бегать когда используете оружие ближнего боя.\n\nПРО: ##$pro##\nСкорость заряда оружия ближнего боя увеличена на ##100%##.",
 			menu_drop_soap_beta_desc = "БАЗОВЫЙ: ##$basic##\nВы будете контратаковать противников и сбивать их с ног, если держите оружие ближнего боя наготове. Когда вы контратакуете врага, вы так же нанесете им урон своим холодным оружием.\n\nУрон от контратаки идентичен обычному урону в ближнем бою и зависит от продолжительности заряда оружия.\n\nУдачные контратаки будут моментально убирать оружие ближнего боя из рук.\n\nПРО: ##$pro##\nТеперь вы можете контратаковать клокеров.\n\nКонтратака теперь наносит ##удвоенный## урон.",
-			menu_wolverine_beta_desc = "БАЗОВЫЙ: ##$basic##\nВы наносите на ##50%## больше урона оружием ближнего боя.\n\nКогда ваша броня ломается и ваше здроровье ниже ##50%## от максимального, вы наносите на ##50%## больше урона оружием ближнего боя в течении ##20## секунд.\n\nПРО: ##$pro##\nКогда ваша броня ломается и ваше здроровье ниже ##50%## от максимального вы наносите на ##100%## больше урона с огнестрельного оружия в течении ##20## секунд, а продолжительность увеличеного урона в ближнем бою теперь будет длиться ##40## секунд.\n\nНа заметку: действие навыка не распространяется на метательное оружие, гранатометы и ракетометы.\n\nПометка от Гильзы: при входе в режим берсерка на экране появляется вспышка показывающая продолжительность эффекта. Данную вспышку можно кастомизировать или полностью выключить в настройках мода Gilza.",
+			menu_wolverine_beta_desc = "БАЗОВЫЙ: ##$basic##\nВаше оружие ближнего боя теперь наносит на ##50%## больше урона.\n\nЕсли ваша броня разрушится при уровне здроровья ниже ##50%##, вы начнете наносить на ##50%## больше урона оружием ближнего боя в течении ##40## секунд.\n\nПРО: ##$pro##\nЕсли ваша броня разрушится при уровне здроровья ниже ##50%## вы начнете наносить на ##100%## больше урона с огнестрельного оружия в течении ##30## секунд.\nУвеличение урона огнестрельного оружия имеет ##15## секундный кулдаун между активациями, и не распространяется на Метательное Оружие, Гранатометы и Ракетометы.\n\nПометка от Гильзы: при входе в режим берсерка на экране появляется вспышка показывающая продолжительность эффекта. Данную вспышку можно кастомизировать или полностью выключить в настройках мода Gilza.",
 		})
 		
 		---- WEAPON MODS ----
@@ -520,10 +594,13 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			bm_wp_wpn_fps_upg_m_celerity = "\"Big Stick\" 30-round mag",
 			bm_wp_wpn_fps_upg_m_308dmmag = "Lightweight 30-round mag",
 			
+			-- Custom weapon descriptions
+			bm_w_supernova_desc = "Альтернативный режим: ускоряет скорострельность в 4x раза, ухудшая точность в 3x раза, а стабильность в 1.5x раза.",
+			
 			-- New weapon mods added by Gilza, no specific order
-			menu_l_global_value_Gilza = "This is a Gilza Item!",
+			menu_l_global_value_Gilza = "Это Предмет Мода Gilza!",
 			bm_wpn_fps_upg_br_shtgn = "Пробивной патрон",
-			bm_wpn_fps_upg_br_shtgn_desc = "Позволяет вам пробивать все, что обычно может пробить пила OVE9000. Также может пробивать насквозь щиты и нательную броню врагов.\nЭффективная дистанция оружия уменьшена на 50%.\n",
+			bm_wpn_fps_upg_br_shtgn_desc = "Пуля позволяющая вам пробивать все, что обычно может пробить пила OVE9000. Также может пробивать насквозь щиты и нательную броню врагов.\nЭффективная дистанция оружия уменьшена на 50%.\nПодбор боеприпасов уменьшен на 20%.",
 			bm_wpn_fps_upg_ar_dmr_ap_rounds = "Бронебойный DMR патрон",
 			bm_wpn_fps_upg_ar_dmr_ap_rounds_desc = "Пробивает нательную броню, щиты и стены.\n\nПодбор боеприпасов уменьшен на 50%.",
 			bm_wpn_fps_upg_ap_kit_ap_rounds = "AP ammunition", -- hidden
@@ -546,7 +623,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			bm_wpn_fps_upg_pis_mid_ap_rounds = "Бронебойные патроны",
 			bm_wpn_fps_upg_pis_mid_ap_rounds_desc = "Пробивает нательную броню и щиты.\n\nПодбор боеприпасов уменьшен на 50%.\n",
 			bm_wpn_fps_upg_pis_mid_ap_rounds_lv = "Утяжеленные бронебойные патроны",
-			bm_wpn_fps_upg_pis_mid_ap_rounds_lv_desc = "Пробивает нательную броню и щиты.\n\nПодбор боеприпасов уменьшен на 30%.\n",
+			bm_wpn_fps_upg_pis_mid_ap_rounds_lv_desc = "Пробивает нательную броню и щиты.\n\nПодбор боеприпасов уменьшен на 10%.\n",
 			
 			-- New custom GL mods
 			bm_wp_upg_a_grenade_launcher_velocity = "Высокоскоростной снаряд",
@@ -572,7 +649,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			
 			-- Pistol mods
 			bm_wpn_fps_pis_c96_b_long_newname = "Бронебойный набор для C96",
-			bm_wpn_fps_pis_c96_b_long_newdesc = "Пробивает нательную броню, щиты и стены.\nПодбор боеприпасов уменьшен на 70%.",
+			bm_wpn_fps_pis_c96_b_long_newdesc = "Пробивает нательную броню, щиты и стены.\nПодбор боеприпасов уменьшен на 75%.",
 			bm_wpn_fps_pis_type54_underbarrel_desc = "Подствольный дробовик. Стата:\n -Урон: 660\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.33-0.4, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
 			bm_wpn_fps_pis_type54_underbarrel_slug_desc = "Подствольный дробовик со свинцовой пулей. Пробивает щиты, стены и нательную броню. Эффективная дистанция оружия увеличина на 15% Стата:\n -Урон: 660\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.25-0.3, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
 			bm_wpn_fps_pis_type54_underbarrel_ap_desc = "Подствольный дробовик со флешеттой, пробивающей нательную броню. Выстреливает 6 дротиков. Эффективная дистанция оружия увеличина на 40%.  Стата:\n -Урон: 660\n -Множитель минимального урона с дробовика: 1\n -Подбор патронов: 0.29-0.36, учитывая навык 'Тяжёлый пехотинец' из карт перков.",
@@ -588,28 +665,28 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			wpn_fps_lmg_hcar_barrel_dmr_PEN = "Бронебойный набор Akron HC",
 			bm_wpn_fps_lmg_hcar_barrel_dmr_PEN_desc = "Пробивает нательную броню, щиты и стены.\nОграничивает режим огня используя только одиночный.\nПодбор боеприпасов уменьшен на 50%.",
 			bm_wpn_fps_upg_lmg_kacchainsaw_underbarrel_flamethrower_desc = "Подствольный огнемет. Наносит 25 урона напрямую со скорострельностью в 2000. Имеет 25% шанс поджечь врага.\nПодожженные враги получают 100 урона в течении 2 секунд.\n\nПодбор боеприпасов уменьшен на 30% для самого пулемета.",
-			bm_wpn_fps_upg_lmg_kacchainsaw_conversionkit_desc = "Подбор боеприпасов увеличен на 15%.",
+			bm_wpn_fps_upg_lmg_kacchainsaw_conversionkit_desc = "Подбор боеприпасов увеличен на 36%.",
 			bm_wpn_fps_lmg_hcar_body_conversionkit_desc = "Подбор боеприпасов увеличен для соответствия новому классу урона.",
 			
 			-- Shotgun mods
 			bm_wpn_fps_upg_a_rip_desc_new = "Пуля вызывающая у протвника неконтролируемую рвоту, блокируя их возможность делать какие либо действия.\n\nНаносит 250 урона в течение 6 секунд.\nПодбор боеприпасов уменьшен на 20%",
-			bm_wpn_fps_upg_a_custom_desc_new = "8 Больших дробинок с утроенным уроном.\n\nОтключает возможность наносить увеличенный урон при попадании в голову.\nЭффективная дистанция оружия уменьшена на 20%.\nПодбор боеприпасов уменьшен на 50%.",
-			bm_wpn_fps_upg_a_explosive_desc_new = "Выстреливает один взрывной заряд, который убивает или оглушает цели.\nОтключает возможность наносить увеличенный урон при попадании в голову.\nПодбор боеприпасов уменьшен на 65%.",
-			bm_wpn_fps_upg_a_piercing_desc_new = "Пробивает нательную броню.\nЭффективная дистанция оружия увеличина на 40%.\n\nВыстреливает 6 дротиков за выстрел.\nПодбор боеприпасов уменьшен на 10%.",
-			bm_wpn_fps_upg_a_slug_desc_new = "Выстреливает один свинцовый снаряд, пробивающий насквозь нательную броню, щиты и стены.\n\nЭффективная дистанция оружия увеличина на 15%.\nПодбор боеприпасов уменьшен на 25%.",
+			bm_wpn_fps_upg_a_custom_desc_new = "12 дробинок с увеличенным уроном.\nПробивает нательную броню.\n\nОтключает возможность наносить бонусный урон при попадании в голову.\nЭффективная дистанция оружия уменьшена на 25%.\nПодбор боеприпасов уменьшен на 15%.",
+			bm_wpn_fps_upg_a_explosive_desc_new = "Выстреливает один взрывной заряд, который убивает или оглушает цели.\nОтключает возможность наносить увеличенный урон при попадании в голову.\nПодбор боеприпасов уменьшен на 55%.",
+			bm_wpn_fps_upg_a_piercing_desc_new = "Пробивает нательную броню.\nЭффективная дистанция оружия увеличина на 25%.\n\nВыстреливает 5 дротиков за выстрел.\nПодбор боеприпасов уменьшен на 15%.",
+			bm_wpn_fps_upg_a_slug_desc_new = "Выстреливает один свинцовый снаряд, пробивающий насквозь нательную броню, щиты и стены.\n\nЭффективная дистанция оружия увеличина на 20%.\nПодбор боеприпасов уменьшен на 25%.",
 			bm_wpn_fps_upg_a_dragons_breath_desc_new = "Выстреливает 8 дробинок, превращающиеся в искры и пламя. Прожигает щиты и нательную броню врагов.\n\nНаносит 350 урона подоженным врагам в течении 2.5 секунд.\nЭффективная дистанция оружия уменьшена на 20%.\nПодбор боеприпасов уменьшен на 30%.",
 			wpn_fps_upg_ns_duck_desc = "Уменьшеает вертикальный разброс дроби до 50%, увеличивает горизонтальный разброс дроби до 225%.",
 			
 			-- Flamethrower mods
-			bm_wpn_fps_fla_mk2_mag_rare_desc = "Меньшая огневая мощь, но увеличинный урон от горения.\n50% шанс поджечь врага. Пока враг горит, он получает 720 единиц урона в течение 3 секунд.\nБазовые значения огнемета: 20% шанс на 300 урона в течение 2 секунд.",
-			bm_wpn_fps_fla_mk2_mag_welldone_desc = "Большая огневая мощь, но уменьшенный урон от горения.\n10% шанс поджечь врага. Пока враг горит, он получает получает 150 единиц урона в течение 1 секунды.\nБазовые значения огнемета: 20% шанс на 300 урона в течение 2 секунд.",
+			bm_wpn_fps_fla_mk2_mag_rare_desc = "Меньшая огневая мощь, но увеличинный урон от горения.\n50% шанс поджечь врага. Пока враг горит, он получает 720 единиц урона в течение 3 секунд. Эффект горения наносит урон больше раз в секунду, чем остальные.\nБазовые значения огнемета: 20% шанс на 300 урона в течение 2 секунд.\nПодбор боеприпасов уменьшен на 60%.",
+			bm_wpn_fps_fla_mk2_mag_welldone_desc = "Большая огневая мощь, но уменьшенный урон от горения.\n10% шанс поджечь врага. Пока враг горит, он получает получает 150 единиц урона в течение 1 секунды.\nБазовые значения огнемета: 20% шанс на 300 урона в течение 2 секунд.\nПодбор боеприпасов увеличен на 45%.",
 			
 			-- Launcher mods
 			bm_wpn_fps_upg_a_grenade_launcher_poison_default_desc = "Наносит урон в 6м радиусе, после чего создает 6м облако газа на 15 секунд. Враги попавшие в данное облако поучат отравление вызывающее неконтролируемую рвоту на 16 секунд, блокируя их возможность делать какие либо действия. Враги получают 3.5 урона в секунду пока они  отравлены.\n\nПодбор боеприпасов уменьшен на 70%.",
-			bm_wpn_fps_upg_a_grenade_launcher_poison_ms3gl_desc = "Наносит урон в 3м радиусе, после чего создает 6м облако газа на 15 секунд. Враги попавшие в данное облако поучат отравление вызывающее неконтролируемую рвоту на 16 секунд, блокируя их возможность делать какие либо действия. Враги получают 3.5 урона в секунду пока они  отравлены.\n\nПодбор боеприпасов уменьшен на 82%.",
-			bm_wpn_fps_upg_a_grenade_launcher_poison_ms3gl_CK_desc = "Наносит урон в 3м радиусе, после чего создает 8м облако газа на 15 секунд. Враги попавшие в данное облако поучат отравление вызывающее неконтролируемую рвоту на 16 секунд, блокируя их возможность делать какие либо действия. Враги получают 3.5 урона в секунду пока они  отравлены.\n\nПодбор боеприпасов уменьшен на 82%.",
+			bm_wpn_fps_upg_a_grenade_launcher_poison_ms3gl_desc = "Наносит урон в 3м радиусе, после чего создает 6м облако газа на 15 секунд. Враги попавшие в данное облако поучат отравление вызывающее неконтролируемую рвоту на 16 секунд, блокируя их возможность делать какие либо действия. Враги получают 3.5 урона в секунду пока они  отравлены.\n\nПодбор боеприпасов уменьшен на 85%.",
+			bm_wpn_fps_upg_a_grenade_launcher_poison_ms3gl_CK_desc = "Наносит урон в 3м радиусе, после чего создает 8м облако газа на 15 секунд. Враги попавшие в данное облако поучат отравление вызывающее неконтролируемую рвоту на 16 секунд, блокируя их возможность делать какие либо действия. Враги получают 3.5 урона в секунду пока они  отравлены.\n\nПодбор боеприпасов уменьшен на 85%.",
 			bm_wpn_fps_upg_a_grenade_launcher_poison_underbarrel_desc = "Наносит 860 урона в 6м радиусе, после чего создает 6м облако газа на 15 секунд. Враги попавшие в данное облако поучат отравление вызывающее неконтролируемую рвоту на 16 секунд, блокируя их возможность делать какие либо действия. Враги получают 3.5 урона в секунду пока они  отравлены.\n\nПодбор боеприпасов для подствольного грагатомета уменьшен на 70%.",
-			bm_wpn_fps_upg_a_grenade_launcher_poison_arbiter_desc = "Наносит урон в 3м радиусе, после чего создает 4м облако газа на 15 секунд. Враги попавшие в данное облако поучат отравление вызывающее неконтролируемую рвоту на 8 секунд, блокируя их возможность делать какие либо действия. Враги получают 7 урона в секунду пока они  отравлены.\n\nПодбор боеприпасов уменьшен на 70%.",
+			bm_wpn_fps_upg_a_grenade_launcher_poison_arbiter_desc = "Наносит урон в 3м радиусе, после чего создает 4м облако газа на 15 секунд. Враги попавшие в данное облако поучат отравление вызывающее неконтролируемую рвоту на 8 секунд, блокируя их возможность делать какие либо действия. Враги получают 7 урона в секунду пока они  отравлены.\n\nПодбор боеприпасов уменьшен на 85%.",
 			bm_wpn_fps_upg_a_grenade_launcher_incendiary_desc = "После детонации создает огненное поле на 6 секунд.\nВраги попавшие в это поле начинают гореть.\n\nСтата поджога:\n -Продолжительность: 6 секунд\n -Урон в секунду: 250\nПока враг стоит в огненном поле он получает утроенный урон в секунду.\n\nПодбор боеприпасов уменьшен на 50%.",
 			bm_wpn_fps_upg_a_grenade_launcher_incendiary_ms3gl_desc = "После детонации создает огненное поле на 6 секунд.\nВраги попавшие в это поле начинают гореть.\n\nСтата поджога:\n -Продолжительность: 6 секунд\n -Урон в секунду: 250\nПока враг стоит в огненном поле он получает утроенный урон в секунду.\n\nПодбор боеприпасов уменьшен на 75%.",
 			bm_wpn_fps_upg_a_grenade_launcher_incendiary_arbiter_desc = "После детонации создает огненное поле на 3 секунды.\nВраги попавшие в это поле начинают гореть.\n\nСтата поджога:\n -Продолжительность: 3 секунд\n -Урон в секунду: 250\nПока враг стоит в огненном поле он получает утроенный урон в секунду.\n\nПодбор боеприпасов уменьшен на 50%.",

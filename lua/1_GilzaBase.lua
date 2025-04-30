@@ -21,24 +21,26 @@ _G.Gilza = {
 		junkie_icon_y_pos = 320,
 	},
 	grenade_multipliers = {
-		dada_com = 0.9,
-		fir_com = 0.6,
-		frag_com = 0.9,
-		wpn_prj_ace = 2.5,
-		concussion = 0.5,
-		poison_gas_grenade = 0.66,
-		frag = 0.9,
-		molotov = 1,
-		dynamite = 0.9,
-		wpn_prj_four = 1.1,
-		wpn_prj_jav = 0.5,
-		wpn_prj_target = 0.8,
-		wpn_prj_hur = 1.4,
-		sticky_grenade = 1.1,
-		wpn_gre_electric = 1,
+		dada_com = 0.6,
+		fir_com = 0.28,
+		frag_com = 0.6,
+		wpn_prj_ace = 2,
+		concussion = 0.28,
+		poison_gas_grenade = 0.2,
+		frag = 0.6,
+		molotov = 0.65,
+		dynamite = 0.6,
+		wpn_prj_four = 0.8,
+		wpn_prj_jav = 0.32,
+		wpn_prj_target = 0.56,
+		wpn_prj_hur = 1,
+		sticky_grenade = 0.65,
+		wpn_gre_electric = 0.65,
 	},
 	shotgun_minimal_damage_multipliers = {},
-	current_shotgun_shot_id = 0
+	current_shotgun_shot_id = 0,
+	weapon_shot_id = 0,
+	intimidated_enemies = {}
 }
 
 function Gilza:Save()
@@ -65,11 +67,16 @@ Gilza:Save()
 function Gilza:modCompatibility()
 	for _, mod in pairs(BeardLib.Mods) do
 		if mod.Name == "WeaponLib" then
-			if mod.AssetUpdates.version == "1.7.5" then
-				Gilza.isWeaponLibBroken = true
-				log("[Gilza] Found broken version of weaponlib, shotgun damage change applied.")
-			elseif mod.AssetUpdates.version ~= "1.7.5" then
-				log("[Gilza] Found possibly unbroken version of weaponlib. If version is higher then 1.7.5, update Gilza to get rid of this log notification. Current weaponlib version: "..tostring(mod.AssetUpdates.version))
+			if mod.AssetUpdates.version then
+				if type(mod.AssetUpdates.version) == "string" then
+					local num_ver_str = string.gsub(mod.AssetUpdates.version,'%.','')
+					if tonumber(num_ver_str) and tonumber(num_ver_str) <= 175 then
+						Gilza.isWeaponLibBroken = true
+						log("[Gilza] Found broken version of weaponlib, shotgun damage change applied.")
+					else
+						log("[Gilza] Found possibly unbroken version of weaponlib. If version is higher then 1.7.5, update Gilza to get rid of this log notification. Current weaponlib version: "..tostring(mod.AssetUpdates.version))
+					end
+				end
 			end
 		end
 	end
@@ -89,6 +96,7 @@ function Gilza:modCompatibility()
 					GameInfoManager._BUFFS.temporary.new_berserk_melee_damage_multiplier_1 = "new_berserk_melee_damage_multiplier_1"
 					GameInfoManager._BUFFS.temporary.new_berserk_melee_damage_multiplier_2 = "new_berserk_melee_damage_multiplier_2"
 					GameInfoManager._BUFFS.temporary.new_berserk_weapon_damage_multiplier = "new_berserk_weapon_damage_multiplier"
+					GameInfoManager._BUFFS.temporary.new_berserk_weapon_damage_multiplier_cooldown = "new_berserk_weapon_damage_multiplier_cooldown"
 				else
 					DelayedCalls:Add("Gilza_wait_for_vhp_to_load", 0.25, function()
 						tryaddingbuffs()
@@ -106,14 +114,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.31 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.4 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.3.1 changelog:\n\nThis patch includes a minor rebalance for the Speed Junkie perk, and a fix for it's armor amount calculation. For the most part this rebalance is a buff, like the new adrenaline spike ability, but a few values were nerfed. For an overview of this minor rebalance, as always, check the full changelog."
+			local message = "2.4 changelog:\n\nThis patch is focused primarly on skills. Some new skills were added and a lot of skills were updated both numericaly and mechanically. A few weapon adjustments are also included. Most important parts:\n\n- Damage resistance skills are now additive instead of multiplicative, which makes stacking them more effective. Max possible damage resist is 90%\n- Added new Guardian perk\n- Updated stability to make difference between the same weapon at 0 and 100 stability less significant.\n\nMake sure to check the full changelog."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.31
+			Gilza.settings.version = 2.4
 			Gilza.Save()
 		end
 	end)

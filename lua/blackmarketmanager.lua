@@ -23,6 +23,7 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_addend", function (self, na
 			end
 		end
 		
+		-- GILZA START
 		if simplified_categories.akimbo and managers.player:has_category_upgrade("akimbo", "pistol_improved_handling") then
 			if simplified_categories.pistol or (simplified_categories.smg and managers.player:has_category_upgrade("akimbo", "allow_smg_improved_handling")) then
 				local skill = managers.player:upgrade_value("akimbo", "pistol_improved_handling")
@@ -30,6 +31,16 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_addend", function (self, na
 					index = index + skill.accuracy
 				end	
 			end
+		end
+		
+		-- 28 points of inaccuracy for all weapon types if firing in full auto
+		if fire_mode ~= "single" then
+			index = index - 7
+		end
+		
+		-- 28 points of inaccuracy for hipfire, unless we have new skill
+		if current_state and not current_state:in_steelsight() then
+			index = index - managers.player:upgrade_value("player", "hipfire_no_accuracy_penalty", 7)
 		end
 
 		if silencer then
@@ -86,6 +97,16 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 				index = index + skill.accuracy
 			end	
 		end
+	end
+	
+	-- 28 points of inaccuracy for all weapon types if firing in full auto
+	if fire_mode ~= "single" then
+		index = index - 7
+	end
+	
+	-- 28 points of inaccuracy for hipfire, unless we have new skill
+	if current_state and not current_state:in_steelsight() then
+		index = index - managers.player:upgrade_value("player", "hipfire_no_accuracy_penalty", 7)
 	end
 
 	if silencer then
@@ -155,6 +176,11 @@ Hooks:OverrideFunction(BlackMarketManager, "recoil_addend", function (self, name
 			if managers.player:has_team_category_upgrade("weapon", "recoil_index_addend") then
 				index = index + managers.player:team_upgrade_value("weapon", "recoil_index_addend", 0)
 			end
+		end
+		
+		-- 36 points of recoil loss if hipfiring without new skill
+		if current_state and not current_state:in_steelsight() then
+			index = index - managers.player:upgrade_value("player", "hipfire_less_recoil", 9)
 		end
 
 		if silencer then

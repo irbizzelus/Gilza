@@ -1,3 +1,7 @@
+if not Gilza then
+	dofile("mods/Gilza/lua/1_GilzaBase.lua")
+end
+
 -- brawler max ammo cut @9
 Hooks:OverrideFunction(RaycastWeaponBase, "replenish", function (self)
 	local ammo_max_multiplier = managers.player:upgrade_value("player", "extra_ammo_multiplier", 1)
@@ -154,18 +158,26 @@ Hooks:OverrideFunction(RaycastWeaponBase, "is_knock_down", function (self)
 	end
 	
 	-- for damage bellow 100 stagger chance is 15%
-	-- for damage above 400 stagger chance is 25%
+	-- for damage above 300 stagger chance is 25%
 	-- for everything in between we scale it based on damage
 	local new_knock_down_chance = 0
-	if self._damage >= 10 and self._damage <= 40 then
-		new_knock_down_chance = 0.1 + ((self._damage - 10) / 30 * 0.1)
+	if self._damage >= 10 and self._damage <= 30 then
+		new_knock_down_chance = 0.1 + ((self._damage - 10) / 20 * 0.1)
 	elseif self._damage < 10 then
 		new_knock_down_chance = 0.1
-	elseif self._damage > 40 then
+	elseif self._damage > 30 then
 		new_knock_down_chance = 0.2
 	end
 	
-	new_knock_down_chance = new_knock_down_chance * (((self._suppression - 0.2) / 4) + 1)
+	local max_threat_bonus = 2 -- 1 + 2x = 3x
+	local max_req_threat = 4 -- 40
+	local wpn_threat = self._suppression - 0.2
+	local threat_percent = wpn_threat / max_req_threat
+	local total_threat_bonus = 1 + max_threat_bonus * threat_percent
+	
+	if total_threat_bonus and total_threat_bonus > 1 then
+		new_knock_down_chance = new_knock_down_chance * total_threat_bonus
+	end
 	
 	-- if we only have the basic skill, use 1/5 the chance, according to skill power
 	if self._knock_down == 0.05 then
@@ -304,6 +316,7 @@ Hooks:OverrideFunction(InstantBulletBase, "give_impact_damage", function (self, 
 	local hit_unit = col_ray.unit
 	local is_valid_target = hit_unit and hit_unit:character_damage() and hit_unit:character_damage()._char_tweak and hit_unit:character_damage()._char_tweak.access
 	local is_target_tank = is_valid_target and hit_unit:character_damage()._char_tweak.access == "tank"
+	local is_target_winters = is_valid_target and hit_unit:base():char_tweak().Gilza_winters_tag
 	
 	-- remove saw's headshot damage for non-dozer enemies
 	if weapon_unit:base():is_category("saw") then
@@ -316,7 +329,7 @@ Hooks:OverrideFunction(InstantBulletBase, "give_impact_damage", function (self, 
 	end
 	
 	-- adds new electric bullets skill, for x seconds after getting tazed
-	if user_unit == managers.player:player_unit() and managers.player:has_activate_temporary_upgrade("temporary", "tased_electric_bullets") and not is_target_tank then
+	if user_unit == managers.player:player_unit() and managers.player:has_activate_temporary_upgrade("temporary", "tased_electric_bullets") and not is_target_tank and not is_target_winters then
 		local action_data = {}
 		action_data.weapon_unit = weapon_unit
 		action_data.attacker_unit = user_unit
@@ -342,4 +355,40 @@ Hooks:OverrideFunction(InstantBulletBase, "give_impact_damage", function (self, 
 	else
 		return instantbullet_give_impact_dmg_orig(self, col_ray, weapon_unit, user_unit, damage, armor_piercing, shield_knock, knock_down, stagger, variant)
 	end
+end)
+
+Hooks:PreHook(RaycastWeaponBase, "_fire_raycast", "Gilza_bullet_fired_tracker", function(user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul)
+	Gilza.weapon_shot_id = Gilza.weapon_shot_id + 1
+end)
+
+-- fix flamethrower magazines not adjusting dot type that is applied to the enemy
+Hooks:OverrideFunction(DOTBulletBase, "_dot_data_by_weapon", function (self, weapon_unit)
+	local weap_base = alive(weapon_unit) and weapon_unit:base()
+	local ammo_data = weap_base.ammo_data and weap_base:ammo_data()
+	local dot_data_name = ammo_data and ammo_data.dot_data_name
+
+	if not dot_data_name then
+		local weapon_tweak_data = weap_base and weap_base.weapon_tweak_data and weap_base:weapon_tweak_data()
+		dot_data_name = weapon_tweak_data and weapon_tweak_data.dot_data_name
+	end
+	
+	-- if dot requesting weapon has a mag, check if that mag has a custom_stats dot property and if so, return it
+	local mag_mods = managers.weapon_factory:get_parts_from_weapon_by_type_or_perk("magazine", weap_base._factory_id, weap_base._blueprint)
+	if #mag_mods >=1 then
+		for _, mag in ipairs(mag_mods) do
+			local factory_part = tweak_data.weapon.factory.parts[mag]
+			if factory_part then
+				if factory_part.custom_stats and factory_part.custom_stats.dot_data_name then
+					dot_data_name = factory_part.custom_stats.dot_data_name
+					break
+				end
+			end
+		end
+	end
+
+	if dot_data_name then
+		return tweak_data.dot:get_dot_data(dot_data_name)
+	end
+
+	return nil
 end)

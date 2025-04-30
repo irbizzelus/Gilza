@@ -5,7 +5,14 @@ Hooks:OverrideFunction(SniperGrazeDamage, "on_weapon_fired", function (self, wea
 	end
 
 	if not weapon_unit:base():is_category("snp") then
-		return
+		if weapon_unit:base():is_category("assault_rifle") or weapon_unit:base():is_category("smg") then
+			local semi_auto = weapon_unit:base()._fire_mode == Idstring("single")
+			if not semi_auto then
+				return
+			end
+		else
+			return
+		end
 	end
 
 	if weapon_unit ~= managers.player:equipped_weapon_unit() then
@@ -64,8 +71,8 @@ Hooks:OverrideFunction(SniperGrazeDamage, "on_weapon_fired", function (self, wea
 		return
 	end
 	
-	-- maximum distance check ~7.5 meters
-	if max_distance < 750 then
+	-- maximum distance check 6 meters
+	if max_distance < 600 then
 		return
 	end
 

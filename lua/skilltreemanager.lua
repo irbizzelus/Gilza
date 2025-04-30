@@ -6,14 +6,16 @@ function SkillTreeManager:pack_to_string()
 	end
 
 	local current_specialization = self:digest_value(self._global.specializations.current_specialization, false, 1)
-	if current_specialization ~= Gilza.custom_specialization_indexes.brawler and current_specialization ~= Gilza.custom_specialization_indexes.junkie then
+	if current_specialization ~= Gilza.custom_specialization_indexes.brawler and current_specialization ~= Gilza.custom_specialization_indexes.junkie and current_specialization ~= Gilza.custom_specialization_indexes.guardian then
 		return orig_skilltreemanager_pack_string(self)
 	end
 	
 	if current_specialization == Gilza.custom_specialization_indexes.brawler then
 		current_specialization = 3
-	else
+	elseif current_specialization == Gilza.custom_specialization_indexes.junkie then
 		current_specialization = 6
+	elseif current_specialization == Gilza.custom_specialization_indexes.guardian then
+		current_specialization = 2
 	end
 
 	local packed_string = ""

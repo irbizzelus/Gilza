@@ -1,5 +1,5 @@
 <mod name="Gilza" author="irbizzelus" color="Color(0,0.8,0.76)">
-	<AssetUpdates id="irbizzelus/Gilza" provider="github" release="true" version="2.3.1"/>
+	<AssetUpdates id="irbizzelus/Gilza" provider="github" release="true" version="2.4"/>
 	<GlobalValue id="Gilza" color="Color(0,0.8,0.76)"/>
 	<AddFiles directory="assets">
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_br_shtgn"/>
@@ -21,7 +21,9 @@
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_pis_mid_ap_rounds"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_pis_mid_ap_rounds_lv"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/specialization/icons_atlas"/>
+		<texture path="guis/dlcs/Gilza_guardian/textures/pd2/specialization/icons_atlas"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/specialization/junkie_icon"/>
+		<texture path="guis/dlcs/Gilza/textures/pd2/specialization/guardian_icon"/>
 		<texture path="guis/textures/berserk_flash"/>
 		<texture path="guis/textures/berserk_flash_bigger"/>
 		<texture path="guis/textures/berserk_flash_biggest"/>

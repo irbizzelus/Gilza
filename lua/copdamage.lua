@@ -1,3 +1,7 @@
+if not Gilza then
+	dofile("mods/Gilza/lua/1_GilzaBase.lua")
+end
+
 -- convert melee damage to % based on the weapon's stat
 Hooks:PreHook(CopDamage, "damage_melee", "Gilza_new_melee_damage", function(self,attack_data)
 	if attack_data.bullet_taze == true then
@@ -25,13 +29,15 @@ Hooks:PreHook(CopDamage, "damage_melee", "Gilza_new_melee_damage", function(self
 		attack_data.damage = attack_data.damage * dmg_multiplier
 	
 		if self._char_tweak.Gilza_boss_tag then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 100)) -- bosses take 10x the amount of hits
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 200)) -- bosses take 20x the amount of hits
 		elseif self._char_tweak.Gilza_boss_tag_deep then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 200)) -- crude awakening boss takes 20x the amount of hits, because this fucker is tanky and techically last boss of the game
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 400)) -- crude awakening boss takes 40x the amount of hits, because this fucker is tanky and techically last boss of the game
 		elseif self._char_tweak.Gilza_winters_tag then
 			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 20)) -- winters takes 2x the amount of hits
+		elseif self._char_tweak.Gilza_headless_dozer_tag then
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 150)) -- headless dozers take 15x the amount of hits, cuz thats like their only weakness
 		elseif self._char_tweak.access == "tank" then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 50)) -- dozers take 5x the amount of hits
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 100)) -- dozers take 10x the amount of hits
 		else
 			attack_data.damage = self._HEALTH_INIT * (attack_data.damage / 10) + 0.1 -- +1 dmg is needed due to rounding calculations with low hp targets, like street cops, that leave them with 0.1 hp instead of killing them
 		end
@@ -43,12 +49,13 @@ end)
 local mvec_1 = Vector3()
 local mvec_2 = Vector3()
 local local_shotgun_shot_id = -1
-local was_first_pellet_proccessed = {}
-local first_pellet_headshot_bonus = {}
+Gilza.was_first_pellet_proccessed = {}
+Gilza.first_pellet_headshot_bonus = {}
+Gilza.is_current_shotgun_critical = {}
+Gilza.rolled_shotgun_crit_already = {}
 
--- override damage_bullet function to add new armor pen skills and allow throawble weapons like axes to perice body armour @113-143
--- shotgun changes @145-206
--- add buckshot tweak @211
+-- override damage_bullet function to add new armor pen skills, allow throawble weapons like axes to perice body armour,
+-- added new shotgun damage based on COD:BO3 shotgun mechanics, and bodyshot buckshot dmg increase
 Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 	
 	if self._dead or self._invulnerable then
@@ -74,6 +81,12 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 		if not_from_the_front then
 			return
 		end
+	end
+	
+	-- reduce bullet damage for headless dozers, since they ignore headshot damage, and Gilza's bodyshot damage is higher with lower HS muls
+	-- cant change their health because of explosive weapon's breakpoints
+	if self._char_tweak.Gilza_headless_tag then
+		attack_data.damage = attack_data.damage * 0.5
 	end
 
 	local is_civilian = CopDamage.is_civilian(self._unit:base()._tweak_table)
@@ -116,6 +129,7 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 	end
 	
 	local attackerIsPlayer = attack_data.attacker_unit == managers.player:player_unit()
+	
 	-- new AP: if enemy is hit in the plate, reduce damage in half if we have armor peirce basic; dont reduce dmg if we have AP aced + basic
 	if (attack_data.armor_piercing or managers.player:has_category_upgrade("player", "ap_bullets_aced")) and attackerIsPlayer and self._has_plate and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_plate_name then
 		if managers.player:has_category_upgrade("player", "ap_bullets") and not managers.player:has_category_upgrade("player", "ap_bullets_aced") or not managers.player:has_category_upgrade("player", "ap_bullets") and managers.player:has_category_upgrade("player", "ap_bullets_aced") then
@@ -142,10 +156,8 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 		return
 	end
 	
-	if managers.player:has_category_upgrade("temporary", "new_berserk_weapon_damage_multiplier") then
-		attack_data.damage = attack_data.damage * managers.player:temporary_upgrade_value("temporary", "new_berserk_weapon_damage_multiplier", 1)
-	end
-	
+	local shotgun_min_mul = 1
+	local min_shot_dmg = 1
 	-- new shotgun damage
 	if attack_data and attack_data.weapon_unit and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_category and (attack_data.weapon_unit:base():is_category("shotgun") or attack_data.weapon_unit:base():is_category("grenade_launcher")) and attack_data.weapon_unit:base()._rays and attack_data.weapon_unit:base()._rays >= 2 then
 		
@@ -163,33 +175,37 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 		-- so, based on example above, all additional pellets will deal '65% of the shotgun max damage / how many pellets shotgun currently has (depends on the shotgun itself and used ammo)'
 		-- this code is a bit of a mess, but the beauty of it is that its fully adaptable to shotgun pellet amount, and every shotgun can be tweaked with it's own base multiplier
 		-- and it can also handle multiple enemy units per shotgun trigger pull, so if you hit 5 enemies with 1 shot, they will all take at least 35% of damage, or whatever that shotgun's value is
-		-- it can also work as a prehook since attackdata's type is a list, but we still need the buckshot headshot override, so keep it like this for now.
+		-- it can also work as a prehook since attackdata's type is a list, but we still need the buckshot headshot override, and other stuff, so this is a full func override
 		
-		local shotgun_mul = Gilza.shotgun_minimal_damage_multipliers[attack_data.weapon_unit:base()._name_id] or (1 / attack_data.weapon_unit:base()._rays)
+		shotgun_min_mul = Gilza.shotgun_minimal_damage_multipliers[attack_data.weapon_unit:base()._name_id] or (1 / attack_data.weapon_unit:base()._rays)
+		min_shot_dmg = attack_data.damage * shotgun_min_mul
 		local is_headshot = self._head_body_name and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
 		
 		-- 'Gilza.current_shotgun_shot_id' value gets updated when we pull the trigger of our shotgun in fire_raycast function,
 		-- so if this value is newer then the local one, the col_ray we are handling right now came from a new shotgun shot, so we reset all the temp values and update the local shot_id value
 		if Gilza.current_shotgun_shot_id > local_shotgun_shot_id then
 			local_shotgun_shot_id = Gilza.current_shotgun_shot_id
-			was_first_pellet_proccessed = {}
-			first_pellet_headshot_bonus = {}
+			Gilza.was_first_pellet_proccessed = {}
+			Gilza.first_pellet_headshot_bonus = {}
+			Gilza.rolled_shotgun_crit_already = {}
+			Gilza.is_current_shotgun_critical = {}
 		end
 		
 		-- if first pellet from the shot was not proccessed yet, we make this pellet deal the minimal weapon damage
-		if not was_first_pellet_proccessed[self._unit:id()] then
-			attack_data.damage = attack_data.damage * shotgun_mul
-			was_first_pellet_proccessed[self._unit:id()] = true
-			first_pellet_headshot_bonus[self._unit:id()] = is_headshot
+		if not Gilza.was_first_pellet_proccessed[tostring(self._unit:id())] then
+			attack_data.damage = min_shot_dmg
+			Gilza.was_first_pellet_proccessed[tostring(self._unit:id())] = true
+			Gilza.first_pellet_headshot_bonus[tostring(self._unit:id())] = is_headshot
 		else
 			-- this value checks if our current shotgun shot managed to deal a headshot with at least 1 pellet yet, if we allready did, then pellet damage is calculated normally
-			if first_pellet_headshot_bonus[self._unit:id()] then
-				attack_data.damage = (attack_data.damage * (1 - shotgun_mul)) / (attack_data.weapon_unit:base()._rays - 1)
-			-- if we still did not land a headshot with any of our pellets, check if the currently proccessed pellet would hit a headshot
+			if Gilza.first_pellet_headshot_bonus[tostring(self._unit:id())] then
+				attack_data.damage = (attack_data.damage * (1 - shotgun_min_mul)) / (attack_data.weapon_unit:base()._rays - 1)
 			else
-				-- if we would, this pellet's damage is set to the same as the first pellet, but it's damage is multiplied by the headshot multiplier of the enemy that we will hit - 1 (-1 because we allready dealt bodyshot damage to them on our first pellet)
-				-- hs_mul calculations are based on headshot calulation bellow, aka vanilla pd2 fucntion
+				-- if we still did not land a headshot with any of our pellets, check if the currently proccessed pellet would hit a headshot
 				if is_headshot then
+					-- if we would, this pellet's damage is set to the same as the first pellet, but it's damage is multiplied by the (headshot multiplier of the enemy - 1)
+					-- -1 because we allready dealt bodyshot damage to this enemy with the first pellet. then dmg is divided by original hs mul, 
+					-- because later in this function damage will be increased by the hs_mul again, regardless of if it's a shotgun or not
 					local hs_mul = 1
 					if not self._char_tweak.ignore_headshot and not self._damage_reduction_multiplier then
 						if self._char_tweak.headshot_dmg_mul then
@@ -198,12 +214,12 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 							hs_mul = 10
 						end
 					end
-					-- since this is an additional pellet that comes after the first, it should deal it's personal damage as well as the compensation for the first pellet
-					attack_data.damage = (attack_data.damage * shotgun_mul * (hs_mul - 1)) + (attack_data.damage * (1 - shotgun_mul)) / (attack_data.weapon_unit:base()._rays - 1)
-					first_pellet_headshot_bonus[self._unit:id()] = true
+					-- compensation + pellet
+					attack_data.damage = (min_shot_dmg * (hs_mul-1)) / hs_mul + ((attack_data.damage * (1 - shotgun_min_mul)) / (attack_data.weapon_unit:base()._rays - 1))
+					Gilza.first_pellet_headshot_bonus[tostring(self._unit:id())] = true
 				else
 					-- if not, same normal calculation
-					attack_data.damage = (attack_data.damage * (1 - shotgun_mul)) / (attack_data.weapon_unit:base()._rays - 1)
+					attack_data.damage = (attack_data.damage * (1 - shotgun_min_mul)) / (attack_data.weapon_unit:base()._rays - 1)
 				end
 			end
 		end
@@ -224,6 +240,10 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 
 	if self._unit:base():char_tweak().DAMAGE_CLAMP_BULLET then
 		damage = math.min(damage, self._unit:base():char_tweak().DAMAGE_CLAMP_BULLET)
+	end
+	
+	if managers.player:has_category_upgrade("temporary", "new_berserk_weapon_damage_multiplier") then
+		damage = damage * managers.player:temporary_upgrade_value("temporary", "new_berserk_weapon_damage_multiplier", 1)
 	end
 
 	damage = damage * (self._marked_dmg_mul or 1)
@@ -255,10 +275,10 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 		end
 
 		local critical_hit, crit_damage = self:roll_critical_hit(attack_data, damage)
-
+		
 		if critical_hit then
 			managers.hud:on_crit_confirmed(damage_scale)
-
+			
 			damage = crit_damage
 			attack_data.critical_hit = true
 		else
@@ -303,10 +323,16 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 			end
 		end
 	end
-
+	
 	damage = self:_apply_damage_reduction(damage)
 	attack_data.raw_damage = damage
 	attack_data.headshot = head
+	-- after calculating % dmg dealt, game ceils it. this causes dmg inaccuracy within 1 chunk of health, and since HEALTH_GRANULARITY is 512, it's 1/512 of enemy's health.
+	-- i am yet to find a reason for this ceil, as it doesnt seem to break any aspect of the game, it just causes your damage to always have damage inacuracy
+	-- always being slightly higher, with an error range of 1/512 of enemy health. this is why dozers recieve so much extra dmg from low-dmg weapons.
+	-- using non-ceiled values works fine, but overriding all functions that do this is a pointless risk for a minor fix, so i wont do it.
+	-- p.s. this is the value you report to other players btw, which allows for you to tell others that you dealt 76/512 of unit's health per shot
+	-- and this is why we can rebalance the game's health and damage so much, since sync is % based.
 	local damage_percent = math.ceil(math.clamp(damage / self._HEALTH_INIT_PRECENT, 1, self._HEALTH_GRANULARITY))
 	damage = damage_percent * self._HEALTH_INIT_PRECENT
 	damage, damage_percent = self:_apply_min_health_limit(damage, damage_percent)
@@ -458,6 +484,13 @@ end)
 
 -- same as the bullet function, but for fire damage. this is only used by the dragon's breath rounds, and it is a complete copy of the new shotgun damage mechanic
 Hooks:PreHook(CopDamage, "damage_fire", "Gilza_fire_shotgun_fix", function(self, attack_data)
+	
+	-- reduce fire damage for headless dozers, since they ignore headshot damage, and Gilza's bodyshot damage is higher with lower HS muls
+	-- cant change their health because of explosive weapon's breakpoints
+	if self._char_tweak.Gilza_headless_tag then
+		attack_data.damage = attack_data.damage * 0.5
+	end
+	
 	if managers.player:has_category_upgrade("temporary", "new_berserk_weapon_damage_multiplier") then
 		attack_data.damage = attack_data.damage * managers.player:temporary_upgrade_value("temporary", "new_berserk_weapon_damage_multiplier", 1)
 	end
@@ -469,15 +502,17 @@ Hooks:PreHook(CopDamage, "damage_fire", "Gilza_fire_shotgun_fix", function(self,
 		local is_headshot = self._head_body_name and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
 		if Gilza.current_shotgun_shot_id ~= local_shotgun_shot_id then
 			local_shotgun_shot_id = Gilza.current_shotgun_shot_id
-			was_first_pellet_proccessed = {}
-			first_pellet_headshot_bonus = {}
+			Gilza.was_first_pellet_proccessed = {}
+			Gilza.first_pellet_headshot_bonus = {}
+			Gilza.rolled_shotgun_crit_already = {}
+			Gilza.is_current_shotgun_critical = {}
 		end
-		if not was_first_pellet_proccessed[self._unit:id()] then
+		if not Gilza.was_first_pellet_proccessed[tostring(self._unit:id())] then
 			attack_data.damage = attack_data.damage * shotgun_mul
-			was_first_pellet_proccessed[self._unit:id()] = true
-			first_pellet_headshot_bonus[self._unit:id()] = is_headshot
+			Gilza.was_first_pellet_proccessed[tostring(self._unit:id())] = true
+			Gilza.first_pellet_headshot_bonus[tostring(self._unit:id())] = is_headshot
 		else
-			if first_pellet_headshot_bonus[self._unit:id()] then
+			if Gilza.first_pellet_headshot_bonus[tostring(self._unit:id())] then
 				attack_data.damage = (attack_data.damage * (1 - shotgun_mul)) / (attack_data.weapon_unit:base()._rays - 1)
 			else
 				if is_headshot then
@@ -489,12 +524,194 @@ Hooks:PreHook(CopDamage, "damage_fire", "Gilza_fire_shotgun_fix", function(self,
 							hs_mul = 10
 						end
 					end
-					attack_data.damage = (attack_data.damage * shotgun_mul * (hs_mul - 1)) + (attack_data.damage * (1 - shotgun_mul)) / (attack_data.weapon_unit:base()._rays - 1)
-					first_pellet_headshot_bonus[self._unit:id()] = true
+					attack_data.damage = ((attack_data.damage * shotgun_mul * (hs_mul - 1)) / hs_mul) + (attack_data.damage * (1 - shotgun_mul)) / (attack_data.weapon_unit:base()._rays - 1)
+					Gilza.first_pellet_headshot_bonus[tostring(self._unit:id())] = true
 				else
 					attack_data.damage = (attack_data.damage * (1 - shotgun_mul)) / (attack_data.weapon_unit:base()._rays - 1)
 				end
 			end
+		end
+	end
+end)
+
+-- make crits always deal 2x damage. this change only makes cloakers, dozers and Winters harder to kill, since everyone else has a 2x headshot multiplier allready
+-- also make crits only evaluate chances only once,
+local gilza_orig_roll_critical_hit = CopDamage.roll_critical_hit
+function CopDamage:roll_critical_hit(attack_data, damage)
+	
+	local res1, res2 = gilza_orig_roll_critical_hit(self, attack_data, damage)
+	
+	local shotgun_check = attack_data.weapon_unit and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_category and (attack_data.weapon_unit:base():is_category("shotgun") or attack_data.weapon_unit:base():is_category("grenade_launcher")) and attack_data.weapon_unit:base()._rays and attack_data.weapon_unit:base()._rays >= 2
+	if shotgun_check then
+		if Gilza.rolled_shotgun_crit_already[tostring(self._unit:id())] then
+			if Gilza.is_current_shotgun_critical[tostring(self._unit:id())] then
+				res1 = true
+			else
+				res1 = false
+			end
+		else
+			if res1 then
+				Gilza.is_current_shotgun_critical[tostring(self._unit:id())] = true
+			end
+			Gilza.rolled_shotgun_crit_already[tostring(self._unit:id())] = true
+		end
+	end
+	
+	if res1 then
+		res2 = damage * 2.5 -- new crit mul
+	end
+	
+	return res1, res2
+end
+
+-- sentry kill tracking
+local gilza_chk_killshot_orig = CopDamage.chk_killshot
+function CopDamage:chk_killshot(attacker_unit, variant, headshot, weapon_id)
+	
+	-- if sentry
+	if alive(attacker_unit) and attacker_unit:in_slot(25) then
+		
+		local owned_sentry_killshot = false
+		-- this func has different input parameters depending on if we are server/client
+		if Network:is_server() then
+			if attacker_unit:base()._owner == managers.player:player_unit() then
+				owned_sentry_killshot = true
+			end
+		elseif attacker_unit:base()._owner_id then
+			local owner_id = attacker_unit:base()._owner_id
+			if managers and managers.network and managers.network:session() and managers.network:session():peer(owner_id) then
+				local peer = managers.network:session():peer(owner_id)
+				local unit = peer and peer:unit() or nil
+				if unit and alive(unit) then
+					if unit == managers.player:player_unit() then
+						owned_sentry_killshot = true
+					end
+				end
+			end
+		end
+		
+		-- sentry killed something
+		if owned_sentry_killshot then
+			
+			local player_unit = managers.player:player_unit()
+			-- guardian health on kill
+			if managers.player:has_category_upgrade("player", "guardian_health_on_kill") and alive(player_unit) and managers.player:Gilza_is_player_in_guardian_zone() then
+				local diff_mul = 1
+				if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty ~= "sm_wish" then
+					diff_mul = 3
+				end
+				local heal = managers.player:upgrade_value("player", "guardian_health_on_kill", 0) * diff_mul
+				player_unit:character_damage():restore_health(heal, true)
+			end
+			
+			-- guardian ammo pickup
+			if managers.player:has_category_upgrade("player", "guardian_auto_ammo_pickup_on_kill") and alive(player_unit) and managers.player:Gilza_is_player_in_guardian_zone() then
+				local function find_pickups_at_death_location(death_spot, desync_compensation)
+					local desync_compensation = desync_compensation or 0
+					local skill_range_increase = managers.player:upgrade_value("player", "increased_pickup_area", 1)
+					local pickups = World:find_units_quick("sphere", death_spot, (20 * skill_range_increase) + desync_compensation, managers.slot:get_mask("pickups"))
+					local grenade_tweak = tweak_data.blackmarket.projectiles[managers.blackmarket:equipped_grenade()]
+					local may_find_grenade = not grenade_tweak.base_cooldown and managers.player:has_category_upgrade("player", "regain_throwable_from_ammo")
+					
+					if pickups and #pickups >= 1 then
+						for _, pickup in ipairs(pickups) do
+							if pickup:pickup() and pickup:pickup():pickup(player_unit) then
+								if may_find_grenade then
+									local data = managers.player:upgrade_value("player", "regain_throwable_from_ammo", nil)
+
+									if data and not managers.player:got_max_grenades() then
+										managers.player:add_coroutine("regain_throwable_from_ammo", PlayerAction.FullyLoaded, managers.player, data.chance, data.chance_inc)
+									end
+								end
+
+								for id, weapon in pairs(player_unit:inventory():available_selections()) do
+									managers.hud:set_ammo_amount(id, weapon.unit:base():ammo_info())
+								end
+								return true
+							end
+						end
+					end
+					return false
+				end
+				local death_spot = Vector3(0,0,0)
+				mvector3.set(death_spot,self._unit:movement():m_pos())
+				if Network and Network:is_client() then
+					local max_attempts = 0 -- 3 seconds tops
+					local function ammo_loop(death_spot)
+						-- whenever we kill more then 1 enemy unit in one shot, this func will trigger for each dead enemy. if delayedcall name was the same, it would override
+						-- first kill's delayed call with the second kill's delayed call, giving less ammo, so we are adding shot id to the name. on top of that, we add randomised number,
+						-- because grenade launcher's shots fired tracker is more complex. for that case a RNG should help in cases where we get <10-20 kills per explosion. otherwise there would be higher chance for RNG to repeat itself
+						DelayedCalls:Add("Gilza_try_finding_ammo_pickups_with_client_ping_compensation_for_shot_"..tostring(Gilza.weapon_shot_id).."_rng_"..tostring( math.random( math.random(0,55555), math.random(55555,99999) ) ), 0.05, function()
+							if player_unit and alive(player_unit) then
+								max_attempts = max_attempts + 1
+								local ammo_found = find_pickups_at_death_location(death_spot,max_attempts*1.5)
+								if max_attempts < 60 and not ammo_found then
+									ammo_loop(death_spot)
+								end
+							end
+						end)
+					end
+					ammo_loop(death_spot)
+				else
+					find_pickups_at_death_location(death_spot)
+				end
+			end
+			
+			-- sentry new ammo on kill skill
+			if managers.player:has_category_upgrade("player", "sentry_kills_refill_ammo") then
+				-- for an unknon reason to me, chk_killshot triggeres twice on kill, so we only refil once per killed unit id
+				if not managers.player.sentry_kill_ammo_refill_units then
+					managers.player.sentry_kill_ammo_refill_units = {}
+				end
+				if not managers.player.sentry_kill_ammo_refill_units[tostring(self._unit:id())] then
+					managers.player.sentry_kill_ammo_refill_units[tostring(self._unit:id())] = true
+					-- refil ammo
+					local player_manager = managers.player
+					local player_unit = player_manager:player_unit()
+					local inventory = player_unit:inventory()
+					if not player_unit:character_damage():dead() and inventory then
+						local picked_up = false
+						local available_selections = {}
+
+						for i, weapon in pairs(inventory:available_selections()) do
+							if inventory:is_equipped(i) then
+								table.insert(available_selections, 1, weapon)
+							else
+								table.insert(available_selections, weapon)
+							end
+						end
+
+						for _, weapon in ipairs(available_selections) do
+							local success, add_amount = nil
+							local pick_up_mul = managers.player:upgrade_value("player", "sentry_kills_refill_ammo", 0.01)
+							success, add_amount = weapon.unit:base():add_ammo(pick_up_mul)
+							picked_up = success or picked_up
+						end
+						
+						if picked_up then
+							player_unit:sound():play(self._pickup_event or "pickup_ammo", nil, true)
+							for id, weapon in pairs(inventory:available_selections()) do
+								managers.hud:set_ammo_amount(id, weapon.unit:base():ammo_info())
+							end
+						end
+					end
+				end
+			end
+			
+		end
+		
+	end
+	
+	return gilza_chk_killshot_orig(self, attacker_unit, variant, headshot, weapon_id)
+end
+
+Hooks:PreHook(CopDamage, "die", "Gilza_itimidated_death_tracker", function(self, attack_data)
+	local is_intimidated_cop = Gilza.intimidated_enemies[self._unit:id()] or false
+	
+	if is_intimidated_cop and attack_data.attacker_unit == managers.player:player_unit() then
+		managers.player._Gilza_menace_kill_tracker = managers.player._Gilza_menace_kill_tracker + 0.2
+		if managers.player._Gilza_menace_kill_tracker >= 4 then
+			managers.player._Gilza_menace_kill_tracker = 4
 		end
 	end
 end)

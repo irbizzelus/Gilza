@@ -35,6 +35,19 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 
 			for _, weapon in ipairs(available_selections) do
 				if not self._weapon_category or self._weapon_category == weapon.unit:base():weapon_tweak_data().categories[1] then
+					
+					-- if we pickup bow/crossbow bolt from enviroment with brawler deck, we only have a chance to get it back
+					if self._pickup_event and (self._pickup_event == "wp_arrow_pick_up" or self._pickup_event == "wp_hunterarrow_pick_up") then
+						if managers.player:has_category_upgrade("player", "extra_ammo_cut") then
+							local rng_win = math.random() <= managers.player:upgrade_value("player", "extra_ammo_cut", 0)
+							if not rng_win then
+								-- no bueno
+								picked_up = true
+								break
+							end
+						end
+					end
+					
 					success, add_amount = weapon.unit:base():add_ammo(1, self._ammo_count)
 					picked_up = success or picked_up
 

@@ -373,12 +373,133 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	self.specializations[j] = speed_junkie_deck
 	Gilza.custom_specialization_indexes.junkie = j
 	
+	-- Guardian perk deck
+	local guardian_deck = {
+		{
+			cost = 200,
+			texture_bundle_folder = "Gilza_guardian",
+			desc_id = "menu_deck_Gilza_guardian_1_desc",
+			short_id = "menu_deck_Gilza_guardian_1_desc_short",
+			name_id = "menu_deck_Gilza_guardian_1",
+			upgrades = {
+				"player_guardian_interaction_speed_penalty",
+				"player_guardian_movement_penalty",
+				"player_guardian_armor_remover",
+				"player_guardian_area_passive",
+				"player_guardian_area_range_1",
+				"player_guardian_area_passive_activation_timer_1",
+				"player_guardian_area_passive_health_regen_1",
+			},
+			icon_xy = {
+				0,
+				0
+			}
+		},
+		deck2,
+		{
+			cost = 400,
+			texture_bundle_folder = "Gilza_guardian",
+			desc_id = "menu_deck_Gilza_guardian_3_desc",
+			short_id = "menu_deck_Gilza_guardian_3_desc_short",
+			name_id = "menu_deck_Gilza_guardian_3",
+			upgrades = {
+				"player_guardian_damage_clamp_inside_1",
+				"player_guardian_damage_clamp_outside_1",
+				"player_passive_health_multiplier_1",
+				"player_passive_health_multiplier_2",
+				"player_passive_health_multiplier_3",
+				"player_passive_health_multiplier_4",
+				"player_passive_health_multiplier_5",
+				"player_guardian_area_passive_health_regen_2",
+			},
+			icon_xy = {
+				1,
+				0
+			}
+		},
+		deck4,
+		{
+			cost = 1000,
+			texture_bundle_folder = "Gilza_guardian",
+			desc_id = "menu_deck_Gilza_guardian_5_desc",
+			short_id = "menu_deck_Gilza_guardian_5_desc_short",
+			name_id = "menu_deck_Gilza_guardian_5",
+			upgrades = {
+				"player_guardian_health_on_kill",
+				"player_passive_health_multiplier_6",
+				"player_guardian_area_passive_health_regen_3",
+				"player_guardian_area_range_2",
+				"player_guardian_reduce_equipment_heal",
+			},
+			icon_xy = {
+				2,
+				0
+			}
+		},
+		deck6,
+		{
+			cost = 2400,
+			texture_bundle_folder = "Gilza_guardian",
+			desc_id = "menu_deck_Gilza_guardian_7_desc",
+			short_id = "menu_deck_Gilza_guardian_7_desc_short",
+			name_id = "menu_deck_Gilza_guardian_7",
+			upgrades = {
+				"player_guardian_heavy_armor_ricochet",
+				"player_guardian_area_passive_activation_timer_2",
+			},
+			icon_xy = {
+				3,
+				0
+			}
+		},
+		deck8,
+		{
+			cost = 4000,
+			texture_bundle_folder = "Gilza_guardian",
+			desc_id = "menu_deck_Gilza_guardian_9_desc",
+			short_id = "menu_deck_Gilza_guardian_9_desc_short",
+			name_id = "menu_deck_Gilza_guardian_9",
+			upgrades = {
+				"player_guardian_auto_ammo_pickup_on_kill",
+				"player_guardian_activate_area_on_kill",
+				"player_guardian_damage_clamp_inside_2",
+				"player_guardian_damage_clamp_outside_2",
+				"player_passive_loot_drop_multiplier"
+			},
+			icon_xy = {
+				0,
+				1
+			}
+		},
+		desc_id = "menu_deck_Gilza_guardian_desc",
+		name_id = "menu_deck_Gilza_guardian",
+		custom = true,
+		custom_id = "Gilza_guardian_perkdeck",
+	}
+
+	-- Guardian
+	j = #self.specializations + 1
+	self.specializations[j] = guardian_deck
+	Gilza.custom_specialization_indexes.guardian = j
+	
 	
 	------------------------------------------------------------------------------------------------------------------------------------------------------
 	-- SKILLS
 	------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	---- MASTERMIND
+	
+	self.skills.combat_medic[2].upgrades = { "player_revive_action_self_heal" }
+	
+	self.skills.triathlete[1].upgrades = { "cable_tie_quantity", "cable_tie_interact_speed_multiplier", "team_damage_hostage_absorption" }
+	self.skills.triathlete[2].upgrades = { "player_convert_enemies_damage_multiplier_1", "player_convert_enemies", "player_convert_enemies_max_minions_1" }
+	
+	self.skills.joker[1].upgrades = { "player_convert_enemies_interaction_speed_multiplier", "player_convert_enemies_damage_multiplier_2" }
+	self.skills.joker[2].upgrades = { "player_convert_enemies_max_minions_2" }
+	
+	self.skills.cable_guy[2].upgrades = { "player_civ_calming_alerts" }
+	
+	self.skills.stockholm_syndrome[1].upgrades = { "player_menace_panic_spread" }
 	
 	self.skills.stable_shot[1].upgrades = { "player_weapon_accuracy_increase_1" }
 	self.skills.stable_shot[2].upgrades = { "player_weapon_accuracy_increase_2" }
@@ -395,7 +516,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	self.skills.shotgun_cqb[2].upgrades = { "shotgun_reload_speed_multiplier_2" }
 	
 	self.skills.shotgun_impact[1].upgrades = { "shotgun_recoil_multiplier_1", "shotgun_enter_steelsight_speed_multiplier" }
-	self.skills.shotgun_impact[2].upgrades = { "shotgun_recoil_multiplier_2" }
+	self.skills.shotgun_impact[2].upgrades = { "shotgun_recoil_multiplier_2", "shotgun_steelsight_accuracy_inc_1" }
 	self.skills.shotgun_impact.icon_xy = { 8, 5 }
 	
 	self.skills.far_away[1].upgrades = { "shotgun_consume_no_ammo_chance_1" }
@@ -408,11 +529,16 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	self.skills.pack_mule[2].upgrades = { "player_sprint_any_bag" }
 	self.skills.pack_mule.icon_xy = { 6, 0 }
 	
+	self.skills.ammo_2x[1].upgrades = { "ammo_bag_ammo_increase1" }
+	self.skills.ammo_2x[2].upgrades = { "ammo_bag_quantity" }
+	
 	self.skills.carbon_blade[2].upgrades = {"saw_ignore_shields_1","saw_panic_when_kill_1","player_saw_ammo_pick_up"}
 	
 	self.skills.bandoliers[2].upgrades = { "player_regain_throwable_from_ammo_2", "player_pick_up_ammo_multiplier", "player_pick_up_ammo_multiplier_2"}
 	
 	---- TECHICIAN
+	
+	self.skills.tower_defense[2].upgrades = { "sentry_gun_quantity_2", "sentry_gun_can_revive", "player_sentry_proximity_damage_resist", "player_sentry_kills_refill_ammo" }
 	
 	self.skills.steady_grip[1].upgrades = { "player_stability_increase_bonus_3" }
 	self.skills.steady_grip[2].upgrades = { "player_stability_increase_bonus_4" }
@@ -425,8 +551,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	
 	---- GHOST
 	
-	self.skills.jail_workout[1].upgrades = { "player_small_loot_multiplier_1", "player_mask_off_pickup" }
-	self.skills.jail_workout[2].upgrades = { "player_additional_assets" }
+	self.skills.jail_workout[1].upgrades = { "player_additional_assets" }
+	self.skills.jail_workout[2].upgrades = { "player_small_loot_multiplier_1", "player_mask_off_pickup" }
 	self.skills.jail_workout.icon_xy = {0,8}
 	
 	self.skills.cleaner[1].upgrades = { "player_corpse_dispose_amount_2", "player_extra_corpse_dispose_amount", "player_cleaner_cost_multiplier" }
@@ -469,6 +595,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	
 	self.skills.up_you_go[2].upgrades = {"player_revived_health_regain_V2"}
 	
+	self.skills.messiah[1].upgrades = {"player_messiah_revive_from_bleed_out_1","player_bleed_out_health_multiplier_2"}
+	
 	self.skills.martial_arts[1].upgrades = {"player_melee_knockdown_mul", "player_melee_shake_reduction_1"}
 	self.skills.martial_arts[2].upgrades = {"player_melee_damage_dampener", "player_melee_shake_reduction_2"}
 	self.skills.martial_arts.icon_xy = { 1, 1 }
@@ -478,6 +606,6 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	self.skills.steroids.icon_xy = { 11, 7 }
 	
 	self.skills.wolverine[1].upgrades = {"player_new_berserk_melee_damage_multiplier_1","player_melee_damage_newzerk_addin"}
-	self.skills.wolverine[2].upgrades = {"player_new_berserk_melee_damage_multiplier_2","player_new_berserk_weapon_damage_multiplier"}
+	self.skills.wolverine[2].upgrades = {"player_new_berserk_weapon_damage_multiplier","player_new_berserk_weapon_damage_multiplier_cooldown"}
 	
 end)

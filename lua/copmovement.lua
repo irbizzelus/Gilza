@@ -3,10 +3,6 @@
 -- enemy is cleared from the list after 4.25 seconds (animation duration + ~1 extra second) and the list is constantly cleared to avoid duplications and other issues
 Hooks:PostHook(CopMovement, "action_request", "Gilza_panic_tracker" , function(self,action_desc)
 	
-	if not managers.player:has_category_upgrade("shotgun", "panic_when_kill") then
-		return
-	end
-	
 	-- still have 0 clue what this prevents, yet im using it :)
 	if self._unit:base().mic_is_being_moved then
 		return
@@ -17,6 +13,22 @@ Hooks:PostHook(CopMovement, "action_request", "Gilza_panic_tracker" , function(s
 	end
 	
 	if self._unit:base():char_tweak().access == "teamAI4" then
+		return
+	end
+	
+	if managers.player:has_category_upgrade("player", "menace_panic_spread") then
+		if action_desc.variant == "tied" or action_desc.variant == "tied_all_in_one" then
+			if not Gilza.intimidated_enemies[self._unit:id()] then
+				Gilza.intimidated_enemies[self._unit:id()] = true
+			end
+		else
+			if Gilza.intimidated_enemies[self._unit:id()] then
+				Gilza.intimidated_enemies[self._unit:id()] = nil
+			end
+		end
+	end
+	
+	if not managers.player:has_category_upgrade("shotgun", "panic_when_kill") then
 		return
 	end
 	

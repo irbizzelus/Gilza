@@ -8,7 +8,7 @@ end)
 -- Completely removes camera recoil compensation for shotguns, semi-auto weapons, and if recoil is high.
 -- Keep compensation if total recoil is not that high, or we fired a 3 or less round burst that doesnt have high recoil
 Hooks:PostHook(FPCameraPlayerBase, "stop_shooting", "GilzaCameraRecoil_stop", function(self, ...)
-	if (self._Gilza_shot_counter <= 3 and self._recoil_kick.accumulated <= 2.5) or self._recoil_kick.accumulated <= 2 then
+	if (self._Gilza_shot_counter <= 3 and self._recoil_kick.accumulated <= 1.75) or self._recoil_kick.accumulated <= 1.5 then
 		self._recoil_kick.to_reduce = self._recoil_kick.accumulated
 		self._recoil_kick.h.to_reduce = self._recoil_kick.h.accumulated
 	else

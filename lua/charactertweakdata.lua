@@ -239,9 +239,9 @@ local function Gilza_set_new_health(self)
 	
 	self.spooc.headshot_dmg_mul = 2.8
 	self.shadow_spooc.headshot_dmg_mul = 2.8
-	self.tank_mini.headshot_dmg_mul = 6.5
-	self.tank_medic.headshot_dmg_mul = 6.5
-	self.tank.headshot_dmg_mul = 6.5
+	self.tank_mini.headshot_dmg_mul = 6
+	self.tank_medic.headshot_dmg_mul = 6
+	self.tank.headshot_dmg_mul = 6
 	self.phalanx_minion.headshot_dmg_mul = 4
 	self.phalanx_vip.headshot_dmg_mul = 4
 	-- this guy has 1x HS mul in base game, so we keepin it, TTK might be a bit faster due to higher overall dmg, but higher base health should compensate it
@@ -258,6 +258,11 @@ local function Gilza_set_new_health(self)
 	self.triad_boss.Gilza_boss_tag = true
 	self.snowman_boss.Gilza_boss_tag = true
 	self.deep_boss.Gilza_boss_tag_deep = true
+	self.tank_hw.Gilza_headless_dozer_tag = true
+	
+	-- headless dozer tag used to reduce their bullet damage. needed to be done this way, because all bodyshot bullet damage in this mod is about 2x higher,
+	-- while bodyshots are about the same. also health can not be altered to avoid fucking with explosive breakpoints too much.
+	self.tank_hw.Gilza_headless_tag = true
 	
 	-- knockdown
 	self.city_swat.damage.hurt_severity = city_swat_hurts

@@ -13,7 +13,7 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 		toothbrush = {class = 2},
 		kabar = {class = 3},
 		swagger = {class = 4},
-		aziz = {class = 3},
+		aziz = {class = 2},
 		clean = {class = 2},
 		spoon_gold = {class = 5},
 		nin = {class = 3},
@@ -125,34 +125,34 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 8
 			elseif stats.class == 2 then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 2
-				self.melee_weapons[tostring(weapon)].stats.max_damage = 3.5
-				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 7
-				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 7
-				self.melee_weapons[tostring(weapon)].stats.charge_time = 1
-			elseif stats.class == 3 then
-				self.melee_weapons[tostring(weapon)].stats.min_damage = 2.5
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 5
 				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 7
 				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 7
-				self.melee_weapons[tostring(weapon)].stats.charge_time = 1.5
+				self.melee_weapons[tostring(weapon)].stats.charge_time = 0.75
+			elseif stats.class == 3 then
+				self.melee_weapons[tostring(weapon)].stats.min_damage = 2.5
+				self.melee_weapons[tostring(weapon)].stats.max_damage = 7
+				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 7
+				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 7
+				self.melee_weapons[tostring(weapon)].stats.charge_time = 1.25
 			elseif stats.class == 4 then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 3.5
-				self.melee_weapons[tostring(weapon)].stats.max_damage = 7.5
+				self.melee_weapons[tostring(weapon)].stats.max_damage = 9
+				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 7
+				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 7
+				self.melee_weapons[tostring(weapon)].stats.charge_time = 1.9
+			elseif stats.class == 5 then
+				self.melee_weapons[tostring(weapon)].stats.min_damage = 5
+				self.melee_weapons[tostring(weapon)].stats.max_damage = 14
 				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 7
 				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 7
 				self.melee_weapons[tostring(weapon)].stats.charge_time = 2.5
-			elseif stats.class == 5 then
-				self.melee_weapons[tostring(weapon)].stats.min_damage = 5
-				self.melee_weapons[tostring(weapon)].stats.max_damage = 10
+			elseif stats.class == 6 then
+				self.melee_weapons[tostring(weapon)].stats.min_damage = 7.5
+				self.melee_weapons[tostring(weapon)].stats.max_damage = 25
 				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 7
 				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 7
 				self.melee_weapons[tostring(weapon)].stats.charge_time = 3.5
-			elseif stats.class == 6 then
-				self.melee_weapons[tostring(weapon)].stats.min_damage = 7.5
-				self.melee_weapons[tostring(weapon)].stats.max_damage = 15
-				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 7
-				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 7
-				self.melee_weapons[tostring(weapon)].stats.charge_time = 4.5
 			elseif stats.class == "tazer" then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 0.5
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 1
@@ -164,7 +164,7 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 3.5
 				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 1
 				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 1
-				self.melee_weapons[tostring(weapon)].stats.charge_time = 2
+				self.melee_weapons[tostring(weapon)].stats.charge_time = 1.25
 			end
 			self.melee_weapons[tostring(weapon)].sounds.charge = nil
 		end

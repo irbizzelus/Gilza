@@ -92,10 +92,10 @@ function Gilza.applyCustomAR_stats(id)
 	-- adjust damage profiles and ammo pick up based on weapons damage (after dmg increase in the init function above)
 	-- if AR has lower then 115 dmg(so, lower then ~57 in vanilla values), only apply changes to pick up, considering that the range of breakpoints down there is way to big, let whatever stats work
 	
-	local avg_120_pickup = 6.89
-	local avg_155_pickup = 4.76
-	local avg_250_pickup = 2.63
-	local avg_450_pickup = 1.62
+	local avg_120_pickup = 6.92
+	local avg_155_pickup = 4.7
+	local avg_250_pickup = 2.56
+	local avg_450_pickup = 1.45
 	
 	local custom_ARs_with_GL = {
 		"g3hk79",
@@ -111,7 +111,7 @@ function Gilza.applyCustomAR_stats(id)
 	
 	-- light AR's
 	if tweak_data.weapon[id].stats.damage >= 115 and tweak_data.weapon[id].stats.damage <= 143 then
-		tweak_data.weapon[id].stats.damage = 120
+		tweak_data.weapon[id].stats.damage = 125
 		tweak_data.weapon[id].AMMO_PICKUP = {(avg_120_pickup * 0.9) / 1.35,(avg_120_pickup * 1.1) / 1.35}
 		dmg_type = "105"
 	-- low mid AR's
@@ -440,9 +440,9 @@ function Gilza.applyCustomAR_stats(id)
 	-- set new recoil
 	local AR_recoil = {
 		v_base = 0.7,
-		v_deviation = 0.75,
-		h_base = 0.8,
-		h_deviation = 0.25
+		v_deviation = 1.8,
+		h_base = 0.65,
+		h_deviation = 0.65
 	}
 	
 	local function set_new_weapon_recoil(weapon, recoil_data)
@@ -489,10 +489,10 @@ function Gilza.applyCustomSMG_stats(id)
 
 	table.insert(customWeaponsUpdated.Sub_Machine_guns, id)
 	
-	local avg_95_pickup = 7.88
-	local avg_120_pickup = 6.89
+	local avg_95_pickup = 8.28
+	local avg_120_pickup = 6.09
 	local avg_155_pickup = 4.76
-	local avg_250_pickup = 2.63
+	local avg_250_pickup = 2.56
 	
 	-- same as with AR's
 	local dmg_type = "nil"
@@ -509,7 +509,7 @@ function Gilza.applyCustomSMG_stats(id)
 		tweak_data.weapon[id].AMMO_PICKUP = {((avg_95_pickup * 0.9) / 1.35) * secondary_mul,((avg_95_pickup * 1.1) / 1.35) * secondary_mul}
 		dmg_type = "95"
 	elseif tweak_data.weapon[id].stats.damage >= 125 and tweak_data.weapon[id].stats.damage <= 149 then
-		tweak_data.weapon[id].stats.damage = 120
+		tweak_data.weapon[id].stats.damage = 125
 		tweak_data.weapon[id].AMMO_PICKUP = {((avg_120_pickup * 0.9) / 1.35) * secondary_mul,((avg_120_pickup * 1.1) / 1.35) * secondary_mul}
 		dmg_type = "105"
 	elseif tweak_data.weapon[id].stats.damage >= 150 and tweak_data.weapon[id].stats.damage <= 179 then
@@ -852,10 +852,10 @@ function Gilza.applyCustomSMG_stats(id)
 	
 	-- set new recoil
 	local SMG_recoil = {
-		v_base = 0.4,
-		v_deviation = 0.9,
-		h_base = 0.55,
-		h_deviation = 0.6
+		v_base = 0.75,
+		v_deviation = 1.3,
+		h_base = 0.9,
+		h_deviation = 1.1
 	}
 	
 	local function set_new_weapon_recoil(weapon, recoil_data)
@@ -902,12 +902,12 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 
 	table.insert(customWeaponsUpdated.Pistols, id)
 	
-	local avg_88_pickup = 6.8
-	local avg_95_pickup = 6.48
-	local avg_120_pickup = 5.67
-	local avg_155_pickup = 3.59
-	local avg_250_pickup = 2.16
-	local avg_450_pickup = 1.44
+	local avg_88_pickup = 9.7
+	local avg_95_pickup = 8.6
+	local avg_120_pickup = 5.9
+	local avg_155_pickup = 4.01
+	local avg_250_pickup = 1.95
+	local avg_450_pickup = 0.9
 	
 	local isActuallyRevolver = false
 	if tweak_data.weapon[id].CLIP_AMMO_MAX <= 8 then
@@ -925,7 +925,7 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 		tweak_data.weapon[id].stats.damage = 95
 		tweak_data.weapon[id].AMMO_PICKUP = {((avg_95_pickup * 0.9) / 1.35) * secondary_mul,((avg_95_pickup * 1.1) / 1.35) * secondary_mul}
 	elseif tweak_data.weapon[id].stats.damage >= 125 and tweak_data.weapon[id].stats.damage <= 150 then
-		tweak_data.weapon[id].stats.damage = 120
+		tweak_data.weapon[id].stats.damage = 125
 		tweak_data.weapon[id].AMMO_PICKUP = {((avg_120_pickup * 0.9) / 1.35) * secondary_mul,((avg_120_pickup * 1.1) / 1.35) * secondary_mul}
 	elseif tweak_data.weapon[id].stats.damage >= 151 and tweak_data.weapon[id].stats.damage <= 219 then
 		tweak_data.weapon[id].stats.damage = 155
@@ -992,16 +992,16 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 	
 	-- set new recoil
 	local SMG_recoil = {
-		v_base = 0.4,
-		v_deviation = 0.9,
-		h_base = 0.55,
-		h_deviation = 0.6
+		v_base = 0.75,
+		v_deviation = 1.3,
+		h_base = 0.9,
+		h_deviation = 1.1
 	}
 	local Pistol_recoil = {
-		v_base = 0.1,
-		v_deviation = 1,
-		h_base = 0.2,
-		h_deviation = 1
+		v_base = 0.2,
+		v_deviation = 2.2,
+		h_base = 0.3,
+		h_deviation = 2.8
 	}
 	
 	local function set_new_weapon_recoil(weapon, recoil_data)
@@ -1053,14 +1053,14 @@ function Gilza.applyCustomLMG_stats(id)
 
 	table.insert(customWeaponsUpdated.Light_Machine_guns, id)
 	
-	local avg_250_pickup = 3.29
-	local avg_155_pickup = 5.95
-	local avg_120_pickup = 8.61
+	local avg_250_pickup = 3.4
+	local avg_155_pickup = 6.25
+	local avg_120_pickup = 9.2
 	
 	local dmg_type = "nil"
 	
 	if tweak_data.weapon[id].stats.damage >= 115 and tweak_data.weapon[id].stats.damage < 144 then
-		tweak_data.weapon[id].stats.damage = 120
+		tweak_data.weapon[id].stats.damage = 125
 		tweak_data.weapon[id].AMMO_PICKUP = {(avg_120_pickup * 0.9) / 1.35,(avg_120_pickup * 1.1) / 1.35}
 		dmg_type = "105"
 	elseif tweak_data.weapon[id].stats.damage >= 145 and tweak_data.weapon[id].stats.damage < 229 then
@@ -1088,10 +1088,10 @@ function Gilza.applyCustomLMG_stats(id)
 
 	-- set new recoil
 	local LMG_recoil = {
-		v_base = 0.85,
-		v_deviation = 0.65,
-		h_base = 0.75,
-		h_deviation = 0.4
+		v_base = 1.3,
+		v_deviation = 1.4,
+		h_base = 1.2,
+		h_deviation = 0.75
 	}
 	
 	local function set_new_weapon_recoil(weapon, recoil_data)
@@ -1141,10 +1141,10 @@ function Gilza.applyCustomSNIPER_stats(id)
 	Gilza.customSnipersToUpdateScopesFor = Gilza.customSnipersToUpdateScopesFor or {}
 	table.insert(Gilza.customSnipersToUpdateScopesFor, id)
 	
-	local sniper_SA_avg_pickup = 0.8
-	local sniper_LA_avg_pickup = 0.74
-	local sniper_BA_avg_pickup = 0.64
-	local sniper_BAH_avg_pickup = 0.57
+	local sniper_SA_avg_pickup = 0.75
+	local sniper_LA_avg_pickup = 0.7
+	local sniper_BA_avg_pickup = 0.65
+	local sniper_BAH_avg_pickup = 0.55
 	
 	if tweak_data.weapon[id].stats_modifiers then
 		if tweak_data.weapon[id].stats_modifiers.damage then
@@ -1236,10 +1236,10 @@ function Gilza.applyCustomSNIPER_stats(id)
 	
 	-- set new recoil
 	local Sniper_recoil = {
-		v_base = 0.7,
-		v_deviation = 1.2,
-		h_base = 0.1,
-		h_deviation = 0.9
+		v_base = 1.8,
+		v_deviation = 1.8,
+		h_base = 0.3,
+		h_deviation = 0.5
 	}
 	
 	local function set_new_weapon_recoil(weapon, recoil_data)
@@ -1286,10 +1286,10 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 
 	table.insert(customWeaponsUpdated.Shotguns, id)
 	
-	local avg_1000_pickup = 0.65
-	local avg_450_pickup = 0.87
-	local avg_310_pickup = 1.77
-	local avg_110_pickup = 5.78
+	local avg_1000_pickup = 0.67
+	local avg_450_pickup = 0.77
+	local avg_310_pickup = 1.25
+	local avg_110_pickup = 2.33
 	
 	if tweak_data.weapon[id].stats_modifiers then
 		if tweak_data.weapon[id].stats_modifiers.damage then
@@ -1338,12 +1338,12 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 	end
 	
 	if category == 1 then
-		tweak_data.weapon[id].stats.damage = 100
+		tweak_data.weapon[id].stats.damage = 155
 		tweak_data.weapon[id].damage_falloff = {
 			optimal_distance = 0,
-			optimal_range = 1000,
+			optimal_range = 800,
 			near_falloff = 0,
-			far_falloff = 1000,
+			far_falloff = 800,
 			near_multiplier = 1,
 			far_multiplier = 0.5
 		}
@@ -1357,9 +1357,9 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 		tweak_data.weapon[id].stats.damage = 325
 		tweak_data.weapon[id].damage_falloff = {
 			optimal_distance = 0,
-			optimal_range = 1250,
+			optimal_range = 1000,
 			near_falloff = 0,
-			far_falloff = 1000,
+			far_falloff = 900,
 			near_multiplier = 1,
 			far_multiplier = 0.5
 		}
@@ -1373,7 +1373,7 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 		tweak_data.weapon[id].stats.damage = 450
 		tweak_data.weapon[id].damage_falloff = {
 			optimal_distance = 0,
-			optimal_range = 1500,
+			optimal_range = 1200,
 			near_falloff = 0,
 			far_falloff = 1000,
 			near_multiplier = 1,
@@ -1386,10 +1386,10 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 			tweak_data.weapon[id].AMMO_PICKUP = {((avg_450_pickup * 0.9) / 1.35) * secondary_mul,((avg_450_pickup * 1.1) / 1.35) * secondary_mul}
 		end
 	elseif category == 4 then
-		tweak_data.weapon[id].stats.damage = 1250
+		tweak_data.weapon[id].stats.damage = 900
 		tweak_data.weapon[id].damage_falloff = {
 			optimal_distance = 0,
-			optimal_range = 1850,
+			optimal_range = 1400,
 			near_falloff = 0,
 			far_falloff = 1000,
 			near_multiplier = 1,
@@ -1403,7 +1403,7 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 		end
 	elseif category == 5 then
 		local dmg = tweak_data.weapon[id].stats.damage
-		local weapon_avg_pickup = (((math.ceil(250/dmg) + math.ceil(450/dmg))/0.4)/2)*0.65
+		local weapon_avg_pickup = (((math.ceil(250/dmg) + math.ceil(450/dmg))/0.95)/2)*0.65
 		if secondary == false then
 			tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9) / 1.35,(weapon_avg_pickup * 1.1) / 1.35}
 		else
@@ -1418,51 +1418,52 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 		damage_near_mul = 1,
 		bullet_class = "InstantExplosiveBulletBase",
 		rays = 1,
-		ammo_pickup_max_mul = 0.35,
-		ammo_pickup_min_mul = 0.35
+		ammo_pickup_max_mul = 0.45,
+		ammo_pickup_min_mul = 0.45
 	}
 	local FAHEstats = {
 		value = 5,
-		total_ammo_mod = -10,
-		damage = 120,
+		total_ammo_mod = -6.66,
+		damage = 186,
 		recoil = -8
 	}
 	local SAHEstats = {
 		value = 5,
-		total_ammo_mod = -10,
+		total_ammo_mod = -6.66,
 		damage = 400,
 		recoil = -8
 	}
 	local PAHEstats = {
 		value = 5,
-		total_ammo_mod = -10,
+		total_ammo_mod = -6.66,
 		damage = 550,
 		recoil = -8
 	}
 	local DBHEstats = {
 		value = 5,
-		total_ammo_mod = -10,
-		damage = 1100,
+		total_ammo_mod = -6.66,
+		damage = 1050,
 		recoil = -8
 	}
 	local ultraHEstats = {
 		value = 5,
-		total_ammo_mod = -10,
+		total_ammo_mod = -6.66,
 		damage = tweak_data.weapon[id].stats.damage * 1.1,
 		recoil = -8
 	}
 	
 	local BS_custom_stats = {
-		damage_far_mul = 0.8,
-		damage_near_mul = 0.8,
-		ammo_pickup_max_mul = 0.5,
-		ammo_pickup_min_mul = 0.5,
+		damage_far_mul = 0.75,
+		damage_near_mul = 0.75,
+		armor_piercing_add = 1,
+		ammo_pickup_max_mul = 0.85,
+		ammo_pickup_min_mul = 0.85,
 		is_buckshot = true,
-		rays = 8
+		rays = 12
 	}
 	local FABS_stats = {
 		total_ammo_mod = -5,
-		damage = 100
+		damage = 155
 	}
 	local SABS_stats = {
 		total_ammo_mod = -5,
@@ -1474,11 +1475,11 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 	}
 	local DBBS_stats = {
 		total_ammo_mod = -5,
-		damage = 1000
+		damage = 900
 	}
 	local ultraBS_stats = {
 		total_ammo_mod = -5,
-		damage = tweak_data.weapon[id].stats.damage * 1.1
+		damage = tweak_data.weapon[id].stats.damage
 	}
 
 	local wpn_factory_id = managers.weapon_factory:get_factory_id_by_weapon_id(id)
@@ -1507,10 +1508,10 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 	
 	-- set new recoil
 	local Shotgun_recoil = {
-		v_base = 1,
-		v_deviation = 1.5,
+		v_base = 2.3,
+		v_deviation = 2.3,
 		h_base = 0.6,
-		h_deviation = 0.8
+		h_deviation = 1.6
 	}
 	
 	local function set_new_weapon_recoil(weapon, recoil_data)
@@ -1561,28 +1562,28 @@ function Gilza.applyCustomMELEE_stats()
 			table.insert(customWeaponsUpdated.Melee, melee)
 			if stats.repeat_expire_t <= 0.35 then
 				tweak_data.blackmarket.melee_weapons[melee].stats.min_damage = 2
-				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 3.5
+				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 5
 				tweak_data.blackmarket.melee_weapons[melee].stats.min_damage_effect = 7
 				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage_effect = 7
 			elseif stats.repeat_expire_t <= 0.65 then
 				tweak_data.blackmarket.melee_weapons[melee].stats.min_damage = 2.5
-				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 5
+				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 7
 				tweak_data.blackmarket.melee_weapons[melee].stats.min_damage_effect = 7
 				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage_effect = 7
 			elseif stats.repeat_expire_t <= 1 then
 				tweak_data.blackmarket.melee_weapons[melee].stats.min_damage = 3.5
-				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 7.5
+				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 9
 				tweak_data.blackmarket.melee_weapons[melee].stats.min_damage_effect = 7
 				tweak_data.blackmarket.melee_weapons[melee].stats.max_damage_effect = 7
 			elseif stats.repeat_expire_t > 1 then
 				if stats.melee_damage_delay <= 0.35 then
 					tweak_data.blackmarket.melee_weapons[melee].stats.min_damage = 5
-					tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 10
+					tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 14
 					tweak_data.blackmarket.melee_weapons[melee].stats.min_damage_effect = 7
 					tweak_data.blackmarket.melee_weapons[melee].stats.max_damage_effect = 7
 				elseif stats.melee_damage_delay > 0.35 then
 					tweak_data.blackmarket.melee_weapons[melee].stats.min_damage = 7.5
-					tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 15
+					tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 25
 					tweak_data.blackmarket.melee_weapons[melee].stats.min_damage_effect = 7
 					tweak_data.blackmarket.melee_weapons[melee].stats.max_damage_effect = 7
 				end

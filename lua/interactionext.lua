@@ -12,8 +12,8 @@ Hooks:OverrideFunction(BaseInteractionExt, "_get_timer", function (self)
 		multiplier = multiplier * managers.player:crew_ability_upgrade_value("crew_interact", 1)
 	end
 	
-	-- junkie perk
 	if self.tweak_data ~= "corpse_alarm_pager" and self.tweak_data ~= "revive" then
+		-- junkie perk
 		if managers.player:has_category_upgrade("player", "speed_junkie_meter_boost_agility") then
 			local counter = managers.player._Gilza_junkie_counter or 0
 			local skill = managers.player:upgrade_value("player", "speed_junkie_meter_boost_agility")
@@ -21,6 +21,10 @@ Hooks:OverrideFunction(BaseInteractionExt, "_get_timer", function (self)
 				local mul = 1 - (skill.interaction - 1) * (counter / 100)
 				multiplier = multiplier * mul
 			end	
+		end
+		-- guardian perk
+		if managers.player:has_category_upgrade("player", "guardian_interaction_speed_penalty") then
+			multiplier = multiplier * managers.player:upgrade_value("player", "guardian_interaction_speed_penalty", 1)
 		end
 	end
 
@@ -41,4 +45,33 @@ Hooks:OverrideFunction(BaseInteractionExt, "_get_timer", function (self)
 	end
 
 	return self:_timer_value() * multiplier * managers.player:toolset_value()
+end)
+
+-- new tower defense aced
+Hooks:PostHook(SentryGunInteractionExt, "_on_death_event", "Gilza_sentry_revive", function (self)
+	if self:is_owner() and managers.player:has_category_upgrade("sentry_gun", "can_revive") then
+		self:set_active(true)
+		self:set_tweak_data("sentry_gun_revive")
+		
+		if not managers.player.owned_broken_sentries then
+			managers.player.owned_broken_sentries = {}
+		end
+		managers.player.owned_broken_sentries[self._unit:id()] = true
+	end
+end)
+
+-- new combat medic aced
+Hooks:PostHook(ReviveInteractionExt, "interact", "Gilza_post_revive", function (self,reviving_unit)
+	if reviving_unit and reviving_unit == managers.player:player_unit() and managers.player:has_category_upgrade("player", "revive_action_self_heal") then
+		local stoic = managers.player:has_category_upgrade("player", "armor_to_health_conversion")
+		local guardian = managers.player:has_category_upgrade("player", "guardian_armor_remover")
+		local player_dmg = managers.player:player_unit():character_damage()
+		if stoic or guardian then -- health
+			local heal = managers.player:upgrade_value("player", "revive_action_self_heal", 0) * player_dmg:_max_health()
+			player_dmg:restore_health(heal, true)
+		else -- armor
+			local armor = managers.player:upgrade_value("player", "revive_action_self_heal", 0) * player_dmg:_max_armor()
+			player_dmg:restore_armor(armor)
+		end
+	end
 end)
