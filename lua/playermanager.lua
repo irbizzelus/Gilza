@@ -785,3 +785,50 @@ Hooks:PostHook(PlayerManager, "on_enter_custody", "Gilza_on_enter_custody", func
 		self._Gilza_menace_kill_tracker = 0
 	end
 end)
+
+-- if we deal damage, delay maniac's decay by it's decay interval
+Hooks:PreHook(PlayerManager, "_update_damage_dealt", "Gilza_pre_update_damage_dealt", function(self, t, dt)
+	if self._damage_dealt_to_cops_recently and self._damage_dealt_to_cops_recently > 0 then
+		self._damage_dealt_to_cops_decay_t = t + (tweak_data.upgrades.cocaine_stacks_decay_t or 5)
+		self._damage_dealt_to_cops_recently = 0
+	end
+end)
+
+-- grab latest damage for maniac changes
+Hooks:PostHook(PlayerManager, "_check_damage_to_cops", "Gilza_post_check_damage_to_cops", function(self, t, unit, damage_info)
+	local player_unit = self:player_unit()
+
+	if alive(player_unit) and not player_unit:character_damage():need_revive() and player_unit:character_damage():dead() then
+		-- Nothing
+	end
+
+	if not alive(unit) or not unit:base() or not damage_info then
+		return
+	end
+
+	if CopDamage.is_civilian(unit:base()._tweak_table) then
+		return
+	end
+	
+	self._damage_dealt_to_cops_recently = 0 + (damage_info.damage or 0)
+end)
+
+-- adds absorption for 9th maniac card on DS
+function PlayerManager:damage_absorption()
+	local total = 0
+
+	for _, absorption in pairs(self._damage_absorption) do
+		total = total + Application:digest_value(absorption, false)
+	end
+
+	-- add more absorption for maniac on DS
+	local diff_mul = 1
+	if managers.player:has_category_upgrade("player", "cocaine_stack_absorption_multiplier") and Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+		diff_mul = 1.5
+	end
+
+	total = total + (self:get_best_cocaine_damage_absorption(managers.network:session():local_peer():id()) * diff_mul)
+	total = managers.modifiers:modify_value("PlayerManager:GetDamageAbsorption", total)
+
+	return total
+end

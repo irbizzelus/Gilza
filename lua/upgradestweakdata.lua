@@ -471,6 +471,15 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				30
 			}
 		}
+		-- maniac
+		self.max_cocaine_stacks_per_tick = 80
+		self.cocaine_stacks_tick_t = 1
+		self.cocaine_stacks_decay_t = 2
+		self.cocaine_stacks_decay_amount_per_tick = 100
+		self.cocaine_stacks_decay_percentage_per_tick = 0.1
+		
+		
+		---- CUSTOM DECKS
 		---- Brawler deck stuff
 		-- why make new code that makes more sense, when old code will do?
 		self.values.player.perk_armor_regen_timer_multiplier = {
