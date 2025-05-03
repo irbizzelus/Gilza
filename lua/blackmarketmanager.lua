@@ -32,16 +32,6 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_addend", function (self, na
 				end	
 			end
 		end
-		
-		-- 28 points of inaccuracy for all weapon types if firing in full auto
-		if fire_mode ~= "single" then
-			index = index - 7
-		end
-		
-		-- 28 points of inaccuracy for hipfire, unless we have new skill
-		if current_state and not current_state:in_steelsight() then
-			index = index - managers.player:upgrade_value("player", "hipfire_no_accuracy_penalty", 7)
-		end
 
 		if silencer then
 			index = index + managers.player:upgrade_value("weapon", "silencer_spread_index_addend", 0)
@@ -100,8 +90,12 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 	end
 	
 	-- 28 points of inaccuracy for all weapon types if firing in full auto
-	if fire_mode ~= "single" then
-		index = index - 7
+	if fire_mode and fire_mode ~= "single" then
+		if managers.player:current_state() == "bipod" then
+			-- ignored
+		else
+			index = index - 7
+		end
 	end
 	
 	-- 28 points of inaccuracy for hipfire, unless we have new skill

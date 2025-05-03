@@ -597,8 +597,8 @@ function CopDamage:chk_killshot(attacker_unit, variant, headshot, weapon_id)
 			-- guardian health on kill
 			if managers.player:has_category_upgrade("player", "guardian_health_on_kill") and alive(player_unit) and managers.player:Gilza_is_player_in_guardian_zone() then
 				local diff_mul = 1
-				if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty ~= "sm_wish" then
-					diff_mul = 3
+				if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+					diff_mul = 2
 				end
 				local heal = managers.player:upgrade_value("player", "guardian_health_on_kill", 0) * diff_mul
 				player_unit:character_damage():restore_health(heal, true)

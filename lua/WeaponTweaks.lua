@@ -1009,7 +1009,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		local avg_155_pickup = 6.25
 		local avg_120_pickup = 9.2
 		-- m60
-		local avg_375_pickup = 2.72 -- avg_250_pickup * 0.8
+		local avg_325_pickup = 2.72 -- avg_250_pickup * 0.8
 		
 		local new_lmg_damage_falloff = {
 			optimal_distance = 150,
@@ -1067,8 +1067,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.rpk.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.rpk.stats.damage = 250
 		
-		self.m60.stats.damage = 375
-		self.m60.AMMO_PICKUP = {(avg_375_pickup * 0.9) / 1.35,(avg_375_pickup * 1.1) / 1.35}
+		self.m60.stats.damage = 325
+		self.m60.AMMO_PICKUP = {(avg_325_pickup * 0.9) / 1.35,(avg_325_pickup * 1.1) / 1.35}
 		self.m60.CLIP_AMMO_MAX = 150
 		self.m60.NR_CLIPS_MAX = 2
 		self.m60.AMMO_MAX = self.m60.CLIP_AMMO_MAX * self.m60.NR_CLIPS_MAX

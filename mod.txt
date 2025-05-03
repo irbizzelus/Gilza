@@ -3,7 +3,7 @@
 	"description" : "Weapons, skills and perks rebalance.",
 	"author" : "irbizzelus",
 	"contact" : "Steam profile link is on my modworkshop account",
-	"version" : "2.4.01",
+	"version" : "2.4.10",
 	"color" : "0 204 193",
 	"blt_version" : 2,
 	"priority" : 19,
