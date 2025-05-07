@@ -477,6 +477,38 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		self.cocaine_stacks_decay_t = 2
 		self.cocaine_stacks_decay_amount_per_tick = 100
 		self.cocaine_stacks_decay_percentage_per_tick = 0.1
+		-- ex-president
+		-- new 9th card
+		self.values.player.store_armor_recovery_bonus_timer = {
+			1
+		}
+		-- new 9th card
+		self.values.player.body_armor.skill_store_armor_recovery_bonus_timer = {
+			0.26,
+			0.22,
+			0.20,
+			0.18,
+			0.12,
+			0.1,
+			0.05
+		}
+		-- basic armor storage value - buffed ICTV
+		self.values.player.body_armor.skill_max_health_store = {
+			10,
+			9,
+			8.5,
+			8,
+			7.25,
+			6.5,
+			3.5
+		}
+		-- new 5th card bonus
+		self.values.player.static_dodge_chance = {
+			0.2
+		}
+		self.values.player.armor_health_store_shield = {
+			1.5
+		}
 		
 		
 		---- CUSTOM DECKS
@@ -1001,6 +1033,34 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 		upgrade = {
 			value = 2,
 			upgrade = "increased_pickup_area",
+			category = "player"
+		}
+	}
+	-- ex-president
+	self.definitions.player_store_armor_recovery_bonus_timer = {
+		name_id = "menu_player_store_armor_recovery_bonus_timer",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "store_armor_recovery_bonus_timer",
+			category = "player"
+		}
+	}
+	self.definitions.player_static_dodge_chance = {
+		name_id = "menu_player_static_dodge_chance",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "static_dodge_chance",
+			category = "player"
+		}
+	}
+	self.definitions.player_armor_health_store_shield = {
+		name_id = "menu_player_armor_health_store_shield",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "armor_health_store_shield",
 			category = "player"
 		}
 	}

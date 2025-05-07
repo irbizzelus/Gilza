@@ -585,6 +585,9 @@ Hooks:OverrideFunction(PlayerManager, "skill_dodge_chance", function (self, runn
 		local junkie_adds_dodge = self._Gilza_junkie_counter / 100 * 0.4 -- up to 40% dodge max
 		result = result + junkie_adds_dodge
 	end
+	if managers.player:has_category_upgrade("player", "static_dodge_chance") then
+		result = managers.player:upgrade_value("player", "static_dodge_chance", 0)
+	end
 	return result
 end)
 
@@ -831,4 +834,43 @@ function PlayerManager:damage_absorption()
 	total = managers.modifiers:modify_value("PlayerManager:GetDamageAbsorption", total)
 
 	return total
+end
+
+-- grab armor regen charge on kill for ex-president new 9th card
+Hooks:PostHook(PlayerManager, "chk_store_armor_health_kill_counter", "Gilza_post_chk_store_armor_health_kill_counter", function(self, killed_unit, variant)
+	local player_unit = self:player_unit()
+
+	if not player_unit then
+		return
+	end
+
+	if CopDamage.is_civilian(killed_unit:base()._tweak_table) then
+		return
+	end
+	
+	if self:has_category_upgrade("player", "store_armor_recovery_bonus_timer") then
+		self._gilza_armor_regen_bonus_timer_on_kill = (self._gilza_armor_regen_bonus_timer_on_kill or 0) - managers.player:body_armor_value("skill_store_armor_recovery_bonus_timer", nil, 0)
+	end
+end)
+
+-- returns armor stats. if we have static dodge, always return dodge stat as 0
+local gilza_orig_pm_body_armor_value = PlayerManager.body_armor_value
+function PlayerManager:body_armor_value(category, override_value, default)
+	if category == "dodge" then
+		if managers.player:has_category_upgrade("player", "static_dodge_chance") then
+			return 0
+		else
+			return gilza_orig_pm_body_armor_value(self, category, override_value, default)
+		end
+	else
+		return gilza_orig_pm_body_armor_value(self, category, override_value, default)
+	end
+end
+
+function PlayerManager:Gilza_new_armor_regen_bonus_timer_on_kill()
+	return self._gilza_armor_regen_bonus_timer_on_kill or 0
+end
+
+function PlayerManager:Gilza_new_armor_regen_bonus_timer_on_kill_reset()
+	self._gilza_armor_regen_bonus_timer_on_kill = 0
 end

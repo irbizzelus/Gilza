@@ -170,6 +170,25 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 	end
 	Gambler_updates()
 	
+	-- Ex-president
+	local function Ex_pres_updates()
+		self.specializations[13][5].upgrades = {
+			"player_armor_max_health_store_multiplier",
+			"player_passive_health_multiplier_2",
+			"player_static_dodge_chance",
+		}
+		self.specializations[13][7].upgrades = {
+			"player_armor_health_store_amount_3",
+			"player_passive_health_multiplier_3",
+			"player_armor_health_store_shield",
+		}
+		self.specializations[13][9].upgrades = {
+			"player_passive_loot_drop_multiplier",
+			"player_store_armor_recovery_bonus_timer"
+		}
+	end
+	Ex_pres_updates()
+	
 	-- Brawler perk deck
 	local brawler_deck = {
 		{

@@ -565,6 +565,13 @@ Hooks:OverrideFunction(PlayerDamage, "set_regenerate_timer_to_max", function (se
 		self._current_state = self._update_regenerate_timer
 	else
 		orig_timer_to_max(self)
+		-- if we have new 9th card from ex-president, on taking damage, reduce armor regen timer, based on amount of kills
+		-- but never reduce it beyond a specified timer
+		if managers.player:has_category_upgrade("player", "store_armor_recovery_bonus_timer") then
+			if self._regenerate_timer + managers.player:Gilza_new_armor_regen_bonus_timer_on_kill() >= 0.25 then
+				self._regenerate_timer = self._regenerate_timer + managers.player:Gilza_new_armor_regen_bonus_timer_on_kill()
+			end
+		end
 	end
 end)
 
@@ -593,6 +600,22 @@ Hooks:OverrideFunction(PlayerDamage, "_calc_health_damage", function (self, atta
 
 	if managers.player:has_activate_temporary_upgrade("temporary", "mrwi_health_invulnerable") then
 		return 0
+	end
+	
+	-- new ex-pres card #7 bonus. if we have any amount of stacks and we take health damage, stacks will "armor gate" incoming damage. stacks take increased damage.
+	if managers.player:has_category_upgrade("player", "armor_health_store_shield") and not (self:get_real_armor() > 0) and attack_data.damage > 0 then
+		if self._armor_stored_health > 0 then
+			local dmg_to_stacks = attack_data.damage * managers.player:upgrade_value("player", "armor_health_store_shield", 1)
+			if self._armor_stored_health - dmg_to_stacks <= 0 then
+				self._armor_stored_health = 0
+				self:update_armor_stored_health()
+				return 0
+			else
+				self._armor_stored_health = self._armor_stored_health - dmg_to_stacks
+				self:update_armor_stored_health()
+				return 0
+			end
+		end
 	end
 	
 	if self._has_mrwi_health_invulnerable then
@@ -756,3 +779,8 @@ function PlayerDamage:_update_armor_hud(t, dt)
 		self._hurt_value = math.min(1, self._hurt_value + dt)
 	end
 end
+
+-- when armor fully regens by any means, reset ex-president's 9th card bonus timer to 0
+Hooks:PostHook(PlayerDamage, "_regenerate_armor", "Gilza_pre_regenerate_armor", function(self, no_sound)
+	managers.player:Gilza_new_armor_regen_bonus_timer_on_kill_reset()
+end)
