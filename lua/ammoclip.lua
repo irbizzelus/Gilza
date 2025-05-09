@@ -74,42 +74,94 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 				local restored_health = nil
 
 				if not unit:character_damage():is_downed() and player_manager:has_category_upgrade("temporary", "loose_ammo_restore_health") and not player_manager:has_activate_temporary_upgrade("temporary", "loose_ammo_restore_health") then
+					
+					local heal_gamble = {effect = "nothing", jackpot = false}
+					if player_manager:has_category_upgrade("player", "loose_ammo_restore_health_chances") then
+						local skill = player_manager:upgrade_value("player", "loose_ammo_restore_health_chances")
+						if skill and type(skill) ~= "number" then
+							local gamble_initial = math.random()
+							if gamble_initial <= skill.addition_chance then
+								heal_gamble.effect = "add"
+								if math.random() <= skill.addition_jackpot_chance then
+									heal_gamble.jackpot = true
+								end
+							else
+								if (1 - gamble_initial) <= skill.removal_chance then
+									heal_gamble.effect = "remove"
+									if math.random() <= skill.removal_jackpot_chance then
+										heal_gamble.jackpot = true
+									end
+								end
+							end
+						end	
+					end
+					
 					player_manager:activate_temporary_upgrade("temporary", "loose_ammo_restore_health")
+					player_manager:Gilza_new_gambler_triggered(heal_gamble)
+					
+					if heal_gamble.effect ~= "nothing" then
+						
+						local values = player_manager:temporary_upgrade_value("temporary", "loose_ammo_restore_health", 0)
 
-					local values = player_manager:temporary_upgrade_value("temporary", "loose_ammo_restore_health", 0)
+						if values ~= 0 then
+							local restore_value = math.random(values[1], values[2])
+							
+							local allow_sync = true
+							if heal_gamble.effect == "remove" then
+								allow_sync = false
+								restore_value = restore_value * -2
+							end
+							
+							if heal_gamble.jackpot then
+								restore_value = restore_value * 3
+							end
+							
+							local base = tweak_data.upgrades.loose_ammo_restore_health_values.base
+							local sync_value = math.round(math.clamp(restore_value - base, 0, 13))
+							restore_value = restore_value * (tweak_data.upgrades.loose_ammo_restore_health_values.multiplier or 0.1)
+							
+							local damage_ext = unit:character_damage()
 
-					if values ~= 0 then
-						local restore_value = math.random(values[1], values[2])
-						local num_more_hp = 1
+							if not damage_ext:need_revive() and not damage_ext:dead() and not damage_ext:is_berserker() then
+								if heal_gamble.effect == "remove" and damage_ext:get_real_health() + restore_value <= 0 then
+									-- prevent player health from going bellow 0 from this substraction
+									damage_ext:restore_health((damage_ext:get_real_health() - 1) * -1, true)
+								else
+									damage_ext:restore_health(restore_value, true)
+								end
+								unit:sound():play("pickup_ammo_health_boost", nil, true)
+							end
 
-						if player_manager:num_connected_players() > 0 then
-							num_more_hp = player_manager:num_players_with_more_health()
-						end
-
-						local base = tweak_data.upgrades.loose_ammo_restore_health_values.base
-						local sync_value = math.round(math.clamp(restore_value - base, 0, 13))
-						restore_value = restore_value * (tweak_data.upgrades.loose_ammo_restore_health_values.multiplier or 0.1)
-						local percent_inc = player_manager:upgrade_value("player", "gain_life_per_players", 0) * math.clamp(num_more_hp, 0, 1) + 1
-
-						print("[AmmoClip:_pickup] Percent increase for health pickup is: ", percent_inc - 1)
-
-						restore_value = restore_value * percent_inc
-						local damage_ext = unit:character_damage()
-
-						if not damage_ext:need_revive() and not damage_ext:dead() and not damage_ext:is_berserker() then
-							damage_ext:restore_health(restore_value, true)
-							unit:sound():play("pickup_ammo_health_boost", nil, true)
-						end
-
-						if player_manager:has_category_upgrade("player", "loose_ammo_restore_health_give_team") then
-							managers.network:session():send_to_peers_synched("sync_unit_event_id_16", self._unit, "pickup", 2 + sync_value)
+							if allow_sync and player_manager:has_category_upgrade("player", "loose_ammo_restore_health_give_team") then
+								managers.network:session():send_to_peers_synched("sync_unit_event_id_16", self._unit, "pickup", 2 + sync_value)
+							end
+							
+							if player_manager:has_category_upgrade("player", "loose_ammo_add_dodge_amount") then
+								local dodge_skill = player_manager:upgrade_value("player", "loose_ammo_add_dodge_amount")
+								if dodge_skill and type(dodge_skill) ~= "number" then
+									if heal_gamble.effect == "add" then
+										if heal_gamble.jackpot then
+											player_manager:Gilza_add_gambler_new_dodge(dodge_skill.addition_jackpot)
+										else
+											player_manager:Gilza_add_gambler_new_dodge(math.random(dodge_skill.addition_min * 100,dodge_skill.addition_max * 100) / 100)
+										end
+									elseif heal_gamble.effect == "remove" then
+										if heal_gamble.jackpot then
+											player_manager:Gilza_add_gambler_new_dodge(dodge_skill.removal_jackpot)
+										else
+											player_manager:Gilza_add_gambler_new_dodge(math.random(dodge_skill.removal_min * 100,dodge_skill.removal_max * 100) / 100)
+										end
+									end
+								end	
+							end
 						end
 					end
-				end
 
-				if player_manager:has_category_upgrade("temporary", "loose_ammo_give_team") and not player_manager:has_activate_temporary_upgrade("temporary", "loose_ammo_give_team") then
-					player_manager:activate_temporary_upgrade("temporary", "loose_ammo_give_team")
-					managers.network:session():send_to_peers_synched("sync_unit_event_id_16", self._unit, "pickup", AmmoClip.EVENT_IDS.bonnie_share_ammo)
+					if player_manager:has_category_upgrade("temporary", "loose_ammo_give_team") and not player_manager:has_activate_temporary_upgrade("temporary", "loose_ammo_give_team") then
+						player_manager:activate_temporary_upgrade("temporary", "loose_ammo_give_team")
+						managers.network:session():send_to_peers_synched("sync_unit_event_id_16", self._unit, "pickup", AmmoClip.EVENT_IDS.bonnie_share_ammo)
+					end
+				
 				end
 			elseif self._projectile_id then
 				player_manager:register_grenade(managers.network:session():local_peer():id())

@@ -497,6 +497,57 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_dodge_gib_armor_1", function(self)
 		
 	end
 	
+	-- start new gambler's logic and GUI
+	if managers.player:has_category_upgrade("temporary", "loose_ammo_restore_health") then
+		
+		managers.player:Gilza_new_gambler_recursive_updater()
+		
+		if not managers.hud or not managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2) then
+			return
+		end
+		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+		local image_scale = Gilza.settings.junkie_icon_scale
+		local x_position = Gilza.settings.junkie_icon_x_pos
+		local y_position = Gilza.settings.junkie_icon_y_pos
+		
+		if not hud.panel:child("Gilza_new_gambler_GUI_icon") then
+			hud.panel:bitmap({
+				name = "Gilza_new_gambler_GUI_icon",
+				visible = true,
+				texture = "guis/dlcs/Gilza/textures/pd2/specialization/new_gambler_icon",
+				layer = 5,
+				color = Color(1, 1, 1, 1),
+				blend_mode = "add",
+				w = 60 * image_scale,
+				h = 60 * image_scale,
+				x = x_position,
+				y = y_position
+			})
+		end
+		
+		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+		managers.player._Gilza_new_gambler_dodge_counter_GUI = OutlinedText:new(hud.panel, {
+			name = "Gilza_new_gambler_dodge_counter_GUI",
+			visible = true,
+			text = "default",
+			valign = "center",
+			align = "center",
+			layer = 5,
+			color = Color(1, 1, 1, 1),
+			font = tweak_data.menu.pd2_large_font,
+			font_size = math.floor(24 * image_scale),
+			w = 60 * image_scale,
+			h = 60 * image_scale,
+			x = x_position,
+			y = 60 * image_scale + y_position
+		})
+		managers.player._Gilza_new_gambler_dodge_counter_GUI:set_text("0")
+		managers.player._Gilza_new_gambler_dodge_counter_GUI:set_outlines_visible(true)
+		managers.player._Gilza_new_gambler_dodge_counter_GUI:set_alpha(1)
+		managers.player._Gilza_new_gambler_dodge_counter_GUI:show()
+		managers.player._Gilza_new_gambler_dodge_counter_GUI:set_visible(false)
+	end
+	
 	managers.player:unregister_message(Message.OnPlayerDodge, "Gilza_armor_on_dodge_skill")
 	managers.player:register_message(Message.OnPlayerDodge, "Gilza_armor_on_dodge_skill", function()
 		

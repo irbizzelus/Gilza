@@ -585,6 +585,9 @@ Hooks:OverrideFunction(PlayerManager, "skill_dodge_chance", function (self, runn
 		local junkie_adds_dodge = self._Gilza_junkie_counter / 100 * 0.4 -- up to 40% dodge max
 		result = result + junkie_adds_dodge
 	end
+	if managers.player:has_category_upgrade("player", "loose_ammo_add_dodge_amount") then
+		result = result + (self._gilza_gambler_new_dodge or 0) 
+	end
 	if managers.player:has_category_upgrade("player", "static_dodge_chance") then
 		result = managers.player:upgrade_value("player", "static_dodge_chance", 0)
 	end
@@ -873,4 +876,95 @@ end
 
 function PlayerManager:Gilza_new_armor_regen_bonus_timer_on_kill_reset()
 	self._gilza_armor_regen_bonus_timer_on_kill = 0
+end
+
+function PlayerManager:Gilza_add_gambler_new_dodge(amount)
+	self._gilza_gambler_new_dodge = (self._gilza_gambler_new_dodge or 0) + amount
+	if self._gilza_gambler_new_dodge < 0 then
+		self._gilza_gambler_new_dodge = 0
+	end
+	if self._gilza_gambler_new_dodge > 0.35 then
+		self._gilza_gambler_new_dodge = 0.35
+	end
+end
+
+function PlayerManager:Gilza_new_gambler_triggered(heal_gamble)
+	self._gilza_new_gambler_activated_recently = true
+	DelayedCalls:Add("Gilza_new_gambler_trigger_deactivate", 2, function(self) -- detemines for how long icon will have effect color and flash if its a jackpot
+		managers.player._gilza_new_gambler_activated_recently = false
+	end)
+	
+	self._gilza_new_gambler_recent_effect = heal_gamble.effect
+	self._gilza_new_gambler_recent_is_jackpot = heal_gamble.jackpot
+end
+
+local new_gambler_jackpoint_flash_cycle = 0
+local jackpot_announced = false
+function PlayerManager:Gilza_new_gambler_recursive_updater()
+	
+	local player_unit = self:player_unit()
+	
+	local info_hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+	local icon = info_hud.panel:child("Gilza_new_gambler_GUI_icon")
+
+	if alive(player_unit) then
+		
+		if self._gilza_new_gambler_activated_recently then -- first 1 second manager
+			-- color
+			if self._gilza_new_gambler_recent_effect == "add" then
+				icon:set_color(Color(1, 0, 1, 0))
+			elseif self._gilza_new_gambler_recent_effect == "remove" then
+				icon:set_color(Color(1, 1, 0, 0))
+			else
+				icon:set_color(Color(1, 1, 1, 1))
+			end
+			
+			-- jackpot flash
+			if self._gilza_new_gambler_recent_is_jackpot then
+				if not jackpot_announced then
+					player_unit:sound():play("perkdeck_activate", nil, false)
+					jackpot_announced = true
+				end
+				
+				new_gambler_jackpoint_flash_cycle = new_gambler_jackpoint_flash_cycle + 1
+				
+				if new_gambler_jackpoint_flash_cycle < 4 then
+					icon:set_visible(false)
+				else
+					icon:set_visible(true)
+				end
+				
+				if new_gambler_jackpoint_flash_cycle == 7 then
+					new_gambler_jackpoint_flash_cycle = 0
+				end
+			else
+				icon:set_visible(true)
+			end
+			
+			if self:has_category_upgrade("player", "loose_ammo_add_dodge_amount") then
+				self._Gilza_new_gambler_dodge_counter_GUI:set_visible(true)
+				local text = (self._gilza_gambler_new_dodge or 0) * 100
+				self._Gilza_new_gambler_dodge_counter_GUI:set_text(tostring(text).." %")
+				self._Gilza_new_gambler_dodge_counter_GUI:set_outlines_visible(true)
+				self._Gilza_new_gambler_dodge_counter_GUI:show()
+			end
+			
+		else -- other time
+			icon:set_visible(true)
+			if self:has_activate_temporary_upgrade("temporary", "loose_ammo_restore_health") then
+				jackpot_announced = false
+				icon:set_color(Color(1, 1, 1, 1)) -- low transperancy while on cooldown
+			else
+				icon:set_color(Color(0.2, 1, 1, 1)) -- active white icon indicating cooldown
+			end
+		end
+	else
+		if icon then
+			icon:set_visible(false)
+		end
+	end
+	
+	DelayedCalls:Add("Gilza_new_gambler_recursive_updater", 0.05, function(self)
+		managers.player:Gilza_new_gambler_recursive_updater()
+	end)
 end
