@@ -94,6 +94,19 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		
 		local function New_Enforcer_Skills()
 			---- SHOTGUNNER
+			-- underdog duration reduced to compensate new activation mechanics
+			self.values.temporary.dmg_multiplier_outnumbered = {
+				{
+					1.1,
+					3
+				}
+			}
+			self.values.temporary.dmg_dampener_outnumbered = {
+				{
+					0.9,
+					3
+				}
+			}
 			-- new shotgun expert skill
 			self.values.shotgun.recoil_multiplier = {
 				0.8,
@@ -436,12 +449,34 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			---- INFILTRATOR/SOCIOPATH
 			-- melee dmg boosts adjustments
 			self.values.melee.stacking_hit_damage_multiplier = {
-				0.75,
-				0.75
+				1,
+				1
 			}
 			-- adjusted hidden infiltrator duration buff to be present on both decks but shorter
 			self.values.melee.stacking_hit_expire_t = {
 				4
+			}
+			-- infil/socio 1st card dmg reduction compensation for new activation rules
+			self.values.temporary.dmg_dampener_outnumbered_strong = {
+				{
+					0.88,
+					3
+				}
+			}
+			-- infiltrator's dmg reduction duration nerf to compensate for new activation rules
+			self.values.temporary.dmg_dampener_close_contact = {
+				{
+					0.92,
+					3
+				},
+				{
+					0.84,
+					3
+				},
+				{
+					0.76,
+					3
+				}
 			}
 			
 			---- HACKER
@@ -509,22 +544,22 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			}
 			-- new 9th card - armor type based
 			self.values.player.body_armor.skill_store_armor_recovery_bonus_timer = {
-				0.26,
-				0.22,
-				0.20,
+				0.25,
+				0.2,
 				0.18,
+				0.16,
 				0.12,
-				0.1,
-				0.05
+				0.08,
+				0.04
 			}
 			-- armor health storage value - buffed ICTV
 			self.values.player.body_armor.skill_max_health_store = {
-				10,
-				9,
-				8.5,
-				8,
-				7.25,
-				6.5,
+				14.5,
+				9.5,
+				8.67,
+				6,
+				6,
+				5.5,
 				3.5
 			}
 			-- new 5th card bonus replacing old 15% dodge

@@ -177,3 +177,69 @@ Hooks:PostHook(PlayerMovement, "on_SPOOCed", "Gilza_PlayerMovement_on_SPOOCed_2"
 		self._unit:movement():current_state():_interupt_action_melee(managers.player:player_timer():time())
 	end
 end)
+
+-- update underdog and it's version activation trigger to a) always check for enemies and b) check for enemies in general instead of those attacking the player
+function PlayerMovement:_upd_underdog_skill(t)
+	local data = self._underdog_skill_data
+
+	if not data.has_dmg_dampener and not data.has_dmg_mul and not data.has_dmg_dampener_close or t < self._underdog_skill_data.chk_t then
+		return
+	end
+
+	local my_pos = self._m_pos
+	local max_guys_to_check = data.nr_enemies
+	local nr_guys = 0
+	local activated = nil
+	
+	-- check for enemies in radius of the player instead of checking for enemies that are currently hostile to player
+	local enemies = World:find_units_quick(self._unit, "sphere", my_pos, math.sqrt(data.max_dis_sq), managers.slot:get_mask("enemies"))
+	if not enemies or #enemies <= 0 then
+		return
+	end
+	
+	for i, enemy in pairs(enemies) do
+		local function is_enemy_enemy()
+			if not enemy or not self._unit or not self._unit:movement() or not enemy:movement() or not self._unit:movement():team() or not enemy:movement():team() then
+				return false
+			end
+			if enemy:brain()._current_logic_name == "trade" then
+				return false
+			end
+			return self._unit:movement():team().foes[enemy:movement():team().id] and true or false
+		end
+		
+		if alive(enemy) and is_enemy_enemy() then
+			
+			local attacker_pos = enemy:movement():m_pos()
+			local dis_sq = mvector3.distance_sq(attacker_pos, my_pos)
+
+			if dis_sq < data.max_dis_sq and math.abs(attacker_pos.z - my_pos.z) < data.max_vert_dis then
+				nr_guys = nr_guys + 1
+
+				if max_guys_to_check <= nr_guys then
+					break
+				end
+			end
+			
+		end
+	end
+	
+	if data.nr_enemies <= nr_guys then
+		activated = true
+
+		if data.has_dmg_mul then
+			managers.player:activate_temporary_upgrade("temporary", "dmg_multiplier_outnumbered")
+		end
+
+		if data.has_dmg_dampener then
+			managers.player:activate_temporary_upgrade("temporary", "dmg_dampener_outnumbered")
+			managers.player:activate_temporary_upgrade("temporary", "dmg_dampener_outnumbered_strong")
+		end
+	end
+
+	if data.has_dmg_dampener_close and nr_guys >= 1 then
+		managers.player:activate_temporary_upgrade("temporary", "dmg_dampener_close_contact")
+	end
+
+	data.chk_t = t + (activated and 0.5 or 0.1) -- change re-activation timer check to 0.5 seconds and inactivity timer to 0.1 seconds to make this skill update more often
+end

@@ -525,27 +525,29 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_dodge_gib_armor_1", function(self)
 			})
 		end
 		
-		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
-		managers.player._Gilza_new_gambler_dodge_counter_GUI = OutlinedText:new(hud.panel, {
-			name = "Gilza_new_gambler_dodge_counter_GUI",
-			visible = true,
-			text = "default",
-			valign = "center",
-			align = "center",
-			layer = 5,
-			color = Color(1, 1, 1, 1),
-			font = tweak_data.menu.pd2_large_font,
-			font_size = math.floor(24 * image_scale),
-			w = 60 * image_scale,
-			h = 60 * image_scale,
-			x = x_position,
-			y = 60 * image_scale + y_position
-		})
-		managers.player._Gilza_new_gambler_dodge_counter_GUI:set_text("0")
-		managers.player._Gilza_new_gambler_dodge_counter_GUI:set_outlines_visible(true)
-		managers.player._Gilza_new_gambler_dodge_counter_GUI:set_alpha(1)
-		managers.player._Gilza_new_gambler_dodge_counter_GUI:show()
-		managers.player._Gilza_new_gambler_dodge_counter_GUI:set_visible(false)
+		if not managers.player._Gilza_new_gambler_dodge_counter_GUI then
+			local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+			managers.player._Gilza_new_gambler_dodge_counter_GUI = OutlinedText:new(hud.panel, {
+				name = "Gilza_new_gambler_dodge_counter_GUI",
+				visible = true,
+				text = "default",
+				valign = "center",
+				align = "center",
+				layer = 5,
+				color = Color(1, 1, 1, 1),
+				font = tweak_data.menu.pd2_large_font,
+				font_size = math.floor(24 * image_scale),
+				w = 60 * image_scale,
+				h = 60 * image_scale,
+				x = x_position,
+				y = 60 * image_scale + y_position
+			})
+			managers.player._Gilza_new_gambler_dodge_counter_GUI:set_text("0")
+			managers.player._Gilza_new_gambler_dodge_counter_GUI:set_outlines_visible(true)
+			managers.player._Gilza_new_gambler_dodge_counter_GUI:set_alpha(1)
+			managers.player._Gilza_new_gambler_dodge_counter_GUI:show()
+			managers.player._Gilza_new_gambler_dodge_counter_GUI:set_visible(false)
+		end
 	end
 	
 	managers.player:unregister_message(Message.OnPlayerDodge, "Gilza_armor_on_dodge_skill")
@@ -606,23 +608,31 @@ Hooks:OverrideFunction(PlayerDamage, "set_regenerate_timer_to_max", function (se
 		managers.player:activate_temporary_upgrade("temporary", "player_new_hitman_regen")
 	elseif managers.player:has_category_upgrade("player", "yakuza_suppression_resist") then
 		-- if we have the new supression resist skill from yakuza, make supression delay 0. that removes the effect
-		-- however we need to compensate regen duration for the armor because supression always adds 1 second of regen time. to be nice, it will be 0.95s instead :) @461
+		-- however we need to compensate regen duration for the armor because supression always adds 1 second of regen time. to be nice, it will be 0.99s instead :)
 		if tweak_data.player.suppression.decay_start_delay ~= 0 then
 			tweak_data.player.suppression.decay_start_delay = 0
 		end
 		local mul = managers.player:body_armor_regen_multiplier(alive(self._unit) and self._unit:movement():current_state()._moving, self:health_ratio())
-		self._regenerate_timer = tweak_data.player.damage.REGENERATE_TIME * mul * managers.player:upgrade_value("player", "armor_regen_time_mul", 1) + 0.95
+		self._regenerate_timer = (tweak_data.player.damage.REGENERATE_TIME + 0.99) * mul * managers.player:upgrade_value("player", "armor_regen_time_mul", 1)
+		self._regenerate_speed = self._regenerate_speed or 1
+		self._current_state = self._update_regenerate_timer
+	elseif managers.player:has_category_upgrade("player", "store_armor_recovery_bonus_timer") then
+		-- if we have new 9th card from ex-president, on taking damage, reduce armor regen timer, based on amount of kills
+		-- but never reduce it beyond a specified timer
+		if tweak_data.player.damage.REGENERATE_TIME + managers.player:Gilza_new_armor_regen_bonus_timer_on_kill() >= 0.8 then
+			self._regenerate_timer = tweak_data.player.damage.REGENERATE_TIME + managers.player:Gilza_new_armor_regen_bonus_timer_on_kill()
+		else
+			self._regenerate_timer = 0.8
+		end
+		
+		-- mostly vanilla
+		local mul = managers.player:body_armor_regen_multiplier(alive(self._unit) and self._unit:movement():current_state()._moving, self:health_ratio())
+		self._regenerate_timer = self._regenerate_timer * mul
+		self._regenerate_timer = self._regenerate_timer * managers.player:upgrade_value("player", "armor_regen_time_mul", 1)
 		self._regenerate_speed = self._regenerate_speed or 1
 		self._current_state = self._update_regenerate_timer
 	else
 		orig_timer_to_max(self)
-		-- if we have new 9th card from ex-president, on taking damage, reduce armor regen timer, based on amount of kills
-		-- but never reduce it beyond a specified timer
-		if managers.player:has_category_upgrade("player", "store_armor_recovery_bonus_timer") then
-			if self._regenerate_timer + managers.player:Gilza_new_armor_regen_bonus_timer_on_kill() >= 0.25 then
-				self._regenerate_timer = self._regenerate_timer + managers.player:Gilza_new_armor_regen_bonus_timer_on_kill()
-			end
-		end
 	end
 end)
 
@@ -656,13 +666,25 @@ Hooks:OverrideFunction(PlayerDamage, "_calc_health_damage", function (self, atta
 	-- new ex-pres card #7 bonus. if we have any amount of stacks and we take health damage, stacks will "armor gate" incoming damage. stacks take increased damage.
 	if managers.player:has_category_upgrade("player", "armor_health_store_shield") and not (self:get_real_armor() > 0) and attack_data.damage > 0 then
 		if self._armor_stored_health > 0 then
-			local dmg_to_stacks = attack_data.damage * managers.player:upgrade_value("player", "armor_health_store_shield", 1)
-			if self._armor_stored_health - dmg_to_stacks <= 0 then
+			
+			-- old armor gating version
+			-- local dmg_to_stacks = attack_data.damage * managers.player:upgrade_value("player", "armor_health_store_shield", 1)
+			-- if self._armor_stored_health - dmg_to_stacks <= 0 then
+				-- self._armor_stored_health = 0
+				-- self:update_armor_stored_health()
+				-- return 0
+			-- else
+				-- self._armor_stored_health = self._armor_stored_health - dmg_to_stacks
+				-- self:update_armor_stored_health()
+				-- return 0
+			-- end
+			
+			if self._armor_stored_health - attack_data.damage <= 0 then
 				self._armor_stored_health = 0
+				attack_data.damage = attack_data.damage - self._armor_stored_health
 				self:update_armor_stored_health()
-				return 0
 			else
-				self._armor_stored_health = self._armor_stored_health - dmg_to_stacks
+				self._armor_stored_health = self._armor_stored_health - attack_data.damage
 				self:update_armor_stored_health()
 				return 0
 			end
