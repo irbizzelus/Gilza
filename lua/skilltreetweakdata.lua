@@ -128,8 +128,22 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 			-- Hitman
 			local function Hitman_updates()
 				self.specializations[5][1].upgrades = {
-					"player_perk_armor_regen_timer_multiplier_1",
-					"player_new_hitman_regen"
+					"temporary_badass_hitman_kill_armor_regen"
+				}
+				self.specializations[5][3].upgrades = {
+					"akimbo_recoil_index_addend_4",
+					"akimbo_extra_ammo_multiplier_2",
+					"temporary_akimbo_pistol_armor_regen_timer_multiplier"
+				}
+				self.specializations[5][5].upgrades = {
+					"temporary_death_dance_combo_invulnerability",
+				}
+				self.specializations[5][7].upgrades = {
+					"temporary_player_bounty_hunter"
+				}
+				self.specializations[5][9].upgrades = {
+					"player_passive_loot_drop_multiplier",
+					"player_passive_always_regen_armor_1"
 				}
 			end
 			Hitman_updates()

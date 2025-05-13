@@ -442,113 +442,95 @@ end)
 -- add armor on dodge with new skill
 Hooks:PostHook(PlayerDamage, "init", "Gilza_dodge_gib_armor_1", function(self)
 	
-	-- create junkie hud
-	if managers.player:has_category_upgrade("player", "speed_junkie_meter") then
-		if not managers.hud or not managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2) then
-			return
-		end
-		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
-		if not hud.panel:child("Gilza_speed_junkie_GUI_icon") then
-			local image_scale = Gilza.settings.junkie_icon_scale
-			local x_position = Gilza.settings.junkie_icon_x_pos
-			local y_position = Gilza.settings.junkie_icon_y_pos
-			hud.panel:bitmap({
-				name = "Gilza_speed_junkie_GUI_icon",
-				visible = true,
-				texture = "guis/dlcs/Gilza/textures/pd2/specialization/junkie_icon",
-				layer = 5,
-				color = Color(1, 1, 1, 1),
-				blend_mode = "add",
-				w = 60 * image_scale,
-				h = 60 * image_scale,
-				x = x_position,
-				y = y_position
-			})
-			managers.player:Gilza_create_junkie_gui(image_scale,x_position,y_position)
-		end
-	end
+	local function CreatePerkGUI()
 	
-	-- start guardian logic and GUI
-	if managers.player:has_category_upgrade("player", "guardian_area_passive") then
-		
-		managers.player:Gilza_start_guardian_tracking()
-		
-		if not managers.hud or not managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2) then
-			return
-		end
-		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
-		if not hud.panel:child("Gilza_guardian_GUI_icon") then
-			local image_scale = Gilza.settings.junkie_icon_scale
-			local x_position = Gilza.settings.junkie_icon_x_pos
-			local y_position = Gilza.settings.junkie_icon_y_pos
-			hud.panel:bitmap({
-				name = "Gilza_guardian_GUI_icon",
-				visible = false,
-				texture = "guis/dlcs/Gilza/textures/pd2/specialization/guardian_icon",
-				layer = 5,
-				color = Color(1, 1, 1, 1),
-				blend_mode = "add",
-				w = 60 * image_scale,
-				h = 60 * image_scale,
-				x = x_position,
-				y = y_position
-			})
-		end
-		
-	end
-	
-	-- start new gambler's logic and GUI
-	if managers.player:has_category_upgrade("temporary", "loose_ammo_restore_health") then
-		
-		managers.player:Gilza_new_gambler_recursive_updater()
-		
-		if not managers.hud or not managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2) then
-			return
-		end
-		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
-		local image_scale = Gilza.settings.junkie_icon_scale
-		local x_position = Gilza.settings.junkie_icon_x_pos
-		local y_position = Gilza.settings.junkie_icon_y_pos
-		
-		if not hud.panel:child("Gilza_new_gambler_GUI_icon") then
-			hud.panel:bitmap({
-				name = "Gilza_new_gambler_GUI_icon",
-				visible = true,
-				texture = "guis/dlcs/Gilza/textures/pd2/specialization/new_gambler_icon",
-				layer = 5,
-				color = Color(1, 1, 1, 1),
-				blend_mode = "add",
-				w = 60 * image_scale,
-				h = 60 * image_scale,
-				x = x_position,
-				y = y_position
-			})
-		end
-		
-		if not managers.player._Gilza_new_gambler_dodge_counter_GUI then
+		local function AddDefaultPerkGUI(panel_name, default_visibility, icon_loc_string)
+			if not managers.hud or not managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2) then
+				return
+			end
 			local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
-			managers.player._Gilza_new_gambler_dodge_counter_GUI = OutlinedText:new(hud.panel, {
-				name = "Gilza_new_gambler_dodge_counter_GUI",
-				visible = true,
-				text = "default",
-				valign = "center",
-				align = "center",
-				layer = 5,
-				color = Color(1, 1, 1, 1),
-				font = tweak_data.menu.pd2_large_font,
-				font_size = math.floor(24 * image_scale),
-				w = 60 * image_scale,
-				h = 60 * image_scale,
-				x = x_position,
-				y = 60 * image_scale + y_position
-			})
-			managers.player._Gilza_new_gambler_dodge_counter_GUI:set_text("0")
-			managers.player._Gilza_new_gambler_dodge_counter_GUI:set_outlines_visible(true)
-			managers.player._Gilza_new_gambler_dodge_counter_GUI:set_alpha(1)
-			managers.player._Gilza_new_gambler_dodge_counter_GUI:show()
-			managers.player._Gilza_new_gambler_dodge_counter_GUI:set_visible(false)
+			if not hud.panel:child(panel_name) then
+				local image_scale = Gilza.settings.junkie_icon_scale
+				local x_position = Gilza.settings.junkie_icon_x_pos
+				local y_position = Gilza.settings.junkie_icon_y_pos
+				hud.panel:bitmap({
+					name = panel_name,
+					visible = default_visibility,
+					texture = icon_loc_string,
+					layer = 5,
+					color = Color(1, 1, 1, 1),
+					blend_mode = "add",
+					w = 60 * image_scale,
+					h = 60 * image_scale,
+					x = x_position,
+					y = y_position
+				})
+			end
 		end
+		
+		local function AddDefaultPerkGUITextAddon(pm_var_name, panel_name, default_string)
+			if not managers.hud or not managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2) then
+				return
+			end
+			local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+			local image_scale = Gilza.settings.junkie_icon_scale
+			local x_position = Gilza.settings.junkie_icon_x_pos
+			local y_position = Gilza.settings.junkie_icon_y_pos
+			
+			if not managers.player[pm_var_name] then
+				managers.player[pm_var_name] = OutlinedText:new(hud.panel, {
+					name = panel_name,
+					visible = true,
+					text = "default",
+					valign = "center",
+					align = "center",
+					layer = 5,
+					color = Color(1, 1, 1, 1),
+					font = tweak_data.menu.pd2_large_font,
+					font_size = math.floor(24 * image_scale),
+					w = 60 * image_scale,
+					h = 60 * image_scale,
+					x = x_position,
+					y = 60 * image_scale + y_position
+				})
+				local str = default_string or "0"
+				managers.player[pm_var_name]:set_text(str)
+				managers.player[pm_var_name]:set_outlines_visible(true)
+				managers.player[pm_var_name]:set_alpha(1)
+				managers.player[pm_var_name]:show()
+				managers.player[pm_var_name]:set_visible(false)
+			end
+		end
+		
+		-- speed junkie
+		if managers.player:has_category_upgrade("player", "speed_junkie_meter") then
+			AddDefaultPerkGUI("Gilza_speed_junkie_GUI_icon", true, "guis/dlcs/Gilza/textures/pd2/specialization/junkie_icon")
+			AddDefaultPerkGUITextAddon("_Gilza_junkie_counter_GUI", "Gilza_speed_junkie_GUI_counter")
+			managers.player:Gilza_update_junkie_loop()
+		end
+		
+		-- guardian
+		if managers.player:has_category_upgrade("player", "guardian_area_passive") then
+			AddDefaultPerkGUI("Gilza_guardian_GUI_icon", false, "guis/dlcs/Gilza/textures/pd2/specialization/guardian_icon")
+			managers.player:Gilza_start_guardian_tracking()
+		end
+		
+		-- gambler
+		if managers.player:has_category_upgrade("temporary", "loose_ammo_restore_health") then
+			AddDefaultPerkGUI("Gilza_new_gambler_GUI_icon", true, "guis/dlcs/Gilza/textures/pd2/specialization/new_gambler_icon")
+			AddDefaultPerkGUITextAddon("_Gilza_new_gambler_dodge_counter_GUI", "Gilza_new_gambler_dodge_counter_GUI")
+			managers.player:Gilza_new_gambler_recursive_updater()
+		end
+		
+		-- hitman
+		if managers.player:has_category_upgrade("temporary", "death_dance_combo_invulnerability") then
+			AddDefaultPerkGUI("Gilza_new_hitman_GUI_icon", true, "guis/dlcs/Gilza/textures/pd2/specialization/new_hitman_icon")
+			AddDefaultPerkGUITextAddon("_Gilza_new_hitman_combo_counter_GUI", "Gilza_new_hitman_combo_counter_GUI", "0x")
+			managers.player:Gilza_new_hitman_recursive_updater()
+		end
+	
 	end
+	CreatePerkGUI()
 	
 	managers.player:unregister_message(Message.OnPlayerDodge, "Gilza_armor_on_dodge_skill")
 	managers.player:register_message(Message.OnPlayerDodge, "Gilza_armor_on_dodge_skill", function()
@@ -628,6 +610,18 @@ Hooks:OverrideFunction(PlayerDamage, "set_regenerate_timer_to_max", function (se
 		-- mostly vanilla
 		local mul = managers.player:body_armor_regen_multiplier(alive(self._unit) and self._unit:movement():current_state()._moving, self:health_ratio())
 		self._regenerate_timer = self._regenerate_timer * mul
+		self._regenerate_timer = self._regenerate_timer * managers.player:upgrade_value("player", "armor_regen_time_mul", 1)
+		self._regenerate_speed = self._regenerate_speed or 1
+		self._current_state = self._update_regenerate_timer
+	elseif managers.player:has_category_upgrade("temporary", "akimbo_pistol_armor_regen_timer_multiplier") then
+		-- new hitman
+		local mul = managers.player:body_armor_regen_multiplier(alive(self._unit) and self._unit:movement():current_state()._moving, self:health_ratio())
+		self._regenerate_timer = tweak_data.player.damage.REGENERATE_TIME * mul
+		local recovery_bonus = managers.player:temporary_upgrade_value("temporary", "akimbo_pistol_armor_regen_timer_multiplier", 1)
+		if managers.player:has_activate_temporary_upgrade("temporary", "player_bounty_hunter") then
+			recovery_bonus = 1 - ((1 - recovery_bonus) * 2)
+		end
+		self._regenerate_timer = self._regenerate_timer * recovery_bonus
 		self._regenerate_timer = self._regenerate_timer * managers.player:upgrade_value("player", "armor_regen_time_mul", 1)
 		self._regenerate_speed = self._regenerate_speed or 1
 		self._current_state = self._update_regenerate_timer
@@ -857,3 +851,7 @@ end
 Hooks:PostHook(PlayerDamage, "_regenerate_armor", "Gilza_pre_regenerate_armor", function(self, no_sound)
 	managers.player:Gilza_new_armor_regen_bonus_timer_on_kill_reset()
 end)
+
+function PlayerDamage:Gilza_add_damage_invuln_timer(duration)
+	self._can_take_dmg_timer = self._can_take_dmg_timer + duration
+end

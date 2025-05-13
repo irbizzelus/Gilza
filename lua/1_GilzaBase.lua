@@ -97,6 +97,10 @@ function Gilza:modCompatibility()
 					GameInfoManager._BUFFS.temporary.new_berserk_melee_damage_multiplier_2 = "new_berserk_melee_damage_multiplier_2"
 					GameInfoManager._BUFFS.temporary.new_berserk_weapon_damage_multiplier = "new_berserk_weapon_damage_multiplier"
 					GameInfoManager._BUFFS.temporary.new_berserk_weapon_damage_multiplier_cooldown = "new_berserk_weapon_damage_multiplier_cooldown"
+					GameInfoManager._BUFFS.temporary.badass_hitman_kill_armor_regen = "badass_hitman_kill_armor_regen"
+					GameInfoManager._BUFFS.temporary.akimbo_pistol_armor_regen_timer_multiplier = "akimbo_pistol_armor_regen_timer_multiplier"
+					GameInfoManager._BUFFS.temporary.death_dance_combo_invulnerability = "death_dance_combo_invulnerability"
+					GameInfoManager._BUFFS.temporary.player_bounty_hunter = "player_bounty_hunter"
 				else
 					DelayedCalls:Add("Gilza_wait_for_vhp_to_load", 0.25, function()
 						tryaddingbuffs()

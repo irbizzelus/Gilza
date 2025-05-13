@@ -714,4 +714,14 @@ Hooks:PreHook(CopDamage, "die", "Gilza_itimidated_death_tracker", function(self,
 			managers.player._Gilza_menace_kill_tracker = 4
 		end
 	end
+	
+	if managers.player:has_category_upgrade("temporary", "player_bounty_hunter") then
+		if self._unit == managers.player._gilza_hitman_bounty_target and attack_data.attacker_unit ~= managers.player:player_unit() then
+			managers.player._gilza_hitman_bounty_cooldown_end = Application:time() + 40
+			managers.player._gilza_hitman_has_active_bounty = false
+		end
+		if self._unit == managers.player._gilza_hitman_bounty_target then
+			self._unit:contour():remove("generic_interactable_selected" , false)
+		end
+	end
 end)

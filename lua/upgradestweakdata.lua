@@ -633,6 +633,34 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 					removal_jackpot = -0.35
 				}
 			}
+			-- hitman new combo skill
+			self.values.temporary.death_dance_combo_invulnerability = {
+				{
+					5,
+					20
+				}
+			}
+			-- hitman new akimbo recovery proc
+			self.values.temporary.akimbo_pistol_armor_regen_timer_multiplier = {
+				{
+					0.75,
+					10
+				}
+			}
+			-- hitman new bounty hunter
+			self.values.temporary.player_bounty_hunter = {
+				{
+					true,
+					25
+				}
+			}
+			-- hitman new melee/throwable kill armor regen
+			self.values.temporary.badass_hitman_kill_armor_regen = {
+				{
+					true,
+					2
+				}
+			}
 			
 		end
 		New_Vanilla_Perks()
@@ -1239,6 +1267,43 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 					category = "player"
 				}
 			}
+			self.definitions.temporary_death_dance_combo_invulnerability = {
+				name_id = "menu_temporary_death_dance_combo_invulnerability",
+				category = "temporary",
+				upgrade = {
+					value = 1,
+					upgrade = "death_dance_combo_invulnerability",
+					category = "temporary"
+				}
+			}
+			self.definitions.temporary_akimbo_pistol_armor_regen_timer_multiplier = {
+				name_id = "menu_temporary_akimbo_pistol_armor_regen_timer_multiplier",
+				category = "temporary",
+				upgrade = {
+					value = 1,
+					upgrade = "akimbo_pistol_armor_regen_timer_multiplier",
+					category = "temporary"
+				}
+			}
+			self.definitions.temporary_player_bounty_hunter = {
+				name_id = "menu_temporary_player_bounty_hunter",
+				category = "temporary",
+				upgrade = {
+					value = 1,
+					upgrade = "player_bounty_hunter",
+					category = "temporary"
+				}
+			}
+			self.definitions.temporary_badass_hitman_kill_armor_regen = {
+				name_id = "menu_temporary_badass_hitman_kill_armor_regen",
+				category = "temporary",
+				upgrade = {
+					value = 1,
+					upgrade = "badass_hitman_kill_armor_regen",
+					category = "temporary"
+				}
+			}
+			
 		end
 		New_Vanilla_Perk_definitions()
 		

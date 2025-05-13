@@ -16,6 +16,18 @@ Hooks:PostHook(CopMovement, "action_request", "Gilza_panic_tracker" , function(s
 		return
 	end
 	
+	if managers.player:has_category_upgrade("temporary", "player_bounty_hunter") and managers.player._gilza_hitman_has_active_bounty then
+		if self._unit == managers.player._gilza_hitman_bounty_target then
+			local is_alive = alive(self._unit) and not self._unit:character_damage():dead()
+			local is_enemy = is_alive and self._unit:brain():is_hostile()
+			if not is_alive or not_enemy then
+				managers.player._gilza_hitman_bounty_cooldown_end = Application:time() + 40
+				managers.player._gilza_hitman_has_active_bounty = false
+				self._unit:contour():remove("generic_interactable_selected" , false)
+			end
+		end
+	end
+	
 	if managers.player:has_category_upgrade("player", "menace_panic_spread") then
 		if action_desc.variant == "tied" or action_desc.variant == "tied_all_in_one" then
 			if not Gilza.intimidated_enemies[self._unit:id()] then
