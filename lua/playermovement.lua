@@ -244,3 +244,10 @@ function PlayerMovement:_upd_underdog_skill(t)
 
 	data.chk_t = t + (activated and 0.5 or 0.1) -- change re-activation timer check to 0.5 seconds and inactivity timer to 0.1 seconds to make this skill update more often
 end
+
+Hooks:PostHook(PlayerMovement, "init", "Gilza_PlayerMovement_post_init", function(self, unit)
+	if managers.player:has_category_upgrade("player", "morale_boost") or managers.player:has_category_upgrade("cooldown", "long_dis_revive") and managers.player:has_category_upgrade("player", "passive_inspire_range_mul") then
+		local inspire_range = 900 * managers.player:upgrade_value("player", "passive_inspire_range_mul", 1)
+		self._rally_skill_data.range_sq = inspire_range * inspire_range
+	end
+end)

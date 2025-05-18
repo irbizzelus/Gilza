@@ -98,13 +98,13 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.temporary.dmg_multiplier_outnumbered = {
 				{
 					1.1,
-					3
+					6
 				}
 			}
 			self.values.temporary.dmg_dampener_outnumbered = {
 				{
 					0.9,
-					3
+					6
 				}
 			}
 			-- new shotgun expert skill
@@ -292,21 +292,21 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			-- new nerfed trigger happy
 			self.values.pistol.stacking_hit_damage_multiplier = {
 				{
-					max_stacks = 2,
+					max_stacks = 1,
 					max_time = 10,
-					damage_bonus = 1.4
+					damage_bonus = 1.75
 				},
 				{
-					max_stacks = 2,
+					max_stacks = 1,
 					max_time = 10,
-					damage_bonus = 1.4
+					damage_bonus = 1.75
 				}
 			}
 			-- new desperado
 			self.values.pistol.stacked_accuracy_bonus = {
 				{
-					max_stacks = 2,
-					accuracy_bonus = 0.84,
+					max_stacks = 1,
+					accuracy_bonus = 0.68,
 					max_time = 10
 				}
 			}	
@@ -424,6 +424,10 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 	local function New_Perks()
 		
 		local function New_Vanilla_Perks()
+			---- CREW CHIEF
+			self.values.player.passive_inspire_range_mul = {
+				1.25
+			}
 			---- ROGUE
 			-- 4th dodge chance value added
 			self.values.player.passive_dodge_chance = {
@@ -460,22 +464,22 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.temporary.dmg_dampener_outnumbered_strong = {
 				{
 					0.88,
-					3
+					6
 				}
 			}
 			-- infiltrator's dmg reduction duration nerf to compensate for new activation rules
 			self.values.temporary.dmg_dampener_close_contact = {
 				{
 					0.92,
-					3
+					6
 				},
 				{
 					0.84,
-					3
+					6
 				},
 				{
 					0.76,
-					3
+					6
 				}
 			}
 			
@@ -531,11 +535,11 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			
 			-- MANIAC
 			-- new values that deplete faster from max possible to keep player on edge. we are a cocaine addict afterall
-			self.max_cocaine_stacks_per_tick = 80
-			self.cocaine_stacks_tick_t = 1
-			self.cocaine_stacks_decay_t = 2
-			self.cocaine_stacks_decay_amount_per_tick = 100
-			self.cocaine_stacks_decay_percentage_per_tick = 0.1
+			self.max_cocaine_stacks_per_tick = 120
+			self.cocaine_stacks_tick_t = 1.5
+			self.cocaine_stacks_decay_t = 3
+			self.cocaine_stacks_decay_amount_per_tick = 80
+			self.cocaine_stacks_decay_percentage_per_tick = 0.2
 			
 			-- EX-PRESIDENT
 			-- new 9th card - store armor recovery
@@ -659,6 +663,71 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				{
 					true,
 					2
+				}
+			}
+			-- anarchist
+			self.values.player.armor_grinding = {
+				{
+					{
+						2.9,
+						3
+					},
+					{
+						2.05,
+						2.3
+					},
+					{
+						1.9,
+						2.15
+					},
+					{
+						1.75,
+						2
+					},
+					{
+						1.6,
+						1.8
+					},
+					{
+						1.5,
+						1.7
+					},
+					{
+						1.25,
+						1.5
+					}
+				}
+			}
+			self.values.player.damage_to_armor = {
+				{
+					{
+						3,
+						1.5
+					},
+					{
+						2,
+						1
+					},
+					{
+						2,
+						1
+					},
+					{
+						2,
+						1
+					},
+					{
+						1.5,
+						0.75
+					},
+					{
+						1.5,
+						0.75
+					},
+					{
+						1.5,
+						0.75
+					}
 				}
 			}
 			
@@ -1169,6 +1238,16 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 		}
 		
 		local function New_Vanilla_Perk_definitions()
+			-- crew chief
+			self.definitions.player_passive_inspire_range_mul = {
+				name_id = "menu_player_passive_inspire_range_mul",
+				category = "feature",
+				upgrade = {
+					value = 1,
+					upgrade = "passive_inspire_range_mul",
+					category = "player"
+				}
+			}
 			-- rogue
 			self.definitions.player_movement_speed_multiplier_2 = {
 				incremental = true,

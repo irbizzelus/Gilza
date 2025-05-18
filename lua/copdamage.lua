@@ -91,6 +91,7 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 
 	local is_civilian = CopDamage.is_civilian(self._unit:base()._tweak_table)
 	local allow_pen = true
+	local allow_pen_from_rng = true
 	
 	if self._has_plate and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_plate_name and not attack_data.armor_piercing then
 		local armor_pierce_roll = math.rand(1)
@@ -124,35 +125,39 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 		end
 		
 		if armor_pierce_roll >= armor_pierce_value then
-			allow_pen = false
+			allow_pen_from_rng = false
 		end
 	end
 	
 	local attackerIsPlayer = attack_data.attacker_unit == managers.player:player_unit()
 	
 	-- new AP: if enemy is hit in the plate, reduce damage in half if we have armor peirce basic; dont reduce dmg if we have AP aced + basic
-	if (attack_data.armor_piercing or managers.player:has_category_upgrade("player", "ap_bullets_aced")) and attackerIsPlayer and self._has_plate and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_plate_name then
+	if not allow_pen_from_rng and (attack_data.armor_piercing or managers.player:has_category_upgrade("player", "ap_bullets_aced")) and attackerIsPlayer and self._has_plate and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_plate_name then
 		if managers.player:has_category_upgrade("player", "ap_bullets") and not managers.player:has_category_upgrade("player", "ap_bullets_aced") or not managers.player:has_category_upgrade("player", "ap_bullets") and managers.player:has_category_upgrade("player", "ap_bullets_aced") then
 			-- allow armor piercing but reduce damage after pen in half
 			attack_data.damage = attack_data.damage * 0.5
 			allow_pen = true
+			allow_pen_from_rng = true
 		else
 			-- if we have AP bullets normal + aced, dont reduce damage
 			allow_pen = true
+			allow_pen_from_rng = true
 		end
 	end
 	
 	-- allow throwable knives and such to pen body armor
 	if attack_data.weapon_unit:base().thrower_unit then
 		allow_pen = true
+		allow_pen_from_rng = true
 	end
 	
 	-- allow saws to pen body armor
 	if attack_data.weapon_unit:base().name_id == "saw" or attack_data.weapon_unit:base().name_id == "saw_secondary" then
 		allow_pen = true
+		allow_pen_from_rng = true
 	end
 	
-	if not allow_pen then
+	if not allow_pen or not allow_pen_from_rng then
 		return
 	end
 	
@@ -710,8 +715,10 @@ Hooks:PreHook(CopDamage, "die", "Gilza_itimidated_death_tracker", function(self,
 	
 	if is_intimidated_cop and attack_data.attacker_unit == managers.player:player_unit() then
 		managers.player._Gilza_menace_kill_tracker = managers.player._Gilza_menace_kill_tracker + 0.2
-		if managers.player._Gilza_menace_kill_tracker >= 4 then
+		if managers.player._Gilza_menace_kill_tracker > 4 then
 			managers.player._Gilza_menace_kill_tracker = 4
+		else
+			managers.hud:show_hint({text = managers.localization:text("Gilza_menace_panic_spread_notification")..tostring(managers.player._Gilza_menace_kill_tracker)})
 		end
 	end
 	

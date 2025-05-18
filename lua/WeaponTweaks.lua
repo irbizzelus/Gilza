@@ -1713,7 +1713,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			-- akimbo
 			for id, status in pairs(SMGs_120) do
 				if self["x_"..id] then
-					self["x_"..id].stats.damage = math.ceil(120/2)
+					self["x_"..id].stats.damage = math.ceil(126/2)
 					self["x_"..id].AMMO_PICKUP[1] = self[id].AMMO_PICKUP[1] * secondary_to_primary_mul * 2
 					self["x_"..id].AMMO_PICKUP[2] = self[id].AMMO_PICKUP[2] * secondary_to_primary_mul * 2
 					self["x_"..id].damage_falloff = new_smg_damage_falloff
@@ -2520,7 +2520,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_model3.NR_CLIPS_MAX = 3.5
 			self.x_model3.AMMO_MAX = self.x_model3.NR_CLIPS_MAX * self.x_model3.CLIP_AMMO_MAX
 			
-			self.rsh12.stats.spread = 18
+			self.rsh12.stats.spread = 19
 			self.rsh12.stats.recoil = 3
 			self.rsh12.AMMO_PICKUP = {((avg_450_pickup * 0.9) / 1.35) * 0.5 * secondary_mul,((avg_450_pickup * 1.1) / 1.35) * 0.5 * secondary_mul}
 			self.rsh12.NR_CLIPS_MAX = 4

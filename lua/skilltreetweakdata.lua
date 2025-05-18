@@ -71,7 +71,19 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		end
 		
 		local function VANILLA_PERKS()
-		
+			
+			-- Crew Chief
+			local function Crew_chief_updates()
+				-- update melee related card
+				self.specializations[1][3].upgrades = {
+					"team_passive_stamina_multiplier_1",
+					"player_passive_intimidate_range_mul",
+					"player_damage_dampener_close_contact_1",
+					"player_passive_inspire_range_mul"
+				}
+			end
+			Crew_chief_updates()
+			
 			-- Sociopath
 			local function Sociopath_updates()
 				-- update melee related card

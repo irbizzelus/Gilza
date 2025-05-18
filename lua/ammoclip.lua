@@ -106,9 +106,7 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 						if values ~= 0 then
 							local restore_value = math.random(values[1], values[2])
 							
-							local allow_sync = true
 							if heal_gamble.effect == "remove" then
-								allow_sync = false
 								restore_value = restore_value * -2
 							end
 							
@@ -116,8 +114,6 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 								restore_value = restore_value * 3
 							end
 							
-							local base = tweak_data.upgrades.loose_ammo_restore_health_values.base
-							local sync_value = math.round(math.clamp(restore_value - base, 0, 13))
 							restore_value = restore_value * (tweak_data.upgrades.loose_ammo_restore_health_values.multiplier or 0.1)
 							
 							local damage_ext = unit:character_damage()
@@ -130,10 +126,6 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 									damage_ext:restore_health(restore_value, true)
 								end
 								unit:sound():play("pickup_ammo_health_boost", nil, true)
-							end
-
-							if allow_sync and player_manager:has_category_upgrade("player", "loose_ammo_restore_health_give_team") then
-								managers.network:session():send_to_peers_synched("sync_unit_event_id_16", self._unit, "pickup", 2 + sync_value)
 							end
 							
 							if player_manager:has_category_upgrade("player", "loose_ammo_add_dodge_amount") then
@@ -155,6 +147,13 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 								end	
 							end
 						end
+					end
+					
+					-- other players have an intended cap to how much health they can get from this effect. if they would recieve more health then 15, they get no healing at all
+					-- since we cant give other players more health, we will just always give them the max possible amount instead of 12-15 that we would get otherwise
+					-- this is both a buff and compensation for longer cooldown of 4 secs
+					if player_manager:has_category_upgrade("player", "loose_ammo_restore_health_give_team") then
+						managers.network:session():send_to_peers_synched("sync_unit_event_id_16", self._unit, "pickup", 15)
 					end
 
 					if player_manager:has_category_upgrade("temporary", "loose_ammo_give_team") and not player_manager:has_activate_temporary_upgrade("temporary", "loose_ammo_give_team") then
