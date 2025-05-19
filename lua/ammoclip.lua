@@ -121,7 +121,7 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 							if not damage_ext:need_revive() and not damage_ext:dead() and not damage_ext:is_berserker() then
 								if heal_gamble.effect == "remove" and damage_ext:get_real_health() + restore_value <= 0 then
 									-- prevent player health from going bellow 0 from this substraction
-									damage_ext:restore_health((damage_ext:get_real_health() - 1) * -1, true)
+									damage_ext:restore_health((damage_ext:get_real_health() - 0.1) * -1, true)
 								else
 									damage_ext:restore_health(restore_value, true)
 								end

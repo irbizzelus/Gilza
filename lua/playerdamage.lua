@@ -589,13 +589,17 @@ Hooks:OverrideFunction(PlayerDamage, "set_regenerate_timer_to_max", function (se
 		tweak_data.upgrades.values.temporary.player_new_hitman_regen[1][2] = skill_freeze_time
 		managers.player:activate_temporary_upgrade("temporary", "player_new_hitman_regen")
 	elseif managers.player:has_category_upgrade("player", "yakuza_suppression_resist") then
-		-- if we have the new supression resist skill from yakuza, make supression delay 0. that removes the effect
-		-- however we need to compensate regen duration for the armor because supression always adds 1 second of regen time. to be nice, it will be 0.99s instead :)
+		-- if we have the new supression resist skill from yakuza, make supression delay 0. this completely removes the supression armor delay effect
 		if tweak_data.player.suppression.decay_start_delay ~= 0 then
 			tweak_data.player.suppression.decay_start_delay = 0
 		end
 		local mul = managers.player:body_armor_regen_multiplier(alive(self._unit) and self._unit:movement():current_state()._moving, self:health_ratio())
-		self._regenerate_timer = (tweak_data.player.damage.REGENERATE_TIME + 0.99) * mul * managers.player:upgrade_value("player", "armor_regen_time_mul", 1)
+		-- however, this 1 sec delay timer is usually added to the regen timer as a flat value.
+		-- because of that vanilla yakuza has best possible armor regen at ~1.765 secs with 2 additional recovery skills from tank subtree in eforcer
+		-- if we dont compensate armor recovery delay, new best possible recovery timer becomes ~0.76 second which is a bit too good imo
+		-- so we compensate lack of suppression by adding a lower flat timer. new best recovery becomes ~1.16 secs, but only ~1.25 secs at 10% health, which is the main target
+		self._regenerate_timer = tweak_data.player.damage.REGENERATE_TIME * mul * managers.player:upgrade_value("player", "armor_regen_time_mul", 1)
+		self._regenerate_timer = self._regenerate_timer + 0.4 -- compensation
 		self._regenerate_speed = self._regenerate_speed or 1
 		self._current_state = self._update_regenerate_timer
 	elseif managers.player:has_category_upgrade("player", "store_armor_recovery_bonus_timer") then
@@ -854,4 +858,37 @@ end)
 
 function PlayerDamage:Gilza_add_damage_invuln_timer(duration)
 	self._can_take_dmg_timer = self._can_take_dmg_timer + duration
+end
+
+-- new yakuza zerk heal protection #1
+local gilza_orig_PlayerDamage_revive = PlayerDamage.revive
+function PlayerDamage:revive(helped_self)
+	if managers.player:has_category_upgrade("player", "armor_regen_damage_health_ratio_multiplier") then
+		tweak_data.player.damage.REVIVE_HEALTH_STEPS = {0.1} -- always revive at 10% health
+	end
+	gilza_orig_PlayerDamage_revive(self, helped_self)
+end
+
+-- new yakuza zerk heal protection #2
+local gilza_orig_PlayerDamage_set_revive_boost = PlayerDamage.set_revive_boost
+function PlayerDamage:set_revive_boost(revive_health_level)
+	if managers.player:has_category_upgrade("player", "armor_regen_damage_health_ratio_multiplier") then
+		-- ignore
+	else
+		gilza_orig_PlayerDamage_set_revive_boost(self, revive_health_level)
+	end
+end
+
+-- new yakuza zerk heal protection #3
+local gilza_orig_PlayerDamage_restore_health = PlayerDamage.restore_health
+function PlayerDamage:restore_health(health_restored, is_static, chk_health_ratio)
+	if managers.player:has_category_upgrade("player", "armor_regen_damage_health_ratio_multiplier") then
+		local has_health = managers.player:player_unit() and managers.player:player_unit():character_damage() and managers.player:player_unit():character_damage():get_real_health() > 0.01
+		if has_health and health_restored > 0 then
+			return false
+		else
+			gilza_orig_PlayerDamage_restore_health(self, health_restored, is_static, chk_health_ratio)
+		end
+	end
+	gilza_orig_PlayerDamage_restore_health(self, health_restored, is_static, chk_health_ratio)
 end

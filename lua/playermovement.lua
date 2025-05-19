@@ -212,9 +212,14 @@ function PlayerMovement:_upd_underdog_skill(t)
 			
 			local attacker_pos = enemy:movement():m_pos()
 			local dis_sq = mvector3.distance_sq(attacker_pos, my_pos)
-			local LOS_wallhit = World:raycast("ray", Vector3(my_pos.x, my_pos.y, my_pos.z+150), Vector3(attacker_pos.x, attacker_pos.y, attacker_pos.z+120), "slot_mask", managers.slot:get_mask("bullet_impact_targets"))
-
-			if dis_sq < data.max_dis_sq and math.abs(attacker_pos.z - my_pos.z) < data.max_vert_dis and not LOS_wallhit then
+			local camera_pos = managers.player:player_unit():camera():position()
+			local LOS_ray = World:raycast("ray", Vector3(camera_pos.x, camera_pos.y, camera_pos.z), Vector3(attacker_pos.x, attacker_pos.y, attacker_pos.z+80), "slot_mask", managers.slot:get_mask("bullet_impact_targets"))
+			local is_LOS_clear = false
+			if LOS_ray and LOS_ray.unit and LOS_ray.unit == enemy then
+				is_LOS_clear = true
+			end
+			
+			if dis_sq < data.max_dis_sq and math.abs(attacker_pos.z - my_pos.z) < data.max_vert_dis and is_LOS_clear then
 				nr_guys = nr_guys + 1
 
 				if max_guys_to_check <= nr_guys then

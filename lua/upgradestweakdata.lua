@@ -98,13 +98,13 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.temporary.dmg_multiplier_outnumbered = {
 				{
 					1.1,
-					6
+					5
 				}
 			}
 			self.values.temporary.dmg_dampener_outnumbered = {
 				{
 					0.9,
-					6
+					5
 				}
 			}
 			-- new shotgun expert skill
@@ -464,22 +464,22 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.temporary.dmg_dampener_outnumbered_strong = {
 				{
 					0.88,
-					6
+					5
 				}
 			}
 			-- infiltrator's dmg reduction duration nerf to compensate for new activation rules
 			self.values.temporary.dmg_dampener_close_contact = {
 				{
 					0.92,
-					6
+					5
 				},
 				{
 					0.84,
-					6
+					5
 				},
 				{
 					0.76,
-					6
+					5
 				}
 			}
 			
