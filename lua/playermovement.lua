@@ -182,7 +182,7 @@ end)
 function PlayerMovement:_upd_underdog_skill(t)
 	local data = self._underdog_skill_data
 
-	if not data.has_dmg_dampener and not data.has_dmg_mul and not data.has_dmg_dampener_close or t < self._underdog_skill_data.chk_t then
+	if not data.has_dmg_dampener and not data.has_dmg_mul and not data.has_dmg_dampener_close or t < self._underdog_skill_data.chk_t or not managers.player:player_unit() then
 		return
 	end
 

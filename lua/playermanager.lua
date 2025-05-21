@@ -1189,3 +1189,13 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 		managers.player:Gilza_new_hitman_recursive_updater()
 	end)
 end
+
+-- maniac 9th card buff for DS
+local gilza_orig_PlayerManager_health_regen = PlayerManager.health_regen
+function PlayerManager:health_regen()
+	local res = gilza_orig_PlayerManager_health_regen(self)
+	if managers.player:has_category_upgrade("player", "passive_health_regen") and Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+		res = res + 0.0325
+	end
+	return res
+end
