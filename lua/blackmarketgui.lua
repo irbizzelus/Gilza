@@ -186,7 +186,9 @@ Hooks:PostHook(BlackMarketGui, "update_info_text", "Gilza_BlackMarketGui_update_
 				amount_3 = tweak_data.upgrades.values.player.damage_to_armor[1][upgrade_level][1] * 10,
 				amount_4 = tweak_data.upgrades.values.player.damage_to_armor[1][upgrade_level][2],
 			})
-			self._info_texts[2]:set_text(tostring(new_info_str))
+			if slot_data.unlocked then -- prevent ICTV's skill requirement text from overlapping with new description if we dont have it unlocked
+				self._info_texts[2]:set_text(tostring(new_info_str))
+			end
 			
 			-- ui activation and positioning
 			local info_text = self._info_texts[2]

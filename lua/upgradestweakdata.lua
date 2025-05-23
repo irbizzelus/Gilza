@@ -276,7 +276,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 					25
 				},
 				{
-					4,
+					5,
 					10
 				}
 			}
@@ -669,31 +669,31 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.player.armor_grinding = {
 				{
 					{
-						2.9,
-						3
+						5.35,
+						4
 					},
 					{
-						2.05,
-						2.3
+						3.25,
+						2.8
 					},
 					{
-						1.9,
-						2.15
+						2.7,
+						2.5
 					},
 					{
-						1.75,
-						2
+						2.2,
+						2.2
 					},
 					{
 						1.6,
-						1.8
+						1.9
 					},
 					{
-						1.5,
-						1.7
+						1.32,
+						1.75
 					},
 					{
-						1.25,
+						1,
 						1.5
 					}
 				}
@@ -701,32 +701,32 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.player.damage_to_armor = {
 				{
 					{
+						6,
+						2.5
+					},
+					{
 						3,
 						1.5
 					},
 					{
-						2,
-						1
+						3,
+						1.5
 					},
 					{
-						2,
-						1
+						3,
+						1.5
 					},
 					{
-						2,
+						1.5,
 						1
 					},
 					{
 						1.5,
-						0.75
+						1
 					},
 					{
 						1.5,
-						0.75
-					},
-					{
-						1.5,
-						0.75
+						1
 					}
 				}
 			}
@@ -795,12 +795,12 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				0.05
 			}
 			self.values.player.speed_junkie_meter_on_kill = {
-				3
+				6
 			}
 			self.values.temporary.player_speed_junkie_armor_on_dodge = {
 				{
-					0.6, -- amount
-					1.5, -- cooldown
+					1.5, -- amount
+					1, -- cooldown
 				}
 			}
 			self.values.player.speed_junkie_armor_berserk = {

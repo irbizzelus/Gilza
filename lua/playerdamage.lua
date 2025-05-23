@@ -555,11 +555,9 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_dodge_gib_armor_1", function(self)
 				if self._unit and alive(self._unit) and self._unit.character_damage then
 					managers.player:activate_temporary_upgrade("temporary", "player_speed_junkie_armor_on_dodge")
 					if self:get_real_armor() > 0 then
-						if self:_max_armor() ~= self:get_real_armor() then
-							self._unit:character_damage():restore_armor(managers.player:temporary_upgrade_value("temporary", "player_speed_junkie_armor_on_dodge", 0))
-						end
+						self._unit:character_damage():restore_armor(managers.player:temporary_upgrade_value("temporary", "player_speed_junkie_armor_on_dodge", 0))
 					else
-						self._unit:character_damage():restore_armor(managers.player:temporary_upgrade_value("temporary", "player_speed_junkie_armor_on_dodge", 0) * 4)
+						self._unit:character_damage():restore_armor(managers.player:temporary_upgrade_value("temporary", "player_speed_junkie_armor_on_dodge", 0) * 3)
 					end
 				end
 			end
@@ -599,7 +597,11 @@ Hooks:OverrideFunction(PlayerDamage, "set_regenerate_timer_to_max", function (se
 		-- if we dont compensate armor recovery delay, new best possible recovery timer becomes ~0.76 second which is a bit too good imo
 		-- so we compensate lack of suppression by adding a lower flat timer. new best recovery becomes ~1.16 secs, but only ~1.25 secs at 10% health, which is the main target
 		self._regenerate_timer = tweak_data.player.damage.REGENERATE_TIME * mul * managers.player:upgrade_value("player", "armor_regen_time_mul", 1)
-		self._regenerate_timer = self._regenerate_timer + 0.4 -- compensation
+		local regen_compensation = 0.75
+		if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+			regen_compensation = 0.3 -- faster regen for ds
+		end
+		self._regenerate_timer = self._regenerate_timer + regen_compensation
 		self._regenerate_speed = self._regenerate_speed or 1
 		self._current_state = self._update_regenerate_timer
 	elseif managers.player:has_category_upgrade("player", "store_armor_recovery_bonus_timer") then

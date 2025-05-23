@@ -230,9 +230,6 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_on_killshot", function(self,
 			if hud.panel:child("Gilza_speed_junkie_GUI_icon") then
 				self._Gilza_junkie_counter = self._Gilza_junkie_counter or 0
 				local amount_to_add = managers.player:upgrade_value("player", "speed_junkie_meter_on_kill", 0)
-				if not headshot then -- x3
-					amount_to_add = amount_to_add * 3
-				end
 				if self._Gilza_junkie_counter < 90 and amount_to_add + self._Gilza_junkie_counter >= 90 then
 					amount_to_add = 90 - self._Gilza_junkie_counter
 				elseif self._Gilza_junkie_counter > 90 then
@@ -245,6 +242,7 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_on_killshot", function(self,
 				-- 10% chance to enter adrenaline mode on kill if eligible
 				if self._Gilza_junkie_eligible_for_spike and math.random() <= 0.1 then
 					self._Gilza_junkie_adrenaline_spike = true
+					player_unit:sound():play("perkdeck_activate", nil, false)
 				end
 			end
 		end
@@ -1050,10 +1048,10 @@ function PlayerManager:Gilza_new_hitman_killshot_handler(killed_unit, variant, h
 	if badass_kill and self._gilza_death_dance == 0 then
 		self._gilza_death_dance = 1
 		self._gilza_death_dance_next_kill_expected_at = Application:time() + 1
-	elseif self._gilza_death_dance >= 1 and math.abs(self._gilza_death_dance_next_kill_expected_at - Application:time()) <= 0.3 then
+	elseif self._gilza_death_dance >= 1 and math.abs(self._gilza_death_dance_next_kill_expected_at - Application:time()) <= 0.5 then
 		self._gilza_death_dance = self._gilza_death_dance + 1
 		self._gilza_death_dance_next_kill_expected_at = Application:time() + 1
-	elseif self._gilza_death_dance >= 1 and self._gilza_death_dance_next_kill_expected_at - Application:time() > 0.3 then
+	elseif self._gilza_death_dance >= 1 and self._gilza_death_dance_next_kill_expected_at - Application:time() > 0.5 then
 		-- if we got a kill before the expected time forgiveness interval, igonre the kill
 	else
 		reset_combo()
@@ -1190,12 +1188,12 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 	end)
 end
 
--- maniac 9th card buff for DS
+-- muscle 9th card buff for DS
 local gilza_orig_PlayerManager_health_regen = PlayerManager.health_regen
 function PlayerManager:health_regen()
 	local res = gilza_orig_PlayerManager_health_regen(self)
 	if managers.player:has_category_upgrade("player", "passive_health_regen") and Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
-		res = res + 0.0325
+		res = res + 0.02
 	end
 	return res
 end
