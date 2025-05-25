@@ -158,7 +158,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			-- fully loaded aced pickup buff 75->85
 			self.values.player.pick_up_ammo_multiplier = {
 				1.35,
-				1.85
+				1.75
 			}
 			-- make old fully loaded aced grenade pick up base kit with perks, buff the skill values. nerf grenade pick ups depending on the grenade
 			self.values.player.regain_throwable_from_ammo = {
@@ -245,7 +245,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			}
 			-- ammo pick up reduction for BE
 			self.values.player.pick_up_ammo_reduction = {
-				0.8,
+				1,
 				1
 			}
 		end
@@ -279,6 +279,11 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 					5,
 					10
 				}
+			}
+			-- ap chance for silencers - incremental
+			self.values.weapon.armor_piercing_chance_silencer = {
+				0.15,
+				0.35
 			}
 		end
 		New_Ghost_Skills()
@@ -336,7 +341,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			---- REVENANT
 			-- new version for self heal with up you go
 			self.values.player.health_regain_V2 = {
-				0.25
+				0.3
 			}
 			-- adjust normal selfheal from up you go just in case
 			self.values.player.revived_health_regain = {
@@ -411,7 +416,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.temporary.new_berserk_weapon_damage_multiplier_cooldown = {
 				{
 					1,
-					45
+					40
 				}
 			}
 		end
@@ -438,7 +443,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			}
 			-- armour piercing buff
 			self.values.weapon.armor_piercing_chance = {
-				0.5
+				0.5,
+				1 -- crook
 			}
 			-- extra 15% move speed
 			self.values.player.movement_speed_multiplier = {
@@ -449,7 +455,23 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.player.stamina_multiplier = {
 				1.25
 			}
-			
+			---- BURGLAR
+			-- stelf buffs
+			self.values.player.corpse_dispose_speed_multiplier = {
+				0.75
+			}
+			self.values.player.pick_lock_speed_multiplier = {
+				0.75
+			}
+			self.values.player.alarm_pager_speed_multiplier = {
+				0.75
+			}
+			self.values.temporary.dodge_roll_with_advantage = {
+				{
+					true,
+					1
+				}
+			}
 			---- INFILTRATOR/SOCIOPATH
 			-- melee dmg boosts adjustments
 			self.values.melee.stacking_hit_damage_multiplier = {
@@ -482,7 +504,11 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 					5
 				}
 			}
-			
+			-- grinder ap
+			self.values.player.armor_piercing_chance = {
+				0.1,
+				0.35
+			}
 			---- HACKER
 			-- PECM jammer - longer feedback, but less cooldown on kill; WARN: duration lasts for 12/6 seconds based on game state, code for that is in playermanager.lua
 			self.values.player.pocket_ecm_jammer_base[1].duration = 12
@@ -640,7 +666,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			-- hitman new combo skill
 			self.values.temporary.death_dance_combo_invulnerability = {
 				{
-					5,
+					8,
 					20
 				}
 			}
@@ -663,6 +689,16 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				{
 					true,
 					2
+				}
+			}
+			-- biker new regen pause
+			self.values.player.wild_temporary_regen_pause_default = {
+				1
+			}
+			self.values.temporary.player_wild_temporary_regen_pause = {
+				{
+					true,
+					1
 				}
 			}
 			-- anarchist
@@ -795,7 +831,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				0.05
 			}
 			self.values.player.speed_junkie_meter_on_kill = {
-				6
+				10
 			}
 			self.values.temporary.player_speed_junkie_armor_on_dodge = {
 				{
@@ -1269,6 +1305,26 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 					category = "temporary"
 				}
 			}
+			-- crook
+			self.definitions.weapon_passive_armor_piercing_chance_maxed = {
+				name_id = "menu_weapon_passive_armor_piercing_chance_maxed",
+				category = "feature",
+				upgrade = {
+					value = 2,
+					upgrade = "armor_piercing_chance",
+					category = "weapon"
+				}
+			}
+			-- burglar
+			self.definitions.temporary_dodge_roll_with_advantage = {
+				name_id = "menu_temporary_dodge_roll_with_advantage",
+				category = "temporary",
+				upgrade = {
+					value = 1,
+					upgrade = "dodge_roll_with_advantage",
+					category = "temporary"
+				}
+			}
 			-- yakuza
 			self.definitions.player_yakuza_suppression_resist = {
 				name_id = "menu_player_yakuza_suppression_resist",
@@ -1382,7 +1438,15 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 					category = "temporary"
 				}
 			}
-			
+			self.definitions.player_wild_temporary_regen_pause = {
+				name_id = "menu_player_wild_temporary_regen_pause",
+				category = "temporary",
+				upgrade = {
+					value = 1,
+					upgrade = "player_wild_temporary_regen_pause",
+					category = "temporary"
+				}
+			}
 		end
 		New_Vanilla_Perk_definitions()
 		

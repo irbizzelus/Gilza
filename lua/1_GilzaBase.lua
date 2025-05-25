@@ -101,6 +101,8 @@ function Gilza:modCompatibility()
 					GameInfoManager._BUFFS.temporary.akimbo_pistol_armor_regen_timer_multiplier = "akimbo_pistol_armor_regen_timer_multiplier"
 					GameInfoManager._BUFFS.temporary.death_dance_combo_invulnerability = "death_dance_combo_invulnerability"
 					GameInfoManager._BUFFS.temporary.player_bounty_hunter = "player_bounty_hunter"
+					GameInfoManager._BUFFS.temporary.dodge_roll_with_advantage = "dodge_roll_with_advantage"
+					GameInfoManager._BUFFS.temporary.player_wild_temporary_regen_pause = "player_wild_temporary_regen_pause"
 				else
 					DelayedCalls:Add("Gilza_wait_for_vhp_to_load", 0.25, function()
 						tryaddingbuffs()

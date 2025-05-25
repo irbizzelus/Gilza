@@ -90,7 +90,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 				self.specializations[9][1] = {
 					cost = 200,
 					desc_id = "menu_sociopathinfil_1_desc",
-					name_id = "menu_deck9_1",
+					name_id = "menu_sociopathinfil_1",
 					upgrades = {
 						"player_damage_dampener_outnumbered_strong",
 						"melee_stacking_hit_damage_multiplier_1",
@@ -110,7 +110,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 				self.specializations[8][1] = {
 					cost = 200,
 					desc_id = "menu_sociopathinfil_1_desc",
-					name_id = "menu_deck8_7",
+					name_id = "menu_sociopathinfil_1",
 					upgrades = {
 						"player_damage_dampener_outnumbered_strong",
 						"melee_stacking_hit_damage_multiplier_1",
@@ -123,8 +123,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 				}
 				self.specializations[8][5] = {
 					cost = 1000,
-					desc_id = "menu_deck8_3_desc",
-					name_id = "menu_deck8_3",
+					desc_id = "menu_deck8_5_desc",
+					name_id = "menu_deck8_5",
 					upgrades = {
 						"player_damage_dampener_close_contact_2",
 						"melee_stacking_hit_damage_multiplier_1"
@@ -134,6 +134,10 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 						4
 					}
 				}
+				self.specializations[8][3].desc_id = "menu_deck8_3_desc"
+				self.specializations[8][3].name_id = "menu_deck8_3"
+				self.specializations[8][7].desc_id = "menu_deck8_7_desc"
+				self.specializations[8][7].name_id = "menu_deck8_7"
 			end
 			Infiltrator_updates()
 			
@@ -186,6 +190,27 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 			end
 			Rogue_updates()
 			
+			-- Crook
+			local function Crook_updates()
+				self.specializations[6][9].upgrades = {
+					"player_passive_loot_drop_multiplier",
+					"player_armor_regen_timer_multiplier_tier",
+					"weapon_passive_armor_piercing_chance_maxed"
+				}
+			end
+			Crook_updates()
+			
+			-- Burglar
+			local function Burglar_updates()
+				self.specializations[7][5].upgrades = {
+					"player_tier_dodge_chance_2",
+					"player_stand_still_crouch_camouflage_bonus_2",
+					"player_pick_lock_speed_multiplier",
+					"temporary_dodge_roll_with_advantage"
+				}
+			end
+			Burglar_updates()
+			
 			-- Ex-president
 			local function Ex_pres_updates()
 				self.specializations[13][5].upgrades = {
@@ -222,6 +247,17 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 				}
 			end
 			Gambler_updates()
+			
+			-- Biker
+			local function Biker_updates()
+				self.specializations[16][1].upgrades = {
+					"player_wild_health_amount_1",
+					"player_wild_armor_amount_1",
+					"player_wild_temporary_regen_pause",
+					"player_tier_armor_multiplier_1"
+				}
+			end
+			Biker_updates()
 			
 		end
 		VANILLA_PERKS()
@@ -602,8 +638,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		self.skills.fire_control[1].upgrades = { "player_hipfire_less_recoil" }
 		self.skills.fire_control[2].upgrades = { "player_hipfire_no_accuracy_penalty" }
 		
-		self.skills.body_expertise[1].upgrades = { "weapon_automatic_head_shot_add_1", "player_pick_up_ammo_reduction_1", "player_ap_bullets_aced"}
-		self.skills.body_expertise[2].upgrades = { "weapon_automatic_head_shot_add_2", "player_pick_up_ammo_reduction_2"}
+		self.skills.body_expertise[1].upgrades = { "weapon_automatic_head_shot_add_1"}
+		self.skills.body_expertise[2].upgrades = { "weapon_automatic_head_shot_add_2", "player_ap_bullets_aced"}
 		
 		---- GHOST
 		self.skills.jail_workout[1].upgrades = { "player_additional_assets" }
@@ -629,6 +665,9 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		self.skills.jail_diet[1].upgrades = {"player_dodge_armor_regen_1"}
 		self.skills.jail_diet[2].upgrades = {"player_dodge_armor_regen_2"}
 		self.skills.jail_diet.icon_xy = {10,8}
+		
+		self.skills.silence_expert[1].upgrades = {"weapon_silencer_recoil_index_addend", "weapon_silencer_enter_steelsight_speed_multiplier", "weapon_silencer_armor_piercing_chance_1"}
+		self.skills.silence_expert[2].upgrades = {"weapon_silencer_spread_index_addend", "weapon_silencer_armor_piercing_chance_2"}
 		
 		---- FUGITIVE
 		self.skills.dance_instructor[1].upgrades = {"pistol_fire_rate_multiplier"}
