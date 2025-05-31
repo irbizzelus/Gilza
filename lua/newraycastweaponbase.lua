@@ -708,3 +708,46 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "_fire_raycast", function (self,use
 
 	return result
 end)
+
+-- yet another fix for a weaponlib crash
+local empty_ids = Idstring("")
+Hooks:OverrideFunction(NewRaycastWeaponBase, "tweak_data_anim_play_redirect", function (self, anim, speed_multiplier)
+	local played = false
+	
+	-- this sanity check in particular
+	if not self._weapon_animation_redirects or not self._part_animation_redirects then
+		return false
+	end
+	
+	if self._weapon_animation_redirects[anim] then
+		local anim_name = self._weapon_animation_redirects[anim]
+		local ids_anim_name = Idstring(anim_name)
+
+		local offset = self:_get_anim_start_offset(anim_name)
+		local result = self._unit:play_redirect(ids_anim_name, offset)
+
+		if result ~= empty_ids and speed_multiplier then
+			self._unit:anim_state_machine():set_speed(result, speed_multiplier)
+			played = true
+		end
+	end
+
+	for part_id, part_redirects in pairs(self._part_animation_redirects) do
+		local unit = self._parts[part_id].unit
+
+		if unit and part_redirects[anim] then
+			local anim_name = part_redirects[anim]
+			local ids_anim_name = Idstring(anim_name)
+
+			local offset = self:_get_anim_start_offset(anim_name)
+			local result = unit:play_redirect(ids_anim_name, offset)
+
+			if result ~= empty_ids and speed_multiplier then
+				unit:anim_state_machine():set_speed(result, speed_multiplier)
+				played = true
+			end
+		end
+	end
+
+	return played
+end)
