@@ -35,8 +35,16 @@ Hooks:PreHook(CopDamage, "damage_melee", "Gilza_new_melee_damage", function(self
 		elseif self._char_tweak.Gilza_winters_tag then
 			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 20)) -- winters takes 2x the amount of hits
 		elseif self._char_tweak.Gilza_headless_dozer_tag then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 150)) -- headless dozers take 15x the amount of hits, cuz thats like their only weakness
+			local reduction = 150
+			if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+				reduction = 300
+			end
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / reduction)) -- headless dozers take 15x the amount of hits, cuz thats like their only weakness
 		elseif self._char_tweak.access == "tank" then
+			local reduction = 100
+			if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+				reduction = 200
+			end
 			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 100)) -- dozers take 10x the amount of hits
 		else
 			attack_data.damage = self._HEALTH_INIT * (attack_data.damage / 10) + 0.1 -- +1 dmg is needed due to rounding calculations with low hp targets, like street cops, that leave them with 0.1 hp instead of killing them

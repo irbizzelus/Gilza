@@ -9,6 +9,7 @@
 	"priority" : 19,
 	"hooks" : [
 		{"hook_id": "lib/units/pickups/ammoclip", "script_path" : "lua/ammoclip.lua"},
+		{"hook_id": "lib/network/base/basenetworksession", "script_path": "lua/basenetworksession.lua"},
 		{"hook_id": "lib/managers/menu/blackmarketgui", "script_path" : "lua/blackmarketgui.lua"},
 		{"hook_id": "lib/managers/blackmarketmanager", "script_path" : "lua/blackmarketmanager.lua"},
 		{"hook_id": "lib/tweak_data/charactertweakdata", "script_path" : "lua/charactertweakdata.lua"},

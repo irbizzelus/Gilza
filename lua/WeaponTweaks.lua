@@ -2254,7 +2254,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_g22c.AMMO_MAX = self.x_g22c.NR_CLIPS_MAX * self.x_g22c.CLIP_AMMO_MAX
 			
 			self.c96.stats.recoil = 17
-			self.c96.stats.reload = 16
+			self.c96.stats.reload = 20
 			self.c96.CLIP_AMMO_MAX = 10
 			self.c96.NR_CLIPS_MAX = 6
 			self.c96.AMMO_MAX = self.c96.NR_CLIPS_MAX * self.c96.CLIP_AMMO_MAX

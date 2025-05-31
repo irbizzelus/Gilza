@@ -443,8 +443,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			}
 			-- armour piercing buff
 			self.values.weapon.armor_piercing_chance = {
-				0.5,
-				1 -- crook
+				0.4,
+				0.75 -- crook
 			}
 			-- extra 15% move speed
 			self.values.player.movement_speed_multiplier = {
@@ -466,11 +466,26 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.player.alarm_pager_speed_multiplier = {
 				0.75
 			}
-			self.values.temporary.dodge_roll_with_advantage = {
-				{
-					true,
-					1
-				}
+			-- supressor buff
+			self.values.player.silencer_concealment_increase = {
+				1,
+				3
+			}
+			-- crook skill adjustments to buff LBV for burglar
+			self.values.player.level_2_dodge_addend = {
+				0.05,
+				0.1,
+				0.25
+			}
+			self.values.player.level_3_dodge_addend = {
+				0.05,
+				0.1,
+				0.25
+			}
+			self.values.player.level_4_dodge_addend = {
+				0.05,
+				0.1,
+				0.25
 			}
 			---- INFILTRATOR/SOCIOPATH
 			-- melee dmg boosts adjustments
@@ -692,10 +707,10 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				}
 			}
 			-- biker new regen pause
-			self.values.player.wild_temporary_regen_pause_default = {
+			self.values.player.wild_temporary_regen_pause_default = { -- used as reference for default delay
 				1
 			}
-			self.values.temporary.player_wild_temporary_regen_pause = {
+			self.values.temporary.player_wild_temporary_regen_pause = { -- actual delay. this was set up such because this skill can be adjusted to be lower in the biker update func
 				{
 					true,
 					1
@@ -766,7 +781,34 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 					}
 				}
 			}
-			
+			-- leech
+			-- fragments
+			self.values.player.copr_static_damage_ratio = {
+				0.25, -- 4
+				0.125 -- 8
+			}
+			-- activation heal
+			self.values.player.copr_activate_bonus_health_ratio = {
+				0.5
+			}
+			-- new
+			self.values.temporary.copr_invuln_on_segment_loss = {
+				{
+					true,
+					0.5
+				}
+			}
+			-- CD
+			self.copr_ability_cooldown = 60
+			-- CD return on kill
+			self.values.player.copr_speed_up_on_kill = {
+				1.5
+			}
+			-- dmg threshold
+			self.copr_high_damage_multiplier = {
+				15,
+				2
+			}
 		end
 		New_Vanilla_Perks()
 		
@@ -779,7 +821,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				0.75,
 				0.65,
 				0.55,
-				3
+				4
 			}
 			self.values.player.extra_ammo_cut = {
 				0.2
@@ -790,12 +832,12 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				0.25
 			}
 			self.values.player.damage_resist_brawler = {
-				0.9,
-				0.8,
-				0.7
+				0.95,
+				0.85,
+				0.75
 			}
 			self.values.player.stamina_on_melee_kill_brawler = {
-				0.1
+				0.05
 			}
 			self.values.player.AP_damage_resist_brawler = {
 				true
@@ -803,9 +845,16 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.player.armor_regen_brawler = {
 				true
 			}
-			self.values.player.damage_resist_faraway_brawler = {
+			self.values.player.damage_resist_faraway_brawler = { -- legacy
 				true
 			}
+			self.values.player.damage_resist_teammates_brawler = {
+				{
+					absorption = 0.25,
+					resist = 0.96
+				}
+			}
+			
 			---- Speed Junkie deck stuff
 			-- anarchist armor increase, extended for new junkie perk
 			self.values.player.armor_increase = {
@@ -1316,13 +1365,24 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				}
 			}
 			-- burglar
-			self.definitions.temporary_dodge_roll_with_advantage = {
-				name_id = "menu_temporary_dodge_roll_with_advantage",
-				category = "temporary",
+			self.definitions.player_silencer_concealment_increase_1 = {
+				incremental = true,
+				name_id = "menu_player_silencer_concealment_increase",
+				category = "feature",
 				upgrade = {
 					value = 1,
-					upgrade = "dodge_roll_with_advantage",
-					category = "temporary"
+					upgrade = "silencer_concealment_increase",
+					category = "player"
+				}
+			}
+			self.definitions.player_silencer_concealment_increase_2 = {
+				incremental = true,
+				name_id = "menu_player_silencer_concealment_increase",
+				category = "feature",
+				upgrade = {
+					value = 2,
+					upgrade = "silencer_concealment_increase",
+					category = "player"
 				}
 			}
 			-- yakuza
@@ -1447,6 +1507,16 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 					category = "temporary"
 				}
 			}
+			-- leech
+			self.definitions.temporary_copr_invuln_on_segment_loss = {
+				name_id = "menu_temporary_copr_invuln_on_segment_loss",
+				category = "temporary",
+				upgrade = {
+					value = 1,
+					upgrade = "copr_invuln_on_segment_loss",
+					category = "temporary"
+				}
+			}
 		end
 		New_Vanilla_Perk_definitions()
 		
@@ -1551,7 +1621,16 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 					category = "player"
 				}
 			}
-			
+			self.definitions.player_damage_resist_teammates_brawler = {
+				name_id = "menu_player_damage_resist_teammates_brawler",
+				category = "feature",
+				upgrade = {
+					upgrade = "damage_resist_teammates_brawler",
+					category = "player",
+					value = 1
+				}
+			}
+	
 			---- SPEED JUNKIE
 			self.definitions.player_speed_junkie_meter = {
 				name_id = "menu_player_speed_junkie_meter",

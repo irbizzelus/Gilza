@@ -2487,7 +2487,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_pis_c96_b_long.has_description = true
 			self.parts.wpn_fps_pis_c96_b_long.desc_id = "bm_wpn_fps_pis_c96_b_long_newdesc"
 			self.wpn_fps_pis_x_c96.override.wpn_fps_pis_c96_b_long = {stats = {value = 1,concealment = -3,damage = 48,spread = 5,recoil = -4,total_ammo_mod = -6.67}}
-			self.parts.wpn_fps_pis_c96_m_extended.stats.reload = -5
+			self.wpn_fps_pis_x_c96.override.wpn_fps_pis_c96_m_extended.stats.reload = -2
+			self.parts.wpn_fps_pis_c96_m_extended.stats.reload = -2
 		end
 		Gilza_init_c96()
 		

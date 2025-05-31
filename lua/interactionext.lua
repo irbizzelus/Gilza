@@ -60,8 +60,8 @@ Hooks:PostHook(SentryGunInteractionExt, "_on_death_event", "Gilza_sentry_revive"
 	end
 end)
 
--- new combat medic aced
 Hooks:PostHook(ReviveInteractionExt, "interact", "Gilza_post_revive", function (self,reviving_unit)
+	-- new combat medic aced
 	if reviving_unit and reviving_unit == managers.player:player_unit() and managers.player:has_category_upgrade("player", "revive_action_self_heal") then
 		local stoic = managers.player:has_category_upgrade("player", "armor_to_health_conversion")
 		local guardian = managers.player:has_category_upgrade("player", "guardian_armor_remover")
@@ -74,4 +74,21 @@ Hooks:PostHook(ReviveInteractionExt, "interact", "Gilza_post_revive", function (
 			player_dmg:restore_armor(armor)
 		end
 	end
+	
+	-- new leech heal bonus
+	if reviving_unit and reviving_unit == managers.player:player_unit() and managers.player:has_activate_temporary_upgrade("temporary", "copr_ability") then
+		managers.player._Gilza_leech_did_revive_during_effect = true
+	end
 end)
+
+-- leech heal block in dire state
+local gilza_orig_doc_bag_interaction_blocked = DoctorBagBaseInteractionExt._interact_blocked
+function DoctorBagBaseInteractionExt:_interact_blocked(player)
+	local res1, res2, res3 = gilza_orig_doc_bag_interaction_blocked(self, player)
+	
+	if player:character_damage()._gilza_leech_dire_state then
+		return true, false, "hint_health_berserking"
+	else
+		return res1, res2, res3
+	end
+end

@@ -256,3 +256,22 @@ Hooks:PostHook(PlayerMovement, "init", "Gilza_PlayerMovement_post_init", functio
 		self._rally_skill_data.range_sq = inspire_range * inspire_range
 	end
 end)
+
+-- update our own attention bonuses to exclude brawler from getting positive values from other skills. this is if we host, for client-play go to basenetworksession
+Hooks:OverrideFunction(PlayerMovement, "_apply_attention_setting_modifications", function (self, setting)
+	setting.detection = self._unit:base():detection_settings()
+	
+	if not (managers.player:has_category_upgrade("player", "damage_resist_brawler") and managers.player:has_category_upgrade("player", "uncover_multiplier")) then
+		if managers.player:has_category_upgrade("player", "camouflage_bonus") then
+			setting.weight_mul = (setting.weight_mul or 1) * managers.player:upgrade_value("player", "camouflage_bonus", 1)
+		end
+
+		if managers.player:has_category_upgrade("player", "camouflage_multiplier") then
+			setting.weight_mul = (setting.weight_mul or 1) * managers.player:upgrade_value("player", "camouflage_multiplier", 1)
+		end
+	end
+
+	if managers.player:has_category_upgrade("player", "uncover_multiplier") then
+		setting.weight_mul = (setting.weight_mul or 1) * managers.player:upgrade_value("player", "uncover_multiplier", 1)
+	end
+end)

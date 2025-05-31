@@ -9,6 +9,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 			name_id = "menu_deckall_2",
 			upgrades = {
 				"passive_doctor_bag_interaction_speed_multiplier",
+				"player_passive_armor_movement_penalty_multiplier"
 			},
 			icon_xy = {
 				1,
@@ -19,12 +20,11 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		-- unchanged, used for new decks
 		local deck4 = {
 			cost = 600,
-			desc_id = "menu_deckall_4_desc_new",
+			desc_id = "menu_deckall_4_desc",
 			name_id = "menu_deckall_4",
 			upgrades = {
 				"passive_player_xp_multiplier",
-				"player_passive_suspicion_bonus",
-				"player_passive_armor_movement_penalty_multiplier"
+				"player_passive_suspicion_bonus"
 			},
 			icon_xy = {
 				3,
@@ -66,6 +66,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		-- Change common perk cards in each deck
 		for i = 1, #self.specializations, 1 do
 			self.specializations[i][2] = deck2
+			self.specializations[i][4] = deck4
 			self.specializations[i][6] = deck6
 			self.specializations[i][8] = deck8
 		end
@@ -206,7 +207,9 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 					"player_tier_dodge_chance_2",
 					"player_stand_still_crouch_camouflage_bonus_2",
 					"player_pick_lock_speed_multiplier",
-					"temporary_dodge_roll_with_advantage"
+					"player_level_2_dodge_addend_1",
+					"player_level_2_dodge_addend_2",
+					"player_silencer_concealment_increase_2"
 				}
 			end
 			Burglar_updates()
@@ -259,6 +262,28 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 			end
 			Biker_updates()
 			
+			-- Leech
+			local function Leech_updates()
+				self.specializations[22][1].upgrades = {
+					"temporary_copr_ability_1",
+					"copr_ability",
+					"player_copr_static_damage_ratio_1",
+					"player_copr_activate_bonus_health_ratio_1",
+					"player_copr_teammate_heal_1",
+					"temporary_copr_invuln_on_segment_loss"
+				}
+				self.specializations[22][7].upgrades = {
+					"player_passive_health_multiplier_3"
+				}
+				self.specializations[22][9].upgrades = {
+					"player_activate_ability_downed",
+					"player_copr_static_damage_ratio_2",
+					"player_passive_loot_drop_multiplier"
+				}
+				self.specializations[22].category = "supportive"
+			end
+			Leech_updates()
+			
 		end
 		VANILLA_PERKS()
 		
@@ -278,7 +303,9 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 						"player_perk_armor_regen_timer_multiplier_3",
 						"player_perk_armor_regen_timer_multiplier_4",
 						"player_perk_armor_regen_timer_multiplier_5",
-						"player_perk_armor_regen_timer_multiplier_6" -- important one
+						"player_perk_armor_regen_timer_multiplier_6", -- important one
+						"melee_stacking_hit_damage_multiplier_1",
+						"melee_stacking_hit_expire_t",
 					},
 					icon_xy = {
 						2,
@@ -295,7 +322,6 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 					name_id = "menu_deck_brawler3",
 					upgrades = {
 						"player_damage_resist_brawler2",
-						"player_uncover_multiplier",
 						"player_passive_armor_movement_penalty_multiplier2",
 					},
 					icon_xy = {
@@ -332,7 +358,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 					short_id = "menu_deck_brawler7_desc_short",
 					name_id = "menu_deck_brawler7",
 					upgrades = {
-						"player_damage_resist_faraway_brawler",
+						"player_uncover_multiplier",
+						"player_damage_resist_teammates_brawler"
 					},
 					icon_xy = {
 						0,

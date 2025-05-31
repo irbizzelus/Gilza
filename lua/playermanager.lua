@@ -10,7 +10,7 @@ Hooks:PostHook(PlayerManager, "_setup", "Gilza_post_setup", function(self)
 end)
 
 -- made dmg resistance stackable by making them additive instead of multiplicative. to avoid god mode, max dmg resist is capped at 90%
-function PlayerManager:damage_reduction_skill_multiplier(damage_type)
+Hooks:OverrideFunction(PlayerManager, "damage_reduction_skill_multiplier", function (self, damage_type)
 	local multiplier = 1
 	multiplier = multiplier - (1 - self:temporary_upgrade_value("temporary", "dmg_dampener_outnumbered", 1))
 	multiplier = multiplier - (1 - self:temporary_upgrade_value("temporary", "dmg_dampener_outnumbered_strong", 1))
@@ -44,9 +44,33 @@ function PlayerManager:damage_reduction_skill_multiplier(damage_type)
 				multiplier = multiplier - (1 - managers.player:upgrade_value("player", "damage_resist_brawler", 1))
 			end
 		end
-	
-		local att_unit = alive(Gilza.latest_bullet_attacker_unit) and Gilza.latest_bullet_attacker_unit
+		
+		if managers.player:has_category_upgrade("player", "damage_resist_teammates_brawler") then
+			if ( managers.player:player_unit():character_damage():_max_health() / managers.player:player_unit():character_damage():get_real_health() ) >= 2 and managers.player:player_unit():character_damage():get_real_armor() > 0 then
+				if self._gilza_brawler_teammates_nearby and self._gilza_brawler_teammates_nearby >= 1 then
+					local skill = managers.player:upgrade_value("player", "damage_resist_teammates_brawler")
+					local brawler_resist = 1
+					if skill and type(skill) ~= "number" then
+						brawler_resist = skill.resist
+					end
+					brawler_resist = 1 - brawler_resist
+					
+					if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+						brawler_resist = brawler_resist * 2
+					end
+					
+					brawler_resist = brawler_resist * self._gilza_brawler_teammates_nearby
+					
+					if brawler_resist > 0 then
+						multiplier = multiplier - brawler_resist
+					end
+				end
+			end
+		end
+		
+		-- legacy
 		if managers.player:has_category_upgrade("player", "damage_resist_faraway_brawler") then
+			local att_unit = alive(Gilza.latest_bullet_attacker_unit) and Gilza.latest_bullet_attacker_unit
 			if ( managers.player:player_unit():character_damage():_max_health() / managers.player:player_unit():character_damage():get_real_health() ) >= 2 and managers.player:player_unit():character_damage():get_real_armor() > 0 then
 				if managers.player:player_unit():camera() and managers.player:player_unit():camera():position() and att_unit and att_unit:position() then
 					local dist = mvector3.distance(managers.player:player_unit():camera():position(), att_unit:position())
@@ -90,11 +114,9 @@ function PlayerManager:damage_reduction_skill_multiplier(damage_type)
 	end
 	
 	return math.clamp(multiplier, 0.1, 1)
-end
+end)
 
 -- on kill add brawler's armor regen and fearmonger's speed boost if we have those skills
-local brawler_melee_kill_count = 0
-local brawler_regen_count = 0
 Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_on_killshot", function(self, killed_unit, variant, headshot, weapon_id)
 	local player_unit = self:player_unit()
 
@@ -104,6 +126,28 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_on_killshot", function(self,
 
 	if CopDamage.is_civilian(killed_unit:base()._tweak_table) then
 		return
+	end
+	
+	-- new leech
+	if self:has_activate_temporary_upgrade("temporary", "copr_ability") and self:has_activate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss") then
+		local damage_ext = player_unit:character_damage()
+		local static_damage_ratio = self:upgrade_value_nil("player", "copr_static_damage_ratio")
+
+		if static_damage_ratio and damage_ext then
+			local current_health_ratio = damage_ext:health_ratio()
+			local wanted_health_ratio = math.floor((current_health_ratio + 0.01 + static_damage_ratio) / static_damage_ratio) * static_damage_ratio
+			local health_regen = wanted_health_ratio - current_health_ratio
+
+			if health_regen > 0 then
+				damage_ext:restore_health(health_regen)
+				damage_ext:on_copr_killshot()
+				local teammate_heal_level = managers.player:upgrade_level_nil("player", "copr_teammate_heal")
+				if teammate_heal_level and damage_ext:get_real_health() > 0 then
+					player_unit:network():send("copr_teammate_heal", teammate_heal_level)
+				end
+				managers.player:deactivate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss")
+			end
+		end
 	end
 	
 	-- new hitman akimbo/pistol armor recovery buff
@@ -257,24 +301,45 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_on_killshot", function(self,
 	end
 	
 	-- brawler armor melee regen
-	if player_unit:character_damage() and managers.player:has_category_upgrade("player", "armor_regen_brawler") and variant == "melee" then
-		brawler_melee_kill_count = brawler_melee_kill_count + 1
+	self._gilza_brawler_melee_kill_count = self._gilza_brawler_melee_kill_count or 0 -- used for delayed call naming to avoid interupting older delayedcalls
+	self._gilza_brawler_regen_count = self._gilza_brawler_regen_count or 0
+	local function is_brawler_regen_allowed()
+		local res = false
+		if variant == "melee" then
+			res = true
+		elseif weapon_id == "saw" or weapon_id == "saw_secondary" then
+			res = true
+		elseif self._gilza_brawler_regen_count == 0 then
+			res = true
+		end
+		return res
+	end
+	if managers.player:has_category_upgrade("player", "armor_regen_brawler") and player_unit:character_damage() and is_brawler_regen_allowed() then
+		self._gilza_brawler_melee_kill_count = self._gilza_brawler_melee_kill_count + 1
+		if self._gilza_brawler_melee_kill_count >= 4 then
+			self._gilza_brawler_melee_kill_count = 1
+		end
 		-- i am too lazy to set up an actual overtime regeneration effect for armor, so here is a braindead method
 		-- it adds 7 delayed calls with a 0.75 interval in between each call
-		-- as a result we get 8 "ticks" every 0.75s with 12.5 points of armor per regen tick, total'ing at 100
-		if brawler_regen_count < 3 then
-			brawler_regen_count = brawler_regen_count + 1
-			player_unit:character_damage():restore_armor(1.25)
-			for i=1,7 do
-				DelayedCalls:Add("Gilza_brawler_armor_regen_"..tostring(i).."_for_hit_number_"..tostring(brawler_melee_kill_count), 0.75 * i, function()
-					if player_unit and alive(player_unit) and player_unit:character_damage() then
-						player_unit:character_damage():restore_armor(1.25)
-					end
-					if i == 7 then
-						brawler_regen_count = brawler_regen_count - 1
-					end
-				end)
-			end
+		-- as a result we get 8 "ticks" every 0.75s
+		local total_regen = 2.5 -- 25 hp points for <= DW
+		if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+			total_regen = 5.0
+		end
+		local regen_per_tick = total_regen / 8
+		if self._gilza_brawler_regen_count < 3 then
+			self._gilza_brawler_regen_count = self._gilza_brawler_regen_count + 1
+		end
+		player_unit:character_damage():restore_armor(regen_per_tick)
+		for i=1,7 do
+			DelayedCalls:Add("Gilza_brawler_armor_regen_"..tostring(i).."_for_hit_number_"..tostring(self._gilza_brawler_melee_kill_count), 0.75 * i, function()
+				if player_unit and alive(player_unit) and player_unit:character_damage() then
+					player_unit:character_damage():restore_armor(regen_per_tick)
+				end
+				if i == 7 then
+					self._gilza_brawler_regen_count = self._gilza_brawler_regen_count - 1
+				end
+			end)
 		end
 	end
 	
@@ -851,13 +916,32 @@ Hooks:PostHook(PlayerManager, "_check_damage_to_cops", "Gilza_post_check_damage_
 end)
 
 -- adds absorption for 9th maniac card on DS
-function PlayerManager:damage_absorption()
+Hooks:OverrideFunction(PlayerManager, "damage_absorption", function (self)
 	local total = 0
 
 	for _, absorption in pairs(self._damage_absorption) do
 		total = total + Application:digest_value(absorption, false)
 	end
-
+	
+	-- new brawler bonuses
+	if managers.player:has_category_upgrade("player", "damage_resist_teammates_brawler") then
+		if self._gilza_brawler_teammates_nearby and self._gilza_brawler_teammates_nearby >= 1 and (managers.player:player_unit():character_damage():_max_health() / managers.player:player_unit():character_damage():get_real_health()) >= 2 then
+			local skill = managers.player:upgrade_value("player", "damage_resist_teammates_brawler")
+			local brawler_absorb = 0
+			if skill and type(skill) ~= "number" then
+				brawler_absorb = skill.absorption
+			end
+			
+			if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+				brawler_absorb = brawler_absorb * 4
+			end
+			
+			brawler_absorb = brawler_absorb * self._gilza_brawler_teammates_nearby
+			
+			total = total + brawler_absorb
+		end
+	end
+	
 	-- add more absorption for maniac on DS
 	local diff_mul = 1
 	if managers.player:has_category_upgrade("player", "cocaine_stack_absorption_multiplier") and Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
@@ -868,7 +952,7 @@ function PlayerManager:damage_absorption()
 	total = managers.modifiers:modify_value("PlayerManager:GetDamageAbsorption", total)
 
 	return total
-end
+end)
 
 -- grab armor regen charge on kill for ex-president new 9th card
 Hooks:PostHook(PlayerManager, "chk_store_armor_health_kill_counter", "Gilza_post_chk_store_armor_health_kill_counter", function(self, killed_unit, variant)
@@ -1188,6 +1272,54 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 	end)
 end
 
+function PlayerManager:Gilza_brawler_recursive_updater()
+	
+	self._gilza_brawler_teammates_nearby = self._gilza_brawler_teammates_nearby or 0
+	local player_unit = managers.player:player_unit()
+	local scan_range = 2400
+	
+	if player_unit and alive(player_unit) then
+		local heisters = World:find_units_quick("sphere", player_unit:position(), scan_range, managers.slot:get_mask("criminals"))
+		if heisters and #heisters > 0 then
+			local total_teammates = 0
+			for i=1, #heisters do
+				if heisters[i] ~= player_unit then
+					total_teammates = total_teammates + 1
+				end
+			end
+			self._gilza_brawler_teammates_nearby = total_teammates
+			
+			if self._gilza_brawler_teammates_nearby > 3 then -- dont think this can happen, but better safe then sorry
+				self._gilza_brawler_teammates_nearby = 3
+			end
+		end
+	end
+	
+	local info_hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+	local icon = info_hud.panel:child("Gilza_brawler_GUI_icon")
+	if self._gilza_brawler_teammates_nearby == 0 then
+		icon:set_color(Color(0.2, 1, 1, 1))
+	elseif self._gilza_brawler_teammates_nearby == 1 then
+		icon:set_color(Color(1, 1, 1, 1))
+	elseif self._gilza_brawler_teammates_nearby == 2 then
+		icon:set_color(Color(1, 1, 1, 0))
+	elseif self._gilza_brawler_teammates_nearby == 3 then
+		icon:set_color(Color(1, 0, 1, 0))
+	end
+	
+	if managers.player:has_category_upgrade("player", "armor_regen_brawler") then
+		self._gilza_brawler_regen_count = self._gilza_brawler_regen_count or 0
+		if self._Gilza_new_brawler_regen_counter_GUI and self._gilza_brawler_regen_count and self._gilza_brawler_regen_count >= 0 then
+			self._Gilza_new_brawler_regen_counter_GUI:set_text(tostring(self._gilza_brawler_regen_count).."x")
+			self._Gilza_new_brawler_regen_counter_GUI:set_visible(true)
+		end
+	end
+
+	DelayedCalls:Add("Gilza_brawler_recursive_updater", 0.05, function(self)
+		managers.player:Gilza_brawler_recursive_updater()
+	end)
+end
+
 -- muscle 9th card buff for DS
 local gilza_orig_PlayerManager_health_regen = PlayerManager.health_regen
 function PlayerManager:health_regen()
@@ -1291,4 +1423,32 @@ Hooks:OverrideFunction(PlayerManager, "chk_wild_kill_counter", function (self, k
 			table.insert(self._wild_kill_triggers, insert_index + 1, trigger_time)
 		end
 	end
+end)
+
+Hooks:OverrideFunction(PlayerManager, "clbk_copr_ability_ended", function (self)
+	self:deactivate_temporary_upgrade("temporary", "copr_ability")
+
+	local player_unit = self:local_player()
+	local character_damage = alive(player_unit) and player_unit:character_damage()
+
+	if character_damage then
+		local health_ratio = character_damage:health_ratio()
+		local static_damage_ratio = self:upgrade_value("player", "copr_static_damage_ratio", 0) - 1e-08
+		local out_of_health = health_ratio < static_damage_ratio
+		local risen_from_dead = self:get_property("copr_risen", false) == true
+
+		character_damage:on_copr_ability_deactivated()
+
+		if self._Gilza_leech_did_revive_during_effect then
+			managers.player._block_medkit_auto_revive = false
+			character_damage:restore_health(character_damage:_max_health(), true, false)
+			character_damage:restore_armor(character_damage:_max_armor())
+			self._Gilza_leech_did_revive_during_effect = false
+		elseif out_of_health or risen_from_dead then
+			character_damage:force_into_bleedout(false, risen_from_dead)
+		end
+	end
+
+	self:set_property("copr_risen", nil)
+	managers.hud:set_copr_indicator(false)
 end)
