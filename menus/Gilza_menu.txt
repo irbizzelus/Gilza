@@ -74,6 +74,20 @@
 			"default_value" : true
 		},
 		{
+			"type" : "multiple_choice",
+			"id" : "Gilza_designated_marksman_zoom",
+			"title" : "Gilza_designated_marksman_zoom",
+			"description" : "Gilza_designated_marksman_zoom_desc",
+			"callback" : "Gilza_designated_marksman_zoom",
+			"items" : [
+				"Gilza_designated_marksman_zoom_1",
+				"Gilza_designated_marksman_zoom_2",
+				"Gilza_designated_marksman_zoom_3"
+			],
+			"value" : "designated_marksman_zoom",
+			"default_value" : 2
+		},
+		{
 			"type" : "button",
 			"id" : "Gilza_perk_reset",
 			"title" : "Gilza_perk_reset",

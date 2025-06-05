@@ -71,16 +71,29 @@ Hooks:OverrideFunction(FPCameraPlayerBase, "recoil_kick", function (self, up, do
 	-- if allowed, first 5 bullets have reduced recoil
 	-- this makes short 1-3 round burst feel like they have almost no recoil
 	if does_weapon_qualify() then
-		if self._Gilza_shot_counter == 5 then
-			mul = 0.92 * managers.player:upgrade_value("player", "less_start_recoil", 1)
-		elseif self._Gilza_shot_counter == 4 then
-			mul = 0.86 * managers.player:upgrade_value("player", "less_start_recoil", 1)
-		elseif self._Gilza_shot_counter == 3 then
-			mul = 0.78 * managers.player:upgrade_value("player", "less_start_recoil", 1)
-		elseif self._Gilza_shot_counter == 2 then
-			mul = 0.7 * managers.player:upgrade_value("player", "less_start_recoil", 1)
-		elseif self._Gilza_shot_counter == 1 then
-			mul = 0.62 * managers.player:upgrade_value("player", "less_start_recoil", 1)
+		local shot_based_mul = {
+			0.62,
+			0.7,
+			0.78,
+			0.86,
+			0.92,
+		}
+		if managers.player:has_category_upgrade("player", "less_start_recoil_for_longer") then
+			shot_based_mul = {
+				0.62,
+				0.66,
+				0.7,
+				0.74,
+				0.78,
+				0.82,
+				0.86,
+				0.89,
+				0.92,
+				0.95,
+			}
+		end
+		if self._Gilza_shot_counter <= 5 or (self._Gilza_shot_counter <= 10 and managers.player:has_category_upgrade("player", "less_start_recoil_for_longer")) then
+			mul = shot_based_mul[self._Gilza_shot_counter] * managers.player:upgrade_value("player", "less_start_recoil", 1)
 		end
 	end
 	

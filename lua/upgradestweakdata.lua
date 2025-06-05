@@ -1,3 +1,7 @@
+if not Gilza then
+	dofile("mods/Gilza/lua/1_GilzaBase.lua")
+end
+
 Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", function(self)
 	
 	-- Shotgun HE round. Why it would be here is beyond my understanding
@@ -41,9 +45,28 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				1,
 				4
 			}
-			-- new designated marksman skill aced - 50% better recoil with first 5 shots
+			-- new designated marksman skill - better recoil with first 5/10 shots
 			self.values.player.less_start_recoil = {
+				0.85,
 				0.5
+			}
+			self.values.player.less_start_recoil_for_longer = {
+				true
+			}
+			self.values.smg.zoom_increase = {
+				(Gilza.settings.designated_marksman_zoom - 1) or 2
+			}
+			self.values.assault_rifle.zoom_increase = {
+				(Gilza.settings.designated_marksman_zoom - 1) or 2
+			}
+			self.values.lmg.zoom_increase = {
+				(Gilza.settings.designated_marksman_zoom - 1) or 2
+			}
+			self.values.snp.zoom_increase = {
+				(Gilza.settings.designated_marksman_zoom - 1) or 2
+			}
+			self.values.pistol.zoom_increase = {
+				(Gilza.settings.designated_marksman_zoom - 1) or 2
 			}
 			-- new slow and steady skill - dmg resist if not moving
 			self.values.player.not_moving_damage_reduction_bonus = {
@@ -428,50 +451,21 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 	-- PERKS
 	local function New_Perks()
 		
-		local function New_Vanilla_Perks()
-			---- CREW CHIEF
-			self.values.player.passive_inspire_range_mul = {
-				1.25
-			}
-			---- ROGUE
-			-- 4th dodge chance value added
+		-- skills that are used by multiple perks at once
+		local function Shared_updates()
+			-- 4th value added for ROGUE, mostly just the first value is used sometimes to add dodge
 			self.values.player.passive_dodge_chance = {
 				0.15,
 				0.3,
 				0.45,
 				0.5
 			}
-			-- armour piercing buff
+			-- armour piercing buffs for ROGUE and CROOK
 			self.values.weapon.armor_piercing_chance = {
-				0.4,
+				0.4, -- rogue
 				0.75 -- crook
 			}
-			-- extra 15% move speed
-			self.values.player.movement_speed_multiplier = {
-				1.1, -- given by parkour normaly, now it's at default card #8. this skill is added at #9, so no conflicts
-				1.25
-			}
-			-- extra 25% stamina
-			self.values.player.stamina_multiplier = {
-				1.25
-			}
-			---- BURGLAR
-			-- stelf buffs
-			self.values.player.corpse_dispose_speed_multiplier = {
-				0.75
-			}
-			self.values.player.pick_lock_speed_multiplier = {
-				0.75
-			}
-			self.values.player.alarm_pager_speed_multiplier = {
-				0.75
-			}
-			-- supressor buff
-			self.values.player.silencer_concealment_increase = {
-				1,
-				3
-			}
-			-- crook skill adjustments to buff LBV for burglar
+			-- CROOK skill adjustments to buff LBV for burglar
 			self.values.player.level_2_dodge_addend = {
 				0.05,
 				0.1,
@@ -487,376 +481,25 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				0.1,
 				0.25
 			}
-			---- INFILTRATOR/SOCIOPATH
-			-- melee dmg boosts adjustments
-			self.values.melee.stacking_hit_damage_multiplier = {
-				1,
-				1
-			}
-			-- adjusted hidden infiltrator duration buff to be present on both decks but shorter
-			self.values.melee.stacking_hit_expire_t = {
-				4
-			}
-			-- infil/socio 1st card dmg reduction compensation for new activation rules
-			self.values.temporary.dmg_dampener_outnumbered_strong = {
-				{
-					0.88,
-					5
-				}
-			}
-			-- infiltrator's dmg reduction duration nerf to compensate for new activation rules
-			self.values.temporary.dmg_dampener_close_contact = {
-				{
-					0.92,
-					5
-				},
-				{
-					0.84,
-					5
-				},
-				{
-					0.76,
-					5
-				}
-			}
-			-- grinder ap
-			self.values.player.armor_piercing_chance = {
-				0.1,
-				0.35
-			}
-			---- HACKER
-			-- PECM jammer - longer feedback, but less cooldown on kill; WARN: duration lasts for 12/6 seconds based on game state, code for that is in playermanager.lua
-			self.values.player.pocket_ecm_jammer_base[1].duration = 12
-			self.values.player.pocket_ecm_jammer_base[1].cooldown_drain = 4
-			-- heal from self - 2x the amount
-			self.values.player.pocket_ecm_heal_on_kill = {
-				4
-			}
-			-- temp dodge - now requires 3 kills to trigger and lasts for 50 secs instead of 20
-			self.values.temporary.pocket_ecm_kill_dodge = {
-				{
-					0.2,
-					50,
-					3
-				}
-			}
-			
-			---- HITMAN
-			self.values.temporary.player_new_hitman_regen = {
-				{
-					0.25, -- % of the base recovery timer that is used for the actual duration
-					0.5, -- default duration
-				}
-			}
-			
-			---- YAKUZA
-			self.values.player.yakuza_suppression_resist = {
-				true
-			}
-			
-			---- TAG TEAM
-			self.values.player.tag_team_base.distance = 24
-			self.values.player.tag_team_base.kill_extension = 1.7
-			self.values.player.tag_team_damage_absorption = {
-				{
-					kill_gain = 0.4,
-					max = 3.2
-				}
-			}
-			
-			---- COPYCAT
-			-- 7th card CD nerf from 15 to 30, because this card was fixed to only activate invlun if armor is <0
-			self.values.temporary.mrwi_health_invulnerable = {
-				{
-					0.5,
-					2,
-					30
-				}
-			}
-			
-			-- MANIAC
-			-- new values that deplete faster from max possible to keep player on edge. we are a cocaine addict afterall
-			self.max_cocaine_stacks_per_tick = 120
-			self.cocaine_stacks_tick_t = 1.5
-			self.cocaine_stacks_decay_t = 3
-			self.cocaine_stacks_decay_amount_per_tick = 80
-			self.cocaine_stacks_decay_percentage_per_tick = 0.2
-			
-			-- EX-PRESIDENT
-			-- new 9th card - store armor recovery
-			self.values.player.store_armor_recovery_bonus_timer = {
-				1
-			}
-			-- new 9th card - armor type based
-			self.values.player.body_armor.skill_store_armor_recovery_bonus_timer = {
-				0.25,
-				0.2,
-				0.18,
-				0.16,
-				0.12,
-				0.08,
-				0.04
-			}
-			-- armor health storage value - buffed ICTV
-			self.values.player.body_armor.skill_max_health_store = {
-				14.5,
-				9.5,
-				8.67,
-				6,
-				6,
-				5.5,
-				3.5
-			}
-			-- new 5th card bonus replacing old 15% dodge
-			self.values.player.static_dodge_chance = {
-				0.2
-			}
-			-- new armor gating from stored health. stored health takes this much more dmg
-			self.values.player.armor_health_store_shield = {
-				1.5
-			}
-			
-			-- GAMBLER
-			self.values.player.gain_life_per_players = {
-				0.4
-			}
+			-- GAMBLER's ammo pick up range. this skill is copied from enforcer's skill tree. both were made incremental so they can stack
 			self.values.player.increased_pickup_area = {
 				1.5,
 				2
 			}
-			-- health regen
-			self.loose_ammo_restore_health_values = {
-				{
-					0,
-					8
-				},
-				{
-					8,
-					16
-				},
-				{
-					16,
-					24
-				},
-				multiplier = 0.1,
-				cd = 4,
-				base = 16
-			}
-			self.values.temporary.loose_ammo_restore_health = {}
-			for i, data in ipairs(self.loose_ammo_restore_health_values) do
-				local base = self.loose_ammo_restore_health_values.base
-
-				table.insert(self.values.temporary.loose_ammo_restore_health, {
-					{
-						base + data[1],
-						base + data[2]
-					},
-					self.loose_ammo_restore_health_values.cd
-				})
-			end
-			self.values.temporary.loose_ammo_give_team = {
-				{
-					true,
-					4
-				}
-			}
-			self.values.player.loose_ammo_restore_health_chances = {
-				{
-					addition_chance = 0.7,
-					removal_chance = 0.15,
-					addition_jackpot_chance = 0.2,
-					removal_jackpot_chance = 0.1
-				}
-			}
-			self.values.player.loose_ammo_add_dodge_amount = {
-				{
-					addition_min = 0.02,
-					addition_max = 0.08,
-					removal_min = -0.04,
-					removal_max = -0.16,
-					addition_jackpot = 0.35,
-					removal_jackpot = -0.35
-				}
-			}
-			-- hitman new combo skill
-			self.values.temporary.death_dance_combo_invulnerability = {
-				{
-					8,
-					20
-				}
-			}
-			-- hitman new akimbo recovery proc
-			self.values.temporary.akimbo_pistol_armor_regen_timer_multiplier = {
-				{
-					0.75,
-					10
-				}
-			}
-			-- hitman new bounty hunter
-			self.values.temporary.player_bounty_hunter = {
-				{
-					true,
-					25
-				}
-			}
-			-- hitman new melee/throwable kill armor regen
-			self.values.temporary.badass_hitman_kill_armor_regen = {
-				{
-					true,
-					2
-				}
-			}
-			-- biker new regen pause
-			self.values.player.wild_temporary_regen_pause_default = { -- used as reference for default delay
-				1
-			}
-			self.values.temporary.player_wild_temporary_regen_pause = { -- actual delay. this was set up such because this skill can be adjusted to be lower in the biker update func
-				{
-					true,
-					1
-				}
-			}
-			-- anarchist
-			self.values.player.armor_grinding = {
-				{
-					{
-						5.35,
-						4
-					},
-					{
-						3.25,
-						2.8
-					},
-					{
-						2.7,
-						2.5
-					},
-					{
-						2.2,
-						2.2
-					},
-					{
-						1.6,
-						1.9
-					},
-					{
-						1.32,
-						1.75
-					},
-					{
-						1,
-						1.5
-					}
-				}
-			}
-			self.values.player.damage_to_armor = {
-				{
-					{
-						6,
-						2.5
-					},
-					{
-						3,
-						1.5
-					},
-					{
-						3,
-						1.5
-					},
-					{
-						3,
-						1.5
-					},
-					{
-						1.5,
-						1
-					},
-					{
-						1.5,
-						1
-					},
-					{
-						1.5,
-						1
-					}
-				}
-			}
-			-- leech
-			-- fragments
-			self.values.player.copr_static_damage_ratio = {
-				0.25, -- 4
-				0.125 -- 8
-			}
-			-- activation heal
-			self.values.player.copr_activate_bonus_health_ratio = {
-				0.5
-			}
-			-- new
-			self.values.temporary.copr_invuln_on_segment_loss = {
-				{
-					true,
-					0.5
-				}
-			}
-			-- CD
-			self.copr_ability_cooldown = 60
-			-- CD return on kill
-			self.values.player.copr_speed_up_on_kill = {
-				1.5
-			}
-			-- dmg threshold
-			self.copr_high_damage_multiplier = {
-				15,
-				2
-			}
-		end
-		New_Vanilla_Perks()
-		
-		local function New_Custom_Perks()
-			---- Brawler deck stuff
-			-- why make new code that makes more sense, when old code will do?
+			-- BRAWLER add 4x slower armor recovery multiplier to this vanilla skill
 			self.values.player.perk_armor_regen_timer_multiplier = {
 				0.95,
 				0.85,
 				0.75,
 				0.65,
 				0.55,
-				4
+				3.5
 			}
-			self.values.player.extra_ammo_cut = {
-				0.2
-			}
-			self.values.player.passive_armor_movement_penalty_multiplier = {
-				0.75,
-				0.5,
-				0.25
-			}
-			self.values.player.damage_resist_brawler = {
-				0.95,
-				0.85,
-				0.75
-			}
-			self.values.player.stamina_on_melee_kill_brawler = {
-				0.05
-			}
+			-- BRAWLER's ap damage resist. now also used for Yakuza, and can be used for more things theoretically
 			self.values.player.AP_damage_resist_brawler = {
 				true
 			}
-			self.values.player.armor_regen_brawler = {
-				true
-			}
-			self.values.player.damage_resist_faraway_brawler = { -- legacy
-				true
-			}
-			self.values.player.damage_resist_teammates_brawler = {
-				{
-					absorption = 0.25,
-					resist = 0.96
-				}
-			}
-			
-			---- Speed Junkie deck stuff
-			-- anarchist armor increase, extended for new junkie perk
+			-- SPEED JUNKIE - anarchist's vanilla armor increase skill, extended for our new perk
 			self.values.player.armor_increase = {
 				1,
 				1.1,
@@ -865,113 +508,616 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				0.46,
 				0.52
 			}
-			-- anarchist health decrease, extended for new junkie perk
+			-- SPEED JUNKIE - anarchist's health decrease, extended for our new perk
 			self.values.player.health_decrease = {
 				0.5,
 				0.9
 			}
-			self.values.player.speed_junkie_meter = {
-				true
-			}
-			self.values.player.pause_armor_recovery_when_moving = {
-				true
-			}
-			self.values.player.speed_junkie_stamina_on_kill = {
-				0.05
-			}
-			self.values.player.speed_junkie_meter_on_kill = {
-				10
-			}
-			self.values.temporary.player_speed_junkie_armor_on_dodge = {
-				{
-					1.5, -- amount
-					1, -- cooldown
+		end
+		Shared_updates()
+		
+		local function New_Vanilla_Perks()
+			
+			local function Crew_chief_updates()
+				-- new inspire buff
+				self.values.player.passive_inspire_range_mul = {
+					1.25
 				}
-			}
-			self.values.player.speed_junkie_armor_berserk = {
-				0.25
-			}
-			self.values.player.speed_junkie_meter_boost_agility = {
-				{
-					reload = 1.4,
-					swap_speed = 2,
-					interaction = 1.4
+			end
+			Crew_chief_updates()
+			
+			local function Rogue_updates()
+				-- extra 15% move speed. basic variant is given by parkour skill in vanilla, but now it's at perk card #8. this skill is added at #9, so no conflicts
+				self.values.player.movement_speed_multiplier = {
+					1.1,
+					1.25
 				}
-			}
-			---- Guardian deck stuff
-			self.values.player.guardian_movement_penalty = {
-				0.8
-			}
-			self.values.player.guardian_interaction_speed_penalty = {
-				1.5
-			}
-			self.values.player.guardian_armor_remover = {
-				true
-			}
-			self.values.player.guardian_area_passive = {
-				true
-			}
-			self.values.player.guardian_area_range = {
-				300,
-				500
-			}
-			self.values.player.guardian_area_passive_activation_timer = {
-				5,
-				3
-			}
-			self.values.player.guardian_area_passive_health_regen = {
-				1,
-				2,
-				3
-			}
-			self.values.player.guardian_damage_clamp_inside_1 = {
-				{
-					minimum = 8,
-					maximum = 16,
+				-- extra 25% stamina
+				self.values.player.stamina_multiplier = {
+					1.25
 				}
-			}
-			self.values.player.guardian_damage_clamp_outside_1 = {
-				{
-					minimum = 10,
-					maximum = 20,
+			end
+			Rogue_updates()
+			
+			local function Hitman_updates()
+				-- legacy upgrade that paused armor regen. not the worst idea, but just boring.
+				self.values.temporary.player_new_hitman_regen = {
+					{
+						0.25, -- % of the base recovery timer that is used for the actual duration
+						0.5, -- default duration
+					}
 				}
-			}
-			self.values.player.guardian_damage_clamp_inside_2 = {
-				{
-					minimum = 6,
-					maximum = 12,
+				-- new "death dance" combo skill
+				self.values.temporary.death_dance_combo_invulnerability = {
+					{
+						5, -- base duration
+						20 -- CD. begins at the same time as the effect
+					}
 				}
-			}
-			self.values.player.guardian_damage_clamp_outside_2 = {
-				{
-					minimum = 8,
-					maximum = 16,
+				-- new akimbo recovery proc from akimbos/pistols/smgs. yes it didnt have secondary smg's initialy, thus the name
+				self.values.temporary.akimbo_pistol_armor_regen_timer_multiplier = {
+					{
+						0.75, -- 25% armor recovery
+						10 -- for 10 secs
+					}
 				}
-			}
-			self.values.player.passive_health_multiplier = {
-				1.1,
-				1.2,
-				1.4,
-				1.8,
-				2,
-				2.5
-			}
-			-- for 10 points of armor you get a chance multiplier for ricochet. so for 216 armor with current mul you get 21 x 2 = 42%
-			self.values.player.guardian_heavy_armor_ricochet = {
-				2
-			}
-			self.values.player.guardian_activate_area_on_kill = {
-				true
-			}
-			self.values.player.guardian_auto_ammo_pickup_on_kill = {
-				true
-			}
-			self.values.player.guardian_health_on_kill = {
-				2
-			}
-			self.values.player.guardian_reduce_equipment_heal = {
-				0.5
-			}
+				-- new bounty hunter system. duration is for the bonus you get after you secure the kill.
+				self.values.temporary.player_bounty_hunter = {
+					{
+						true,
+						25 -- do not update without touching up playermanager file, since values there are hard coded to this value right now. should fix this later
+					}
+				}
+				-- new melee/non-explosive throwable kill armor regen. amount is determined in playermanager, cooldown here
+				self.values.temporary.badass_hitman_kill_armor_regen = {
+					{
+						true,
+						1
+					}
+				}
+			end
+			Hitman_updates()
+			
+			local function Burglar_updates()
+				---- BURGLAR
+				-- stelf buffs
+				self.values.player.corpse_dispose_speed_multiplier = {
+					0.75
+				}
+				self.values.player.pick_lock_speed_multiplier = {
+					0.75
+				}
+				self.values.player.alarm_pager_speed_multiplier = {
+					0.75
+				}
+				-- new supressor buff, firs value is used by silencer skill. this upgrade is now incremental, so they add up if combined
+				self.values.player.silencer_concealment_increase = {
+					1,
+					3
+				}
+			end
+			Burglar_updates()
+			
+			local function Infil_Socio_updates()
+				-- dmg boosts adjusted for new melee stats. now a 2x bonus instead of 10x
+				self.values.melee.stacking_hit_damage_multiplier = {
+					1,
+					1
+				}
+				-- adjusted hidden (more like forgotten to be added to descriptions) infiltrator duration buff to be present on both decks, but made it shorter
+				self.values.melee.stacking_hit_expire_t = {
+					4
+				}
+				-- overdog - 1st card dmg reduction duration compensation for new activation rules
+				self.values.temporary.dmg_dampener_outnumbered_strong = {
+					{
+						0.88,
+						5
+					}
+				}
+				-- INFILTRATOR's dmg reduction duration nerf to compensate for new activation rules and new dmg resist stacking math
+				self.values.temporary.dmg_dampener_close_contact = {
+					{
+						0.92,
+						5
+					},
+					{
+						0.85,
+						5
+					},
+					{
+						0.78,
+						5
+					}
+				}
+			end
+			Infil_Socio_updates()
+			
+			local function Gambler_updates()
+				-- Almost complete rework.
+				-- health regen. re-wrote values because basic multiplier system is just confusing for no reason (other then 1 that i removed) on the backend
+				self.loose_ammo_restore_health_values = {
+					{
+						0,
+						8
+					},
+					{
+						8,
+						16
+					},
+					{
+						16,
+						24
+					},
+					multiplier = 0.1,
+					cd = 4,
+					base = 16
+				}
+				-- add values from above into a proper upgrade table and make new skills out of them. copy of vanilla set up
+				self.values.temporary.loose_ammo_restore_health = {}
+				for i, data in ipairs(self.loose_ammo_restore_health_values) do
+					local base = self.loose_ammo_restore_health_values.base
+
+					table.insert(self.values.temporary.loose_ammo_restore_health, {
+						{
+							base + data[1],
+							base + data[2]
+						},
+						self.loose_ammo_restore_health_values.cd
+					})
+				end
+				-- adjusted cooldown to be in sync with ammo pick up, both are at 4 secs now
+				self.values.temporary.loose_ammo_give_team = {
+					{
+						true,
+						4
+					}
+				}
+				-- new gambling (cause, you know, GAMBLER perk) system, hells ye. neutral chance is calculated as 1-(addition)-(removal)
+				self.values.player.loose_ammo_restore_health_chances = {
+					{
+						addition_chance = 0.7,
+						removal_chance = 0.15,
+						addition_jackpot_chance = 0.2,
+						removal_jackpot_chance = 0.1
+					}
+				}
+				-- dodge values for new galmbling system
+				self.values.player.loose_ammo_add_dodge_amount = {
+					{
+						addition_min = 0.02,
+						addition_max = 0.08,
+						removal_min = -0.04,
+						removal_max = -0.16,
+						addition_jackpot = 0.35,
+						removal_jackpot = -0.35
+					}
+				}
+			end
+			Gambler_updates()
+			
+			local function Grinder_updates()
+				-- buffed ap chances a bit to make them more viable with new silencer skills
+				self.values.player.armor_piercing_chance = {
+					0.1,
+					0.35
+				}
+			end
+			Grinder_updates()
+			
+			local function Yakuza_updates()
+				-- this upgrade adds both suppression and AP resistance cause im lazy.
+				self.values.player.yakuza_suppression_resist = {
+					true
+				}
+				self.values.player.yakuza_behind_player_resist = {
+					0.75,
+				}
+			end
+			Yakuza_updates()
+			
+			local function Ex_President_updates()
+				-- new 9th card - store armor recovery, similar to health
+				self.values.player.store_armor_recovery_bonus_timer = {
+					1
+				}
+				-- new 9th card - armor type based amount of recovery
+				self.values.player.body_armor.skill_store_armor_recovery_bonus_timer = {
+					0.25,
+					0.2,
+					0.18,
+					0.16,
+					0.12,
+					0.08,
+					0.04
+				}
+				-- armor health storage values. completely new to get new breakpoints accounting for new "shield" system
+				self.values.player.body_armor.skill_max_health_store = {
+					14.5,
+					9.5,
+					8.67,
+					6,
+					6,
+					5.5,
+					3.5
+				}
+				-- new 5th card static dodge bonus replacing old 15% dodge. this only effectively hurts 2 piece suit, while all other armors are buffed.
+				-- yes, ICTV is favoured heavily for DS, but this is not the perk balance issue, but a difficulty balance issue
+				self.values.player.static_dodge_chance = {
+					0.2
+				}
+				-- new health "shield" system from stored health. originaly stored health took this much more dmg before damage was applies to health
+				-- but this was both confusing, and unnecessarily harsh, so now it no longer gets multiplied.
+				self.values.player.armor_health_store_shield = {
+					1.5
+				}
+			end
+			Ex_President_updates()
+			
+			local function Maniac_updates()
+				-- new values that deplete faster from max possible to keep player on edge. we are a cocaine addict afterall
+				-- max dmg per tick we can add
+				self.max_cocaine_stacks_per_tick = 120
+				-- tick length
+				self.cocaine_stacks_tick_t = 1.5
+				-- passive decay. correction: no longer passive. now will only deplete if no damage was dealt for this duration
+				self.cocaine_stacks_decay_t = 3
+				-- yes
+				self.cocaine_stacks_decay_amount_per_tick = 80
+				self.cocaine_stacks_decay_percentage_per_tick = 0.2
+			end
+			Maniac_updates()
+			
+			local function Anarchist_updates()
+				-- new passive regeneration. revered values for ICTV and suit, to give ICTV best gating.
+				-- this was done to make anarchist more expensive (skills wise) to run if you want best gating on DS
+				-- or you can run the suit and gain more armor per minute then ICTV, which is more viable for lower difficulties
+				self.values.player.armor_grinding = {
+					{
+						{
+							5.35,
+							4
+						},
+						{
+							3.25,
+							2.8
+						},
+						{
+							2.7,
+							2.5
+						},
+						{
+							2.2,
+							2.2
+						},
+						{
+							1.6,
+							1.9
+						},
+						{
+							1.32,
+							1.75
+						},
+						{
+							1,
+							1.5
+						}
+					}
+				}
+				-- 9th card armor gain from damage. overkill originaly meant to have different values based on armor, but later this was simplified.
+				-- i brought this back, but also had to add UI to the armor panel to make this make sense.
+				-- overall idea is same as with skill above - more armor, more often you can regen, but gain is lower both per instance and per minute
+				self.values.player.damage_to_armor = {
+					{
+						{
+							6,
+							2.5
+						},
+						{
+							3,
+							1.5
+						},
+						{
+							3,
+							1.5
+						},
+						{
+							3,
+							1.5
+						},
+						{
+							1.5,
+							1
+						},
+						{
+							1.5,
+							1
+						},
+						{
+							1.5,
+							1
+						}
+					}
+				}
+			end
+			Anarchist_updates()
+			
+			local function Biker_updates()
+				-- biker new regen stacking pause
+				-- used as reference for default delay
+				self.values.player.wild_temporary_regen_pause_default = {
+					1
+				}
+				-- actual delay. this was set up in such way because this skill can sometimes have lower duration based on health/armor. logic is setup in playermanager
+				self.values.temporary.player_wild_temporary_regen_pause = {
+					{
+						true,
+						1
+					}
+				}
+			end
+			Biker_updates()
+			
+			local function Stoic_updates()
+				-- 1st card
+				self.values.player.damage_control_passive = {
+					{
+						70,
+						10
+					}
+				}
+				-- 7th card
+				self.values.player.damage_control_cooldown_drain = {
+					{
+						0,
+						1
+					},
+					{
+						45,
+						1.5
+					}
+				}
+				-- 9th card
+				self.values.player.damage_control_healing = {
+					60
+				}
+			end
+			Stoic_updates()
+			
+			local function Tag_team_updates()
+				-- range biff
+				self.values.player.tag_team_base.distance = 24
+				-- 1.3 -> 1.7
+				self.values.player.tag_team_base.kill_extension = 1.7
+				-- make it maxed faster
+				self.values.player.tag_team_damage_absorption = {
+					{
+						kill_gain = 0.4,
+						max = 3.2
+					}
+				}
+			end
+			Tag_team_updates()
+			
+			local function Hacker_updates()
+				-- PECM jammer longer feedback
+				-- BEWARE: duration lasts for 12/6 seconds based on game state (loud/stealth), code for that is in playermanager.lua
+				self.values.player.pocket_ecm_jammer_base[1].duration = 12
+				-- PECM jammer less cooldown on kill;
+				self.values.player.pocket_ecm_jammer_base[1].cooldown_drain = 4
+				-- heal from self during PECM - 2x the amount to compensate lower activation frequency
+				self.values.player.pocket_ecm_heal_on_kill = {
+					4
+				}
+				-- temp dodge - now requires 3 kills to trigger and lasts for 50 secs instead of 20, to compensate lower activation frequency
+				self.values.temporary.pocket_ecm_kill_dodge = {
+					{
+						0.2,
+						50,
+						3
+					}
+				}
+			end
+			Hacker_updates()
+			
+			local function Leech_updates()
+				-- № of segments
+				self.values.player.copr_static_damage_ratio = {
+					0.25, -- 4
+					0.125 -- 8
+				}
+				-- heal on ampule activation. slight buff to compensate longer CD
+				self.values.player.copr_activate_bonus_health_ratio = {
+					0.5
+				}
+				-- new invulnerability skill. gained upon loosing any amount of segments
+				self.values.temporary.copr_invuln_on_segment_loss = {
+					{
+						true,
+						0.5
+					}
+				}
+				-- longer basic CD
+				self.copr_ability_cooldown = 60
+				-- increased CD return on kill, to incentivize a bit more agressive playstyle. overall time to get CD back is equal to vanilla, but without kills its slower.
+				self.values.player.copr_speed_up_on_kill = {
+					1.5
+				}
+				-- reduced damage threshold to loose 2 segments at once, to avoid allowing player to run dmg resistance skills to get to this amount
+				self.copr_high_damage_multiplier = {
+					15,
+					2
+				}
+			end
+			Leech_updates()
+			
+			local function Copycat_updates()
+				-- 7th card CD nerf from 15 to 20, because this card was fixed to only activate invlun if armor is <0
+				self.values.temporary.mrwi_health_invulnerable = {
+					{
+						0.5,
+						2,
+						20
+					}
+				}
+				-- first 4 choise cards health boost 20%->15% to make certain 9th card choises more impactfull
+				local health_boost = 0.15
+				self.values.player.mrwi_health_multiplier = {
+					1 + health_boost * 1,
+					1 + health_boost * 2,
+					1 + health_boost * 3,
+					1 + health_boost * 4
+				}
+			end
+			Copycat_updates()
+			
+		end
+		New_Vanilla_Perks()
+		
+		local function New_Custom_Perks()
+			
+			local function Brawler_updates()
+				self.values.player.extra_ammo_cut = {
+					0.2
+				}
+				self.values.player.passive_armor_movement_penalty_multiplier = {
+					0.75,
+					0.5,
+					0.25
+				}
+				self.values.player.damage_resist_brawler = {
+					0.95,
+					0.9,
+					0.8
+				}
+				self.values.player.stamina_on_melee_kill_brawler = {
+					0.05
+				}
+				self.values.player.armor_regen_brawler = {
+					true
+				}
+				self.values.player.damage_resist_faraway_brawler = { -- legacy
+					true
+				}
+				self.values.player.damage_resist_teammates_brawler = {
+					{
+						absorption = 0.25,
+						resist = 0.965
+					}
+				}
+			end
+			Brawler_updates()
+			
+			local function Speed_Junkie_updates()
+				self.values.player.speed_junkie_meter = {
+					true
+				}
+				self.values.player.pause_armor_recovery_when_moving = {
+					true
+				}
+				self.values.player.speed_junkie_stamina_on_kill = {
+					0.05
+				}
+				self.values.player.speed_junkie_meter_on_kill = {
+					10
+				}
+				self.values.temporary.player_speed_junkie_armor_on_dodge = {
+					{
+						1.5, -- amount
+						1, -- cooldown
+					}
+				}
+				self.values.player.speed_junkie_armor_berserk = {
+					0.25
+				}
+				self.values.player.speed_junkie_meter_boost_agility = {
+					{
+						reload = 1.4,
+						swap_speed = 2,
+						interaction = 1.4
+					}
+				}
+			end
+			Speed_Junkie_updates()
+			
+			local function Guardian_updates()
+				---- Guardian deck stuff
+				self.values.player.guardian_movement_penalty = {
+					0.8
+				}
+				self.values.player.guardian_interaction_speed_penalty = {
+					1.5
+				}
+				self.values.player.guardian_armor_remover = {
+					true
+				}
+				self.values.player.guardian_area_passive = {
+					true
+				}
+				self.values.player.guardian_area_range = {
+					300,
+					500
+				}
+				self.values.player.guardian_area_passive_activation_timer = {
+					5,
+					3
+				}
+				self.values.player.guardian_area_passive_health_regen = {
+					1,
+					2,
+					3
+				}
+				self.values.player.guardian_damage_clamp_inside_1 = {
+					{
+						minimum = 8,
+						maximum = 16,
+					}
+				}
+				self.values.player.guardian_damage_clamp_outside_1 = {
+					{
+						minimum = 10,
+						maximum = 20,
+					}
+				}
+				self.values.player.guardian_damage_clamp_inside_2 = {
+					{
+						minimum = 6,
+						maximum = 12,
+					}
+				}
+				self.values.player.guardian_damage_clamp_outside_2 = {
+					{
+						minimum = 8,
+						maximum = 16,
+					}
+				}
+				self.values.player.passive_health_multiplier = {
+					1.1,
+					1.2,
+					1.4,
+					1.8,
+					2,
+					2.5
+				}
+				-- for 10 points of armor you get a chance multiplier for ricochet. so for 216 armor with current mul you get 21 x 3 = 63%
+				self.values.player.guardian_heavy_armor_ricochet = {
+					3
+				}
+				self.values.player.guardian_activate_area_on_kill = {
+					true
+				}
+				self.values.player.guardian_auto_ammo_pickup_on_kill = {
+					true
+				}
+				self.values.player.guardian_health_on_kill = {
+					2
+				}
+				self.values.player.guardian_reduce_equipment_heal = {
+					0.5
+				}
+			end
+			Guardian_updates()
+			
 		end
 		New_Custom_Perks()
 		
@@ -1003,7 +1149,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 			}
 		}
 		self.definitions.player_less_start_recoil = {
-			name_id = "player_less_start_recoil",
+			name_id = "menu_player_less_start_recoil",
 			category = "feature",
 			upgrade = {
 				value = 1,
@@ -1011,6 +1157,25 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		self.definitions.player_less_start_recoil_2 = {
+			name_id = "menu_player_less_start_recoil_2",
+			category = "feature",
+			upgrade = {
+				value = 2,
+				upgrade = "less_start_recoil",
+				category = "player"
+			}
+		}
+		self.definitions.player_less_start_recoil_for_longer = {
+			name_id = "menu_player_less_start_recoil_for_longer",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "less_start_recoil_for_longer",
+				category = "player"
+			}
+		}
+		
 		self.definitions.player_not_moving_damage_reduction_bonus_1 = {
 			name_id = "player_not_moving_damage_reduction_bonus",
 			category = "feature",
@@ -1392,6 +1557,15 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				upgrade = {
 					value = 1,
 					upgrade = "yakuza_suppression_resist",
+					category = "player"
+				}
+			}
+			self.definitions.player_yakuza_behind_player_resist = {
+				name_id = "menu_player_yakuza_behind_player_resist",
+				category = "feature",
+				upgrade = {
+					value = 1,
+					upgrade = "yakuza_behind_player_resist",
 					category = "player"
 				}
 			}

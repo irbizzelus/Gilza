@@ -17,6 +17,11 @@
 	"Gilza_skills_header": "----- Skills -----",
 	"Gilza_shotgun_skill_notification": "Fearmonger notification",
 	"Gilza_shotgun_skill_notification_desc": "Adds a pop up notification when you recieve a speed bonus from 'fearmonger' skill.",
+	"Gilza_designated_marksman_zoom": "Marksman Zoom Skill",
+	"Gilza_designated_marksman_zoom_desc": "Change how much extra zoom Designated Marksman skill will provide. Vanilla PayDay 2 provides you with 1.5x zoom by default. Heist restart is required for changes to apply.",
+	"Gilza_designated_marksman_zoom_1": "0x",
+	"Gilza_designated_marksman_zoom_2": "1.5x",
+	"Gilza_designated_marksman_zoom_3": "2x",
 	"Gilza_perk_reset": "Reset Perks",
 	"Gilza_perk_reset_desc": "Resets your perk deck progression. Does not reset accumulated amount of perk points. This allows you to re-acquire all perks in whatever order you prefer.",
 	

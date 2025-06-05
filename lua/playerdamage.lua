@@ -122,6 +122,17 @@ Hooks:PreHook(PlayerDamage, "damage_bullet", "Gilza_player_damage_bullet", funct
 	local att_unit = attack_data.attacker_unit
 	Gilza.latest_bullet_attacker_unit = att_unit
 	
+	if managers.player:has_category_upgrade("player", "yakuza_behind_player_resist") then
+		local player_unit = managers.player:player_unit()
+		local camera = player_unit:camera()
+		local looking_at = Vector3(camera:forward().x,camera:forward().y,0)
+		local attacking_pos = Vector3(att_unit:position().x,att_unit:position().y,0)
+		local taking_pos = Vector3(camera:position().x,camera:position().y,0)
+		local normalized_in_space_difference = (attacking_pos - taking_pos):normalized()
+		local target_dir = mvector3.dot(looking_at, normalized_in_space_difference)
+		managers.player._last_damage_taken_direction = target_dir
+	end
+	
 	if managers.player:has_category_upgrade("player", "guardian_area_passive") then
 		attack_data.damage = self:Gilza_calculate_guardian_damage_clamp(attack_data.damage)
 	end
@@ -203,8 +214,8 @@ Hooks:PreHook(PlayerDamage, "damage_bullet", "Gilza_player_damage_bullet", funct
 	
 	if self:get_real_armor() > 0 then
 		if managers.player:has_category_upgrade("player", "AP_damage_resist_brawler") and attack_data.armor_piercing == true then
-			-- if we have yakuza deck card #9, check that we are under half health before giving AP resist
-			if managers.player:has_category_upgrade("player", "yakuza_suppression_resist") then
+			-- if we have yakuza deck, check that we are under half health before giving AP resist
+			if managers.player:has_category_upgrade("player", "armor_regen_damage_health_ratio_multiplier") then
 				if ( self:_max_health() / self:get_real_health() ) >= 2 then
 					attack_data.armor_piercing = nil
 				end
@@ -534,7 +545,7 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_dodge_gib_armor_1", function(self)
 		
 		-- brawler
 		if managers.player:has_category_upgrade("player", "damage_resist_teammates_brawler") then
-			AddDefaultPerkGUI("Gilza_brawler_GUI_icon", true, "guis/dlcs/Gilza/textures/pd2/specialization/new_hitman_icon")
+			AddDefaultPerkGUI("Gilza_brawler_GUI_icon", true, "guis/dlcs/Gilza/textures/pd2/specialization/brawler_icon")
 			if managers.player:has_category_upgrade("player", "armor_regen_brawler") then
 				AddDefaultPerkGUITextAddon("_Gilza_new_brawler_regen_counter_GUI", "Gilza_new_brawler_regen_counter_GUI", "0x")
 			end
@@ -605,14 +616,11 @@ Hooks:OverrideFunction(PlayerDamage, "set_regenerate_timer_to_max", function (se
 		end
 		local mul = managers.player:body_armor_regen_multiplier(alive(self._unit) and self._unit:movement():current_state()._moving, self:health_ratio())
 		-- however, this 1 sec delay timer is usually added to the regen timer as a flat value.
-		-- because of that vanilla yakuza has best possible armor regen at ~1.765 secs with 2 additional recovery skills from tank subtree in eforcer
-		-- if we dont compensate armor recovery delay, new best possible recovery timer becomes ~0.76 second which is a bit too good imo
-		-- so we compensate lack of suppression by adding a lower flat timer. new best recovery becomes ~1.16 secs, but only ~1.25 secs at 10% health, which is the main target
+		-- because of that vanilla yakuza has best possible armor regen at ~1.765 secs with 2 additional recovery skills from tank subtree in enforcer
+		-- if we dont compensate armor recovery delay, new best possible recovery timer becomes ~0.765 seconds which is a bit too good imo
+		-- so we compensate lack of suppression by adding a lower flat timer. new best recovery becomes ~1.265 secs, but only ~1.34 secs at 10% health, which is the main balance target
 		self._regenerate_timer = tweak_data.player.damage.REGENERATE_TIME * mul * managers.player:upgrade_value("player", "armor_regen_time_mul", 1)
-		local regen_compensation = 0.75
-		if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
-			regen_compensation = 0.3 -- faster regen for ds
-		end
+		local regen_compensation = 0.5
 		self._regenerate_timer = self._regenerate_timer + regen_compensation
 		self._regenerate_speed = self._regenerate_speed or 1
 		self._current_state = self._update_regenerate_timer
@@ -675,27 +683,15 @@ Hooks:OverrideFunction(PlayerDamage, "_calc_health_damage", function (self, atta
 		return 0
 	end
 	
-	-- new ex-pres card #7 bonus. if we have any amount of stacks and we take health damage, stacks will "armor gate" incoming damage. stacks take increased damage.
+	-- new ex-pres card #7 bonus. if we have any amount of stacks and we take health damage, stacks will "shield" incoming damage by absorbing damage first, and then damaging health
 	if managers.player:has_category_upgrade("player", "armor_health_store_shield") and not (self:get_real_armor() > 0) and attack_data.damage > 0 then
 		if self._armor_stored_health > 0 then
-			
-			-- old armor gating version
-			-- local dmg_to_stacks = attack_data.damage * managers.player:upgrade_value("player", "armor_health_store_shield", 1)
-			-- if self._armor_stored_health - dmg_to_stacks <= 0 then
-				-- self._armor_stored_health = 0
-				-- self:update_armor_stored_health()
-				-- return 0
-			-- else
-				-- self._armor_stored_health = self._armor_stored_health - dmg_to_stacks
-				-- self:update_armor_stored_health()
-				-- return 0
-			-- end
-			
+			-- reduce incoming dmg with stored stacks
 			if self._armor_stored_health - attack_data.damage <= 0 then
 				self._armor_stored_health = 0
 				attack_data.damage = attack_data.damage - self._armor_stored_health
 				self:update_armor_stored_health()
-			else
+			else -- if stored health can tank dmg, stored health gets reduced and incoming dmg is reduced to 0
 				self._armor_stored_health = self._armor_stored_health - attack_data.damage
 				self:update_armor_stored_health()
 				return 0
@@ -719,6 +715,9 @@ Hooks:OverrideFunction(PlayerDamage, "_calc_health_damage", function (self, atta
 
 			managers.player:activate_temporary_upgrade("temporary", "mrwi_health_invulnerable")
 			managers.player:activate_temporary_property("mrwi_health_invulnerable", cooldown_time, true)
+			if new_health <= 0 then -- preven health from going bellow 0 if invlun was proced
+				attack_data.damage = attack_data.damage + new_health - 0.1
+			end
 		end
 	end
 

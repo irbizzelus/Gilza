@@ -167,12 +167,16 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 			
 			-- Yakuza
 			local function Yakuza_updates()
+				self.specializations[12][7].upgrades = {
+					"player_armor_regen_damage_health_ratio_multiplier_3",
+					"player_AP_damage_resist_brawler"
+				}
 				self.specializations[12][9].upgrades = {
 					"player_passive_loot_drop_multiplier",
 					"player_armor_regen_damage_health_ratio_threshold_multiplier",
 					"player_movement_speed_damage_health_ratio_threshold_multiplier",
-					"player_AP_damage_resist_brawler",
 					"player_yakuza_suppression_resist",
+					"player_yakuza_behind_player_resist",
 				}
 			end
 			Yakuza_updates()
@@ -257,7 +261,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 					"player_wild_health_amount_1",
 					"player_wild_armor_amount_1",
 					"player_wild_temporary_regen_pause",
-					"player_tier_armor_multiplier_1"
+					"player_tier_armor_multiplier_1",
+					"player_passive_health_multiplier_1"
 				}
 			end
 			Biker_updates()
@@ -371,6 +376,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 				
 				{
 					cost = 4000,
+					texture_bundle_folder = "Gilza",
 					desc_id = "menu_deck_brawler9_desc",
 					short_id = "menu_deck_brawler9_desc_short",
 					name_id = "menu_deck_brawler9",
@@ -379,8 +385,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 						"player_passive_loot_drop_multiplier"
 					},
 					icon_xy = {
-						6,
-						4
+						2,
+						1
 					}
 				},
 				desc_id = "menu_deck_brawler_desc",
@@ -625,8 +631,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		self.skills.stable_shot[1].upgrades = { "player_weapon_accuracy_increase_1" }
 		self.skills.stable_shot[2].upgrades = { "player_weapon_accuracy_increase_2" }
 		
-		self.skills.rifleman[1].upgrades = { "weapon_enter_steelsight_speed_multiplier", "assault_rifle_zoom_increase", "snp_zoom_increase", "smg_zoom_increase", "lmg_zoom_increase", "pistol_zoom_increase" }
-		self.skills.rifleman[2].upgrades = { "player_steelsight_normal_movement_speed", "player_less_start_recoil" }
+		self.skills.rifleman[1].upgrades = { "weapon_enter_steelsight_speed_multiplier", "assault_rifle_zoom_increase", "snp_zoom_increase", "smg_zoom_increase", "lmg_zoom_increase", "pistol_zoom_increase", "player_less_start_recoil" }
+		self.skills.rifleman[2].upgrades = { "player_steelsight_normal_movement_speed", "player_less_start_recoil_2", "player_less_start_recoil_for_longer" }
 		
 		self.skills.sharpshooter[1].upgrades = { "player_not_moving_damage_reduction_bonus_1" }
 		self.skills.sharpshooter[2].upgrades = { "player_not_moving_damage_reduction_bonus_bipoded", "player_bipod_deploy_speed" }

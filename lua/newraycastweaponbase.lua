@@ -751,3 +751,12 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "tweak_data_anim_play_redirect", fu
 
 	return played
 end)
+
+-- allow for crossbows to also benefit from body expertise skill. for whatever reason only bows are allowed in vanilla
+Hooks:OverrideFunction(NewRaycastWeaponBase, "get_add_head_shot_mul", function (self)
+	if self:is_category("smg", "lmg", "assault_rifle", "minigun") and self._fire_mode == ids_auto or self:is_category("bow", "crossbow", "saw") then
+		return managers.player:upgrade_value("weapon", "automatic_head_shot_add", nil)
+	end
+	
+	return nil
+end)

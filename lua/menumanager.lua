@@ -46,6 +46,17 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		Gilza:Save()
 	end
 	
+	MenuCallbackHandler.Gilza_designated_marksman_zoom = function(this, item)
+		Gilza.settings.designated_marksman_zoom = tonumber(item:value())
+		Gilza:Save()
+		tweak_data.upgrades.values.assault_rifle.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
+		tweak_data.upgrades.values.smg.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
+		tweak_data.upgrades.values.lmg.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
+		tweak_data.upgrades.values.snp.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
+		tweak_data.upgrades.values.pistol.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
+		tweak_data.upgrades.values.assault_rifle.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
+	end
+	
 	MenuCallbackHandler.Gilza_perk_reset = function(this, item)
 		local function Gilza_reset_perk_progression()
 			managers.skilltree:reset_specializations()

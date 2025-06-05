@@ -1,6 +1,8 @@
 -- changes to all weapon attachments and addition of some new ones
 Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", function(self, ...)
 	
+	local G_W_M = Gilza.Weapons_module
+	
 	local function init_new_mods()
 		-- shotgun breach round
 		self.parts.wpn_fps_upg_br_shtgn.name_id = "bm_wpn_fps_upg_br_shtgn"
@@ -29,7 +31,13 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		-- ammo that C96 ap kit adds to the gun, invisible in the blackmarket menus
 		self.parts.wpn_fps_upg_c96_ap_kit_ap_rounds.name_id = "bm_wpn_fps_upg_ap_kit_ap_rounds"
 		self.parts.wpn_fps_upg_c96_ap_kit_ap_rounds.stats = {}
-		self.parts.wpn_fps_upg_c96_ap_kit_ap_rounds.custom_stats = {armor_piercing_add = 1,can_shoot_through_shield = true,can_shoot_through_wall = true,ammo_pickup_max_mul = 0.243,ammo_pickup_min_mul = 0.242}
+		self.parts.wpn_fps_upg_c96_ap_kit_ap_rounds.custom_stats = {
+			armor_piercing_add = 1,
+			can_shoot_through_shield = true,
+			can_shoot_through_wall = true,
+			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("PISTOL", 155, 250, true).max_mul,
+			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("PISTOL", 155, 250, true).min_mul
+		}
 		-- p90 AP rounds
 		self.parts.wpn_fps_upg_smg_p90_ap_rounds.name_id = "bm_wpn_fps_upg_smg_p90_ap_rounds"
 		self.parts.wpn_fps_upg_smg_p90_ap_rounds.desc_id = "bm_wpn_fps_upg_smg_p90_ap_rounds_desc"
@@ -46,32 +54,50 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_upg_contraband_762_to_556_kit.name_id = "bm_wpn_fps_upg_contraband_762_to_556_kit"
 		self.parts.wpn_fps_upg_contraband_762_to_556_kit.desc_id = "bm_wpn_fps_upg_contraband_762_to_556_kit_desc"
 		self.parts.wpn_fps_upg_contraband_762_to_556_kit.stats = {value = 0,total_ammo_mod = 8,extra_ammo = 5,damage = -250,spread = -1,recoil = 3}
-		self.parts.wpn_fps_upg_contraband_762_to_556_kit.custom_stats = {ammo_pickup_min_mul = 2.768,ammo_pickup_max_mul = 2.742}
+		self.parts.wpn_fps_upg_contraband_762_to_556_kit.custom_stats = {
+			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 450, 200).max_mul,
+			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 450, 200).min_mul
+		}
 		-- akm's 450 damage profile kit
 		self.parts.wpn_fps_upg_ak_hp_rounds.name_id = "wpn_fps_upg_ak_hp_rounds"
 		self.parts.wpn_fps_upg_ak_hp_rounds.desc_id = "wpn_fps_upg_ak_hp_rounds_desc"
 		self.parts.wpn_fps_upg_ak_hp_rounds.stats = {value = 0,damage = 200,spread = -2,recoil = -3,total_ammo_mod = -8}
-		self.parts.wpn_fps_upg_ak_hp_rounds.custom_stats = {ammo_pickup_min_mul = 0.564,ammo_pickup_max_mul = 0.562}
+		self.parts.wpn_fps_upg_ak_hp_rounds.custom_stats = {
+			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 250, 450).max_mul,
+			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 250, 450).min_mul
+		}
 		-- m4 250 damage profile kit
 		self.parts.wpn_fps_upg_m4_hp_rounds.name_id = "wpn_fps_upg_m4_hp_rounds"
 		self.parts.wpn_fps_upg_m4_hp_rounds.desc_id = "wpn_fps_upg_m4_hp_rounds_desc"
 		self.parts.wpn_fps_upg_m4_hp_rounds.stats = {value = 0,damage = 95,spread = -4,recoil = -3,total_ammo_mod = -3.33}
-		self.parts.wpn_fps_upg_m4_hp_rounds.custom_stats = {ammo_pickup_min_mul = 0.545,ammo_pickup_max_mul = 0.545}
+		self.parts.wpn_fps_upg_m4_hp_rounds.custom_stats = {
+			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 155, 250).max_mul,
+			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 155, 250).min_mul
+		}
 		-- groza's 762 to 5.45 conversion kit
 		self.parts.wpn_fps_upg_groza_762_to_545_kit.name_id = "bm_wpn_fps_upg_groza_762_to_545_kit"
 		self.parts.wpn_fps_upg_groza_762_to_545_kit.desc_id = "bm_wpn_fps_upg_groza_762_to_545_kit_desc"
 		self.parts.wpn_fps_upg_groza_762_to_545_kit.stats = {value = 0,total_ammo_mod = 5,damage = -95,spread = -2,recoil = 4}
-		self.parts.wpn_fps_upg_groza_762_to_545_kit.custom_stats = {ammo_pickup_min_mul = 1.838,ammo_pickup_max_mul = 1.837}
+		self.parts.wpn_fps_upg_groza_762_to_545_kit.custom_stats = {
+			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 250, 155).max_mul,
+			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 250, 155).min_mul
+		}
 		-- fal's 250 damage profile kit
 		self.parts.wpn_fps_upg_fal_sp_rounds.name_id = "wpn_fps_upg_fal_sp_rounds"
 		self.parts.wpn_fps_upg_fal_sp_rounds.desc_id = "wpn_fps_upg_fal_sp_rounds_desc"
 		self.parts.wpn_fps_upg_fal_sp_rounds.stats = {value = 0,damage = -200,spread = 1,recoil = 5,total_ammo_mod = 10}
-		self.parts.wpn_fps_upg_fal_sp_rounds.custom_stats = {ammo_pickup_min_mul = 1.767,ammo_pickup_max_mul = 1.771}
+		self.parts.wpn_fps_upg_fal_sp_rounds.custom_stats = {
+			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 450, 250).max_mul,
+			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 450, 250).min_mul
+		}
 		-- amcar's 125 damage profile kit
 		self.parts.wpn_fps_upg_amcar_rrlp_rounds.name_id = "wpn_fps_upg_amcar_rrlp_rounds"
 		self.parts.wpn_fps_upg_amcar_rrlp_rounds.desc_id = "wpn_fps_upg_amcar_rrlp_rounds_desc"
-		self.parts.wpn_fps_upg_amcar_rrlp_rounds.stats = {value = 0,damage = -75,spread = -2,recoil = 5,total_ammo_mod = 6.67}
-		self.parts.wpn_fps_upg_amcar_rrlp_rounds.custom_stats = {ammo_pickup_min_mul = 1.729,ammo_pickup_max_mul = 1.732}
+		self.parts.wpn_fps_upg_amcar_rrlp_rounds.stats = {value = 0,damage = -75,spread = 1,recoil = 5,total_ammo_mod = 6.67}
+		self.parts.wpn_fps_upg_amcar_rrlp_rounds.custom_stats = {
+			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 200, 125).max_mul,
+			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 200, 125).min_mul
+		}
 		-- baby deagle/white streak AP rounds
 		self.parts.wpn_fps_upg_pis_mid_ap_rounds.name_id = "bm_wpn_fps_upg_pis_mid_ap_rounds"
 		self.parts.wpn_fps_upg_pis_mid_ap_rounds.desc_id = "bm_wpn_fps_upg_pis_mid_ap_rounds_desc"
@@ -85,7 +111,12 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_upg_pis_mid_ap_rounds_lv.name_id = "bm_wpn_fps_upg_pis_mid_ap_rounds_lv"
 		self.parts.wpn_fps_upg_pis_mid_ap_rounds_lv.desc_id = "bm_wpn_fps_upg_pis_mid_ap_rounds_lv_desc"
 		self.parts.wpn_fps_upg_pis_mid_ap_rounds_lv.stats = {value = 0,damage = -50,total_ammo_mod = -5,spread = -3,recoil = 2}
-		self.parts.wpn_fps_upg_pis_mid_ap_rounds_lv.custom_stats = {can_shoot_through_shield = true,armor_piercing_add = 1,ammo_pickup_max_mul = 0.9,ammo_pickup_min_mul = 0.9}
+		self.parts.wpn_fps_upg_pis_mid_ap_rounds_lv.custom_stats = {
+			can_shoot_through_shield = true,
+			armor_piercing_add = 1,
+			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("PISTOL", 250, 200, true).max_mul,
+			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("PISTOL", 250, 200, true).min_mul
+		}
 		self.wpn_fps_pis_x_sparrow.override.wpn_fps_upg_pis_mid_ap_rounds_lv = {stats = {value = 0,damage = -25,total_ammo_mod = -5,spread = -3,recoil = 2}}
 		self.wpn_fps_pis_x_pl14.override.wpn_fps_upg_pis_mid_ap_rounds_lv = {stats = {value = 0,damage = -25,total_ammo_mod = -5,spread = -3,recoil = 2}}
 		-- new mag limiter mods for ms3gl
@@ -1177,8 +1208,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			}
 			self.parts.wpn_fps_ass_g3_b_short.custom_stats = {
 				fire_rate_multiplier = 1.3077,
-				ammo_pickup_max_mul = 1.562,
-				ammo_pickup_min_mul = 1.562
+				ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 250, 200).max_mul,
+				ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 250, 200).min_mul
 			}
 			self.parts.wpn_fps_ass_g3_b_short.has_description = true
 			self.parts.wpn_fps_ass_g3_b_short.desc_id = "bm_wpn_fps_ass_g3_b_short_desc"
@@ -1651,7 +1682,11 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_lmg_kacchainsaw_flamethrower.has_description = true
 		self.parts.wpn_fps_lmg_kacchainsaw_flamethrower.desc_id = "bm_wpn_fps_upg_lmg_kacchainsaw_underbarrel_flamethrower_desc"
 		self.parts.wpn_fps_lmg_kacchainsaw_conversionkit.stats = {extra_ammo = 50,damage = -30,value = 1,spread = 1,recoil = 4,total_ammo_mod = 6.67}
-		self.parts.wpn_fps_lmg_kacchainsaw_conversionkit.custom_stats = {ammo_pickup_min_mul = 1.36,ammo_pickup_max_mul = 1.36,fire_rate_multiplier = 1.25}
+		self.parts.wpn_fps_lmg_kacchainsaw_conversionkit.custom_stats = {
+			fire_rate_multiplier = 1.25,
+			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("LMG", "125_bipodless", "95_bipodless").max_mul,
+			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("LMG", "125_bipodless", "95_bipodless").min_mul
+		}
 		self.parts.wpn_fps_lmg_kacchainsaw_conversionkit.has_description = true
 		self.parts.wpn_fps_lmg_kacchainsaw_conversionkit.desc_id = "bm_wpn_fps_upg_lmg_kacchainsaw_conversionkit_desc"
 		
@@ -1678,8 +1713,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_lmg_hcar_barrel_dmr.forbids = {"wpn_fps_lmg_hcar_m_drum"}
 		self.parts.wpn_fps_lmg_hcar_body_conversionkit.stats = {extra_ammo = 40,total_ammo_mod = 17.5,damage = -50,value = 1,spread = -8,recoil = 7,fire_rate = 1.5,reload = -6}
 		self.parts.wpn_fps_lmg_hcar_body_conversionkit.custom_stats.fire_rate_multiplier = 1.5
-		self.parts.wpn_fps_lmg_hcar_body_conversionkit.custom_stats.ammo_pickup_min_mul = 1.68
-		self.parts.wpn_fps_lmg_hcar_body_conversionkit.custom_stats.ammo_pickup_max_mul = 1.68
+		self.parts.wpn_fps_lmg_hcar_body_conversionkit.custom_stats.ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("LMG", "250_bipodless", "200_bipodless").min_mul
+		self.parts.wpn_fps_lmg_hcar_body_conversionkit.custom_stats.ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("LMG", "250_bipodless", "200_bipodless").max_mul
 		self.parts.wpn_fps_lmg_hcar_body_conversionkit.has_description = true
 		self.parts.wpn_fps_lmg_hcar_body_conversionkit.desc_id = "bm_wpn_fps_lmg_hcar_body_conversionkit_desc"
 		table.insert(self.parts.wpn_fps_lmg_hcar_body_conversionkit.forbids, "wpn_fps_upg_m4_s_a2")
@@ -1797,7 +1832,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_smg_mp5_m_straight.stats.reload = 2
 			self.parts.wpn_fps_smg_mp5_m_straight.stats.concealment = -4
 			self.parts.wpn_fps_smg_mp5_m_straight.stats.total_ammo_mod = -6.67
-			self.parts.wpn_fps_smg_mp5_m_straight.custom_stats = {ammo_pickup_min_mul = 0.54,ammo_pickup_max_mul = 0.54}
+			self.parts.wpn_fps_smg_mp5_m_straight.custom_stats = {
+				ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("SMG", 155, 250).max_mul,
+				ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("SMG", 155, 250).min_mul
+			}
 			self.parts.wpn_fps_smg_mp5_m_straight.name_id = "bm_wpn_fps_smg_mp5_m_straight_R"
 			self.parts.wpn_fps_smg_mp5_m_straight.has_description = true
 			self.parts.wpn_fps_smg_mp5_m_straight.desc_id = "bm_wpn_fps_smg_mp5_m_straight_R_desc"
@@ -2083,8 +2121,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_hailstorm_conversion.stats.reload = 2
 		
 		-- SAWS
-		self.parts.wpn_fps_saw_body_speed.stats.damage = 4
-		self.parts.wpn_fps_saw_m_blade_sharp.stats.damage = 4
+		self.parts.wpn_fps_saw_body_speed.stats.damage = 40
+		self.parts.wpn_fps_saw_m_blade_sharp.stats.damage = 40
 		
 		-- PISTOL CROSSBOW
 		self.parts.wpn_fps_bow_hunter_m_standard.custom_stats = {armor_piercing_add = 1}
@@ -2221,17 +2259,17 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_upg_a_grenade_launcher_incendiary_arbiter.custom_stats.ammo_pickup_max_mul = 0.5
 		self.parts.wpn_fps_upg_a_grenade_launcher_incendiary_arbiter.custom_stats.ammo_pickup_min_mul = 0.5
 		-- electric
-		self.parts.wpn_fps_upg_a_grenade_launcher_electric.custom_stats.ammo_pickup_min_mul = 1.1
-		self.parts.wpn_fps_upg_a_grenade_launcher_electric.custom_stats.ammo_pickup_max_mul = 1.1
+		self.parts.wpn_fps_upg_a_grenade_launcher_electric.custom_stats.ammo_pickup_min_mul = 1.2
+		self.parts.wpn_fps_upg_a_grenade_launcher_electric.custom_stats.ammo_pickup_max_mul = 1.2
 		self.parts.wpn_fps_upg_a_grenade_launcher_electric.desc_id = "bm_wpn_fps_upg_a_grenade_launcher_electric_desc"
-		self.parts.wpn_fps_upg_a_grenade_launcher_electric_arbiter.custom_stats.ammo_pickup_min_mul = 1.1
-		self.parts.wpn_fps_upg_a_grenade_launcher_electric_arbiter.custom_stats.ammo_pickup_max_mul = 1.1
+		self.parts.wpn_fps_upg_a_grenade_launcher_electric_arbiter.custom_stats.ammo_pickup_min_mul = 1.2
+		self.parts.wpn_fps_upg_a_grenade_launcher_electric_arbiter.custom_stats.ammo_pickup_max_mul = 1.2
 		self.parts.wpn_fps_upg_a_grenade_launcher_electric_arbiter.desc_id = "bm_wpn_fps_upg_a_grenade_launcher_electric_desc"
-		self.parts.wpn_fps_upg_a_grenade_launcher_electric_ms3gl.custom_stats.ammo_pickup_min_mul = 1.1
-		self.parts.wpn_fps_upg_a_grenade_launcher_electric_ms3gl.custom_stats.ammo_pickup_max_mul = 1.1
+		self.parts.wpn_fps_upg_a_grenade_launcher_electric_ms3gl.custom_stats.ammo_pickup_min_mul = 1.2
+		self.parts.wpn_fps_upg_a_grenade_launcher_electric_ms3gl.custom_stats.ammo_pickup_max_mul = 1.2
 		self.parts.wpn_fps_upg_a_grenade_launcher_electric_ms3gl.desc_id = "bm_wpn_fps_upg_a_grenade_launcher_electric_desc"
-		self.parts.wpn_fps_upg_a_underbarrel_electric.custom_stats.ammo_pickup_min_mul = 1.1
-		self.parts.wpn_fps_upg_a_underbarrel_electric.custom_stats.ammo_pickup_max_mul = 1.1
+		self.parts.wpn_fps_upg_a_underbarrel_electric.custom_stats.ammo_pickup_min_mul = 1.2
+		self.parts.wpn_fps_upg_a_underbarrel_electric.custom_stats.ammo_pickup_max_mul = 1.2
 		-- shotgun round
 		self.wpn_fps_gre_arbiter.override.wpn_fps_upg_a_grenade_launcher_hornet.custom_stats.ammo_pickup_min_mul = 2.5
 		self.wpn_fps_gre_arbiter.override.wpn_fps_upg_a_grenade_launcher_hornet.custom_stats.ammo_pickup_max_mul = 2.5
@@ -2703,13 +2741,20 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		-- AWP
 		self.parts.wpn_fps_snp_awp_conversion_dragonlore.stats.total_ammo_mod = -4
 		self.parts.wpn_fps_snp_awp_conversion_dragonlore.stats.damage = 300
-		self.parts.wpn_fps_snp_awp_conversion_dragonlore.custom_stats = {ammo_pickup_max_mul = 0.847,ammo_pickup_min_mul = 0.847}
+		self.parts.wpn_fps_snp_awp_conversion_dragonlore.custom_stats = {
+			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("SNIPER", 1300, 1600).max_mul,
+			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("SNIPER", 1300, 1600).min_mul
+		}
 		self.parts.wpn_fps_snp_awp_conversion_dragonlore.has_description = true
 		self.parts.wpn_fps_snp_awp_conversion_dragonlore.desc_id = "bm_wpn_fps_upg_snp_awp_conversionkit_new_desc"
 		self.parts.wpn_fps_snp_awp_conversion_wildlands.stats.total_ammo_mod = 4
 		self.parts.wpn_fps_snp_awp_conversion_wildlands.stats.damage = -350
 		self.parts.wpn_fps_snp_awp_conversion_wildlands.stats.reload = -4
-		self.parts.wpn_fps_snp_awp_conversion_wildlands.custom_stats = {ammo_pickup_max_mul = 1.066,ammo_pickup_min_mul = 1.066,fire_rate_multiplier = 1.8}
+		self.parts.wpn_fps_snp_awp_conversion_wildlands.custom_stats = {
+			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("SNIPER", 1300, 950).max_mul,
+			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("SNIPER", 1300, 950).min_mul,
+			fire_rate_multiplier = 1.8
+		}
 		self.parts.wpn_fps_snp_awp_conversion_wildlands.has_description = true
 		self.parts.wpn_fps_snp_awp_conversion_wildlands.desc_id = "bm_wpn_fps_upg_snp_awp_conversionkit_new_desc"
 		self.parts.wpn_fps_snp_awp_ext_shellrack.stats.total_ammo_mod = 5
@@ -2839,7 +2884,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_snp_contender_conversion.stats.reload = -3
 		self.parts.wpn_fps_snp_contender_conversion.stats.total_ammo_mod = -8
 		self.parts.wpn_fps_snp_contender_conversion.stats.damage = 300
-		self.parts.wpn_fps_snp_contender_conversion.custom_stats = {ammo_pickup_max_mul = 0.846,ammo_pickup_min_mul = 0.846}
+		self.parts.wpn_fps_snp_contender_conversion.custom_stats = {
+			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("SNIPER", 1300, 1600).max_mul,
+			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("SNIPER", 1300, 1600).min_mul
+		}
 		
 		-- SCOUT
 		self.parts.wpn_fps_snp_scout_conversion.stats.spread = -2
@@ -4077,7 +4125,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_upg_m4_s_viper.stats.spread = 0
 					self.parts.wpn_fps_upg_m4_s_viper.stats.recoil = 0
 					self.parts.wpn_fps_upg_m4_s_viper.stats.concealment = 1
-					self.parts.wpn_fps_upg_m4_s_viper.stats.reload = 5
+					self.parts.wpn_fps_upg_m4_s_viper.stats.reload = 4
 				end
 				if self.parts.wpn_fps_upg_m4_s_hke1 then
 					self.parts.wpn_fps_upg_m4_s_hke1.stats.spread = -1

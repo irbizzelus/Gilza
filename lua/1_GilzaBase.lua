@@ -8,6 +8,7 @@ _G.Gilza = {
 	settings = {
 		v_fov = 90,
 		shotgun_skill_notification = true,
+		designated_marksman_zoom = 2,
 		melee_gui = 4,
 		flash_color_R = 255,
 		flash_color_G = 0,

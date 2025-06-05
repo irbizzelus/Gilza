@@ -24,6 +24,17 @@ Hooks:OverrideFunction(PlayerManager, "damage_reduction_skill_multiplier", funct
 	multiplier = multiplier - (1 - self._properties:get_property("revive_damage_reduction", 1))
 	multiplier = multiplier - (1 - self._temporary_properties:get_property("revived_damage_reduction", 1))
 	local dmg_red_mul = self:team_upgrade_value("damage_dampener", "team_damage_reduction", 1)
+	
+	if managers.player:has_category_upgrade("player", "yakuza_behind_player_resist") and self._last_damage_taken_direction and self._last_damage_taken_direction ~= 69 then
+		if self._last_damage_taken_direction < 0 then
+			local yakuza_bhind_resist = 1
+			if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+				yakuza_bhind_resist = yakuza_bhind_resist * 2
+			end
+			multiplier = multiplier - (1 - self:upgrade_value("player", "yakuza_behind_player_resist", 1)) * yakuza_bhind_resist
+		end
+		self._last_damage_taken_direction = 69
+	end
 
 	if managers.network:session():local_peer():unit():movement()._current_state._moving == false or managers.player:current_state() == "bipod" then
 		multiplier = multiplier - (1 - managers.player:upgrade_value("player", "not_moving_damage_reduction_bonus", 1))
@@ -113,7 +124,7 @@ Hooks:OverrideFunction(PlayerManager, "damage_reduction_skill_multiplier", funct
 		multiplier = multiplier - (1 - managers.player:upgrade_value("player", "interacting_damage_multiplier", 1))
 	end
 	
-	return math.clamp(multiplier, 0.1, 1)
+	return math.round(math.clamp(multiplier, 0.15, 1) * 100) / 100 -- no idea why math.clamp has floating point errors, but it does.
 end)
 
 -- on kill add brawler's armor regen and fearmonger's speed boost if we have those skills
@@ -1027,11 +1038,11 @@ function PlayerManager:Gilza_new_gambler_recursive_updater()
 		if self._gilza_new_gambler_activated_recently then -- first 1 second manager
 			-- color
 			if self._gilza_new_gambler_recent_effect == "add" then
-				icon:set_color(Color(1, 0, 1, 0))
+				icon:set_color(Color(1, 0.06, 0.65, 0.27)) -- prettier green
 			elseif self._gilza_new_gambler_recent_effect == "remove" then
-				icon:set_color(Color(1, 1, 0, 0))
+				icon:set_color(Color(1, 0.73, 0.24, 0)) -- prettier red
 			else
-				icon:set_color(Color(1, 1, 1, 1))
+				icon:set_color(Color(0.9, 1, 1, 1)) -- full white
 			end
 			
 			-- jackpot flash
@@ -1097,7 +1108,6 @@ function PlayerManager:Gilza_new_hitman_killshot_handler(killed_unit, variant, h
 	end
 	
 	self._gilza_death_dance = self._gilza_death_dance or 0
-	self._gilza_death_dance_badass_kill_counter = self._gilza_death_dance_badass_kill_counter or 0
 	self._gilza_death_dance_next_kill_expected_at = self._gilza_death_dance_next_kill_expected_at or 0
 	self._gilza_death_dance_invuln_end = self._gilza_death_dance_invuln_end or 0
 	
@@ -1113,17 +1123,15 @@ function PlayerManager:Gilza_new_hitman_killshot_handler(killed_unit, variant, h
 	local function reset_combo()
 		self._gilza_death_dance = 0
 		self._gilza_death_dance_next_kill_expected_at = -1
-		self._gilza_death_dance_badass_kill_counter = 0
 		self._gilza_death_dance_invuln_end = 0
 	end
 	
 	if badass_kill then
-		self._gilza_death_dance_badass_kill_counter = self._gilza_death_dance_badass_kill_counter + 1
 		if managers.player:has_inactivate_temporary_upgrade("temporary", "badass_hitman_kill_armor_regen") then
 			managers.player:activate_temporary_upgrade("temporary", "badass_hitman_kill_armor_regen")
-			local armor_percent = 0.5
+			local armor_percent = 0.25
 			if managers.player:has_activate_temporary_upgrade("temporary", "player_bounty_hunter") then
-				armor_percent = 1
+				armor_percent = 0.5
 			end
 			player_unit:character_damage():restore_armor(player_unit:character_damage():_max_armor() * armor_percent)
 		end
@@ -1132,16 +1140,20 @@ function PlayerManager:Gilza_new_hitman_killshot_handler(killed_unit, variant, h
 	if badass_kill and self._gilza_death_dance == 0 then
 		self._gilza_death_dance = 1
 		self._gilza_death_dance_next_kill_expected_at = Application:time() + 1
-	elseif self._gilza_death_dance >= 1 and math.abs(self._gilza_death_dance_next_kill_expected_at - Application:time()) <= 0.5 then
-		self._gilza_death_dance = self._gilza_death_dance + 1
+	elseif self._gilza_death_dance >= 1 and math.abs(self._gilza_death_dance_next_kill_expected_at - Application:time()) <= 0.4 then
+		if badass_kill then
+			self._gilza_death_dance = self._gilza_death_dance + 2
+		else
+			self._gilza_death_dance = self._gilza_death_dance + 1
+		end
 		self._gilza_death_dance_next_kill_expected_at = Application:time() + 1
-	elseif self._gilza_death_dance >= 1 and self._gilza_death_dance_next_kill_expected_at - Application:time() > 0.5 then
+	elseif self._gilza_death_dance >= 1 and self._gilza_death_dance_next_kill_expected_at - Application:time() > 0.4 then
 		-- if we got a kill before the expected time forgiveness interval, igonre the kill
 	else
 		reset_combo()
 	end
 	
-	if self._gilza_death_dance == 4 and self._gilza_death_dance_badass_kill_counter >= 2 then
+	if self._gilza_death_dance == 5 or (self._gilza_death_dance == 6 and badass_kill) then
 		if managers.player:has_inactivate_temporary_upgrade("temporary", "death_dance_combo_invulnerability") then
 			managers.player:activate_temporary_upgrade("temporary", "death_dance_combo_invulnerability")
 			duration_mul = 1
@@ -1153,7 +1165,7 @@ function PlayerManager:Gilza_new_hitman_killshot_handler(killed_unit, variant, h
 			player_unit:character_damage():Gilza_add_damage_invuln_timer(duration)
 			self._gilza_death_dance_invuln_end = Application:time() + duration
 		end
-	elseif self._gilza_death_dance >= 4 then
+	elseif self._gilza_death_dance >= 5 then
 		reset_combo()
 	end
 end
@@ -1220,7 +1232,6 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 		if self._gilza_death_dance >= 1 and self._gilza_death_dance_next_kill_expected_at - Application:time() <= -0.3 then
 			self._gilza_death_dance = 0
 			self._gilza_death_dance_next_kill_expected_at = -1
-			self._gilza_death_dance_badass_kill_counter = 0
 		end
 		
 		if managers.player._Gilza_new_hitman_combo_counter_GUI then
@@ -1246,10 +1257,10 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 		
 		if icon then
 			if managers.player:has_activate_temporary_upgrade("temporary", "player_bounty_hunter") then
-				icon:set_color(Color(1, 0, 1, 0))
+				icon:set_color(Color(1, 0.06, 0.65, 0.27))
 			else
 				if self._gilza_hitman_has_active_bounty then
-					icon:set_color(Color(1, 1, 1, 1))
+					icon:set_color(Color(0.9, 1, 1, 1))
 				else
 					icon:set_color(Color(0.2, 1, 1, 1))
 				end
@@ -1276,15 +1287,33 @@ function PlayerManager:Gilza_brawler_recursive_updater()
 	
 	self._gilza_brawler_teammates_nearby = self._gilza_brawler_teammates_nearby or 0
 	local player_unit = managers.player:player_unit()
-	local scan_range = 2400
+	local scan_range = 2100
 	
 	if player_unit and alive(player_unit) then
-		local heisters = World:find_units_quick("sphere", player_unit:position(), scan_range, managers.slot:get_mask("criminals"))
-		if heisters and #heisters > 0 then
+		local criminals = World:find_units_quick("sphere", player_unit:position(), scan_range, managers.slot:get_mask("criminals"))
+		if criminals and #criminals > 0 then
 			local total_teammates = 0
-			for i=1, #heisters do
-				if heisters[i] ~= player_unit then
-					total_teammates = total_teammates + 1
+			for i=1, #criminals do
+				if criminals[i] ~= player_unit then
+					if criminals[i] and criminals[i].character_damage and criminals[i]:character_damage() then
+						-- if criminal in range is converted, check if it's our minion before adding resists
+						if criminals[i]:character_damage()._converted then
+							for u_key, u_data in pairs(managers.groupai:state():all_player_criminals()) do
+								if player_unit:key() == u_key and u_data.minions then
+									for bot_key, bot_data in pairs(u_data.minions) do
+										if criminals[i] == bot_data.unit then
+											total_teammates = total_teammates + 1
+										end
+									end
+								end
+							end
+						else
+							-- if criminal in range is not converted, make sure it's not a sentry gun :D
+							if not criminals[i]:base().sentry_gun then
+								total_teammates = total_teammates + 1
+							end
+						end
+					end
 				end
 			end
 			self._gilza_brawler_teammates_nearby = total_teammates
@@ -1394,7 +1423,13 @@ Hooks:OverrideFunction(PlayerManager, "chk_wild_kill_counter", function (self, k
 		
 		-- only heal if armor or health is damaged
 		local did_restore = false
-		if not (damage_ext:get_real_health() == damage_ext:_max_health()) and not (damage_ext:get_real_armor() == damage_ext:_max_armor()) then
+		-- for some very reasonable reasons these 2 damage extension functions can return the same number but not be equal
+		-- if i log these numbers they will both show up as 23 and 23, yet not be equal. and when i substract one from the other result turns up to be -7
+		-- im definetly too stupid to understand why it works this way software logic wise, but why this was never an issue for OVK devs is also confusing.
+		-- rounding them like this seems to fix it somehow as well. idek why, but it works, so here it is.
+		local curr_health = math.round(damage_ext:get_real_armor() * 100) / 100
+		local max_health = math.round(damage_ext:_max_armor() * 100) / 100
+		if not (damage_ext:get_real_health() == damage_ext:_max_health()) or not (curr_health == max_health) then
 			if damage_ext:get_real_armor() > 0 then
 				-- dont allow wasting all stacks while armor is >0
 				if managers.player:has_inactivate_temporary_upgrade("temporary", "player_wild_temporary_regen_pause") then
