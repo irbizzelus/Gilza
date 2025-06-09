@@ -70,11 +70,11 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			}
 			-- new slow and steady skill - dmg resist if not moving
 			self.values.player.not_moving_damage_reduction_bonus = {
-				0.9
+				0.925
 			}
 			-- slow and steady pro - extra dmg resist if bipoded
 			self.values.player.not_moving_damage_reduction_bonus_bipoded = {
-				0.75
+				0.7
 			}
 			-- slow and steady pro - faster bipod deploy time
 			self.values.player.bipod_deploy_speed = {
@@ -92,11 +92,11 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.snp.reload_speed_multiplier = {
 				1.25
 			}
-			-- agressive reload aced buff from 100% to 200% reload
+			-- agressive reload aced buff from 100% to 300% reload but only for 0.5 sec
 			self.values.temporary.single_shot_fast_reload = {
 				{
-					2.5,
-					4
+					5,
+					0.5
 				}
 			}
 			-- new graze values, they should be 1/3 and 2/3 but i dont trust damage calculation's rounding up values correctly
@@ -140,8 +140,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			}
 			-- new blast away skill - suprisingly still has native support, and does not require any code on my part
 			self.values.shotgun.consume_no_ammo_chance = {
-				0.06,
-				0.18
+				0.065,
+				0.2
 			}
 			-- fearmonger's shotgun panic spread
 			self.values.shotgun.panic_when_kill = {
@@ -168,6 +168,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			}
 			-- Sprint with any bag
 			self.values.player.sprint_any_bag = {true}
+			-- bullseye aced
+			self.values.player.headshot_regen_armor_shorter_cooldown = {true}
 			
 			---- AMMO SPECIALIST
 			-- we consume less total ammo with saw, so skill is also reduced
@@ -213,6 +215,11 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				0.25,
 			}
 			---- BREACHER
+			-- new drill repairs
+			self.values.player.drill_fix_interaction_speed_multiplier = {
+				0.85,
+				0.5
+			}
 			-- buff firetraps a bit
 			self.values.trip_mine.fire_trap = {
 				{
@@ -237,7 +244,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			-- heavy impact
 			self.values.weapon.knock_down = {
 				0.05,
-				0.25
+				0.2
 			}
 			-- new fire control basic - removed 40% recoil penalty while hipfiring
 			self.values.player.hipfire_less_recoil = {
@@ -246,6 +253,10 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			-- new fire control aced - removes acc penalty while hipfiring
 			self.values.player.hipfire_no_accuracy_penalty = {
 				0
+			}
+			-- ap chance for surefire aced, in addition to it's reduced guarnteed pen, for better build variety
+			self.values.weapon.armor_piercing_chance_2 = {
+				0.25
 			}
 			-- lock n load aced, new version
 			self.values.player.automatic_faster_reload = {
@@ -262,11 +273,15 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				1,
 				1.25
 			}
-			-- new ap bullets from BE basic
+			-- new ap bullets for surefire
+			self.values.player.ap_bullets_basic = {
+				true
+			}
+			-- new ap bullets for BE aced
 			self.values.player.ap_bullets_aced = {
 				true
 			}
-			-- ammo pick up reduction for BE
+			-- ammo pick up reduction for BE - legacy
 			self.values.player.pick_up_ammo_reduction = {
 				1,
 				1
@@ -279,6 +294,10 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			-- new jump skill
 			self.values.player.extra_jump_height = {
 				1.2
+			}
+			-- new no fall damage skill
+			self.values.player.limited_fall_damage_immunity = {
+				1
 			}
 			-- new tazer boolets
 			self.values.temporary.tased_electric_bullets = {
@@ -308,11 +327,42 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				0.15,
 				0.35
 			}
+			-- unseen strike velue nerfs to compensate much more forgiving activation trigger
+			self.values.player.unseen_increased_crit_chance = {
+				{
+					min_time = 6,
+					max_duration = 6,
+					crit_chance = 1.35
+				},
+				{
+					min_time = 6,
+					max_duration = 18,
+					crit_chance = 1.35
+				}
+			}
+			self.values.temporary.unseen_strike = {
+				{
+					1.35,
+					6
+				},
+				{
+					1.35,
+					18
+				}
+			}
 		end
 		New_Ghost_Skills()
 		
 		local function New_Fugitive_Skills()
 			---- GUNSLINGER
+			-- equilibrium aced buffs
+			self.values.pistol.swap_speed_multiplier = {
+				1.5,
+				2
+			}
+			self.values.pistol.spread_index_addend = {
+				3
+			}
 			-- gun nut ROF changed to 20%
 			self.values.pistol.fire_rate_multiplier = {
 				1.20
@@ -321,12 +371,12 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.pistol.stacking_hit_damage_multiplier = {
 				{
 					max_stacks = 1,
-					max_time = 10,
+					max_time = 6,
 					damage_bonus = 1.75
 				},
 				{
 					max_stacks = 1,
-					max_time = 10,
+					max_time = 6,
 					damage_bonus = 1.75
 				}
 			}
@@ -335,7 +385,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				{
 					max_stacks = 1,
 					accuracy_bonus = 0.68,
-					max_time = 10
+					max_time = 6
 				}
 			}	
 			-- new akimbo skill
@@ -359,6 +409,10 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.smg.extra_ammo_multiplier = {
 				1.4,
 				2
+			}
+			-- bottomless pockets aced
+			self.values.player.secondary_weapons_pickup_bonus = {
+				1 / 0.7 -- secondary mul nulifier
 			}
 			
 			---- REVENANT
@@ -453,12 +507,13 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		
 		-- skills that are used by multiple perks at once
 		local function Shared_updates()
-			-- 4th value added for ROGUE, mostly just the first value is used sometimes to add dodge
+			-- 4th value added for ROGUE, mostly just the first value is used sometimes to add dodge. 5th value for COPYCAT
 			self.values.player.passive_dodge_chance = {
 				0.15,
 				0.3,
 				0.45,
-				0.5
+				0.5,
+				0.2
 			}
 			-- armour piercing buffs for ROGUE and CROOK
 			self.values.weapon.armor_piercing_chance = {
@@ -485,6 +540,21 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.player.increased_pickup_area = {
 				1.5,
 				2
+			}
+			-- COPYCAT's additions to this skill
+			self.values.temporary.armor_break_invulnerable = {
+				{
+					2,
+					15
+				},
+				{
+					2,
+					25
+				},
+				{
+					2,
+					35
+				}
 			}
 			-- BRAWLER add 4x slower armor recovery multiplier to this vanilla skill
 			self.values.player.perk_armor_regen_timer_multiplier = {
@@ -775,31 +845,31 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				self.values.player.armor_grinding = {
 					{
 						{
-							5.35,
-							4
+							4.15,
+							5
 						},
 						{
-							3.25,
-							2.8
+							2.05,
+							3.5
 						},
 						{
-							2.7,
-							2.5
-						},
-						{
-							2.2,
-							2.2
+							1.75,
+							3
 						},
 						{
 							1.6,
+							2.75
+						},
+						{
+							1.05,
+							2.1
+						},
+						{
+							0.95,
 							1.9
 						},
 						{
-							1.32,
-							1.75
-						},
-						{
-							1,
+							0.75,
 							1.5
 						}
 					}
@@ -810,8 +880,20 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				self.values.player.damage_to_armor = {
 					{
 						{
-							6,
-							2.5
+							7.5,
+							3
+						},
+						{
+							4.5,
+							2
+						},
+						{
+							4.5,
+							2
+						},
+						{
+							4.5,
+							2
 						},
 						{
 							3,
@@ -820,18 +902,6 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 						{
 							3,
 							1.5
-						},
-						{
-							3,
-							1.5
-						},
-						{
-							1.5,
-							1
-						},
-						{
-							1.5,
-							1
 						},
 						{
 							1.5,
@@ -967,6 +1037,17 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 					1 + health_boost * 2,
 					1 + health_boost * 3,
 					1 + health_boost * 4
+				}
+				local ammo_multiplier = 0.075
+				self.values.player.mrwi_ammo_supply_multiplier = {
+					1 + ammo_multiplier * 1,
+					1 + ammo_multiplier * 2,
+					1 + ammo_multiplier * 3,
+					1 + ammo_multiplier * 4
+				}
+				-- used in some perks to identify the fact of usage of 9th Copy card to reduce certain effects
+				self.values.player.copycat_9th_card_identifier = {
+					true
 				}
 			end
 			Copycat_updates()
@@ -1126,10 +1207,302 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 	
 end)
 
+function UpgradesTweakData.mrwi_deck9_options_gilza_update()
+	local deck9_options = {
+		{ -- CC
+			tree = 1,
+			tier = 1,
+			desc_id = "menu_deck23_9_crew_chief_desc",
+			upgrades = {
+				"team_passive_stamina_multiplier_1",
+				"player_passive_intimidate_range_mul",
+				"player_damage_dampener_close_contact_1",
+				"player_passive_inspire_range_mul"
+			},
+			icon_xy = {
+				0,
+				1
+			}
+		},
+		{ -- MUSCLE
+			tree = 2,
+			tier = 1,
+			desc_id = "menu_deck23_9_muscle_desc",
+			upgrades = {
+				"player_passive_health_multiplier_2",
+				"player_passive_health_regen"
+			},
+			icon_xy = {
+				4,
+				1
+			}
+		},
+		{ -- ARMORER
+			desc_id = "menu_deck23_9_armorer_desc",
+			tier = 1,
+			tree = 3,
+			upgrades = {
+				"temporary_armor_break_invulnerable_1",
+				"temporary_armor_break_invulnerable_2"
+			},
+			icon_xy = {
+				0,
+				2
+			}
+		},
+		{ -- ROGUE
+			tree = 4,
+			tier = 1,
+			desc_id = "menu_deck23_9_rogue_desc",
+			upgrades = {
+				"player_passive_dodge_chance_2",
+				"player_passive_dodge_chance_3",
+				"player_passive_dodge_chance_4",
+				"player_passive_dodge_chance_5",
+				"player_crouch_dodge_chance_1",
+			},
+			icon_xy = {
+				5,
+				2
+			}
+		},
+		{ -- HITMAN
+			tree = 5,
+			tier = 1,
+			desc_id = "menu_deck23_9_hitman_desc",
+			upgrades = {
+				"akimbo_recoil_index_addend_4",
+				"akimbo_extra_ammo_multiplier_2",
+				"temporary_akimbo_pistol_armor_regen_timer_multiplier"
+			},
+			icon_xy = {
+				3,
+				3
+			}
+		},
+		{ -- CROOK
+			tree = 6,
+			tier = 3,
+			desc_id = "menu_deck23_9_crook_desc",
+			upgrades = {
+				"weapon_passive_armor_piercing_chance_maxed",
+			},
+			icon_xy = {
+				6,
+				2
+			}
+		},
+		{ -- BURGLAR
+			desc_id = "menu_deck23_9_burglar_desc",
+			name_id = "menu_st_spec_7",
+			upgrades = {
+				"player_level_2_dodge_addend_1",
+				"player_level_2_dodge_addend_2",
+				"player_silencer_concealment_increase_2",
+				"player_alarm_pager_speed_multiplier",
+				"player_stand_still_crouch_camouflage_bonus_1",
+			},
+			icon_xy = {
+				2,
+				4
+			}
+		},
+		{ -- INFIL
+			tier = 9,
+			tree = 8,
+			desc_id = "menu_deck23_9_infil_desc",
+			upgrades = {
+				"melee_stacking_hit_damage_multiplier_1",
+				"melee_stacking_hit_expire_t"
+			}
+		},
+		{ -- SOCIO
+			tree = 9,
+			tier = 3,
+			icon_xy = {
+				3,
+				5
+			}
+		},
+		{ -- GAMBLER
+			tree = 10,
+			desc_id = "menu_deck23_9_gambler_desc",
+			tier = 1,
+			icon_xy = {
+				0,
+				6
+			}
+		},
+		{ -- GRINDER
+			desc_id = "menu_deck23_9_grinder_desc",
+			tier = 1,
+			tree = 11,
+			upgrades = {
+				"player_damage_to_hot_2"
+			},
+			icon_xy = {
+				5,
+				6
+			}
+		},
+		{ -- YAKUZA
+			tree = 12,
+			tier = 3,
+			desc_id = "menu_deck23_9_yakuza_desc",
+			upgrades = {
+				"player_yakuza_suppression_resist",
+				"player_movement_speed_damage_health_ratio_threshold_multiplier"
+			},
+			icon_xy = {
+				2,
+				7
+			}
+		},
+		{ -- EX-PRES
+			desc_id = "menu_deck23_9_expres_desc",
+			tier = 3,
+			tree = 13,
+			upgrades = {
+				"player_armor_health_store_amount_1"
+			},
+			icon_xy = {
+				7,
+				7
+			}
+		},
+		{ -- MANIAC
+			desc_id = "menu_deck23_9_maniac_desc",
+			tier = 3,
+			tree = 14,
+			upgrades = {
+				"player_cocaine_stacking_1"
+			},
+			icon_xy = {
+				0,
+				1
+			}
+		},
+		{ -- ANARCHIST
+			tree = 15,
+			tier = 1,
+			upgrades = {
+				"temporary_armor_break_invulnerable_2",
+				"temporary_armor_break_invulnerable_3"
+			},
+			desc_id = "menu_deck23_9_anarchist_desc",
+			icon_xy = {
+				0,
+				1
+			}
+		},
+		{ -- BIKER
+			texture_bundle_folder = "wild",
+			name_id = "menu_st_spec_16",
+			upgrades = {
+				"player_wild_health_amount_1",
+				"player_wild_armor_amount_1"
+			},
+			icon_xy = {
+				0,
+				1
+			},
+			desc_id = "menu_deck23_9_biker_desc",
+		},
+		{ -- KINGPIN
+			tree = 17,
+			tier = 1,
+			icon_xy = {
+				0,
+				1
+			}
+		},
+		{ -- SICARIO
+			tree = 18,
+			tier = 1,
+			icon_xy = {
+				0,
+				1
+			}
+		},
+		{ -- STOIC
+			tree = 19,
+			tier = 1,
+			icon_xy = {
+				0,
+				1
+			}
+		},
+		{ -- TAG TEAM
+			tree = 20,
+			tier = 1,
+			icon_xy = {
+				0,
+				1
+			}
+		},
+		{ -- HACKER
+			tree = 21,
+			tier = 1,
+			icon_xy = {
+				0,
+				1
+			}
+		},
+		{ -- LEECH
+			tree = 22,
+			tier = 1,
+			desc_id = "menu_deck23_9_leech_desc",
+			icon_xy = {
+				1,
+				1
+			}
+		},
+		{ -- BRAWLER
+			tree = 24,
+			tier = 9,
+			desc_id = "menu_deck23_9_brawler_desc",
+		},
+		{ -- JUNKIE
+			texture_bundle_folder = "Gilza",
+			icon_xy = {
+				1,
+				1
+			},
+			name_id = "menu_deck23_9_junkie",
+			desc_id = "menu_deck23_9_junkie_desc",
+			upgrades = {
+				"player_speed_junkie_meter",
+				"player_pause_armor_recovery_when_moving",
+			},
+		},
+		{ -- GUARDIAN
+			texture_bundle_folder = "Gilza_guardian",
+			name_id = "menu_deck23_9_guardian",
+			desc_id = "menu_deck23_9_guardian_desc",
+			icon_xy = {
+				0,
+				1
+			},
+			upgrades = {
+				"player_guardian_interaction_speed_penalty",
+				"player_guardian_movement_penalty",
+				"player_guardian_area_passive",
+				"player_guardian_area_range_1",
+				"player_guardian_area_passive_activation_timer_1",
+				"player_guardian_area_passive_health_regen_1",
+				"player_guardian_area_passive_health_regen_2",
+			},
+		}
+	}
+	
+	return deck9_options
+end
+
 Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definitions_1", function(self)	
 	
 	---- MASTERMIND
 	local function New_Mastermind_definitions()
+		-- new self heal on ally revive interaction
 		self.definitions.player_revive_action_self_heal = {
 			name_id = "menu_player_revive_action_self_heal",
 			category = "feature",
@@ -1139,6 +1512,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- 1st tier acc bonus
 		self.definitions.player_weapon_accuracy_increase_2 = {
 			name_id = "menu_player_weapon_accuracy_increase",
 			category = "feature",
@@ -1148,6 +1522,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- new stuff
 		self.definitions.player_less_start_recoil = {
 			name_id = "menu_player_less_start_recoil",
 			category = "feature",
@@ -1175,7 +1550,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
-		
+		-- bipod skill pt1
 		self.definitions.player_not_moving_damage_reduction_bonus_1 = {
 			name_id = "player_not_moving_damage_reduction_bonus",
 			category = "feature",
@@ -1185,6 +1560,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- bipod skill pt2
 		self.definitions.player_not_moving_damage_reduction_bonus_bipoded = {
 			name_id = "player_not_moving_damage_reduction_bonus_bipoded",
 			category = "feature",
@@ -1194,6 +1570,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- 3
 		self.definitions.player_bipod_deploy_speed = {
 			name_id = "menu_player_bipod_deploy_speed",
 			category = "feature",
@@ -1208,6 +1585,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 	
 	---- ENFORCER
 	local function New_Enforcer_definitions()
+		-- fearmonger
 		self.definitions.player_speed_boost_on_panic_kill = {
 			name_id = "menu_player_speed_boost_on_panic_kill",
 			category = "temporary",
@@ -1217,6 +1595,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "temporary"
 			}
 		}
+		-- yea
 		self.definitions.player_sprint_any_bag = {
 			category = "feature",
 			name_id = "menu_player_sprint_any_bag",
@@ -1226,6 +1605,16 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				value = 1
 			}
 		}
+		self.definitions.player_headshot_regen_armor_shorter_cooldown = {
+			category = "feature",
+			name_id = "menu_player_headshot_regen_armor_shorter_cooldown",
+			upgrade = {
+				category = "player",
+				upgrade = "headshot_regen_armor_shorter_cooldown",
+				value = 1
+			}
+		}
+		-- ye
 		self.definitions.player_saw_ammo_pick_up = {
 			name_id = "saw_ammo_pick_up",
 			category = "feature",
@@ -1235,6 +1624,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- new fully loaded aced, #1 used for perk deck card #8 (or 6?)
 		self.definitions.player_regain_throwable_from_ammo_2 = {
 			incremental = true,
 			name_id = "menu_player_regain_throwable_from_ammo",
@@ -1250,6 +1640,17 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 	
 	---- TECHNICIAN
 	local function New_Technician_definitions()
+		-- more drill repair speed for kickstarter aced
+		self.definitions.player_drill_fix_interaction_speed_multiplier_2 = {
+			name_id = "menu_player_drill_fix_interaction_speed_multiplier_2",
+			category = "feature",
+			upgrade = {
+				value = 2,
+				upgrade = "drill_fix_interaction_speed_multiplier",
+				category = "player"
+			}
+		}
+		-- tier 1 recoil
 		self.definitions.player_stability_increase_bonus_3 = {
 			incremental = true,
 			name_id = "menu_player_stability_increase_bonus",
@@ -1260,6 +1661,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- twice
 		self.definitions.player_stability_increase_bonus_4 = {
 			incremental = true,
 			name_id = "menu_player_stability_increase_bonus",
@@ -1270,6 +1672,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- new recoil negation
 		self.definitions.player_hipfire_less_recoil = {
 			name_id = "player_hipfire_less_recoil",
 			category = "feature",
@@ -1279,6 +1682,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- new acc negation
 		self.definitions.player_hipfire_no_accuracy_penalty = {
 			name_id = "player_hipfire_no_accuracy_penalty",
 			category = "feature",
@@ -1288,6 +1692,17 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- new AP, used in surefire
+		self.definitions.player_ap_bullets_basic = {
+			name_id = "player_ap_bullets_basic",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "ap_bullets_basic",
+				category = "player"
+			}
+		}
+		-- new AP, used in BE
 		self.definitions.player_ap_bullets_aced = {
 			name_id = "player_ap_bullets_aced",
 			category = "feature",
@@ -1297,6 +1712,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- BE ammo pick up penalty - legacy
 		self.definitions.player_pick_up_ammo_reduction_1 = {
 			name_id = "menu_player_pick_up_ammo_reduction_1",
 			category = "feature",
@@ -1306,6 +1722,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- 2
 		self.definitions.player_pick_up_ammo_reduction_2 = {
 			name_id = "menu_player_pick_up_ammo_reduction_2",
 			category = "feature",
@@ -1315,6 +1732,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- yea
 		self.definitions.player_sentry_proximity_damage_resist = {
 			name_id = "menu_player_sentry_proximity_damage_resist",
 			category = "feature",
@@ -1324,6 +1742,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- ye
 		self.definitions.player_sentry_kills_refill_ammo = {
 			name_id = "menu_player_sentry_kills_refill_ammo",
 			category = "feature",
@@ -1347,6 +1766,15 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		self.definitions.player_limited_fall_damage_immunity = {
+			name_id = "menu_player_limited_fall_damage_immunity",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "limited_fall_damage_immunity",
+				category = "player"
+			}
+		}
 		self.definitions.player_tased_electric_bullets = {
 			name_id = "menu_player_tased_electric_bullets",
 			category = "temporary",
@@ -1356,6 +1784,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "temporary"
 			}
 		}
+		-- new tier 4
 		self.definitions.player_dodge_armor_regen_1 = {
 			name_id = "menu_player_dodge_armor_regen_1",
 			category = "temporary",
@@ -1365,6 +1794,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "temporary"
 			}
 		}
+		-- 2ice
 		self.definitions.player_dodge_armor_regen_2 = {
 			name_id = "menu_player_dodge_armor_regen_2",
 			category = "temporary",
@@ -1379,6 +1809,17 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 	
 	---- FUGITIVE
 	local function New_Fugitive_definitions()
+		-- up you go
+		self.definitions.player_secondary_weapons_pickup_bonus = {
+			name_id = "menu_player_secondary_weapons_pickup_bonus",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "secondary_weapons_pickup_bonus",
+				category = "player"
+			}
+		}
+		-- up you go
 		self.definitions.player_revived_health_regain_V2 = {
 			name_id = "revived_health_regain_V2",
 			category = "feature",
@@ -1388,6 +1829,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- messiah basic buff
 		self.definitions.player_bleed_out_health_multiplier_2 = {
 			name_id = "menu_player_bleed_out_health_multiplier_2",
 			category = "feature",
@@ -1397,6 +1839,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- camera shake on melee hits
 		self.definitions.player_melee_shake_reduction_1 = {
 			name_id = "menu_player_melee_shake_reduction_1",
 			category = "feature",
@@ -1415,6 +1858,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- hell yeaaaa
 		self.definitions.player_melee_sprint = {
 			name_id = "menu_player_melee_sprint",
 			category = "feature",
@@ -1433,6 +1877,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- passive melee dmg increase from berserk
 		self.definitions.player_melee_damage_newzerk_addin = {
 			name_id = "melee_damage_newzerk_addin",
 			category = "feature",
@@ -1442,6 +1887,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- new zerk - melee
 		self.definitions.player_new_berserk_melee_damage_multiplier_1 = {
 			name_id = "menu_player_new_berserk_melee_damage_multiplier_1",
 			category = "temporary",
@@ -1451,6 +1897,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "temporary"
 			}
 		}
+		-- new zerk - firearms
 		self.definitions.player_new_berserk_weapon_damage_multiplier = {
 			name_id = "menu_player_new_berserk_weapon_damage_multiplier",
 			category = "temporary",
@@ -1460,6 +1907,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "temporary"
 			}
 		}
+		-- CD is seperate to track both temp effects
 		self.definitions.player_new_berserk_weapon_damage_multiplier_cooldown = {
 			name_id = "menu_player_new_berserk_weapon_damage_multiplier_cooldown",
 			category = "temporary",
@@ -1475,7 +1923,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 	---- PERKS
 	local function New_Perk_definitions()
 		
-		-- general card throwble pickup
+		-- neutral card #6(or 8?) throwble pickup
 		self.definitions.player_regain_throwable_from_ammo_1 = {
 			incremental = true,
 			name_id = "menu_player_regain_throwable_from_ammo",
@@ -1488,623 +1936,716 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 		}
 		
 		local function New_Vanilla_Perk_definitions()
-			-- crew chief
-			self.definitions.player_passive_inspire_range_mul = {
-				name_id = "menu_player_passive_inspire_range_mul",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "passive_inspire_range_mul",
-					category = "player"
+			
+			local function CrewChief_definitions()
+				self.definitions.player_passive_inspire_range_mul = {
+					name_id = "menu_player_passive_inspire_range_mul",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "passive_inspire_range_mul",
+						category = "player"
+					}
 				}
-			}
-			-- rogue
-			self.definitions.player_movement_speed_multiplier_2 = {
-				incremental = true,
-				name_id = "menu_player_movement_speed_multiplier",
-				category = "feature",
-				upgrade = {
-					value = 2,
-					upgrade = "movement_speed_multiplier",
-					category = "player"
+			end
+			CrewChief_definitions()
+			
+			local function Rogue_definitions()
+				self.definitions.player_movement_speed_multiplier_2 = {
+					incremental = true,
+					name_id = "menu_player_movement_speed_multiplier",
+					category = "feature",
+					upgrade = {
+						value = 2,
+						upgrade = "movement_speed_multiplier",
+						category = "player"
+					}
 				}
-			}
-			-- hitman
-			self.definitions.player_new_hitman_regen = {
-				name_id = "menu_player_new_hitman_regen",
-				category = "temporary",
-				upgrade = {
-					value = 1,
-					upgrade = "player_new_hitman_regen",
-					category = "temporary"
+			end
+			Rogue_definitions()
+			
+			local function Hitman_definitions()
+				-- legacy
+				self.definitions.player_new_hitman_regen = {
+					name_id = "menu_player_new_hitman_regen",
+					category = "temporary",
+					upgrade = {
+						value = 1,
+						upgrade = "player_new_hitman_regen",
+						category = "temporary"
+					}
 				}
-			}
-			-- crook
-			self.definitions.weapon_passive_armor_piercing_chance_maxed = {
-				name_id = "menu_weapon_passive_armor_piercing_chance_maxed",
-				category = "feature",
-				upgrade = {
-					value = 2,
-					upgrade = "armor_piercing_chance",
-					category = "weapon"
+				self.definitions.temporary_death_dance_combo_invulnerability = {
+					name_id = "menu_temporary_death_dance_combo_invulnerability",
+					category = "temporary",
+					upgrade = {
+						value = 1,
+						upgrade = "death_dance_combo_invulnerability",
+						category = "temporary"
+					}
 				}
-			}
-			-- burglar
-			self.definitions.player_silencer_concealment_increase_1 = {
-				incremental = true,
-				name_id = "menu_player_silencer_concealment_increase",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "silencer_concealment_increase",
-					category = "player"
+				self.definitions.temporary_akimbo_pistol_armor_regen_timer_multiplier = {
+					name_id = "menu_temporary_akimbo_pistol_armor_regen_timer_multiplier",
+					category = "temporary",
+					upgrade = {
+						value = 1,
+						upgrade = "akimbo_pistol_armor_regen_timer_multiplier",
+						category = "temporary"
+					}
 				}
-			}
-			self.definitions.player_silencer_concealment_increase_2 = {
-				incremental = true,
-				name_id = "menu_player_silencer_concealment_increase",
-				category = "feature",
-				upgrade = {
-					value = 2,
-					upgrade = "silencer_concealment_increase",
-					category = "player"
+				self.definitions.temporary_player_bounty_hunter = {
+					name_id = "menu_temporary_player_bounty_hunter",
+					category = "temporary",
+					upgrade = {
+						value = 1,
+						upgrade = "player_bounty_hunter",
+						category = "temporary"
+					}
 				}
-			}
-			-- yakuza
-			self.definitions.player_yakuza_suppression_resist = {
-				name_id = "menu_player_yakuza_suppression_resist",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "yakuza_suppression_resist",
-					category = "player"
+				self.definitions.temporary_badass_hitman_kill_armor_regen = {
+					name_id = "menu_temporary_badass_hitman_kill_armor_regen",
+					category = "temporary",
+					upgrade = {
+						value = 1,
+						upgrade = "badass_hitman_kill_armor_regen",
+						category = "temporary"
+					}
 				}
-			}
-			self.definitions.player_yakuza_behind_player_resist = {
-				name_id = "menu_player_yakuza_behind_player_resist",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "yakuza_behind_player_resist",
-					category = "player"
+			end
+			Hitman_definitions()
+			
+			local function Crook_definitions()
+				-- by "maxed" i mean 75% evidently. initialy was 100%
+				self.definitions.weapon_passive_armor_piercing_chance_maxed = {
+					name_id = "menu_weapon_passive_armor_piercing_chance_maxed",
+					category = "feature",
+					upgrade = {
+						value = 2,
+						upgrade = "armor_piercing_chance",
+						category = "weapon"
+					}
 				}
-			}
-			-- ex-president
-			self.definitions.player_store_armor_recovery_bonus_timer = {
-				name_id = "menu_player_store_armor_recovery_bonus_timer",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "store_armor_recovery_bonus_timer",
-					category = "player"
+			end
+			Crook_definitions()
+			
+			local function Burglar_definitions()
+				self.definitions.player_silencer_concealment_increase_1 = {
+					incremental = true,
+					name_id = "menu_player_silencer_concealment_increase",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "silencer_concealment_increase",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_static_dodge_chance = {
-				name_id = "menu_player_static_dodge_chance",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "static_dodge_chance",
-					category = "player"
+				self.definitions.player_silencer_concealment_increase_2 = {
+					incremental = true,
+					name_id = "menu_player_silencer_concealment_increase",
+					category = "feature",
+					upgrade = {
+						value = 2,
+						upgrade = "silencer_concealment_increase",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_armor_health_store_shield = {
-				name_id = "menu_player_armor_health_store_shield",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "armor_health_store_shield",
-					category = "player"
+			end
+			Burglar_definitions()
+			
+			local function Yakuza_definitions()
+				self.definitions.player_yakuza_suppression_resist = {
+					name_id = "menu_player_yakuza_suppression_resist",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "yakuza_suppression_resist",
+						category = "player"
+					}
 				}
-			}
-			-- gambler
-			self.definitions.player_increased_pickup_area_1.incremental = true
-			self.definitions.player_increased_pickup_area_2 = {
-				name_id = "menu_player_increased_pickup_area",
-				category = "feature",
-				incremental = true,
-				upgrade = {
-					value = 2,
-					upgrade = "increased_pickup_area",
-					category = "player"
+				self.definitions.player_yakuza_behind_player_resist = {
+					name_id = "menu_player_yakuza_behind_player_resist",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "yakuza_behind_player_resist",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.temporary_loose_ammo_add_dodge = {
-				name_id = "menu_temporary_loose_ammo_add_dodge",
-				category = "temporary",
-				upgrade = {
-					value = 1,
-					upgrade = "loose_ammo_add_dodge",
-					category = "temporary"
+			end
+			Yakuza_definitions()
+			
+			local function Ex_president_definitions()
+				-- new 9th card
+				self.definitions.player_store_armor_recovery_bonus_timer = {
+					name_id = "menu_player_store_armor_recovery_bonus_timer",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "store_armor_recovery_bonus_timer",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_loose_ammo_restore_health_chances = {
-				name_id = "menu_player_loose_ammo_restore_health_chances",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "loose_ammo_restore_health_chances",
-					category = "player"
+				-- ICTV dodge lol
+				self.definitions.player_static_dodge_chance = {
+					name_id = "menu_player_static_dodge_chance",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "static_dodge_chance",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_loose_ammo_add_dodge_amount = {
-				name_id = "menu_player_loose_ammo_add_dodge_amount",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "loose_ammo_add_dodge_amount",
-					category = "player"
+				-- new mechanic
+				self.definitions.player_armor_health_store_shield = {
+					name_id = "menu_player_armor_health_store_shield",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "armor_health_store_shield",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.temporary_death_dance_combo_invulnerability = {
-				name_id = "menu_temporary_death_dance_combo_invulnerability",
-				category = "temporary",
-				upgrade = {
-					value = 1,
-					upgrade = "death_dance_combo_invulnerability",
-					category = "temporary"
+			end
+			Ex_president_definitions()
+			
+			local function Gambler_definitions()
+				-- range
+				self.definitions.player_increased_pickup_area_1.incremental = true
+				self.definitions.player_increased_pickup_area_2 = {
+					name_id = "menu_player_increased_pickup_area",
+					category = "feature",
+					incremental = true,
+					upgrade = {
+						value = 2,
+						upgrade = "increased_pickup_area",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.temporary_akimbo_pistol_armor_regen_timer_multiplier = {
-				name_id = "menu_temporary_akimbo_pistol_armor_regen_timer_multiplier",
-				category = "temporary",
-				upgrade = {
-					value = 1,
-					upgrade = "akimbo_pistol_armor_regen_timer_multiplier",
-					category = "temporary"
+				self.definitions.temporary_loose_ammo_add_dodge = {
+					name_id = "menu_temporary_loose_ammo_add_dodge",
+					category = "temporary",
+					upgrade = {
+						value = 1,
+						upgrade = "loose_ammo_add_dodge",
+						category = "temporary"
+					}
 				}
-			}
-			self.definitions.temporary_player_bounty_hunter = {
-				name_id = "menu_temporary_player_bounty_hunter",
-				category = "temporary",
-				upgrade = {
-					value = 1,
-					upgrade = "player_bounty_hunter",
-					category = "temporary"
+				self.definitions.player_loose_ammo_restore_health_chances = {
+					name_id = "menu_player_loose_ammo_restore_health_chances",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "loose_ammo_restore_health_chances",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.temporary_badass_hitman_kill_armor_regen = {
-				name_id = "menu_temporary_badass_hitman_kill_armor_regen",
-				category = "temporary",
-				upgrade = {
-					value = 1,
-					upgrade = "badass_hitman_kill_armor_regen",
-					category = "temporary"
+				self.definitions.player_loose_ammo_add_dodge_amount = {
+					name_id = "menu_player_loose_ammo_add_dodge_amount",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "loose_ammo_add_dodge_amount",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_wild_temporary_regen_pause = {
-				name_id = "menu_player_wild_temporary_regen_pause",
-				category = "temporary",
-				upgrade = {
-					value = 1,
-					upgrade = "player_wild_temporary_regen_pause",
-					category = "temporary"
+			end
+			Gambler_definitions()
+			
+			local function Biker_definitions()
+				self.definitions.player_wild_temporary_regen_pause = {
+					name_id = "menu_player_wild_temporary_regen_pause",
+					category = "temporary",
+					upgrade = {
+						value = 1,
+						upgrade = "player_wild_temporary_regen_pause",
+						category = "temporary"
+					}
 				}
-			}
-			-- leech
-			self.definitions.temporary_copr_invuln_on_segment_loss = {
-				name_id = "menu_temporary_copr_invuln_on_segment_loss",
-				category = "temporary",
-				upgrade = {
-					value = 1,
-					upgrade = "copr_invuln_on_segment_loss",
-					category = "temporary"
+			end
+			Biker_definitions()
+			
+			local function Leech_definitions()
+				self.definitions.temporary_copr_invuln_on_segment_loss = {
+					name_id = "menu_temporary_copr_invuln_on_segment_loss",
+					category = "temporary",
+					upgrade = {
+						value = 1,
+						upgrade = "copr_invuln_on_segment_loss",
+						category = "temporary"
+					}
 				}
-			}
+			end
+			Leech_definitions()
+			
+			local function Copycat_definitions()
+				-- new ammo buffs
+				for i = 1, 4 do
+					self.definitions["mrwi_ammo_supply_multiplier_" .. tostring(i)] = {
+						incremental = true,
+						name_id = "menu_mrwi_ammo_supply_multiplier",
+						category = "feature",
+						upgrade = {
+							value = 1,
+							upgrade = "mrwi_ammo_supply_multiplier",
+							category = "player"
+						}
+					}
+				end
+				-- used to nerf some effects if detected
+				self.definitions.player_copycat_9th_card_identifier = {
+					name_id = "menu_player_copycat_9th_card_identifier",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "copycat_9th_card_identifier",
+						category = "player"
+					}
+				}
+				-- new armorer/anarchist bonuses
+				self.definitions.temporary_armor_break_invulnerable_3 = {
+					name_id = "menu_temporary_armor_break_invulnerable",
+					category = "temporary",
+					upgrade = {
+						value = 3,
+						upgrade = "armor_break_invulnerable",
+						category = "temporary"
+					}
+				}
+				-- rogue new dodge chance
+				self.definitions.player_passive_dodge_chance_5 = {
+					name_id = "menu_player_run_dodge_chance",
+					category = "feature",
+					upgrade = {
+						value = 5,
+						upgrade = "passive_dodge_chance",
+						category = "player"
+					}
+				}
+			end
+			Copycat_definitions()
+			
 		end
 		New_Vanilla_Perk_definitions()
 		
 		local function New_Custom_Perk_definitions()
-			---- BRAWLER
-			self.definitions.player_extra_ammo_cut = {
-				name_id = "extra_ammo_cut",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "extra_ammo_cut",
-					category = "player"
-				}
-			}
-			self.definitions.player_perk_armor_regen_timer_multiplier_6 = {
-				name_id = "menu_player_perk_armor_regen_timer_multiplier",
-				category = "feature",
-				upgrade = {
-					upgrade = "perk_armor_regen_timer_multiplier",
-					category = "player",
-					value = 6
-				}
-			}
-			self.definitions.player_stamina_on_melee_kill_brawler = {
-				name_id = "menu_player_stamina_on_melee_kill_brawler",
-				category = "feature",
-				upgrade = {
-					upgrade = "stamina_on_melee_kill_brawler",
-					category = "player",
-					value = 1
-				}
-			}
-			self.definitions.player_passive_armor_movement_penalty_multiplier2 = {
-				name_id = "menu_passive_armor_movement_penalty_multiplier2",
-				category = "feature",
-				upgrade = {
-					value = 2,
-					upgrade = "passive_armor_movement_penalty_multiplier",
-					category = "player"
-				}
-			}
-			self.definitions.player_passive_armor_movement_penalty_multiplier3 = {
-				name_id = "menu_passive_armor_movement_penalty_multiplier3",
-				category = "feature",
-				upgrade = {
-					value = 3,
-					upgrade = "passive_armor_movement_penalty_multiplier",
-					category = "player"
-				}
-			}
-			self.definitions.player_damage_resist_brawler1 = {
-				name_id = "menu_damage_resist_brawler1",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "damage_resist_brawler",
-					category = "player"
-				}
-			}
-			self.definitions.player_damage_resist_brawler2 = {
-				name_id = "menu_damage_resist_brawler2",
-				category = "feature",
-				upgrade = {
-					value = 2,
-					upgrade = "damage_resist_brawler",
-					category = "player"
-				}
-			}
-			self.definitions.player_damage_resist_brawler3 = {
-				name_id = "menu_damage_resist_brawler3",
-				category = "feature",
-				upgrade = {
-					value = 3,
-					upgrade = "damage_resist_brawler",
-					category = "player"
-				}
-			}
-			self.definitions.player_AP_damage_resist_brawler = {
-				name_id = "menu_AP_damage_resist_brawler",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "AP_damage_resist_brawler",
-					category = "player"
-				}
-			}
-			self.definitions.player_armor_regen_brawler = {
-				name_id = "menu_armor_regen_brawler",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "armor_regen_brawler",
-					category = "player"
-				}
-			}
-			self.definitions.player_damage_resist_faraway_brawler = {
-				name_id = "damage_resist_faraway_brawler",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "damage_resist_faraway_brawler",
-					category = "player"
-				}
-			}
-			self.definitions.player_damage_resist_teammates_brawler = {
-				name_id = "menu_player_damage_resist_teammates_brawler",
-				category = "feature",
-				upgrade = {
-					upgrade = "damage_resist_teammates_brawler",
-					category = "player",
-					value = 1
-				}
-			}
-	
-			---- SPEED JUNKIE
-			self.definitions.player_speed_junkie_meter = {
-				name_id = "menu_player_speed_junkie_meter",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "speed_junkie_meter",
-					category = "player"
-				}
-			}
-			self.definitions.player_pause_armor_recovery_when_moving = {
-				name_id = "menu_player_pause_armor_recovery_when_moving",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "pause_armor_recovery_when_moving",
-					category = "player"
-				}
-			}
-			self.definitions.player_health_decrease_2 = {
-				name_id = "menu_player_health_decrease",
-				category = "feature",
-				upgrade = {
-					value = 2,
-					upgrade = "health_decrease",
-					category = "player"
-				}
-			}
-			self.definitions.player_armor_increase_4 = {
-				name_id = "menu_player_health_to_armor_conversion",
-				category = "feature",
-				upgrade = {
-					value = 4,
-					upgrade = "armor_increase",
-					category = "player"
-				}
-			}
-			self.definitions.player_armor_increase_5 = {
-				name_id = "menu_player_health_to_armor_conversion",
-				category = "feature",
-				upgrade = {
-					value = 5,
-					upgrade = "armor_increase",
-					category = "player"
-				}
-			}
-			self.definitions.player_speed_junkie_stamina_on_kill = {
-				name_id = "menu_player_speed_junkie_stamina_on_kill",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "speed_junkie_stamina_on_kill",
-					category = "player"
-				}
-			}
-			self.definitions.player_speed_junkie_meter_on_kill = {
-				name_id = "menu_player_speed_junkie_meter_on_kill",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "speed_junkie_meter_on_kill",
-					category = "player"
-				}
-			}
-			self.definitions.player_armor_increase_6 = {
-				name_id = "menu_player_health_to_armor_conversion",
-				category = "feature",
-				upgrade = {
-					value = 6,
-					upgrade = "armor_increase",
-					category = "player"
-				}
-			}
-			self.definitions.player_speed_junkie_armor_on_dodge = {
-				name_id = "menu_player_speed_junkie_armor_on_dodge",
-				category = "temporary",
-				upgrade = {
-					value = 1,
-					upgrade = "player_speed_junkie_armor_on_dodge",
-					category = "temporary"
-				}
-			}
-			self.definitions.player_speed_junkie_armor_berserk = {
-				name_id = "menu_player_speed_junkie_armor_berserk",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "speed_junkie_armor_berserk",
-					category = "player"
-				}
-			}
-			self.definitions.player_speed_junkie_meter_boost_agility = {
-				name_id = "menu_player_speed_junkie_meter_boost_agility",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "speed_junkie_meter_boost_agility",
-					category = "player"
-				}
-			}
 			
-			---- GUARDIAN
-			self.definitions.player_guardian_interaction_speed_penalty = {
-				name_id = "menu_player_guardian_interaction_speed_penalty",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_interaction_speed_penalty",
-					category = "player"
+			local function Brawler_definitions()
+				self.definitions.player_extra_ammo_cut = {
+					name_id = "extra_ammo_cut",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "extra_ammo_cut",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_movement_penalty = {
-				name_id = "menu_player_guardian_movement_penalty",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_movement_penalty",
-					category = "player"
+				self.definitions.player_perk_armor_regen_timer_multiplier_6 = {
+					name_id = "menu_player_perk_armor_regen_timer_multiplier",
+					category = "feature",
+					upgrade = {
+						upgrade = "perk_armor_regen_timer_multiplier",
+						category = "player",
+						value = 6
+					}
 				}
-			}
-			self.definitions.player_guardian_armor_remover = {
-				name_id = "menu_player_guardian_armor_remover",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_armor_remover",
-					category = "player"
+				self.definitions.player_stamina_on_melee_kill_brawler = {
+					name_id = "menu_player_stamina_on_melee_kill_brawler",
+					category = "feature",
+					upgrade = {
+						upgrade = "stamina_on_melee_kill_brawler",
+						category = "player",
+						value = 1
+					}
 				}
-			}
-			self.definitions.player_guardian_area_passive = {
-				name_id = "menu_player_guardian_area_passive",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_area_passive",
-					category = "player"
+				self.definitions.player_passive_armor_movement_penalty_multiplier2 = {
+					name_id = "menu_passive_armor_movement_penalty_multiplier2",
+					category = "feature",
+					upgrade = {
+						value = 2,
+						upgrade = "passive_armor_movement_penalty_multiplier",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_area_range_1 = {
-				name_id = "menu_player_guardian_area_range_1",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_area_range",
-					category = "player"
+				self.definitions.player_passive_armor_movement_penalty_multiplier3 = {
+					name_id = "menu_passive_armor_movement_penalty_multiplier3",
+					category = "feature",
+					upgrade = {
+						value = 3,
+						upgrade = "passive_armor_movement_penalty_multiplier",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_area_range_2 = {
-				name_id = "menu_player_guardian_area_range_2",
-				category = "feature",
-				upgrade = {
-					value = 2,
-					upgrade = "guardian_area_range",
-					category = "player"
+				self.definitions.player_damage_resist_brawler1 = {
+					name_id = "menu_damage_resist_brawler1",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "damage_resist_brawler",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_area_passive_activation_timer_1 = {
-				name_id = "menu_player_guardian_area_passive_activation_timer_1",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_area_passive_activation_timer",
-					category = "player"
+				self.definitions.player_damage_resist_brawler2 = {
+					name_id = "menu_damage_resist_brawler2",
+					category = "feature",
+					upgrade = {
+						value = 2,
+						upgrade = "damage_resist_brawler",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_area_passive_activation_timer_2 = {
-				name_id = "menu_player_guardian_area_passive_activation_timer_2",
-				category = "feature",
-				upgrade = {
-					value = 2,
-					upgrade = "guardian_area_passive_activation_timer",
-					category = "player"
+				self.definitions.player_damage_resist_brawler3 = {
+					name_id = "menu_damage_resist_brawler3",
+					category = "feature",
+					upgrade = {
+						value = 3,
+						upgrade = "damage_resist_brawler",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_area_passive_health_regen_1 = {
-				name_id = "menu_player_guardian_area_passive_health_regen_1",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_area_passive_health_regen",
-					category = "player"
+				self.definitions.player_AP_damage_resist_brawler = {
+					name_id = "menu_AP_damage_resist_brawler",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "AP_damage_resist_brawler",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_area_passive_health_regen_2 = {
-				name_id = "menu_player_guardian_area_passive_health_regen_2",
-				category = "feature",
-				upgrade = {
-					value = 2,
-					upgrade = "guardian_area_passive_health_regen",
-					category = "player"
+				self.definitions.player_armor_regen_brawler = {
+					name_id = "menu_armor_regen_brawler",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "armor_regen_brawler",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_area_passive_health_regen_3 = {
-				name_id = "menu_player_guardian_area_passive_health_regen_3",
-				category = "feature",
-				upgrade = {
-					value = 3,
-					upgrade = "guardian_area_passive_health_regen",
-					category = "player"
+				self.definitions.player_damage_resist_faraway_brawler = {
+					name_id = "damage_resist_faraway_brawler",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "damage_resist_faraway_brawler",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_damage_clamp_inside_1 = {
-				name_id = "menu_player_guardian_damage_clamp_inside_1",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_damage_clamp_inside_1",
-					category = "player"
+				self.definitions.player_damage_resist_teammates_brawler = {
+					name_id = "menu_player_damage_resist_teammates_brawler",
+					category = "feature",
+					upgrade = {
+						upgrade = "damage_resist_teammates_brawler",
+						category = "player",
+						value = 1
+					}
 				}
-			}
-			self.definitions.player_guardian_damage_clamp_inside_2 = {
-				name_id = "menu_player_guardian_damage_clamp_inside_2",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_damage_clamp_inside_2",
-					category = "player"
+			end
+			Brawler_definitions()
+			
+			local function Junkie_definitions()
+				self.definitions.player_speed_junkie_meter = {
+					name_id = "menu_player_speed_junkie_meter",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "speed_junkie_meter",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_damage_clamp_outside_1 = {
-				name_id = "menu_player_guardian_damage_clamp_outside_1",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_damage_clamp_outside_1",
-					category = "player"
+				self.definitions.player_pause_armor_recovery_when_moving = {
+					name_id = "menu_player_pause_armor_recovery_when_moving",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "pause_armor_recovery_when_moving",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_damage_clamp_outside_2 = {
-				name_id = "menu_player_guardian_damage_clamp_outside_2",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_damage_clamp_outside_2",
-					category = "player"
+				self.definitions.player_health_decrease_2 = {
+					name_id = "menu_player_health_decrease",
+					category = "feature",
+					upgrade = {
+						value = 2,
+						upgrade = "health_decrease",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_passive_health_multiplier_6 = {
-				name_id = "menu_player_health_multiplier",
-				category = "feature",
-				upgrade = {
-					value = 6,
-					upgrade = "passive_health_multiplier",
-					category = "player"
+				self.definitions.player_armor_increase_4 = {
+					name_id = "menu_player_health_to_armor_conversion",
+					category = "feature",
+					upgrade = {
+						value = 4,
+						upgrade = "armor_increase",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_heavy_armor_ricochet = {
-				name_id = "menu_player_guardian_heavy_armor_ricochet",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_heavy_armor_ricochet",
-					category = "player"
+				self.definitions.player_armor_increase_5 = {
+					name_id = "menu_player_health_to_armor_conversion",
+					category = "feature",
+					upgrade = {
+						value = 5,
+						upgrade = "armor_increase",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_activate_area_on_kill = {
-				name_id = "menu_player_guardian_activate_area_on_kill",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_activate_area_on_kill",
-					category = "player"
+				self.definitions.player_speed_junkie_stamina_on_kill = {
+					name_id = "menu_player_speed_junkie_stamina_on_kill",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "speed_junkie_stamina_on_kill",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_auto_ammo_pickup_on_kill = {
-				name_id = "menu_player_guardian_auto_ammo_pickup_on_kill",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_auto_ammo_pickup_on_kill",
-					category = "player"
+				self.definitions.player_speed_junkie_meter_on_kill = {
+					name_id = "menu_player_speed_junkie_meter_on_kill",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "speed_junkie_meter_on_kill",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_health_on_kill = {
-				name_id = "menu_player_guardian_health_on_kill",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_health_on_kill",
-					category = "player"
+				self.definitions.player_armor_increase_6 = {
+					name_id = "menu_player_health_to_armor_conversion",
+					category = "feature",
+					upgrade = {
+						value = 6,
+						upgrade = "armor_increase",
+						category = "player"
+					}
 				}
-			}
-			self.definitions.player_guardian_reduce_equipment_heal = {
-				name_id = "menu_player_guardian_reduce_equipment_heal",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "guardian_reduce_equipment_heal",
-					category = "player"
+				self.definitions.player_speed_junkie_armor_on_dodge = {
+					name_id = "menu_player_speed_junkie_armor_on_dodge",
+					category = "temporary",
+					upgrade = {
+						value = 1,
+						upgrade = "player_speed_junkie_armor_on_dodge",
+						category = "temporary"
+					}
 				}
-			}
-			self.definitions.player_menace_panic_spread = {
-				name_id = "menu_player_menace_panic_spread",
-				category = "feature",
-				upgrade = {
-					value = 1,
-					upgrade = "menace_panic_spread",
-					category = "player"
+				self.definitions.player_speed_junkie_armor_berserk = {
+					name_id = "menu_player_speed_junkie_armor_berserk",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "speed_junkie_armor_berserk",
+						category = "player"
+					}
 				}
-			}
+				self.definitions.player_speed_junkie_meter_boost_agility = {
+					name_id = "menu_player_speed_junkie_meter_boost_agility",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "speed_junkie_meter_boost_agility",
+						category = "player"
+					}
+				}
+			end
+			Junkie_definitions()
+			
+			local function Guardian_definitions()
+				self.definitions.player_guardian_interaction_speed_penalty = {
+					name_id = "menu_player_guardian_interaction_speed_penalty",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_interaction_speed_penalty",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_movement_penalty = {
+					name_id = "menu_player_guardian_movement_penalty",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_movement_penalty",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_armor_remover = {
+					name_id = "menu_player_guardian_armor_remover",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_armor_remover",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_area_passive = {
+					name_id = "menu_player_guardian_area_passive",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_area_passive",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_area_range_1 = {
+					name_id = "menu_player_guardian_area_range_1",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_area_range",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_area_range_2 = {
+					name_id = "menu_player_guardian_area_range_2",
+					category = "feature",
+					upgrade = {
+						value = 2,
+						upgrade = "guardian_area_range",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_area_passive_activation_timer_1 = {
+					name_id = "menu_player_guardian_area_passive_activation_timer_1",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_area_passive_activation_timer",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_area_passive_activation_timer_2 = {
+					name_id = "menu_player_guardian_area_passive_activation_timer_2",
+					category = "feature",
+					upgrade = {
+						value = 2,
+						upgrade = "guardian_area_passive_activation_timer",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_area_passive_health_regen_1 = {
+					name_id = "menu_player_guardian_area_passive_health_regen_1",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_area_passive_health_regen",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_area_passive_health_regen_2 = {
+					name_id = "menu_player_guardian_area_passive_health_regen_2",
+					category = "feature",
+					upgrade = {
+						value = 2,
+						upgrade = "guardian_area_passive_health_regen",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_area_passive_health_regen_3 = {
+					name_id = "menu_player_guardian_area_passive_health_regen_3",
+					category = "feature",
+					upgrade = {
+						value = 3,
+						upgrade = "guardian_area_passive_health_regen",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_damage_clamp_inside_1 = {
+					name_id = "menu_player_guardian_damage_clamp_inside_1",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_damage_clamp_inside_1",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_damage_clamp_inside_2 = {
+					name_id = "menu_player_guardian_damage_clamp_inside_2",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_damage_clamp_inside_2",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_damage_clamp_outside_1 = {
+					name_id = "menu_player_guardian_damage_clamp_outside_1",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_damage_clamp_outside_1",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_damage_clamp_outside_2 = {
+					name_id = "menu_player_guardian_damage_clamp_outside_2",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_damage_clamp_outside_2",
+						category = "player"
+					}
+				}
+				self.definitions.player_passive_health_multiplier_6 = {
+					name_id = "menu_player_health_multiplier",
+					category = "feature",
+					upgrade = {
+						value = 6,
+						upgrade = "passive_health_multiplier",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_heavy_armor_ricochet = {
+					name_id = "menu_player_guardian_heavy_armor_ricochet",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_heavy_armor_ricochet",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_activate_area_on_kill = {
+					name_id = "menu_player_guardian_activate_area_on_kill",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_activate_area_on_kill",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_auto_ammo_pickup_on_kill = {
+					name_id = "menu_player_guardian_auto_ammo_pickup_on_kill",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_auto_ammo_pickup_on_kill",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_health_on_kill = {
+					name_id = "menu_player_guardian_health_on_kill",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_health_on_kill",
+						category = "player"
+					}
+				}
+				self.definitions.player_guardian_reduce_equipment_heal = {
+					name_id = "menu_player_guardian_reduce_equipment_heal",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "guardian_reduce_equipment_heal",
+						category = "player"
+					}
+				}
+				self.definitions.player_menace_panic_spread = {
+					name_id = "menu_player_menace_panic_spread",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "menace_panic_spread",
+						category = "player"
+					}
+				}
+			end
+			Guardian_definitions()
+			
 		end
 		New_Custom_Perk_definitions()
 		
@@ -2114,6 +2655,7 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 end)
 
 Hooks:PostHook(UpgradesTweakData, "_shotgun_definitions", "Gilza_skill_definitions_2", function(self)	
+	-- new shotgun recoil skill
 	self.definitions.shotgun_recoil_multiplier_1 = {
 		incremental = true,
 		name_id = "menu_shotgun_recoil_multiplier_1",
@@ -2134,6 +2676,7 @@ Hooks:PostHook(UpgradesTweakData, "_shotgun_definitions", "Gilza_skill_definitio
 			category = "shotgun"
 		}
 	}
+	-- fearmonger
 	self.definitions.shotgun_panic_when_kill = {
 		name_id = "menu_shotgun_panic_when_kill",
 		category = "feature",
@@ -2146,6 +2689,7 @@ Hooks:PostHook(UpgradesTweakData, "_shotgun_definitions", "Gilza_skill_definitio
 end)
 
 Hooks:PostHook(UpgradesTweakData, "_pistol_definitions", "Gilza_skill_definitions_3", function(self)	
+	-- botomless pockets pistol part
 	self.definitions.pistol_extra_ammo_multiplier_1 = {
 		incremental = true,
 		name_id = "menu_pistol_extra_ammo_multiplier",
@@ -2166,9 +2710,20 @@ Hooks:PostHook(UpgradesTweakData, "_pistol_definitions", "Gilza_skill_definition
 			category = "pistol"
 		}
 	}
+	-- new ACED tier 1 upgrade
+	self.definitions.pistol_swap_speed_multiplier_2 = {
+		name_id = "menu_pistol_swap_speed_multiplier_2",
+		category = "feature",
+		upgrade = {
+			value = 2,
+			upgrade = "swap_speed_multiplier",
+			category = "pistol"
+		}
+	}
 end)
 
 Hooks:PostHook(UpgradesTweakData, "_smg_definitions", "Gilza_skill_definitions_4", function(self)	
+	-- botomless pockets smg part
 	self.definitions.smg_extra_ammo_multiplier_1 = {
 		incremental = true,
 		name_id = "menu_smg_extra_ammo_multiplier_1",
@@ -2192,6 +2747,7 @@ Hooks:PostHook(UpgradesTweakData, "_smg_definitions", "Gilza_skill_definitions_4
 end)
 
 Hooks:PostHook(UpgradesTweakData, "_weapon_definitions", "Gilza_skill_definitions_5", function(self)	
+	-- double trouble skill
 	self.definitions.akimbo_pistol_improved_handling = {
 		name_id = "menu_akimbo_pistol_improved_handling",
 		category = "feature",

@@ -91,15 +91,17 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 		end
 	end
 	
+	local attackerIsPlayer = attack_data.attacker_unit == managers.player:player_unit()
+	
 	-- reduce bullet damage for headless dozers, since they ignore headshot damage, and Gilza's bodyshot damage is higher with lower HS muls
 	-- cant change their health because of explosive weapon's breakpoints
-	if self._char_tweak.Gilza_headless_tag then
+	if self._char_tweak.Gilza_headless_tag and attackerIsPlayer then
 		attack_data.damage = attack_data.damage * 0.5
 	end
 
 	local is_civilian = CopDamage.is_civilian(self._unit:base()._tweak_table)
 	local allow_pen = true
-	local allow_pen_from_rng = true
+	local allow_pen_from_rng = false
 	
 	if self._has_plate and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_plate_name and not attack_data.armor_piercing then
 		local armor_pierce_roll = math.rand(1)
@@ -132,40 +134,45 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 			end
 		end
 		
-		if armor_pierce_roll >= armor_pierce_value then
-			allow_pen_from_rng = false
+		if armor_pierce_roll <= armor_pierce_value then
+			allow_pen_from_rng = true
 		end
 	end
 	
-	local attackerIsPlayer = attack_data.attacker_unit == managers.player:player_unit()
+	-- if sentry RNG fails, dmg is ignored
+	if not attackerIsPlayer and not allow_pen_from_rng then
+		return
+	end
 	
 	-- new AP: if enemy is hit in the plate, reduce damage in half if we have armor peirce basic; dont reduce dmg if we have AP aced + basic
-	if not allow_pen_from_rng and (attack_data.armor_piercing or managers.player:has_category_upgrade("player", "ap_bullets_aced")) and attackerIsPlayer and self._has_plate and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_plate_name then
-		if managers.player:has_category_upgrade("player", "ap_bullets") and not managers.player:has_category_upgrade("player", "ap_bullets_aced") or not managers.player:has_category_upgrade("player", "ap_bullets") and managers.player:has_category_upgrade("player", "ap_bullets_aced") then
-			-- allow armor piercing but reduce damage after pen in half
-			attack_data.damage = attack_data.damage * 0.5
-			allow_pen = true
-			allow_pen_from_rng = true
+	if not attack_data.armor_piercing and attackerIsPlayer and self._has_plate and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_plate_name and not allow_pen_from_rng then
+		local has_basic = managers.player:has_category_upgrade("player", "ap_bullets_basic")
+		local has_aced = managers.player:has_category_upgrade("player", "ap_bullets_aced")
+		if has_basic or has_aced then
+			if (has_basic and not has_aced) or (has_aced and not has_basic) then
+				-- allow armor piercing but reduce damage after pen in half
+				attack_data.damage = attack_data.damage * 0.5
+				allow_pen = true
+			else
+				-- if we have AP bullets normal + aced, dont reduce damage
+				allow_pen = true
+			end
 		else
-			-- if we have AP bullets normal + aced, dont reduce damage
-			allow_pen = true
-			allow_pen_from_rng = true
+			allow_pen = false
 		end
 	end
 	
 	-- allow throwable knives and such to pen body armor
 	if attack_data.weapon_unit:base().thrower_unit then
 		allow_pen = true
-		allow_pen_from_rng = true
 	end
 	
 	-- allow saws to pen body armor
 	if attack_data.weapon_unit:base().name_id == "saw" or attack_data.weapon_unit:base().name_id == "saw_secondary" then
 		allow_pen = true
-		allow_pen_from_rng = true
 	end
 	
-	if not allow_pen or not allow_pen_from_rng then
+	if not allow_pen then
 		return
 	end
 	
@@ -571,7 +578,7 @@ function CopDamage:roll_critical_hit(attack_data, damage)
 	end
 	
 	if res1 then
-		res2 = damage * 2.5 -- new crit mul
+		res2 = damage * 2.25 -- new crit mul
 	end
 	
 	return res1, res2
@@ -722,7 +729,7 @@ Hooks:PreHook(CopDamage, "die", "Gilza_itimidated_death_tracker", function(self,
 	local is_intimidated_cop = Gilza.intimidated_enemies[self._unit:id()] or false
 	
 	if is_intimidated_cop and attack_data.attacker_unit == managers.player:player_unit() then
-		managers.player._Gilza_menace_kill_tracker = managers.player._Gilza_menace_kill_tracker + 0.2
+		managers.player._Gilza_menace_kill_tracker = managers.player._Gilza_menace_kill_tracker + 0.25
 		if managers.player._Gilza_menace_kill_tracker > 4 then
 			managers.player._Gilza_menace_kill_tracker = 4
 		else

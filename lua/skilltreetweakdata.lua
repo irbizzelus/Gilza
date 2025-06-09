@@ -71,227 +71,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 			self.specializations[i][8] = deck8
 		end
 		
-		local function VANILLA_PERKS()
-			
-			-- Crew Chief
-			local function Crew_chief_updates()
-				-- update melee related card
-				self.specializations[1][3].upgrades = {
-					"team_passive_stamina_multiplier_1",
-					"player_passive_intimidate_range_mul",
-					"player_damage_dampener_close_contact_1",
-					"player_passive_inspire_range_mul"
-				}
-			end
-			Crew_chief_updates()
-			
-			-- Sociopath
-			local function Sociopath_updates()
-				-- update melee related card
-				self.specializations[9][1] = {
-					cost = 200,
-					desc_id = "menu_sociopathinfil_1_desc",
-					name_id = "menu_sociopathinfil_1",
-					upgrades = {
-						"player_damage_dampener_outnumbered_strong",
-						"melee_stacking_hit_damage_multiplier_1",
-						"melee_stacking_hit_expire_t",
-					},
-					icon_xy = {
-						6,
-						4
-					}
-				}
-			end
-			Sociopath_updates()
-			
-			-- Infiltrator
-			local function Infiltrator_updates()
-				-- update melee related cards
-				self.specializations[8][1] = {
-					cost = 200,
-					desc_id = "menu_sociopathinfil_1_desc",
-					name_id = "menu_sociopathinfil_1",
-					upgrades = {
-						"player_damage_dampener_outnumbered_strong",
-						"melee_stacking_hit_damage_multiplier_1",
-						"melee_stacking_hit_expire_t",
-					},
-					icon_xy = {
-						6,
-						4
-					}
-				}
-				self.specializations[8][5] = {
-					cost = 1000,
-					desc_id = "menu_deck8_5_desc",
-					name_id = "menu_deck8_5",
-					upgrades = {
-						"player_damage_dampener_close_contact_2",
-						"melee_stacking_hit_damage_multiplier_1"
-					},
-					icon_xy = {
-						4,
-						4
-					}
-				}
-				self.specializations[8][3].desc_id = "menu_deck8_3_desc"
-				self.specializations[8][3].name_id = "menu_deck8_3"
-				self.specializations[8][7].desc_id = "menu_deck8_7_desc"
-				self.specializations[8][7].name_id = "menu_deck8_7"
-			end
-			Infiltrator_updates()
-			
-			-- Hitman
-			local function Hitman_updates()
-				self.specializations[5][1].upgrades = {
-					"temporary_badass_hitman_kill_armor_regen"
-				}
-				self.specializations[5][3].upgrades = {
-					"akimbo_recoil_index_addend_4",
-					"akimbo_extra_ammo_multiplier_2",
-					"temporary_akimbo_pistol_armor_regen_timer_multiplier"
-				}
-				self.specializations[5][5].upgrades = {
-					"temporary_death_dance_combo_invulnerability",
-				}
-				self.specializations[5][7].upgrades = {
-					"temporary_player_bounty_hunter"
-				}
-				self.specializations[5][9].upgrades = {
-					"player_passive_loot_drop_multiplier",
-					"player_passive_always_regen_armor_1"
-				}
-			end
-			Hitman_updates()
-			
-			-- Yakuza
-			local function Yakuza_updates()
-				self.specializations[12][7].upgrades = {
-					"player_armor_regen_damage_health_ratio_multiplier_3",
-					"player_AP_damage_resist_brawler"
-				}
-				self.specializations[12][9].upgrades = {
-					"player_passive_loot_drop_multiplier",
-					"player_armor_regen_damage_health_ratio_threshold_multiplier",
-					"player_movement_speed_damage_health_ratio_threshold_multiplier",
-					"player_yakuza_suppression_resist",
-					"player_yakuza_behind_player_resist",
-				}
-			end
-			Yakuza_updates()
-			
-			-- Rogue
-			local function Rogue_updates()
-				self.specializations[4][9].upgrades = {
-					"player_passive_loot_drop_multiplier",
-					"weapon_passive_armor_piercing_chance",
-					"weapon_passive_swap_speed_multiplier_1",
-					"player_movement_speed_multiplier_2",
-					"player_stamina_multiplier",
-					"player_passive_dodge_chance_4",
-					"player_crouch_dodge_chance_1"
-				}
-			end
-			Rogue_updates()
-			
-			-- Crook
-			local function Crook_updates()
-				self.specializations[6][9].upgrades = {
-					"player_passive_loot_drop_multiplier",
-					"player_armor_regen_timer_multiplier_tier",
-					"weapon_passive_armor_piercing_chance_maxed"
-				}
-			end
-			Crook_updates()
-			
-			-- Burglar
-			local function Burglar_updates()
-				self.specializations[7][5].upgrades = {
-					"player_tier_dodge_chance_2",
-					"player_stand_still_crouch_camouflage_bonus_2",
-					"player_pick_lock_speed_multiplier",
-					"player_level_2_dodge_addend_1",
-					"player_level_2_dodge_addend_2",
-					"player_silencer_concealment_increase_2"
-				}
-			end
-			Burglar_updates()
-			
-			-- Ex-president
-			local function Ex_pres_updates()
-				self.specializations[13][5].upgrades = {
-					"player_armor_max_health_store_multiplier",
-					"player_passive_health_multiplier_2",
-					"player_static_dodge_chance",
-				}
-				self.specializations[13][7].upgrades = {
-					"player_armor_health_store_amount_3",
-					"player_passive_health_multiplier_3",
-					"player_armor_health_store_shield",
-				}
-				self.specializations[13][9].upgrades = {
-					"player_passive_loot_drop_multiplier",
-					"player_store_armor_recovery_bonus_timer"
-				}
-			end
-			Ex_pres_updates()
-			
-			-- Gambler
-			local function Gambler_updates()
-				self.specializations[10][1].upgrades = {
-					"player_loose_ammo_restore_health_chances",
-					"temporary_loose_ammo_restore_health_1",
-					"player_increased_pickup_area_2"
-				}
-				self.specializations[10][7].upgrades = {
-					"temporary_loose_ammo_restore_health_2",
-					"temporary_loose_ammo_restore_health_3"
-				}
-				self.specializations[10][9].upgrades = {
-					"player_passive_loot_drop_multiplier",
-					"player_loose_ammo_add_dodge_amount",
-				}
-			end
-			Gambler_updates()
-			
-			-- Biker
-			local function Biker_updates()
-				self.specializations[16][1].upgrades = {
-					"player_wild_health_amount_1",
-					"player_wild_armor_amount_1",
-					"player_wild_temporary_regen_pause",
-					"player_tier_armor_multiplier_1",
-					"player_passive_health_multiplier_1"
-				}
-			end
-			Biker_updates()
-			
-			-- Leech
-			local function Leech_updates()
-				self.specializations[22][1].upgrades = {
-					"temporary_copr_ability_1",
-					"copr_ability",
-					"player_copr_static_damage_ratio_1",
-					"player_copr_activate_bonus_health_ratio_1",
-					"player_copr_teammate_heal_1",
-					"temporary_copr_invuln_on_segment_loss"
-				}
-				self.specializations[22][7].upgrades = {
-					"player_passive_health_multiplier_3"
-				}
-				self.specializations[22][9].upgrades = {
-					"player_activate_ability_downed",
-					"player_copr_static_damage_ratio_2",
-					"player_passive_loot_drop_multiplier"
-				}
-				self.specializations[22].category = "supportive"
-			end
-			Leech_updates()
-			
-		end
-		VANILLA_PERKS()
-		
+		-- load custom perks first so that copycat can successfully copy them
 		local function CUSTOM_PERKS()
 			-- Brawler perk deck
 			local brawler_deck = {
@@ -609,6 +389,277 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 			Gilza.custom_specialization_indexes.guardian = j
 		end
 		CUSTOM_PERKS()
+		
+		local function VANILLA_PERKS()
+			
+			local function Crew_chief_updates()
+				-- update melee related card
+				self.specializations[1][3].upgrades = {
+					"team_passive_stamina_multiplier_1",
+					"player_passive_intimidate_range_mul",
+					"player_damage_dampener_close_contact_1",
+					"player_passive_inspire_range_mul"
+				}
+			end
+			Crew_chief_updates()
+			
+			local function Rogue_updates()
+				self.specializations[4][9].upgrades = {
+					"player_passive_loot_drop_multiplier",
+					"weapon_passive_armor_piercing_chance",
+					"weapon_passive_swap_speed_multiplier_1",
+					"player_movement_speed_multiplier_2",
+					"player_stamina_multiplier",
+					"player_passive_dodge_chance_4",
+					"player_crouch_dodge_chance_1"
+				}
+			end
+			Rogue_updates()
+			
+			local function Hitman_updates()
+				self.specializations[5][1].upgrades = {
+					"temporary_badass_hitman_kill_armor_regen"
+				}
+				self.specializations[5][3].upgrades = {
+					"akimbo_recoil_index_addend_4",
+					"akimbo_extra_ammo_multiplier_2",
+					"temporary_akimbo_pistol_armor_regen_timer_multiplier"
+				}
+				self.specializations[5][5].upgrades = {
+					"temporary_death_dance_combo_invulnerability",
+				}
+				self.specializations[5][7].upgrades = {
+					"temporary_player_bounty_hunter"
+				}
+				self.specializations[5][9].upgrades = {
+					"player_passive_loot_drop_multiplier",
+					"player_passive_always_regen_armor_1"
+				}
+			end
+			Hitman_updates()
+			
+			local function Crook_updates()
+				self.specializations[6][9].upgrades = {
+					"player_passive_loot_drop_multiplier",
+					"player_armor_regen_timer_multiplier_tier",
+					"weapon_passive_armor_piercing_chance_maxed"
+				}
+			end
+			Crook_updates()
+			
+			local function Burglar_updates()
+				self.specializations[7][5].upgrades = {
+					"player_tier_dodge_chance_2",
+					"player_stand_still_crouch_camouflage_bonus_2",
+					"player_pick_lock_speed_multiplier",
+					"player_level_2_dodge_addend_1",
+					"player_level_2_dodge_addend_2",
+					"player_silencer_concealment_increase_2"
+				}
+			end
+			Burglar_updates()
+			
+			local function Infiltrator_updates()
+				-- update melee related cards
+				self.specializations[8][1] = {
+					cost = 200,
+					desc_id = "menu_sociopathinfil_1_desc",
+					short_id = "menu_sociopathinfil_1_short",
+					name_id = "menu_sociopathinfil_1",
+					upgrades = {
+						"player_damage_dampener_outnumbered_strong",
+						"melee_stacking_hit_damage_multiplier_1",
+						"melee_stacking_hit_expire_t",
+					},
+					icon_xy = {
+						6,
+						4
+					}
+				}
+				self.specializations[8][5] = {
+					cost = 1000,
+					desc_id = "menu_deck8_5_desc",
+					short_id = "menu_deck8_5_short",
+					name_id = "menu_deck8_5",
+					upgrades = {
+						"player_damage_dampener_close_contact_2",
+						"melee_stacking_hit_damage_multiplier_1"
+					},
+					icon_xy = {
+						4,
+						4
+					}
+				}
+				-- fixes vanilla mixed around card names for ease of use in loc files
+				self.specializations[8][3].desc_id = "menu_deck8_3_desc"
+				self.specializations[8][3].short_id = "menu_deck8_3_short"
+				self.specializations[8][3].name_id = "menu_deck8_3"
+				self.specializations[8][7].desc_id = "menu_deck8_7_desc"
+				self.specializations[8][7].short_id = "menu_deck8_7_short"
+				self.specializations[8][7].name_id = "menu_deck8_7"
+			end
+			Infiltrator_updates()
+			
+			local function Sociopath_updates()
+				-- update melee related card
+				self.specializations[9][1] = {
+					cost = 200,
+					desc_id = "menu_sociopathinfil_1_desc",
+					short_id = "menu_sociopathinfil_1_short",
+					name_id = "menu_sociopathinfil_1",
+					upgrades = {
+						"player_damage_dampener_outnumbered_strong",
+						"melee_stacking_hit_damage_multiplier_1",
+						"melee_stacking_hit_expire_t",
+					},
+					icon_xy = {
+						6,
+						4
+					}
+				}
+			end
+			Sociopath_updates()
+			
+			local function Gambler_updates()
+				self.specializations[10][1].upgrades = {
+					"player_loose_ammo_restore_health_chances",
+					"temporary_loose_ammo_restore_health_1",
+					"player_increased_pickup_area_2"
+				}
+				self.specializations[10][7].upgrades = {
+					"temporary_loose_ammo_restore_health_2",
+					"temporary_loose_ammo_restore_health_3"
+				}
+				self.specializations[10][9].upgrades = {
+					"player_passive_loot_drop_multiplier",
+					"player_loose_ammo_add_dodge_amount",
+				}
+			end
+			Gambler_updates()
+			
+			local function Yakuza_updates()
+				self.specializations[12][7].upgrades = {
+					"player_armor_regen_damage_health_ratio_multiplier_3",
+					"player_AP_damage_resist_brawler"
+				}
+				self.specializations[12][9].upgrades = {
+					"player_passive_loot_drop_multiplier",
+					"player_armor_regen_damage_health_ratio_threshold_multiplier",
+					"player_movement_speed_damage_health_ratio_threshold_multiplier",
+					"player_yakuza_suppression_resist",
+					"player_yakuza_behind_player_resist",
+				}
+			end
+			Yakuza_updates()
+			
+			local function Ex_pres_updates()
+				self.specializations[13][5].upgrades = {
+					"player_armor_max_health_store_multiplier",
+					"player_passive_health_multiplier_2",
+					"player_static_dodge_chance",
+				}
+				self.specializations[13][7].upgrades = {
+					"player_armor_health_store_amount_3",
+					"player_passive_health_multiplier_3",
+					"player_armor_health_store_shield",
+				}
+				self.specializations[13][9].upgrades = {
+					"player_passive_loot_drop_multiplier",
+					"player_store_armor_recovery_bonus_timer"
+				}
+			end
+			Ex_pres_updates()
+
+			local function Biker_updates()
+				self.specializations[16][1].upgrades = {
+					"player_wild_health_amount_1",
+					"player_wild_armor_amount_1",
+					"player_wild_temporary_regen_pause",
+					"player_tier_armor_multiplier_1",
+					"player_passive_health_multiplier_1"
+				}
+			end
+			Biker_updates()
+			
+			local function Leech_updates()
+				self.specializations[22][1].upgrades = {
+					"temporary_copr_ability_1",
+					"copr_ability",
+					"player_copr_static_damage_ratio_1",
+					"player_copr_activate_bonus_health_ratio_1",
+					"player_copr_teammate_heal_1",
+					"temporary_copr_invuln_on_segment_loss"
+				}
+				self.specializations[22][7].upgrades = {
+					"player_passive_health_multiplier_3"
+				}
+				self.specializations[22][9].upgrades = {
+					"player_activate_ability_downed",
+					"player_copr_static_damage_ratio_2",
+					"player_passive_loot_drop_multiplier"
+				}
+				self.specializations[22].category = "supportive"
+			end
+			Leech_updates()
+			
+			local function Copycat_updates()
+				self.specializations[23][1].multi_choice[4].upgrades = {
+					"mrwi_crouch_speed_multiplier_1",
+					"mrwi_carry_speed_multiplier_1",
+					"mrwi_ammo_supply_multiplier_1"
+				}
+				self.specializations[23][3].multi_choice[4].upgrades = {
+					"mrwi_crouch_speed_multiplier_2",
+					"mrwi_carry_speed_multiplier_2",
+					"mrwi_ammo_supply_multiplier_2"
+				}
+				self.specializations[23][5].multi_choice[4].upgrades = {
+					"mrwi_crouch_speed_multiplier_3",
+					"mrwi_carry_speed_multiplier_3",
+					"mrwi_ammo_supply_multiplier_3"
+				}
+				self.specializations[23][7].multi_choice[4].upgrades = {
+					"mrwi_crouch_speed_multiplier_4",
+					"mrwi_carry_speed_multiplier_4",
+					"mrwi_ammo_supply_multiplier_4"
+				}
+				local deck9_multi_choice = {}
+				local deck9_options = UpgradesTweakData.mrwi_deck9_options_gilza_update()
+				for _, options in pairs(deck9_options) do
+					local data = nil
+					local perk_name = nil
+
+					if options.tree and options.tier then
+						data = clone(self.specializations[options.tree][options.tier])
+						perk_name = self.specializations[options.tree].name_id
+					else
+						data = {}
+					end
+
+					data.upgrades = table.list_add(options.upgrades or {}, data.upgrades or {})
+					data.cost = options.cost or data.cost or 4000
+					data.icon_atlas = options.icon_atlas or data.icon_atlas or "icons_atlas"
+					data.icon_xy = options.icon_xy or data.icon_xy
+					data.texture_bundle_folder = options.texture_bundle_folder or data.texture_bundle_folder
+					data.name_id = perk_name or options.name_id or data.name_id
+					data.desc_id = options.desc_id or data.desc_id
+					data.short_id = "menu_deck23_9_short"
+					data.skip_tier_desc = options.skip_tier_desc or data.skip_tier_desc
+					data.skip_tier_name = true
+					data.shorten_desc = options.shorten_desc or data.shorten_desc
+					
+					table.insert(deck9_multi_choice, data)
+				end
+				self.specializations[23][9].upgrades = {
+					"player_passive_loot_drop_multiplier",
+					"player_copycat_9th_card_identifier" -- does not do anything, only used to idenfy usage of 9th card to reduce some bonuses
+				}
+				self.specializations[23][9].multi_choice = deck9_multi_choice
+			end
+			Copycat_updates()
+			
+		end
+		VANILLA_PERKS()
 	
 	end
 	updatePERKS()
@@ -655,6 +706,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		self.skills.pack_mule[2].upgrades = { "player_sprint_any_bag" }
 		self.skills.pack_mule.icon_xy = { 6, 0 }
 		
+		self.skills.prison_wife[2].upgrades = {"player_headshot_regen_armor_bonus_2", "player_headshot_regen_armor_shorter_cooldown"}
+		
 		self.skills.ammo_2x[1].upgrades = { "ammo_bag_ammo_increase1" }
 		self.skills.ammo_2x[2].upgrades = { "ammo_bag_quantity" }
 		
@@ -665,11 +718,15 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		---- TECHICIAN
 		self.skills.tower_defense[2].upgrades = { "sentry_gun_quantity_2", "sentry_gun_can_revive", "player_sentry_proximity_damage_resist", "player_sentry_kills_refill_ammo" }
 		
+		self.skills.kick_starter[2].upgrades = {"player_drill_melee_hit_restart_chance_1", "player_drill_fix_interaction_speed_multiplier_2"}
+		
 		self.skills.steady_grip[1].upgrades = { "player_stability_increase_bonus_3" }
 		self.skills.steady_grip[2].upgrades = { "player_stability_increase_bonus_4" }
 		
 		self.skills.fire_control[1].upgrades = { "player_hipfire_less_recoil" }
 		self.skills.fire_control[2].upgrades = { "player_hipfire_no_accuracy_penalty" }
+		
+		self.skills.fast_fire[2].upgrades = {"player_ap_bullets_basic", "weapon_armor_piercing_chance_2"}
 		
 		self.skills.body_expertise[1].upgrades = { "weapon_automatic_head_shot_add_1"}
 		self.skills.body_expertise[2].upgrades = { "weapon_automatic_head_shot_add_2", "player_ap_bullets_aced"}
@@ -685,8 +742,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		self.skills.chameleon[1].upgrades = { "player_buy_spotter_asset", "player_suspicion_bonus", "player_sec_camera_highlight_mask_off", "player_special_enemy_highlight_mask_off" }
 		self.skills.chameleon[2].upgrades = { "player_standstill_omniscience" }
 		
-		self.skills.awareness[1].upgrades = { "player_climb_speed_multiplier_1", "player_extra_jump_height" }
-		self.skills.awareness[2].upgrades = { "player_can_free_run", "player_run_and_reload" }
+		self.skills.awareness[1].upgrades = { "player_climb_speed_multiplier_1", "player_extra_jump_height", "player_can_free_run" }
+		self.skills.awareness[2].upgrades = {  "player_run_and_reload", "player_limited_fall_damage_immunity" }
 		
 		self.skills.dire_need[1].upgrades = {"player_detection_risk_add_dodge_chance_1"}
 		self.skills.dire_need[2].upgrades = {"player_detection_risk_add_dodge_chance_2"}
@@ -703,6 +760,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		self.skills.silence_expert[2].upgrades = {"weapon_silencer_spread_index_addend", "weapon_silencer_armor_piercing_chance_2"}
 		
 		---- FUGITIVE
+		self.skills.equilibrium[2].upgrades = {"pistol_swap_speed_multiplier_2", "pistol_spread_index_addend"}
+		
 		self.skills.dance_instructor[1].upgrades = {"pistol_fire_rate_multiplier"}
 		self.skills.dance_instructor[2].upgrades = {"pistol_reload_speed_multiplier"}
 		self.skills.dance_instructor.icon_xy = {0,9}
@@ -716,7 +775,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		self.skills.expert_handling.icon_xy = {3,3}
 
 		self.skills.trigger_happy[1].upgrades = {"pistol_extra_ammo_multiplier_1", "smg_extra_ammo_multiplier_1"}
-		self.skills.trigger_happy[2].upgrades = {"pistol_extra_ammo_multiplier_2", "smg_extra_ammo_multiplier_2"}
+		self.skills.trigger_happy[2].upgrades = {"pistol_extra_ammo_multiplier_2", "smg_extra_ammo_multiplier_2", "player_secondary_weapons_pickup_bonus"}
 		self.skills.trigger_happy.icon_xy = {11,0}
 		
 		self.skills.up_you_go[2].upgrades = {"player_revived_health_regain_V2"}

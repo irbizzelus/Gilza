@@ -1005,3 +1005,38 @@ Hooks:PostHook(PlayerDamage, "update", "Gilza_post_player_dmg_update", function(
 		end
 	end
 end)
+
+-- new fall damage immunity skill
+local gilza_orig_playerDamage_damage_fall = PlayerDamage.damage_fall
+function PlayerDamage:damage_fall(data)
+	if managers.player:has_category_upgrade("player", "limited_fall_damage_immunity") then
+		local will_block_fall = false
+		local is_free_falling = self._unit:movement():current_state_name() == "jerry1"
+		if self._god_mode and not is_free_falling or self._invulnerable or self._mission_damage_blockers.invulnerable then
+			will_block_fall = true
+		elseif self:incapacitated() then
+			will_block_fall = true
+		elseif self._unit:movement():current_state().immortal then
+			will_block_fall = true
+		elseif self._mission_damage_blockers.damage_fall_disabled then
+			will_block_fall = true
+		end
+		local height_limit = 300
+		local death_limit = 631
+		if data.height < height_limit then
+			will_block_fall = true
+		end
+		local die = death_limit < data.height
+		
+		if not will_block_fall and not is_free_falling and die and managers.player:limited_fall_damage_charges() >= 1 then
+			managers.player:use_limited_fall_damage_charge()
+			managers.hud:show_hint({text = managers.localization:text("Gilza_used_limited_fall_damage_immunity_charge")..tostring(managers.player:limited_fall_damage_charges())})
+			data.height = 630
+			gilza_orig_playerDamage_damage_fall(self, data)
+		else
+			gilza_orig_playerDamage_damage_fall(self, data)
+		end
+	else
+		gilza_orig_playerDamage_damage_fall(self, data)
+	end
+end

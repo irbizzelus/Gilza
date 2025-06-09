@@ -128,6 +128,14 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_gre_ms3gl_ml_single_round.has_description = true
 		self.parts.wpn_fps_gre_ms3gl_ml_single_round.stats = {reload = -4, recoil = 4, spread = 2}
 		self.parts.wpn_fps_gre_ms3gl_ml_single_round.custom_stats = {ammo_offset = -2}
+		-- sub2000 250 damage profile kit
+		self.parts.wpn_fps_upg_sub2000_250_dmg_kit.name_id = "wpn_fps_upg_sub2000_250_dmg_kit"
+		self.parts.wpn_fps_upg_sub2000_250_dmg_kit.desc_id = "wpn_fps_upg_sub2000_250_dmg_kit_desc"
+		self.parts.wpn_fps_upg_sub2000_250_dmg_kit.stats = {value = 0,damage = 50,spread = -1,recoil = -2,total_ammo_mod = -5}
+		self.parts.wpn_fps_upg_sub2000_250_dmg_kit.custom_stats = {
+			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 200, 250).max_mul,
+			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 200, 250).min_mul
+		}
 		-- new velocity nade for standard launchers
 		self.parts.wpn_fps_upg_a_grenade_launcher_velocity = deep_clone(self.parts.wpn_fps_upg_a_grenade_launcher_incendiary)
 		self.parts.wpn_fps_upg_a_grenade_launcher_velocity.dlc = nil
@@ -2129,42 +2137,49 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_upg_a_crossbow_poison.stats = {total_ammo_mod = -10}
 		self.parts.wpn_fps_upg_a_crossbow_poison.custom_stats.armor_piercing_add = 1
 		self.parts.wpn_fps_upg_a_crossbow_poison.desc_id = "bm_wpn_fps_upg_a_pistol_crossbow_poison_desc"
+		self.parts.wpn_fps_upg_a_crossbow_explosion.stats = {total_ammo_mod = -5}
 
 		-- LIGHT CROSSBOW
 		self.parts.wpn_fps_bow_frankish_m_standard.custom_stats = {armor_piercing_add = 1}
 		self.parts.wpn_fps_bow_frankish_m_poison.stats = {total_ammo_mod = -10}
 		self.parts.wpn_fps_bow_frankish_m_poison.custom_stats.armor_piercing_add = 1
 		self.parts.wpn_fps_bow_frankish_m_poison.desc_id = "bm_wpn_fps_upg_a_light_crossbow_poison_desc"
+		self.parts.wpn_fps_bow_frankish_m_explosive.stats = {total_ammo_mod = -5}
 
 		-- PLAINSRIDER
 		self.parts.wpn_fps_bow_plainsrider_m_standard.custom_stats = {armor_piercing_add = 1}
 		self.parts.wpn_fps_upg_a_bow_poison.stats = {total_ammo_mod = -10}
 		self.parts.wpn_fps_upg_a_bow_poison.custom_stats.armor_piercing_add = 1
 		self.parts.wpn_fps_upg_a_bow_poison.desc_id = "bm_wpn_fps_upg_a_crossbow_poison_desc_new"
+		self.parts.wpn_fps_upg_a_bow_explosion.stats = {total_ammo_mod = -5}
 
 		-- BRITISH LONGBOW
 		self.parts.wpn_fps_bow_long_m_standard.custom_stats = {armor_piercing_add = 1}
 		self.parts.wpn_fps_bow_long_m_poison.stats = {total_ammo_mod = -10}
 		self.parts.wpn_fps_bow_long_m_poison.custom_stats.armor_piercing_add = 1
 		self.parts.wpn_fps_bow_long_m_poison.desc_id = "bm_wpn_fps_upg_a_crossbow_poison_desc_new"
+		self.parts.wpn_fps_bow_long_m_explosive.stats = {total_ammo_mod = -5}
 
 		-- DECA COMPOUND
 		self.parts.wpn_fps_bow_elastic_m_standard.custom_stats = {armor_piercing_add = 1}
 		self.parts.wpn_fps_bow_elastic_m_poison.stats = {total_ammo_mod = -10}
 		self.parts.wpn_fps_bow_elastic_m_poison.custom_stats.armor_piercing_add = 1
 		self.parts.wpn_fps_bow_elastic_m_poison.desc_id = "bm_wpn_fps_upg_a_crossbow_poison_desc_new"
+		self.parts.wpn_fps_bow_elastic_m_explosive.stats = {total_ammo_mod = -5}
 
 		-- HEAVY CROSSBOW
 		self.parts.wpn_fps_bow_arblast_m_standard.custom_stats = {armor_piercing_add = 1}
 		self.parts.wpn_fps_bow_arblast_m_poison.stats = {total_ammo_mod = -10}
 		self.parts.wpn_fps_bow_arblast_m_poison.custom_stats.armor_piercing_add = 1
 		self.parts.wpn_fps_bow_arblast_m_poison.desc_id = "bm_wpn_fps_upg_a_crossbow_poison_desc_new"
+		self.parts.wpn_fps_bow_arblast_m_explosive.stats = {total_ammo_mod = -5}
 
 		-- H3H3
 		self.parts.wpn_fps_bow_ecp_m_arrows_standard.custom_stats = {armor_piercing_add = 1}
 		self.parts.wpn_fps_bow_ecp_m_arrows_poison.stats = {total_ammo_mod = -10}
 		self.parts.wpn_fps_bow_ecp_m_arrows_poison.custom_stats.armor_piercing_add = 1
 		self.parts.wpn_fps_bow_ecp_m_arrows_poison.desc_id = "bm_wpn_fps_upg_a_h3h3_poison_desc"
+		self.parts.wpn_fps_bow_ecp_m_arrows_explosive.stats = {total_ammo_mod = -5}
 		
 		---- FLAMENWERFERS
 		-- primary

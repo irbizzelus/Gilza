@@ -22,6 +22,41 @@ if tweak_data and tweak_data.projectiles then
 	tweak_data.weapon_disable_crit_for_damage.underbarrel_velocity_frag = {explosion = false,fire = false}
 	tweak_data.projectiles.underbarrel_velocity_frag_groza = deep_clone(tweak_data.projectiles.underbarrel_velocity_frag)
 	tweak_data.weapon_disable_crit_for_damage.underbarrel_velocity_frag_groza = {explosion = false,fire = false}
+	
+	tweak_data.projectiles.crossbow_arrow.damage = 41
+	tweak_data.projectiles.crossbow_poison_arrow.damage = 20
+	tweak_data.projectiles.crossbow_arrow_exp.damage = 82
+	
+	tweak_data.projectiles.frankish_arrow.damage = 41
+	tweak_data.projectiles.frankish_poison_arrow.damage = 20
+	tweak_data.projectiles.frankish_arrow_exp.damage = 82
+	
+	tweak_data.projectiles.arblast_arrow.damage = 90
+	tweak_data.projectiles.arblast_poison_arrow.damage = 60
+	tweak_data.projectiles.arblast_arrow_exp.damage = 180
+	
+	tweak_data.projectiles.ecp_arrow.damage = 20
+	tweak_data.projectiles.ecp_arrow_poison.damage = 5
+	tweak_data.projectiles.ecp_arrow_exp.damage = 50
+	
+	tweak_data.projectiles.west_arrow.damage = 50
+	tweak_data.projectiles.west_arrow_exp.damage = 100
+	tweak_data.projectiles.bow_poison_arrow.damage = 40
+	
+	tweak_data.projectiles.long_arrow.damage = 130
+	tweak_data.projectiles.long_poison_arrow.damage = 60
+	tweak_data.projectiles.long_arrow_exp.damage = 250
+	
+	tweak_data.projectiles.elastic_arrow.damage = 130
+	tweak_data.projectiles.elastic_arrow_poison.damage = 60
+	tweak_data.projectiles.elastic_arrow_exp.damage = 250
+	
+	-- throwables that we can adjust for better breakpoints, since they are client authorative. thank fuck.
+	tweak_data.projectiles.wpn_prj_ace.damage = 30
+	tweak_data.projectiles.wpn_prj_four.damage = 15
+	tweak_data.projectiles.wpn_prj_target.damage = 100
+	tweak_data.projectiles.wpn_prj_hur.damage = 130
+	
 end
 
 -- swaping camera location when using bipods when BTAW mod is found. makes them all closer to the fronal iron sight for both ease of use and better compatibility with various scopes

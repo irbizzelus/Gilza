@@ -10,6 +10,10 @@ Hooks:OverrideFunction(RaycastWeaponBase, "replenish", function (self)
 		ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value(category, "extra_ammo_multiplier", 1) - 1
 	end
 	
+	if managers.player:has_category_upgrade("player", "mrwi_ammo_supply_multiplier") then
+		ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value("player", "mrwi_ammo_supply_multiplier", 1) - 1
+	end
+	
 	ammo_max_multiplier = ammo_max_multiplier * managers.player:upgrade_value("player", "extra_ammo_cut", 1)
 
 	ammo_max_multiplier = ammo_max_multiplier + ammo_max_multiplier * (self._total_ammo_mod or 0)
@@ -77,6 +81,11 @@ Hooks:OverrideFunction(RaycastWeaponBase, "add_ammo", function (self, ratio, add
 				-- P.S. techincally could break if another ammo has identical ammo pick up stat, but we can just make sure that never happens by tweaking attachment's data :)
 				min_pickup = min_pickup * (ammo_base._ammo_data.ammo_pickup_min_mul or 1)
 				max_pickup = max_pickup * (ammo_base._ammo_data.ammo_pickup_max_mul or 1)
+			end
+			
+			local weapon_tweak_data = tweak_data.weapon[ammo_base._name_id]
+			if managers.player:has_category_upgrade("player", "secondary_weapons_pickup_bonus") and weapon_tweak_data.use_data and weapon_tweak_data.use_data.selection_index and weapon_tweak_data.use_data.selection_index == 1 then
+				pickup_mul = pickup_mul * managers.player:upgrade_value("player", "secondary_weapons_pickup_bonus", 1)
 			end
 			
 			pickup_mul = pickup_mul * managers.player:upgrade_value("player", "extra_ammo_cut", 1)
@@ -157,18 +166,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "is_knock_down", function (self)
 		return false
 	end
 	
-	-- for damage bellow 100 stagger chance is 15%
-	-- for damage above 300 stagger chance is 25%
-	-- for everything in between we scale it based on damage
-	local new_knock_down_chance = 0
-	if self._damage >= 10 and self._damage <= 30 then
-		new_knock_down_chance = 0.1 + ((self._damage - 10) / 20 * 0.1)
-	elseif self._damage < 10 then
-		new_knock_down_chance = 0.1
-	elseif self._damage > 30 then
-		new_knock_down_chance = 0.2
-	end
-	
+	local new_knock_down_chance = 0.2
 	local max_threat_bonus = 2 -- 1 + 2x = 3x
 	local max_req_threat = 4 -- 40
 	local wpn_threat = self._suppression - 0.2
@@ -181,7 +179,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "is_knock_down", function (self)
 	
 	-- if we only have the basic skill, use 1/5 the chance, according to skill power
 	if self._knock_down == 0.05 then
-		new_knock_down_chance = new_knock_down_chance / 5
+		new_knock_down_chance = new_knock_down_chance / 4
 	end
 	
 	return self._knock_down > 0 and math.random() < new_knock_down_chance

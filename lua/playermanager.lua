@@ -1140,14 +1140,14 @@ function PlayerManager:Gilza_new_hitman_killshot_handler(killed_unit, variant, h
 	if badass_kill and self._gilza_death_dance == 0 then
 		self._gilza_death_dance = 1
 		self._gilza_death_dance_next_kill_expected_at = Application:time() + 1
-	elseif self._gilza_death_dance >= 1 and math.abs(self._gilza_death_dance_next_kill_expected_at - Application:time()) <= 0.4 then
+	elseif self._gilza_death_dance >= 1 and math.abs(self._gilza_death_dance_next_kill_expected_at - Application:time()) <= 0.5 then
 		if badass_kill then
 			self._gilza_death_dance = self._gilza_death_dance + 2
 		else
 			self._gilza_death_dance = self._gilza_death_dance + 1
 		end
 		self._gilza_death_dance_next_kill_expected_at = Application:time() + 1
-	elseif self._gilza_death_dance >= 1 and self._gilza_death_dance_next_kill_expected_at - Application:time() > 0.4 then
+	elseif self._gilza_death_dance >= 1 and self._gilza_death_dance_next_kill_expected_at - Application:time() > 0.5 then
 		-- if we got a kill before the expected time forgiveness interval, igonre the kill
 	else
 		reset_combo()
@@ -1353,8 +1353,20 @@ end
 local gilza_orig_PlayerManager_health_regen = PlayerManager.health_regen
 function PlayerManager:health_regen()
 	local res = gilza_orig_PlayerManager_health_regen(self)
-	if managers.player:has_category_upgrade("player", "passive_health_regen") and Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
-		res = res + 0.02
+	if managers.player:has_category_upgrade("player", "passive_health_regen") then
+		-- copycat's reduced heal
+		if managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
+			res = res - 0.015
+		end
+		-- DS increased heal
+		if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+			if managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
+				-- but not so much for kitty
+				res = res + 0.01
+			else
+				res = res + 0.02
+			end
+		end
 	end
 	return res
 end
@@ -1460,6 +1472,7 @@ Hooks:OverrideFunction(PlayerManager, "chk_wild_kill_counter", function (self, k
 	end
 end)
 
+-- leech
 Hooks:OverrideFunction(PlayerManager, "clbk_copr_ability_ended", function (self)
 	self:deactivate_temporary_upgrade("temporary", "copr_ability")
 
@@ -1487,3 +1500,128 @@ Hooks:OverrideFunction(PlayerManager, "clbk_copr_ability_ended", function (self)
 	self:set_property("copr_risen", nil)
 	managers.hud:set_copr_indicator(false)
 end)
+
+Hooks:PostHook(PlayerManager, "check_skills", "Gilza_posthook_pm_check_skills", function(self)
+	-- charge based fall_damage_immunity
+	if self:has_category_upgrade("player", "limited_fall_damage_immunity") then
+		self._limited_fall_damage_charges = self:upgrade_value("player", "limited_fall_damage_immunity", 0)
+		self._max_limited_fall_damage_charges = self._limited_fall_damage_charges
+		
+		self._message_system:register(Message.OnDoctorBagUsed, "recharge_limited_fall_damage", callback(self, self, "_on_limited_fall_damage_recharge_event"))
+	else
+		self._limited_fall_damage_charges = 0
+		self._max_limited_fall_damage_charges = self._limited_fall_damage_charges
+		self._message_system:unregister(Message.OnDoctorBagUsed, "recharge_limited_fall_damage")
+	end
+end)
+
+function PlayerManager:limited_fall_damage_charges()
+	return self._limited_fall_damage_charges
+end
+
+function PlayerManager:use_limited_fall_damage_charge()
+	if self._limited_fall_damage_charges then
+		self._limited_fall_damage_charges = math.max(self._limited_fall_damage_charges - 1, 0)
+	end
+end
+
+function PlayerManager:_on_limited_fall_damage_recharge_event()
+	if self._limited_fall_damage_charges and self._max_limited_fall_damage_charges then
+		self._limited_fall_damage_charges = math.min(self._limited_fall_damage_charges + 1, self._max_limited_fall_damage_charges)
+	end
+end
+
+-- aced bullseye
+Hooks:OverrideFunction(PlayerManager, "on_headshot_dealt", function (self)
+	local player_unit = self:player_unit()
+
+	if not player_unit then
+		return
+	end
+	
+	if self:has_category_upgrade("player", "headshot_regen_armor_shorter_cooldown") then
+		tweak_data.upgrades.on_headshot_dealt_cooldown = 1.5
+	end
+
+	self._message_system:notify(Message.OnHeadShot, nil, nil)
+
+	local t = Application:time()
+
+	if self._on_headshot_dealt_t and t < self._on_headshot_dealt_t then
+		return
+	end
+
+	self._on_headshot_dealt_t = t + (tweak_data.upgrades.on_headshot_dealt_cooldown or 0)
+	local damage_ext = player_unit:character_damage()
+	local regen_armor_bonus = managers.player:upgrade_value("player", "headshot_regen_armor_bonus", 0)
+
+	if damage_ext and regen_armor_bonus > 0 then
+		damage_ext:restore_armor(regen_armor_bonus)
+	end
+
+	local regen_health_bonus = managers.player:upgrade_value("player", "headshot_regen_health_bonus", 0)
+	
+	-- reduce heal for copycat's headshot heal amount. this keeps the heal per minute amount the same without breaking infohuds, but does make it slighlty harder to use.
+	if self:has_category_upgrade("player", "headshot_regen_armor_shorter_cooldown") and regen_health_bonus > 0 then
+		regen_health_bonus = regen_health_bonus * 0.75
+	end
+	
+	if damage_ext and regen_health_bonus > 0 then
+		damage_ext:restore_health(regen_health_bonus, true)
+	end
+end)
+
+-- new aggressive reload
+function PlayerManager:_on_activate_aggressive_reload_event(attack_data)
+	self._aggressive_reload_stacks = self._aggressive_reload_stacks or 0
+	if attack_data and attack_data.variant ~= "projectile" then
+		local weapon_unit = self:equipped_weapon_unit()
+
+		if weapon_unit then
+			local weapon = weapon_unit:base()
+
+			if weapon and weapon:fire_mode() == "single" and weapon:is_category("smg", "assault_rifle", "snp") then
+				self:activate_temporary_upgrade("temporary", "single_shot_fast_reload")
+				
+				if not managers.player._gilza_bullet_fired_from_clip then
+					managers.player._gilza_bullet_fired_from_clip = {0,0}
+				end
+				local wpn_selection_index = tweak_data.weapon[weapon.name_id].use_data.selection_index
+				
+				if managers.player._gilza_bullet_fired_from_clip[wpn_selection_index] == 1 then
+					self._aggressive_reload_stacks = self._aggressive_reload_stacks + 2
+					if self._aggressive_reload_stacks > 10 then
+						self._aggressive_reload_stacks = 10
+					end
+					
+					-- update clip size for both equipped weapons on stack adjustment
+					for i=1, 2 do
+						local wpn_to_update = self:player_unit():inventory():unit_by_selection(i)
+						if wpn_to_update:base():is_category("smg", "assault_rifle", "snp") then
+							local original_tweak_data = tweak_data.weapon[wpn_to_update:base()._name_id]
+							local weapon_tweak_data = wpn_to_update:base():weapon_tweak_data()
+							local ammo_max_multiplier = managers.player:upgrade_value("player", "extra_ammo_multiplier", 1)
+							for _, category in ipairs(weapon_tweak_data.categories) do
+								ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value(category, "extra_ammo_multiplier", 1) - 1
+							end
+							if managers.player:has_category_upgrade("player", "mrwi_ammo_supply_multiplier") then
+								ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value("player", "mrwi_ammo_supply_multiplier", 1) - 1
+							end
+							if managers.player:has_category_upgrade("player", "add_armor_stat_skill_ammo_mul") then
+								ammo_max_multiplier = ammo_max_multiplier * managers.player:body_armor_value("skill_ammo_mul", nil, 1)
+							end
+							ammo_max_multiplier = ammo_max_multiplier * managers.player:upgrade_value("player", "extra_ammo_cut", 1)
+							ammo_max_multiplier = managers.modifiers:modify_value("WeaponBase:GetMaxAmmoMultiplier", ammo_max_multiplier)
+							local ammo_max_per_clip = wpn_to_update:base():calculate_ammo_max_per_clip()
+							local ammo_max_override_delta = weapon_tweak_data.AMMO_MAX - original_tweak_data.AMMO_MAX
+							local ammo_max = math.round(((original_tweak_data.AMMO_MAX + (managers.player:upgrade_value(wpn_to_update:base()._name_id, "clip_amount_increase") * ammo_max_per_clip) + ammo_max_override_delta + math.round(original_tweak_data.AMMO_MAX * (wpn_to_update:base()._total_ammo_mod or 0))) * ammo_max_multiplier))
+							ammo_max_per_clip = math.min(ammo_max_per_clip, ammo_max)
+							wpn_to_update:base():set_ammo_max_per_clip(ammo_max_per_clip + wpn_to_update:base():get_chamber_size())
+						end
+					end
+					
+				end
+			end
+		end
+	end
+end

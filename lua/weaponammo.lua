@@ -6,6 +6,10 @@ Hooks:OverrideFunction(WeaponAmmo, "replenish", function (self)
 		ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value(category, "extra_ammo_multiplier", 1) - 1
 	end
 	
+	if managers.player:has_category_upgrade("player", "mrwi_ammo_supply_multiplier") then
+		ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value("player", "mrwi_ammo_supply_multiplier", 1) - 1
+	end
+	
 	ammo_max_multiplier = ammo_max_multiplier * managers.player:upgrade_value("player", "extra_ammo_cut", 1)
 
 	ammo_max_multiplier = managers.modifiers:modify_value("WeaponBase:GetMaxAmmoMultiplier", ammo_max_multiplier)

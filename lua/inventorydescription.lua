@@ -47,6 +47,12 @@ Hooks:OverrideFunction(WeaponDescription, "get_weapon_ammo_info", function (weap
 
 	if managers.player:has_category_upgrade("player", "add_armor_stat_skill_ammo_mul") then
 		ammo_max_multiplier = ammo_max_multiplier * managers.player:body_armor_value("skill_ammo_mul", nil, 1)
+		category_skill_in_effect = true
+	end
+	
+	if managers.player:has_category_upgrade("player", "mrwi_ammo_supply_multiplier") then
+		ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value("player", "mrwi_ammo_supply_multiplier", 1) - 1
+		category_skill_in_effect = true
 	end
 	
 	ammo_max_multiplier = ammo_max_multiplier * managers.player:upgrade_value("player", "extra_ammo_cut", 1)
@@ -98,7 +104,7 @@ Hooks:OverrideFunction(WeaponDescription, "get_weapon_ammo_info", function (weap
 		mod = ammo_from_mods + override_total_ammo + managers.player:upgrade_value(weapon_id, "clip_amount_increase") * ammo_max_per_clip
 	}
 	ammo_data.skill = (ammo_data.base + ammo_data.mod) * ammo_max_multiplier - ammo_data.base - ammo_data.mod
-	ammo_data.skill_in_effect = managers.player:has_category_upgrade("player", "extra_ammo_multiplier") or category_skill_in_effect or managers.player:has_category_upgrade("player", "add_armor_stat_skill_ammo_mul") or managers.player:has_category_upgrade("player", "extra_ammo_cut")
+	ammo_data.skill_in_effect = managers.player:has_category_upgrade("player", "extra_ammo_multiplier") or category_skill_in_effect or managers.player:has_category_upgrade("player", "add_armor_stat_skill_ammo_mul") or managers.player:has_category_upgrade("player", "extra_ammo_cut") or managers.player:has_category_upgrade("player", "mrwi_ammo_supply_multiplier")
 	
 	return ammo_max_per_clip, ammo_max, ammo_data
 end)
