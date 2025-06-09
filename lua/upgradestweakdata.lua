@@ -1400,7 +1400,8 @@ function UpgradesTweakData.mrwi_deck9_options_gilza_update()
 			name_id = "menu_st_spec_16",
 			upgrades = {
 				"player_wild_health_amount_1",
-				"player_wild_armor_amount_1"
+				"player_wild_armor_amount_1",
+				"player_wild_temporary_regen_pause"
 			},
 			icon_xy = {
 				0,

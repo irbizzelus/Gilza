@@ -1439,12 +1439,12 @@ Hooks:OverrideFunction(PlayerManager, "chk_wild_kill_counter", function (self, k
 		-- if i log these numbers they will both show up as 23 and 23, yet not be equal. and when i substract one from the other result turns up to be -7
 		-- im definetly too stupid to understand why it works this way software logic wise, but why this was never an issue for OVK devs is also confusing.
 		-- rounding them like this seems to fix it somehow as well. idek why, but it works, so here it is.
-		local curr_health = math.round(damage_ext:get_real_armor() * 100) / 100
-		local max_health = math.round(damage_ext:_max_armor() * 100) / 100
-		if not (damage_ext:get_real_health() == damage_ext:_max_health()) or not (curr_health == max_health) then
-			if damage_ext:get_real_armor() > 0 then
+		local curr_armor = math.round(damage_ext:get_real_armor() * 100) / 100
+		local max_armor = math.round(damage_ext:_max_armor() * 100) / 100
+		if not (damage_ext:get_real_health() == damage_ext:_max_health()) or not (curr_armor == max_armor) then
+			if curr_armor > 0 then
 				-- dont allow wasting all stacks while armor is >0
-				if managers.player:has_inactivate_temporary_upgrade("temporary", "player_wild_temporary_regen_pause") then
+				if managers.player:has_category_upgrade("temporary", "player_wild_temporary_regen_pause") and not managers.player:has_activate_temporary_upgrade("temporary", "player_wild_temporary_regen_pause") then
 					tweak_data.upgrades.values.temporary.player_wild_temporary_regen_pause[1][2] = regen_pause_duration -- reduce cooldown duration if armor/health is damaged
 					managers.player:activate_temporary_upgrade("temporary", "player_wild_temporary_regen_pause")
 					damage_ext:restore_health(wild_health_amount, true, false)
