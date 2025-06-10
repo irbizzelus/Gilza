@@ -139,8 +139,8 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 		end
 	end
 	
-	-- if sentry RNG fails, dmg is ignored
-	if not attackerIsPlayer and not allow_pen_from_rng then
+	-- if sentry shot body armor, without AP, or AP RNG success, dmg is ignored
+	if attack_data.attacker_unit:base() and attack_data.attacker_unit:base().sentry_gun and self._has_plate and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_plate_name and not attack_data.armor_piercing and not allow_pen_from_rng then
 		return
 	end
 	

@@ -845,8 +845,12 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				self.values.player.armor_grinding = {
 					{
 						{
-							4.15,
-							5
+							5,
+							6
+						},
+						{
+							2.35,
+							4
 						},
 						{
 							2.05,
@@ -857,20 +861,16 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 							3
 						},
 						{
-							1.6,
-							2.75
+							1.125,
+							2.25
 						},
 						{
-							1.05,
-							2.1
+							1,
+							2
 						},
 						{
-							0.95,
-							1.9
-						},
-						{
-							0.75,
-							1.5
+							0.875,
+							1.75
 						}
 					}
 				}
@@ -904,8 +904,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 							1.5
 						},
 						{
-							1.5,
-							1
+							1.875,
+							1.25
 						}
 					}
 				}
