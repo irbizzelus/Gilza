@@ -483,16 +483,13 @@ end)
 
 -- melee gui 3
 Hooks:PostHook(PlayerStandard, "_update_melee_timers", "Gilza_PlayerStandard_update_melee_timers_GUI", function(self, t, input)
-	if true and self._state_data.meleeing and self._state_data._Gilza_showing_melee then
+	if self._state_data.meleeing and self._state_data._Gilza_showing_melee then
 		local melee_lerp = self:_get_melee_charge_lerp_value(t)
 		if hide_int_state[managers.player:current_state()] then
 			managers.hud:hide_interaction_bar()
 			self._state_data._Gilza_showing_melee = false
-		elseif melee_lerp < 1 or self._state_data.chainsaw_t then
+		elseif self._state_data._Gilza_showing_melee or self._state_data.chainsaw_t then
 			managers.hud:set_interaction_bar_width(self._state_data._Gilza_melee_charge_duration * melee_lerp, self._state_data._Gilza_melee_charge_duration)
-		elseif self._state_data._Gilza_showing_melee then
-			managers.hud:hide_interaction_bar()
-			self._state_data._Gilza_showing_melee = false
 		end
 	end
 end)

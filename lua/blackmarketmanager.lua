@@ -100,7 +100,11 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 	
 	-- 28 points of inaccuracy for hipfire, unless we have new skill
 	if current_state and not current_state:in_steelsight() then
-		index = index - managers.player:upgrade_value("player", "hipfire_no_accuracy_penalty", 7)
+		if managers.player:current_state() == "bipod" then
+			-- ignored
+		else
+			index = index - managers.player:upgrade_value("player", "hipfire_no_accuracy_penalty", 7)
+		end
 	end
 
 	if silencer then

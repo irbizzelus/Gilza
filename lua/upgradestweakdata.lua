@@ -549,11 +549,11 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				},
 				{
 					2,
-					25
+					30
 				},
 				{
 					2,
-					35
+					40
 				}
 			}
 			-- BRAWLER add 4x slower armor recovery multiplier to this vanilla skill

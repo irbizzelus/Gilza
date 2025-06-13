@@ -8,7 +8,7 @@
 	"blt_version" : 2,
 	"priority" : 19,
 	"persist_scripts" : [
-		{"global" : "Gilza_fucking_stupid_action_primary_attack_fix","script_path" : "lua/STUPIDFIX_run_and_reload_cancel.lua"}
+		{"global" : "Gilzas_weaponlib_overrides_and_fixes","script_path" : "lua/WEAPONLIB_fixes_and_overrides.lua"}
 	],
 	"hooks" : [
 		{"hook_id": "lib/units/pickups/ammoclip", "script_path" : "lua/ammoclip.lua"},

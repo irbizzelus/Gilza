@@ -270,15 +270,16 @@ Hooks:OverrideFunction(HUDInteraction, "set_interaction_bar_width", function (se
 			cur_dmg = cur_dmg * dmg_multiplier
 			
 			local text = string.format("%.1f%%", math.max(cur_dmg*10, 0))
-			local show = cur_charge_percent < 1
 			if managers.player:player_unit():movement()._state_data.chainsaw_t then
 				text = string.format("%.1f%% DPS", cur_dmg*10)
-				show = true
+			end
+			if cur_charge_percent >= 1 then
+				self.hide_interaction_bar(self)
 			end
 			self._Gilza_melee_damage:set_text(text)
 			self._Gilza_melee_damage:set_color(Color(1, 1, 1, 1))
 			self._Gilza_melee_damage:set_alpha(1)
-			self._Gilza_melee_damage:set_visible(show)
+			self._Gilza_melee_damage:set_visible(true)
 		end
 	else
 		orig_set_interaction_bar_width(self, current, total)
