@@ -620,7 +620,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.scar.NR_CLIPS_MAX = 4
 			self.scar.AMMO_MAX = self.scar.CLIP_AMMO_MAX * self.scar.NR_CLIPS_MAX
 			self.scar.stats.spread = 18
-			self.scar.stats.recoil = 9
+			self.scar.stats.recoil = 6
 			self.scar.fire_mode_data = {fire_rate = 60/600}
 			self.scar.auto = {fire_rate = 60/600}
 			
@@ -638,13 +638,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.shak12.CLIP_AMMO_MAX = 25
 			self.shak12.NR_CLIPS_MAX = 4
 			self.shak12.AMMO_MAX = self.shak12.CLIP_AMMO_MAX * self.shak12.NR_CLIPS_MAX
-			self.shak12.stats.recoil = 11
+			self.shak12.stats.recoil = 10
 			self.shak12.stats.spread = 19
 			
 			self.contraband.CLIP_AMMO_MAX = 25
 			self.contraband.NR_CLIPS_MAX = 3
 			self.contraband.AMMO_MAX = self.contraband.CLIP_AMMO_MAX * self.contraband.NR_CLIPS_MAX
-			self.contraband.stats.recoil = 9
+			self.contraband.stats.recoil = 6
 			self.contraband.stats.spread = 19
 			self.contraband.fire_mode_data = {fire_rate = 60/600}
 			self.contraband.auto = {fire_rate = 60/600}
@@ -652,7 +652,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.fal.CLIP_AMMO_MAX = 20
 			self.fal.NR_CLIPS_MAX = 5
 			self.fal.AMMO_MAX = self.fal.CLIP_AMMO_MAX * self.fal.NR_CLIPS_MAX
-			self.fal.stats.recoil = 8
+			self.fal.stats.recoil = 7
 			self.fal.stats.spread = 16
 			self.fal.fire_mode_data = {fire_rate = 60/660}
 			self.fal.auto = {fire_rate = 60/660}

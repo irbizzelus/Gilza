@@ -620,7 +620,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				-- new "death dance" combo skill
 				self.values.temporary.death_dance_combo_invulnerability = {
 					{
-						5, -- base duration
+						6, -- base duration
 						20 -- CD. begins at the same time as the effect
 					}
 				}
@@ -635,7 +635,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				self.values.temporary.player_bounty_hunter = {
 					{
 						true,
-						25 -- do not update without touching up playermanager file, since values there are hard coded to this value right now. should fix this later
+						30 -- do not update without touching up playermanager file, since values there are hard coded to this value right now. should fix this later
 					}
 				}
 				-- new melee/non-explosive throwable kill armor regen. amount is determined in playermanager, cooldown here
@@ -1331,6 +1331,9 @@ function UpgradesTweakData.mrwi_deck9_options_gilza_update()
 			icon_xy = {
 				0,
 				6
+			},
+			upgrades = {
+				"temporary_loose_ammo_give_team"
 			}
 		},
 		{ -- GRINDER

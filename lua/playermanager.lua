@@ -1170,6 +1170,7 @@ function PlayerManager:Gilza_new_hitman_killshot_handler(killed_unit, variant, h
 	end
 end
 
+local new_hitman_bounty_notifier_flash_cycle = 0
 function PlayerManager:Gilza_new_hitman_recursive_updater()
 	
 	self._gilza_hitman_has_active_bounty = self._gilza_hitman_has_active_bounty or false
@@ -1177,6 +1178,7 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 	self._gilza_hitman_bounty_cooldown_end = self._gilza_hitman_bounty_cooldown_end or 0
 	self._gilza_death_dance = self._gilza_death_dance or 0
 	self._gilza_death_dance_next_kill_expected_at = self._gilza_death_dance_next_kill_expected_at or 0
+	self._gilza_hitman_bounty_received_at = self._gilza_hitman_bounty_received_at or 0
 	
 	local player_unit = managers.player:player_unit()
 	
@@ -1204,7 +1206,7 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 
 					if dist < best_dist then
 						best_dist = dist
-						if best_dist <= 1000 then -- prioritise enemies as close to 10m mark, but above it
+						if best_dist <= 1500 then -- prioritise first found enemy within 15m
 							if prefered_bounty then
 								break
 							else
@@ -1222,6 +1224,7 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 				self._gilza_hitman_bounty_target = prefered_bounty
 				prefered_bounty:contour():add("generic_interactable_selected", false)
 				self._gilza_hitman_has_active_bounty = true
+				self._gilza_hitman_bounty_received_at = Application:time()
 			end
 		
 		end
@@ -1260,7 +1263,22 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 				icon:set_color(Color(1, 0.06, 0.65, 0.27))
 			else
 				if self._gilza_hitman_has_active_bounty then
-					icon:set_color(Color(0.9, 1, 1, 1))
+					if (self._gilza_hitman_bounty_received_at + 3) > Application:time() then
+						new_hitman_bounty_notifier_flash_cycle = new_hitman_bounty_notifier_flash_cycle + 1
+						icon:set_color(Color(0.9, 1, 1, 1))
+						if new_hitman_bounty_notifier_flash_cycle < 4 then
+							icon:set_visible(false)
+						else
+							icon:set_visible(true)
+						end
+						if new_hitman_bounty_notifier_flash_cycle == 7 then
+							new_hitman_bounty_notifier_flash_cycle = 0
+						end
+					else
+						new_hitman_bounty_notifier_flash_cycle = 0
+						icon:set_visible(true)
+						icon:set_color(Color(0.9, 1, 1, 1))
+					end
 				else
 					icon:set_color(Color(0.2, 1, 1, 1))
 				end
@@ -1270,8 +1288,16 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 		if self._gilza_hitman_has_active_bounty then
 			local is_alive = alive(self._gilza_hitman_bounty_target) and not self._gilza_hitman_bounty_target:character_damage():dead()
 			local is_enemy = is_alive and self._gilza_hitman_bounty_target:brain():is_hostile()
-			if not is_alive or not_enemy then
-				managers.player._gilza_hitman_bounty_cooldown_end = Application:time() + 40
+			local too_long_since_bounty_received = ((self._gilza_hitman_bounty_received_at + 40) < Application:time())
+			if too_long_since_bounty_received or not is_alive or not is_enemy then
+				local extension = 40
+				if too_long_since_bounty_received then
+					extension = 10
+					if is_alive then
+						managers.player._gilza_hitman_bounty_target:contour():remove("generic_interactable_selected" , false)
+					end
+				end
+				managers.player._gilza_hitman_bounty_cooldown_end = Application:time() + extension
 				managers.player._gilza_hitman_has_active_bounty = false
 			end
 		end
