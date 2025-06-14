@@ -27,7 +27,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					menu_deckall_2 = "Fast and Furious",
 					menu_deckall_2_desc = "Increases your doctor bag interaction speed by ##20%##.\n\nBody armor movement speed penalty is reduced by ##25%##.",
 					menu_deckall_4_desc = "You gain ##+1## increased concealment.\n\nYou gain ##45%## more experience when you complete days and jobs.",
-					menu_deckall_6_desc = "Unlocks an armor bag equipment for you to use. The armor bag can be used to change your armor during a heist.\n\nIncreases your ammo pickup to ##135%## of the normal rate.\n\nYou also gain a base ##0%## chance to get a throwable from an ammo box. The base chance is increased by ##1% * x## (where x - throwable pick up multiplier) for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.\n\nNote: Throwable pick up multipliers are different for each throwable - you can find them under throwable descriptions.",
+					menu_deckall_6_desc = "Unlocks an armor bag equipment for you to use. The armor bag can be used to change your armor during a heist.\n\nIncreases amount of ammo you gain from ammo boxes by ##35%##.\n\nYou also gain a base ##0%## chance to get a throwable from an ammo box. The base chance is increased by ##1% * x## (where x - throwable pick up multiplier) for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.\n\nNote: Throwable pick up multipliers are different for each throwable - you can find them under throwable descriptions.",
 					menu_deckall_8 = "Improved Physique",
 					menu_deckall_8_desc = "You gain ##10%## additional movement speed.\n\nYou can throw bags ##50%## further.",
 				})
@@ -36,7 +36,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			
 			local function Crew_chief_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck1_3_desc = "You and your crew's stamina is increased by ##50%##.\n\nWhile trying to intimidate a law enforcer or a civilian, marking a special enemy, or using Inspire skill on your teammates, your shout distance is increased by ##25%##.\n\nWhile you are within ##18m## of an enemy that you can see, you receive a ##8%## damage reduction. This damage reduction lingers for ##5## seconds after you are no longer close to an enemy.\nNote: Crew perks do not stack.",
+					menu_deck1_3_desc = "You and your crew's stamina is increased by ##50%##.\n\nWhile trying to intimidate a law enforcer or a civilian, marking a special enemy, or using \"Inspire\" skill on your teammates, your shout distance is increased by ##25%##.\n\nWhile you are within ##18m## of an enemy that you can see, you receive a ##8%## damage reduction. This damage reduction lingers for ##5## seconds after you are no longer close to an enemy.\nNote: Crew perks do not stack.",
 					menu_deck1_5_desc = "You and your crew's health is increased by ##10%##.\n\nYou gain ##10%## health that is only applied to you.\n\nNote: Crew perks do not stack.",
 					menu_deck1_7_desc = "You and your crew's armor is increased by ##5%##.\n\nYou gain ##5%## armor that is only applied to you.\n\nNote: Crew perks do not stack.",
 					menu_deck1_9_desc = "You and your crew will gain ##6%## max health and ##12%## stamina for each hostage up to ##4## times.\n\nYou and your crew will gain ##8%## damage reduction for having one or more hostages.\n\nIntimidated law enforcers count as hostages for this perk card. Enemies who were converted to fight on your side will provide hostage bonuses from this perk card only to the crew member who converted such enemy.\n\nNote: Crew perks do not stack.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
@@ -212,7 +212,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			
 			local function Maniac_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck14_1_desc = "##100%## of damage you deal is converted into Hysteria Stacks, up to ##120## every ##1.5## second. Max amount of stacks is ##600##.\n\nHysteria Stacks\nYou gain ##1## damage absorption for every ##30## stacks of Hysteria.\nIf you don't deal any damage for ##3## seconds, you will lose ##20% + 80## Hysteria Stacks.",
+					menu_deck14_1_desc = "##100%## of damage you deal is converted into Hysteria Stacks, up to ##120## every ##1.5## second. Max amount of stacks is ##600##.\n\nHysteria Stacks\nYou gain ##1## damage absorption for every ##30## stacks of Hysteria.\n\nIf you don't deal any damage for ##3## seconds, you will lose ##20% + 80## Hysteria Stacks.",
 					menu_deck14_5_desc = "Change decay of your Hysteria Stacks when you don't deal damage for ##3## seconds to ##20% + 40##.",
 					menu_deck14_9_desc = "Damage absorption from Hysteria Stacks on you is increased by ##100%##.\nIf you are playing on Death Sentence difficulty, this bonus is increased to ##200%##.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##$multiperk2;##.",
 					-- short descs
@@ -478,6 +478,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					-- E2
 					menu_show_of_force_beta_desc = "BASIC: ##$basic;##\nYou take ##40%## less damage while interacting with objects.\n\nACE: ##$pro;##\nIncreases the armor of all Ballistic vests by ##20##.",
 					menu_pack_mule_beta_desc = "BASIC: ##$basic##\nFor each ##10## armor points, the bag movement penalty is reduced by ##1%##.\n\nACE: ##$pro##\nYou can sprint with any bag.",
+					--menu_iron_man_beta_desc = "БАЗОВЫЙ: ##$basic;##\nУвеличивает скорость восстановления брони у вас и у напарников на ##25%##.\n\nПометка: Данный навык не складывается сам с собой.\n\nПРО: ##$pro;##\nПри стрельбе по щитовику, у вас есть шанс отбросить его назад. Чем больше урона у вашего оружия, тем выше шанс.\n\nШанс отбросить щитовика назад при использовании оружия ближнего боя равен ##100%##.",
 					menu_prison_wife_beta_desc = "BASIC: ##$basic;##\nYou regenerate ##5## armor for each successful headshot. This can not occur more than once every ##2## seconds.\n\nACE: ##$pro;##\nYour armor regeneration from this skill is increased to ##25##, and cooldown is decreased to ##1.5## seconds.",
 					-- E3
 					menu_ammo_2x_beta_desc = "BASIC: ##$basic;##\nEach ammo bag now contains ##50%## more ammunition.\n\nACE: ##$pro;##\nYou can now place ##2## ammo bags instead of just one.",
@@ -769,7 +770,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		UI_strings()
 		
 	end
-	--AddEnglishLoc() -- always add eng loc to avoid errors for missing strings, this way all strings will default to eng if they did not get updated properly 
+	AddEnglishLoc() -- always add eng loc to avoid errors for missing strings, this way all strings will default to eng if they did not get updated properly 
 	
 	local function AddRussianLoc()
 		
@@ -789,14 +790,14 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			
 			local function Crew_chief_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck1_3_desc = "Выносливость всех членов команды, включая вас, увеличена на ##50%##.\n\nКогда вы пытаетесь запугать гражданского, убедить врага сдаться, пометить специальнього врага, или использовать навык Вдохновление на союзнике, дальность вашего крика увеличена на ##25%##.\n\nПока вы находитесь в пределах ##18## метров от видимого врага, вы получаете на ##8%## меньше урона. Это уменьшение остаеется с вами в течении еще ##5## секунд после того как вы перестали находиться в пределах видимого врага.\n\nВНИМАНИЕ: Навыки распространяющиеся на напарников не складываются сами с собой.",
-					menu_deck1_5_desc = "Ваше здоровье и здоровье вашей команды увеличено на ##10%##.\n\nВы, и только вы, получаете еще ##10%## здоровья.\n\nВНИМАНИЕ: Навыки распространяющиеся на напарников не складываются сами с собой.",
-					menu_deck1_7_desc = "Ваша броня и броня вашей команды увеличено на ##5%##.\n\nВы, и только вы, получаете еще ##5%## брони.\n\nВНИМАНИЕ: Навыки распространяющиеся на напарников не складываются сами с собой.",
-					menu_deck1_9_desc = "Вы и ваша команда получаете ##6%## здоровья и ##12%## выносливости за каждого взятого вами заложника. Навык складывается вплоть до ##4## заложников.\n\nЕсли у вас есть заложник, то все члены команды будут получать на ##8%## меньше урона.\n\nЕсли вы убедили врага сдаться, он будет считаться за заложника для этого навыка. Враги, которых перевели сражаться на вашей стороне, будут давать бонусы от данной карточки перка только игроку который перевел врага на вашу сторону.\n\nВнимание: Перки, распространяющие своё действие на напарников, не складываются сами с собой.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
+					menu_deck1_3_desc = "Выносливость всех членов команды, включая вас, увеличена на ##50%##.\n\nКогда вы пытаетесь запугать гражданского, убедить врага сдаться, пометить специальнього врага, или использовать навык \"Вдохновление\" на союзнике, дальность вашего крика увеличена на ##25%##.\n\nПока вы находитесь в пределах ##18## метров от видимого врага, вы получаете ##8%## сопротивления урону. Это сопротивление остаеется с вами в течении еще ##5## секунд после того как вы больше не окружены.\n\nПометка: Навыки распространяющиеся на напарников не складываются сами с собой.",
+					menu_deck1_5_desc = "Ваше здоровье и здоровье вашей команды увеличено на ##10%##.\n\nВы, и только вы, получаете еще ##10%## здоровья.\n\nПометка: Навыки распространяющиеся на напарников не складываются сами с собой.",
+					menu_deck1_7_desc = "Прочность вашей брони и брони вашей команды увеличена на ##5%##.\n\nВы, и только вы, получаете еще ##5%## к прочности брони.\n\nПометка: Навыки распространяющиеся на напарников не складываются сами с собой.",
+					menu_deck1_9_desc = "Вы и ваша команда получаете ##6%## здоровья и ##12%## выносливости за каждого взятого вами заложника. Навык складывается вплоть до ##4## заложников.\n\nЕсли у вас есть заложник, то все члены команды получают ##8%## сопротивления урону.\n\nЕсли вы убедили врага сдаться, он будет считаться за заложника для этого навыка. Враги, которых перевели сражаться на вашей стороне, будут давать бонусы от данной карточки перка только игроку который перевел врага на вашу сторону.\n\nПометка: Перки, распространяющие своё действие на напарников, не складываются сами с собой.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 					-- short descs
-					menu_deck1_3_short = "Выносливость всех членов команды, включая вас, увеличена на ##50%##. Дальность вашего крика увелиена на ##25%##. Пока вы находитесь в пределах ##18## метров от видимого врага, вы получаете на ##8%## меньше урона. ВНИМАНИЕ: Навыки распространяющиеся на напарников не складываются сами с собой.",
-					menu_deck1_5_short = "Ваше здоровье и здоровье вашей команды увеличено на ##10%##. Вы, и только вы, получаете еще ##10%## здоровья. ВНИМАНИЕ: Навыки распространяющиеся на напарников не складываются сами с собой.",
-					menu_deck1_7_short = "Ваша броня и броня вашей команды увеличено на ##5%##. Вы, и только вы, получаете еще ##5%## брони. ВНИМАНИЕ: Навыки распространяющиеся на напарников не складываются сами с собой.",
+					menu_deck1_3_short = "Выносливость всех членов команды, увеличена на ##50%##. Дальность вашего крика увелиена на ##25%##. Пока вы находитесь близко к врагу, вы получаете меньше урона.",
+					menu_deck1_5_short = "Здоровье вашей команды увеличено на ##10%##, а ваше на ##20%##.",
+					menu_deck1_7_short = "Прочность брони вашей команды увеличена на ##5%##, а вашей на ##10%##.",
 				})
 			end
 			Crew_chief_str()
@@ -804,37 +805,37 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			local function Muscle_str()
 				LocalizationManager:add_localized_strings({
 					menu_deck2_7_desc = "Всё ваше оружие имеет шанс ##20%## посеять панику среди врагов, если на нём не установлен глушитель.\n\nПаника будет подавлять противника, заставляя его испытывать страх, предотвращая его совершать какие либо действия. Некоторые враги могут сопротивляться этому эффекту, а некоторые, например Бульдозеры, полностью его игнорируют.",
-					menu_deck2_9_desc = "Здоровье увеличено ещё на ##60%##.\n\nВы будете восстанавливать ##3%## здоровья каждые ##5## секунд.\n\nПри игре на сложности Смертный Приговор ваше пасивное восставновление здорвоье увеличено до ##5%## раз в ##5## секунд.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
+					menu_deck2_9_desc = "Здоровье увеличено ещё на ##60%##.\n\nВы будете восполнять ##3%## здоровья каждые ##5## секунд.\n\nПри игре на сложности Смертный Приговор ваше пассивное восполнение здоровья увеличено до ##5%## раз в ##5## секунд.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 					-- short descs
-					menu_deck2_9_short = "Здоровье увеличено ещё на ##60%##. Вы будете восстанавливать ##3%## здоровья каждые ##5## секунд. При игре на сложности Смертный Приговор пасивное восставновление здорвоье увеличено.",
+					menu_deck2_9_short = "Здоровье увеличено ещё на ##60%##. Вы будете восполнять ##3%## здоровья каждые ##5## секунд. При игре на сложности Смертный Приговор пассивное восполнение здоровья увеличено.",
 				})
 			end
 			Muscle_str()
 			
 			local function Rogue_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck4_9_desc = "Шанс пробить вражескую броню из любого оружия равен ##40%##.\nУменьшает время переключения между оружием на ##80%##.\n\nШанс увернуться увеличен на еще ##5%##.\nШанс увернуться когда вы пригнулись увеличен на ##5%##.\n\nВаша скорость передвижения увеличена на ##15%##.\nВаш запас выносливости увеличен на ##25%##.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличина на ##10%##.",
+					menu_deck4_9_desc = "Шанс пробить вражескую нательную броню из любого оружия увеличен на ##40%##.\nУменьшает время переключения между оружием на ##80%##.\n\nШанс увернуться увеличен на еще ##5%##.\nШанс увернуться когда вы пригнулись увеличен на ##5%##.\n\nВаша скорость передвижения увеличена на ##15%##.\nВаш запас выносливости увеличен на ##25%##.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличина на ##10%##.",
 					-- short descs
-					menu_deck4_9_short = "Шанс пробить вражескую броню из любого оружия равен ##40%##. Уменьшает время переключения между оружием на ##80%##. Шанс увернуться увеличен на еще ##5%## и шанс увернуться когда вы пригнулись увеличен на ##5%##. Ваша скорость передвижения увеличена на ##15%##. Ваш запас выносливости увеличен на ##25%##.",
+					menu_deck4_9_short = "Шанс пробить вражескую нательную броню из любого оружия увеличен на ##40%##. Уменьшает время переключения между оружием на ##80%##. Шанс увернуться увеличен на еще ##5%## и шанс увернуться когда вы пригнулись увеличен на ##5%##. Ваша скорость передвижения увеличена на ##15%##. Ваш запас выносливости увеличен на ##25%##.",
 				})
 			end
 			Rogue_str()
 			
 			local function Hitman_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck5_1 = "Мастре оружий",
+					menu_deck5_1 = "Мастер оружий",
 					menu_deck5_1_desc = "Убийство врага оружием ближнего боя, или не-взрывчатым метательным оружием восполнит ##25%## вашей брони. Навык срабатывает только один раз в ##1## секунду.",
-					menu_deck5_3_desc = "Штраф к стабильности вашего парного оружия уменьшено на ##8##.\nКоличество переносимых боеприпасов для парного оружия увеличено на ##50%##.\n\nУбийство врага используя пистолет, пистолет-пулемет или парное оружие ускоряет скорость восставновления брони на ##25%## в течении ##10## секунд. Если вы опять убьете врага используя пистолет, пистолет-пулемет или парное оружие пока навык активен, таймер навыка будет пополнен до ##10## секунд.",
+					menu_deck5_3_desc = "Штраф к стабильности вашего парного оружия уменьшен на ##8##.\nКоличество переносимых боеприпасов для парного оружия увеличено на ##50%##.\n\nУбийство врага используя пистолет, пистолет-пулемет или парное оружие ускоряет скорость восставновления брони на ##25%## в течении ##10## секунд. Если вы опять убьете врага используя пистолет, пистолет-пулемет или парное оружие пока навык активен, таймер навыка будет пополнен до ##10## секунд.",
 					menu_deck5_5 = "В ритме смерти",
-					menu_deck5_5_desc = "\nНовая способность: В Ритме Смерти.\nДля активации необходимо совершить ##5## убийств подряд в комбо. Время между каждым убийством не должно быть меньше ##0.5## секунд и не больше ##1.5## секунд. Если убийство совершено быстрее требуемого времени, оно не засчитывается в комбо; если слишком медленно — комбо сбрасывается.\n\nПервое убийство комбо должно быть выполнено с помощью оружия ближнего боя, или не-взрывчатым метательным оружием. Убийства оружием ближнего боя, или не-взрывчатым метательным оружием будет засчитываться как 2 убийства вместо 1, за исключением самого первого убийства комбо.\n\nПри активации: вы получаете ##5## секунд неуязвимости. Данный эффект не может происходить чаще чем раз в ##20## секунд.\n\nПометка: иконка перков мода Gilza покажет текущее комбо, если у вас есть эффект неуязвимости (синий череп) и если эффект на кулдауне (красный таймер).",
+					menu_deck5_5_desc = "\nНовая способность: В Ритме Смерти.\nДля активации необходимо совершить ##5## убийств подряд в комбо. Время между каждым убийством не должно быть меньше ##0.5## секунд и не больше ##1.5## секунд. Если убийство совершено быстрее требуемого времени, оно не засчитывается в комбо; если слишком медленно — комбо сбрасывается.\n\nПервое убийство комбо должно быть выполнено с помощью оружия ближнего боя, или не-взрывчатым метательным оружием. Убийства оружием ближнего боя, или не-взрывчатым метательным оружием будут засчитываться как 2 убийства вместо 1, за исключением самого первого убийства комбо.\n\nПри активации: вы получаете ##5## секунд неуязвимости. Данный эффект не может происходить чаще чем раз в ##20## секунд.\n\nПометка: иконка перков мода Gilza покажет текущее комбо, если у вас есть эффект неуязвимости (синий череп) и если эффект на кулдауне (красный таймер).",
 					menu_deck5_7 = "Охотник за головами",
-					menu_deck5_7_desc = "\nНовая пассивная черта: Охотник за головами.\nСлучайный враг в радиусе ##25м## становится вашей приоритетной целью, и будет подсвечен для вас белым контуром. Убийство цели даёт бонус охотника за головами.\n\nБонус охотника за головами действует ##25## сек. После того как бонус будет исчерпан вы не сможете получить новую цель в течении ##15## секунд. Если цель сбежит или её убьют, вы не получите бонус и вы не сможете получить новую цель в течении ##40## секунд.\n\nБонус охотника за головами:\nУсиливает эффекты навыков Киллера для карт 1, 3 и 5.\nВосполнение брони 1 карты увеличивается до ##50%##, скорость восставновления брони 3 карты увеличивается до ##50%##, и неуязвимость 5 карты увеличивается до ##10## секунд, не затрагивая кулдаун.\n\nПометка: иконка перков мода Gilza покажет если у вас есть приоритетная цель (ярко-белый) и если бонус охотника за головами активен (зелёный).",
+					menu_deck5_7_desc = "\nНовая пассивная черта: Охотник за головами.\nСлучайный враг в радиусе ##25м## становится вашей приоритетной целью, и будет подсвечен для вас белым контуром. Убийство цели даёт бонус охотника за головами.\n\nБонус охотника за головами действует ##25## секунд. После того как бонус будет исчерпан вы не сможете получить новую цель в течении ##15## секунд. Если цель сбежит или её убьют, вы не получите бонус и вы не сможете получить новую цель в течении ##40## секунд.\n\nБонус охотника за головами:\nУсиливает эффекты навыков Киллера для карт 1, 3 и 5.\nВосполнение брони 1 карты увеличивается до ##50%##, скорость восставновления брони 3 карты увеличивается до ##50%##, и продолжиельность неуязвимости 5 карты увеличивается до ##10## секунд, не затрагивая кулдаун.\n\nПометка: иконка перков мода Gilza покажет если у вас есть приоритетная цель (ярко-белый) и если бонус охотника за головами активен (зелёный).",
 					menu_deck5_9_desc = "Когда вы лишитесь брони, то она восстановится через ##1.5## секунды вне зависимости от того в каких вы находитесь условиях.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 					-- short descs
 					menu_deck5_1_short = "Убийство врага оружием ближнего боя или не-взрывчатым метательным оружием восполняет ##25%## брони. Навык срабатывает только один раз в ##1## секунду.",
-					menu_deck5_3_short = "Парное оружие получает увеличенную ёмкость магазина и улучшенную стабильность. Убийства пистолетами, пистолет-пулеметами или парным оружием ускоряет скорость восставновления брони на ##25%##.",
-					menu_deck5_5_short = "Новый навык: В ритме смерти. ##5## убийств в идеальном комбо дают ##5## секунд неуязвимости, с кулдауном в ##20## секунд. Первое убийство должно быть совершено оружием ближнего боя или не-взрывчатым метательным оружием.",
-					menu_deck5_7_short = "Новый пассивный навык: Охотник за Головами. Случайный враг становится целью - убийство даёт бонус, усиливающий эффекты других карт перка Киллера.",
+					menu_deck5_3_short = "Парное оружие получает увеличенную ёмкость боезапаса и улучшенную стабильность. Убийства пистолетами, пистолет-пулеметами или парным оружием ускоряет скорость восставновления брони на ##25%##.",
+					menu_deck5_5_short = "Новая способность: В ритме смерти. ##5## убийств в идеальном комбо дают ##5## секунд неуязвимости, с кулдауном в ##20## секунд. Первое убийство должно быть совершено оружием ближнего боя или не-взрывчатым метательным оружием.",
+					menu_deck5_7_short = "Новая пассивная черта: Охотник за Головами. Случайный враг становится целью - убийство даёт бонус, усиливающий эффекты других карт перка Киллера.",
 					menu_deck5_9_short = "Броня восстанавливается через ##1.5## секунды после разрушения в любых условиях.",
 				})
 			end
@@ -855,15 +856,15 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			
 			local function Burglar_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck7_3_desc = "Вероятность того, что враги начнут стрелять по вам снижена на ##10%##, если вы пригнулись или не двигаетесь.\n\nСкорость упаковки трупов увеличена на ##25%##.",
-					menu_deck7_5_desc = "Шанс увернуться увеличен на ##5%##.\n\nВероятность того, что враги начнут стрелять по вам уменьшена на ##5%##, если вы пригнулись или не двигаетесь.\n\nШанс увернуться увеличен на ##5%##, когда вы используете Легкий Баллистический Бронежилет.\n\nВы получаете ##2## очка скрытности за каждое используемое оружие с глушителем.\n\nСкорость взлома замков увеличена на ##25%##.",
-					menu_deck7_7_desc = "Шанс увернуться увеличен на ##5%##. Вероятность того, что враги начнут стрелять по вам уменьшена на ##5%##, если вы пригнулись или не двигаетесь.\n\nСкорость ответа на пейджеры увеличена на ##25%##.",
-					menu_deck7_9_desc = "Скорость восстановления брони будет увеличена на ##20%##, если вы не двигаетесь.\n\nВы передвигаетесь на ##10%## быстрее сидя.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
+					menu_deck7_3_desc = "Вероятность того, что враги начнут стрелять по вам снижена на ##10%##, если вы пригнулись и не двигаетесь.\n\nСкорость упаковки трупов увеличена на ##25%##.",
+					menu_deck7_5_desc = "Шанс увернуться увеличен на ##5%##.\n\nВероятность того, что враги начнут стрелять по вам уменьшена на ##5%##, если вы пригнулись и не двигаетесь.\n\nШанс увернуться увеличен на ##10%##, когда вы используете Легкий Баллистический Бронежилет.\n\nВы получаете ##2## очка скрытности за каждое используемое оружие с глушителем.\n\nСкорость взлома замков увеличена на ##25%##.",
+					menu_deck7_7_desc = "Шанс увернуться увеличен на ##5%##. Вероятность того, что враги начнут стрелять по вам уменьшена на ##5%##, если вы пригнулись и не двигаетесь.\n\nСкорость ответа на пейджеры увеличена на ##25%##.",
+					menu_deck7_9_desc = "Скорость восстановления брони будет увеличена на ##20%##, если вы не двигаетесь.\n\nВы передвигаетесь на ##10%## быстрее в присяди.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 					-- short descs
-					menu_deck7_3_short = "Вероятность того, что враги начнут стрелять по вам снижена на ##10%##, если вы пригнулись или не двигаетесь. Скорость упаковки трупов увеличена на ##25%##.",
-					menu_deck7_5_short = "Шанс увернуться увеличен на ##5%##. Вероятность того, что враги начнут стрелять по вам уменьшена на ##5%##, если вы пригнулись или не двигаетесь. Шанс увернуться увеличен на ##5%##, когда вы используете Легкий Баллистический Бронежилет. Вы получаете ##2## очка скрытности за каждое используемое оружие с глушителем. Скорость взлома замков увеличена на ##25%##.",
-					menu_deck7_7_short = "Шанс увернуться увеличен на ##5%##. Вероятность того, что враги начнут стрелять по вам уменьшена на ##5%##, если вы пригнулись или не двигаетесь.\n\nСкорость ответа на пейджеры увеличена на ##25%##.",
-					menu_deck7_9_short = "Скорость восстановления брони будет увеличена на ##20%##, если вы не двигаетесь. Вы передвигаетесь на ##10%## быстрее сидя.",
+					menu_deck7_3_short = "Враги будут стрелять по вам реже, если вы пригнулись и не двигаетесь. Скорость упаковки трупов увеличена.",
+					menu_deck7_5_short = "Шанс увернуться увеличен, оссобенно при использовании ЛББ. Враги будут стрелять по вам еще реже, если вы пригнулись и не двигаетесь. Вы получаете скрытность за оружия с глушителем. Скорость взлома замков увеличена.",
+					menu_deck7_7_short = "Шанс увернуться увеличен. Враги будут стрелять по вам еще реже, если вы пригнулись и не двигаетесь. Скорость ответа на пейджеры увеличена.",
+					menu_deck7_9_short = "Скорость восстановления брони увеличена, если вы не двигаетесь. Вы быстрее передвигаетесь в присяди.",
 				})
 			end
 			Burglar_str()
@@ -871,242 +872,243 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			-- Socio/Infil shared first card
 			LocalizationManager:add_localized_strings({
 				menu_sociopathinfil_1 = "OVERDOG",
-				menu_sociopathinfil_1_desc = "Когда по вам ведут огонь трое или более врагов, вы получаете на ##12%## меньше урона.\n\nВаш второй и каждый последующий удар в ближнем бою с перерывом не более чем в ##4## секунды, нанесёт на ##100%## больше урона от базового урона оружия.",
-				menu_sociopathinfil_1_short = "While you are surrounded by three or more visible enemies within ##18m## of you, you receive a ##12%## damage reduction. Your second and each consecutive melee hit within ##4## seconds of the last one will deal ##100%## more damage.",
+				menu_sociopathinfil_1_desc = "Пока вас окружают как минимум три видимых врага в пределах ##18## метров от вас, вы получаете ##12%## сопротивления урону. Это сопротивление остаеется с вами в течении еще ##5## секунд после того как вы больше не окружены.\n\nВаш второй и каждый последующий удар в ближнем бою с перерывом не более чем в ##4## секунды, нанесёт на ##100%## больше урона от базового урона оружия.",
+				menu_sociopathinfil_1_short = "Пока вас окружают как минимум три видимых врага в пределах ##18## метров от вас, вы получаете ##12%## сопротивления урону. Ваш второй и каждый последующий удар в ближнем бою с перерывом не более чем в ##4## секунды, нанесёт на ##100%## больше урона от базового урона оружия.",
 			})
 			
 			local function Infiltrator_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck8_3 = "Basic Close Combat",
-					menu_deck8_3_desc = "While you are within ##18m## of an enemy that you can see, you receive a ##8%## damage reduction. This damage reduction lingers for ##5## seconds after you are no longer close to an enemy.",
-					menu_deck8_5 = "Advanced Close Combat",
-					menu_deck8_5_desc = "While you are within ##18m## of an enemy that you can see, you receive an additional ##7%## damage reduction. This damage reduction lingers for ##5## seconds after you are no longer close to an enemy.",
-					menu_deck8_7 = "Expert Close Combat",
-					menu_deck8_7_desc = "While you are within ##18m## of an enemy that you can see, you receive an additional ##7%## damage reduction. This damage reduction lingers for ##5## seconds after you are no longer close to an enemy.",
+					menu_deck8_3 = "Специалист ближнего боя",
+					menu_deck8_3_desc = "Пока вы находитесь в пределах ##18## метров от видимого врага, вы получаете ##8%## сопротивления урону. Это сопротивление остаеется с вами в течении еще ##5## секунд после того как вы больше не окружены.",
+					menu_deck8_5 = "Эксперт ближнего боя",
+					menu_deck8_5_desc = "Пока вы находитесь в пределах ##18## метров от видимого врага, вы получаете еще ##7%## сопротивления урону. Это сопротивление остаеется с вами в течении еще ##5## секунд после того как вы больше не окружены.",
+					menu_deck8_7 = "Мастер ближнего боя",
+					menu_deck8_7_desc = "Пока вы находитесь в пределах ##18## метров от видимого врага, вы получаете еще ##7%## сопротивления урону. Это сопротивление остаеется с вами в течении еще ##5## секунд после того как вы больше не окружены.",
 					-- short descs
-					menu_deck8_3_short = "While you are within ##18m## of an enemy that you can see, you receive a ##8%## damage reduction.",
-					menu_deck8_5_short = "While you are within ##18m## of an enemy that you can see, you receive an additional ##7%## damage reduction.",
-					menu_deck8_7_short = "While you are within ##18m## of an enemy that you can see, you receive an additional ##7%## damage reduction.",
+					menu_deck8_3_short = "Пока вы находитесь в пределах ##18## метров от видимого врага, вы получаете ##8%## сопротивления урону.",
+					menu_deck8_5_short = "Пока вы находитесь в пределах ##18## метров от видимого врага, вы получаете еще ##7%## сопротивления урону.",
+					menu_deck8_7_short = "Пока вы находитесь в пределах ##18## метров от видимого врага, вы получаете еще ##7%## сопротивления урону.",
 				})
 			end
 			Infiltrator_str()
 			
 			local function Sociopath_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck9_5_desc = "Killing an enemy with a melee weapon regenerates ##10%## health. Note: armor regeneration from \"Tension\" perk card will activate along with this skill.\n\nThis cannot occur more than once every ##1## second.\n\nWhile you are within ##18m## of an enemy that you can see, you receive a ##8%## damage reduction. This damage reduction lingers for ##5## seconds after you are no longer close to an enemy.",
-					menu_deck9_7_desc = "Killing an enemy within ##18m## of you increases your armor recovery on kill by ##30##.\n\nYou gain an additional ##10%## more armor.",
-					menu_deck9_9_desc = "Killing an enemy within ##18m## of you has a ##75%## chance to spread panic among your enemies.\n\nPanic will make enemies go into short bursts of uncontrollable fear, preventing them from making other actions. Some enemies have resistance for this effect and some, like Bulldozers, are completely immune to it.\n\nThis effect can only occur once every ##1## second and is sycned with other \"on kill\" effects from this perk deck.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
+					menu_deck9_5_desc = "При убийстве врага оружием ближнего боя вы восстановите ##10%## здоровья. Пометка: восполнение брони от карточка перка  \"Напряженность\" активируется одновременно с этим навыком.\n\nПерк срабатывает только один раз за ##1## секунду.\n\nПока вы находитесь в пределах ##18## метров от видимого врага, вы получаете ##8%## сопротивления урону. Это сопротивление остаеется с вами в течении еще ##5## секунд после того как вы больше не окружены.",
+					menu_deck9_7_desc = "Если при убийстве врага он был в пределах ##18## метров от вас, вы восполните на ##30## больше брони.\n\nПрочность брони увеличена на еще ##10%##.",
+					menu_deck9_9_desc = "При убийстве противника в пределах ##18## метров от вас у вас есть ##75%## вероятность посеять панику среди врагов.\n\nПаника будет подавлять противника, заставляя его испытывать страх, предотвращая его совершать какие либо действия. Некоторые враги могут сопротивляться этому эффекту, а некоторые, например Бульдозеры, полностью его игнорируют.\n\nНавык срабатывает только один раз за ##1## секунду, и активируется синхронно с другими эффектами перка, активирующимися при убийстве.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 					-- short descs
-					menu_deck9_3_desc = "Killing an enemy regenerates ##30%## armor. You gain ##10%## more armor.",
-					menu_deck9_5_desc = "Killing an enemy with a melee weapon regenerates ##10%## health.  While you are within ##18m## of an enemy that you can see, you receive additional ##8%## damage reduction.",
-					menu_deck9_7_desc = "Killing an enemy within ##18m## of you increases your armor recovery on kill by ##30##. You gain ##10%## more armor.",
-					menu_deck9_9_desc = "Killing an enemy within ##18m## of you has a ##75%## chance to spread panic among your enemies. Panic will make enemies go into short bursts of uncontrollable fear.",
+					menu_deck9_3_short = "Убийство врага восполнит ##30## единиц брони. Прочность брони увеличена.",
+					menu_deck9_5_short = "Убийство врага оружием ближнего боя восполнит здоровье.",
+					menu_deck9_7_short = "Убийство врага в пределах ##18## метров от вас восполнит больше брони. Прочность брони увеличена.",
+					menu_deck9_9_short = "При убийстве противника у вас есть ##75%## вероятность посеять панику среди врагов.",
 				})
 			end
 			Sociopath_str()
 			
 			local function Gambler_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck10_1_desc = "Боеприпасы оставленные врагами, также содержат медицинские припасы которые могут восстановить вам от ##16## до ##24## здоровья.\n\nПерк срабатывает только один раз за ##3## секунды.\n\nЕсли текущее здоровье Шуллера меньше чем у другого игрока, эффект восстановления будет увеличен на ##40%##. Эффект не может складываться несколько раз.\n\nРадиус с которого вы можете поднимать патроны увеличен на ##50%##.",
-					menu_deck10_3_desc = "When you pick up ammo, you trigger an ammo pickup for ##50%## of normal pickup to other players in your team.\n\nCan not occur more than once every ##4## seconds.\n\nYou gain ##20%## more health.",
-					menu_deck10_5_desc = "When you pick up ammo packs that contain medical supplies, your teammates will also get healed for ##15## health points, regardless of what kind of effect you got.\n\nYou gain ##20%## more health.",
-					menu_deck10_7 = "Against all odds",
-					menu_deck10_7_desc = "Health you gain from ammo packs on a successful roll is increased by ##16## health points, but health you lose on a failure roll is also increased by ##32##.",
-					menu_deck10_9 = "Even more dice",
-					menu_deck10_9_desc = "When you pick up ammo packs that contain medical supplies, you will now also receive passive dodge chance. Maximum dodge chance you can get from this perk card is ##35%##. Your chances of getting positive/negative bonuses are shared and depend on this perk deck's first card activation.\n\nOn a successful roll you gain random amount of dodge chance: from ##2%## to ##8%##. On a successful jackpot, your dodge chance bonus from this perk card is set to the maximum.\nOn a failure roll you will lose a random amount of dodge chance: from ##4%## to ##16%##. On a failure jackpot your bonus dodge chance from this perk card is reset to ##0%##.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.\n\nNote: Gilza's perk UI that appears while using Gambler will now also show bonus dodge chance that this perk card provides.",
+					menu_deck10_1_desc = "Боеприпасы, оставленные врагами, будут содержать медицинские припасы - при подборе боеприпаса вы испытываете свои шансы на исцеление. Данный эффект не может срабатывать чаще чем раз в ##4## секунды.\n\nПри подборе есть ##70%## шанс восполнить случайное количество здоровья: от ##16## до ##24##. Если вам повезет с дополнительным шансом в ##20%##, вы получите позитивный джекпот и утроите полученное здоровье.\nТакже есть ##15%## шанс найти ядовитые медицинские припасы и потерять случайное количество здоровья: от ##32## до ##48##. Если вам \"повезет\" с дополнительным шансом в ##10%##, вы получите негативный джекпот и утроите потерянное здоровье.\nНаконец, есть ##15%## шанс, что навык ничего не сделает, но уйдёт на кулдаун.\n\nРадиус подбора боеприпасов увеличен на ##50%##.\n\nПометка: иконка перков мода Gilza покажет если навык на кулдауне (ярко-белый), если эффект был положительным (зелёный) или отрицательным (красный), и если эффект снова доступен (бледно-белый). При получении джекпота иконка будет мигать.",
+					menu_deck10_3_desc = "Когда вы собираете боеприпасы, оставленные врагами, ваши напарники будут получать ##50%## от собранного вами количества.\n\nДанный эффект не может срабатывать чаще чем раз в ##4## секунды.\n\nВаше здоровье увеличено на ##20%##.",
+					menu_deck10_5_desc = "Когда вы находите медицинские припасы, ваши напарники также будут получать ##15## здоровья вне зависимости от полученого вами эффекта.\n\nВаше здоровье увеличено на еще ##20%##.",
+					menu_deck10_7 = "Вопреки всему",
+					menu_deck10_7_desc = "При восполнении здоровья от боеприпасов вы получаете на ##16## здоровья больше, но при потере здоровья вы теряете на ##32## здоровья больше.",
+					menu_deck10_9 = "Еще больше шансов",
+					menu_deck10_9_desc = "При подборе боеприпасов с медицинскими припасами вы также получаете пассивный шанс уклонения. Максимальный шанс уклонения от этой карты перка - ##35%##. Шансы получения положительных/отрицательных бонусов напрямую зависят от того какой эффект вы получили от первой карты данного набора перков.\n\nПри успехе вы получаете случайное количество уклонения: от ##2%## до ##8%##. При получении позитивного джекпота, бонус уклонения устанавливается на максимум.\nПри неудаче вы потеряете от ##4%## до ##16%## уклонения. При получении негативного джекпота бонус уклонения данной карты перка опускается до ##0%##.\n\nПометка: иконка перков мода Gilza теперь будет отображать текущий бонус уклонения от этой карточка перка.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 					-- short descs
-					menu_deck10_1_short = "Ammo pickups can heal or damage you. Your ammo box pick up range is increased.",
-					menu_deck10_3_short = "Ammo pickups refill ammo for your teammates. Your health is increased.",
-					menu_deck10_5_short = "Ammo pickups heal your teammates. Your health is increased.",
-					menu_deck10_7_short = "Amount of gained/lost health from ammo pickups is increased.",
-					menu_deck10_9_short = "Ammo pickups can now adjust you dodge chances.",
+					menu_deck10_1_short = "Подбираемые боеприпасы теперь могут восполнить или убавить здоровье. Радус подбора боеприпасов увеличен.",
+					menu_deck10_3_short = "Подбираемые боеприпасы восполняют боезапас ваших напарников. Ваше здоровье увеличено.",
+					menu_deck10_5_short = "Подбираемые боеприпасы восполняют здоровье ваших напарников. Ваше здоровье увеличено.",
+					menu_deck10_7_short = "Количество восполняемого или убавляемого здоровья увеличено.",
+					menu_deck10_9_short = "Подбираемые боеприпасы теперь влияют на ваш шанс уворота.",
 				})
 			end
 			Gambler_str()
 			
 			local function Grinder_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck11_5_desc = "Damaging an enemy now heals ##3## life points every ##0.3## seconds for ##3## seconds.\n\nYour chances to pierce enemy body armor are increased by ##10%##.",
-					menu_deck11_9_desc = "Damaging an enemy now heals ##4## life points every ##0.3## seconds for ##4.2## seconds.\n\nYour chances to pierce enemy body armor are increased by additional ##25%##.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
+					menu_deck11_5_desc = "Эффект восстанавливающий здоровье теперь восстанавливает ##3## единицы здоровья каждые ##0.3## секунды в течение ##3## секунд.\n\nВероятность пробить вражескую нательную броню увеличена на ##10%##.",
+					menu_deck11_9_desc = "Эффект восстанавливающий здоровье теперь восстанавливает ##4## единицы здоровья каждые ##0.3## секунды в течение ##4.2## секунд.\n\nВероятность пробить вражескую нательную броню увеличена на еще ##25%##.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 					-- short descs
-					menu_deck11_9_short = "Damaging an enemy now heals ##4## life points every ##0.3## seconds for ##4.2## seconds. Increase your chance to pierce enemy armor by ##25%##.",
+					menu_deck11_9_short = "Вы восстанавливаете больше здоровья и дольше. Вероятность пробить вражескую нательную броню увеличена.",
 				})
 			end
 			Grinder_str()
 			
 			local function Yakuza_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck12_1_desc = "The lower your health, the more armor recovery rate you have. When your health is below ##25%##, you will gain up to ##20%## armor recovery rate.\n\nWhenever you are revived, your health will always be set to ##10%## of your max health.\n\nAll skills that provide health regeneration are completely ignored.",
-					menu_deck12_7_desc = "The lower your health, the more armor recovery rate you have. When your health is below ##25%##, you will gain up to an additional ##20%## armor recovery rate.\n\nWhile your health is below ##50%## you are immune to the armor piercing effect.",
-					menu_deck12_9_desc = " Теперь все эффекты берсерка в этом наборе перков активируется не на ##25%## уровне здоровья, а на ##50%##.\n\nПри входе в режим берсерка вы получаете иммунитет к эффекту подавления и ваша броня больше не может быть пробита насквозь бронебойными выстрелами.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
+					menu_deck12_1_desc = "Чем ниже ваше здоровье, тем быстрее восстанавливается ваша броня. Эффект активируется только когда ваше здоровье ниже ##25%##. Максимальный бонус к скорости восстанавления брони равен ##20%##.\n\nПосле того как вас подняли, ваше здоровье всегда будет равно ##10%##.\n\nВсе навыки восстанавливающие ваше здоровье отныне игнорируются.",
+					menu_deck12_7_desc = "Максимальный бонус к скорости восстанавления брони при низком уровне здоровья увеличен на еще ##20%##.\n\nКогда ваше здоровье ниже ##50%## ваша броня не может быть пробита бронебойными выстрелами.",
+					menu_deck12_9_desc = "Теперь все эффекты в этом наборе перков активируемые на уровне здоровья ниже ##25%##, будут активированы на уровне здоровья ниже ##50%##.\n\nВы получаете ##25%## сопротивления пулевому урону от врагов которые находятся у вас за спиной. Данный бонус увеличен до ##50%## при игре на сложности Смертный Приговор.\n\nКогда ваше здоровье ниже ##50%## вы получаете иммунитет к эффекту подавления. Пометка: когда в вас стреляют, вне зависимости от того попали по вам или нет, на вас накладывается эффект подавления. Если вас подавили, ваш таймер восставновления брони сбрасывается до максимального значения, и сверху накладывается ##1## секунда от эффекта подавления. Эта секунда не уменьшаема навыками влияющими на скорость восставновления брони. Имея иммунитет к данному эффекту, ваш таймер регенерации брони больше не будет сбрасываться если по вам выстрелили, но не попали, а эффект подавления при удачном попадании будет уменьшен с одной секунды до ##0.5##.\n\nБонус завершения: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 					-- short descs
-					menu_deck12_1_short = "The lower your health, the more armor recovery rate you have. When your health is below ##25%##, you will gain up to ##20%## armor recovery rate. All skills that provide health regeneration are completely ignored.",
-					menu_deck12_5_short = "When your health is below ##25%##, you will gain up to an additional ##20%## armor recovery rate.",
-					menu_deck12_7_short = "When your health is below ##25%##, you will gain up to an additional ##20%## armor recovery rate. While your health is below ##50%## you are immune to the armor piercing effect.",
-					menu_deck12_9_short = "Теперь все эффекты берсерка в этом наборе перков активируется не на ##25%## уровне здоровья, а на ##50%##. При входе в режим берсерка вы получаете иммунитет к эффекту подавления и ваша броня больше не может быть пробита насквозь бронебойными выстрелами.",
+					menu_deck12_1_short = "Чем ниже ваше здоровье, тем быстрее восстанавливается ваша броня.",
+					menu_deck12_5_short = "Максимальный бонус к скорости восстанавления брони увеличен.",
+					menu_deck12_7_short = "Максимальный бонус к скорости восстанавления брони увеличен. Когда ваше здоровье ниже ##50%## ваша броня не может быть пробита бронебойными выстрелами.",
+					menu_deck12_9_short = "Все эффекты в этом наборе перков активируемые на ##<25%## уровне здоровья, будут активированы на ##<50%## уровне здоровья. Когда ваше здоровье ниже ##50%## вы получаете иммунитет к эффекту подавления.",
 				})
 			end
 			Yakuza_str()
 			
 			local function Ex_president_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck13_5_desc = "Increases the maximum health that your armor can store by ##50%##.\n\nYou gain ##10%## more health.\n\nYou now have ##20%## static dodge chance. Static dodge chance can not be increased or decreased regardless of equipped skills and armor.",
-					menu_deck13_7_desc = "Increases the amount of health stored from kills by ##4##.\n\nYou gain ##20%## more health.\n\nIf you were to take damage to your health while having any amount of stored health, your stored health will absorb incoming damage.\nIf incoming damage is greater then your stored health, your stored health will absorb damage equal to amount of stored health, and the remaining damage will be applied to your health directly.",
-					menu_deck13_9_desc = "For each kill you or your crew performs, your next armor recovery timer will be reduced by a few centiseconds. Timer reduction depends on your equipped armor - higher armor equipped provides smaller timer bonus. Your armor recovery timer can not go lower then ##0.8## seconds total with this skill.\nArmor recovery timer bonus is reset when your armor fully recovers.\n\nNote: armor recovery timer is a flat ##3## seconds timer. Armor recovery rate is a multiplier that applies after the timer duration is calculated.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
+					menu_deck13_5_desc = "Максимальное количество запасного здоровья, которое вы можете накопить, увеличено на ##50%##.\n\nВаше основное здоровье увеличено на ##10%##.\n\nВы получаете статичный шанс увернуться в ##20%##. Статичный шанс уворота нельзя увеличить или уменьшить используя навыки влияющие на уворот или заменяя используемую броню.",
+					menu_deck13_7_desc = "Количество запасного здоровья, получаемого за убийство противников, увеличено на еще ##4##.\n\nВаше основное здоровье увеличено на еще ##20%##.\n\nЕсли у вас есть запасное здоровье, при риске получения урона по вашему основному здоровью, получаемый урон будет нанесен по вашему запасному здоровью, убавляя его количество. Если получаемый урон выше чем количество вашего запасного здоровья, урон будет уменьшен вашим запасным здоровьем и затем нанесен по вашему основному здоровью.",
+					menu_deck13_9_desc = "За каждого убитого вами или вашей командой противника вы будете уменьшать ваш таймер восставновления брони на несколько сантисекунд. Насколько именно сантисекунд вы будете сокращать ваш таймер, зависит от используемой вами брони - чем сильнее броня, тем меньше бонус. Подробные количества можно узнать в описаниях брони.\nДанный бонус обнуляется после того как ваша броня полностью восстановилась.\nДанный бонус не может сократить таймер регенерации брони до значения меньше чем ##0.8## секунд.\n\nПометка: таймер восставновления брони обычно равен ##3## секундам. Навыки влияющие на скорость восстановления брони умножают данный таймер на объем своего бонуса после того как таймер был высчитан.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 					-- armor description for blackmarket UI
-					bm_menu_armor_max_health_store = "Ex-President Perk Deck:\nMaximum amount of health that can be stored: $amount;\nArmor recovery timer reduction per kill: $amount_2;s",
+					bm_menu_armor_max_health_store = "Набор перков Экс-Президент:\nМаксимальное количество запасного здоровья: $amount;\nСокращение таймера регенерации за убийство: $amount_2; сек.",
 					-- short descs
-					menu_deck13_5_short = "Increases the maximum health that your armor can store by ##50%##. You gain ##10%## more health. You now have ##20%## static dodge chance.",
-					menu_deck13_7_short = "Increases the amount of health stored from kills by ##4##. You gain ##20%## more health. Your stored health can now shield your normal health.",
-					menu_deck13_9_short = "For each kill you or your crew performs, your next armor recovery timer will be reduced by a few centiseconds. Timer reduction depends on your equipped armor - higher armor equipped provides smaller timer bonus.",
+					menu_deck13_5_short = "Максимальное количество запасного здоровья, которое вы можете накопить, увеличено. Ваше здоровье увеличено. Вы получаете статичный шанс увернуться.",
+					menu_deck13_7_short = "Количество запасного здоровья, получаемого за убийство увеличено. Ваше здоровье увеличено. Запасное здорове теперь может защищать основное здорвоье.",
+					menu_deck13_9_short = "За каждого убитого вами или вашей командой противника вы будете уменьшать ваш таймер восставновления брони на несколько сантисекунд.",
 				})
 			end
 			Ex_president_str()
 			
 			local function Maniac_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck14_1_desc = "##100%## of damage you deal is converted into Hysteria Stacks, up to ##120## every ##1.5## second. Max amount of stacks is ##600##.\n\nHysteria Stacks\nYou gain ##1## damage absorption for every ##30## stacks of Hysteria.\nIf you don't deal any damage for ##3## seconds, you will lose ##20% + 80## Hysteria Stacks.",
-					menu_deck14_5_desc = "Change decay of your Hysteria Stacks when you don't deal damage for ##3## seconds to ##20% + 40##.",
-					menu_deck14_9_desc = "Damage absorption from Hysteria Stacks on you is increased by ##100%##.\nIf you are playing on Death Sentence difficulty, this bonus is increased to ##200%##.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##$multiperk2;##.",
+					menu_deck14_1_desc = "Нанесённый вами урон конвертируются в \"Очки истерии\" в соотношении 1 к 1. Вы не можете получить больше чем ##120## очков истерии за ##1.5## секундный интервал. Максимальное количество очков истерии которое вы можете иметь - ##600##.\n\n\"Очки истерии\"\nЗа каждые ##30## очков истерии вы поглощаете ##1## единицу урона.\n\nЕсли вы не нанесете ни единицы урона в течении ##3## секунд вы потеряете ##20% + 80## очков истерии.",
+					menu_deck14_5_desc = "Если вы не нанесете ни единицы урона в течении ##3## секунд вы теперь потеряете ##20% + 40## очков истерии, вместо ##20% + 80##.",
+					menu_deck14_9_desc = "Поглощение урона от очков истерии увеличено на ##100%## для вас.\nПри игре на сложности Смертный Приговор, данный бонус равен ##200%##.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 					-- short descs
-					menu_deck14_1_short = "##100%## of damage you deal is converted into Hysteria Stacks, up to ##120## every ##1.5## second. Max amount of stacks is ##600##. Hysteria Stacks - you gain ##1## damage absorption for every ##30## stacks of Hysteria.\nIf you don't deal any damage for ##3## seconds, you will lose ##20% + 80## Hysteria Stacks.",
-					menu_deck14_5_short = "Change decay of your Hysteria Stacks when you don't deal damage for ##3## seconds to ##20% + 40##.",
-					menu_deck14_9_short = "Damage absorption from Hysteria Stacks on you is increased by ##100%##, or ##200%## if you are playing on Death Sentence difficulty.",
+					menu_deck14_1_short = "Нанесённый вами урон конвертируются в \"Очки истерии\". Максимальное количество очков истерии которое вы можете иметь - ##600##. За каждые ##30## очков истерии вы поглощаете ##1## единицу урона. Если вы не нанесете ни единицы урона в течении ##3## секунд вы потеряете ##20% + 80## очков истерии.",
+					menu_deck14_5_short = "Если вы не нанесете ни единицы урона в течении ##3## секунд вы теперь потеряете ##20% + 40## очков истерии.",
+					menu_deck14_9_short = "Поглощение урона от очков истерии увеличено на ##100%## для вас. При игре на сложности Смертный Приговор, данный бонус равен ##200%##.",
 				})
 			end
 			Maniac_str()
 			
 			local function Anarchist_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck15_1_desc = "Instead of fully regenerating armor when out of combat, The Anarchist will continuously regenerate armor throughout the entire combat. Heavier armor regenerates less armor, but during shorter intervals.\nYou can view specific values in armor descriptions.\n\nWhen your armor gets depleted you will be immune to health damage for ##2## seconds. This cannot occur more often than once every ##15## seconds.\n\nNote: Skills that increase armor recovery rate are disabled when using this perk deck.",
-					menu_deck15_9_desc = "Dealing damage will grant you a few points of armor - this ability can only occur once every few seconds. Heavier armor regenerates less armor, but has shorter cooldown for this effect.\nYou can view specific values in armor descriptions.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
+					menu_deck15_1_desc = "Вместо того, чтобы полностью восстановить броню вне боя, Анархист может делать это постепенно и в самом бою. Чем мощнее ваша броня, тем меньше брони вы восстанавливаете за раз, но чаще.\n\nКогда ваша броня опустится до нуля, вы получите неуязвимость ко всем видам урона на ##2## секунды. Эффект срабатывает один раз в ##15## секунд.\n\nПометка: навыки сокращающие время восстановления брони не работают с данным набором перков.",
+					menu_deck15_9_desc = "Нанося урон врагу, вы восполните несколько единиц брони. Эффект может срабатывать только один раз в несколько секунд. Чем мощнее ваша броня, тем меньше брони вы восполните но эффект может срабатывать чаще.\nВы можете узнать конкретные значения, в описаниях брони.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 					-- armor description for blackmarket UI
-					bm_menu_anarchist_armor_desc = "Anarchist Perk Deck:\nPassive armor regeneration: $amount_1; points every $amount_2; seconds;\nArmor regeneration on dealt damage: $amount_3; armor points every $amount_4; seconds",
+					bm_menu_anarchist_armor_desc = "Набор перков Анархист:\nПассивное восставновление брони: $amount_1; единиц брони раз в $amount_2; секунд(ы);\nКол-во восполняемой брони за нанесенный урон: $amount_3; единиц брони раз в $amount_4; секунд(ы)",
 					-- short descs
-					menu_deck15_1_short = "Instead of fully regenerating armor when out of combat, The Anarchist will continuously regenerate armor throughout the entire combat. Heavier armor regenerates less armor, but during shorter intervals. When your armor gets depleted you will be immune to health damage for ##2## seconds. This cannot occur more often than once every ##15## seconds.",
-					menu_deck15_9_short = "Dealing damage will grant you a few points of armor - this ability can only occur once every few seconds. Heavier armor regenerates less armor, but has shorter cooldown for this effect. You can view specific values in armor descriptions.",
+					menu_deck15_1_short = "Вместо того, чтобы полностью восстановить броню вне боя, Анархист может делать это постепенно и в самом бою. Чем мощнее ваша броня, тем меньше брони вы восстанавливаете за раз, но чаще. Когда ваша броня опустится до нуля, вы получите неуязвимость ко всем видам урона на ##2## секунды, с кулдауном в ##15## секунд.",
+					menu_deck15_9_short = "Нанося урон врагу, вы восполните несколько единиц брони. Эффект может срабатывать только один раз в несколько секунд. Чем мощнее ваша броня, тем меньше брони вы восполните но эффект может срабатывать чаще.",
 				})
 			end
 			Anarchist_str()
 			
 			local function Biker_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck16_1_desc = "You gain ##5%## more armor and ##10%## more health.\n\nEvery time you or your crew performs a kill, 1 Stack of Regeneration can be received. When received, Stack of Regeneration instantly restores ##5## health and ##5## armor and then activates it's ##4## second cooldown, after which this stack will be removed.\n\nYou have a maximum of ##4## Stack of Regeneration slots. New Stacks of Regeneration can not be added if your Stack of Regeneration slots are full. New Stacks of Regeneration will not be added if both your armor and health are full.\n\nWhile you have any amount of armor remaining, upon receiving a Stack of Regeneration, you will also receive a ##1## second Overstack Prevention cooldown.\nWhile Overstack Prevention cooldown is active, you can not receive additional Stacks of Regeneration unless your armor is completely broken.",
-					menu_deck16_3_desc = "Every ##10%## health missing will increase the amount of armor gained from a single Stack of Regeneration by ##1##.",
-					menu_deck16_5_desc = "Every ##10%## health missing will reduce the ##4## second cooldown that Stack of Regeneration has before it's removed by ##0.1## seconds.\n\nEvery ##10%## health missing will reduce the ##1## second Overstack Prevention cooldown by ##0.025## seconds.",
-					menu_deck16_7_desc = "Every ##10%## armor missing will increase the amount of health gained from a single Stack of Regeneration by ##1##.",
-					menu_deck16_9_desc = "Every ##10%## armor missing will reduce the ##4## second cooldown that Stack of Regeneration has before it's removed by ##0.1## seconds.\n\nEvery ##10%## armor missing will reduce the ##1## second Overstack Prevention cooldown by ##0.025## seconds.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
+					menu_deck16_1_desc = "Вы получаете ##5%## к прочности вашей брони и на ##10%## больше здоровья.\n\nКаждое убийство, совершенное вами или вашей командой, может добавить вам 1 Стак Регенерации. Полученный Стак мгновенно восполняет ##5## здоровья и ##5## брони, после чего активирует свой кулдаун в ##4## секунды, по истечении которого Стак исчезает.\n\nМаксимальное количество слотов для Стаков Регенерации - ##4##. Новые Стаки не могут быть получены, если все слоты заняты, или если вы одновременно имеете максимальный уровень здоровья и брони.\n\nЕсли ваш уровень брони не равен нулю, при получении Стака Регенерации активируется эффект Предотвращения Переполнения Стаков длительностью в ##1## секунду.\nВо время действия этого эффекта новые Стаки Регенерации не могут быть получены, если уровень вашей брони выше нуля.",
+					menu_deck16_3_desc = "Каждые ##10%## потерянного уровня здоровья, увеличат количество восполняемой брони от Стака Регенерации на ##1##.",
+					menu_deck16_5_desc = "Каждые ##10%## потерянного уровня здоровья уменьшат ##4## секундную задержку перед тем как Стак Регенерации будет удален на ##0.1## секунду.\n\nКаждые ##10%## потерянного уровня здоровья уменьшат продолжительность эффекта Предотвращения Переполнения Стаков на ##0.025## секунд.",
+					menu_deck16_7_desc = "Каждые ##10%## потерянного уровня брони, увеличат количество восполняемого здоровья от Стака Регенерации на ##1##.",
+					menu_deck16_9_desc = "Каждые ##10%## потерянного уровня брони уменьшат ##4## секундную задержку перед тем как Стак Регенерации будет удален на ##0.1## секунд.\n\nКаждые ##10%## потерянного уровня брони уменьшат продолжительность эффекта Предотвращения Переполнения Стаков на ##0.025## секунд.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 				})
 			end
 			Biker_str()
 			
 			local function Kingpin_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck17_1_desc = "Unlocks and equips the Kingpin Injector.\n\nChanging to another perk deck will make the Injector unavailable again. The Injector replaces your current throwable, is equipped in your throwable slot and can be switched out if desired.\n\nWhile in game you can use throwable key ##$BTN_ABILITY;## to activate the Injector.\n\nActivating the injector will heal you with ##75%## of all damage taken for ##6## seconds.\n\nYou can still take damage during the effect. The Injector can only be used once every ##30## seconds.\n\nKilling an enemy reduces The Injector cooldown by ##1## second.",
-					menu_deck17_9_desc = "You gain ##40%## more health.\n\nFor every ##50## points of health gained during the injector effect while at maximum health, the recharge time of the injector is reduced by ##1## second.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
+					menu_deck17_1_desc = "Разблокирует и позволяет взять с собой инъектор \"Вора в законе\".\n\nЕсли вы смените набор перков на другой, инъектор будет недоступен для использования. Инъектор использует слот для метательного оружия, но вы можете взять вместо него что-нибудь другое.\n\nЧтобы воспользоваться инъектором, достаточно нажать на кнопку для метательного оружия ##$BTN_ABILITY;##.\n\nВо время действия инъектора, вы будете восстанавливать ##75%## от всего полученного урона. Длительность эффекта инъектора равна ##6## секундам.\n\nПока активен инъектор, вы всё ещё можете получать урон. Воспользоваться инъектором можно раз в ##30## секунд.\n\nУбийство врага моментально сокращает кулдаун инъектора на ##1## секунду.",
+					menu_deck17_9_desc = "Здоровье увеличено ещё на ##40%##.\n\nЗа каждые ##50## восстановленных очков здоровья во время действия инъектора при полном показателе здоровья, кулдаун инъектора будет сокращен на ##1## секунду.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 					-- short descs
-					menu_deck17_1_short = "Unlocks and equips the Kingpin Injector, replacing your current throwable. The injector will heal you with ##75%## of all damage taken for ##6## seconds. The Injector can only be used once every ##30## seconds. Killing an enemy reduces The Injector cooldown by ##1## second.",
-					menu_deck17_9_short = "You gain ##40%## more health. For every ##50## points of health gained during the injector effect while at maximum health, the recharge time of the injector is reduced by ##1## second.",
+					menu_deck17_1_short = "Разблокирует и позволяет взять инъектор \"Вора в законе\". Во время действия инъектора, вы будете восстанавливать ##75%## от всего полученного урона. Эффект инъектора длиться ##6## секунд с кулдауном в ##30## секунд. Убийства врагов сокращает кулдаун инъектора.",
+					menu_deck17_9_short = "Здоровье увеличено ещё на ##40%##. За каждые ##50## восстановленных очков здоровья во время действия инъектора при полном показателе здоровья, кулдаун инъектора будет сокращен на ##1## секунду.",
 				})
 			end
 			Kingpin_str()
 			
 			local function Sicario_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck18_1_desc = "Разблокирует и позволяет взять с собой дымовую шашку. Если вы смените набор перков на другой, дымовая шашка будет недоступна для использования.\n\nПри использовании, дымовая шашка создаёт завесу, которая длится ##10## секунд. Пока вы и ваши напарники стоят в завесе, вы будете уворачиваться от ##50%## всех пуль. Любой враг, находящийся в дыму, будет менее точен при стрельбе на ##50%##.\n\nКак дым рассеется, вы не сможете использовать дымовую шашку в течение ##40## секунд. Тем не менее, убийство врагов сокращает время восстановления на ##1## секунду.",
+					menu_deck18_1_desc = "Разблокирует и позволяет взять с собой дымовую шашку. Если вы смените набор перков на другой, дымовая шашка будет недоступна для использования.\n\nПри использовании, с помощи кнопки ##$BTN_ABILITY;##, дымовая шашка создаёт завесу, которая длится ##10## секунд. Пока вы и ваши напарники стоят в завесе, вы будете уворачиваться от ##50%## всех пуль. Любой враг, находящийся в дыму, будет менее точен при стрельбе на ##50%##.\n\nКак дым рассеется, вы не сможете использовать дымовую шашку в течение ##45## секунд. Тем не менее, убийство врагов сокращает время восстановления на ##1## секунду.",
 					-- short descs
-					menu_deck18_1_short = "Разблокирует и позволяет взять с собой дымовую шашку. При использовании, дымовая шашка создаёт завесу, которая длится ##10## секунд. Вы и ваши напарники стоя в завесе,  уворачиваетесь от ##50%## всех пуль. Любой враг, находящийся в дыму, будет менее точен при стрельбе на ##50%##. Как дым рассеется, вы не сможете использовать дымовую шашку в течение ##40## секунд. Тем не менее, убийство врагов сокращает время восстановления на ##1## секунду.",
+					menu_deck18_1_short = "Разблокирует и позволяет взять с собой дымовую шашку. При использовании, дымовая шашка создаёт завесу, которая длится ##10## секунд. Вы и ваши напарники стоя в завесе,  уворачиваетесь от ##50%## всех пуль. Любой враг, находящийся в дыму, будет менее точен при стрельбе на ##50%##. Как дым рассеется, вы не сможете использовать дымовую шашку в течение ##45## секунд. Тем не менее, убийство врагов сокращает время восстановления на ##1## секунду.",
 				})
 			end
 			Sicario_str()
 			
 			local function Stoic_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck19_1_desc = "Unlocks and equips the Stoic Hip Flask.\n\nChanging to another perk deck will make the Stoic Hip Flask unavailable again. The Stoic Hip Flask replaces your current throwable, is equipped in your throwable slot and can be switched out if desired.\n\nDamage taken is now reduced by ##70%##. The remaining damage will be applied directly.\n\nThe ##70%## reduced damage will be applied over-time (##10## seconds) instead.\n\nYou can use the throwable key ##$BTN_ABILITY;## to activate the Stoic Hip Flask and immediately negate any pending damage. The flask has a ##10## second cooldown but time remaining will be lessened by ##1## second per enemy killed.",
-					menu_deck19_7_desc = "When your health is below ##45%##, the cooldown of your flask will be reduced by ##1.5## seconds for each enemy you kill instead of ##1## second.",
-					menu_deck19_9_desc = "When damage-over-time is removed you will be healed for an additional ##60%## of the damage-over-time remaining at that point.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
+					menu_deck19_1_desc = "Разблокирует и позволяет взять с собой флягу.\n\nЕсли вы смените набор перков на другой, фляга будет недоступна для использования. Фляга использует слот для метательного оружия, но вы можете взять вместо неё что-нибудь другое.\n\nЧтобы отпить из фляги, достаточно нажать на кнопку для метательного оружия ##$BTN_ABILITY;##.\n\nВесь получаемый урон разделен. ##30%## урона будут нанесёны сразу, а оставшиеся ##70%## будут наноситься по вам периодически в течении ##10## секунд.\n\nОтпив из фляги, весь периодический урон исчезает. Фляга имеет ##10## секундный кулдаун, но каждое совершенное убийство будет сокращать кулдаун на ##1## секунду.",
+					menu_deck19_7_desc = "Пока ваш показатель здоровья ниже ##45%##, время сокращения кулдауна вашей фляги за каждого убитого врага будет увеличено с ##1## секунды до ##1.5## секунд.",
+					menu_deck19_9_desc = "Когда периодический урон будет отменён, вы восполните здоровье. Восполненное здоровье будет равно ##60%## количества оставшегося периодического урона.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 					-- short descs
-					menu_deck19_1_short = "Unlocks and equips the Stoic Hip Flask, replacing your current throwable. Damage taken is now reduced by ##70%## and reduced damage will be applied over-time (##10## seconds). Stoic Hip Flask immediately negates any pending damage when used. The flask has a ##10## second cooldown, but time remaining will be lessened by ##1## second per enemy killed.",
-					menu_deck19_7_short = "When your health is below ##45%##, the cooldown of your flask will be reduced by ##1.5## seconds for each enemy you kill instead of ##1## second.",
-					menu_deck19_9_short = "When damage-over-time is removed you will be healed for an additional ##60%## of the damage-over-time remaining at that point.",
+					menu_deck19_1_short = "Разблокирует и позволяет взять с собой флягу. Весь получаемый урон разделен. ##30%## урона будут нанесёны сразу, а оставшиеся ##70%## будут наноситься по вам периодически в течении ##10## секунд. Отпив из фляги, весь периодический урон исчезает. Фляга имеет ##10## секундный кулдаун, но каждое совершенное убийство будет сокращать кулдаун на ##1## секунду.",
+					menu_deck19_7_short = "Пока ваш показатель здоровья ниже ##45%##, сокращение кулдауна фляги за убийство увеличивается.",
+					menu_deck19_9_short = "Когда периодический урон отменяется, он восполняет здоровье.",
 				})
 			end
 			Stoic_str()
 			
 			local function TagTeam_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck20_1_desc_short = "Разблокирует и позволяет взять с собой «Парилку». Чтобы использовать парилку, достаточно посмотреть на союзника в ##24## метровом радиусе и нажать на кнопку метательного ##$BTN_ABILITY;##, чтобы пометить его. Каждый убитый вами или вашим выбранным союзником противник восстановит ##15## единиц здоровья для вас и ##7.5## единиц здоровья для помеченного союзника. Каждый убитый вами противник продолжит время действия парилки на ##1.7## секунд и снизит время восстановления самой парилки на ##2## секунды. Эффект парилки длится ##12## секунд и имеет время восстановления в ##60## секунд.",
-					menu_deck20_5_desc_short = "Убитый вами или выбранным вами напарником противник гарантирует вам ##4## единицы поглощения урона из максимальных ##32##. Данный эффект длится до тех пор, пока восстанавливается «Парилка».",
+					menu_deck20_1_desc = "Разблокирует и позволяет взять с собой \"Парилку\".\n\nЧтобы использовать парилку, достаточно посмотреть на союзника в ##24## метровом радиусе и нажать на кнопку метательного оружия ##$BTN_ABILITY;##, чтобы пометить его.\n\nКаждый убитый вами, или выбранным вами союзником, противник восстановит ##15## единиц здоровья для вас и ##7.5## единиц здоровья для помеченного союзника.\n\nКаждый убитый вами противник продолжит время действия парилки на ##1.7## секунд и снизит кулдаун самой парилки на ##2## секунды.\n\nЭффект парилки длится ##12## секунд и имеет кулдаун в ##60## секунд.",
+					menu_deck20_5_desc = "Убитый вами, или выбранным вами напарником, противник дает вам ##4## единицы поглощения урона. Максимальное количество поглощемого урона от данной карты перка равно ##32##. Данный эффект длится до тех пор, пока \"Парилка\" на кулдауне.",
 					-- short descs
-					menu_deck20_1_short = "Unlocks and equips the Gas Dispenser, replacing your current throwable. To activate, you need to look at another allied unit within a ##24## meter radius and press the throwable key ##$BTN_ABILITY;## to tag them. Each enemy you or the tagged unit kills will now heal you for ##15## health and the tagged unit for ##7.5## health. Your kills will extend the duration of the effect by ##1.7## seconds and reduce the cooldown timer by ##2## seconds. The effect will last for a duration of ##12## seconds and has a cooldown of ##60## seconds.",
-					menu_deck20_5_short = "Each enemy you or the tagged unit kills will now grant you ##4## absorption up to a maximum of ##32##. This effect will last until the perk deck item goes out of cooldown.",
+					menu_deck20_1_short = "Разблокирует и позволяет взять с собой \"Парилку\". При использовании парилки вы помечаете союзника. Каждый убитый вами, или выбранным вами союзником, противник восстановит ##15## единиц здоровья для вас и ##7.5## единиц здоровья для помеченного союзника. Каждый убитый противник продолжит время действия парилки на ##1.7## секунд. Эффект парилки длится ##12## секунд и имеет кулдаун ##60## секунд.",
+					menu_deck20_5_short = "Убитый вами или выбранным вами напарником противник гарантирует вам ##4## единицы поглащения урона из максимальных ##32##. Данный эффект длится до тех пор, пока восстанавливается \"Парилка\".",
 				})
 			end
 			TagTeam_str()
 			
 			local function Hacker_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck21_1_desc = "Разблокирует и позволяет взять с собой карманный генератор помех.\n\nЕсли вы смените набор перков на другой, карманный генератор помех будет недоступен для использования. Карманный генератор помех использует слот для метательного оружия, но выможете взять вместо него что-нибудь другое.\nЧтобы воспользоваться карманным генератором помех, достаточно нажать на кнопку для метательного оружия ##$BTN_ABILITY;##.\n\nЕсли генератор помех был использован до поднятия тревоги, то он отключит все пейджеры и электронику на ##6## секунд. \n\nИспользование генератора помех после поднятия тревоги будет генерировать поле, которое имеет шанс оглушить противников на ##12## секунд.\n\nКарманный генератор помех имеет ##2## заряда с ##140## секундным временем восстановления, но каждое убийтво уменьшает время восставновления на ##4## секунды.",
-					menu_deck21_5_desc = "При убийстве противников во время действия Звуковой петли будет возвращаться ##40## единиц здоровья.\nШанс увернуться увеличен на ##15%##.",
-					menu_deck21_7_desc = "При убийстве как минимум ##3## противников во время Звуковой петли вам дается ##20## единиц уклонения на ##50## секунд.",
+					menu_deck21_1_desc = "Разблокирует и позволяет взять с собой карманный генератор помех.\n\nЕсли вы смените набор перков на другой, карманный генератор помех будет недоступен для использования. Карманный генератор помех использует слот для метательного оружия, но вы можете взять вместо него что-нибудь другое.\nЧтобы воспользоваться карманным генератором помех, достаточно нажать на кнопку для метательного оружия ##$BTN_ABILITY;##.\n\nЕсли генератор помех был использован до поднятия тревоги, то он отключит все пейджеры и электронику на ##6## секунд. \n\nИспользование генератора помех после поднятия тревоги будет генерировать поле со Звуковой петлей в течении ##12## секунд. Данное поле имеет шанс оглушить противников.\n\nКарманный генератор помех имеет ##2## заряда с ##140## секундным кулдауном, но каждое убийтво уменьшает кулдаун на ##4## секунды.",
+					menu_deck21_5_desc = "При убийстве противников во время действия Звуковой петли вы будете восполнять ##40## единиц здоровья.\nШанс увернуться увеличен на ##15%##.",
+					menu_deck21_7_desc = "При убийстве как минимум ##3## противников во время Звуковой петли вы получаете ##20%## бонус к шансу уклонения на ##50## секунд.",
 					-- short descs
 					menu_deck21_1_short = "Разблокирует и позволяет взять с собой карманный генератор помех.",
-					menu_deck21_5_short = "При убийстве противников во время действия Звуковой петли будет возвращаться ##40## единиц здоровья. Шанс увернуться увеличен на ##15%##.",
-					menu_deck21_7_short = "При убийстве как минимум ##3## противников во время Звуковой петли вам дается ##20## единиц уклонения на ##50## секунд.",
+					menu_deck21_5_short = "При убийстве противников во время действия Звуковой петли вы будете восполнять ##40## единиц здоровья. Шанс увернуться увеличен на ##15%##.",
+					menu_deck21_7_short = "При убийстве как минимум ##3## противников во время Звуковой петли вы получаете ##20%## бонус к шансу уклонения на ##50## секунд.",
 				})
 			end
 			Hacker_str()
 			
 			local function Leech_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck22_1_desc = "Unlocks and equips the Leech Ampule. The Leech Ampule replaces your current throwable, is equipped in your throwable slot and can be switched out if desired. While in game you can use throwable key ##$BTN_ABILITY;## to activate the Leech Ampule.\nThe Leech Ampule lasts ##6## seconds with a ##60## seconds cooldown.\nIf you revive a teammate while the Leech Ampule is active, you will fully recover your health and armor after the Leech Ampule effect ends.\nIf you go down while your Leech Ampule cooldown is lower then ##30## seconds, the cooldown will be increased to ##30## seconds.\n\nActivating the Leech Ampule will restore ##50%## health and disable your armor for the duration of the Leech Ampule. While the Leech Ampule is active your health is divided into segments of ##25%## and damage taken from enemies removes one segment. Taking a hit that deals over 150 damage will remove two segments at once.\nUpon losing a segment all damage taken is blocked for ##0.5## seconds. If you secure a kill during this period, you will recover 1 lost segment - this can only occur once during a single invulnerability period. When you recover a segment this way your teammates are also healed for ##5%## of their health. For every additional Leech player on your team, this team heal bonus is reduced by ##25%##.",
-					menu_deck22_3_desc = "Your maximum health is increased by ##20%##.\n\nWhile the Leech Ampule is active you cannot go into bleedout, but being out of health makes you go into \"Last Breath\" state which will slow you down by ##80%##.\n\nIf Leech Ampule effect ends, while you are in the Last Breath state, you will automatically go down, unless you have revived a teammate during the Leech Ampule effect duration.\n\nHealing yourself during the invulnerability period you receive after losing a health segment, can prevent you from entering Last Breath state, even if you are out of health.\n\nEntering Last Breath state disables healing from skills, automatic revive from \"Uppers\" Aced skill, and your ability to heal from First Aid Kits and Doctor Bags.",
-					menu_deck22_5_desc = "The Leech Ampule duration is increased to ##10## seconds.\n\nKilling an enemy reduces the cooldown of the Leech Ampule by ##1.5## second(s).\n\nRecovering health during invulnerability state now heals teammates for ##10%## of their health.",
-					menu_deck22_9_desc = "You can now activate Leech Ampule while downed, temporarily reviving you until the end of the Leech Ampule.\nIf, after reviving yourself with the Leech Ampule, you successfully use a doctor bag before the effect ends, you may stay alive if you are above 0 health.\nIf, after reviving yourself with the Leech Ampule, you successfully revive a teammate before the effect ends, you will stay alive after effect ends.\n\nWhile the Leech Ampule is active your health is now divided into segments of ##12.5%##.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a Payday is increased by ##10%##.",
+					menu_deck22_1_desc = "Открывает и экипирует Ампулу Кровопийцы в слот метательного оружия. После активации клавишей ##$BTN_ABILITY;##, Ампула будет длиться ##6## секунд, с кулдауном ##60## секунд.\nЕсли вы поднимите союзника под действием Ампулы, вы полностью восполните ваше здоровье и броню после окончания эффекта.\nЕсли вы упадете при кулдауне Ампулы меньше ##30## секунд, таймер кулдауна увеличится до ##30## секунд.\n\nАктивация Ампулы восстанавливает ##50%## здоровья, но временно отключает броню. Во время действия, здоровье делится на ##25%## сегменты, и любой полученный урон отнимает сегмент. Если инстанция урона нанесла вам больше 150 урона, вы теряете два сегмента.\nПри потере сегмента(-ов) вы получаете неуязвимость на ##0.5## секунд. Убийство в период неуязвимости восстановит один потерянный сегмент - это не может произойти чаще чем один раз за период неуязвимости. При восстановлении сегмента таким образом, ваши союзники восполнят ##5%## своего здоровья. Каждый дополнительный игрок с набором перков Кровопийца уменьшает данное командное восполнение здоровья на ##25%##.",
+					menu_deck22_3_desc = "Ваше здоровье увеличено на ##20%##.\n\nВо время действия Ампулы Кровопийцы вы не можете упасть, но при потере всего здоровья перейдёте в режим \"Последнего Дыхания\", снижающий скорость передвижения на ##80%##.\n\nЕсли эффект Ампулы закончится во время режима Последнего Дыхания, вы автоматически упадёте, если только не возродили союзника за время действия Ампулы.\n\nВосполнение здоровья во время периода неуязвимости, после потери сегмента здоровья, может предотвратить переход в режим Последнего Дыхания, даже при отсутствии здоровья.\n\nВ режиме Последнего Дыхания отключается возможность лечения от навыков, предотвращение падения от навыка \"Колеса\", и возможность лечиться с помощью аптечек первой помощи и медицинских сумок.",
+					menu_deck22_5_desc = "Длительность эффекта Ампулы Кровопийцы увеличена до ##10## секунд.\n\nУбийство противника ускоряет восстановление Ампулы на ##1.5## секунды.\n\nВостановление сегмента здоровья в период неуязвимости теперь будет восполнять ##10%## здоровья вашим союзникам.",
+					menu_deck22_9_desc = "Теперь вы можете активировать Ампулу Кровопийцы после падения, что временно поднимет вас на ноги до истечения эффекта Ампулы.\nЕсли вы успешно используете медицинскую сумку до окончания эффекта Ампулы и ваше здоровье будет выше 0, вы останетесь в живых.\nЕсли вы успешно поднимете союзника до окончания эффекта Ампулы, вы останетесь в живых.\n\nПока Ампула Кровопийцы активна, ваше здоровье разбивается на сегменты, равные ##12.5%## вашего здоровья.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 					-- short descs
-					menu_deck22_1_short = "Unlocks and equips the Leech Ampule throwable, which will restore ##50%## health, disable your armor, and divide your health into segments. Taking damage removes one segment. Hits worth over 150 damage will remove two segments. When segment is removed you gain ##0.5## seconds of invulnerability. If you secure a kill during this period you will restore ##1## health segment and heal your teammates for ##5%## of their health. The Leech Ampule lasts ##6## seconds with a ##60## seconds cooldown.",
-					menu_deck22_5_short = "The Leech Ampule duration is increased to ##10## seconds. Killing an enemy reduces the cooldown of the Leech Ampule by ##1.5## second(s). Recovering health segments now heals teammates by ##10%## of their health.",
-					menu_deck22_9_short = "You can now activate Leech Ampule while downed, temporarily reviving you.",
+					menu_deck22_1_short = "Открывает и экипирует Ампулу Кровопийцы, позваляющую вам поддерживать своих тиммейтов и себя дополнительным здоровьем.",
+					menu_deck22_5_short = "Длительность эффекта Ампулы увеличена. Убийство противника ускоряет восстановление Ампулы. Вы востанавливаете больше здоровья вашим союзникам.",
+					menu_deck22_9_short = "Теперь вы можете активировать Ампулу Кровопийцы после падения, что временно поднимет вас на ноги до истечения эффекта Ампулы.",
 				})
 			end
 			Leech_str()
 			
 			local function Copycat_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck23_3_desc = "Each headshot you land heals ##10## health points.\nThis cannot occur more than once every ##2## seconds.\n\nIf you have \"Bullseye\" Aced skill equipped, you will regenerate ##7.5## health points per headshot with a cooldown of ##1.5## seconds instead.",
-					menu_deck23_7_desc = "При получении урона который снижает ваще здоровье до ##50%## или меньше, вы получете ##2## секунды неуязвимости к урону здоровья.\nВы все еще получите урон от такого попадания.\nДанный навык активируется только если у вас не осталось брони.\n\nДанный навык не может быть активирован чаще чем раз в ##30## секунд.",
-					menu_deck23_1_1_desc = "Your maximum health is increased by ##15%##.",
-					menu_deck23_3_1_desc = "Your maximum health is increased by ##15%##.",
-					menu_deck23_5_1_desc = "Your maximum health is increased by ##15%##.",
-					menu_deck23_7_1_desc = "Your maximum health is increased by ##15%##.",
-					menu_deck23_1_4_desc = "Your crouched and carry movement speed is increased by ##10%##. Your total ammo capacity is increased by ##7.5%##.",
-					menu_deck23_3_4_desc = "Your crouched and carry movement speed is increased by ##10%##. Your total ammo capacity is increased by ##7.5%##.",
-					menu_deck23_5_4_desc = "Your crouched and carry movement speed is increased by ##10%##. Your total ammo capacity is increased by ##7.5%##.",
-					menu_deck23_7_4_desc = "Your crouched and carry movement speed is increased by ##10%##. Your total ammo capacity is increased by ##7.5%##.",
+					menu_deck23_3_desc = "Каждое попадание в голову восполняет ##10## единиц здоровья. Данный эффект срабатывает не чаще, чем раз в ##2## секунды.\n\nПри наличии ПРО навыка \"Меткий стрелок\" попадания в голову будут восполнять ##7.5## здоровья с кулдауном ##1.5## секунды.",
+					menu_deck23_7_desc = "При получении урона, снижающего здоровье ниже ##50%##, вы получаете иммунитет к урону по здоровью на ##2## секунды.\n\nУрон активирующий данный навык всё равно будет нанесён, но он не сможет снизить ваше здоровье ниже ##1##.\nНавык срабатывает только при уровне брони ниже нуля.\nНавык не может активироваться чаще, чем раз в ##20## секунд.",
+					menu_deck23_1_1_desc = "Ваше здоровье увеличено на ##15%##.",
+					menu_deck23_3_1_desc = "Ваше здоровье увеличено на ##15%##.",
+					menu_deck23_5_1_desc = "Ваше здоровье увеличено на ##15%##.",
+					menu_deck23_7_1_desc = "Ваше здоровье увеличено на ##15%##.",
+					menu_deck23_1_4_desc = "Ваша скорость передвижения в присяди и во время переноса сумок ускорена на ##10%##. Количество боезапаса которое вы можете взять с собой увеличено на ##7.5%##.",
+					menu_deck23_3_4_desc = "Ваша скорость передвижения в присяди и во время переноса сумок ускорена на ##10%##. Количество боезапаса которое вы можете взять с собой увеличено на ##7.5%##.",
+					menu_deck23_5_4_desc = "Ваша скорость передвижения в присяди и во время переноса сумок ускорена на ##10%##. Количество боезапаса которое вы можете взять с собой увеличено на ##7.5%##.",
+					menu_deck23_7_4_desc = "Ваша скорость передвижения в присяди и во время переноса сумок ускорена на ##10%##. Количество боезапаса которое вы можете взять с собой увеличено на ##7.5%##.",
 					-- 9th card bonuses
-					menu_deck23_9_crew_chief_desc = "You grant ##8%## damage reduction for players in your group. This bonus is doubled for you when you are under ##50%## health.\n\nYou and your crew's stamina is increased by ##50%##.\n\nWhile trying to intimidate a law enforcer or a civilian, marking a special enemy, or using Inspire skill on your teammates, your shout distance is increased by ##25%##.\n\nWhile you are within ##18m## of an enemy that you can see, you receive a ##8%## damage reduction. This damage reduction lingers for ##5## seconds after you are no longer close to an enemy.\nNote: Crew perks do not stack.",
-					menu_deck23_9_muscle_desc = "You gain an additional ##20%## more health.\n\nYou regenerate ##1.5%## of your health every ##5## seconds.\n\nWhile playing on Death Sentence difficulty your passive health regeneration is increased to ##2.5%## every ##5## seconds.",
-					menu_deck23_9_armorer_desc = "You gain ##10%## more armor.\n\nWhen your armor gets depleted you will be immune to health damage for ##2## seconds. This cannot occur more often than once every ##25## seconds.",
-					menu_deck23_9_rogue_desc = "Your chance to dodge is increased by ##20%##.\n\nYour chance to dodge while crouched is increased by ##5%##.",
-					menu_deck23_9_hitman_desc = "Securing a kill with a melee weapon or a throwable non-explosive weapon regenerates ##25%## of your armor. This can not happen more often than once every ##1## seconds.\n\nStability penalty that your akimbo weapons have is reduced by ##8##.\nAmmo capacity for your akimbo weapons is increased by ##50%##.\n\nKilling an enemy using a pistol, SMG or an akimbo weapon grants you ##25%## faster armor recovery rate for ##10## seconds. If you secure a kill with a pistol, SMG or akimbo weapon while this skill is already active, skill duration timer we be refreshed.",
-					menu_deck23_9_crook_desc = "Your chance to dodge is increased by ##5%## for ballistic vests.\n\nYour armor is increased by ##20%## for ballistic vests.\n\nYour chances to pierce enemy body armor are increased by ##75%##.",
-					menu_deck23_9_burglar_desc = "Your chance to dodge is increased by ##10%## while using the Lightweight Ballistic Vest.\n\nYou gain ##2## concealment for each silenced weapon you equip.\n\nYou answer pagers ##25%## faster.\n\nStanding still and crouching decreases your chances to be targeted by ##10%##.",
-					menu_deck23_9_infil_desc = "Your second and each consecutive melee hit within ##4## seconds of the last one will deal ##100%## more damage.\n\nStriking an enemy with your melee weapon regenerates ##20%## of your health. This cannot occur more than once every ##10## seconds.",
-					menu_deck23_9_gambler_desc = "Ammo packs you pick up can sometimes yield medical supplies - when ammo pack is picked up, you roll your chances to get healed. This can not occur more often than once every ##4## seconds.\n\nOn pick up, you have a ##70%## chance to be healed for a random amount of health points: from ##16## to ##24##. If you succeed an additional ##20%## chance roll, you will get a jackpot and triple your earned health.\nOtherwise there is a ##15%## chance you will find poisonous medical supplies and will lose a random amount of health points: from ##32## to ##48##. If you succeed an additional ##10%## failure roll, you will get a failure jackpot and triple your lost health.\nLastly you have a ##15%## chance for this skill to do nothing, but go on cooldown.\n\nYour ammo box pick up range is increased by ##50%##.\n\nNote: Gilza's perk UI will show you if this skill is on cooldown (bright white), if effect was positive (green) or negative (red), and if effect is available to be activated again (faded out white). If you get a jackpot, icon will flash.",
-					menu_deck23_9_grinder_desc = "Damaging an enemy now heals ##2## life points every ##0.3## seconds for ##3## seconds.\n\nThis effect stacks but cannot occur more than once every ##1.5## seconds and only while wearing the Two-piece Suit or Lightweight Ballistic Vest.",
-					menu_deck23_9_yakuza_desc = "The lower your health, the more movement speed you gain. When your health is below ##50%##, you will gain up to ##20%## movement speed.\n\nWhile your health is below ##50%## you are immune to armor suppression effect.\n\nNote: normally, armor suppression effect is applied to you whenever you are shot, regardless of if you are hit or not. If you get suppressed, your armor recovery timer will be set to it's maximum duration and additional ##1## second will be added from armor suppression effect to your total recovery timer. This addition is not affected by armor recovery or any other skills.\nArmor suppression immunity effect from this perk card reduces this timer extension to ##0.5## seconds, and also disables your armor recovery timer from resetting to it's maximum duration when you are being shot at, without getting hit.",
-					menu_deck23_9_expres_desc = "While your armor is up, you will store ##8## health for every ##1## enemy you or your crew kills.\n\nWhen your armor regenerates after depletion, you will gain health equal to the stored health amount.\n\nMaximum amount of stored health depends on your equipped armor.\n\nYou gain ##10%## more health.",
-					menu_deck23_9_maniac_desc = "##100%## of damage you deal is converted into Hysteria Stacks, up to ##120## every ##1.5## second. Max amount of stacks is ##600##.\n\nHysteria Stacks\nYou gain ##1## damage absorption for every ##30## stacks of Hysteria.\nIf you don't deal any damage for ##3## seconds, you will lose ##20% + 80## Hysteria Stacks.\n\nMembers of your crew also gain the effect of your Hysteria Stacks.\n\nHysteria Stacks from multiple crew members do not stack and only the stacks that gives the highest damage absorption will have an effect.",
-					menu_deck23_9_anarchist_desc = "Instead of fully regenerating armor when out of combat, The Anarchist will continuously regenerate armor throughout the entire combat. Heavier armor regenerates less armor, but during shorter intervals.\nYou can view specific values in armor descriptions.\n\nWhen your armor gets depleted you will be immune to health damage for ##2## seconds. This cannot occur more often than once every ##35## seconds.\n\nNote: Skills that increase armor recovery rate are disabled when using this perk deck card.",
-					menu_deck23_9_biker_desc = "Every time you or your crew performs a kill, 1 Stack of Regeneration can be received. When received, Stack of Regeneration instantly restores ##5## health and ##5## armor and then activates it's ##4## second cooldown, after which this stack will be removed.\n\nYou have a maximum of ##4## Stack of Regeneration slots. New Stacks of Regeneration can not be added if your Stack of Regeneration slots are full. New Stacks of Regeneration will not be added if both your armor and health are full.\n\nWhile you have any amount of armor remaining, upon receiving a Stack of Regeneration, you will also receive a ##1## second Overstack Prevention cooldown.\nWhile Overstack Prevention cooldown is active, you can not receive additional Stacks of Regeneration unless your armor is completely broken.",
-					menu_deck23_9_leech_desc = "Unlocks and equips the Leech Ampule, replacing your current throwable. While in game you can use throwable key ##$BTN_ABILITY;## to activate the Leech Ampule.\nThe Leech Ampule lasts ##6## seconds with a ##60## seconds cooldown.\nIf you revive a teammate while the Leech Ampule is active, you will fully recover your health and armor after the Leech Ampule effect ends.\nIf you go down while your Leech Ampule cooldown is lower then ##30## seconds, the cooldown will be increased to ##30## seconds.\nActivating the Leech Ampule will restore ##50%## health and disable your armor for the duration of the Leech Ampule. While the Leech Ampule is active your health is divided into segments of ##25%## and damage taken from enemies removes one segment. Taking a hit that deals over 150 damage will remove two segments at once.\nUpon losing a segment all damage taken is blocked for ##0.5## seconds. If you secure a kill during this period, you will recover 1 lost segment - this can only occur once during a single invulnerability period. When you recover a segment this way your teammates are also healed for ##5%## of their health. For every additional Leech Ampule user on your team, this team heal bonus is reduced by ##25%##.",
-					menu_deck23_9_brawler_desc = "You can now receive up to ##3## simultaneous armor regeneration effects from this perk card. If you have no regeneration effects active, you can activate one by securing a kill by any means. To achieve more simultaneous regeneration effects you need to secure kills with melee weapons or the OVE9000 Saw.\n\nArmor regeneration effect: regenerate ##25## points of armor over a period of ##6## seconds, with a \"tick\" of regeneration every ##0.75## seconds.\n\nTotal armor regeneration from one effect is increased to ##50## while playing on Death Sentence difficulty.\n\nNote: Gilza's perk UI will show you how many regeneration effects you currently have as \"1x\" text under the Brawler icon.",
-					menu_deck23_9_junkie = "Speed Junkie",
-					menu_deck23_9_junkie_desc = "You can now obtain up to ##100## adrenaline stacks by moving. Moving at high speeds will add adrenaline stacks to your meter - higher your speed, more stacks you gain. If you don't move quickly enough, your adrenaline stacks will begin to deplete.\n\nFor every adrenaline stack you have you gain a chance to dodge, up to ##40%## maximum dodge chance at ##100## stacks.\n\nIf you maintain ##90## or more stacks of adrenaline for longer then ##4## seconds you will become exhausted. Becoming exhausted completely depletes your stamina and some of your adrenaline stacks.\n\nYou can recover your armor only when you stand still.\n\nGilza's perk UI will show your current amount of adrenaline stacks, if you have too much adrenaline (red) and if you are exhausted (purple).",
-					menu_deck23_9_guardian = "Guardian",
-					menu_deck23_9_guardian_desc = "Your movement speed is reduced by ##20%##.\nAll interaction speeds, excluding player revives and pager answering, are now ##50%## slower.\n\nYou gain an ability to create a personal defensive area by standing perfectly still for ##5## seconds. This area has a ##3m## radius. If you stay outside of your defensive area for more then ##8## seconds, area will be removed. You would have to wait ##8## more seconds after your last area was removed before a new defensive area could be created.\n\nWhile standing inside of your defensive area you regenerate ##20## points of health every ##2## seconds.\n\nGilza's perk UI will show if you are currently inside of your defensive area (bright white) and if you have an active area, but you are not inside of it(faded out white).",
+					menu_deck23_9_crew_chief_desc = "Вы и члены вашей команды получаете ##8%## сопротивления урону. Эффект сопротивления урону будет увеличен для вас в два раза, если уровень вашего здоровья ниже ##50%##.\n\nВыносливость всех членов команды, включая вас, увеличена на ##50%##.\n\nКогда вы пытаетесь запугать гражданского, убедить врага сдаться, пометить специальнього врага, или использовать навык \"Вдохновление\" на союзнике, дальность вашего крика увеличена на ##25%##.\n\nПока вы находитесь в пределах ##18## метров от видимого врага, вы получаете ##8%## сопротивления урону. Это сопротивление остаеется с вами в течении еще ##5## секунд после того как вы больше не окружены.\nПометка: Навыки распространяющиеся на напарников не складываются сами с собой.",
+					menu_deck23_9_muscle_desc = "Ваше здоровье увеличено на ##20%##. Вы будете восполнять ##1.5%## здоровья каждые ##5## секунд. При игре на сложности Смертный Приговор пассивное восполнение здоровья увеличено до ##2.5%## каждые ##5## секунд.",
+					menu_deck23_9_armorer_desc = "Прочность вашей брони увеличена на ##10%##.\n\nКогда ваша броня опустится до нуля, вы получите неуязвимость ко всем видам урона на ##2## секунды. Эффект срабатывает один раз в ##30## секунд.",
+					menu_deck23_9_rogue_desc = "Ваш шанс увернуться увеличен на ##20%##.\n\nШанс увернуться когда вы пригнулись увеличен на ##5%##.",
+					menu_deck23_9_hitman_desc = "Убийство врага оружием ближнего боя, или не-взрывчатым метательным оружием восполнит ##25%## вашей брони. Навык срабатывает только один раз в ##1## секунду.\n\nШтраф к стабильности вашего парного оружия уменьшен на ##8##.\nКоличество переносимых боеприпасов для парного оружия увеличено на ##50%##.\n\nУбийство врага используя пистолет, пистолет-пулемет или парное оружие ускоряет скорость восставновления брони на ##25%## в течении ##10## секунд. Если вы опять убьете врага используя пистолет, пистолет-пулемет или парное оружие пока навык активен, таймер навыка будет пополнен до ##10## секунд.",
+					menu_deck23_9_crook_desc = "При ношении баллистических бронежилетов, шанс увернуться от вражеского огня увеличен на ##5%##.\n\nПрочность брони всех баллистических бронежилетов увеличена на ##20%##.\n\nШансы пробития вражеской нательной брони увеличены на ##75%##.",
+					menu_deck23_9_burglar_desc = "Шанс увернуться увеличен на ##10%##, когда вы используете Легкий Баллистический Бронежилет.\n\nВы получаете ##2## очка скрытности за каждое используемое оружие с глушителем.\n\nСкорость ответа на пейджеры увеличена на ##25%##.\n\nВероятность того, что враги начнут стрелять по вам уменьшена на ##10%##, если вы пригнулись и не двигаетесь.",
+					menu_deck23_9_infil_desc = "Ваш второй и каждый последующий удар в ближнем бою с перерывом не более чем в ##4## секунды, нанесёт на ##100%## больше урона от базового урона оружия.\n\nВы восстановите ##20%## здоровья, если ударите врага оружием ближнего боя. Навык срабатывает только один раз за ##10## секунд.",
+					menu_deck23_9_gambler_desc = "Боеприпасы, оставленные врагами, будут содержать медицинские припасы - при подборе боеприпаса вы испытываете свои шансы на исцеление. Данный эффект не может срабатывать чаще чем раз в ##4## секунды.\nПри подборе есть ##70%## шанс восполнить случайное количество здоровья: от ##16## до ##24##. Если вам повезет с дополнительным шансом в ##20%##, вы получите позитивный джекпот и утроите полученное здоровье.\nТакже есть ##15%## шанс найти ядовитые медицинские припасы и потерять случайное количество здоровья: от ##32## до ##48##. Если вам \"повезет\" с дополнительным шансом в ##10%##, вы получите негативный джекпот и утроите потерянное здоровье.\nНаконец, есть ##15%## шанс, что навык ничего не сделает, но уйдёт на кулдаун.\nРадиус подбора боеприпасов увеличен на ##50%##.\nПометка: иконка перков мода Gilza покажет если навык на кулдауне (ярко-белый), если эффект был положительным (зелёный) или отрицательным (красный), и если эффект снова доступен (бледно-белый). При получении джекпота иконка будет мигать.",
+					menu_deck23_9_grinder_desc = "Нанесение урона противнику добавляет вам эффект восстанавливающий здоровье. Данный эффект восстанавливает ##2## единицы здоровья каждые ##0.3## секунды в течение ##3## секунд.\n\nВы можете иметь несколько эффектов восстанавливающих здоровье, но вы не можете добавлять новый эффект чаще чем один раз за ##1.5## секунды.\nНавык работает только с Костюмом-Двойкой или Лёгким Баллистическим Бронежилетом.",
+					menu_deck23_9_yakuza_desc = "Чем ниже ваше здоровье, тем быстрее вы передвигаетесь. Эффект активируется только когда ваше здоровье ниже ##50%##. Максимальный бонус к скорости передвижения равен ##20%##.\n\nКогда ваше здоровье ниже ##50%## вы получаете иммунитет к эффекту подавления. Пометка: когда в вас стреляют, вне зависимости от того попали по вам или нет, на вас накладывается эффект подавления. Если вас подавили, ваш таймер восставновления брони сбрасывается до максимального значения, и сверху накладывается ##1## секунда от эффекта подавления. Эта секунда не уменьшаема навыками влияющими на скорость восставновления брони. Имея иммунитет к данному эффекту, ваш таймер регенерации брони больше не будет сбрасываться если по вам выстрелили, но не попали, а эффект подавления при удачном попадании будет уменьшен с одной секунды до ##0.5##.",
+					menu_deck23_9_expres_desc = "Вы будете накапливать ##8## единиц запасного здоровья за каждого ##1## убитого вами или вашей командой противника при условии, что ваша броня полностью цела.\n\nПосле того как ваша броня полностью сломается, и затем закончит восстанавливаться, вы восполните ваше основное здоровье с помощью накопленного вами запасного здоровья. Вне зависимости от того сколько запасного здоровья было использовано, после восставновления брони его количество всегда будет сброшено до ##0##.\n\nМаксимальное количество запасного здоровья, которое можно накопить, зависит от используемой вами брони, и доступно вам для просмотра в описанях брони.\n\nВаше основное здоровье увеличено на ##10%##.",
+					menu_deck23_9_maniac_desc = "Нанесённый вами урон конвертируются в \"Очки истерии\" в соотношении 1 к 1. Вы не можете получить больше чем ##120## очков истерии за ##1.5## секундный интервал. Максимальное количество очков истерии которое вы можете иметь - ##600##.\n\n\"Очки истерии\"\nЗа каждые ##30## очков истерии вы поглощаете ##1## единицу урона.\n\nЕсли вы не нанесете ни единицы урона в течении ##3## секунд вы потеряете ##20% + 80## очков истерии.\n\nДругие члены команды так же будут получать бонусы от ваших очков истерии.\nОчки истерии разных членов команды не складываются и работают только очки, дающие большую прибавку к урону.",
+					menu_deck23_9_anarchist_desc = "Вместо того, чтобы полностью восстановить броню вне боя, Анархист может делать это постепенно и в самом бою. Чем мощнее ваша броня, тем меньше брони вы восстанавливаете за раз, но чаще.\n\nКогда ваша броня опустится до нуля, вы получите неуязвимость ко всем видам урона на ##2## секунды. Эффект срабатывает один раз в ##40## секунд.\n\nПометка: навыки сокращающие время восстановления брони не работают с данным набором перков.",
+					menu_deck23_9_biker_desc = "Каждое убийство, совершенное вами или вашей командой, может добавить вам 1 Стак Регенерации. Полученный Стак мгновенно восполняет ##5## здоровья и ##5## брони, после чего активирует свой кулдаун в ##4## секунды, по истечении которого Стак исчезает.\n\nМаксимальное количество слотов для Стаков Регенерации - ##4##. Новые Стаки не могут быть получены, если все слоты заняты, или если вы одновременно имеете максимальный уровень здоровья и брони.\n\nЕсли ваш уровень брони не равен нулю, при получении Стака Регенерации активируется эффект Предотвращения Переполнения Стаков длительностью в ##1## секунду.\nВо время действия этого эффекта новые Стаки Регенерации не могут быть получены, если уровень вашей брони выше нуля.",
+					menu_deck23_9_leech_desc = "Открывает и экипирует Ампулу Кровопийцы в слот метательного оружия, активируемую клавишей ##$BTN_ABILITY;##. Ампула длится ##6## секунд, с кулдауном ##60## секунд. Если вы поднимите союзника под действием Ампулы, вы полностью восполните ваше здоровье и броню после окончания эффекта. Если вы упадете при кулдауне Ампулы меньше ##30## секунд, таймер кулдауна увеличится до ##30## секунд.\nАктивация Ампулы восстанавливает ##50%## здоровья, но временно отключает броню. Во время действия, здоровье делится на ##25%## сегменты, и любой полученный урон отнимает сегмент. Если инстанция урона нанесла вам больше 150 урона, вы теряете два сегмента.\nПри потере сегмента(-ов) вы получаете неуязвимость на ##0.5## секунд. Убийство в период неуязвимости восстановит один потерянный сегмент - это не может произойти чаще чем один раз за период неуязвимости. При восстановлении сегмента таким образом, ваши союзники восполнят ##5%## своего здоровья. Каждый дополнительный игрок с набором перков Кровопийца уменьшает данное командное восполнение здоровья на ##25%##.",
+					menu_deck23_9_brawler_desc = "Вы можете получить вплоть до ##3## одновременных эффектов регенерации брони от данной карточки перка. Если у вас нет ни одного эффекта регенерации брони, вы можете активировать его убив врага. Чтобы получить больше одновременных эффектов вам нужно убивать врагов использую оружие ближнего боя или пилу OVE9000.\n\nЭфеект регенерации брони: восполните ##25## очков брони в течении ##6## секунд с \"тиком\" регенрации раз в ##0.75## секунд.\n\nИграя на сложности Смертельный Приговор вы будете восполнять ##50## очков брони вместо ##25## за такой же срок.\n\nПометка: иконка перков мода Gilza покажет количество эффектов регенерации которое вы имеете в виде текста \"1x\" под иконкой.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличина на ##10%##.",
+					menu_deck23_9_junkie = "Под спидами",
+					menu_deck23_9_junkie_desc = "Вы можете иметь вплоть до ##100## стаков адреналина. Быстрое передвижение добавляет адреналин - чем быстрее вы двигаетесь, тем больше стаков вы получаете. Если вы двигаетесь недостаточно быстро ваш адреналин будет уменьшаться.\n\nЗа каждый стак адреналина вы получаете шанс увернуться, вплоть до максимального шанса в ##40%## при ##100## стаках.\n\nЕсли вы будете поддерживать ##90## и более адреналина дольше чем ##4## секунды вы обессилете. Обессилее полностью исчерпывает вашу выносливость и некоторую часть ваших стаков адреналина.\n\nВаша броня теперь может восстанавливаться только когда вы полностью неподвижны.\n\nПометка: иконка перков мода Gilza покажет количество стаков адреналина, если ваш уровень адреналина слишком высок (красный) и если вы обессилите (фиолетовый).",
+					menu_deck23_9_guardian = "Страж",
+					menu_deck23_9_guardian_desc = "Ваша скорость передвижения уменьшена на ##20%##.\nВремя взаимодействия с любыми предметами, кроме пейджеров и окозания помощи напарникам, замедлены на ##50%##.\n\nВы получаете возможность создать личную оборонную позицию, если вы будете неподвижно стоять в течении ##5## секунд. Данная позиция имеет ##3м## радиус. Если вы будете находиться вне зоны вашей позиции дольше ##8## секунд, позиция будет удалена. Вам придется подождать еще ##8## секунд, перед тем как вы сможете создать новую позицию.\n\nПока вы стоите внутри вашей оборонной позиции, вы восполняете ##20## единиц здоровья раз в ##2## секунды.\n\nПометка: иконка перков мода Gilza покажет если вы в данный момент внутри вашей оборонной позиции (яркий белый), и если ваша оборонная позиция существует, но вы вне ее пределов (тусклый белый).",
 					-- short descs
-					menu_deck23_7_short = "When your health gets below ##50%## you will be immune to health damage for ##2## seconds. This cannot occur more than once every ##20## seconds.",
+					menu_deck23_3_short = "Попадания в голову восполняют здоровье.",
+					menu_deck23_7_short = "При получении урона, снижающего здоровье ниже ##50%##, вы получаете иммунитет к урону.",
 				})
 			end
 			Copycat_str()
@@ -1131,10 +1133,10 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					menu_deck_brawler9 = "Кровожадный кевлар",
 					menu_deck_brawler9_desc = "Вы можете получить вплоть до ##3## одновременных эффектов регенерации брони от данной карточки перка. Если у вас нет ни одного эффекта регенерации брони, вы можете активировать его убив врага. Чтобы получить больше одновременных эффектов вам нужно убивать врагов использую оружие ближнего боя или пилу OVE9000.\n\nЭфеект регенерации брони: восполните ##25## очков брони в течении ##6## секунд с \"тиком\" регенрации раз в ##0.75## секунд.\n\nИграя на сложности Смертельный Приговор вы будете восполнять ##50## очков брони вместо ##25## за такой же срок.\n\nПометка: иконка перков мода Gilza покажет количество эффектов регенерации которое вы имеете в виде текста \"1x\" под иконкой.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличина на ##10%##.",
 					-- short descs
-					menu_deck_brawler1_desc_short = "Ваш запас и подбираемое количество боеприпасов уменьшены на ##80%##. Ваш второй и каждый последующий удар в ближнем бою с перерывом не более чем в ##4## секунды, нанесёт на ##100%## больше урона от базового урона оружия. Время восстановления брони замедлено на ##350%##. Ваша броня получает сопротивление к пулевому урону.",
-					menu_deck_brawler3_desc_short = "Ваша броня получает дополнительное сопротивление к пулевому урону и ее штраф к скорости передвижения уменьшен.",
-					menu_deck_brawler5_desc_short = "Ваша броня получает дополнительное сопротивление к пулевому урону ее штраф к скорости передвижения уменьшен еще сильнее, и она получает сопротивление бронебойному урону. Убийства в ближнем бою восстанавливают выносливость.",
-					menu_deck_brawler7_desc_short = "Вероятность того что по вам начнут стрелять когда вы находитесь рядом с союзниками повышена. Пока ваше здоровье меньше 50%, враги будут наносить меньше урона по вам, в зависимости от количество союзников поблизости.",
+					menu_deck_brawler1_desc_short = "Ваш запас и подбираемое количество боеприпасов уменьшены. Ваш второй и каждый последующий удар в ближнем бою, нанесёт больше урона. Ваша броня получает сопротивление к пулевому урону.",
+					menu_deck_brawler3_desc_short = "Сопротивление к пулевому урону увеличено и штраф к скорости передвижения в броне уменьшен.",
+					menu_deck_brawler5_desc_short = "Сопротивление к пулевому урону увеличено и штраф к скорости передвижения в броне уменьшен. Броня получает иммунитет к бронебойному урону.",
+					menu_deck_brawler7_desc_short = "Пока ваше здоровье меньше ##50%##, враги будут наносить меньше урона по вам, в зависимости от количество союзников поблизости.",
 					menu_deck_brawler9_desc_short = "Убийства в ближнем бою восполняют броню в течении короткого срока.",
 				})
 			end
@@ -1179,10 +1181,10 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					menu_deck_Gilza_guardian_9 = "От обороны до атаки..",
 					menu_deck_Gilza_guardian_9_desc = "Если вы не имеете оборонной позиции, и вы уже можете создать новую позицию, вы можете создать ее убив врага.\n\nПока вы находитесь внутри вашей оборонной позиции вы автоматически подбираете боеприпасы оставленные врагами.*\n\nПока вы находитесь внутри своей оборонной позиции вы не можете получить больше чем ##120## урона за попадание, но вы так же не можете получить меньше чем ##60## урона за попадание.\nПока вы находитесь вне своей оборонной позиции вы не можете получить больше чем ##160## урона за попадание, но вы так же не можете получить меньше чем ##80## урона за попадание.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличина на ##10%##.\n\n*Gilza: из-за того как данный навык работает, может пройти вплоть до 3 секунд (зависит от пинга), перед тем как вы подберете патроны, будучи клиентом лобби.",
 					-- short descs
-					menu_deck_Gilza_guardian_1_desc_short = "Ваша скорость передвижения и взаимодействия с предметами уменьшена. Вы теряете всю броню. Вы можете создать оборонительную позицию которая восполняет важе здоровье.",
-					menu_deck_Gilza_guardian_3_desc_short = "Проходящий по вам урон теперь будет увеличиваться если он слишком мал и уменьшаться если он слишком велик, насколько конкретно зависит от того внутри вы своей оборонительной позиции или нет. Вы получаете здоровье, и увеличенную скорость регенерации здоровься будучи в позиции.",
-					menu_deck_Gilza_guardian_5_desc_short = "Вы получаете больше здоровья, регенерации здоровья, и регенерация здоровья за убийства.",
-					menu_deck_Gilza_guardian_7_desc_short = "Вы можете автоматически отражать нанесеный по вам урон, шансы меняются в зависимости от вашей брони.",
+					menu_deck_Gilza_guardian_1_desc_short = "Ваша скорость передвижения и взаимодействия с предметами уменьшена. Вы теряете всю броню. Вы можете создать оборонную позицию восполняющую ваше здоровье.",
+					menu_deck_Gilza_guardian_3_desc_short = "Проходящий по вам урон теперь будет увеличиваться если он слишком мал и уменьшаться если он слишком велик. Вы получаете здоровье, и увеличенную скорость регенерации здоровься.",
+					menu_deck_Gilza_guardian_5_desc_short = "Вы получаете больше здоровья, регенерации здоровья, и регенерацию здоровья за убийства.",
+					menu_deck_Gilza_guardian_7_desc_short = "Вы можете автоматически отражать нанесеный по вам урон.",
 					menu_deck_Gilza_guardian_9_desc_short = "Вы автоматически подбираете боезапас со своих убийств. Вы получаете меньше урона.",
 				})
 			end
@@ -1525,19 +1527,125 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		-- strings that have either incorrect or inaccurate information, or use different-from-the-rest terminology.
 		local function Additional_fix_strings()
 			LocalizationManager:add_localized_strings({
+				-- SKILLS
 				menu_tea_time_beta_desc = "БАЗОВЫЙ: ##$basic;##\nУвеличивает скорость для установки аптечек первой помощи и медицинских сумок на ##50%##.\n\nПРО: ##$pro;##\nПосле использования вашей аптечки первой помощи или медицинской сумки, вы получаете ##10%## сопротивления урону в течении ##120## секунд.\n\nДанный навык распространяется на членов вашей команды если они воспользуются вашей аптечкой первой помощи или медицинской сумкой.",
 				menu_fast_learner_beta_desc = "БАЗОВЫЙ: ##$basic;##\nНапарники, поднятые вами, получают ##30%## сопротивления урону в течение ##5## секунд.\n\nПРО: ##$pro;##\nНапарники, поднятые вами, получают ещё ##50%## сопротивления урону.",
 				menu_tea_cookies_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВы теперь можете взять с собой ##7## дополнительных аптечек первой помощи.\n\nПРО: ##$pro;##\nВы теперь можете взять с собой еще ##3## дополнительных аптечек первой помощи.\n\nПосле установки, аптечки первой помощи будут автоматически использоваться, если игрок будет повален в ##5## метровом радиусе от них, предотвращая падение. Эффект может срабатывать только раз в ##20## секунд, но отсчитывается он отдельно для каждого игрока.",
 				menu_medic_2x_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВы теперь можете взять с собой ##2## медицинских сумки вместо одной.\n\nПРО: ##$pro;##\nДает вашим медицинским сумкам по ##2## дополнительных использования.",
 				menu_control_freak_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВаша скорость передвижения увеличится на ##10%##, если есть враг, которого вы перевели сражаться на вашей стороне.\n\nВраг, которого вы перевели сражаться на вашей стороне, получает ##45%## сопротивления урону.\n\nПРО: ##$pro;##\nВаше здоровье увеличится на ##30%##, если есть враг, которого вы перевели сражаться на вашей стороне.\n\nВраг, которого вы перевели сражаться на вашей стороне, получает еще ##54%## сопротивления урону.",
 				menu_black_marketeer_beta = "Захватчик заложников",
+				menu_black_marketeer_beta_desc = "БАЗОВЫЙ: ##$basic;##\nЕсли у вас есть как минимум один заложник или переведённый на вашу сторону полицейский, то вы будете восполнять ##1.5%## здоровья каждые ##5## секунд.\n\nПРО: ##$pro;##\nЕсли у вас есть как минимум один заложник или переведённый на вашу сторону полицейский, то вы будете восполнять ##4.5%## здоровья каждые ##5## секунд.",
 				menu_stable_shot_beta = "Стабильный стрелок",
 				menu_ammo_reservoir_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПосле взаимодействия с установленной вами сумки с патронами, вы или ваша команда можете стрелять из своего оружия не расходуя боеприпасы в течение ##5## или меньше секунд. Чем больше амуниции вы восстановите из сумки, тем дольше будет эффект непрерывной стрельбы.\n\nПРО: ##$pro;##\nМаксимальная продолжительность эффекта увеличена до ##15## секунд.\n\nПометка: Если взаимодействие с сумкой у которой есть данный эффект полностью ее расходует, данный эффект будет наложен на игрока в течении максимальной возможной продолжительности умноженой на ##4##.",
 				menu_drill_expert_beta = "Майор дрель",
 				menu_drill_expert_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает эффективность ваших пил и дрелей, делая их на ##15%## быстрее.\n\nПРО: ##$pro;##\nУвеличивает эффективность ваших пил и дрелей на ещё ##15%##.\n\nПометка: действие навыка не распространяется на пилу OVE9000.",
 				menu_akimbo_skill_beta_desc = "БАЗОВЫЙ: ##$basic;##\nШтраф стабильности парного оружия снижен на ##8##.\n\nПРО: ##$pro;##\nШтраф стабильности парного оружия снижен на ##8##.\nКоличество переносимых боеприпасов для парного оружия увеличено на ##$multipro4;##.\n\nВнимание: количество дополнительных патронов для парного оружия от карточка перка \"Амбидекстрия\" и навыка \"Парное оружие\" суммируется.",
 				menu_frenzy_desc = "БАЗОВЫЙ: ##$basic;##\nТеперь у вас только ##30%## от максимального запаса здоровья и вы не сможете восполнить его выше этой отметки. Вы получаете ##10%## сопротивления урону.\n\nНавыки восполняеющие ваше здоровье восполняют на ##75%## меньше здоровья.\n\nПРО: ##$pro;##\nВаше сопротивление урону от данного навыка теперь равно ##25%##. Навыки восполняеющие ваше здоровье теперь восполняют здоровье в полной силе.",
-				menu_deck1_1_desc = "Члены вашей команды получают на ##8%## меньше урона.\n\nЭффект поглощения урона будет увеличен для вас в два раза, если уровень вашего здоровья упал ниже отметки в ##50%##.",
+				-- PERKS
+				menu_specialization_tier = "Карта",
+				menu_deck1_1_desc = "Вы и члены вашей команды получаете ##8%## сопротивления урону.\n\nЭффект сопротивления урону будет увеличен для вас в два раза, если уровень вашего здоровья ниже ##50%##.",
+				menu_deck1_1_short = "Вы и члены вашей команды получаете ##8%## сопротивления урону, этот бонус удвоен для вас, если уровень вашего здоровья ниже ##50%##.",
+				menu_deck1_5 = "Стая волков",
+				menu_deck1_9_short = "Вы и ваша команда получаете ##6%## здоровья и ##12%## выносливости за каждого взятого вами заложника, вплоть до ##4##. Если у вас есть заложник, то все члены команды получают ##8%## сопротивления урону. Пометка: Все навыки набора перков распространяющиеся на напарников, не складываются сами с собой.",
+				menu_deck2_1_desc = "Ваше здоровье увеличено на ##10%##.",
+				menu_deck2_3_desc = "Повышает вероятность того, что по вам начнут стрелять, когда вы будете рядом с напарниками на ##15%##.\n\nВаше здоровье увеличено еще на ##10%##.",
+				menu_deck3_9_desc = "Прочность брони увелчится еще на ##5%##.\n\nБроня всех членов команды, включая вас, восстанавливается быстрее на ##10%##.\n\nПометка: Навыки, распространяющие своё действие на напарников, не складываются.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
+				menu_deck3_9_short = "Прочность брони увелчится еще на ##5%##. Броня всех членов команды, включая вас, восстанавливается быстрее на ##10%##. Пометка: Навыки, распространяющие своё действие на напарников, не складываются.",
+				menu_deck4_5_desc = "Шанс увернуться увеличен еще на ##15%##.",
+				menu_deck4_5_short = "Шанс увернуться увеличен еще на ##15%##.",
+				menu_deck4_7_desc = "Шанс увернуться увеличен еще на ##15%##.",
+				menu_deck4_7_short = "Шанс увернуться увеличен еще на ##15%##.",
+				menu_deck8_9_desc = "Вы восстановите ##20%## здоровья, если ударите врага оружием ближнего боя. Навык срабатывает только один раз за ##10## секунд.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
+				menu_deck8_9_short = "Вы восстановите ##20%## здоровья, если ударите врага оружием ближнего боя. Навык срабатывает только один раз за ##10## секунд.",
+				menu_deck9_3 = "Напряженность",
+				menu_deck9_5 = "Прямое Попадание",
+				menu_deck9_7 = "Передозировка",
+				menu_deck9_9 = "В Открытую",
+				menu_deck9_3_desc = "При убийстве противника вы восполните ##30## единиц брони.\n\nПерк не срабатывает чаще чем раз за ##1## секунду.\n\nПрочность брони увеличена на ##10%##.",
+				menu_st_spec_10 = "Азартник",
+				menu_st_spec_10_desc = "Чтобы преуспеть в бою, требуется опыт, сноровка и чуть больше, чем просто удача. Некоторым присуща лишь удача.\n\nНа самом деле удача обманчива. В древней Греции удачу считали благословлением богов. В действительности это не так. Удача существует, но её нужно заслужить. Чтобы достичь самой большой вероятности успеха, требуется подготовка и тщательное продумывание. Лучше следить за картами, чем надеяться на Фортуну.\n\nНабор перков \"Азартник\" - это набор класса поддержки. С любым напарником можно выиграть, но только с азартником можно выиграть по-крупному.",
+				menu_deck11_1_desc = "Нанесение урона противнику добавляет вам эффект восстанавливающий здоровье. Данный эффект восстанавливает ##1## единицу здоровья каждые ##0.3## секунды в течение ##3## секунд.\n\nВы можете иметь несколько эффектов восстанавливающих здоровье, но вы не можете добавлять новый эффект чаще чем один раз за ##1.5## секунды.\nНавык работает только с Костюмом-Двойкой или Лёгким Баллистическим Бронежилетом.",
+				menu_deck11_1_short = "Нанесение урона противнику добавляет вам эффект восстанавливающий здоровье. Навык работает только с Костюмом-Двойкой или Лёгким Баллистическим Бронежилетом.",
+				menu_deck11_3_desc = "Эффект восстанавливающий здоровье теперь восстанавливает ##2## единицы здоровья каждые ##0.3## секунды в течение ##3## секунд.\n\nВаше здоровье увеличено на ##20%##.",
+				menu_deck11_3_short = "Вы восстанавливаете больше здоровья. Ваше здоровье увеличено.",
+				menu_deck11_5_short = "Вы восстанавливаете больше здоровья. Вероятность пробить вражескую нательную броню увеличена.",
+				menu_deck11_7_desc = "Эффект восстанавливающий здоровье теперь восстанавливает ##4## единицы здоровья каждые ##0.3## секунды в течение ##3## секунд.\n\nВаше здоровье увеличено еще на ##20%##.",
+				menu_deck11_7_short = "Вы восстанавливаете больше здоровья. Ваше здоровье увеличено.",
+				menu_deck12_3_desc = "Чем ниже ваше здоровье, тем быстрее вы передвигаетесь. Эффект активируется только когда ваше здоровье ниже ##25%##. Максимальный бонус к скорости передвижения равен ##20%##.",
+				menu_deck12_3_short = "Чем ниже ваше здоровье, тем быстрее вы передвигаетесь.",
+				menu_deck12_5_desc = "Максимальный бонус к скорости восстанавления брони при низком уровне здоровья увеличен на ##20%##.",
+				menu_deck13_1 = "На гребне волны",
+				menu_deck13_1_desc = "Вы будете накапливать ##4## единицы запасного здоровья за каждого ##1## убитого вами или вашей командой противника при условии, что ваша броня полностью цела.\n\nПосле того как ваша броня полностью сломается, и затем закончит восстанавливаться, вы восполните ваше основное здоровье с помощью накопленного вами запасного здоровья. Вне зависимости от того сколько запасного здоровья было использовано, после восставновления брони его количество всегда будет сброшено до ##0##.\n\nМаксимальное количество запасного здоровья, которое можно накопить, зависит от используемой вами брони, и доступно вам для просмотра в описанях брони.",
+				menu_deck13_1_short = "Вы можете накапливать запасное здоровья за каждого убитого вами или вашей командой противника. После того как ваша броня полностью сломается, и затем закончит восстанавливаться, вы восполните ваше основное здоровье с помощью накопленного вами запасного здоровья.",
+				menu_deck13_3_desc = "Количество запасного здоровья, получаемого за убийство противников, увеличено на ##4##.\n\nВаше основное здоровье увеличено на ##10%##.",
+				menu_deck13_3_short = "Количество запасного здоровья, получаемого за убийство противников, увеличено. Ваше здоровье увеличено.",
+				menu_deck14_7_desc = "Вы и ваша команды теперь получаете ##1## поглощение урона за каждые ##25## очков истерии вместо ##30##.",
+				menu_deck16_9_short = "Каждые ##10%## потерянной брони, уменьшат ##4## секундную задержку восстановления на ##0.1## секунд.",
+				menu_deck18_3_desc = "Когда вы получаете урон, вы получаете прибавку к вашему шансу увернуться в размере ##20%##. Данный эффект сбросится в случае удачного уворота и перестанет работать в течении следующих ##4## секунд.",
+				menu_deck18_3_short = "Когда вы получаете урон, вы получаете прибавку к вашему шансу увернуться в размере ##20%##. Данный эффект сбросится в случае удачного уворота и перестанет работать в течении следующих ##4## секунд.",
+				menu_deck18_9_short = "Все бонусы от вашего набора перков будут увеличены на ##100%## пока вы стоите в дымовой завесе. Если кто-то из ваших напарников стоит в дыму, они получают ##10%## к шансу увернуться.",
+				menu_deck19_5_desc = "Если вы не получали урона в течение ##4## секунд, весь оставшийся периодический урон будет отменён.",
+				menu_deck20_3_desc = "Ваше здоровье увеличено на ##20%##.",
+				menu_deck20_3_short = "Ваше здоровье увеличено на ##20%##.",
+				menu_deck20_7_desc = "Ваше здоровье увеличено на ##20%##.",
+				menu_deck20_7_short = "Ваше здоровье увеличено на ##20%##.",
+				menu_deck20_9_desc = "Каждый убитый враг вашим выбранным напарником сокращает кулдаун \"Парилки\" на ##2## секунды до тех пор, пока вы в паре.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
+				menu_deck20_9_short = "Каждый враг убитый вашим выбранным напарником сокращает кулдаун \"Парилки\" на ##2## секунды.",
+				menu_deck21_3_desc = "Ваше здоровье увеличено на ##20%##.",
+				menu_deck21_9_desc = "Пока Звуковая петля активна, члены вашей команды будут восполнять по ##10## единиц здоровья за каждое убийство.\nВаш шанс уворота увеличен на дополнительные ##15%##.\n\nБонус завершения ряда: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
+				menu_deck21_9_short = "Пока Звуковая петля активна, члены вашей команды будут восполнять по ##10## единиц здоровья за каждое убийство. Ваш шанс уворота увеличен на дополнительные ##15%##.",
+				menu_deck22_3_short = "Вы не можете упасть во время действия Ампулы. Ваше здоровье увеличено.",
+				menu_deck22_7_short = "Ваше здоровье увеличено.",
+				-- COPYCAT
+				menu_st_spec_23 = "КопиКэт",
+				menu_st_spec_23_desc = "Обладая эйдетической памятью и фотографическими рефлексами, КопиКэт — это физический феномен. Способность предугадывать движения сделала вас невероятно быстрым, вплоть до возможности уклоняться и даже отражать пули. Вы тщательно изучили другие наборы перков и теперь можете копировать их базовые способности, усиливая свои собственные. Комбинируйте техники, чтобы создать стиль, одновременно повторяющий и уникальный. Если другие обвинят вас в воровстве, напомните им, что подражание — это наивысшая форма лести.",
+				menu_deck23_1 = "Тактическая перезарядка (Выберите Буст)",
+				menu_pxp4_deck23_1_short = "##10## убийств автоматически перезаряжает оружие в другом слоте.",
+				menu_deck23_3 = "Игры разума (Выберите Буст)",
+				menu_deck23_5 = "Это твоя пуля? (Выберите Буст)",
+				menu_deck23_5_desc = "При удачном увороте, пуля отрикошетит во врага который выстрелил по вам.",
+				menu_deck23_5_short = "При удачном увороте, пуля отрикошетит во врага.",
+				menu_deck23_7 = "Период милости (Выберите Буст)",
+				-- bullshit with boost cards
+				menu_deck23_1_1 = "Процветающий",
+				menu_deck23_3_1 = "Процветающий",
+				menu_deck23_5_1 = "Процветающий",
+				menu_deck23_7_1 = "Процветающий",
+				menu_deck23_1_1_short = "Здоровье увеличено на ##15%##",
+				menu_deck23_3_1_short = "Здоровье увеличено на ##15%##",
+				menu_deck23_5_1_short = "Здоровье увеличено на ##15%##",
+				menu_deck23_7_1_short = "Здоровье увеличено на ##15%##",
+				menu_deck23_1_2 = "Ужесточённый",
+				menu_deck23_3_2 = "Ужесточённый",
+				menu_deck23_5_2 = "Ужесточённый",
+				menu_deck23_7_2 = "Ужесточённый",
+				menu_deck23_1_2_desc = "Вы получаете ##5%## к прочности брони.",
+				menu_deck23_3_2_desc = "Вы получаете ##5%## к прочности брони.",
+				menu_deck23_5_2_desc = "Вы получаете ##5%## к прочности брони.",
+				menu_deck23_7_2_desc = "Вы получаете ##5%## к прочности брони.",
+				menu_deck23_1_2_short = "Прочность брони увеличена на ##5%##",
+				menu_deck23_3_2_short = "Прочность брони увеличена на ##5%##",
+				menu_deck23_5_2_short = "Прочность брони увеличена на ##5%##",
+				menu_deck23_7_2_short = "Прочность брони увеличена на ##5%##",
+				menu_deck23_1_3 = "Кошачий рефлекс",
+				menu_deck23_3_3 = "Кошачий рефлекс",
+				menu_deck23_5_3 = "Кошачий рефлекс",
+				menu_deck23_7_3 = "Кошачий рефлекс",
+				menu_deck23_1_3_desc = "Ваш шанса уворота увеличен на ##5%##.",
+				menu_deck23_3_3_desc = "Ваш шанса уворота увеличен на ##5%##.",
+				menu_deck23_5_3_desc = "Ваш шанса уворота увеличен на ##5%##.",
+				menu_deck23_7_3_desc = "Ваш шанса уворота увеличен на ##5%##.",
+				menu_deck23_1_3_short = "Шанса уворота увеличен на ##5%##",
+				menu_deck23_3_3_short = "Шанса уворота увеличен на ##5%##",
+				menu_deck23_5_3_short = "Шанса уворота увеличен на ##5%##",
+				menu_deck23_7_3_short = "Шанса уворота увеличен на ##5%##",
+				menu_deck23_bonus_speed = "Грузоподъемный",
+				menu_deck23_1_4_short = "Передвижение в присяди или с сумкой, и боеприпасы увеличены.",
+				menu_deck23_3_4_short = "Передвижение в присяди или с сумкой, и боеприпасы увеличены.",
+				menu_deck23_5_4_short = "Передвижение в присяди или с сумкой, и боеприпасы увеличены.",
+				menu_deck23_7_4_short = "Передвижение в присяди или с сумкой, и боеприпасы увеличены.",
+				menu_deck23_9_short = "Копируете: $CLONED_CARD;.",
+				menu_deck23_9_desc = "Бонус завершения: Вероятность получить предмет высокого качества после завершения контракта увеличена на ##10%##.",
 			})
 		end
 		Additional_fix_strings()
@@ -1548,7 +1656,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 		loc:load_localization_file(Gilza._path .. 'menus/lang/Gilza_en.txt', false)
 	elseif chosen_language == "ru" then
 		loc:load_localization_file(Gilza._path .. 'menus/lang/Gilza_ru.txt', false)
-		--AddRussianLoc()
+		AddRussianLoc()
 	end
 
 end)
