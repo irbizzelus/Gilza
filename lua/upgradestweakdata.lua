@@ -201,6 +201,11 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 		
 		local function New_Technician_Skills()
 			---- ENGINEER
+			-- new gun oil skill
+			self.values.player.ar_smg_lmg_rof_increase = {
+				0.95,
+				0.75
+			}
 			-- sentry guns tower defense - less sentries
 			self.values.sentry_gun.quantity = {
 				3,
@@ -620,7 +625,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				-- new "death dance" combo skill
 				self.values.temporary.death_dance_combo_invulnerability = {
 					{
-						6, -- base duration
+						5, -- base duration
 						20 -- CD. begins at the same time as the effect
 					}
 				}
@@ -1082,8 +1087,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				}
 				self.values.player.damage_resist_teammates_brawler = {
 					{
-						absorption = 0.25,
-						resist = 0.965
+						absorption = 0.35,
+						resist = 0.975
 					}
 				}
 			end
@@ -1644,6 +1649,25 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 	
 	---- TECHNICIAN
 	local function New_Technician_definitions()
+		-- new gun oil skill
+		self.definitions.player_ar_smg_lmg_rof_increase_1 = {
+			name_id = "menu_player_ar_smg_lmg_rof_increase_1",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "ar_smg_lmg_rof_increase",
+				category = "player"
+			}
+		}
+		self.definitions.player_ar_smg_lmg_rof_increase_2 = {
+			name_id = "menu_player_ar_smg_lmg_rof_increase_2",
+			category = "feature",
+			upgrade = {
+				value = 2,
+				upgrade = "ar_smg_lmg_rof_increase",
+				category = "player"
+			}
+		}
 		-- more drill repair speed for kickstarter aced
 		self.definitions.player_drill_fix_interaction_speed_multiplier_2 = {
 			name_id = "menu_player_drill_fix_interaction_speed_multiplier_2",

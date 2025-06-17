@@ -814,7 +814,7 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "calculate_ammo_max_per_clip", func
 	local added = 0
 	local weapon_tweak_data = self:weapon_tweak_data()
 
-	if self:is_category("shotgun") and tweak_data.weapon[self._name_id].has_magazine then
+	if self:is_category("shotgun") and weapon_tweak_data.has_magazine then
 		added = managers.player:upgrade_value("shotgun", "magazine_capacity_inc", 0)
 
 		if self:is_category("akimbo") then
@@ -843,14 +843,14 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "calculate_ammo_max_per_clip", func
 		added = added + to_add
 	end
 
-	local ammo = tweak_data.weapon[self._name_id].CLIP_AMMO_MAX + added
+	local ammo = weapon_tweak_data.CLIP_AMMO_MAX + added
 	ammo = ammo + managers.player:upgrade_value(self._name_id, "clip_ammo_increase")
 
 	if not self:upgrade_blocked("weapon", "clip_ammo_increase") then
 		ammo = ammo + managers.player:upgrade_value("weapon", "clip_ammo_increase", 0)
 	end
 
-	for _, category in ipairs(tweak_data.weapon[self._name_id].categories) do
+	for _, category in ipairs(weapon_tweak_data.categories) do
 		if not self:upgrade_blocked(category, "clip_ammo_increase") then
 			ammo = ammo + managers.player:upgrade_value(category, "clip_ammo_increase", 0)
 		end

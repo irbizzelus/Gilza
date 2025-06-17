@@ -205,3 +205,36 @@ Hooks:OverrideFunction(BlackMarketManager, "recoil_addend", function (self, name
 
 	return addend
 end)
+
+Hooks:OverrideFunction(BlackMarketManager, "fire_rate_multiplier", function (self, name, categories, silencer, detection_risk, current_state, blueprint)
+	local multiplier = 1
+	multiplier = multiplier + 1 - managers.player:upgrade_value(name, "fire_rate_multiplier", 1)
+	multiplier = multiplier + 1 - managers.player:upgrade_value("weapon", "fire_rate_multiplier", 1)
+
+	for _, category in ipairs(categories) do
+		multiplier = multiplier + 1 - managers.player:upgrade_value(category, "fire_rate_multiplier", 1)
+	end
+	
+	-- new gun oil skill - due to the fact that this is a multiplier, we do some funny fuckery to make the bonus always the same
+	-- and we do it as a mul since making flat number increases would be annoying. this func allready supports skills UI, so might as well just make it work
+	local has_skill_value = managers.player:upgrade_value("player", "ar_smg_lmg_rof_increase", 0)
+	if has_skill_value ~= 0 then
+		for _, category in ipairs(categories) do
+			if category == "assault_rifle" or category == "smg" or category == "lmg" then
+				-- get weapon rof bonus based on it's default rof
+				-- this effectively makes all weapons have identical ROF bouns, favouring lower ROF weapons as a result
+				local wpn_rof = 60 / tweak_data.weapon[name].fire_mode_data.fire_rate
+				local rof_bonus = 1 - has_skill_value
+				if wpn_rof ~= 600 then
+					local rof_dif_ratio = (600 / wpn_rof)
+					rof_bonus = rof_bonus * rof_dif_ratio
+				end
+				
+				multiplier = multiplier * (1 - rof_bonus)
+				break
+			end
+		end
+	end
+	
+	return self:_convert_add_to_mul(multiplier)
+end)

@@ -335,7 +335,11 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_on_killshot", function(self,
 		-- as a result we get 8 "ticks" every 0.75s
 		local total_regen = 2.5 -- 25 hp points for <= DW
 		if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
-			total_regen = 5.0
+			if managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
+				total_regen = 5.0
+			else
+				total_regen = 10.0
+			end
 		end
 		local regen_per_tick = total_regen / 8
 		if self._gilza_brawler_regen_count < 3 then
@@ -944,7 +948,7 @@ Hooks:OverrideFunction(PlayerManager, "damage_absorption", function (self)
 			end
 			
 			if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
-				brawler_absorb = brawler_absorb * 4
+				brawler_absorb = brawler_absorb * 2
 			end
 			
 			brawler_absorb = brawler_absorb * self._gilza_brawler_teammates_nearby
@@ -1153,7 +1157,7 @@ function PlayerManager:Gilza_new_hitman_killshot_handler(killed_unit, variant, h
 		reset_combo()
 	end
 	
-	if self._gilza_death_dance == 5 or (self._gilza_death_dance == 6 and badass_kill) then
+	if self._gilza_death_dance == 4 or (self._gilza_death_dance == 5 and badass_kill) then
 		if managers.player:has_inactivate_temporary_upgrade("temporary", "death_dance_combo_invulnerability") then
 			managers.player:activate_temporary_upgrade("temporary", "death_dance_combo_invulnerability")
 			duration_mul = 1
@@ -1248,7 +1252,11 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 				end
 			else
 				managers.player._Gilza_new_hitman_combo_counter_GUI:set_text(tostring(self._gilza_death_dance).."x")
-				managers.player._Gilza_new_hitman_combo_counter_GUI:set_color(Color(1, 1, 1, 1))
+				if self._gilza_death_dance > 0 then
+					managers.player._Gilza_new_hitman_combo_counter_GUI:set_color(Color(1, 1, 1, 0))
+				else
+					managers.player._Gilza_new_hitman_combo_counter_GUI:set_color(Color(1, 1, 1, 1))
+				end
 			end
 			managers.player._Gilza_new_hitman_combo_counter_GUI:set_visible(true)
 		end
@@ -1260,6 +1268,7 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 		
 		if icon then
 			if managers.player:has_activate_temporary_upgrade("temporary", "player_bounty_hunter") then
+				icon:set_visible(true)
 				icon:set_color(Color(1, 0.06, 0.65, 0.27))
 			else
 				if self._gilza_hitman_has_active_bounty then
@@ -1280,6 +1289,7 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 						icon:set_color(Color(0.9, 1, 1, 1))
 					end
 				else
+					icon:set_visible(true)
 					icon:set_color(Color(0.2, 1, 1, 1))
 				end
 			end
@@ -1367,6 +1377,11 @@ function PlayerManager:Gilza_brawler_recursive_updater()
 		if self._Gilza_new_brawler_regen_counter_GUI and self._gilza_brawler_regen_count and self._gilza_brawler_regen_count >= 0 then
 			self._Gilza_new_brawler_regen_counter_GUI:set_text(tostring(self._gilza_brawler_regen_count).."x")
 			self._Gilza_new_brawler_regen_counter_GUI:set_visible(true)
+			if self._gilza_brawler_regen_count == 0 then
+				self._Gilza_new_brawler_regen_counter_GUI:set_color(Color(1, 1, 0.25, 0.25))
+			else
+				self._Gilza_new_brawler_regen_counter_GUI:set_color(Color(1, 1, 1, 1))
+			end
 		end
 	end
 

@@ -716,6 +716,16 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		self.skills.bandoliers[2].upgrades = { "player_regain_throwable_from_ammo_2", "player_pick_up_ammo_multiplier", "player_pick_up_ammo_multiplier_2"}
 		
 		---- TECHICIAN
+		self.skills.defense_up[1].upgrades = {"sentry_gun_cost_reduction_1", "sentry_gun_cost_reduction_2"}
+		self.skills.defense_up[2].upgrades = {"sentry_gun_armor_multiplier", "sentry_gun_extra_ammo_multiplier_1"}
+		
+		self.skills.sentry_targeting_package[1].upgrades = {"sentry_gun_spread_multiplier","sentry_gun_rot_speed_multiplier"}
+		self.skills.sentry_targeting_package[2].upgrades = {"sentry_gun_shield"}
+		
+		self.skills.eco_sentry[1].upgrades = {"player_ar_smg_lmg_rof_increase_1"}
+		self.skills.eco_sentry[2].upgrades = {"player_ar_smg_lmg_rof_increase_2"}
+		self.skills.eco_sentry.icon_xy = {1,7}
+		
 		self.skills.tower_defense[2].upgrades = { "sentry_gun_quantity_2", "sentry_gun_can_revive", "player_sentry_proximity_damage_resist", "player_sentry_kills_refill_ammo" }
 		
 		self.skills.kick_starter[2].upgrades = {"player_drill_melee_hit_restart_chance_1", "player_drill_fix_interaction_speed_multiplier_2"}
