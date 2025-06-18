@@ -93,6 +93,9 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 	if fire_mode and fire_mode ~= "single" then
 		if managers.player:current_state() == "bipod" then
 			-- ignored
+		elseif fire_mode == "volley" then
+			-- buff volley mode, because this firemode is used by mostly inaccurate guns in this mod
+			index = index + 7
 		else
 			index = index - 7
 		end

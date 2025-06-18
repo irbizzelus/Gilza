@@ -66,7 +66,11 @@ Hooks:OverrideFunction(FPCameraPlayerBase, "recoil_kick", function (self, up, do
 				return true
 			end
 		end
-		return true
+		if wpn_base._fire_mode_category == Idstring("single") or wpn_base._fire_mode_category == "single" or wpn_base._fire_mode_category == Idstring("auto") or wpn_base._fire_mode_category == "auto" then
+			return true
+		else
+			return false
+		end
 	end
 	-- if allowed, first 5 bullets have reduced recoil
 	-- this makes short 1-3 round burst feel like they have almost no recoil
