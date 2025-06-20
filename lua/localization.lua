@@ -770,6 +770,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				Gilza_used_limited_fall_damage_immunity_charge = "Lethal fall damage prevented. Remaining charges: ",
 				-- custom attachments tag
 				menu_l_global_value_Gilza = "This is a Gilza Item!",
+				-- VHUD compatibility with burst warning
+				Gilza_vhud_burst_warning_str = "It seems like you have \"Burst Fire\" setting enabled in VanillaHUD. Please disable it for Gilza's burst fire feature to work correctly.\n\nYou can do so in Options->Mod options->VanillaHUD Plus Settings->Equipment Tweaks->Enable Burst Fire.",
 			})
 		end
 		UI_strings()
@@ -1530,6 +1532,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				Gilza_used_limited_fall_damage_immunity_charge = "Смертельный урон от падения предотвращен. Кол-во зарядов: ",
 				-- custom attachments tag
 				menu_l_global_value_Gilza = "Это Предмет Мода Gilza!",
+				-- VHUD compatibility with burst warning
+				Gilza_vhud_burst_warning_str = "У вас включена опция \"Стрельба Очередями\" в моде VanillaHUD. Пожалуйста, выключите данную опцию дабы стрельба очередями мода Gilza работала без проблем.\n\nВы можете сделать это перейдя в Настройки->Настройки модов->VanillaHUD Plus Настройки->Настройки снаряжения->Включить стрельбу очередями.",
 			})
 		end
 		UI_strings()

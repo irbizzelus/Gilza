@@ -8,7 +8,7 @@ end)
 -- Completely removes camera recoil compensation for shotguns, semi-auto weapons, and if recoil is high.
 -- Keep compensation if total recoil is not that high, or we fired a 3 or less round burst that doesnt have high recoil
 Hooks:PostHook(FPCameraPlayerBase, "stop_shooting", "GilzaCameraRecoil_stop", function(self, ...)
-	if (self._Gilza_shot_counter <= 3 and self._recoil_kick.accumulated <= 1.75) or self._recoil_kick.accumulated <= 1.5 then
+	if (self._Gilza_shot_counter <= 3 and self._recoil_kick.accumulated <= 1.25) or self._recoil_kick.accumulated <= 1 then
 		self._recoil_kick.to_reduce = self._recoil_kick.accumulated
 		self._recoil_kick.h.to_reduce = self._recoil_kick.h.accumulated
 	else
@@ -26,14 +26,6 @@ Hooks:PostHook(FPCameraPlayerBase, "stop_shooting", "GilzaCameraRecoil_stop", fu
 		end
 		if wpn_base:is_category("pistol") then
 			if wpn_base._fire_mode_category == Idstring("single") or wpn_base._fire_mode_category == "single" then
-				return true
-			else
-				return false
-			end
-		end
-		if wpn_base:is_category("assault_rifle") then
-			-- this weapon can only be single fire, so we treat it like a sniper rifle in terms of recoil compensation
-			if wpn_base._name_id == "ching" then
 				return true
 			else
 				return false
@@ -66,13 +58,9 @@ Hooks:OverrideFunction(FPCameraPlayerBase, "recoil_kick", function (self, up, do
 				return true
 			end
 		end
-		if wpn_base._fire_mode_category == Idstring("single") or wpn_base._fire_mode_category == "single" or wpn_base._fire_mode_category == Idstring("auto") or wpn_base._fire_mode_category == "auto" then
-			return true
-		else
-			return false
-		end
+		return true
 	end
-	-- if allowed, first 5 bullets have reduced recoil
+	-- if allowed, first 5-10 bullets have reduced recoil
 	-- this makes short 1-3 round burst feel like they have almost no recoil
 	if does_weapon_qualify() then
 		local shot_based_mul = {

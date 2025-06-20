@@ -5,6 +5,17 @@ end
 Hooks:PostHook(MenuManager, "_node_selected", "Gilza_patch_notification", function(self, menu_name, node)
 	if type(node) == "table" and node._parameters.name == "main" then
 		Gilza:changelog_message()
+		if Gilza.VHP_enabled then
+			if VHUDPlus:getSetting({"EQUIPMENT", "ENABLE_BURSTMODE"}, true) then
+				DelayedCalls:Add("Gilza_vhud_burst_warning", 0.3, function()
+					local menu_options = {}
+					menu_options[#menu_options+1] = {text = "OK", is_cancel_button = true}
+					local message = managers.localization:text("Gilza_vhud_burst_warning_str")
+					local menu = QuickMenu:new("Gilza", message, menu_options)
+					menu:Show()
+				end)
+			end
+		end
 	end
 end)
 

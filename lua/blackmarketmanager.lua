@@ -96,6 +96,9 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 		elseif fire_mode == "volley" then
 			-- buff volley mode, because this firemode is used by mostly inaccurate guns in this mod
 			index = index + 7
+		elseif fire_mode == "burst" then
+			-- burst fire mode has slighlty better accuracy. only 1 vanilla weapon has this feature - ms3gl, other weapons gain this mode from gilza's weapon_tweaks
+			index = index - 4
 		else
 			index = index - 7
 		end

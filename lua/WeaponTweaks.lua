@@ -3181,6 +3181,150 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	end
 	setNewRecoil()
 	
+	local function addBURSTFIRE()
+		-- add burst fire to whichever weapons i feel like here
+		-- this can be done with any weapon, even custom, by adding required properties to their tweak_data by whatever means you want
+		
+		-- add burst
+		self.m16.HAS_BURST_AS_THIRD = true
+		-- determine № of rounds per burst. if weapon is akimbo, both guns are fired out in the same fashion, so 3 round burst in the code = 6 round burst in practice in total
+		self.m16.BURST_COUNT = 3
+		-- determine delay between bursts in seconds. delay starts after last shot was fired
+		-- this, for example, specifically takes natural delay after firing 2 shots, instead of just 1, with default ROF, to reduce overall dps by 25% (total delay of 4 shots, after firing 3)
+		self.m16.fire_mode_data.burst_cooldown = self.m16.fire_mode_data.fire_rate * 2
+		-- ROF during the burst. reminder that this is a delay - set as 60/1200 if you want custom ROF of 1200, instead of weapon's vanilla ROF.
+		self.m16.burst = {fire_rate = self.m16.fire_mode_data.fire_rate}
+		
+		self.famas.HAS_BURST_AS_THIRD = true
+		self.famas.BURST_COUNT = 3
+		self.famas.fire_mode_data.burst_cooldown = self.famas.fire_mode_data.fire_rate * 2
+		self.famas.burst = {fire_rate = self.famas.fire_mode_data.fire_rate}
+		
+		self.flint.HAS_BURST_AS_THIRD = true
+		self.flint.BURST_COUNT = 2
+		self.flint.fire_mode_data.burst_cooldown = 60/1200 * 2 -- bootleg an94
+		self.flint.burst = {fire_rate = 60/1200}
+		
+		self.g36.HAS_BURST_AS_THIRD = true
+		self.g36.BURST_COUNT = 2
+		self.g36.fire_mode_data.burst_cooldown = self.g36.fire_mode_data.fire_rate * 1.666
+		self.g36.burst = {fire_rate = self.g36.fire_mode_data.fire_rate}
+		
+		self.komodo.HAS_BURST_AS_THIRD = true
+		self.komodo.BURST_COUNT = 3
+		self.komodo.fire_mode_data.burst_cooldown = self.komodo.fire_mode_data.fire_rate * 2
+		self.komodo.burst = {fire_rate = self.komodo.fire_mode_data.fire_rate}
+		
+		self.g3.HAS_BURST_AS_THIRD = true
+		self.g3.BURST_COUNT = 2
+		self.g3.fire_mode_data.burst_cooldown = self.g3.fire_mode_data.fire_rate * 1.666
+		self.g3.burst = {fire_rate = self.g3.fire_mode_data.fire_rate}
+		
+		self.s552.HAS_BURST_AS_THIRD = true
+		self.s552.BURST_COUNT = 3
+		self.s552.fire_mode_data.burst_cooldown = self.s552.fire_mode_data.fire_rate * 2
+		self.s552.burst = {fire_rate = self.s552.fire_mode_data.fire_rate}
+		
+		self.new_m4.HAS_BURST_AS_THIRD = true
+		self.new_m4.BURST_COUNT = 3
+		self.new_m4.fire_mode_data.burst_cooldown = self.new_m4.fire_mode_data.fire_rate * 2
+		self.new_m4.burst = {fire_rate = self.new_m4.fire_mode_data.fire_rate}
+		
+		self.groza.HAS_BURST_AS_THIRD = true
+		self.groza.BURST_COUNT = 3
+		self.groza.fire_mode_data.burst_cooldown = self.groza.fire_mode_data.fire_rate * 2
+		self.groza.burst = {fire_rate = self.groza.fire_mode_data.fire_rate}
+		
+		self.asval.HAS_BURST_AS_THIRD = true
+		self.asval.BURST_COUNT = 3
+		self.asval.fire_mode_data.burst_cooldown = self.asval.fire_mode_data.fire_rate * 2
+		self.asval.burst = {fire_rate = self.asval.fire_mode_data.fire_rate}
+		
+		self.aug.HAS_BURST_AS_THIRD = true
+		self.aug.BURST_COUNT = 3
+		self.aug.fire_mode_data.burst_cooldown = self.aug.fire_mode_data.fire_rate * 2
+		self.aug.burst = {fire_rate = self.aug.fire_mode_data.fire_rate}
+		
+		self.scar.HAS_BURST_AS_THIRD = true
+		self.scar.BURST_COUNT = 2
+		self.scar.fire_mode_data.burst_cooldown = self.scar.fire_mode_data.fire_rate * 1.666
+		self.scar.burst = {fire_rate = self.scar.fire_mode_data.fire_rate}
+		
+		self.beer.HAS_BURST_AS_THIRD = true
+		self.beer.BURST_COUNT = 3
+		self.beer.fire_mode_data.burst_cooldown = self.beer.fire_mode_data.fire_rate * 2
+		self.beer.burst = {fire_rate = self.beer.fire_mode_data.fire_rate}
+		self.x_beer.HAS_BURST_AS_THIRD = true
+		self.x_beer.BURST_COUNT = 3
+		self.x_beer.fire_mode_data.burst_cooldown = self.x_beer.fire_mode_data.fire_rate * 2
+		self.x_beer.burst = {fire_rate = self.x_beer.fire_mode_data.fire_rate}
+		
+		self.hajk.HAS_BURST_AS_THIRD = true
+		self.hajk.BURST_COUNT = 3
+		self.hajk.fire_mode_data.burst_cooldown = self.hajk.fire_mode_data.fire_rate * 2
+		self.hajk.burst = {fire_rate = self.hajk.fire_mode_data.fire_rate}
+		self.x_hajk.HAS_BURST_AS_THIRD = true
+		self.x_hajk.BURST_COUNT = 3
+		self.x_hajk.fire_mode_data.burst_cooldown = self.x_hajk.fire_mode_data.fire_rate * 2
+		self.x_hajk.burst = {fire_rate = self.x_hajk.fire_mode_data.fire_rate}
+		
+		self.vityaz.HAS_BURST_AS_THIRD = true
+		self.vityaz.BURST_COUNT = 3
+		self.vityaz.fire_mode_data.burst_cooldown = self.vityaz.fire_mode_data.fire_rate * 2
+		self.vityaz.burst = {fire_rate = self.vityaz.fire_mode_data.fire_rate}
+		self.x_vityaz.HAS_BURST_AS_THIRD = true
+		self.x_vityaz.BURST_COUNT = 3
+		self.x_vityaz.fire_mode_data.burst_cooldown = self.x_vityaz.fire_mode_data.fire_rate * 2
+		self.x_vityaz.burst = {fire_rate = self.x_vityaz.fire_mode_data.fire_rate}
+		
+		self.new_mp5.HAS_BURST_AS_THIRD = true
+		self.new_mp5.BURST_COUNT = 3
+		self.new_mp5.fire_mode_data.burst_cooldown = self.new_mp5.fire_mode_data.fire_rate * 2
+		self.new_mp5.burst = {fire_rate = self.new_mp5.fire_mode_data.fire_rate}
+		self.x_mp5.HAS_BURST_AS_THIRD = true
+		self.x_mp5.BURST_COUNT = 3
+		self.x_mp5.fire_mode_data.burst_cooldown = self.x_mp5.fire_mode_data.fire_rate * 2
+		self.x_mp5.burst = {fire_rate = self.x_mp5.fire_mode_data.fire_rate}
+		
+		self.scorpion.HAS_BURST_AS_THIRD = true
+		self.scorpion.BURST_COUNT = 3
+		self.scorpion.fire_mode_data.burst_cooldown = self.scorpion.fire_mode_data.fire_rate * 2
+		self.scorpion.burst = {fire_rate = self.scorpion.fire_mode_data.fire_rate}
+		self.x_scorpion.HAS_BURST_AS_THIRD = true
+		self.x_scorpion.BURST_COUNT = 3
+		self.x_scorpion.fire_mode_data.burst_cooldown = self.x_scorpion.fire_mode_data.fire_rate * 2
+		self.x_scorpion.burst = {fire_rate = self.x_scorpion.fire_mode_data.fire_rate}
+		
+		self.mp9.HAS_BURST_AS_THIRD = true
+		self.mp9.BURST_COUNT = 3
+		self.mp9.fire_mode_data.burst_cooldown = self.mp9.fire_mode_data.fire_rate * 2
+		self.mp9.burst = {fire_rate = self.mp9.fire_mode_data.fire_rate}
+		self.x_mp9.HAS_BURST_AS_THIRD = true
+		self.x_mp9.BURST_COUNT = 3
+		self.x_mp9.fire_mode_data.burst_cooldown = self.x_mp9.fire_mode_data.fire_rate * 2
+		self.x_mp9.burst = {fire_rate = self.x_mp9.fire_mode_data.fire_rate}
+		
+		self.shepheard.HAS_BURST_AS_THIRD = true
+		self.shepheard.BURST_COUNT = 3
+		self.shepheard.fire_mode_data.burst_cooldown = self.shepheard.fire_mode_data.fire_rate * 2
+		self.shepheard.burst = {fire_rate = self.shepheard.fire_mode_data.fire_rate}
+		self.x_shepheard.HAS_BURST_AS_THIRD = true
+		self.x_shepheard.BURST_COUNT = 3
+		self.x_shepheard.fire_mode_data.burst_cooldown = self.x_shepheard.fire_mode_data.fire_rate * 2
+		self.x_shepheard.burst = {fire_rate = self.x_shepheard.fire_mode_data.fire_rate}
+		
+		self.polymer.HAS_BURST_AS_THIRD = true
+		self.polymer.BURST_COUNT = 2
+		self.polymer.fire_mode_data.burst_cooldown = self.polymer.fire_mode_data.fire_rate * 1.666
+		self.polymer.burst = {fire_rate = self.polymer.fire_mode_data.fire_rate}
+		self.x_polymer.HAS_BURST_AS_THIRD = true
+		self.x_polymer.BURST_COUNT = 3
+		self.x_polymer.fire_mode_data.burst_cooldown = self.x_polymer.fire_mode_data.fire_rate * 2
+		self.x_polymer.burst = {fire_rate = self.x_polymer.fire_mode_data.fire_rate}
+		
+	end
+	addBURSTFIRE()
+	
 	-- remove spread_moving stat from all weapons
 	for i=1, #Gilza.defaultWeapons do
 		if self[Gilza.defaultWeapons[i]].stats.spread_moving then

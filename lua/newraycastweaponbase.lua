@@ -871,3 +871,98 @@ Hooks:PreHook(NewRaycastWeaponBase, "on_reload", "Gilza_PostHook_NewRaycastWeapo
 		managers.player._gilza_bullet_fired_from_clip[wpn_selection_index] = 0
 	end
 end)
+
+-- add burst fire mode as third fire mod option if it was added to weapon's tweak data
+Hooks:PostHook(NewRaycastWeaponBase,"init","weaponbase_burstfiremod_init",function(self,unit)
+	local wtd = self:weapon_tweak_data()
+	if wtd.HAS_BURST_AS_THIRD then
+		self._burst_count = wtd.BURST_COUNT or 3
+		local fire_mode_data = wtd.fire_mode_data or {}
+		local toggable_fire_modes = fire_mode_data.toggable
+		if self._toggable_fire_modes and toggable_fire_modes then
+			if not table.contains(self._toggable_fire_modes,ids_burst) then
+				table.insert(self._toggable_fire_modes,ids_burst)
+			end
+		end
+	end
+end)
+
+-- if weapon has a burst mode, allow to switch to it. single->burst->auto cycle
+local gilza_orig_toggle_firemode = Hooks:GetFunction(NewRaycastWeaponBase,"toggle_firemode")
+Hooks:OverrideFunction(NewRaycastWeaponBase,"toggle_firemode",function(self, skip_post_event, ...)
+	local wtd = self:weapon_tweak_data()
+	if wtd and wtd.HAS_BURST_AS_THIRD then
+		local can_toggle = not self._locked_fire_mode and self:can_toggle_firemode()
+
+		if can_toggle then
+			if self._toggable_fire_modes then
+				local cur_fire_mode = table.index_of(self._toggable_fire_modes, self._fire_mode)
+
+				if cur_fire_mode > 0 then
+					cur_fire_mode = cur_fire_mode % #self._toggable_fire_modes + 1
+					self._fire_mode = self._toggable_fire_modes[cur_fire_mode]
+
+					if not skip_post_event then
+						self._sound_fire:post_event(cur_fire_mode % 2 == 0 and "wp_auto_switch_on" or "wp_auto_switch_off")
+					end
+
+					local fire_mode_data = self._fire_mode_data[self._fire_mode:key()]
+					local fire_effect = fire_mode_data and (self._silencer and fire_mode_data.muzzleflash_silenced or fire_mode_data.muzzleflash)
+
+					self:change_fire_effect(fire_effect)
+
+					local trail_effect = fire_mode_data and fire_mode_data.trail_effect
+
+					self:change_trail_effect(trail_effect)
+					self:call_on_digital_gui("set_firemode", self:fire_mode())
+					self:update_firemode_gui_ammo()
+
+					return true
+				end
+
+				return false
+			end
+			
+			if self._fire_mode == ids_single then
+				self._fire_mode = ids_burst
+				if not skip_post_event then
+					self._sound_fire:post_event("wp_auto_switch_on")
+				end
+			elseif self._fire_mode == ids_burst then
+				self._fire_mode = ids_auto
+				if not skip_post_event then
+					self._sound_fire:post_event("wp_auto_switch_on")
+				end
+			else
+				self._fire_mode = ids_single
+				if not skip_post_event then
+					self._sound_fire:post_event("wp_auto_switch_off")
+				end
+			end
+
+			return true
+		else
+			return false
+		end
+	else
+		return gilza_orig_toggle_firemode(self,skip_post_event,...)
+	end
+end)
+
+-- fix for a crash from npcs or akimbo weapons with burst firemode
+Hooks:PreHook(NewRaycastWeaponBase,"fire","weaponbase_burstfiremod_firepre",function(self,...)
+	if self._fire_mode == ids_burst then
+		self._bullets_fired = self._bullets_fired or 0
+	end
+end)
+
+-- use weapon's burst fire rate, to determine ROF during the burst
+Hooks:OverrideFunction(NewRaycastWeaponBase,"weapon_fire_rate",function(self)
+	if self._alt_fire_active and self._alt_fire_data and self._alt_fire_data.fire_rate then
+		return self._alt_fire_data.fire_rate
+	elseif self._fire_mode == ids_burst then
+		return self:weapon_tweak_data().burst.fire_rate / self:fire_rate_multiplier()
+	end
+
+	return NewRaycastWeaponBase.super.weapon_fire_rate(self)
+end)
