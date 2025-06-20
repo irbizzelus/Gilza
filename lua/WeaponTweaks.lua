@@ -3318,7 +3318,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.polymer.fire_mode_data.burst_cooldown = self.polymer.fire_mode_data.fire_rate * 1.666
 		self.polymer.burst = {fire_rate = self.polymer.fire_mode_data.fire_rate}
 		self.x_polymer.HAS_BURST_AS_THIRD = true
-		self.x_polymer.BURST_COUNT = 3
+		self.x_polymer.BURST_COUNT = 2
 		self.x_polymer.fire_mode_data.burst_cooldown = self.x_polymer.fire_mode_data.fire_rate * 2
 		self.x_polymer.burst = {fire_rate = self.x_polymer.fire_mode_data.fire_rate}
 		
