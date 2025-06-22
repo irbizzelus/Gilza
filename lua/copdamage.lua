@@ -756,7 +756,7 @@ local gilza_orig_copdamage_damage_simple = Hooks:GetFunction(CopDamage,"damage_s
 Hooks:OverrideFunction(CopDamage, "damage_simple", function (self, attack_data)
 	local res = gilza_orig_copdamage_damage_simple(self, attack_data)
 	
-	if res.type == "death" then
+	if res and res.type == "death" then
 		if attack_data.variant == "graze" then
 			managers.player:_Gilza_activate_bodyshot_kill_aggressive_reload(attack_data)
 			managers.player:_Gilza_activate_bodyshot_kill_ammo_refill(attack_data)
