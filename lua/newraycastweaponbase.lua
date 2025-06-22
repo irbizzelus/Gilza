@@ -130,6 +130,12 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "reload_speed_multiplier", function
 	if managers.player:has_activate_temporary_upgrade("temporary", "single_shot_fast_reload") then
 		multiplier = multiplier + 1 - managers.player:temporary_upgrade_value("temporary", "single_shot_fast_reload", 1)
 	end
+	
+	if managers.player:has_activate_temporary_upgrade("temporary", "single_body_shot_kill_reload") then
+		if managers.player._aggressive_reload_stacks and managers.player._aggressive_reload_stacks > 0 then
+			multiplier = multiplier - (managers.player:temporary_upgrade_value("temporary", "single_body_shot_kill_reload", 0) * managers.player._aggressive_reload_stacks)
+		end
+	end
 
 	multiplier = multiplier + 1 - managers.player:get_property("shock_and_awe_reload_multiplier", 1)
 	multiplier = multiplier + 1 - managers.player:get_temporary_property("bloodthirst_reload_speed", 1)
@@ -716,44 +722,6 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "_fire_raycast", function (self,use
 		result.rays = hit_rays
 	end
 	
-	-- remove stack of agressive reload on miss
-	if self:is_category("smg", "assault_rifle", "snp") and managers.player:has_category_upgrade("temporary", "single_shot_fast_reload") then
-		managers.player._aggressive_reload_stacks = managers.player._aggressive_reload_stacks or 0
-		if not result.hit_enemy then
-			managers.player._aggressive_reload_stacks = managers.player._aggressive_reload_stacks - 1
-			if managers.player._aggressive_reload_stacks < 0 then
-				managers.player._aggressive_reload_stacks = 0
-			end
-			
-			-- update clip size for both equipped weapons on stack adjustment
-			for i=1, 2 do	
-				local wpn_to_update = managers.player:player_unit():inventory():unit_by_selection(i)
-				if wpn_to_update:base():is_category("smg", "assault_rifle", "snp") then
-					local original_tweak_data = tweak_data.weapon[wpn_to_update:base()._name_id]
-					local weapon_tweak_data = wpn_to_update:base():weapon_tweak_data()
-					local ammo_max_multiplier = managers.player:upgrade_value("player", "extra_ammo_multiplier", 1)
-					for _, category in ipairs(weapon_tweak_data.categories) do
-						ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value(category, "extra_ammo_multiplier", 1) - 1
-					end
-					if managers.player:has_category_upgrade("player", "mrwi_ammo_supply_multiplier") then
-						ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value("player", "mrwi_ammo_supply_multiplier", 1) - 1
-					end
-					if managers.player:has_category_upgrade("player", "add_armor_stat_skill_ammo_mul") then
-						ammo_max_multiplier = ammo_max_multiplier * managers.player:body_armor_value("skill_ammo_mul", nil, 1)
-					end
-					ammo_max_multiplier = ammo_max_multiplier * managers.player:upgrade_value("player", "extra_ammo_cut", 1)
-					ammo_max_multiplier = managers.modifiers:modify_value("WeaponBase:GetMaxAmmoMultiplier", ammo_max_multiplier)
-					local ammo_max_per_clip = wpn_to_update:base():calculate_ammo_max_per_clip()
-					local ammo_max_override_delta = weapon_tweak_data.AMMO_MAX - original_tweak_data.AMMO_MAX
-					local ammo_max = math.round(((original_tweak_data.AMMO_MAX + (managers.player:upgrade_value(wpn_to_update:base()._name_id, "clip_amount_increase") * ammo_max_per_clip) + ammo_max_override_delta + math.round(original_tweak_data.AMMO_MAX * (wpn_to_update:base()._total_ammo_mod or 0))) * ammo_max_multiplier))
-					ammo_max_per_clip = math.min(ammo_max_per_clip, ammo_max)
-					wpn_to_update:base():set_ammo_max_per_clip(ammo_max_per_clip + wpn_to_update:base():get_chamber_size())
-				end
-			end
-			
-		end
-	end
-	
 	return result
 end)
 
@@ -802,73 +770,17 @@ end)
 
 -- allow for crossbows to also benefit from body expertise skill. for whatever reason only bows are allowed in vanilla
 Hooks:OverrideFunction(NewRaycastWeaponBase, "get_add_head_shot_mul", function (self)
-	if self:is_category("smg", "lmg", "assault_rifle", "minigun") and self._fire_mode == ids_auto or self:is_category("bow", "crossbow", "saw") then
+	if (self:is_category("smg", "lmg", "assault_rifle", "minigun") and (self._fire_mode == ids_auto or self._fire_mode == ids_burst)) or self:is_category("bow", "crossbow", "saw") then
 		return managers.player:upgrade_value("weapon", "automatic_head_shot_add", nil)
 	end
 	
 	return nil
 end)
 
--- add bullets to clip size if we have new agressive reload
-Hooks:OverrideFunction(NewRaycastWeaponBase, "calculate_ammo_max_per_clip", function (self)
-	local added = 0
-	local weapon_tweak_data = self:weapon_tweak_data()
-
-	if self:is_category("shotgun") and weapon_tweak_data.has_magazine then
-		added = managers.player:upgrade_value("shotgun", "magazine_capacity_inc", 0)
-
-		if self:is_category("akimbo") then
-			added = added * 2
-		end
-	elseif self:is_category("pistol") and not self:is_category("revolver") and managers.player:has_category_upgrade("pistol", "magazine_capacity_inc") then
-		added = managers.player:upgrade_value("pistol", "magazine_capacity_inc", 0)
-
-		if self:is_category("akimbo") then
-			added = added * 2
-		end
-	elseif self:is_category("smg", "assault_rifle", "lmg") then
-		added = managers.player:upgrade_value("player", "automatic_mag_increase", 0)
-
-		if self:is_category("akimbo") then
-			added = added * 2
-		end
-	end
-	
-	if self:is_category("smg", "assault_rifle", "snp") and managers.player:has_category_upgrade("temporary", "single_shot_fast_reload") then
-		local to_add = managers.player._aggressive_reload_stacks or 0
-		
-		if self:is_category("akimbo") then
-			to_add = to_add * 2
-		end
-		added = added + to_add
-	end
-
-	local ammo = weapon_tweak_data.CLIP_AMMO_MAX + added
-	ammo = ammo + managers.player:upgrade_value(self._name_id, "clip_ammo_increase")
-
-	if not self:upgrade_blocked("weapon", "clip_ammo_increase") then
-		ammo = ammo + managers.player:upgrade_value("weapon", "clip_ammo_increase", 0)
-	end
-
-	for _, category in ipairs(weapon_tweak_data.categories) do
-		if not self:upgrade_blocked(category, "clip_ammo_increase") then
-			ammo = ammo + managers.player:upgrade_value(category, "clip_ammo_increase", 0)
-		end
-	end
-
-	ammo = ammo + (self._extra_ammo or 0)
-
-	return ammo
-end)
-
 -- force clip size to update on reload if agressive reload skill is equipped
 Hooks:PreHook(NewRaycastWeaponBase, "on_reload", "Gilza_PostHook_NewRaycastWeaponBase_on_reload", function(self)
-	if managers.player:has_category_upgrade("temporary", "single_shot_fast_reload") then
-		if not managers.player._gilza_bullet_fired_from_clip then
-			managers.player._gilza_bullet_fired_from_clip = {0,0}
-		end
-		local wpn_selection_index = tweak_data.weapon[self._name_id].use_data.selection_index
-		managers.player._gilza_bullet_fired_from_clip[wpn_selection_index] = 0
+	if managers.player:has_category_upgrade("temporary", "single_body_shot_kill_reload") then
+		managers.player._gilza_new_AR_should_cancel_on_kill = true
 	end
 end)
 

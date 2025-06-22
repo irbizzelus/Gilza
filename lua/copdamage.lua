@@ -375,7 +375,10 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 					rotation = attack_data.col_ray.body:rotation(),
 					dir = attack_data.col_ray.ray
 				})
+			else
+				managers.player:_Gilza_activate_bodyshot_kill_ammo_refill(attack_data)
 			end
+			managers.player:_Gilza_activate_bodyshot_kill_aggressive_reload(attack_data, head)
 
 			attack_data.damage = self._health
 			result = {
@@ -746,4 +749,19 @@ Hooks:PreHook(CopDamage, "die", "Gilza_itimidated_death_tracker", function(self,
 			self._unit:contour():remove("generic_interactable_selected" , false)
 		end
 	end
+end)
+
+-- allow new agressive reload to get credit from graze kills
+local gilza_orig_copdamage_damage_simple = Hooks:GetFunction(CopDamage,"damage_simple")
+Hooks:OverrideFunction(CopDamage, "damage_simple", function (self, attack_data)
+	local res = gilza_orig_copdamage_damage_simple(self, attack_data)
+	
+	if res.type == "death" then
+		if attack_data.variant == "graze" then
+			managers.player:_Gilza_activate_bodyshot_kill_aggressive_reload(attack_data)
+			managers.player:_Gilza_activate_bodyshot_kill_ammo_refill(attack_data)
+		end
+	end
+	
+	return res
 end)

@@ -3195,6 +3195,10 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		-- ROF during the burst. reminder that this is a delay - set as 60/1200 if you want custom ROF of 1200, instead of weapon's vanilla ROF.
 		self.m16.burst = {fire_rate = self.m16.fire_mode_data.fire_rate}
 		
+		-- fix ms3gl values for new burst system
+		self.ms3gl.fire_mode_data.burst_cooldown = 1
+		self.ms3gl.burst = {fire_rate = 0.33}
+		
 		self.famas.HAS_BURST_AS_THIRD = true
 		self.famas.BURST_COUNT = 3
 		self.famas.fire_mode_data.burst_cooldown = self.famas.fire_mode_data.fire_rate * 2

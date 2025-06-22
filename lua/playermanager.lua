@@ -1613,56 +1613,79 @@ Hooks:OverrideFunction(PlayerManager, "on_headshot_dealt", function (self)
 end)
 
 -- new aggressive reload
-function PlayerManager:_on_activate_aggressive_reload_event(attack_data)
-	self._aggressive_reload_stacks = self._aggressive_reload_stacks or 0
-	if attack_data and attack_data.variant ~= "projectile" then
-		local weapon_unit = self:equipped_weapon_unit()
+function PlayerManager:_Gilza_activate_bodyshot_kill_aggressive_reload(attack_data, head)
+	if self:has_category_upgrade("temporary", "single_body_shot_kill_reload") then
+		self._aggressive_reload_stacks = self._aggressive_reload_stacks or 0
+		if attack_data and attack_data.variant ~= "projectile" then
+			local weapon_unit = self:equipped_weapon_unit()
 
-		if weapon_unit then
-			local weapon = weapon_unit:base()
+			if weapon_unit then
+				local weapon = weapon_unit:base()
+				
+				if managers.player._gilza_new_AR_should_cancel_on_kill then
+					self._aggressive_reload_stacks = 0
+					managers.player._gilza_new_AR_should_cancel_on_kill = false
+					self:deactivate_temporary_upgrade("temporary", "single_body_shot_kill_reload")
+				else
+					if not head and weapon and weapon:fire_mode() == "single" and weapon:is_category("smg", "assault_rifle", "snp") then
+						if not managers.player:has_activate_temporary_upgrade("temporary", "single_body_shot_kill_reload") then
+							self:activate_temporary_upgrade("temporary", "single_body_shot_kill_reload")
+						end
 
-			if weapon and weapon:fire_mode() == "single" and weapon:is_category("smg", "assault_rifle", "snp") then
-				self:activate_temporary_upgrade("temporary", "single_shot_fast_reload")
-				
-				if not managers.player._gilza_bullet_fired_from_clip then
-					managers.player._gilza_bullet_fired_from_clip = {0,0}
-				end
-				local wpn_selection_index = tweak_data.weapon[weapon.name_id].use_data.selection_index
-				
-				if managers.player._gilza_bullet_fired_from_clip[wpn_selection_index] == 1 then
-					self._aggressive_reload_stacks = self._aggressive_reload_stacks + 2
-					if self._aggressive_reload_stacks > 10 then
-						self._aggressive_reload_stacks = 10
+						self._aggressive_reload_stacks = self._aggressive_reload_stacks + 0.75
+						if self._aggressive_reload_stacks >= 7.5 then
+							self._aggressive_reload_stacks = 7.5
+						end
 					end
+				end
+			end
+		end
+	end
+end
+
+function PlayerManager:_Gilza_activate_bodyshot_kill_ammo_refill(attack_data)
+	if self:has_category_upgrade("player", "single_body_shot_kill_refill_ammo") then
+		if attack_data and attack_data.variant ~= "projectile" then
+			local weapon_unit = self:equipped_weapon_unit()
+
+			if weapon_unit then
+				local weapon = weapon_unit:base()
+
+				if weapon and weapon:fire_mode() == "single" and weapon:is_category("smg", "assault_rifle", "snp") then
+					local player_unit = self:player_unit()
+					local inventory = player_unit:inventory()
 					
-					-- update clip size for both equipped weapons on stack adjustment
-					for i=1, 2 do
-						local wpn_to_update = self:player_unit():inventory():unit_by_selection(i)
-						if wpn_to_update:base():is_category("smg", "assault_rifle", "snp") then
-							local original_tweak_data = tweak_data.weapon[wpn_to_update:base()._name_id]
-							local weapon_tweak_data = wpn_to_update:base():weapon_tweak_data()
-							local ammo_max_multiplier = managers.player:upgrade_value("player", "extra_ammo_multiplier", 1)
-							for _, category in ipairs(weapon_tweak_data.categories) do
-								ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value(category, "extra_ammo_multiplier", 1) - 1
+					if not player_unit:character_damage():dead() and inventory then
+						local picked_up = false
+						local available_selections = {}
+
+						for i, weapon in pairs(inventory:available_selections()) do
+							if inventory:is_equipped(i) then
+								table.insert(available_selections, 1, weapon)
+							else
+								table.insert(available_selections, weapon)
 							end
-							if managers.player:has_category_upgrade("player", "mrwi_ammo_supply_multiplier") then
-								ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value("player", "mrwi_ammo_supply_multiplier", 1) - 1
+						end
+
+						for _, weapon in ipairs(available_selections) do
+							local success, add_amount = nil
+							local pick_up_mul = managers.player:upgrade_value("player", "single_body_shot_kill_refill_ammo", 0)
+							success, add_amount = weapon.unit:base():add_ammo(pick_up_mul)
+							picked_up = success or picked_up
+						end
+						
+						if picked_up then
+							player_unit:sound():play(self._pickup_event or "pickup_ammo", nil, true)
+							for id, weapon in pairs(inventory:available_selections()) do
+								managers.hud:set_ammo_amount(id, weapon.unit:base():ammo_info())
 							end
-							if managers.player:has_category_upgrade("player", "add_armor_stat_skill_ammo_mul") then
-								ammo_max_multiplier = ammo_max_multiplier * managers.player:body_armor_value("skill_ammo_mul", nil, 1)
-							end
-							ammo_max_multiplier = ammo_max_multiplier * managers.player:upgrade_value("player", "extra_ammo_cut", 1)
-							ammo_max_multiplier = managers.modifiers:modify_value("WeaponBase:GetMaxAmmoMultiplier", ammo_max_multiplier)
-							local ammo_max_per_clip = wpn_to_update:base():calculate_ammo_max_per_clip()
-							local ammo_max_override_delta = weapon_tweak_data.AMMO_MAX - original_tweak_data.AMMO_MAX
-							local ammo_max = math.round(((original_tweak_data.AMMO_MAX + (managers.player:upgrade_value(wpn_to_update:base()._name_id, "clip_amount_increase") * ammo_max_per_clip) + ammo_max_override_delta + math.round(original_tweak_data.AMMO_MAX * (wpn_to_update:base()._total_ammo_mod or 0))) * ammo_max_multiplier))
-							ammo_max_per_clip = math.min(ammo_max_per_clip, ammo_max)
-							wpn_to_update:base():set_ammo_max_per_clip(ammo_max_per_clip + wpn_to_update:base():get_chamber_size())
 						end
 					end
 					
 				end
+				
 			end
+			
 		end
 	end
 end

@@ -688,6 +688,9 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		self.skills.sharpshooter[1].upgrades = { "player_not_moving_damage_reduction_bonus_1" }
 		self.skills.sharpshooter[2].upgrades = { "player_not_moving_damage_reduction_bonus_bipoded", "player_bipod_deploy_speed" }
 		
+		self.skills.speedy_reload[1].upgrades = { "assault_rifle_reload_speed_multiplier", "smg_reload_speed_multiplier", "snp_reload_speed_multiplier", "player_single_body_shot_kill_refill_ammo_1" }
+		self.skills.speedy_reload[2].upgrades = { "player_single_body_shot_kill_reload", "player_single_body_shot_kill_refill_ammo_2" }
+		
 		---- ENFORCER
 		self.skills.shotgun_cqb[1].upgrades = { "shotgun_reload_speed_multiplier_1" }
 		self.skills.shotgun_cqb[2].upgrades = { "shotgun_reload_speed_multiplier_2" }

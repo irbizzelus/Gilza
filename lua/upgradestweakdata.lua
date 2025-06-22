@@ -82,22 +82,27 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			}
 			-- agressive reload for AR's; due to game's reload speed caluclations, this value is now 25% so that actuall reloads gain a 20% buff
 			self.values.assault_rifle.reload_speed_multiplier = {
-				1.25
+				1.2
 			}
 			-- agressive reload for SMG's
 			self.values.smg.reload_speed_multiplier = {
-				1.25
+				1.2
 			}
 			-- agressive reload for sniper's
 			self.values.snp.reload_speed_multiplier = {
-				1.25
+				1.2
 			}
-			-- agressive reload aced buff from 100% to 300% reload but only for 0.5 sec
-			self.values.temporary.single_shot_fast_reload = {
+			-- agressive reload based on bodyshots that lasts "forever" and grants 10% bonus per 1 stack. stacks counted in PM
+			self.values.temporary.single_body_shot_kill_reload = {
 				{
-					5,
-					0.5
+					0.1,
+					9999
 				}
+			}
+			-- agressive reload basic/aced ammo refills
+			self.values.player.single_body_shot_kill_refill_ammo = {
+				0.1,
+				0.4
 			}
 			-- new graze values, they should be 1/3 and 2/3 but i dont trust damage calculation's rounding up values correctly
 			self.values.snp.graze_damage = {
@@ -1586,6 +1591,35 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 			upgrade = {
 				value = 1,
 				upgrade = "bipod_deploy_speed",
+				category = "player"
+			}
+		}
+		-- new bodyshot kill reload
+		self.definitions.player_single_body_shot_kill_reload = {
+			name_id = "menu_player_single_body_shot_kill_reload",
+			category = "temporary",
+			upgrade = {
+				value = 1,
+				upgrade = "single_body_shot_kill_reload",
+				category = "temporary"
+			}
+		}
+		-- new bodyshot kill refill
+		self.definitions.player_single_body_shot_kill_refill_ammo_1 = {
+			name_id = "menu_player_single_body_shot_kill_refill_ammo_1",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "single_body_shot_kill_refill_ammo",
+				category = "player"
+			}
+		}
+		self.definitions.player_single_body_shot_kill_refill_ammo_2 = {
+			name_id = "menu_player_single_body_shot_kill_refill_ammo_2",
+			category = "feature",
+			upgrade = {
+				value = 2,
+				upgrade = "single_body_shot_kill_refill_ammo",
 				category = "player"
 			}
 		}

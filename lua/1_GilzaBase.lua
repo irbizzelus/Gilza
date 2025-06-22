@@ -104,6 +104,7 @@ function Gilza:modCompatibility()
 					GameInfoManager._BUFFS.temporary.player_bounty_hunter = "player_bounty_hunter"
 					GameInfoManager._BUFFS.temporary.player_wild_temporary_regen_pause = "player_wild_temporary_regen_pause"
 					GameInfoManager._BUFFS.temporary.copr_invuln_on_segment_loss = "copr_invuln_on_segment_loss"
+					GameInfoManager._BUFFS.temporary.single_body_shot_kill_reload = "single_body_shot_kill_reload"
 				else
 					DelayedCalls:Add("Gilza_wait_for_vhp_to_load", 0.25, function()
 						tryaddingbuffs()
