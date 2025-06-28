@@ -39,7 +39,6 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 			name_id = "menu_deckall_6",
 			upgrades = {
 				"armor_kit",
-				"player_pick_up_ammo_multiplier",
 				"player_regain_throwable_from_ammo_1"
 			},
 			icon_xy = {
@@ -716,7 +715,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		
 		self.skills.carbon_blade[2].upgrades = {"saw_ignore_shields_1","saw_panic_when_kill_1","player_saw_ammo_pick_up"}
 		
-		self.skills.bandoliers[2].upgrades = { "player_regain_throwable_from_ammo_2", "player_pick_up_ammo_multiplier", "player_pick_up_ammo_multiplier_2"}
+		self.skills.bandoliers[2].upgrades = { "player_regain_throwable_from_ammo_1", "player_regain_throwable_from_ammo_2", "player_pick_up_ammo_multiplier"}
 		
 		---- TECHICIAN
 		self.skills.defense_up[1].upgrades = {"sentry_gun_cost_reduction_1", "sentry_gun_cost_reduction_2"}

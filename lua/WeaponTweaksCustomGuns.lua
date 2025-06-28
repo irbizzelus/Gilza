@@ -110,27 +110,27 @@ function Gilza.applyCustomAR_stats(id)
 	-- light AR's
 	if tweak_data.weapon[id].stats.damage >= 115 and tweak_data.weapon[id].stats.damage <= 143 then
 		tweak_data.weapon[id].stats.damage = 125
-		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._125 * 0.9) / 1.35,(pickups._125 * 1.1) / 1.35}
+		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._125 * 0.9),(pickups._125 * 1.1)}
 		dmg_type = "105"
 	-- low mid AR's
 	elseif tweak_data.weapon[id].stats.damage >= 144 and tweak_data.weapon[id].stats.damage <= 174 then
 		tweak_data.weapon[id].stats.damage = 155
-		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._155 * 0.9) / 1.35,(pickups._155 * 1.1) / 1.35}
+		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._155 * 0.9),(pickups._155 * 1.1)}
 		dmg_type = "146"
 	-- high mid AR's
 	elseif tweak_data.weapon[id].stats.damage >= 175 and tweak_data.weapon[id].stats.damage <= 229 then
 		tweak_data.weapon[id].stats.damage = 200
-		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._200 * 0.9) / 1.35),((pickups._200 * 1.1) / 1.35)}
+		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._200 * 0.9)),((pickups._200 * 1.1))}
 		dmg_type = "175"
 	-- heavy AR's
 	elseif tweak_data.weapon[id].stats.damage >= 230 and tweak_data.weapon[id].stats.damage <= 400 then
 		tweak_data.weapon[id].stats.damage = 250
-		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._250 * 0.9) / 1.35,(pickups._250 * 1.1) / 1.35}
+		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._250 * 0.9),(pickups._250 * 1.1)}
 		dmg_type = "210"
 	-- super heavy AR's
 	elseif tweak_data.weapon[id].stats.damage >= 401 then
 		tweak_data.weapon[id].stats.damage = 450
-		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._450 * 0.9) / 1.35,(pickups._450 * 1.1) / 1.35}
+		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._450 * 0.9),(pickups._450 * 1.1)}
 		dmg_type = "420"
 	end
 	
@@ -139,7 +139,7 @@ function Gilza.applyCustomAR_stats(id)
 	if dmg_type == "nil" then
 		dmg_type = "super_light"
 		local weapon_avg_pickup = G_W_M:get_ammo_pickup(tweak_data.weapon[id].stats.damage, 0.28)
-		tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9) / 1.35,(weapon_avg_pickup * 1.1) / 1.35}
+		tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9),(weapon_avg_pickup * 1.1)}
 	end
 	
 	local primary = true
@@ -468,23 +468,23 @@ function Gilza.applyCustomSMG_stats(id)
 	
 	if tweak_data.weapon[id].stats.damage >= 105 and tweak_data.weapon[id].stats.damage <= 124 then
 		tweak_data.weapon[id].stats.damage = 95
-		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._95 * 0.9) / 1.35) * secondary_mul,((pickups._95 * 1.1) / 1.35) * secondary_mul}
+		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._95 * 0.9)) * secondary_mul,((pickups._95 * 1.1)) * secondary_mul}
 		dmg_type = "95"
 	elseif tweak_data.weapon[id].stats.damage >= 125 and tweak_data.weapon[id].stats.damage <= 149 then
 		tweak_data.weapon[id].stats.damage = 125
-		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._125 * 0.9) / 1.35) * secondary_mul,((pickups._125 * 1.1) / 1.35) * secondary_mul}
+		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._125 * 0.9)) * secondary_mul,((pickups._125 * 1.1)) * secondary_mul}
 		dmg_type = "105"
 	elseif tweak_data.weapon[id].stats.damage >= 150 and tweak_data.weapon[id].stats.damage <= 179 then
 		tweak_data.weapon[id].stats.damage = 155
-		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._155 * 0.9) / 1.35) * secondary_mul,((pickups._155 * 1.1) / 1.35) * secondary_mul}
+		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._155 * 0.9)) * secondary_mul,((pickups._155 * 1.1)) * secondary_mul}
 		dmg_type = "146"
 	elseif tweak_data.weapon[id].stats.damage >= 180 and tweak_data.weapon[id].stats.damage <= 264 then
 		tweak_data.weapon[id].stats.damage = 200
-		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._200 * 0.9) / 1.35) * secondary_mul,((pickups._200 * 1.1) / 1.35) * secondary_mul}
+		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._200 * 0.9)) * secondary_mul,((pickups._200 * 1.1)) * secondary_mul}
 		dmg_type = "175"
 	elseif tweak_data.weapon[id].stats.damage >= 265 then
 		tweak_data.weapon[id].stats.damage = 250
-		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._250 * 0.9) / 1.35) * secondary_mul,((pickups._250 * 1.1) / 1.35) * secondary_mul}
+		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._250 * 0.9)) * secondary_mul,((pickups._250 * 1.1)) * secondary_mul}
 		dmg_type = "210"
 	end
 	
@@ -493,7 +493,7 @@ function Gilza.applyCustomSMG_stats(id)
 	if dmg_type == "nil" then
 		dmg_type = "super_light"
 		local weapon_avg_pickup = G_W_M:get_ammo_pickup(tweak_data.weapon[id].stats.damage)
-		tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9) / 1.35 * secondary_mul,(weapon_avg_pickup * 1.1) / 1.35 * secondary_mul}
+		tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9) * secondary_mul,(weapon_avg_pickup * 1.1) * secondary_mul}
 	end
 	
 	-- primary adjust
@@ -844,27 +844,27 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 	-- same as with others - dont touch guns with REALLY low damage
 	if tweak_data.weapon[id].stats.damage >= 50 and tweak_data.weapon[id].stats.damage <= 69 then
 		tweak_data.weapon[id].stats.damage = 88
-		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._88 * 0.9) / 1.35) * secondary_mul,((pickups._88 * 1.1) / 1.35) * secondary_mul}
+		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._88 * 0.9)) * secondary_mul,((pickups._88 * 1.1)) * secondary_mul}
 	elseif tweak_data.weapon[id].stats.damage >= 70 and tweak_data.weapon[id].stats.damage <= 124 then
 		tweak_data.weapon[id].stats.damage = 95
-		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._95 * 0.9) / 1.35) * secondary_mul,((pickups._95 * 1.1) / 1.35) * secondary_mul}
+		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._95 * 0.9)) * secondary_mul,((pickups._95 * 1.1)) * secondary_mul}
 	elseif tweak_data.weapon[id].stats.damage >= 125 and tweak_data.weapon[id].stats.damage <= 150 then
 		tweak_data.weapon[id].stats.damage = 125
-		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._125 * 0.9) / 1.35) * secondary_mul,((pickups._125 * 1.1) / 1.35) * secondary_mul}
+		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._125 * 0.9)) * secondary_mul,((pickups._125 * 1.1)) * secondary_mul}
 	elseif tweak_data.weapon[id].stats.damage >= 151 and tweak_data.weapon[id].stats.damage <= 219 then
 		tweak_data.weapon[id].stats.damage = 155
-		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._155 * 0.9) / 1.35) * secondary_mul,((pickups._155 * 1.1) / 1.35) * secondary_mul}
+		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._155 * 0.9)) * secondary_mul,((pickups._155 * 1.1)) * secondary_mul}
 	elseif tweak_data.weapon[id].stats.damage >= 220 then
 		tweak_data.weapon[id].stats.damage = 250
-		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._250 * 0.9) / 1.35) * secondary_mul,((pickups._250 * 1.1) / 1.35) * secondary_mul}
+		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._250 * 0.9)) * secondary_mul,((pickups._250 * 1.1)) * secondary_mul}
 	elseif tweak_data.weapon[id].stats.damage >= 300 and isActuallyRevolver then
 		tweak_data.weapon[id].stats.damage = 450
-		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._450 * 0.9) / 1.35) * secondary_mul,((pickups._450 * 1.1) / 1.35) * secondary_mul}
+		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._450 * 0.9)) * secondary_mul,((pickups._450 * 1.1)) * secondary_mul}
 	end
 	
 	if tweak_data.weapon[id].stats.damage < 50 then
 		local weapon_avg_pickup = G_W_M:get_ammo_pickup(tweak_data.weapon[id].stats.damage, 0.34)
-		tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9) / 1.35 * secondary_mul,(weapon_avg_pickup * 1.1) / 1.35} * secondary_mul
+		tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9) * secondary_mul,(weapon_avg_pickup * 1.1)} * secondary_mul
 	end
 	
 	tweak_data.weapon[id].damage_falloff = G_W_M.damage_dropoff.PISTOLs
@@ -936,22 +936,22 @@ function Gilza.applyCustomLMG_stats(id)
 	
 	if tweak_data.weapon[id].stats.damage >= 115 and tweak_data.weapon[id].stats.damage < 144 then
 		tweak_data.weapon[id].stats.damage = 125
-		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._125 * 0.9) / 1.35,(pickups._125 * 1.1) / 1.35}
+		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._125 * 0.9),(pickups._125 * 1.1)}
 		dmg_type = "105"
 	elseif tweak_data.weapon[id].stats.damage >= 145 and tweak_data.weapon[id].stats.damage < 229 then
 		tweak_data.weapon[id].stats.damage = 155
-		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._155 * 0.9) / 1.35,(pickups._155 * 1.1) / 1.35}
+		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._155 * 0.9),(pickups._155 * 1.1)}
 		dmg_type = "140"
 	elseif tweak_data.weapon[id].stats.damage >= 230 then
 		tweak_data.weapon[id].stats.damage = 250
-		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._250 * 0.9) / 1.35,(pickups._250 * 1.1) / 1.35}
+		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._250 * 0.9),(pickups._250 * 1.1)}
 		dmg_type = "210"
 	end
 	
 	if dmg_type == "nil" then
 		dmg_type = "super_light"
 		local weapon_avg_pickup = G_W_M:get_ammo_pickup(tweak_data.weapon[id].stats.damage, 0.28, 0.85)
-		tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9) / 1.35,(weapon_avg_pickup * 1.1) / 1.35}
+		tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9),(weapon_avg_pickup * 1.1)}
 	end
 
 	tweak_data.weapon[id].damage_falloff = G_W_M.damage_dropoff.LMGs
@@ -1005,7 +1005,7 @@ function Gilza.applyCustomSNIPER_stats(id)
 				force_lever_action = true
 			else
 				tweak_data.weapon[id].stats.damage = 1300
-				tweak_data.weapon[id].AMMO_PICKUP = {(pickups._1300 * 0.9) / 1.35,(pickups._1300 * 1.1) / 1.35}
+				tweak_data.weapon[id].AMMO_PICKUP = {(pickups._1300 * 0.9),(pickups._1300 * 1.1)}
 			end
 		else
 			force_lever_action = true
@@ -1013,10 +1013,10 @@ function Gilza.applyCustomSNIPER_stats(id)
 	elseif tweak_data.weapon[id].stats.damage > 300 and tweak_data.weapon[id].stats.damage < 1200 then
 		if tweak_data.weapon[id].CLIP_AMMO_MAX > 6 then
 			tweak_data.weapon[id].stats.damage = 1300
-			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._1300 * 0.9) / 1.35,(pickups._1300 * 1.1) / 1.35}
+			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._1300 * 0.9),(pickups._1300 * 1.1)}
 		else
 			tweak_data.weapon[id].stats.damage = 1600
-			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._1600 * 0.9) / 1.35,(pickups._1600 * 1.1) / 1.35}
+			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._1600 * 0.9),(pickups._1600 * 1.1)}
 		end
 		bolty = true
 	end
@@ -1041,10 +1041,10 @@ function Gilza.applyCustomSNIPER_stats(id)
 		tweak_data.weapon[id].fire_mode_data = {fire_rate = 60/210}
 		tweak_data.weapon[id].single = {fire_rate = 60/210}
 		tweak_data.weapon[id].stats.damage = 650
-		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._650 * 0.9) / 1.35,(pickups._650 * 1.1) / 1.35}
+		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._650 * 0.9),(pickups._650 * 1.1)}
 	elseif force_lever_action then
 		tweak_data.weapon[id].stats.damage = 950
-		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._950 * 0.9) / 1.35,(pickups._950 * 1.1) / 1.35}
+		tweak_data.weapon[id].AMMO_PICKUP = {(pickups._950 * 0.9),(pickups._950 * 1.1)}
 	end
 	
 	-- if weapon did not fall under either of 4 categories
@@ -1055,7 +1055,7 @@ function Gilza.applyCustomSNIPER_stats(id)
 		if tweak_data.weapon[id].stats.damage >= 4000 then
 			weapon_avg_pickup = math.ceil(24000/dmg) * 0.07
 		end
-		tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9) / 1.35,(weapon_avg_pickup * 1.1) / 1.35}
+		tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9),(weapon_avg_pickup * 1.1)}
 	end
 	
 	-- secondary snipers
@@ -1144,43 +1144,43 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 		tweak_data.weapon[id].damage_falloff = G_W_M.damage_dropoff.SHOTGUNs._155
 		Gilza.shotgun_minimal_damage_multipliers[id] = 0.35
 		if secondary == false then
-			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._155 * 0.9) / 1.35,(pickups._155 * 1.1) / 1.35}
+			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._155 * 0.9),(pickups._155 * 1.1)}
 		else
-			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._155 * 0.9) / 1.35 * secondary_mul,(pickups._155 * 1.1) / 1.35 * secondary_mul}
+			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._155 * 0.9) * secondary_mul,(pickups._155 * 1.1) * secondary_mul}
 		end
 	elseif category == 2 then
 		tweak_data.weapon[id].stats.damage = 325
 		tweak_data.weapon[id].damage_falloff = G_W_M.damage_dropoff.SHOTGUNs._325
 		Gilza.shotgun_minimal_damage_multipliers[id] = 0.5
 		if secondary == false then
-			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._325 * 0.9) / 1.35,(pickups._325 * 1.1) / 1.35}
+			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._325 * 0.9),(pickups._325 * 1.1)}
 		else
-			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._325 * 0.9) / 1.35 * secondary_mul,(pickups._325 * 1.1) / 1.35 * secondary_mul}
+			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._325 * 0.9) * secondary_mul,(pickups._325 * 1.1) * secondary_mul}
 		end
 	elseif category == 3 then
 		tweak_data.weapon[id].stats.damage = 450
 		tweak_data.weapon[id].damage_falloff = G_W_M.damage_dropoff.SHOTGUNs._450
 		Gilza.shotgun_minimal_damage_multipliers[id] = 0.67
 		if secondary == false then
-			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._450 * 0.9) / 1.35,(pickups._450 * 1.1) / 1.35}
+			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._450 * 0.9),(pickups._450 * 1.1)}
 		else
-			tweak_data.weapon[id].AMMO_PICKUP = {((pickups._450 * 0.9) / 1.35) * secondary_mul,((pickups._450 * 1.1) / 1.35) * secondary_mul}
+			tweak_data.weapon[id].AMMO_PICKUP = {((pickups._450 * 0.9)) * secondary_mul,((pickups._450 * 1.1)) * secondary_mul}
 		end
 	elseif category == 4 then
 		tweak_data.weapon[id].stats.damage = 900
 		tweak_data.weapon[id].damage_falloff = G_W_M.damage_dropoff.SHOTGUNs._900
 		Gilza.shotgun_minimal_damage_multipliers[id] = 1
 		if secondary == false then
-			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._900 * 0.9) / 1.35,(pickups._900 * 1.1) / 1.35}
+			tweak_data.weapon[id].AMMO_PICKUP = {(pickups._900 * 0.9),(pickups._900 * 1.1)}
 		else
-			tweak_data.weapon[id].AMMO_PICKUP = {((pickups._900 * 0.9) / 1.35) * secondary_mul,((pickups._900 * 1.1) / 1.35) * secondary_mul}
+			tweak_data.weapon[id].AMMO_PICKUP = {((pickups._900 * 0.9)) * secondary_mul,((pickups._900 * 1.1)) * secondary_mul}
 		end
 	elseif category == 5 then
 		local weapon_avg_pickup = G_W_M:get_ammo_pickup(tweak_data.weapon[id].stats.damage, 1, 0.55)
 		if secondary == false then
-			tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9) / 1.35,(weapon_avg_pickup * 1.1) / 1.35}
+			tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9),(weapon_avg_pickup * 1.1)}
 		else
-			tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9) / 1.35 * secondary_mul,(weapon_avg_pickup * 1.1) / 1.35} * secondary_mul
+			tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9) * secondary_mul,(weapon_avg_pickup * 1.1)} * secondary_mul
 		end
 	end
 	

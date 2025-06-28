@@ -95,12 +95,12 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 			-- ignored
 		elseif fire_mode == "volley" then
 			-- buff volley mode, because this firemode is used by mostly inaccurate guns in this mod
-			index = index + 7
+			index = index + 6
 		elseif fire_mode == "burst" then
 			-- burst fire mode has slighlty better accuracy. only 1 vanilla weapon has this feature - ms3gl, other weapons gain this mode from gilza's weapon_tweaks
 			index = index - 4
 		else
-			index = index - 7
+			index = index - 6
 		end
 	end
 	
@@ -109,7 +109,7 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 		if managers.player:current_state() == "bipod" then
 			-- ignored
 		else
-			index = index - managers.player:upgrade_value("player", "hipfire_no_accuracy_penalty", 7)
+			index = index - managers.player:upgrade_value("player", "hipfire_no_accuracy_penalty", 6)
 		end
 	end
 

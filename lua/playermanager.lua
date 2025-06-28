@@ -5,7 +5,7 @@ Hooks:PostHook(PlayerManager, "_setup", "Gilza_post_setup", function(self)
 	if skill and type(skill) ~= "number" then
 		val = skill.target_enemies
 	end
-	self._SHOCK_AND_AWE_TARGET_KILLS = val or 2
+	self._SHOCK_AND_AWE_TARGET_KILLS = val or 3
 	self._Gilza_menace_kill_tracker = 0
 end)
 
@@ -24,17 +24,6 @@ Hooks:OverrideFunction(PlayerManager, "damage_reduction_skill_multiplier", funct
 	multiplier = multiplier - (1 - self._properties:get_property("revive_damage_reduction", 1))
 	multiplier = multiplier - (1 - self._temporary_properties:get_property("revived_damage_reduction", 1))
 	local dmg_red_mul = self:team_upgrade_value("damage_dampener", "team_damage_reduction", 1)
-	
-	if managers.player:has_category_upgrade("player", "yakuza_behind_player_resist") and self._last_damage_taken_direction and self._last_damage_taken_direction ~= 69 then
-		if self._last_damage_taken_direction < 0 then
-			local yakuza_bhind_resist = 1
-			if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
-				yakuza_bhind_resist = yakuza_bhind_resist * 2
-			end
-			multiplier = multiplier - (1 - self:upgrade_value("player", "yakuza_behind_player_resist", 1)) * yakuza_bhind_resist
-		end
-		self._last_damage_taken_direction = 69
-	end
 
 	if managers.network:session():local_peer():unit():movement()._current_state._moving == false or managers.player:current_state() == "bipod" then
 		multiplier = multiplier - (1 - managers.player:upgrade_value("player", "not_moving_damage_reduction_bonus", 1))
@@ -49,7 +38,18 @@ Hooks:OverrideFunction(PlayerManager, "damage_reduction_skill_multiplier", funct
 	end
 	
 	if damage_type == "bullet" then
-	
+		
+		if managers.player:has_category_upgrade("player", "yakuza_behind_player_resist") and self._last_damage_taken_direction and self._last_damage_taken_direction ~= 69 then
+			if self._last_damage_taken_direction < 0 then
+				local yakuza_bhind_resist = 1
+				if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+					yakuza_bhind_resist = yakuza_bhind_resist * 2
+				end
+				multiplier = multiplier - (1 - self:upgrade_value("player", "yakuza_behind_player_resist", 1)) * yakuza_bhind_resist
+			end
+			self._last_damage_taken_direction = 69
+		end
+		
 		if managers.player:player_unit():character_damage():get_real_armor() > 0 then
 			if managers.player:has_category_upgrade("player", "damage_resist_brawler") then
 				multiplier = multiplier - (1 - managers.player:upgrade_value("player", "damage_resist_brawler", 1))
@@ -124,7 +124,7 @@ Hooks:OverrideFunction(PlayerManager, "damage_reduction_skill_multiplier", funct
 		multiplier = multiplier - (1 - managers.player:upgrade_value("player", "interacting_damage_multiplier", 1))
 	end
 	
-	return math.round(math.clamp(multiplier, 0.15, 1) * 100) / 100 -- no idea why math.clamp has floating point errors, but it does.
+	return math.round(math.clamp(multiplier, 0.15, 1) * 1000) / 1000 -- no idea why math.clamp has floating point errors, but it does.
 end)
 
 -- on kill add brawler's armor regen and fearmonger's speed boost if we have those skills
@@ -175,6 +175,7 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_on_killshot", function(self,
 		
 		if condition_met then
 			managers.player:activate_temporary_upgrade("temporary", "akimbo_pistol_armor_regen_timer_multiplier")
+			Gilza.NSI:activated_new_hitman_akimbo_recovery()
 		end
 		
 	end
@@ -410,6 +411,7 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_on_killshot", function(self,
 			self:get_current_state()._unit:movement():_change_stamina(self:get_current_state()._unit:movement():_max_stamina()+1)
 			if managers.player:has_category_upgrade("temporary", "speed_boost_on_panic_kill") then
 				managers.player:activate_temporary_upgrade("temporary", "speed_boost_on_panic_kill")
+				Gilza.NSI:activated_fearmonger_speed_boost()
 			end
 		end
 	end
@@ -900,6 +902,7 @@ Hooks:PostHook(PlayerManager, "on_enter_custody", "Gilza_on_enter_custody", func
 
 	if player == self:player_unit() then
 		self._Gilza_menace_kill_tracker = 0
+		Gilza.New_Skills_Informer:adjusted_stockholm_stacks(0, true)
 	end
 end)
 
@@ -1394,22 +1397,24 @@ end
 local gilza_orig_PlayerManager_health_regen = PlayerManager.health_regen
 function PlayerManager:health_regen()
 	local res = gilza_orig_PlayerManager_health_regen(self)
+	local adjustments_wanted = 0
 	if managers.player:has_category_upgrade("player", "passive_health_regen") then
 		-- copycat's reduced heal
 		if managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
-			res = res - 0.015
+			adjustments_wanted = adjustments_wanted - 0.015
 		end
 		-- DS increased heal
 		if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
 			if managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
 				-- but not so much for kitty
-				res = res + 0.01
+				adjustments_wanted = adjustments_wanted + 0.01
 			else
-				res = res + 0.02
+				adjustments_wanted = adjustments_wanted + 0.02
 			end
 		end
 	end
-	return res
+	Gilza.NSI:new_passive_health_regen_adjustment(adjustments_wanted)
+	return res + adjustments_wanted
 end
 
 -- new biker stuff
@@ -1626,16 +1631,18 @@ function PlayerManager:_Gilza_activate_bodyshot_kill_aggressive_reload(attack_da
 					self._aggressive_reload_stacks = 0
 					managers.player._gilza_new_AR_should_cancel_on_kill = false
 					self:deactivate_temporary_upgrade("temporary", "single_body_shot_kill_reload")
+					Gilza.NSI:adjusted_body_economy_stacks(0, true)
 				else
 					if not head and weapon and weapon:fire_mode() == "single" and weapon:is_category("smg", "assault_rifle", "snp") then
 						if not managers.player:has_activate_temporary_upgrade("temporary", "single_body_shot_kill_reload") then
 							self:activate_temporary_upgrade("temporary", "single_body_shot_kill_reload")
 						end
-
+						
 						self._aggressive_reload_stacks = self._aggressive_reload_stacks + 0.75
 						if self._aggressive_reload_stacks >= 7.5 then
 							self._aggressive_reload_stacks = 7.5
 						end
+						Gilza.NSI:adjusted_body_economy_stacks(self._aggressive_reload_stacks / 0.75)
 					end
 				end
 			end
@@ -1643,6 +1650,7 @@ function PlayerManager:_Gilza_activate_bodyshot_kill_aggressive_reload(attack_da
 	end
 end
 
+-- new aggressive reload ammo
 function PlayerManager:_Gilza_activate_bodyshot_kill_ammo_refill(attack_data)
 	if self:has_category_upgrade("player", "single_body_shot_kill_refill_ammo") then
 		if attack_data and attack_data.variant ~= "projectile" then
@@ -1686,6 +1694,38 @@ function PlayerManager:_Gilza_activate_bodyshot_kill_ammo_refill(attack_data)
 				
 			end
 			
+		end
+	end
+end
+
+function PlayerManager:_on_enter_shock_and_awe_event()
+	if not self._coroutine_mgr:is_running("automatic_faster_reload") then
+		local equipped_unit = self:get_current_state()._equipped_unit
+		local data = self:upgrade_value("player", "automatic_faster_reload", nil)
+		local is_grenade_launcher = equipped_unit:base():is_category("grenade_launcher")
+
+		if data and equipped_unit and not is_grenade_launcher and (equipped_unit:base():fire_mode() == "auto" or equipped_unit:base():is_category("minigun", "flamethrower")) then
+			self._coroutine_mgr:add_and_run_coroutine("automatic_faster_reload", PlayerAction.ShockAndAwe, self, data.target_enemies, data.max_reload_increase, data.min_reload_increase, data.penalty, data.min_bullets, equipped_unit)
+			
+			-- INFOHUD UI
+			-- current value calculations
+			local reload_multiplier = data.min_reload_increase
+			local ammo = equipped_unit:base():get_ammo_max_per_clip()
+			if self:has_category_upgrade("player", "automatic_mag_increase") and equipped_unit:base():is_category("smg", "assault_rifle", "lmg") then
+				ammo = ammo - self:upgrade_value("player", "automatic_mag_increase", 0)
+			end
+			local ammo_fired = ammo - equipped_unit:base():get_ammo_remaining_in_clip()
+			if data.min_bullets < ammo_fired then
+				local num_bullets = ammo_fired - data.min_bullets
+
+				for i = 1, num_bullets do
+					reload_multiplier = reload_multiplier + (data.penalty-1)
+				end
+			end
+			reload_multiplier = math.clamp(reload_multiplier,data.min_reload_increase,data.max_reload_increase)
+			-- enable and set value
+			Gilza.NSI:new_lock_n_load_status(true)
+			Gilza.NSI:new_lock_n_load_buff_update(reload_multiplier)
 		end
 	end
 end

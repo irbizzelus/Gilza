@@ -247,7 +247,7 @@ function PlayerMovement:_upd_underdog_skill(t)
 		managers.player:activate_temporary_upgrade("temporary", "dmg_dampener_close_contact")
 	end
 
-	data.chk_t = t + (activated and 0.5 or 0.1) -- change re-activation timer check to 0.5 seconds and inactivity timer to 0.1 seconds to make this skill update more often
+	data.chk_t = t + (activated and 0.1 or 0.1) -- change re-activation timer check to 0.5 seconds and inactivity timer to 0.1 seconds to make this skill update more often
 end
 
 Hooks:PostHook(PlayerMovement, "init", "Gilza_PlayerMovement_post_init", function(self, unit)

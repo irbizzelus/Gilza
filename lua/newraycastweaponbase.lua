@@ -785,7 +785,7 @@ Hooks:PreHook(NewRaycastWeaponBase, "on_reload", "Gilza_PostHook_NewRaycastWeapo
 end)
 
 -- add burst fire mode as third fire mod option if it was added to weapon's tweak data
-Hooks:PostHook(NewRaycastWeaponBase,"init","weaponbase_burstfiremod_init",function(self,unit)
+Hooks:PostHook(NewRaycastWeaponBase,"init","Gilza_post_newraycast_init",function(self,unit)
 	local wtd = self:weapon_tweak_data()
 	if wtd.HAS_BURST_AS_THIRD then
 		self._burst_count = wtd.BURST_COUNT or 3
@@ -862,9 +862,40 @@ Hooks:OverrideFunction(NewRaycastWeaponBase,"toggle_firemode",function(self, ski
 end)
 
 -- fix for a crash from npcs or akimbo weapons with burst firemode
-Hooks:PreHook(NewRaycastWeaponBase,"fire","weaponbase_burstfiremod_firepre",function(self,...)
+Hooks:PreHook(NewRaycastWeaponBase,"fire","Gilza_pre_newraycast_fire",function(self,...)
 	if self._fire_mode == ids_burst then
 		self._bullets_fired = self._bullets_fired or 0
+	end
+	-- lock n load hudinfo UI support
+	local is_player = self._setup.user_unit == managers.player:player_unit()
+	if is_player and managers.player:has_category_upgrade("player", "automatic_faster_reload") then
+		local upg_values = managers.player:upgrade_value("player", "automatic_faster_reload")
+		local consume_ammo = not managers.player:has_active_temporary_property("bullet_storm") and (not managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier") or not managers.player:has_category_upgrade("player", "berserker_no_ammo_cost")) or not is_player
+		if self:is_category("smg", "assault_rifle", "lmg") and consume_ammo and upg_values and self:get_ammo_remaining_in_clip() >= 1 then
+			
+			local reload_multiplier = upg_values.min_reload_increase
+			local min_bullets = upg_values.min_bullets
+
+			local ammo = self:get_ammo_max_per_clip()
+			
+			if managers.player:has_category_upgrade("player", "automatic_mag_increase") then
+				ammo = ammo - managers.player:upgrade_value("player", "automatic_mag_increase", 0)
+			end
+			
+			local ammo_fired = ammo - self:get_ammo_remaining_in_clip() + 1 -- since this is a prehook bullet wasnt yet fired, so we adjust for it. or maybe do it in a posthook
+			
+			if min_bullets < ammo_fired then
+				local num_bullets = ammo_fired - min_bullets
+
+				for i = 1, num_bullets do
+					reload_multiplier = reload_multiplier + (upg_values.penalty-1)
+				end
+			end
+			
+			reload_multiplier = math.clamp(reload_multiplier,upg_values.min_reload_increase,upg_values.max_reload_increase)
+			
+			Gilza.NSI:new_lock_n_load_buff_update(reload_multiplier)
+		end
 	end
 end)
 

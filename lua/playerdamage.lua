@@ -10,6 +10,7 @@ Hooks:PreHook(PlayerDamage, "_calc_armor_damage", "Gilza_new_berserk_trigger", f
 			local weapon_duration = false
 			if managers.player:has_category_upgrade("temporary", "new_berserk_melee_damage_multiplier_1") then
 				managers.player:activate_temporary_upgrade("temporary", "new_berserk_melee_damage_multiplier_1")
+				Gilza.NSI:activated_new_zerk_melee()
 				local skill = managers.player:upgrade_value("temporary", "new_berserk_melee_damage_multiplier_1")
 				if skill and type(skill) ~= "number" then
 					melee_duration = skill[2]
@@ -20,6 +21,7 @@ Hooks:PreHook(PlayerDamage, "_calc_armor_damage", "Gilza_new_berserk_trigger", f
 				if not managers.player:has_activate_temporary_upgrade("temporary", "new_berserk_weapon_damage_multiplier_cooldown") then
 					managers.player:activate_temporary_upgrade("temporary", "new_berserk_weapon_damage_multiplier")
 					managers.player:activate_temporary_upgrade("temporary", "new_berserk_weapon_damage_multiplier_cooldown")
+					Gilza.NSI:activated_new_zerk_firearms()
 					local skill = managers.player:upgrade_value("temporary", "new_berserk_weapon_damage_multiplier")
 					if skill and type(skill) ~= "number" then
 						weapon_duration = skill[2]
@@ -453,8 +455,20 @@ Hooks:PostHook(PlayerDamage, "_on_enter_swansong_event", "Gilza_on_enter_SwanSon
 	
 end)
 
--- add armor on dodge with new skill
-Hooks:PostHook(PlayerDamage, "init", "Gilza_dodge_gib_armor_1", function(self)
+-- add armor on dodge from new skill and a bunch of UI stuff
+Hooks:PostHook(PlayerDamage, "init", "Gilza_post_PlayerDamage_init", function(self)
+	
+	if Gilza.VHP_enabled then
+		if managers.player:has_category_upgrade("player", "menace_panic_spread") then
+			managers.gameinfo:event("buff", "activate", "stockholm_basic_stacks")
+			managers.gameinfo:event("buff", "set_value", "stockholm_basic_stacks", { value = math.random() })
+		end
+		if managers.player:has_category_upgrade("temporary", "single_body_shot_kill_reload") then
+			managers.gameinfo:event("buff", "activate", "body_economy_stacks")
+			managers.gameinfo:event("buff", "set_value", "body_economy_stacks", { value = -69 })
+			managers.gameinfo:event("buff", "deactivate", "body_economy_stacks")
+		end
+	end
 	
 	local function CreatePerkGUI()
 	
@@ -569,6 +583,7 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_dodge_gib_armor_1", function(self)
 			if not managers.player:has_activate_temporary_upgrade("temporary", "player_dodge_armor_regen") then
 				if self._unit and alive(self._unit) and self._unit.character_damage then
 					managers.player:activate_temporary_upgrade("temporary", "player_dodge_armor_regen")
+					Gilza.NSI:activated_revitalized_cd()
 					self._unit:character_damage():restore_armor(managers.player:temporary_upgrade_value("temporary", "player_dodge_armor_regen", 0))
 				end
 			end

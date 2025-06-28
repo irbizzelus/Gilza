@@ -169,7 +169,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			---- TANK
 			-- interaction dmg resist reduced for new dmg resist properties
 			self.values.player.interacting_damage_multiplier = {
-				0.4
+				0.6
 			}
 			-- Sprint with any bag
 			self.values.player.sprint_any_bag = {true}
@@ -185,10 +185,10 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.player.saw_ammo_pick_up = {
 				true
 			}
-			-- fully loaded aced pickup buff 75->85
+			-- fully loaded aced pickup. basic version is noramlly under perks, but no more - its fucking annoying
 			self.values.player.pick_up_ammo_multiplier = {
-				1.35,
-				1.75
+				1.25,
+				1
 			}
 			-- make old fully loaded aced grenade pick up base kit with perks, buff the skill values. nerf grenade pick ups depending on the grenade
 			self.values.player.regain_throwable_from_ammo = {

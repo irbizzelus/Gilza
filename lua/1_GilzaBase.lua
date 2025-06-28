@@ -20,6 +20,22 @@ _G.Gilza = {
 		junkie_icon_scale = 1,
 		junkie_icon_x_pos = 50,
 		junkie_icon_y_pos = 320,
+		-- VHUD STUFF
+		vhud_compat_new_melee_zerk = false,
+		vhud_compat_new_weapon_zerk = true,
+		vhud_compat_stockholm_menace = true,
+		vhud_compat_body_economy = true,
+		vhud_compat_fearmonger_speed = true,
+		vhud_compat_electric_bullets = true,
+		vhud_compat_dire_need_override = false,
+		vhud_compat_revitalized = true,
+		vhud_compat_unseen_strike_override = true,
+		vhud_compat_new_lock_n_load = true,
+		vhud_compat_total_dmg_resist = true,
+		vhud_compat_total_dmg_absorb = true,
+		vhud_compat_total_dodge = true,
+		vhud_compat_new_hitman_recovery = true,
+		vhud_compat_new_trigger_happy = true,
 	},
 	grenade_multipliers = {
 		dada_com = 0.6,
@@ -86,32 +102,6 @@ function Gilza:modCompatibility()
 			Gilza.BTAW_enabled = true
 		elseif mod.id == "VanillaHUD Plus" then
 			Gilza.VHP_enabled = true
-			-- add our skills to vanila hud's buff list so that it stops screaming about unknown effects in the logs
-			local function tryaddingbuffs()
-				if GameInfoManager and GameInfoManager._BUFFS and GameInfoManager._BUFFS.temporary then
-					GameInfoManager._BUFFS.temporary.player_new_hitman_regen = "player_new_hitman_regen"
-					GameInfoManager._BUFFS.temporary.player_dodge_armor_regen = "player_dodge_armor_regen"
-					GameInfoManager._BUFFS.temporary.player_speed_junkie_armor_on_dodge = "player_speed_junkie_armor_on_dodge"
-					GameInfoManager._BUFFS.temporary.speed_boost_on_panic_kill = "speed_boost_on_panic_kill"
-					GameInfoManager._BUFFS.temporary.tased_electric_bullets = "tased_electric_bullets"
-					GameInfoManager._BUFFS.temporary.new_berserk_melee_damage_multiplier_1 = "new_berserk_melee_damage_multiplier_1"
-					GameInfoManager._BUFFS.temporary.new_berserk_melee_damage_multiplier_2 = "new_berserk_melee_damage_multiplier_2"
-					GameInfoManager._BUFFS.temporary.new_berserk_weapon_damage_multiplier = "new_berserk_weapon_damage_multiplier"
-					GameInfoManager._BUFFS.temporary.new_berserk_weapon_damage_multiplier_cooldown = "new_berserk_weapon_damage_multiplier_cooldown"
-					GameInfoManager._BUFFS.temporary.badass_hitman_kill_armor_regen = "badass_hitman_kill_armor_regen"
-					GameInfoManager._BUFFS.temporary.akimbo_pistol_armor_regen_timer_multiplier = "akimbo_pistol_armor_regen_timer_multiplier"
-					GameInfoManager._BUFFS.temporary.death_dance_combo_invulnerability = "death_dance_combo_invulnerability"
-					GameInfoManager._BUFFS.temporary.player_bounty_hunter = "player_bounty_hunter"
-					GameInfoManager._BUFFS.temporary.player_wild_temporary_regen_pause = "player_wild_temporary_regen_pause"
-					GameInfoManager._BUFFS.temporary.copr_invuln_on_segment_loss = "copr_invuln_on_segment_loss"
-					GameInfoManager._BUFFS.temporary.single_body_shot_kill_reload = "single_body_shot_kill_reload"
-				else
-					DelayedCalls:Add("Gilza_wait_for_vhp_to_load", 0.25, function()
-						tryaddingbuffs()
-					end)
-				end
-			end
-			tryaddingbuffs()
 		end
 	end
 end
@@ -134,3 +124,5 @@ function Gilza:changelog_message()
 		end
 	end)
 end
+
+dofile(Gilza._path.."lua/2_New_Gilza_Skills_Informer.lua")

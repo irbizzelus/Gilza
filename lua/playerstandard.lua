@@ -41,6 +41,37 @@ Hooks:PostHook(PlayerStandard, "update", "Gilza_posthook_PlayerStandard_update",
 			self._in_melee_skill_sprint_animation = false
 		end
 	end
+	
+	-- infohud ui
+	local pl_unit = self._unit
+	if pl_unit and alive(pl_unit) and pl_unit:movement() then
+		-- dodge
+		local dodge_value = tweak_data.player.damage.DODGE_INIT or 0
+		local armor_dodge_chance = managers.player:body_armor_value("dodge")
+		local skill_dodge_chance = managers.player:skill_dodge_chance(pl_unit:movement():running(), pl_unit:movement():crouching(), pl_unit:movement():zipline_unit())
+		dodge_value = dodge_value + armor_dodge_chance + skill_dodge_chance
+		local pl_dmg = pl_unit:character_damage()
+		if pl_dmg._temporary_dodge_t and TimerManager:game():time() < pl_dmg._temporary_dodge_t then
+			dodge_value = dodge_value + pl_dmg._temporary_dodge
+		end
+		local smoke_dodge = 0
+		for _, smoke_screen in ipairs(managers.player._smoke_screen_effects or {}) do
+			if smoke_screen:is_in_smoke(pl_unit) then
+				smoke_dodge = tweak_data.projectiles.smoke_screen_grenade.dodge_chance
+				break
+			end
+		end
+		dodge_value = 1 - (1 - dodge_value) * (1 - smoke_dodge)
+		Gilza.NSI:dodge_value_tracker(dodge_value)
+		
+		-- dmg resist
+		Gilza.NSI:update_current_passive_dmg_resist(managers.player:damage_reduction_skill_multiplier())
+		
+		-- dmg absorb
+		Gilza.NSI:update_current_dmg_absorb(managers.player:damage_absorption())
+	else
+		log("[Gilza] playerstandard:update cant report on current dodge/dmg resist/etc for infohuds")
+	end
 end)
 
 -- prevent sprint interupt when starting a melee charge with sprint skill. also adds chainsaw stuff
