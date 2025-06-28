@@ -373,29 +373,33 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 			self.values.pistol.spread_index_addend = {
 				3
 			}
-			-- gun nut ROF changed to 20%
+			-- pistol passive ROF
 			self.values.pistol.fire_rate_multiplier = {
 				1.20
 			}
-			-- new nerfed trigger happy
+			-- nerfed main trigger happy
 			self.values.pistol.stacking_hit_damage_multiplier = {
 				{
 					max_stacks = 1,
-					max_time = 6,
-					damage_bonus = 1.75
+					max_time = 5,
+					damage_bonus = 1.3
 				},
 				{
 					max_stacks = 1,
-					max_time = 6,
-					damage_bonus = 1.75
+					max_time = 5,
+					damage_bonus = 1.3
 				}
+			}
+			-- rof buff during trigger happy
+			self.values.pistol.trigger_happpy_rof_increase = {
+				1.3
 			}
 			-- new desperado
 			self.values.pistol.stacked_accuracy_bonus = {
 				{
 					max_stacks = 1,
 					accuracy_bonus = 0.68,
-					max_time = 6
+					max_time = 5
 				}
 			}	
 			-- new akimbo skill
@@ -415,14 +419,18 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				1.5,
 				2.5
 			}
-			-- new bottomless pockets skill
+			-- new bottomless pockets skill - ammo total
 			self.values.smg.extra_ammo_multiplier = {
 				1.4,
 				2
 			}
-			-- bottomless pockets aced
+			-- bottomless pockets basic
 			self.values.player.secondary_weapons_pickup_bonus = {
 				1 / 0.7 -- secondary mul nulifier
+			}
+			-- bottomless pockets aced
+			self.values.player.pistols_and_smgs_pick_up_increase = {
+				1.25
 			}
 			
 			---- REVENANT
@@ -1871,13 +1879,23 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 	
 	---- FUGITIVE
 	local function New_Fugitive_definitions()
-		-- up you go
+		-- botomless pockets basic
 		self.definitions.player_secondary_weapons_pickup_bonus = {
 			name_id = "menu_player_secondary_weapons_pickup_bonus",
 			category = "feature",
 			upgrade = {
 				value = 1,
 				upgrade = "secondary_weapons_pickup_bonus",
+				category = "player"
+			}
+		}
+		-- aced
+		self.definitions.player_pistols_and_smgs_pick_up_increase = {
+			name_id = "menu_player_pistols_and_smgs_pick_up_increase",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "pistols_and_smgs_pick_up_increase",
 				category = "player"
 			}
 		}
@@ -2779,6 +2797,16 @@ Hooks:PostHook(UpgradesTweakData, "_pistol_definitions", "Gilza_skill_definition
 		upgrade = {
 			value = 2,
 			upgrade = "swap_speed_multiplier",
+			category = "pistol"
+		}
+	}
+	-- new trigger happy buff
+	self.definitions.pistol_trigger_happpy_rof_increase = {
+		name_id = "menu_pistol_trigger_happpy_rof_increase",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "trigger_happpy_rof_increase",
 			category = "pistol"
 		}
 	}

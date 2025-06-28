@@ -2108,13 +2108,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				local function apply_stats(id, is_akimbo)
 					if self[id] then
 						if self[id].fire_mode_data then
-							self[id].fire_mode_data.fire_rate = 60/1350
+							self[id].fire_mode_data.fire_rate = 60/1150
 						end
 						if self[id].single then
-							self[id].single.fire_rate = 60/1350
+							self[id].single.fire_rate = 60/1150
 						end
 						if self[id].auto then
-							self[id].auto.fire_rate = 60/1350
+							self[id].auto.fire_rate = 60/1150
 						end
 						self[id].damage_falloff = new_pistol_damage_falloff
 						if is_akimbo then
@@ -2200,13 +2200,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.czech.NR_CLIPS_MAX = 8
 			self.czech.AMMO_MAX = self.czech.NR_CLIPS_MAX * self.czech.CLIP_AMMO_MAX
 			if self.czech.fire_mode_data then
-				self.czech.fire_mode_data.fire_rate = 60/1250
+				self.czech.fire_mode_data.fire_rate = 60/1050
 			end
 			if self.czech.single then
-				self.czech.single.fire_rate = 60/1250
+				self.czech.single.fire_rate = 60/1050
 			end
 			if self.czech.auto then
-				self.czech.auto.fire_rate = 60/1250
+				self.czech.auto.fire_rate = 60/1050
 			end
 			self.x_czech.stats.spread = 13
 			self.x_czech.stats.recoil = 17
@@ -2214,13 +2214,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_czech.NR_CLIPS_MAX = 4
 			self.x_czech.AMMO_MAX = self.x_czech.NR_CLIPS_MAX * self.x_czech.CLIP_AMMO_MAX
 			if self.x_czech.fire_mode_data then
-				self.x_czech.fire_mode_data.fire_rate = 60/1250
+				self.x_czech.fire_mode_data.fire_rate = 60/1050
 			end
 			if self.x_czech.single then
-				self.x_czech.single.fire_rate = 60/1250
+				self.x_czech.single.fire_rate = 60/1050
 			end
 			if self.x_czech.auto then
-				self.x_czech.auto.fire_rate = 60/1250
+				self.x_czech.auto.fire_rate = 60/1050
 			end
 			
 			self.glock_18c.stats.spread = 13
@@ -2228,26 +2228,26 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.glock_18c.NR_CLIPS_MAX = 7
 			self.glock_18c.AMMO_MAX = self.glock_18c.NR_CLIPS_MAX * self.glock_18c.CLIP_AMMO_MAX
 			if self.glock_18c.fire_mode_data then
-				self.glock_18c.fire_mode_data.fire_rate = 60/1115
+				self.glock_18c.fire_mode_data.fire_rate = 60/950
 			end
 			if self.glock_18c.single then
-				self.glock_18c.single.fire_rate = 60/1115
+				self.glock_18c.single.fire_rate = 60/950
 			end
 			if self.glock_18c.auto then
-				self.glock_18c.auto.fire_rate = 60/1115
+				self.glock_18c.auto.fire_rate = 60/950
 			end
 			self.x_g18c.stats.spread = 13
 			self.x_g18c.stats.recoil = 15
 			self.x_g18c.NR_CLIPS_MAX = 3.5
 			self.x_g18c.AMMO_MAX = self.x_g18c.NR_CLIPS_MAX * self.x_g18c.CLIP_AMMO_MAX
 			if self.x_g18c.fire_mode_data then
-				self.x_g18c.fire_mode_data.fire_rate = 60/1115
+				self.x_g18c.fire_mode_data.fire_rate = 60/950
 			end
 			if self.x_g18c.single then
-				self.x_g18c.single.fire_rate = 60/1115
+				self.x_g18c.single.fire_rate = 60/950
 			end
 			if self.x_g18c.auto then
-				self.x_g18c.auto.fire_rate = 60/1115
+				self.x_g18c.auto.fire_rate = 60/950
 			end
 			
 		end
@@ -2272,9 +2272,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			local new_damage = 125
 			
 			for gun, tbl in pairs(mid_pistols) do
-				local new_fire_rate = 60/455
+				local new_fire_rate = 60/360
 				if tbl.fmd == "auto" then
-					new_fire_rate = 60/910
+					new_fire_rate = 60/540
 				end
 				local function apply_stats(id, is_akimbo)
 					if self[id] then
@@ -2408,9 +2408,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			local new_damage = 155
 			
 			for gun, tbl in pairs(upper_mid_pistols) do
-				local new_fire_rate = 60/400
+				local new_fire_rate = 60/330
 				if tbl.fmd == "auto" then
-					new_fire_rate = 60/800
+					new_fire_rate = 60/500
 				end
 				local function apply_stats(id, is_akimbo)
 					if self[id] then
@@ -2516,8 +2516,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.type54.AMMO_PICKUP = {((pick_up * 0.9 * 0.7)) * secondary_mul,((pick_up * 1.1 * 0.7)) * secondary_mul}
 			
 			self.x_type54.stats.recoil = 12
-			self.x_type54.fire_mode_data.fire_rate = 60/400
-			self.x_type54.single.fire_rate = 60/400
+			self.x_type54.fire_mode_data.fire_rate = 60/330
+			self.x_type54.single.fire_rate = 60/330
 			self.x_type54.NR_CLIPS_MAX = 2.5
 			self.x_type54.AMMO_MAX = self.x_type54.NR_CLIPS_MAX * self.x_type54.CLIP_AMMO_MAX
 			self.x_type54.AMMO_PICKUP = {((pick_up * 0.9 * 0.7)) * 2,((pick_up * 1.1 * 0.7)) * 2}
@@ -2570,13 +2570,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				local function apply_stats(id, is_akimbo)
 					if self[id] then
 						if self[id].fire_mode_data then
-							self[id].fire_mode_data.fire_rate = 60/360
+							self[id].fire_mode_data.fire_rate = 60/300
 						end
 						if self[id].single then
-							self[id].single.fire_rate = 60/360
+							self[id].single.fire_rate = 60/300
 						end
 						if self[id].auto then
-							self[id].auto.fire_rate = 60/360
+							self[id].auto.fire_rate = 60/300
 						end
 						self[id].damage_falloff = new_pistol_damage_falloff
 						if is_akimbo then
@@ -2684,13 +2684,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				local function apply_stats(id, is_akimbo)
 					if self[id] then
 						if self[id].fire_mode_data then
-							self[id].fire_mode_data.fire_rate = 60/300
+							self[id].fire_mode_data.fire_rate = 60/240
 						end
 						if self[id].single then
-							self[id].single.fire_rate = 60/300
+							self[id].single.fire_rate = 60/240
 						end
 						if self[id].auto then
-							self[id].auto.fire_rate = 60/300
+							self[id].auto.fire_rate = 60/240
 						end
 						self[id].damage_falloff = new_pistol_damage_falloff
 						if is_akimbo then

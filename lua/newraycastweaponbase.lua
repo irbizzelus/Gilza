@@ -909,3 +909,32 @@ Hooks:OverrideFunction(NewRaycastWeaponBase,"weapon_fire_rate",function(self)
 
 	return NewRaycastWeaponBase.super.weapon_fire_rate(self)
 end)
+
+Hooks:OverrideFunction(NewRaycastWeaponBase,"fire_rate_multiplier",function(self)
+	
+	local le_pistole = false
+	for _, category in ipairs(self:weapon_tweak_data().categories) do
+		if category == "pistol" then
+			le_pistole = true
+			break
+		end
+	end
+	
+	-- if we have trigger happy, cache latest ROF. ROF itself depends on TH status and is re-calculated in blackmarket manager
+	if le_pistole and managers.player:has_category_upgrade("pistol", "stacking_hit_damage_multiplier") then
+		self._gilza_cahed_rof_state = self._gilza_cahed_rof_state or {skill_status = false, rof = self._fire_rate_multiplier}
+		local TH_status = managers.player._coroutine_mgr:is_running("trigger_happy") and true or false
+		if self._gilza_cahed_rof_state.skill_status ~= TH_status then
+			self._gilza_cahed_rof_state.skill_status = TH_status
+			local user_unit = self._setup and self._setup.user_unit
+			local current_state = alive(user_unit) and user_unit:movement() and user_unit:movement()._current_state
+			self._gilza_cahed_rof_state.rof = managers.blackmarket:fire_rate_multiplier(self._name_id, self:weapon_tweak_data().categories, self._silencer, nil, current_state, self._blueprint)
+			if self._ammo_data.fire_rate_multiplier then
+				self._gilza_cahed_rof_state.rof = self._gilza_cahed_rof_state.rof + self._ammo_data.fire_rate_multiplier
+			end
+		end
+		return self._gilza_cahed_rof_state.rof
+	else
+		return self._fire_rate_multiplier
+	end
+end)

@@ -213,12 +213,18 @@ Hooks:OverrideFunction(BlackMarketManager, "recoil_addend", function (self, name
 end)
 
 Hooks:OverrideFunction(BlackMarketManager, "fire_rate_multiplier", function (self, name, categories, silencer, detection_risk, current_state, blueprint)
+	
 	local multiplier = 1
 	multiplier = multiplier + 1 - managers.player:upgrade_value(name, "fire_rate_multiplier", 1)
 	multiplier = multiplier + 1 - managers.player:upgrade_value("weapon", "fire_rate_multiplier", 1)
 
 	for _, category in ipairs(categories) do
 		multiplier = multiplier + 1 - managers.player:upgrade_value(category, "fire_rate_multiplier", 1)
+		
+		-- new trigger happy buff
+		if category == "pistol" and managers.player:has_category_upgrade("pistol", "stacking_hit_damage_multiplier") and managers.player._coroutine_mgr:is_running("trigger_happy") then
+			multiplier = multiplier + 1 - managers.player:upgrade_value("pistol", "trigger_happpy_rof_increase", 1)
+		end
 	end
 	
 	-- new gun oil skill - due to the fact that this is a multiplier, we do some funny fuckery to make the bonus always the same

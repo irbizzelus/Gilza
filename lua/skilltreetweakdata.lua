@@ -779,15 +779,15 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		self.skills.dance_instructor.icon_xy = {0,9}
 		
 		self.skills.gun_fighter[1].upgrades = {"pistol_stacked_accuracy_bonus_1"}
-		self.skills.gun_fighter[2].upgrades = {"pistol_stacking_hit_damage_multiplier_1"}
+		self.skills.gun_fighter[2].upgrades = {"pistol_stacking_hit_damage_multiplier_1", "pistol_trigger_happpy_rof_increase"}
 		self.skills.gun_fighter.icon_xy = {11,2}
 		
 		self.skills.expert_handling[1].upgrades = {"akimbo_pistol_improved_handling"}
 		self.skills.expert_handling[2].upgrades = {"akimbo_allow_smg_improved_handling"}
 		self.skills.expert_handling.icon_xy = {3,3}
 
-		self.skills.trigger_happy[1].upgrades = {"pistol_extra_ammo_multiplier_1", "smg_extra_ammo_multiplier_1"}
-		self.skills.trigger_happy[2].upgrades = {"pistol_extra_ammo_multiplier_2", "smg_extra_ammo_multiplier_2", "player_secondary_weapons_pickup_bonus"}
+		self.skills.trigger_happy[1].upgrades = {"pistol_extra_ammo_multiplier_1", "smg_extra_ammo_multiplier_1", "player_secondary_weapons_pickup_bonus"}
+		self.skills.trigger_happy[2].upgrades = {"pistol_extra_ammo_multiplier_2", "smg_extra_ammo_multiplier_2", "player_pistols_and_smgs_pick_up_increase"}
 		self.skills.trigger_happy.icon_xy = {11,0}
 		
 		self.skills.up_you_go[2].upgrades = {"player_revived_health_regain_V2"}

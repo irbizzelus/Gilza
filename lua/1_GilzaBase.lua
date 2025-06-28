@@ -97,11 +97,32 @@ function Gilza:modCompatibility()
 			end
 		end
 	end
+	-- based on folder name
 	for i, mod in pairs(BLT.FindMods(BLT)) do
 		if mod.id == "Bipods That Work" then
 			Gilza.BTAW_enabled = true
 		elseif mod.id == "VanillaHUD Plus" then
 			Gilza.VHP_enabled = true
+		elseif mod.id == "AFSF2" then
+			local afsf = BLT.Mods:GetModByName("Auto-Fire Sound Fix")
+			if afsf then
+				afsf:SetEnabled(false, true)
+				Gilza.AFSF_force_disabled = true
+			end
+		end
+	end
+	-- based on mod.txt name
+	if BLT.Mods:GetModByName("Bipods That (Actually) Work") then
+		Gilza.BTAW_enabled = true
+	end
+	if BLT.Mods:GetModByName("VanillaHUDPlus") then
+		Gilza.VHP_enabled = true
+	end
+	if BLT.Mods:GetModByName("Auto-Fire Sound Fix") then
+		local afsf = BLT.Mods:GetModByName("Auto-Fire Sound Fix")
+		if afsf then
+			afsf:SetEnabled(false, true)
+			Gilza.AFSF_force_disabled = true
 		end
 	end
 end

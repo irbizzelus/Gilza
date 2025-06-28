@@ -483,7 +483,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					-- E3
 					menu_ammo_2x_beta_desc = "BASIC: ##$basic;##\nEach ammo bag now contains ##50%## more ammunition.\n\nACE: ##$pro;##\nYou can now place ##2## ammo bags instead of just one.",
 					menu_carbon_blade_beta_desc = "BASIC: ##$basic##\nReducing the wear down of the blades on enemies by ##50%##.\n\nACE: ##$pro##\nYou can now saw through shield enemies with your OVER9000 portable saw. When killing an enemy with the saw, you have a ##50%## chance to cause nearby enemies in a ##10## m radius to panic. Panic will make enemies go into short bursts of uncontrollable fear.\n\nYou can now gain ammunition for the saw from dropped ammo boxes. Saw ammo pick up can't be increased/decreased by other ammo pick up related skills.",
-					menu_bandoliers_beta_desc = "BASIC: ##$basic##\nYour total ammo capacity is increased by ##25%##.\n\nACE: ##$pro##\nIncreases the amount of ammo you gain from ammo boxes by ##25%##. You also gain a base ##10%## chance to get a throwable from an ammo box. The base chance is increased by ##3% * x## (where x - throwable pick up multiplier) for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.\n\nNotes:\nThis skill does not stack with the perk skill \"Walk-in Closet\".\nThrowable pick up multipliers are different for each throwable - you can find them under throwable descriptions.",
+					menu_bandoliers_beta_desc = "BASIC: ##$basic##\nYour total ammo capacity is increased by ##25%##.\n\nACE: ##$pro##\nYour ammo pick up rate is increased by ##25%##. You also gain a base ##10%## chance to get a throwable from an ammo box. The base chance is increased by ##3% * x## (where x - throwable pick up multiplier) for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.\n\nNotes:\nThis skill does not stack with the perk skill \"Walk-in Closet\".\nThrowable pick up multipliers are different for each throwable - you can find them under throwable descriptions.",
 				})
 			end
 			Enforcer_str()
@@ -545,11 +545,11 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					menu_equilibrium_beta_desc = "BASIC: ##$basic;##\nDecreases the time it takes to draw and holster pistols by ##33%##.\n\nACE: ##$pro;##\nDecreases the time it takes to draw and holster pistols by ##50%##.\n\nYou gain ##12## weapon accuracy with all pistols.",
 					menu_dance_instructor_desc = "BASIC: ##$basic##\nYou gain ##20%## increased rate of fire with pistols.\n\nACE: ##$pro##\nYou reload all pistols ##33%## faster.",
 					menu_gun_fighter_beta = "Trigger happy",
-					menu_gun_fighter_beta_desc = "BASIC: ##$basic##\nEach successful pistol hit gives you a ##32%## increased accuracy bonus for ##6## seconds and can stack ##1## times.\n\nACE: ##$pro##\nEach successful pistol hit gives you a ##75%## damage boost for ##6## seconds and can stack ##1## times.",
+					menu_gun_fighter_beta_desc = "BASIC: ##$basic##\nSuccessful pistol hit activates this skill for ##5## seconds.\nWhile this skill is active you gain a ##32%## increased accuracy with all pistols.\n\nACE: ##$pro##\nWhile this skill is active you now also gain a ##30%## damage boost, and a ##30%## rate of fire increase with all pistols.\n\nYou are the fastest gun in the New West.\nYou can now fire your single-fire mode pistols automatically, by holding down your \"Fire Weapon\" keybind.",
 					menu_expert_handling = "Double trouble",
 					menu_expert_handling_desc = "BASIC: ##$basic##\nYour akimbo pistols receive following bonuses:\n - ##16## more stability\n - ##12## more accuracy\n - ##35%## faster reload speed\n - ##2x## faster weapon swap speed\n\nACE: ##$pro##\nYour akimbo SMGs now receive same bonuses.",
 					menu_trigger_happy_beta = "Bottomless pockets",
-					menu_trigger_happy_beta_desc = "BASIC: ##$basic##\nYou gain ##50%## more reserve ammunition with all Pistols and SMGs.\n\nACE: ##$pro##\nYou gain additional ##100%## reserve ammunition with all Pistols and SMGs.\n\nAll weapons in the secondary slot lose their ##30%## ammo pick up penalty.",
+					menu_trigger_happy_beta_desc = "BASIC: ##$basic##\nYou gain ##50%## more reserve ammunition with all Pistols and SMGs.\n\nAll weapons in the secondary slot lose their ##30%## ammo pick up penalty.\n\nACE: ##$pro##\nYou gain additional ##100%## reserve ammunition with all Pistols and SMGs.\n\nYour ammo pick up rate with Pistols and SMGs is increased by ##25%##.",
 					-- F2
 					menu_running_from_death_beta_desc = "BASIC: ##$basic;##\nYou reload and swap weapons ##100%## faster for ##30## seconds after being revived.\n\nACE: ##$pro;##\nYou move ##30%## faster for ##30## seconds after being revived.",
 					menu_up_you_go_beta_desc = "BASIC: ##$basic##\nYou take ##30%## less damage for ##10## seconds after being revived.\n\nACE: ##$pro##\nYou receive additional ##30%## of your maximum health when revived.",
@@ -770,6 +770,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				Gilza_used_limited_fall_damage_immunity_charge = "Lethal fall damage prevented. Remaining charges: ",
 				-- custom attachments tag
 				menu_l_global_value_Gilza = "This is a Gilza Item!",
+				Gilza_AFSF_warning_str = "Auto Fire Sound Fix mod detected, and automatically disabled. Please remove it to avoid issues while running Gilza.",
 				-- VHUD compatibility with burst warning
 				Gilza_vhud_burst_warning_str = "It seems like you have \"Burst Fire\" setting enabled in VanillaHUD. Please disable it for Gilza's burst fire feature to work correctly.\n\nYou can do so in Options->Mod options->VanillaHUD Plus Settings->Equipment Tweaks->Enable Burst Fire.",
 				-- VHUD compatibility for buffinfo
@@ -1259,7 +1260,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					-- E3
 					menu_ammo_2x_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВ каждой сумке с патронами на ##50%## больше патронов.\n\nПРО: ##$pro;##\nПозволяет устанавливать ##2## сумки с патронами вместо одной.",
 					menu_carbon_blade_beta_desc = "БАЗОВЫЙ: ##$basic;##\nАтака врагов портативной пилой OVE9000 изнашивает лезвия на ##50%## меньше.\n\nПРО: ##$pro;##\nТеперь вы можете прорезать щитовиков своей пилой OVE9000. Убив противника пилой, у вас есть ##50%## шанс посеять панику в ##10## метровом радиусе. Паника будет подавлять противника, заставляя его испытывать страх.\n\nВраги теперь оставляют боезапас к пиле. Подбор боезапаса пилы не может быть увеличен/уменьшен другими навыками влияющими на подбор боезапаса.",
-					menu_bandoliers_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает количество переносимых боеприпасов на ##25%##.\n\nПРО: ##$pro;##\nВраги оставляют на ##25%## больше боеприпасов. У вас есть ##10%## шанс найти метательное оружие в оставленных врагами боеприпасах. Шанс увеличивается на ##3% * x## (где x - метательный множитель) за каждый подобранный боеприпас, в котором не было метательного оружия. Когда метательное оружие будет найдено в боеприпасах, шанс будет сброшен к стандартному значению.\n\nПометки:\nНавык не складывается с бонусом \"Тяжёлый пехотинец\" из набора перков.\nМетательный множитель зависит от используемого вами метательного оружия, а его значение можно узнать в описании каждого метательного оружия.",
+					menu_bandoliers_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает количество переносимых боеприпасов на ##25%##.\n\nПРО: ##$pro;##\nВы подбираете на ##25%## больше боеприпасов. У вас есть ##10%## шанс найти метательное оружие в оставленных врагами боеприпасах. Шанс увеличивается на ##3% * x## (где x - метательный множитель) за каждый подобранный боеприпас, в котором не было метательного оружия. Когда метательное оружие будет найдено в боеприпасах, шанс будет сброшен к стандартному значению.\n\nПометки:\nНавык не складывается с бонусом \"Тяжёлый пехотинец\" из набора перков.\nМетательный множитель зависит от используемого вами метательного оружия, а его значение можно узнать в описании каждого метательного оружия.",
 				})
 			end
 			Enforcer_str()
@@ -1321,11 +1322,11 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					menu_equilibrium_beta_desc = "БАЗОВЫЙ: ##$basic;##\nУменьшает на ##33%## время, нужное, чтобы достать и убрать пистолеты.\n\nПРО: ##$pro;##\nУменьшает на ##50%## время, нужное, чтобы достать и убрать пистолеты.\n\nПовышает точность пистолетов на ##12##.",
 					menu_dance_instructor_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает скорострельность пистолетов на ##20%##.\n\nПРО: ##$pro;##\nВы перезаряжаете пистолеты на ##33%## быстрее.",
 					menu_gun_fighter_beta = "Однорукий бандит",
-					menu_gun_fighter_beta_desc = "БАЗОВЫЙ: ##$basic##\nКаждое попадание из пистолета увеличивает вашу точность с пистолетами на ##32%## в течение ##6## секунд и может складываться до ##1## раз.\n\nПРО: ##$pro##\nКаждое попадание из пистолета даёт ##75%## к наносимому урону пистолетов на ##6## секунд и может складываться до ##1## раз.",
+					menu_gun_fighter_beta_desc = "БАЗОВЫЙ: ##$basic##\nПопадание из пистолета активирует данный навык на ##5## секунд.\nПока данный навык активен, вы получаете ##32%## бонус к точности с пистолетами.\n\nПРО: ##$pro##\nПока данный навык активен, вы так же получаете ##30%## бонус к урону и ##30%## бонус к скорострельности с пистолетами.\n\nВы самый быстрый стрелок на новом западе.\nВы теперь будете автоматически стрелять из пистолетов в одиночном режиме стрельбы, если вы удерживаете клавишу \"Выстрелить\".",
 					menu_expert_handling = "Вдвоем веселей",
 					menu_expert_handling_desc = "БАЗОВЫЙ: ##$basic##\nВаши парные пистолеты получают следующие бонусы:\n - ##16## стабильности\n - ##12## точности\n - ##35%## бонус с скорости перезарядки\n - ##удвоенная## скорость смены оружия\n\nПРО: ##$pro##\nВаши парные пистолет-пулеметы теперь тоже получают эти бонусы.",
 					menu_trigger_happy_beta = "БЕЗДОННЫЕ КАРМАНЫ",
-					menu_trigger_happy_beta_desc = "БАЗОВЫЙ: ##$basic##\nВы получаете на ##50%## больше боезапаса для пистолетов и пистолет-пулеметов.\n\nПРО: ##$pro##\nВы получаете на еще ##100%## больше боезапаса для пистолетов и пистолет-пулеметов.\n\nВсе вторичное оружие больше не имеет ##30%## штрафа к количеству подбираемого боезапаса.",
+					menu_trigger_happy_beta_desc = "БАЗОВЫЙ: ##$basic##\nВы получаете на ##50%## больше переносимых боеприпасов с пистолетами и пистолет-пулеметами.\n\nВаше вторичное оружие больше не будет иметь ##30%## штраф при подборе боеприпасов.\n\nПРО: ##$pro##\nВы получаете на еще ##100%## больше переносимых боеприпасов с пистолетами и пистолет-пулеметами.\n\nВы подбираете на ##25%## больше боеприпасов для пистолетов и пистолет-пулеметов.",
 					-- F2
 					menu_running_from_death_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВы перезаряжаете и переключаетесь между оружием на ##100%## быстрее в течение ##30## секунд после того, как вас подняли.\n\nПРО: ##$pro;##\nСкорость вашего передвижения увеличена на ##30%## в течение ##30## секунд после того, как вас подняли.",
 					menu_up_you_go_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВы получаете на ##30%## меньше урона в течение ##10## секунд после того, как вас подняли.\n\nПРО: ##$pro;##\nВы получаете дополнительные ##30%## от своего максимального здоровья когда вас подняли.",
@@ -1546,6 +1547,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				Gilza_used_limited_fall_damage_immunity_charge = "Смертельный урон от падения предотвращен. Кол-во зарядов: ",
 				-- custom attachments tag
 				menu_l_global_value_Gilza = "Это Предмет Мода Gilza!",
+				Gilza_AFSF_warning_str = "Мод \"Auto Fire Sound Fix\" был найден и отключен. Пожалуйста, удалите AFSF дабы мод Gilza нормально работал. Функционал мода AFSF уже включен в моде Gilza.",
 				-- VHUD compatibility with burst warning
 				Gilza_vhud_burst_warning_str = "У вас включена опция \"Стрельба Очередями\" в моде VanillaHUD. Пожалуйста, выключите данную опцию дабы стрельба очередями мода Gilza работала без проблем.\n\nВы можете сделать это перейдя в Настройки->Настройки модов->VanillaHUD Plus Настройки->Настройки снаряжения->Включить стрельбу очередями.",
 				-- VHUD compatibility for buffinfo

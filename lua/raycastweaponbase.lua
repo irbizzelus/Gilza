@@ -84,6 +84,16 @@ Hooks:OverrideFunction(RaycastWeaponBase, "add_ammo", function (self, ratio, add
 			end
 			
 			local weapon_tweak_data = tweak_data.weapon[ammo_base._name_id]
+			
+			if managers.player:has_category_upgrade("player", "pistols_and_smgs_pick_up_increase") then
+				for _, category in pairs(weapon_tweak_data.categories) do
+					if category == "pistol" or category == "smg" then
+						pickup_mul = pickup_mul + managers.player:upgrade_value("player", "pistols_and_smgs_pick_up_increase", 1) - 1
+						break
+					end
+				end
+			end
+			
 			if managers.player:has_category_upgrade("player", "secondary_weapons_pickup_bonus") and weapon_tweak_data.use_data and weapon_tweak_data.use_data.selection_index and weapon_tweak_data.use_data.selection_index == 1 then
 				pickup_mul = pickup_mul * managers.player:upgrade_value("player", "secondary_weapons_pickup_bonus", 1)
 			end
@@ -389,4 +399,61 @@ Hooks:OverrideFunction(DOTBulletBase, "_dot_data_by_weapon", function (self, wea
 	end
 
 	return nil
+end)
+
+
+-- adding AFSF because original version has a sound bug, and does not work properly with new pistol skill implementation
+-- because AFSF defaults to .single_fire sound instead of also checking for .fire sound
+
+_G.AutoFireSoundFixBlacklist = {
+	["saw"] = true,
+	["saw_secondary"] = true,
+	["flamethrower_mk2"] = true,
+	["m134"] = true,
+	["mg42"] = true,
+	["shuno"] = true,
+	["system"] = true,
+	["par"] = true
+}
+
+--Allows users/modders to easily edit this blacklist from outside of this mod
+Hooks:Register("AFSF2_OnWriteBlacklist")
+Hooks:Add("BaseNetworkSessionOnLoadComplete","AFSF2_OnLoadComplete",function()
+	Hooks:Call("AFSF2_OnWriteBlacklist",AutoFireSoundFixBlacklist)
+end)
+
+--Check for if AFSF's fix code should apply to this particular weapon
+function RaycastWeaponBase:_soundfix_should_play_normal()
+	local name_id = self:get_name_id() or "xX69dank420blazermachineXx"
+	if not self._setup.user_unit == managers.player:player_unit() then --don't apply fix for NPCs
+		return true
+	elseif tweak_data.weapon[name_id].use_fix ~= nil then -- custom weapon support
+		return tweak_data.weapon[name_id].use_fix
+	elseif AutoFireSoundFixBlacklist[name_id] then --blacklist
+		return true
+	elseif not (self:weapon_tweak_data().sounds.fire_single or self:weapon_tweak_data().sounds.fire) then -- singlefire sound check
+		return true
+	end
+	return false
+end
+
+--Prevent playing sounds except for blacklisted weapons
+local orig_fire_sound = RaycastWeaponBase._fire_sound
+function RaycastWeaponBase:_fire_sound(...)
+	if self:_soundfix_should_play_normal() then
+		return orig_fire_sound(self,...)
+	end
+end
+
+-- play single fire sound.
+-- also removed the stop_shooting function because it caused sounds of bullet casings to never play. this doesnt seem to affect anything else noticably
+Hooks:PreHook(RaycastWeaponBase,"fire","autofiresoundfix2_raycastweaponbase_fire",function(self,...)
+	if not self:_soundfix_should_play_normal() then
+		self._bullets_fired = 0
+		if self:weapon_tweak_data().sounds.fire_single then
+			self:play_tweak_data_sound(self:weapon_tweak_data().sounds.fire_single,"fire_single")
+		else
+			self:play_tweak_data_sound(self:weapon_tweak_data().sounds.fire,"fire")
+		end
+	end
 end)

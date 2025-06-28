@@ -2,6 +2,7 @@ if not Gilza then
 	dofile("mods/Gilza/lua/1_GilzaBase.lua")
 end
 
+local afsf_warned = false -- only warn about afsf once per entry to main menu, to be less annoying, but annoying enough to make user uninstall original mod, cause otherwise shit dont work
 Hooks:PostHook(MenuManager, "_node_selected", "Gilza_patch_notification", function(self, menu_name, node)
 	if type(node) == "table" and node._parameters.name == "main" then
 		Gilza:changelog_message()
@@ -15,6 +16,16 @@ Hooks:PostHook(MenuManager, "_node_selected", "Gilza_patch_notification", functi
 					menu:Show()
 				end)
 			end
+		end
+		if Gilza.AFSF_force_disabled and not afsf_warned then
+			afsf_warned = true
+			DelayedCalls:Add("Gilza_vhud_burst_warning", 0.4, function()
+				local menu_options = {}
+				menu_options[#menu_options+1] = {text = "OK", is_cancel_button = true}
+				local message = managers.localization:text("Gilza_AFSF_warning_str")
+				local menu = QuickMenu:new("Gilza", message, menu_options)
+				menu:Show()
+			end)
 		end
 	end
 end)
