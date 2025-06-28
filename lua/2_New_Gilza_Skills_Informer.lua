@@ -7,11 +7,12 @@
 
 -- you can use semi overrides of these functions or posthooks to track when skills are activated
 -- in order to properly work, your HUD/info mod needs to have lower priority then gilza (current Gilza priority: 19)
--- use Hooks:GetFunction(Gilza.New_Skills_Informer,"activated_new_zerk_melee") to grab the function itself to do a soft override
+-- use Hooks:GetFunction(Gilza.New_Skills_Informer,"activated_new_zerk_melee") to grab the function itself to do a semi override
 
 -- semi overrides are ones that copy original function to a local var, then do an override of the same function while running original func in the override
 
 Gilza.New_Skills_Informer = {}
+-- for ease of use run .NSI
 Gilza.NSI = Gilza.New_Skills_Informer
 
 -- add new skills to VHUD, fold this part to go bellow it where relevant functions are.
@@ -557,7 +558,7 @@ end
 
 -- new dmg resist reporter - provides damage multiplier that you currently have from passive dmg resistances
 -- so 0.3 means 70% total dmg resist. also, this does not take into account specific damage type resistances like bullet/melee, so perks like yakuza and brawler
--- may show lower resist than what they might have
+-- will show lower resist than what they probably have
 function Gilza.New_Skills_Informer:update_current_passive_dmg_resist(total_resist)
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
 		if true then
@@ -586,9 +587,9 @@ function Gilza.New_Skills_Informer:dodge_value_tracker(current_dodge)
 	end
 end
 
--- any time PlayerManager:health_regen() caclulated amount of passive health regen, this function also gets triggered.
--- it will report by how much health regen is adjusted. value can be both positive and negative. example: -0.015 to reduce 5 second heal by 1.5%
--- this skill is now part of copycat, and muscle has it, but only on DS.
+-- any time PlayerManager:health_regen() caclulates amount of passive health regen, this function also gets triggered.
+-- it will report by how much health regen was adjusted. value can be both positive and negative. example: -0.015 to reduce 5 second heal by 1.5%
+-- this skill is now part of copycat, and muscle but only on DS.
 function Gilza.New_Skills_Informer:new_passive_health_regen_adjustment(amount)
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
 		if amount then
