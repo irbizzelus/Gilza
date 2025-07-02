@@ -11,6 +11,11 @@
 	"Gilza_melee_gui_2": "Only charge time",
 	"Gilza_melee_gui_3": "Only damage value",
 	"Gilza_melee_gui_4": "Both",
+	"Gilza_blackmarket_weapon_sorting": "Weapon Sorting",
+	"Gilza_blackmarket_weapon_sorting_desc": "Choose how weapons are sorted based on damage while selecting to buy a new one on the blackmarket - disabled, ascending (low to high) or descending (high to low). Does not apply to special weapons tab.",
+	"Gilza_weapon_sorting_choise_1": "Disabled",
+	"Gilza_weapon_sorting_choise_2": "Descending",
+	"Gilza_weapon_sorting_choise_3": "Ascending",
 	
 	"Gilza_misc_header": "----- Info Links -----",
 	"Gilza_MWS_page": "Gilza MWS page",
@@ -30,6 +35,8 @@
 	
 	"Gilza_shotgun_skill_notification": "Fearmonger notification",
 	"Gilza_shotgun_skill_notification_desc": "Adds a pop up notification when you recieve a speed bonus from \"fearmonger\" skill.",
+	"Gilza_menace_points_notification": "Stockholm (Basic) notification",
+	"Gilza_menace_points_notification_desc": "Adds a pop up notification when you gain menace points while using Stockholm Syndrome skill.",
 	"Gilza_designated_marksman_zoom": "Marksman Zoom Skill",
 	"Gilza_designated_marksman_zoom_desc": "Change how much extra zoom \"Designated Marksman\" skill will provide. Vanilla PayDay 2 provides you with 1.5x zoom by default. Heist restart is required for changes to apply.",
 	"Gilza_designated_marksman_zoom_1": "0x",

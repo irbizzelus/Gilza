@@ -40,6 +40,15 @@
 			"default_value" : true
 		},
 		{
+			"type" : "toggle",
+			"id" : "Gilza_menace_points_notification",
+			"title" : "Gilza_menace_points_notification",
+			"description" : "Gilza_menace_points_notification_desc",
+			"callback" : "Gilza_menace_points_notification",
+			"value" : "menace_points_notification",
+			"default_value" : true
+		},
+		{
 			"type" : "multiple_choice",
 			"id" : "Gilza_designated_marksman_zoom",
 			"title" : "Gilza_designated_marksman_zoom",

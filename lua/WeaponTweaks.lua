@@ -49,16 +49,16 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_NewWeaponRecoilBaseStats",
 	
 	Gilza.Weapons_module.ammo_pickups = {
 		ARs = {
-			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.4),
-			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.36),
-			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.32) * 0.88, -- 12% less then 155
-			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.32),
-			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.3)
+			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.44),
+			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.4),
+			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.36) * 0.88, -- 12% less then 155
+			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.36),
+			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.34)
 		},
 		SHOTGUNs = {
 			_900 = Gilza.Weapons_module:get_ammo_pickup(900, 0.95),
 			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.8),
-			_325 = Gilza.Weapons_module:get_ammo_pickup(325, 0.84), -- better accuracy is not really expected, but their benefits from overkill skill are too good.
+			_325 = Gilza.Weapons_module:get_ammo_pickup(325, 0.85), -- better accuracy is not really expected, but their benefits from overkill skill are too good.
 			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.75)
 		},
 		LMGs = {
@@ -83,20 +83,20 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_NewWeaponRecoilBaseStats",
 			_50cal = 0.28
 		},
 		SMGs = {
-			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.42),
-			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.38) * 0.88, -- 12% less then 155
-			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.38),
-			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.36),
-			_95 = Gilza.Weapons_module:get_ammo_pickup(95, 0.38),
+			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.43),
+			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.4) * 0.88, -- 12% less then 155
+			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.4),
+			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.38),
+			_95 = Gilza.Weapons_module:get_ammo_pickup(95, 0.36),
 		},
 		PISTOLs = {
 			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.75),
 			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.5),
 			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.42) * 0.88, -- 12% less then 155
 			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.42),
-			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.36),
-			_95 = Gilza.Weapons_module:get_ammo_pickup(95, 0.32),
-			_88 = Gilza.Weapons_module:get_ammo_pickup(88, 0.3),
+			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.38),
+			_95 = Gilza.Weapons_module:get_ammo_pickup(95, 0.35),
+			_88 = Gilza.Weapons_module:get_ammo_pickup(88, 0.33),
 		},
 		GLs = {
 			_1300 = 0.26,
@@ -627,18 +627,20 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.ching.stats.reload = 14
 			self.ching.NR_CLIPS_MAX = 8
 			self.ching.AMMO_MAX = self.ching.CLIP_AMMO_MAX * self.ching.NR_CLIPS_MAX
+			self.ching.fire_mode_data = {fire_rate = 60/400}
+			self.ching.single = {fire_rate = 60/400}
 			
 			self.new_m14.stats.reload = 8
 			self.new_m14.CLIP_AMMO_MAX = 15
 			self.new_m14.NR_CLIPS_MAX = 5
 			self.new_m14.AMMO_MAX = self.new_m14.CLIP_AMMO_MAX * self.new_m14.NR_CLIPS_MAX
-			self.new_m14.fire_mode_data = {fire_rate = 60/600}
-			self.new_m14.single = {fire_rate = 60/600}
+			self.new_m14.fire_mode_data = {fire_rate = 60/400}
+			self.new_m14.single = {fire_rate = 60/400}
 			
 			self.shak12.CLIP_AMMO_MAX = 25
 			self.shak12.NR_CLIPS_MAX = 4
 			self.shak12.AMMO_MAX = self.shak12.CLIP_AMMO_MAX * self.shak12.NR_CLIPS_MAX
-			self.shak12.stats.recoil = 10
+			self.shak12.stats.recoil = 9
 			self.shak12.stats.spread = 19
 			
 			self.contraband.CLIP_AMMO_MAX = 25
@@ -747,7 +749,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			local ARs_200 = {
 				amcar = true,
 				ak74 = true,
-				aug = true,
 				sub2000 = true,
 				l85a2 = true,
 				asval = true,		
@@ -776,13 +777,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.ak74.fire_mode_data = {fire_rate = 60/650}
 			self.ak74.auto = {fire_rate = 60/650}
 			
-			self.aug.stats.recoil = 14
-			self.aug.stats.spread = 17
-			self.aug.fire_mode_data = {fire_rate = 60/680}
-			self.aug.auto = {fire_rate = 60/680}
-			self.aug.NR_CLIPS_MAX = 5
-			self.aug.AMMO_MAX = self.aug.CLIP_AMMO_MAX * self.aug.NR_CLIPS_MAX
-			
 			self.sub2000.NR_CLIPS_MAX = 4
 			self.sub2000.AMMO_MAX = self.sub2000.CLIP_AMMO_MAX * self.sub2000.NR_CLIPS_MAX
 			self.sub2000.stats.spread = 21
@@ -790,17 +784,17 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.sub2000.single = {fire_rate = 60/669}
 			
 			self.l85a2.stats.reload = 15
-			self.l85a2.stats.recoil = 14
-			self.l85a2.stats.spread = 13
+			self.l85a2.stats.recoil = 16
+			self.l85a2.stats.spread = 14
 			self.l85a2.NR_CLIPS_MAX = 5
 			self.l85a2.AMMO_MAX = self.l85a2.CLIP_AMMO_MAX * self.l85a2.NR_CLIPS_MAX
 			
 			self.asval.CLIP_AMMO_MAX = 20
-			self.asval.NR_CLIPS_MAX = 6
+			self.asval.NR_CLIPS_MAX = 7
 			self.asval.AMMO_MAX = self.asval.CLIP_AMMO_MAX * self.asval.NR_CLIPS_MAX
 			self.asval.stats.spread = 22
 			self.asval.stats.reload = 20
-			self.asval.stats.recoil = 17
+			self.asval.stats.recoil = 16
 			self.asval.auto = {fire_rate = 60/900}
 			self.asval.fire_mode_data = {fire_rate = 60/900}
 			
@@ -834,18 +828,18 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.corgi.auto = {fire_rate = 60/875}
 			self.corgi.fire_mode_data = {fire_rate = 60/875}
 			self.corgi.stats.recoil = 15
-			self.corgi.stats.spread = 17
+			self.corgi.stats.spread = 19
 			self.corgi.stats.concealment = 19
 			
 			self.s552.NR_CLIPS_MAX = 7
 			self.s552.AMMO_MAX = self.s552.CLIP_AMMO_MAX * self.s552.NR_CLIPS_MAX
 			self.s552.stats.recoil = 15
-			self.s552.stats.spread = 10
+			self.s552.stats.spread = 11
 			self.s552.fire_mode_data = {fire_rate = 60/700}
 			self.s552.auto = {fire_rate = 60/700}
 			self.s552.stats.reload = 15
 			
-			self.new_m4.stats.recoil = 8
+			self.new_m4.stats.recoil = 9
 			self.new_m4.stats.spread = 12
 			self.new_m4.NR_CLIPS_MAX = 6
 			self.new_m4.AMMO_MAX = self.new_m4.CLIP_AMMO_MAX * self.new_m4.NR_CLIPS_MAX
@@ -857,9 +851,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			end
 			
 			self.g36.NR_CLIPS_MAX = 6
-			self.g36.stats.spread = 5
+			self.g36.stats.spread = 9
 			self.g36.AMMO_MAX = self.g36.CLIP_AMMO_MAX * self.g36.NR_CLIPS_MAX
-			self.g36.stats.recoil = 23
+			self.g36.stats.recoil = 22
 			self.g36.stats.concealment = 20
 			self.g36.stats.reload = 13
 			self.g36.auto = {fire_rate = 60/750}
@@ -873,12 +867,12 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.flint.fire_mode_data = {fire_rate = 60/700}
 			self.flint.auto = {fire_rate = 60/700}
 			
-			self.tecci.stats.recoil = 20
-			self.tecci.stats.spread = 2
+			self.tecci.stats.recoil = 19
+			self.tecci.stats.spread = 6
 			self.tecci.NR_CLIPS_MAX = 2
 			self.tecci.AMMO_MAX = self.tecci.CLIP_AMMO_MAX * self.tecci.NR_CLIPS_MAX
-			self.tecci.fire_mode_data = {fire_rate = 60/600}
-			self.tecci.auto = {fire_rate = 60/600}
+			self.tecci.fire_mode_data = {fire_rate = 60/666}
+			self.tecci.auto = {fire_rate = 60/666}
 			
 			self.tkb.NR_CLIPS_MAX = 2
 			self.tkb.AMMO_MAX = self.tkb.CLIP_AMMO_MAX * self.tkb.NR_CLIPS_MAX
@@ -895,6 +889,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			local ARs_120 = {
 				famas = true,
 				ak5 = true,
+				aug = true,
 				komodo = true,
 				m16 = true
 			}
@@ -913,19 +908,28 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.famas.stats.recoil = 19
 			self.famas.stats.spread = 6
 		
-			self.ak5.NR_CLIPS_MAX = 6
+			self.ak5.NR_CLIPS_MAX = 7
 			self.ak5.AMMO_MAX = self.ak5.CLIP_AMMO_MAX * self.ak5.NR_CLIPS_MAX
-			self.ak5.stats.recoil = 19
-			self.ak5.stats.spread = 18		
+			self.ak5.fire_mode_data = {fire_rate = 60/680}
+			self.ak5.auto = {fire_rate = 60/680}
+			self.ak5.stats.recoil = 14
+			self.ak5.stats.spread = 16	
+
+			self.aug.stats.recoil = 18
+			self.aug.stats.spread = 18
+			self.aug.fire_mode_data = {fire_rate = 60/730}
+			self.aug.auto = {fire_rate = 60/730}
+			self.aug.NR_CLIPS_MAX = 6
+			self.aug.AMMO_MAX = self.aug.CLIP_AMMO_MAX * self.aug.NR_CLIPS_MAX
 			
 			self.komodo.fire_mode_data = {fire_rate = 60/850}
 			self.komodo.auto = {fire_rate = 60/850}
 			self.komodo.stats.recoil = 16
 			self.komodo.stats.spread = 16
-			self.komodo.NR_CLIPS_MAX = 7
+			self.komodo.NR_CLIPS_MAX = 6
 			self.komodo.AMMO_MAX = self.komodo.CLIP_AMMO_MAX * self.komodo.NR_CLIPS_MAX
 			
-			self.m16.NR_CLIPS_MAX = 6
+			self.m16.NR_CLIPS_MAX = 7
 			self.m16.AMMO_MAX = self.m16.CLIP_AMMO_MAX * self.m16.NR_CLIPS_MAX
 			self.m16.stats.recoil = 1
 			self.m16.stats.spread = 22
@@ -1039,8 +1043,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.m590.AMMO_MAX = self.m590.CLIP_AMMO_MAX * self.m590.NR_CLIPS_MAX
 			self.m590.stats.recoil = 14
 			self.m590.stats.spread = 12
-			self.m590.fire_mode_data = {fire_rate = 60/130}
-			self.m590.single = {fire_rate = 60/130}
+			self.m590.fire_mode_data = {fire_rate = 60/120}
+			self.m590.single = {fire_rate = 60/120}
 			
 			self.ksg.CLIP_AMMO_MAX = 14
 			self.ksg.NR_CLIPS_MAX = 2
@@ -1550,7 +1554,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.desertfox.stats.spread = 17
 			
 			self.r93.stats.recoil = 7
-			self.r93.stats.spread = 22
+			self.r93.stats.spread = 21
 			self.r93.NR_CLIPS_MAX = 3.35
 			self.r93.AMMO_MAX = self.r93.CLIP_AMMO_MAX * self.r93.NR_CLIPS_MAX
 			
@@ -1608,20 +1612,20 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.m45.NR_CLIPS_MAX = 3
 			self.m45.AMMO_MAX = self.m45.CLIP_AMMO_MAX * self.m45.NR_CLIPS_MAX
 			
-			self.hajk.stats.recoil = 14
-			self.hajk.stats.spread = 12
+			self.hajk.stats.recoil = 15
+			self.hajk.stats.spread = 13
 			self.hajk.NR_CLIPS_MAX = 3
 			self.hajk.AMMO_MAX = self.hajk.CLIP_AMMO_MAX * self.hajk.NR_CLIPS_MAX
 			self.hajk.fire_mode_data = {fire_rate = 60/775}
 			self.hajk.auto = {fire_rate = 60/775}
 			
 			self.erma.stats.recoil = 21
-			self.erma.stats.spread = 7
+			self.erma.stats.spread = 9
 			self.erma.NR_CLIPS_MAX = 3.5
 			self.erma.CLIP_AMMO_MAX = 32
 			self.erma.AMMO_MAX = self.erma.CLIP_AMMO_MAX * self.erma.NR_CLIPS_MAX
-			self.erma.fire_mode_data = {fire_rate = 60/550}
-			self.erma.auto = {fire_rate = 60/550}
+			self.erma.fire_mode_data = {fire_rate = 60/650}
+			self.erma.auto = {fire_rate = 60/650}
 			
 			self.sterling.stats.spread = 16
 			self.sterling.stats.recoil = 16
@@ -1649,20 +1653,20 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_m45.NR_CLIPS_MAX = 1.5
 			self.x_m45.AMMO_MAX = self.x_m45.CLIP_AMMO_MAX * self.x_m45.NR_CLIPS_MAX
 			
-			self.x_hajk.stats.recoil = 14
-			self.x_hajk.stats.spread = 12
+			self.x_hajk.stats.recoil = 15
+			self.x_hajk.stats.spread = 13
 			self.x_hajk.NR_CLIPS_MAX = 1.5
 			self.x_hajk.AMMO_MAX = self.x_hajk.CLIP_AMMO_MAX * self.x_hajk.NR_CLIPS_MAX
 			self.x_hajk.fire_mode_data = {fire_rate = 60/775}
 			self.x_hajk.single = {fire_rate = 60/775}
 			
 			self.x_erma.stats.recoil = 21
-			self.x_erma.stats.spread = 7
+			self.x_erma.stats.spread = 9
 			self.x_erma.NR_CLIPS_MAX = 1.75
 			self.x_erma.CLIP_AMMO_MAX = 64
 			self.x_erma.AMMO_MAX = self.x_erma.CLIP_AMMO_MAX * self.x_erma.NR_CLIPS_MAX
-			self.x_erma.fire_mode_data = {fire_rate = 60/550}
-			self.x_erma.auto = {fire_rate = 60/550}
+			self.x_erma.fire_mode_data = {fire_rate = 60/650}
+			self.x_erma.auto = {fire_rate = 60/650}
 			
 			self.x_sterling.stats.spread = 16
 			self.x_sterling.stats.recoil = 16
@@ -1703,13 +1707,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.olympic.fire_mode_data = {fire_rate = 60/710}
 			self.olympic.auto = {fire_rate = 60/710}
 			
-			self.schakal.stats.spread = 12
-			self.schakal.stats.recoil = 15
+			self.schakal.stats.spread = 18
+			self.schakal.stats.recoil = 17
 			self.schakal.CLIP_AMMO_MAX = 25
 			self.schakal.NR_CLIPS_MAX = 6
 			self.schakal.AMMO_MAX = self.schakal.CLIP_AMMO_MAX * self.schakal.NR_CLIPS_MAX
-			self.schakal.fire_mode_data = {fire_rate = 60/666}
-			self.schakal.auto = {fire_rate = 60/666}
+			self.schakal.fire_mode_data = {fire_rate = 60/690}
+			self.schakal.auto = {fire_rate = 60/690}
 			
 			self.sr2.stats.spread = 6
 			self.sr2.stats.recoil = 20
@@ -1752,8 +1756,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_olympic.fire_mode_data = {fire_rate = 60/710}
 			self.x_olympic.single = {fire_rate = 60/710}
 			
-			self.x_schakal.stats.spread = 12
-			self.x_schakal.stats.recoil = 15
+			self.x_schakal.stats.spread = 18
+			self.x_schakal.stats.recoil = 17
 			self.x_schakal.CLIP_AMMO_MAX = 50
 			self.x_schakal.NR_CLIPS_MAX = 3
 			self.x_schakal.AMMO_MAX = self.x_schakal.CLIP_AMMO_MAX * self.x_schakal.NR_CLIPS_MAX
@@ -1826,6 +1830,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			
 			self.m1928.stats.spread = 7
 			self.m1928.stats.recoil = 23
+			self.m1928.stats.reload = 12
 			self.m1928.NR_CLIPS_MAX = 3
 			self.m1928.AMMO_MAX = self.m1928.CLIP_AMMO_MAX * self.m1928.NR_CLIPS_MAX
 			
@@ -1844,8 +1849,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.akmsu.fire_mode_data = {fire_rate = 60/700}
 			self.akmsu.auto = {fire_rate = 60/700}
 			
-			self.tec9.stats.recoil = 17
-			self.tec9.stats.spread = 12
+			self.tec9.stats.recoil = 18
+			self.tec9.stats.spread = 11
 			self.tec9.stats.reload = 14
 			self.tec9.NR_CLIPS_MAX = 7.5
 			self.tec9.AMMO_MAX = self.tec9.CLIP_AMMO_MAX * self.tec9.NR_CLIPS_MAX
@@ -1897,8 +1902,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_akmsu.fire_mode_data = {fire_rate = 60/700}
 			self.x_akmsu.single = {fire_rate = 60/700}
 			
-			self.x_tec9.stats.recoil = 17
-			self.x_tec9.stats.spread = 12
+			self.x_tec9.stats.recoil = 18
+			self.x_tec9.stats.spread = 11
 			self.x_tec9.NR_CLIPS_MAX = 3.75
 			self.x_tec9.AMMO_MAX = self.x_tec9.CLIP_AMMO_MAX * self.x_tec9.NR_CLIPS_MAX
 			
@@ -1926,7 +1931,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				end
 			end
 			
-			self.mp7.stats.spread = 12
+			self.mp7.stats.spread = 18
+			self.mp7.stats.recoil = 12
 			self.mp7.stats.reload = 14
 			self.mp7.stats.concealment = 25
 			self.mp7.AMMO_MAX = 180
@@ -1969,7 +1975,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				end
 			end
 			
-			self.x_mp7.stats.spread = 12
+			self.x_mp7.stats.spread = 18
+			self.x_mp7.stats.recoil = 12
 			self.x_mp7.stats.reload = 14
 			self.x_mp7.stats.concealment = 25
 			self.x_mp7.AMMO_MAX = 180
@@ -2036,8 +2043,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.fmg9.AMMO_MAX = 210
 			self.fmg9.NR_CLIPS_MAX = self.fmg9.AMMO_MAX / self.fmg9.CLIP_AMMO_MAX
 			
-			self.scorpion.stats.spread = 12
-			self.scorpion.stats.recoil = 19
+			self.scorpion.stats.spread = 19
+			self.scorpion.stats.recoil = 13
 			self.scorpion.AMMO_MAX = 200
 			self.scorpion.NR_CLIPS_MAX = self.scorpion.AMMO_MAX / self.scorpion.CLIP_AMMO_MAX
 			
@@ -2066,8 +2073,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_mac10.AMMO_MAX = 200
 			self.x_mac10.NR_CLIPS_MAX = self.x_mac10.AMMO_MAX / self.x_mac10.CLIP_AMMO_MAX
 			
-			self.x_scorpion.stats.spread = 12
-			self.x_scorpion.stats.recoil = 19
+			self.x_scorpion.stats.spread = 19
+			self.x_scorpion.stats.recoil = 13
 			self.x_scorpion.AMMO_MAX = 200
 			self.x_scorpion.NR_CLIPS_MAX = self.x_scorpion.AMMO_MAX / self.x_scorpion.CLIP_AMMO_MAX
 			
@@ -2143,12 +2150,12 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.beer.stats.spread = 13
 			self.beer.stats.recoil = 19
 			self.beer.CLIP_AMMO_MAX = 24
-			self.beer.NR_CLIPS_MAX = 7
+			self.beer.NR_CLIPS_MAX = 6
 			self.beer.AMMO_MAX = self.beer.NR_CLIPS_MAX * self.beer.CLIP_AMMO_MAX
 			self.x_beer.stats.spread = 13
 			self.x_beer.stats.recoil = 19
 			self.x_beer.CLIP_AMMO_MAX = 48
-			self.x_beer.NR_CLIPS_MAX = 4
+			self.x_beer.NR_CLIPS_MAX = 3
 			self.x_beer.AMMO_MAX = self.x_beer.NR_CLIPS_MAX * self.x_beer.CLIP_AMMO_MAX
 			
 		end
@@ -2197,7 +2204,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.czech.stats.spread = 13
 			self.czech.stats.recoil = 17
 			self.czech.CLIP_AMMO_MAX = 20
-			self.czech.NR_CLIPS_MAX = 8
+			self.czech.NR_CLIPS_MAX = 7
 			self.czech.AMMO_MAX = self.czech.NR_CLIPS_MAX * self.czech.CLIP_AMMO_MAX
 			if self.czech.fire_mode_data then
 				self.czech.fire_mode_data.fire_rate = 60/1050
@@ -2211,7 +2218,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_czech.stats.spread = 13
 			self.x_czech.stats.recoil = 17
 			self.x_czech.CLIP_AMMO_MAX = 40
-			self.x_czech.NR_CLIPS_MAX = 4
+			self.x_czech.NR_CLIPS_MAX = 3.5
 			self.x_czech.AMMO_MAX = self.x_czech.NR_CLIPS_MAX * self.x_czech.CLIP_AMMO_MAX
 			if self.x_czech.fire_mode_data then
 				self.x_czech.fire_mode_data.fire_rate = 60/1050
@@ -2338,12 +2345,12 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_b92fs.NR_CLIPS_MAX = 2.5
 			self.x_b92fs.AMMO_MAX = self.x_b92fs.NR_CLIPS_MAX * self.x_b92fs.CLIP_AMMO_MAX
 			
-			self.legacy.stats.spread = 10
-			self.legacy.stats.recoil = 23
+			self.legacy.stats.spread = 15
+			self.legacy.stats.recoil = 17
 			self.legacy.NR_CLIPS_MAX = 7
 			self.legacy.AMMO_MAX = self.legacy.NR_CLIPS_MAX * self.legacy.CLIP_AMMO_MAX
-			self.x_legacy.stats.spread = 10
-			self.x_legacy.stats.recoil = 23
+			self.x_legacy.stats.spread = 15
+			self.x_legacy.stats.recoil = 17
 			self.x_legacy.NR_CLIPS_MAX = 3.5
 			self.x_legacy.AMMO_MAX = self.x_legacy.NR_CLIPS_MAX * self.x_legacy.CLIP_AMMO_MAX
 			
@@ -2449,12 +2456,12 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			end
 			
 			self.usp.stats.spread = 21
-			self.usp.stats.recoil = 17
+			self.usp.stats.recoil = 15
 			self.usp.CLIP_AMMO_MAX = 12
 			self.usp.NR_CLIPS_MAX = 5.5
 			self.usp.AMMO_MAX = self.usp.NR_CLIPS_MAX * self.usp.CLIP_AMMO_MAX
 			self.x_usp.stats.spread = 21
-			self.x_usp.stats.recoil = 17
+			self.x_usp.stats.recoil = 15
 			self.x_usp.CLIP_AMMO_MAX = 24
 			self.x_usp.NR_CLIPS_MAX = 2.75
 			self.x_usp.AMMO_MAX = self.x_usp.NR_CLIPS_MAX * self.x_usp.CLIP_AMMO_MAX
@@ -2480,21 +2487,21 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_1911.NR_CLIPS_MAX = 3.5
 			self.x_1911.AMMO_MAX = self.x_1911.NR_CLIPS_MAX * self.x_1911.CLIP_AMMO_MAX
 			
-			self.g22c.stats.spread = 18
-			self.g22c.stats.recoil = 19
+			self.g22c.stats.spread = 17
+			self.g22c.stats.recoil = 17
 			self.g22c.NR_CLIPS_MAX = 4
 			self.g22c.AMMO_MAX = self.g22c.NR_CLIPS_MAX * self.g22c.CLIP_AMMO_MAX
-			self.x_g22c.stats.spread = 18
-			self.x_g22c.stats.recoil = 19
+			self.x_g22c.stats.spread = 17
+			self.x_g22c.stats.recoil = 17
 			self.x_g22c.NR_CLIPS_MAX = 2
 			self.x_g22c.AMMO_MAX = self.x_g22c.NR_CLIPS_MAX * self.x_g22c.CLIP_AMMO_MAX
 			
-			self.c96.stats.recoil = 17
+			self.c96.stats.recoil = 15
 			self.c96.stats.reload = 20
 			self.c96.CLIP_AMMO_MAX = 10
 			self.c96.NR_CLIPS_MAX = 6
 			self.c96.AMMO_MAX = self.c96.NR_CLIPS_MAX * self.c96.CLIP_AMMO_MAX
-			self.x_c96.stats.recoil = 17
+			self.x_c96.stats.recoil = 15
 			self.x_c96.CLIP_AMMO_MAX = 20
 			self.x_c96.NR_CLIPS_MAX = 3
 			self.x_c96.AMMO_MAX = self.x_c96.NR_CLIPS_MAX * self.x_c96.CLIP_AMMO_MAX
@@ -2522,11 +2529,11 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_type54.AMMO_MAX = self.x_type54.NR_CLIPS_MAX * self.x_type54.CLIP_AMMO_MAX
 			self.x_type54.AMMO_PICKUP = {((pick_up * 0.9 * 0.7)) * 2,((pick_up * 1.1 * 0.7)) * 2}
 			
-			self.packrat.stats.spread = 20
+			self.packrat.stats.spread = 22
 			self.packrat.stats.recoil = 13
 			self.packrat.NR_CLIPS_MAX = 4
 			self.packrat.AMMO_MAX = self.packrat.NR_CLIPS_MAX * self.packrat.CLIP_AMMO_MAX
-			self.x_packrat.stats.spread = 20
+			self.x_packrat.stats.spread = 22
 			self.x_packrat.stats.recoil = 13
 			self.x_packrat.NR_CLIPS_MAX = 2
 			self.x_packrat.AMMO_MAX = self.x_packrat.NR_CLIPS_MAX * self.x_packrat.CLIP_AMMO_MAX
@@ -2544,7 +2551,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.holt.AMMO_MAX = self.holt.NR_CLIPS_MAX * self.holt.CLIP_AMMO_MAX
 			self.x_holt.stats.spread = 23
 			self.x_holt.stats.recoil = 20
-			self.x_holt.NR_CLIPS_MAX = 1.5
+			self.x_holt.NR_CLIPS_MAX = 2
 			self.x_holt.AMMO_MAX = self.x_holt.NR_CLIPS_MAX * self.x_holt.CLIP_AMMO_MAX
 			
 		end
@@ -2604,11 +2611,11 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			end
 			
 			self.m1911.stats.spread = 14
-			self.m1911.stats.recoil = 13
+			self.m1911.stats.recoil = 12
 			self.m1911.NR_CLIPS_MAX = 4
 			self.m1911.AMMO_MAX = self.m1911.NR_CLIPS_MAX * self.m1911.CLIP_AMMO_MAX
 			self.x_m1911.stats.spread = 14
-			self.x_m1911.stats.recoil = 13
+			self.x_m1911.stats.recoil = 12
 			self.x_m1911.NR_CLIPS_MAX = 2
 			self.x_m1911.AMMO_MAX = self.x_m1911.NR_CLIPS_MAX * self.x_m1911.CLIP_AMMO_MAX
 			
@@ -2650,12 +2657,12 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_deagle.AMMO_MAX = self.x_deagle.NR_CLIPS_MAX * self.x_deagle.CLIP_AMMO_MAX
 			
 			self.hs2000.stats.spread = 11
-			self.hs2000.stats.recoil = 14
+			self.hs2000.stats.recoil = 13
 			self.hs2000.CLIP_AMMO_MAX = 13
 			self.hs2000.NR_CLIPS_MAX = 4
 			self.hs2000.AMMO_MAX = self.hs2000.NR_CLIPS_MAX * self.hs2000.CLIP_AMMO_MAX
-			self.x_hs2000.stats.spread = 16
-			self.x_hs2000.stats.recoil = 8
+			self.x_hs2000.stats.spread = 11
+			self.x_hs2000.stats.recoil = 13
 			self.x_hs2000.CLIP_AMMO_MAX = 26
 			self.x_hs2000.NR_CLIPS_MAX = 2
 			self.x_hs2000.AMMO_MAX = self.x_hs2000.NR_CLIPS_MAX * self.x_hs2000.CLIP_AMMO_MAX
@@ -2744,11 +2751,11 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_chinchilla.NR_CLIPS_MAX = 2.5
 			self.x_chinchilla.AMMO_MAX = self.x_chinchilla.NR_CLIPS_MAX * self.x_chinchilla.CLIP_AMMO_MAX
 			
-			self.model3.stats.spread = 17
+			self.model3.stats.spread = 18
 			self.model3.stats.recoil = 7
 			self.model3.NR_CLIPS_MAX = 7
 			self.model3.AMMO_MAX = self.model3.NR_CLIPS_MAX * self.model3.CLIP_AMMO_MAX
-			self.x_model3.stats.spread = 17
+			self.x_model3.stats.spread = 18
 			self.x_model3.stats.recoil = 7
 			self.x_model3.NR_CLIPS_MAX = 3.5
 			self.x_model3.AMMO_MAX = self.x_model3.NR_CLIPS_MAX * self.x_model3.CLIP_AMMO_MAX
@@ -2773,6 +2780,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			-- 1 shot to the body on normal swats, 1 shot headshot on everyone else (except dozers)
 			-- the most badass cowboy in the west
 			self.peacemaker.stats.damage = 650
+			self.peacemaker.has_description = true
+			self.peacemaker.can_shoot_through_enemy = true
+			self.peacemaker.armor_piercing_chance = 1
 			self.peacemaker.stats.spread = 23
 			self.peacemaker.stats_modifiers = {damage = 1}
 			self.peacemaker.NR_CLIPS_MAX = 4
@@ -2891,7 +2901,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.hailstorm.stats.damage = 71
 		self.hailstorm.stats.recoil = 21
 		local hailstorm_avg = G_W_M:get_ammo_pickup(71, 0.34, 0.75)
-		self.hailstorm.AMMO_PICKUP = {(8.1 * 0.9),(8.1 * 1.1)}
+		self.hailstorm.AMMO_PICKUP = {(hailstorm_avg * 0.9),(hailstorm_avg * 1.1)}
 		self.hailstorm.damage_falloff = G_W_M.damage_dropoff.ARs
 	end
 	setMINIGUNs()
@@ -3194,6 +3204,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.m16.fire_mode_data.burst_cooldown = self.m16.fire_mode_data.fire_rate * 2
 		-- ROF during the burst. reminder that this is a delay - set as 60/1200 if you want custom ROF of 1200, instead of weapon's vanilla ROF.
 		self.m16.burst = {fire_rate = self.m16.fire_mode_data.fire_rate}
+		self.m16.has_description = true
 		
 		-- fix ms3gl values for new burst system
 		self.ms3gl.fire_mode_data.burst_cooldown = 1
@@ -3203,128 +3214,155 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.famas.BURST_COUNT = 3
 		self.famas.fire_mode_data.burst_cooldown = self.famas.fire_mode_data.fire_rate * 2
 		self.famas.burst = {fire_rate = self.famas.fire_mode_data.fire_rate}
+		self.famas.has_description = true
 		
 		self.flint.HAS_BURST_AS_THIRD = true
 		self.flint.BURST_COUNT = 2
 		self.flint.fire_mode_data.burst_cooldown = 60/1200 * 2 -- bootleg an94
 		self.flint.burst = {fire_rate = 60/1200}
+		self.flint.has_description = true
 		
 		self.g36.HAS_BURST_AS_THIRD = true
 		self.g36.BURST_COUNT = 2
 		self.g36.fire_mode_data.burst_cooldown = self.g36.fire_mode_data.fire_rate * 1.666
 		self.g36.burst = {fire_rate = self.g36.fire_mode_data.fire_rate}
+		self.g36.has_description = true
 		
 		self.komodo.HAS_BURST_AS_THIRD = true
 		self.komodo.BURST_COUNT = 3
 		self.komodo.fire_mode_data.burst_cooldown = self.komodo.fire_mode_data.fire_rate * 2
 		self.komodo.burst = {fire_rate = self.komodo.fire_mode_data.fire_rate}
+		self.komodo.has_description = true
 		
 		self.g3.HAS_BURST_AS_THIRD = true
 		self.g3.BURST_COUNT = 2
 		self.g3.fire_mode_data.burst_cooldown = self.g3.fire_mode_data.fire_rate * 1.666
 		self.g3.burst = {fire_rate = self.g3.fire_mode_data.fire_rate}
+		self.g3.has_description = true
 		
 		self.s552.HAS_BURST_AS_THIRD = true
 		self.s552.BURST_COUNT = 3
 		self.s552.fire_mode_data.burst_cooldown = self.s552.fire_mode_data.fire_rate * 2
 		self.s552.burst = {fire_rate = self.s552.fire_mode_data.fire_rate}
+		self.s552.has_description = true
 		
 		self.new_m4.HAS_BURST_AS_THIRD = true
 		self.new_m4.BURST_COUNT = 3
 		self.new_m4.fire_mode_data.burst_cooldown = self.new_m4.fire_mode_data.fire_rate * 2
 		self.new_m4.burst = {fire_rate = self.new_m4.fire_mode_data.fire_rate}
+		self.new_m4.has_description = true
 		
 		self.groza.HAS_BURST_AS_THIRD = true
 		self.groza.BURST_COUNT = 3
 		self.groza.fire_mode_data.burst_cooldown = self.groza.fire_mode_data.fire_rate * 2
 		self.groza.burst = {fire_rate = self.groza.fire_mode_data.fire_rate}
+		self.groza.has_description = true
 		
 		self.asval.HAS_BURST_AS_THIRD = true
 		self.asval.BURST_COUNT = 3
 		self.asval.fire_mode_data.burst_cooldown = self.asval.fire_mode_data.fire_rate * 2
 		self.asval.burst = {fire_rate = self.asval.fire_mode_data.fire_rate}
+		self.asval.has_description = true
 		
 		self.aug.HAS_BURST_AS_THIRD = true
 		self.aug.BURST_COUNT = 3
 		self.aug.fire_mode_data.burst_cooldown = self.aug.fire_mode_data.fire_rate * 2
 		self.aug.burst = {fire_rate = self.aug.fire_mode_data.fire_rate}
+		self.aug.has_description = true
 		
 		self.scar.HAS_BURST_AS_THIRD = true
 		self.scar.BURST_COUNT = 2
 		self.scar.fire_mode_data.burst_cooldown = self.scar.fire_mode_data.fire_rate * 1.666
 		self.scar.burst = {fire_rate = self.scar.fire_mode_data.fire_rate}
+		self.scar.has_description = true
 		
 		self.beer.HAS_BURST_AS_THIRD = true
 		self.beer.BURST_COUNT = 3
 		self.beer.fire_mode_data.burst_cooldown = self.beer.fire_mode_data.fire_rate * 2
 		self.beer.burst = {fire_rate = self.beer.fire_mode_data.fire_rate}
+		self.beer.has_description = true
 		self.x_beer.HAS_BURST_AS_THIRD = true
 		self.x_beer.BURST_COUNT = 3
 		self.x_beer.fire_mode_data.burst_cooldown = self.x_beer.fire_mode_data.fire_rate * 2
 		self.x_beer.burst = {fire_rate = self.x_beer.fire_mode_data.fire_rate}
+		self.x_beer.has_description = true
 		
 		self.hajk.HAS_BURST_AS_THIRD = true
 		self.hajk.BURST_COUNT = 3
 		self.hajk.fire_mode_data.burst_cooldown = self.hajk.fire_mode_data.fire_rate * 2
 		self.hajk.burst = {fire_rate = self.hajk.fire_mode_data.fire_rate}
+		self.hajk.has_description = true
 		self.x_hajk.HAS_BURST_AS_THIRD = true
 		self.x_hajk.BURST_COUNT = 3
 		self.x_hajk.fire_mode_data.burst_cooldown = self.x_hajk.fire_mode_data.fire_rate * 2
 		self.x_hajk.burst = {fire_rate = self.x_hajk.fire_mode_data.fire_rate}
+		self.x_hajk.has_description = true
 		
 		self.vityaz.HAS_BURST_AS_THIRD = true
 		self.vityaz.BURST_COUNT = 3
 		self.vityaz.fire_mode_data.burst_cooldown = self.vityaz.fire_mode_data.fire_rate * 2
 		self.vityaz.burst = {fire_rate = self.vityaz.fire_mode_data.fire_rate}
+		self.vityaz.has_description = true
 		self.x_vityaz.HAS_BURST_AS_THIRD = true
 		self.x_vityaz.BURST_COUNT = 3
 		self.x_vityaz.fire_mode_data.burst_cooldown = self.x_vityaz.fire_mode_data.fire_rate * 2
 		self.x_vityaz.burst = {fire_rate = self.x_vityaz.fire_mode_data.fire_rate}
+		self.x_vityaz.has_description = true
 		
 		self.new_mp5.HAS_BURST_AS_THIRD = true
 		self.new_mp5.BURST_COUNT = 3
 		self.new_mp5.fire_mode_data.burst_cooldown = self.new_mp5.fire_mode_data.fire_rate * 2
 		self.new_mp5.burst = {fire_rate = self.new_mp5.fire_mode_data.fire_rate}
+		self.new_mp5.has_description = true
 		self.x_mp5.HAS_BURST_AS_THIRD = true
 		self.x_mp5.BURST_COUNT = 3
 		self.x_mp5.fire_mode_data.burst_cooldown = self.x_mp5.fire_mode_data.fire_rate * 2
 		self.x_mp5.burst = {fire_rate = self.x_mp5.fire_mode_data.fire_rate}
+		self.x_mp5.has_description = true
 		
 		self.scorpion.HAS_BURST_AS_THIRD = true
 		self.scorpion.BURST_COUNT = 3
 		self.scorpion.fire_mode_data.burst_cooldown = self.scorpion.fire_mode_data.fire_rate * 2
 		self.scorpion.burst = {fire_rate = self.scorpion.fire_mode_data.fire_rate}
+		self.scorpion.has_description = true
 		self.x_scorpion.HAS_BURST_AS_THIRD = true
 		self.x_scorpion.BURST_COUNT = 3
 		self.x_scorpion.fire_mode_data.burst_cooldown = self.x_scorpion.fire_mode_data.fire_rate * 2
 		self.x_scorpion.burst = {fire_rate = self.x_scorpion.fire_mode_data.fire_rate}
+		self.x_scorpion.has_description = true
 		
 		self.mp9.HAS_BURST_AS_THIRD = true
 		self.mp9.BURST_COUNT = 3
 		self.mp9.fire_mode_data.burst_cooldown = self.mp9.fire_mode_data.fire_rate * 2
 		self.mp9.burst = {fire_rate = self.mp9.fire_mode_data.fire_rate}
+		self.mp9.has_description = true
 		self.x_mp9.HAS_BURST_AS_THIRD = true
 		self.x_mp9.BURST_COUNT = 3
 		self.x_mp9.fire_mode_data.burst_cooldown = self.x_mp9.fire_mode_data.fire_rate * 2
 		self.x_mp9.burst = {fire_rate = self.x_mp9.fire_mode_data.fire_rate}
+		self.x_mp9.has_description = true
 		
 		self.shepheard.HAS_BURST_AS_THIRD = true
 		self.shepheard.BURST_COUNT = 3
 		self.shepheard.fire_mode_data.burst_cooldown = self.shepheard.fire_mode_data.fire_rate * 2
 		self.shepheard.burst = {fire_rate = self.shepheard.fire_mode_data.fire_rate}
+		self.shepheard.has_description = true
 		self.x_shepheard.HAS_BURST_AS_THIRD = true
 		self.x_shepheard.BURST_COUNT = 3
 		self.x_shepheard.fire_mode_data.burst_cooldown = self.x_shepheard.fire_mode_data.fire_rate * 2
 		self.x_shepheard.burst = {fire_rate = self.x_shepheard.fire_mode_data.fire_rate}
+		self.x_shepheard.has_description = true
 		
 		self.polymer.HAS_BURST_AS_THIRD = true
 		self.polymer.BURST_COUNT = 2
 		self.polymer.fire_mode_data.burst_cooldown = self.polymer.fire_mode_data.fire_rate * 1.666
 		self.polymer.burst = {fire_rate = self.polymer.fire_mode_data.fire_rate}
+		self.polymer.has_description = true
 		self.x_polymer.HAS_BURST_AS_THIRD = true
 		self.x_polymer.BURST_COUNT = 2
 		self.x_polymer.fire_mode_data.burst_cooldown = self.x_polymer.fire_mode_data.fire_rate * 2
 		self.x_polymer.burst = {fire_rate = self.x_polymer.fire_mode_data.fire_rate}
+		self.x_polymer.has_description = true
 		
 	end
 	addBURSTFIRE()

@@ -63,6 +63,16 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		Gilza:Save()
 	end
 	
+	MenuCallbackHandler.Gilza_blackmarket_weapon_sorting = function(this, item)
+		Gilza.settings.blackmarket_weapon_sorting = tonumber(item:value())
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_menace_points_notification = function(this, item)
+		Gilza.settings.menace_points_notification = item:value() == 'on'
+		Gilza:Save()
+	end
+	
 	MenuCallbackHandler.Gilza_shotgun_skill_notification = function(this, item)
 		Gilza.settings.shotgun_skill_notification = item:value() == 'on'
 		Gilza:Save()

@@ -1,5 +1,5 @@
 -- fix lock and load aced target kill propety being static, instead of being taked from the skill value
-Hooks:PostHook(PlayerManager, "_setup", "Gilza_post_setup", function(self)
+Hooks:PostHook(PlayerManager, "_setup", "Gilza_PlayerManager_post_setup", function(self)
 	local skill = self:upgrade_value("player", "automatic_faster_reload")
 	local val
 	if skill and type(skill) ~= "number" then
@@ -139,22 +139,24 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_on_killshot", function(self,
 		return
 	end
 	
-	-- new leech
+	-- new leech heal during invuln window
 	if self:has_activate_temporary_upgrade("temporary", "copr_ability") and self:has_activate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss") then
 		local damage_ext = player_unit:character_damage()
 		local static_damage_ratio = self:upgrade_value_nil("player", "copr_static_damage_ratio")
-
+		
 		if static_damage_ratio and damage_ext then
-			local current_health_ratio = damage_ext:health_ratio()
-			local wanted_health_ratio = math.floor((current_health_ratio + 0.01 + static_damage_ratio) / static_damage_ratio) * static_damage_ratio
-			local health_regen = wanted_health_ratio - current_health_ratio
+			local health_regen = static_damage_ratio
 
 			if health_regen > 0 then
-				damage_ext:restore_health(health_regen)
+				damage_ext:restore_health(health_regen * managers.player:upgrade_value("player", "copr_heal_during_invuln_increase", 1))
 				damage_ext:on_copr_killshot()
 				local teammate_heal_level = managers.player:upgrade_level_nil("player", "copr_teammate_heal")
 				if teammate_heal_level and damage_ext:get_real_health() > 0 then
 					player_unit:network():send("copr_teammate_heal", teammate_heal_level)
+					-- double heal for teammates from kills during invuln. techically would still most likely be less heals per minute than vanilla leech
+					if self:has_category_upgrade("player", "copr_heal_during_invuln_increase") then
+						player_unit:network():send("copr_teammate_heal", teammate_heal_level)
+					end
 				end
 				managers.player:deactivate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss")
 			end
@@ -894,7 +896,7 @@ function PlayerManager:is_close_to_sentry_gun()
 	return false
 end
 
-Hooks:PostHook(PlayerManager, "on_enter_custody", "Gilza_on_enter_custody", function(self, _player, already_dead)
+Hooks:PreHook(PlayerManager, "on_enter_custody", "Gilza_on_enter_custody", function(self, _player, already_dead)
 	local player = _player or self:player_unit()
 	if not player then
 		return
@@ -1136,9 +1138,9 @@ function PlayerManager:Gilza_new_hitman_killshot_handler(killed_unit, variant, h
 	if badass_kill then
 		if managers.player:has_inactivate_temporary_upgrade("temporary", "badass_hitman_kill_armor_regen") then
 			managers.player:activate_temporary_upgrade("temporary", "badass_hitman_kill_armor_regen")
-			local armor_percent = 0.25
+			local armor_percent = 0.2
 			if managers.player:has_activate_temporary_upgrade("temporary", "player_bounty_hunter") then
-				armor_percent = 0.5
+				armor_percent = 0.4
 			end
 			player_unit:character_damage():restore_armor(player_unit:character_damage():_max_armor() * armor_percent)
 		end
@@ -1324,55 +1326,66 @@ end
 
 function PlayerManager:Gilza_brawler_recursive_updater()
 	
-	self._gilza_brawler_teammates_nearby = self._gilza_brawler_teammates_nearby or 0
-	local player_unit = managers.player:player_unit()
-	local scan_range = 2100
-	
-	if player_unit and alive(player_unit) then
-		local criminals = World:find_units_quick("sphere", player_unit:position(), scan_range, managers.slot:get_mask("criminals"))
-		if criminals and #criminals > 0 then
-			local total_teammates = 0
-			for i=1, #criminals do
-				if criminals[i] ~= player_unit then
-					if criminals[i] and criminals[i].character_damage and criminals[i]:character_damage() then
-						-- if criminal in range is converted, check if it's our minion before adding resists
-						if criminals[i]:character_damage()._converted then
-							for u_key, u_data in pairs(managers.groupai:state():all_player_criminals()) do
-								if player_unit:key() == u_key and u_data.minions then
-									for bot_key, bot_data in pairs(u_data.minions) do
-										if criminals[i] == bot_data.unit then
-											total_teammates = total_teammates + 1
+	if managers.player:has_category_upgrade("player", "damage_resist_teammates_brawler") then
+		self._gilza_brawler_teammates_nearby = self._gilza_brawler_teammates_nearby or 0
+		local player_unit = managers.player:player_unit()
+		local scan_range = 2100
+		
+		if player_unit and alive(player_unit) then
+			local criminals = World:find_units_quick("sphere", player_unit:position(), scan_range, managers.slot:get_mask("criminals"))
+			if criminals and #criminals > 0 then
+				local total_teammates = 0
+				for i=1, #criminals do
+					if criminals[i] ~= player_unit then
+						if criminals[i] and criminals[i].character_damage and criminals[i]:character_damage() then
+							-- if criminal in range is converted, check if it's our minion before adding resists
+							if criminals[i]:character_damage()._converted then
+								for u_key, u_data in pairs(managers.groupai:state():all_player_criminals()) do
+									if player_unit:key() == u_key and u_data.minions then
+										for bot_key, bot_data in pairs(u_data.minions) do
+											if criminals[i] == bot_data.unit then
+												total_teammates = total_teammates + 1
+											end
 										end
 									end
 								end
-							end
-						else
-							-- if criminal in range is not converted, make sure it's not a sentry gun :D
-							if not criminals[i]:base().sentry_gun then
-								total_teammates = total_teammates + 1
+							else
+								-- if criminal in range is not converted, make sure it's not a sentry gun :D
+								if not criminals[i]:base().sentry_gun then
+									total_teammates = total_teammates + 1
+								end
 							end
 						end
 					end
 				end
-			end
-			self._gilza_brawler_teammates_nearby = total_teammates
-			
-			if self._gilza_brawler_teammates_nearby > 3 then -- dont think this can happen, but better safe then sorry
-				self._gilza_brawler_teammates_nearby = 3
+				self._gilza_brawler_teammates_nearby = total_teammates
+				
+				if self._gilza_brawler_teammates_nearby > 3 then -- dont think this can happen, but better safe then sorry
+					self._gilza_brawler_teammates_nearby = 3
+				end
 			end
 		end
-	end
-	
-	local info_hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
-	local icon = info_hud.panel:child("Gilza_brawler_GUI_icon")
-	if self._gilza_brawler_teammates_nearby == 0 then
-		icon:set_color(Color(0.2, 1, 1, 1))
-	elseif self._gilza_brawler_teammates_nearby == 1 then
-		icon:set_color(Color(1, 1, 1, 1))
-	elseif self._gilza_brawler_teammates_nearby == 2 then
-		icon:set_color(Color(1, 1, 1, 0))
-	elseif self._gilza_brawler_teammates_nearby == 3 then
-		icon:set_color(Color(1, 0, 1, 0))
+		
+		local info_hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+		local icon = info_hud.panel:child("Gilza_brawler_GUI_icon")
+		if self._gilza_brawler_teammates_nearby == 0 then
+			icon:set_color(Color(0.2, 1, 1, 1))
+		elseif self._gilza_brawler_teammates_nearby == 1 then
+			icon:set_color(Color(1, 1, 1, 1))
+		elseif self._gilza_brawler_teammates_nearby == 2 then
+			icon:set_color(Color(1, 1, 1, 0))
+		elseif self._gilza_brawler_teammates_nearby == 3 then
+			icon:set_color(Color(1, 0, 1, 0))
+		end
+	else
+		-- copycat 9th
+		if managers.player:has_category_upgrade("player", "armor_regen_brawler") then
+			local info_hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+			local icon = info_hud.panel:child("Gilza_brawler_GUI_icon")
+			if icon then
+				icon:set_color(Color(0.2, 1, 1, 1))
+			end
+		end
 	end
 	
 	if managers.player:has_category_upgrade("player", "armor_regen_brawler") then
@@ -1535,7 +1548,7 @@ Hooks:OverrideFunction(PlayerManager, "clbk_copr_ability_ended", function (self)
 
 		if self._Gilza_leech_did_revive_during_effect then
 			managers.player._block_medkit_auto_revive = false
-			character_damage:restore_health(character_damage:_max_health(), true, false)
+			character_damage:restore_health(character_damage:_max_health() * 0.5, true, false)
 			character_damage:restore_armor(character_damage:_max_armor())
 			self._Gilza_leech_did_revive_during_effect = false
 		elseif out_of_health or risen_from_dead then

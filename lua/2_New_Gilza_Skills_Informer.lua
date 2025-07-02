@@ -60,7 +60,7 @@ if Gilza.VHP_enabled then
 				title = "Gilza_new_skill_zerk_weapons",
 				localized = true,
 				color = HUDListManager.ListOptions.buff_icon_color_standard,
-				ignore = not Gilza.settings.vhud_compat_new_melee_zerk,
+				ignore = not Gilza.settings.vhud_compat_new_weapon_zerk,
 			}
 			HUDList.BuffItemBase.MAP.new_berserk_weapon_damage_multiplier_cooldown = {
 				skills_new = tweak_data.skilltree.skills.wolverine.icon_xy,
@@ -76,7 +76,7 @@ if Gilza.VHP_enabled then
 				title = "Gilza_new_skill_zerk_melee",
 				localized = true,
 				color = HUDListManager.ListOptions.buff_icon_color_standard,
-				ignore = not Gilza.settings.vhud_compat_new_weapon_zerk,
+				ignore = not Gilza.settings.vhud_compat_new_melee_zerk,
 			}
 			-- new stockholm - made as a class because the value needs to be calculated differently from default trackers and it needs % at the end
 			-- add trigger to our stockholm class
@@ -460,6 +460,9 @@ end
 -- because we always start at 0 stacks, but always have our basic 10% chance (at least thats current value)
 -- for an example scroll up to HUDList.Gilza_stockholm_basic:_update_value()
 function Gilza.New_Skills_Informer:adjusted_stockholm_stacks(amount, cleared)
+	if Gilza.settings.menace_points_notification and not cleared then
+		managers.hud:show_hint({text = managers.localization:text("Gilza_menace_panic_spread_notification")..tostring(managers.player._Gilza_menace_kill_tracker)})
+	end
 	if amount and Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
 		managers.gameinfo:event("buff", "set_value", "stockholm_basic_stacks", { value = math.random() }) -- value is irrelevant bcuz updater func calculates current amount by itself
 	end

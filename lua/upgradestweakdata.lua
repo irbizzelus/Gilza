@@ -660,7 +660,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				self.values.temporary.badass_hitman_kill_armor_regen = {
 					{
 						true,
-						1
+						0.01 -- no longer has a cooldown, since having 1 sec cooldown is pointless, because most weapons that trigger this skill already have ~1sec delay in-between uses, and having longer then 1 sec CD feels like shit
 					}
 				}
 			end
@@ -1012,7 +1012,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				-- № of segments
 				self.values.player.copr_static_damage_ratio = {
 					0.25, -- 4
-					0.125 -- 8
+					0.2 -- 5
 				}
 				-- heal on ampule activation. slight buff to compensate longer CD
 				self.values.player.copr_activate_bonus_health_ratio = {
@@ -1022,12 +1022,20 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				self.values.temporary.copr_invuln_on_segment_loss = {
 					{
 						true,
-						0.5
+						1
 					}
 				}
+				-- increased amount of self heal during invuln period per kill
+				self.values.player.copr_heal_during_invuln_increase = {
+					2
+				}
+				-- gain x seconds when either self is revived by any means other than ampule, on when revived another player
+				self.values.player.copr_regain_cooldown_on_revives = {
+					15
+				}
 				-- longer basic CD
-				self.copr_ability_cooldown = 60
-				-- increased CD return on kill, to incentivize a bit more agressive playstyle. overall time to get CD back is equal to vanilla, but without kills its slower.
+				self.copr_ability_cooldown = 80
+				-- increased CD return on kill, to incentivize a bit more agressive playstyle. overall time to get CD back is ~equal to vanilla, but without kills its slower.
 				self.values.player.copr_speed_up_on_kill = {
 					1.5
 				}
@@ -1474,6 +1482,9 @@ function UpgradesTweakData.mrwi_deck9_options_gilza_update()
 			tree = 22,
 			tier = 1,
 			desc_id = "menu_deck23_9_leech_desc",
+			upgrades = {
+				"player_copr_regain_cooldown_on_revives",
+			},
 			icon_xy = {
 				1,
 				1
@@ -2252,6 +2263,24 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 						value = 1,
 						upgrade = "copr_invuln_on_segment_loss",
 						category = "temporary"
+					}
+				}
+				self.definitions.player_copr_heal_during_invuln_increase = {
+					name_id = "menu_player_copr_heal_during_invuln_increase",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "copr_heal_during_invuln_increase",
+						category = "player"
+					}
+				}
+				self.definitions.player_copr_regain_cooldown_on_revives = {
+					name_id = "menu_player_copr_regain_cooldown_on_revives",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "copr_regain_cooldown_on_revives",
+						category = "player"
 					}
 				}
 			end

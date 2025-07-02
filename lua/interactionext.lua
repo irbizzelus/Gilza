@@ -76,8 +76,14 @@ Hooks:PostHook(ReviveInteractionExt, "interact", "Gilza_post_revive", function (
 	end
 	
 	-- new leech heal bonus
-	if reviving_unit and reviving_unit == managers.player:player_unit() and managers.player:has_activate_temporary_upgrade("temporary", "copr_ability") then
-		managers.player._Gilza_leech_did_revive_during_effect = true
+	if reviving_unit and reviving_unit == managers.player:player_unit() and managers.player:has_category_upgrade("temporary", "copr_ability") then
+		local secs = managers.player:upgrade_value("player", "copr_regain_cooldown_on_revives", 0)
+		if secs > 0 then
+			managers.player:speed_up_grenade_cooldown(secs)
+		end
+		if managers.player:has_activate_temporary_upgrade("temporary", "copr_ability") then
+			managers.player._Gilza_leech_did_revive_during_effect = true
+		end
 	end
 end)
 

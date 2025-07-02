@@ -413,6 +413,7 @@ _G.AutoFireSoundFixBlacklist = {
 	["mg42"] = true,
 	["shuno"] = true,
 	["system"] = true,
+	["hailstorm"] = true,
 	["par"] = true
 }
 

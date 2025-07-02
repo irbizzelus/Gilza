@@ -202,3 +202,76 @@ Hooks:PostHook(BlackMarketGui, "update_info_text", "Gilza_BlackMarketGui_update_
 		end
 	end
 end)
+
+Hooks:PreHook(BlackMarketGui, "populate_buy_weapon", "Gilza_BlackMaaweaweawetGui_update_info_text", function(self, data)
+	
+	-- 2 descend, 3 ascend, 1 disable
+	local order_preference = Gilza.settings.blackmarket_weapon_sorting
+	
+	if order_preference > 1 and data.name ~= "wpn_special" then
+		local default_data_clone = deep_clone(data.on_create_data)
+		local new_data = {}
+		for i=1, #data.on_create_data do
+			local wpn_id = data.on_create_data[i].weapon_id
+			local dmg = 0
+			if tweak_data.weapon[wpn_id] then
+				dmg = tweak_data.weapon[wpn_id].stats.damage
+			end
+			new_data[dmg] = new_data[dmg] or {}
+			table.insert(new_data[dmg], wpn_id)
+		end
+		
+		local new_new_data = {}
+		local import_order = 1
+		local function sort_weapon_order()
+			local positions = 0
+			for ___, ____ in pairs(new_data) do
+				positions = positions + 1
+			end
+			
+			if order_preference == 2 then
+				for i = 1, positions do
+					local highest_dmg = 0
+					for dmg_type, weapons in pairs(new_data) do
+						if highest_dmg < dmg_type then
+							highest_dmg = dmg_type
+						end
+					end
+					new_new_data[import_order] = deep_clone(new_data[highest_dmg])
+					import_order = import_order + 1
+					new_data[highest_dmg] = nil
+				end
+			elseif order_preference == 3 then
+				for i = 1, positions do
+					local lowest_dmg = 999999
+					for dmg_type, weapons in pairs(new_data) do
+						if lowest_dmg > dmg_type then
+							lowest_dmg = dmg_type
+						end
+					end
+					new_new_data[import_order] = deep_clone(new_data[lowest_dmg])
+					import_order = import_order + 1
+					new_data[lowest_dmg] = nil
+				end
+			end
+		end
+		sort_weapon_order()
+		
+		local table_fill_id = 1
+		for order, weapons in ipairs(new_new_data) do
+			for _, weapon in pairs(weapons) do
+				local orig_item_spot = 0
+				for i=1, #default_data_clone do
+					if default_data_clone[i].weapon_id == weapon then
+						orig_item_spot = i
+					end
+				end
+				if orig_item_spot ~= 0 then
+					data.on_create_data[table_fill_id] = deep_clone(default_data_clone[orig_item_spot])
+					table_fill_id = table_fill_id + 1
+				end
+			end
+		end
+	end
+	
+end)

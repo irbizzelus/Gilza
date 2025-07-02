@@ -60,7 +60,7 @@ Hooks:OverrideFunction(FPCameraPlayerBase, "recoil_kick", function (self, up, do
 		end
 		return true
 	end
-	-- if allowed, first 5-10 bullets have reduced recoil
+	-- if allowed, first 5-8 bullets have reduced recoil
 	-- this makes short 1-3 round burst feel like they have almost no recoil
 	if does_weapon_qualify() then
 		local shot_based_mul = {
@@ -75,16 +75,14 @@ Hooks:OverrideFunction(FPCameraPlayerBase, "recoil_kick", function (self, up, do
 				0.62,
 				0.66,
 				0.7,
-				0.74,
-				0.78,
-				0.82,
-				0.86,
-				0.89,
-				0.92,
+				0.75,
+				0.8,
+				0.85,
+				0.9,
 				0.95,
 			}
 		end
-		if self._Gilza_shot_counter <= 5 or (self._Gilza_shot_counter <= 10 and managers.player:has_category_upgrade("player", "less_start_recoil_for_longer")) then
+		if self._Gilza_shot_counter <= 5 or (self._Gilza_shot_counter <= 8 and managers.player:has_category_upgrade("player", "less_start_recoil_for_longer")) then
 			mul = shot_based_mul[self._Gilza_shot_counter] * managers.player:upgrade_value("player", "less_start_recoil", 1)
 		end
 	end

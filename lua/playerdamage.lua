@@ -266,6 +266,12 @@ Hooks:PostHook(PlayerDamage, "revive", "Gilza_newUpYouGoPart2", function(self)
 	if managers.player:has_category_upgrade("player", "speed_junkie_meter") then
 		managers.player._Gilza_junkie_counter = (managers.player._Gilza_junkie_counter or 0) + math.random(18,42)
 	end
+	if managers.player:has_category_upgrade("temporary", "copr_ability") and not managers.player:has_activate_temporary_upgrade("temporary", "copr_ability") then
+		local secs = managers.player:upgrade_value("player", "copr_regain_cooldown_on_revives", 0)
+		if secs > 0 then
+			managers.player:speed_up_grenade_cooldown(secs)
+		end
+	end
 end)
 
 -- allow counterstrike skill to deal damage
@@ -558,7 +564,7 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_post_PlayerDamage_init", function(se
 		end
 		
 		-- brawler
-		if managers.player:has_category_upgrade("player", "damage_resist_teammates_brawler") then
+		if managers.player:has_category_upgrade("player", "damage_resist_teammates_brawler") or (managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") and managers.player:has_category_upgrade("player", "armor_regen_brawler")) then
 			AddDefaultPerkGUI("Gilza_brawler_GUI_icon", true, "guis/dlcs/Gilza/textures/pd2/specialization/brawler_icon")
 			if managers.player:has_category_upgrade("player", "armor_regen_brawler") then
 				AddDefaultPerkGUITextAddon("_Gilza_new_brawler_regen_counter_GUI", "Gilza_new_brawler_regen_counter_GUI", "0x")
@@ -932,8 +938,9 @@ end
 function PlayerDamage:copr_update_attack_data(attack_data)
 	if managers.player:has_activate_temporary_upgrade("temporary", "copr_ability") then
 		local static_damage_ratio = managers.player:upgrade_value_nil("player", "copr_static_damage_ratio")
-
-		if static_damage_ratio and attack_data.damage > 0 then
+		local next_allowed_dmg_t = type(self._next_allowed_dmg_t) == "number" and self._next_allowed_dmg_t or Application:digest_value(self._next_allowed_dmg_t, false)
+		
+		if static_damage_ratio and attack_data.damage > 0 and (next_allowed_dmg_t < managers.player:player_timer():time()) then
 			local high_damage_tweak = tweak_data.upgrades.copr_high_damage_multiplier
 			local damage_multiplier = high_damage_tweak[1] <= attack_data.damage and high_damage_tweak[2] or 1
 			attack_data.damage = self:_max_health() * static_damage_ratio * damage_multiplier
@@ -949,7 +956,7 @@ Hooks:PostHook(PlayerDamage, "damage_melee", "Gilza_post_damage_melee_leech_invu
 		managers.player:activate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss")
 		local invuln_timer_dur = tweak_data.upgrades.values.temporary.copr_invuln_on_segment_loss[1][2]
 		self._next_allowed_dmg_t = Application:digest_value(managers.player:player_timer():time() + invuln_timer_dur, true)
-		self._last_received_dmg = self:_max_health()
+		self._last_received_dmg = self:_max_health() * 5
 	end
 end)
 
@@ -959,7 +966,7 @@ Hooks:PostHook(PlayerDamage, "damage_bullet", "Gilza_post_damage_bullet_leech_in
 		managers.player:activate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss")
 		local invuln_timer_dur = tweak_data.upgrades.values.temporary.copr_invuln_on_segment_loss[1][2]
 		self._next_allowed_dmg_t = Application:digest_value(managers.player:player_timer():time() + invuln_timer_dur, true)
-		self._last_received_dmg = self:_max_health()
+		self._last_received_dmg = self:_max_health() * 5
 	end
 end)
 
@@ -969,7 +976,7 @@ Hooks:PostHook(PlayerDamage, "damage_explosion", "Gilza_post_damage_explosion_le
 		managers.player:activate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss")
 		local invuln_timer_dur = tweak_data.upgrades.values.temporary.copr_invuln_on_segment_loss[1][2]
 		self._next_allowed_dmg_t = Application:digest_value(managers.player:player_timer():time() + invuln_timer_dur, true)
-		self._last_received_dmg = self:_max_health()
+		self._last_received_dmg = self:_max_health() * 5
 	end
 end)
 
@@ -979,7 +986,7 @@ Hooks:PostHook(PlayerDamage, "damage_fire_hit", "Gilza_post_damage_fire_hit_leec
 		managers.player:activate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss")
 		local invuln_timer_dur = tweak_data.upgrades.values.temporary.copr_invuln_on_segment_loss[1][2]
 		self._next_allowed_dmg_t = Application:digest_value(managers.player:player_timer():time() + invuln_timer_dur, true)
-		self._last_received_dmg = self:_max_health()
+		self._last_received_dmg = self:_max_health() * 5
 	end
 end)
 
@@ -987,9 +994,9 @@ Hooks:PostHook(PlayerDamage, "on_downed", "Gilza_post_on_downed", function(self,
 	if managers.player:has_category_upgrade("temporary", "copr_ability") then
 		self._gilza_leech_dire_state = false
 		local remaining_cooldown = managers.player:get_timer_remaining("replenish_grenades") or 0
-		if remaining_cooldown < 30 then
+		if remaining_cooldown < 25 then
 			if remaining_cooldown == 0 then
-				managers.player:replenish_grenades(30) -- cd
+				managers.player:replenish_grenades(25) -- cd
 				managers.player:add_grenade_amount(-1) -- remove ability
 				local speed_up_on_kill_time = managers.player:upgrade_value("player", "copr_speed_up_on_kill", 0)
 				local function speed_up_on_kill_func()
@@ -997,7 +1004,7 @@ Hooks:PostHook(PlayerDamage, "on_downed", "Gilza_post_on_downed", function(self,
 				end
 				managers.player:register_message(Message.OnEnemyKilled, "speed_up_copr_ability", speed_up_on_kill_func) -- add 1 sec on kill if we have skill
 			else
-				managers.player:speed_up_grenade_cooldown(-1 * (30 - remaining_cooldown))
+				managers.player:speed_up_grenade_cooldown(-1 * (25 - remaining_cooldown))
 			end
 		end
 	end

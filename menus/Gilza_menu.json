@@ -45,6 +45,20 @@
 			"default_value" : 4
 		},
 		{
+			"type" : "multiple_choice",
+			"id" : "Gilza_blackmarket_weapon_sorting",
+			"title" : "Gilza_blackmarket_weapon_sorting",
+			"description" : "Gilza_blackmarket_weapon_sorting_desc",
+			"callback" : "Gilza_blackmarket_weapon_sorting",
+			"items" : [
+				"Gilza_weapon_sorting_choise_1",
+				"Gilza_weapon_sorting_choise_2",
+				"Gilza_weapon_sorting_choise_3",
+			],
+			"value" : "blackmarket_weapon_sorting",
+			"default_value" : 2
+		},
+		{
 			"type" : "divider",
 			"size" : 22
 		},

@@ -733,15 +733,14 @@ Hooks:PreHook(CopDamage, "die", "Gilza_itimidated_death_tracker", function(self,
 	
 	if is_intimidated_cop and attack_data.attacker_unit == managers.player:player_unit() then
 		local orig_amount = managers.player._Gilza_menace_kill_tracker
-		managers.player._Gilza_menace_kill_tracker = managers.player._Gilza_menace_kill_tracker + 0.25
+		managers.player._Gilza_menace_kill_tracker = managers.player._Gilza_menace_kill_tracker + 0.3
 		if orig_amount < 4 and managers.player._Gilza_menace_kill_tracker > 4 then
 			Gilza.New_Skills_Informer:adjusted_stockholm_stacks(4-managers.player._Gilza_menace_kill_tracker)
 			managers.player._Gilza_menace_kill_tracker = 4
 		elseif managers.player._Gilza_menace_kill_tracker > 4 then
 			managers.player._Gilza_menace_kill_tracker = 4
 		else
-			Gilza.New_Skills_Informer:adjusted_stockholm_stacks(0.25)
-			managers.hud:show_hint({text = managers.localization:text("Gilza_menace_panic_spread_notification")..tostring(managers.player._Gilza_menace_kill_tracker)})
+			Gilza.New_Skills_Informer:adjusted_stockholm_stacks(0.3)
 		end
 	end
 	

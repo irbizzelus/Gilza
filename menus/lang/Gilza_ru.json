@@ -11,6 +11,11 @@
 	"Gilza_melee_gui_2": "Только время заряда",
 	"Gilza_melee_gui_3": "Только процент урона",
 	"Gilza_melee_gui_4": "Оба одновременно",
+	"Gilza_blackmarket_weapon_sorting": "Сортировка оружия",
+	"Gilza_blackmarket_weapon_sorting_desc": "Выберите как оружие будет отсортировано по урону на экране покупки нового оружия на черном рынке - Отключено, По Убыванию (от большего к меньшему) или По Возрастанию (от меньшего к большему). Сортировка не распространяется на категорию специального оружия.",
+	"Gilza_weapon_sorting_choise_1": "Отключено",
+	"Gilza_weapon_sorting_choise_2": "По Убыванию",
+	"Gilza_weapon_sorting_choise_3": "По Возрастанию",
 	
 	"Gilza_misc_header": "----- Ссылки с информацией  -----",
 	"Gilza_MWS_page": "Страница Gilza на MWS",
@@ -30,6 +35,8 @@
 	
 	"Gilza_shotgun_skill_notification": "Оповещение разжигателя страха",
 	"Gilza_shotgun_skill_notification_desc": "Добавляет оповещение когда вы получаете бонус к скорости передвижения от навыка \"Разжигатель Страха\".",
+	"Gilza_menace_points_notification": "Оповещение Стокгольм. Синдрома",
+	"Gilza_menace_points_notification_desc": "Добавляет оповещение когда вы получаете очки запугивания используя навык \"Стокгольмский Синдром\".",
 	"Gilza_designated_marksman_zoom": "Зум Стрелка в Отс.",
 	"Gilza_designated_marksman_zoom_desc": "Изменяет количество прибавляемого зума/кратности прицела при использовании навыка \"Стрелок в Отставке\". Количество зума в базовой версии PayDay 2 - 1.5x. Имзенения доступны только после перезапуска ограбления.",
 	"Gilza_designated_marksman_zoom_1": "0x",

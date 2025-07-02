@@ -590,11 +590,13 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 					"temporary_copr_invuln_on_segment_loss"
 				}
 				self.specializations[22][7].upgrades = {
-					"player_passive_health_multiplier_3"
+					"player_passive_health_multiplier_3",
+					"player_copr_regain_cooldown_on_revives"
 				}
 				self.specializations[22][9].upgrades = {
 					"player_activate_ability_downed",
 					"player_copr_static_damage_ratio_2",
+					"player_copr_heal_during_invuln_increase",
 					"player_passive_loot_drop_multiplier"
 				}
 				self.specializations[22].category = "supportive"
@@ -715,7 +717,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", functio
 		
 		self.skills.carbon_blade[2].upgrades = {"saw_ignore_shields_1","saw_panic_when_kill_1","player_saw_ammo_pick_up"}
 		
-		self.skills.bandoliers[2].upgrades = { "player_regain_throwable_from_ammo_1", "player_regain_throwable_from_ammo_2", "player_pick_up_ammo_multiplier"}
+		self.skills.bandoliers[2].upgrades = {"player_regain_throwable_from_ammo_2", "player_pick_up_ammo_multiplier"}
 		
 		---- TECHICIAN
 		self.skills.defense_up[1].upgrades = {"sentry_gun_cost_reduction_1", "sentry_gun_cost_reduction_2"}

@@ -27,7 +27,8 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 		action_wanted = action_wanted or self:_is_charging_weapon()
 		
 		-- allow to potentially fire a shot even if we are not pressing mouse keys, if we requested a shot before
-		if action_wanted or self._requested_fire_between_single_shots then
+		self._requested_fire_between_single_shots = self._requested_fire_between_single_shots or {nil, self._equipped_unit:base()._name_id}
+		if action_wanted or self._requested_fire_between_single_shots[1] then
 			
 			local weap_base = self._equipped_unit:base()
 			local weapon_tweak_data = weap_base:weapon_tweak_data()
@@ -64,20 +65,31 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 				end
 				
 				-- if we request a mouse press action with single fire weapons, while we cant shoot (either cause we already are or gun's ROF delay is not done)
-				-- remember our mouse press request time
-				if action_wanted and fire_mode == "single" and input.btn_primary_attack_press and (self._shooting or not weap_base:start_shooting_allowed()) then
-					self._requested_fire_between_single_shots = Application:time()
-				elseif self._requested_fire_between_single_shots and weap_base:start_shooting_allowed() and not self._shooting and (weap_base:weapon_fire_rate() / weap_base:fire_rate_multiplier() < 0.6) then
-					-- if we can shoot and we requested a shot when we couldnt shoot, try to fire a shot automatically. dont do this for weapons with too low ROF (<100 per min rn)
+				-- remember our mouse press request time. dont do this for weapons with too low ROF (<150 per min rn)
+				if action_wanted and fire_mode == "single" and input.btn_primary_attack_press and (self._shooting or not weap_base:start_shooting_allowed()) and (weap_base:weapon_fire_rate() / weap_base:fire_rate_multiplier() < 0.4) then
+					self._requested_fire_between_single_shots[1] = Application:time()
+					self._requested_fire_between_single_shots[2] = weap_base._name_id
+				elseif fire_mode == "single" and self._requested_fire_between_single_shots[1] and self._requested_fire_between_single_shots[2] == weap_base._name_id and weap_base:start_shooting_allowed() and not self._shooting and (weap_base:weapon_fire_rate() / weap_base:fire_rate_multiplier() < 0.4) then
+					-- if we can shoot and we requested a shot when we couldnt shoot, try to fire a shot automatically. dont do this for weapons with too low ROF (<150 per min rn)
 					local rof_based_delay_window = weap_base:weapon_fire_rate() / weap_base:fire_rate_multiplier() * 0.5
 					-- also dont do this if we requested a shot too long ago, or if firing a shot would be too late after the ROF delay has run out
-					if (weap_base._next_fire_allowed - self._requested_fire_between_single_shots <= rof_based_delay_window) and (Application:time() - weap_base._next_fire_allowed <= rof_based_delay_window * 0.25) then
-						self._requested_fire_between_single_shots = nil
+					if (weap_base._next_fire_allowed - self._requested_fire_between_single_shots[1] <= rof_based_delay_window) and (Application:time() - weap_base._next_fire_allowed <= rof_based_delay_window * 0.25) then
+						self._requested_fire_between_single_shots[1] = nil
 						-- to allow a shot, simulate a mouse press
 						input.btn_primary_attack_press = true
 					else
 						-- if timing was unfortunate, ignore our shot request
-						self._requested_fire_between_single_shots = nil
+						self._requested_fire_between_single_shots[1] = nil
+					end
+				else
+					-- clear var on weapon/fire mode change
+					if fire_mode ~= "single" or self._requested_fire_between_single_shots[2] ~= weap_base._name_id then
+						self._requested_fire_between_single_shots[1] = nil
+					elseif self._requested_fire_between_single_shots[1] then
+						-- if its been too long since last shot - clear
+						if Application:time() - self._requested_fire_between_single_shots[1] >= (weap_base:weapon_fire_rate() / weap_base:fire_rate_multiplier()) * 1.1 then
+							self._requested_fire_between_single_shots[1] = nil
+						end
 					end
 				end
 
@@ -304,9 +316,9 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 				end
 			elseif self:_is_reloading() and self._equipped_unit:base():reload_interuptable() and input.btn_primary_attack_press then
 				self._queue_reload_interupt = true
-				self._requested_fire_between_single_shots = nil -- clear single fire shot buffering
+				self._requested_fire_between_single_shots[1] = nil -- clear single fire shot buffering
 			else
-				self._requested_fire_between_single_shots = nil
+				self._requested_fire_between_single_shots[1] = nil
 			end
 		end
 

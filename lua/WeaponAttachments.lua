@@ -22,7 +22,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		-- AP rounds for galant and m14 - ammo cut is under individual wpn tweaks
 		self.parts.wpn_fps_upg_ar_dmr_ap_rounds.name_id = "bm_wpn_fps_upg_ar_dmr_ap_rounds"
 		self.parts.wpn_fps_upg_ar_dmr_ap_rounds.desc_id = "bm_wpn_fps_upg_ar_dmr_ap_rounds_desc"
-		self.parts.wpn_fps_upg_ar_dmr_ap_rounds.stats = {value = 0,spread = -4,recoil = -3, total_ammo_mod = -7.5}
+		self.parts.wpn_fps_upg_ar_dmr_ap_rounds.stats = {value = 0,spread = -3,recoil = -4, total_ammo_mod = -7.5}
 		self.parts.wpn_fps_upg_ar_dmr_ap_rounds.custom_stats = {armor_piercing_add = 1,can_shoot_through_shield = true,can_shoot_through_wall = true,ammo_pickup_max_mul = 0.5,ammo_pickup_min_mul = 0.5}
 		-- ammo that ap kits add to the gun, invisible in the blackmarket menus
 		self.parts.wpn_fps_upg_ap_kit_ap_rounds.name_id = "bm_wpn_fps_upg_ap_kit_ap_rounds"
@@ -135,6 +135,15 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_upg_sub2000_250_dmg_kit.custom_stats = {
 			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 200, 250).max_mul,
 			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 200, 250).min_mul
+		}
+		-- shak12 250 damage profile kit
+		self.parts.wpn_fps_upg_shak12_250_dmg_kit.name_id = "wpn_fps_upg_shak12_250_dmg_kit"
+		self.parts.wpn_fps_upg_shak12_250_dmg_kit.desc_id = "wpn_fps_upg_shak12_250_dmg_kit_desc"
+		self.parts.wpn_fps_upg_shak12_250_dmg_kit.stats = {value = 0,damage = -200,spread = 2,recoil = 6,total_ammo_mod = 10}
+		self.parts.wpn_fps_upg_shak12_250_dmg_kit.forbids = {"wpn_fps_ass_shak12_body_vks"}
+		self.parts.wpn_fps_upg_shak12_250_dmg_kit.custom_stats = {
+			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 450, 250).max_mul,
+			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 450, 250).min_mul
 		}
 		-- new velocity nade for standard launchers
 		self.parts.wpn_fps_upg_a_grenade_launcher_velocity = deep_clone(self.parts.wpn_fps_upg_a_grenade_launcher_incendiary)
@@ -1174,7 +1183,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_ass_tkb_body_pouch.stats.total_ammo_mod = 3.33
 			self.parts.wpn_fps_ass_tkb_conversion.stats = {
 				value = 1,
-				spread = 4,
+				spread = 7,
 				damage = 3,
 				recoil = 9,
 				concealment = -3,
@@ -1391,8 +1400,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self[semi_auto[i]].override.wpn_fps_upg_a_explosive.stats = {value = 5,total_ammo_mod = -6.66,damage = 400,recoil = -8}
 					self[semi_auto[i]].override.wpn_fps_upg_a_explosive.custom_stats = HE_custom_stats
 				end
-				self.wpn_fps_pis_x_judge.override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = -5,damage = 163}
-				self.wpn_fps_pis_x_judge.override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = -5,damage = 163}
+				self.wpn_fps_pis_x_judge.override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 5,damage = 163}
+				self.wpn_fps_pis_x_judge.override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 5,damage = 163}
 				self.wpn_fps_pis_x_judge.override.wpn_fps_upg_a_explosive.stats = {value = 5,total_ammo_mod = -6.66,damage = 200,recoil = -8}
 			end
 			init_SA()
@@ -1842,7 +1851,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_smg_mp5_m_straight.stats.total_ammo_mod = -6.67
 			self.parts.wpn_fps_smg_mp5_m_straight.custom_stats = {
 				ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("SMG", 155, 250).max_mul,
-				ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("SMG", 155, 250).min_mul
+				ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("SMG", 155, 250).min_mul,
+				fire_rate_multiplier = 0.8125
 			}
 			self.parts.wpn_fps_smg_mp5_m_straight.name_id = "bm_wpn_fps_smg_mp5_m_straight_R"
 			self.parts.wpn_fps_smg_mp5_m_straight.has_description = true

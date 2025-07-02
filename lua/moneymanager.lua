@@ -10,7 +10,6 @@ Hooks:PreHook(MoneyManager, "civilian_killed", "Gilza_civ_kill_tracker", functio
 			managers.player._Gilza_menace_kill_tracker = 4
 		else
 			Gilza.New_Skills_Informer:adjusted_stockholm_stacks(1.5)
-			managers.hud:show_hint({text = managers.localization:text("Gilza_menace_panic_spread_notification")..tostring(managers.player._Gilza_menace_kill_tracker)})
 		end
 	end
 end)

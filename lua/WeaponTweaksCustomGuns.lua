@@ -834,36 +834,143 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 	local pickups = G_W_M.ammo_pickups.PISTOLs
 	
 	local isActuallyRevolver = false
-	if tweak_data.weapon[id].CLIP_AMMO_MAX <= 8 then
+	if tweak_data.weapon[id].CLIP_AMMO_MAX <= 6 then
 		isActuallyRevolver = true
 	end
 	if isRevolver then
 		isActuallyRevolver = true
 	end
 	
+	local fire_mode = "single"
+	if (tweak_data.weapon[id].FIRE_MODE and tweak_data.weapon[id].FIRE_MODE == "auto") or tweak_data.weapon[id].CAN_TOGGLE_FIREMODE then
+		fire_mode = "auto"
+	end
+	
 	-- same as with others - dont touch guns with REALLY low damage
 	if tweak_data.weapon[id].stats.damage >= 50 and tweak_data.weapon[id].stats.damage <= 69 then
 		tweak_data.weapon[id].stats.damage = 88
+		local new_rof = 60/650
+		if fire_mode == "single" then
+			if tweak_data.weapon[id].fire_mode_data then
+				tweak_data.weapon[id].fire_mode_data.fire_rate = new_rof
+			end
+			if tweak_data.weapon[id].single then
+				tweak_data.weapon[id].single.fire_rate = new_rof
+			end
+			if tweak_data.weapon[id].auto then
+				tweak_data.weapon[id].auto.fire_rate = new_rof
+			end
+		else
+			if tweak_data.weapon[id].fire_mode_data then
+				tweak_data.weapon[id].fire_mode_data.fire_rate = tweak_data.weapon[id].fire_mode_data.fire_rate * 0.75
+			end
+			if tweak_data.weapon[id].single then
+				tweak_data.weapon[id].single.fire_rate = tweak_data.weapon[id].single.fire_rate * 0.75
+			end
+			if tweak_data.weapon[id].auto then
+				tweak_data.weapon[id].auto.fire_rate = tweak_data.weapon[id].auto.fire_rate * 0.75
+			end
+		end
 		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._88 * 0.9)) * secondary_mul,((pickups._88 * 1.1)) * secondary_mul}
 	elseif tweak_data.weapon[id].stats.damage >= 70 and tweak_data.weapon[id].stats.damage <= 124 then
 		tweak_data.weapon[id].stats.damage = 95
+		local new_rof = 60/450
+		if fire_mode == "single" then
+			if tweak_data.weapon[id].fire_mode_data then
+				tweak_data.weapon[id].fire_mode_data.fire_rate = new_rof
+			end
+			if tweak_data.weapon[id].single then
+				tweak_data.weapon[id].single.fire_rate = new_rof
+			end
+			if tweak_data.weapon[id].auto then
+				tweak_data.weapon[id].auto.fire_rate = new_rof
+			end
+		else
+			if tweak_data.weapon[id].fire_mode_data then
+				tweak_data.weapon[id].fire_mode_data.fire_rate = tweak_data.weapon[id].fire_mode_data.fire_rate * 0.75
+			end
+			if tweak_data.weapon[id].single then
+				tweak_data.weapon[id].single.fire_rate = tweak_data.weapon[id].single.fire_rate * 0.75
+			end
+			if tweak_data.weapon[id].auto then
+				tweak_data.weapon[id].auto.fire_rate = tweak_data.weapon[id].auto.fire_rate * 0.75
+			end
+		end
 		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._95 * 0.9)) * secondary_mul,((pickups._95 * 1.1)) * secondary_mul}
 	elseif tweak_data.weapon[id].stats.damage >= 125 and tweak_data.weapon[id].stats.damage <= 150 then
 		tweak_data.weapon[id].stats.damage = 125
+		local new_rof = 60/360
+		if fire_mode == "auto" then
+			new_rof = 60/540
+		end
+		if tweak_data.weapon[id].fire_mode_data then
+			tweak_data.weapon[id].fire_mode_data.fire_rate = new_rof
+		end
+		if tweak_data.weapon[id].single then
+			tweak_data.weapon[id].single.fire_rate = new_rof
+		end
+		if tweak_data.weapon[id].auto then
+			tweak_data.weapon[id].auto.fire_rate = new_rof
+		end
 		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._125 * 0.9)) * secondary_mul,((pickups._125 * 1.1)) * secondary_mul}
 	elseif tweak_data.weapon[id].stats.damage >= 151 and tweak_data.weapon[id].stats.damage <= 219 then
 		tweak_data.weapon[id].stats.damage = 155
+		local new_rof = 60/330
+		if fire_mode == "auto" then
+			new_rof = 60/500
+		end
+		if tweak_data.weapon[id].fire_mode_data then
+			tweak_data.weapon[id].fire_mode_data.fire_rate = new_rof
+		end
+		if tweak_data.weapon[id].single then
+			tweak_data.weapon[id].single.fire_rate = new_rof
+		end
+		if tweak_data.weapon[id].auto then
+			tweak_data.weapon[id].auto.fire_rate = new_rof
+		end
 		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._155 * 0.9)) * secondary_mul,((pickups._155 * 1.1)) * secondary_mul}
 	elseif tweak_data.weapon[id].stats.damage >= 220 then
 		tweak_data.weapon[id].stats.damage = 250
+		local new_rof = 60/300
+		if fire_mode == "auto" then
+			new_rof = 60/400
+		end
+		if tweak_data.weapon[id].fire_mode_data then
+			tweak_data.weapon[id].fire_mode_data.fire_rate = new_rof
+		end
+		if tweak_data.weapon[id].single then
+			tweak_data.weapon[id].single.fire_rate = new_rof
+		end
+		if tweak_data.weapon[id].auto then
+			tweak_data.weapon[id].auto.fire_rate = new_rof
+		end
 		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._250 * 0.9)) * secondary_mul,((pickups._250 * 1.1)) * secondary_mul}
 	elseif tweak_data.weapon[id].stats.damage >= 300 and isActuallyRevolver then
 		tweak_data.weapon[id].stats.damage = 450
+		local new_rof = 60/240
+		if tweak_data.weapon[id].fire_mode_data then
+			tweak_data.weapon[id].fire_mode_data.fire_rate = new_rof
+		end
+		if tweak_data.weapon[id].single then
+			tweak_data.weapon[id].single.fire_rate = new_rof
+		end
+		if tweak_data.weapon[id].auto then
+			tweak_data.weapon[id].auto.fire_rate = new_rof
+		end
 		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._450 * 0.9)) * secondary_mul,((pickups._450 * 1.1)) * secondary_mul}
 	end
 	
 	if tweak_data.weapon[id].stats.damage < 50 then
 		local weapon_avg_pickup = G_W_M:get_ammo_pickup(tweak_data.weapon[id].stats.damage, 0.34)
+		if tweak_data.weapon[id].fire_mode_data then
+			tweak_data.weapon[id].fire_mode_data.fire_rate = tweak_data.weapon[id].fire_mode_data.fire_rate * 0.75
+		end
+		if tweak_data.weapon[id].single then
+			tweak_data.weapon[id].single.fire_rate = tweak_data.weapon[id].single.fire_rate * 0.75
+		end
+		if tweak_data.weapon[id].auto then
+			tweak_data.weapon[id].auto.fire_rate = tweak_data.weapon[id].auto.fire_rate * 0.75
+		end
 		tweak_data.weapon[id].AMMO_PICKUP = {(weapon_avg_pickup * 0.9) * secondary_mul,(weapon_avg_pickup * 1.1)} * secondary_mul
 	end
 	
@@ -879,33 +986,6 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 	if primary then
 		tweak_data.weapon[id].AMMO_PICKUP[1] = tweak_data.weapon[id].AMMO_PICKUP[1] * secondary_to_primary_mul
 		tweak_data.weapon[id].AMMO_PICKUP[2] = tweak_data.weapon[id].AMMO_PICKUP[2] * secondary_to_primary_mul
-	end
-	
-	local fire_mode = "single"
-	if (tweak_data.weapon[id].FIRE_MODE and tweak_data.weapon[id].FIRE_MODE == "auto") or tweak_data.weapon[id].CAN_TOGGLE_FIREMODE then
-		fire_mode = "auto"
-	end
-	
-	if fire_mode == "single" then
-		if tweak_data.weapon[id].fire_mode_data then
-			tweak_data.weapon[id].fire_mode_data.fire_rate = tweak_data.weapon[id].fire_mode_data.fire_rate * 1.2
-		end
-		if tweak_data.weapon[id].single then
-			tweak_data.weapon[id].single.fire_rate = tweak_data.weapon[id].single.fire_rate * 1.2
-		end
-		if tweak_data.weapon[id].auto then
-			tweak_data.weapon[id].auto.fire_rate = tweak_data.weapon[id].auto.fire_rate * 1.2
-		end
-	else
-		if tweak_data.weapon[id].fire_mode_data then
-			tweak_data.weapon[id].fire_mode_data.fire_rate = tweak_data.weapon[id].fire_mode_data.fire_rate * 0.8
-		end
-		if tweak_data.weapon[id].single then
-			tweak_data.weapon[id].single.fire_rate = tweak_data.weapon[id].single.fire_rate * 0.8
-		end
-		if tweak_data.weapon[id].auto then
-			tweak_data.weapon[id].auto.fire_rate = tweak_data.weapon[id].auto.fire_rate * 0.8
-		end
 	end
 
 	-- dont allow for full auto pistols to go over this amount of base stability
@@ -1229,29 +1309,29 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 		damage_far_mul = 0.75,
 		damage_near_mul = 0.75,
 		armor_piercing_add = 1,
-		ammo_pickup_max_mul = 0.85,
-		ammo_pickup_min_mul = 0.85,
+		ammo_pickup_max_mul = 0.9,
+		ammo_pickup_min_mul = 0.9,
 		is_buckshot = true,
 		rays = 12
 	}
 	local FABS_stats = {
-		total_ammo_mod = -5,
+		total_ammo_mod = 5,
 		damage = 155
 	}
 	local SABS_stats = {
-		total_ammo_mod = -5,
+		total_ammo_mod = 5,
 		damage = 325
 	}
 	local PABS_stats = {
-		total_ammo_mod = -5,
+		total_ammo_mod = 5,
 		damage = 450
 	}
 	local DBBS_stats = {
-		total_ammo_mod = -5,
+		total_ammo_mod = 5,
 		damage = 900
 	}
 	local ultraBS_stats = {
-		total_ammo_mod = -5,
+		total_ammo_mod = 5,
 		damage = tweak_data.weapon[id].stats.damage
 	}
 
