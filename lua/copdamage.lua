@@ -45,7 +45,7 @@ Hooks:PreHook(CopDamage, "damage_melee", "Gilza_new_melee_damage", function(self
 			if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
 				reduction = 200
 			end
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 100)) -- dozers take 10x the amount of hits
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / reduction)) -- dozers take 10-20x the amount of hits
 		else
 			attack_data.damage = self._HEALTH_INIT * (attack_data.damage / 10) + 0.1 -- +1 dmg is needed due to rounding calculations with low hp targets, like street cops, that leave them with 0.1 hp instead of killing them
 		end
