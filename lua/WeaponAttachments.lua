@@ -1728,7 +1728,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_lmg_hcar_barrel_dmr.has_description = true
 		self.parts.wpn_fps_lmg_hcar_barrel_dmr.desc_id = "bm_wpn_fps_lmg_hcar_barrel_dmr_PEN_desc"
 		self.parts.wpn_fps_lmg_hcar_barrel_dmr.forbids = {"wpn_fps_lmg_hcar_m_drum"}
-		self.parts.wpn_fps_lmg_hcar_body_conversionkit.stats = {extra_ammo = 40,total_ammo_mod = 17.5,damage = -50,value = 1,spread = -8,recoil = 7,fire_rate = 1.5,reload = -6}
+		self.parts.wpn_fps_lmg_hcar_body_conversionkit.stats = {extra_ammo = 40,total_ammo_mod = 10,damage = -50,value = 1,spread = -11,recoil = 7,fire_rate = 1.5,reload = -6}
 		self.parts.wpn_fps_lmg_hcar_body_conversionkit.custom_stats.fire_rate_multiplier = 1.5
 		self.parts.wpn_fps_lmg_hcar_body_conversionkit.custom_stats.ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("LMG", "250_bipodless", "200_bipodless").min_mul
 		self.parts.wpn_fps_lmg_hcar_body_conversionkit.custom_stats.ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("LMG", "250_bipodless", "200_bipodless").max_mul
@@ -2201,8 +2201,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			total_ammo_mod = -5,
 			damage = -19
 		}
-		self.parts.wpn_fps_fla_mk2_mag_rare.custom_stats.ammo_pickup_min_mul = 0.4
-		self.parts.wpn_fps_fla_mk2_mag_rare.custom_stats.ammo_pickup_max_mul = 0.4
+		self.parts.wpn_fps_fla_mk2_mag_rare.custom_stats.ammo_pickup_min_mul = 0.25
+		self.parts.wpn_fps_fla_mk2_mag_rare.custom_stats.ammo_pickup_max_mul = 0.25
 		-- well done mag
 		self.parts.wpn_fps_fla_mk2_mag_welldone.has_description = true
 		self.parts.wpn_fps_fla_mk2_mag_welldone.desc_id = "bm_wpn_fps_fla_mk2_mag_welldone_desc"
@@ -2211,8 +2211,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			total_ammo_mod = 5,
 			damage = 20
 		}
-		self.parts.wpn_fps_fla_mk2_mag_welldone.custom_stats.ammo_pickup_min_mul = 1.45
-		self.parts.wpn_fps_fla_mk2_mag_welldone.custom_stats.ammo_pickup_max_mul = 1.45
+		self.parts.wpn_fps_fla_mk2_mag_welldone.custom_stats.ammo_pickup_min_mul = 1
+		self.parts.wpn_fps_fla_mk2_mag_welldone.custom_stats.ammo_pickup_max_mul = 1
 		-- secondary
 		-- high temp mix
 		self.parts.wpn_fps_fla_system_m_high.has_description = true
@@ -2222,8 +2222,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			total_ammo_mod = 5,
 			damage = 20
 		}
-		self.parts.wpn_fps_fla_system_m_high.custom_stats.ammo_pickup_min_mul = 1.45
-		self.parts.wpn_fps_fla_system_m_high.custom_stats.ammo_pickup_max_mul = 1.45
+		self.parts.wpn_fps_fla_system_m_high.custom_stats.ammo_pickup_min_mul = 1
+		self.parts.wpn_fps_fla_system_m_high.custom_stats.ammo_pickup_max_mul = 1
 		-- low temp mix
 		self.parts.wpn_fps_fla_system_m_low.has_description = true
 		self.parts.wpn_fps_fla_system_m_low.desc_id = "bm_wpn_fps_fla_mk2_mag_rare_desc"
@@ -2232,8 +2232,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			total_ammo_mod = -5,
 			damage = -19
 		}
-		self.parts.wpn_fps_fla_system_m_low.custom_stats.ammo_pickup_min_mul = 0.4
-		self.parts.wpn_fps_fla_system_m_low.custom_stats.ammo_pickup_max_mul = 0.4
+		self.parts.wpn_fps_fla_system_m_low.custom_stats.ammo_pickup_min_mul = 0.25
+		self.parts.wpn_fps_fla_system_m_low.custom_stats.ammo_pickup_max_mul = 0.25
 		
 		-- GL's - INCLUDES UNDERBARRELS
 		
@@ -2563,7 +2563,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_upg_a_slug_underbarrel.custom_stats.damage_near_mul = 1.15
 			self.parts.wpn_fps_upg_a_slug_underbarrel.custom_stats.ammo_pickup_min_mul = 0.75
 			self.parts.wpn_fps_upg_a_slug_underbarrel.custom_stats.ammo_pickup_max_mul = 0.75
-			self.parts.wpn_fps_upg_a_piercing_underbarrel.custom_stats = {rays = 6, armor_piercing_add = 1,damage_near_mul = 1.4,damage_far_mul = 1.4,ammo_pickup_max_mul = 0.9,ammo_pickup_min_mul = 0.9}
+			self.parts.wpn_fps_upg_a_piercing_underbarrel.custom_stats = {rays = 6, armor_piercing_add = 1,damage_near_mul = 1.4,damage_far_mul = 1.4,ammo_pickup_max_mul = 0.85,ammo_pickup_min_mul = 0.85}
 			-- underbarrel mods
 			self.parts.wpn_fps_pis_type54_underbarrel.desc_id = "bm_wpn_fps_pis_type54_underbarrel_desc"
 			self.parts.wpn_fps_pis_type54_underbarrel.has_description = true

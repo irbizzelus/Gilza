@@ -51,7 +51,7 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_NewWeaponRecoilBaseStats",
 		ARs = {
 			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.44),
 			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.4),
-			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.36) * 0.88, -- 12% less then 155
+			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.36) * 0.9, -- 10% less then 155
 			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.36),
 			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.34)
 		},
@@ -69,7 +69,7 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_NewWeaponRecoilBaseStats",
 			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.3, 0.85),
 			_95 = Gilza.Weapons_module:get_ammo_pickup(95, 0.28, 0.85),
 			_250_bipodless = Gilza.Weapons_module:get_ammo_pickup(250, 0.36, 0.75),
-			_200_bipodless = Gilza.Weapons_module:get_ammo_pickup(155, 0.32, 0.75) * 0.88,
+			_200_bipodless = Gilza.Weapons_module:get_ammo_pickup(155, 0.32, 0.75) * 0.9,
 			_155_bipodless = Gilza.Weapons_module:get_ammo_pickup(155, 0.32, 0.75),
 			_125_bipodless = Gilza.Weapons_module:get_ammo_pickup(125, 0.3, 0.75),
 			_95_bipodless = Gilza.Weapons_module:get_ammo_pickup(95, 0.28, 0.85),
@@ -84,7 +84,7 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_NewWeaponRecoilBaseStats",
 		},
 		SMGs = {
 			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.43),
-			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.4) * 0.88, -- 12% less then 155
+			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.4) * 0.9,
 			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.4),
 			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.38),
 			_95 = Gilza.Weapons_module:get_ammo_pickup(95, 0.36),
@@ -92,7 +92,7 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_NewWeaponRecoilBaseStats",
 		PISTOLs = {
 			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.75),
 			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.5),
-			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.42) * 0.88, -- 12% less then 155
+			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.42) * 0.9,
 			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.42),
 			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.38),
 			_95 = Gilza.Weapons_module:get_ammo_pickup(95, 0.35),
@@ -768,7 +768,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.amcar.AMMO_MAX = self.amcar.CLIP_AMMO_MAX * self.amcar.NR_CLIPS_MAX
 			self.amcar.fire_mode_data = {fire_rate = 60/650}
 			self.amcar.auto = {fire_rate = 60/650}
-			self.amcar.stats.recoil = 7
+			self.amcar.stats.recoil = 8
 			
 			self.ak74.NR_CLIPS_MAX = 5
 			self.ak74.AMMO_MAX = self.ak74.CLIP_AMMO_MAX * self.ak74.NR_CLIPS_MAX
@@ -1302,7 +1302,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.kacchainsaw_flamethrower.CLIP_AMMO_MAX = 150
 		self.kacchainsaw_flamethrower.NR_CLIPS_MAX = 250/150
 		self.kacchainsaw_flamethrower.AMMO_MAX = self.kacchainsaw_flamethrower.CLIP_AMMO_MAX * self.kacchainsaw_flamethrower.NR_CLIPS_MAX
-		self.kacchainsaw_flamethrower.AMMO_PICKUP = {2.3,4.7}
+		self.kacchainsaw_flamethrower.AMMO_PICKUP = {8.1,9.9}
 		self.kacchainsaw_flamethrower.stats.damage = 25
 		
 		-- HEAVY --
@@ -2509,12 +2509,12 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.type54_underbarrel.rays = 10
 			self.type54_underbarrel.stats.damage = 66
 			self.type54_underbarrel.stats.spread = 10
-			self.type54_underbarrel.AMMO_PICKUP = {0.3375,0.4}
+			self.type54_underbarrel.AMMO_PICKUP = {0.35,0.45}
 			Gilza.shotgun_minimal_damage_multipliers.type54_underbarrel = 1
 			self.x_type54_underbarrel.rays = 10
 			self.x_type54_underbarrel.stats.damage = 33
 			self.x_type54_underbarrel.stats.spread = 10
-			self.x_type54_underbarrel.AMMO_PICKUP = {0.675,0.81}
+			self.x_type54_underbarrel.AMMO_PICKUP = {0.8,1}
 			Gilza.shotgun_minimal_damage_multipliers.x_type54_underbarrel = 1
 			
 			self.type54.stats.recoil = 12
@@ -2846,7 +2846,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	-- Flammenwerfers --
 	local function setFLAMENs()
 		
-		local flamen_pickup = 13.4
+		local flamen_pickup = 10.4
 		
 		self.flamethrower_mk2.stats.damage = 20
 		self.flamethrower_mk2.stats.reload = 18

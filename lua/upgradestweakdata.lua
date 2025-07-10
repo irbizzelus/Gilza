@@ -1108,8 +1108,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				}
 				self.values.player.damage_resist_teammates_brawler = {
 					{
-						absorption = 0.35,
-						resist = 0.975
+						absorption = 0,
+						resist = 0.96
 					}
 				}
 			end

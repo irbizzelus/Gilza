@@ -124,7 +124,7 @@ Hooks:OverrideFunction(PlayerManager, "damage_reduction_skill_multiplier", funct
 		multiplier = multiplier - (1 - managers.player:upgrade_value("player", "interacting_damage_multiplier", 1))
 	end
 	
-	return math.round(math.clamp(multiplier, 0.15, 1) * 1000) / 1000 -- no idea why math.clamp has floating point errors, but it does.
+	return math.round(math.clamp(multiplier, 0.2, 1) * 1000) / 1000 -- no idea why math.clamp has floating point errors, but it does.
 end)
 
 -- on kill add brawler's armor regen and fearmonger's speed boost if we have those skills
@@ -336,12 +336,19 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_on_killshot", function(self,
 		-- i am too lazy to set up an actual overtime regeneration effect for armor, so here is a braindead method
 		-- it adds 7 delayed calls with a 0.75 interval in between each call
 		-- as a result we get 8 "ticks" every 0.75s
-		local total_regen = 2.5 -- 25 hp points for <= DW
+		local total_regen = 0
 		if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
 			if managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
-				total_regen = 5.0
+				total_regen = 5.0 -- 50 hp points
 			else
 				total_regen = 10.0
+			end
+		else
+			-- <= DW
+			if managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
+				total_regen = 2.0
+			else
+				total_regen = 4.0
 			end
 		end
 		local regen_per_tick = total_regen / 8
@@ -943,7 +950,7 @@ Hooks:OverrideFunction(PlayerManager, "damage_absorption", function (self)
 		total = total + Application:digest_value(absorption, false)
 	end
 	
-	-- new brawler bonuses
+	-- new brawler absorb bonuses
 	if managers.player:has_category_upgrade("player", "damage_resist_teammates_brawler") then
 		if self._gilza_brawler_teammates_nearby and self._gilza_brawler_teammates_nearby >= 1 and (managers.player:player_unit():character_damage():_max_health() / managers.player:player_unit():character_damage():get_real_health()) >= 2 then
 			local skill = managers.player:upgrade_value("player", "damage_resist_teammates_brawler")
