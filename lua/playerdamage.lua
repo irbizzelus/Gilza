@@ -891,7 +891,7 @@ function PlayerDamage:Gilza_add_damage_invuln_timer(duration)
 end
 
 -- revive assosiated stuff like yakuza, up u go, leech and junkie
-Hooks:OverrideFunction(PlayerDamage, "revive", function (self, helped_self)
+Hooks:OverrideFunction(PlayerDamage, "revive", function (self, silent)
 	
 	if Application:digest_value(self._revives, false) == 0 then
 		self._revive_health_multiplier = nil
