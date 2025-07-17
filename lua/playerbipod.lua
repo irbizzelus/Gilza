@@ -1,4 +1,4 @@
--- speed up bipod deploy speed if skill is used
+-- speed up bipod deploy speed if skill is used. this works in vanilla, but if bipods that actually works is installed, it's handled in playerstandard
 -- changes @15 and 27
 Hooks:OverrideFunction(PlayerBipod, "_enter", function (self, enter_data)
 	local player = managers.player:player_unit()

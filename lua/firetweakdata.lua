@@ -1,5 +1,5 @@
--- new fire damage stats
-Hooks:PostHook(FireTweakData, "_init_dot_entries_fire", "Gilza_new_fire_dot", function(self)
+-- new fire DOT damage stats
+Hooks:PostHook(FireTweakData, "_init_dot_entries_fire", "Gilza_FireTweakData_init_dot_entries_fire_post", function(self)
 	-- flammenwerfers
 	self.dot_entries.fire.weapon_flamethrower_mk2 = {
 		dot_trigger_chance = 0.2,

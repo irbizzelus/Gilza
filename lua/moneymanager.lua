@@ -1,4 +1,4 @@
-Hooks:PreHook(MoneyManager, "civilian_killed", "Gilza_civ_kill_tracker", function(self)
+Hooks:PreHook(MoneyManager, "civilian_killed", "Gilza_civ_kill_tracker_stockholm", function(self)
 	-- track civ kills for new stockholm basic. for some reason copdamage:die does not trigger for civs, even though it should.
 	if managers.player:has_category_upgrade("player", "menace_panic_spread") then
 		local orig_amount = managers.player._Gilza_menace_kill_tracker

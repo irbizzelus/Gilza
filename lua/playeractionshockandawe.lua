@@ -1,3 +1,4 @@
+-- new "lock n' load" skill reload adjusments
 PlayerAction.ShockAndAwe = {
 	Priority = 1,
 	Function = function (player_manager, target_enemies, max_reload_increase, min_reload_increase, penalty, min_bullets, weapon_unit)

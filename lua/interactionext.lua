@@ -1,4 +1,4 @@
--- reduced interaction timer if we have speed junkie perk, depends on stacks amount
+-- adjust interaction timer(s) if we have speed junkie or guardian perk
 Hooks:OverrideFunction(BaseInteractionExt, "_get_timer", function (self)
 	local modified_timer = self:_get_modified_timer()
 
@@ -48,7 +48,7 @@ Hooks:OverrideFunction(BaseInteractionExt, "_get_timer", function (self)
 end)
 
 -- new tower defense aced
-Hooks:PostHook(SentryGunInteractionExt, "_on_death_event", "Gilza_sentry_revive", function (self)
+Hooks:PostHook(SentryGunInteractionExt, "_on_death_event", "Gilza_SentryGunInteractionExt_on_death_event_post", function (self)
 	if self:is_owner() and managers.player:has_category_upgrade("sentry_gun", "can_revive") then
 		self:set_active(true)
 		self:set_tweak_data("sentry_gun_revive")
@@ -60,7 +60,8 @@ Hooks:PostHook(SentryGunInteractionExt, "_on_death_event", "Gilza_sentry_revive"
 	end
 end)
 
-Hooks:PostHook(ReviveInteractionExt, "interact", "Gilza_post_revive", function (self,reviving_unit)
+-- player revive skills
+Hooks:PostHook(ReviveInteractionExt, "interact", "Gilza_ReviveInteractionExt_interact_post", function (self,reviving_unit)
 	-- new combat medic aced
 	if reviving_unit and reviving_unit == managers.player:player_unit() and managers.player:has_category_upgrade("player", "revive_action_self_heal") then
 		local stoic = managers.player:has_category_upgrade("player", "armor_to_health_conversion")
@@ -89,12 +90,10 @@ end)
 
 -- leech heal block in dire state
 local gilza_orig_doc_bag_interaction_blocked = DoctorBagBaseInteractionExt._interact_blocked
-function DoctorBagBaseInteractionExt:_interact_blocked(player)
-	local res1, res2, res3 = gilza_orig_doc_bag_interaction_blocked(self, player)
-	
+Hooks:OverrideFunction(DoctorBagBaseInteractionExt, "_interact_blocked", function (self, player)
 	if player:character_damage()._gilza_leech_dire_state then
 		return true, false, "hint_health_berserking"
 	else
-		return res1, res2, res3
+		return gilza_orig_doc_bag_interaction_blocked(self, player)
 	end
-end
+end)

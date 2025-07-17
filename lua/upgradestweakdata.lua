@@ -2,7 +2,8 @@ if not Gilza then
 	dofile("mods/Gilza/lua/1_GilzaBase.lua")
 end
 
-Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", function(self)
+-- actual values for all skills
+Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_init_pd2_values_post", function(self)
 	
 	-- Shotgun HE round. Why it would be here is beyond my understanding
 	self.explosive_bullet = {
@@ -993,9 +994,9 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 				self.values.player.pocket_ecm_jammer_base[1].duration = 12
 				-- PECM jammer less cooldown on kill;
 				self.values.player.pocket_ecm_jammer_base[1].cooldown_drain = 4
-				-- heal from self during PECM - 2x the amount to compensate lower activation frequency
+				-- heal from self during PECM - 1.5x the amount to compensate lower activation frequency
 				self.values.player.pocket_ecm_heal_on_kill = {
-					4
+					3
 				}
 				-- temp dodge - now requires 3 kills to trigger and lasts for 50 secs instead of 20, to compensate lower activation frequency
 				self.values.temporary.pocket_ecm_kill_dodge = {
@@ -1233,6 +1234,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_skill_values", func
 	
 end)
 
+-- copycat skill asignments
 function UpgradesTweakData.mrwi_deck9_options_gilza_update()
 	local deck9_options = {
 		{ -- CC

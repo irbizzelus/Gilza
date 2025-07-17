@@ -3,6 +3,7 @@ if not Gilza then
 end
 
 local afsf_warned = false -- only warn about afsf once per entry to main menu, to be less annoying, but annoying enough to make user uninstall original mod, cause otherwise shit dont work
+-- warnings about vhud's burst fire and afsf
 Hooks:PostHook(MenuManager, "_node_selected", "Gilza_patch_notification", function(self, menu_name, node)
 	if type(node) == "table" and node._parameters.name == "main" then
 		Gilza:changelog_message()
@@ -30,6 +31,7 @@ Hooks:PostHook(MenuManager, "_node_selected", "Gilza_patch_notification", functi
 	end
 end)
 
+-- menu elements
 Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 	MenuCallbackHandler.Gilza_save = function(this, item)
 		Gilza:Save()

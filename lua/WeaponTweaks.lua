@@ -2,7 +2,7 @@ if not Gilza then
 	dofile("mods/Gilza/lua/1_GilzaBase.lua")
 end
 
-Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_NewWeaponRecoilBaseStats", function(self)
+Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_post_WeaponTweakData_init_stats", function(self)
 	-- default recoil multiplier. in vanilla it goes from 3 to 0.5, practically allowing you to improve recoil by a magnitude of 6x with recoil adjusting attachments/skills
 	-- with new values maximum magnitude we will have is 3x. this makes weapons feel more unique because weapon's basic recoil is more important then what you can do with attachments/skills
 	self.stats.recoil = {
@@ -321,7 +321,7 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_NewWeaponRecoilBaseStats",
 	
 end)
 
-Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", function(self, tweak_data)
+Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData_init_new_weapons", function(self, tweak_data)
 	local special_weapon_ids = { -- not used but handy to have
 		-- primary
 		"ecp",

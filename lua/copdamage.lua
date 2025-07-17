@@ -3,7 +3,8 @@ if not Gilza then
 end
 
 -- convert melee damage to % based on the weapon's stat
-Hooks:PreHook(CopDamage, "damage_melee", "Gilza_new_melee_damage", function(self,attack_data)
+Hooks:PreHook(CopDamage, "damage_melee", "Gilza_CopDamage_damage_melee_pre", function(self,attack_data)
+	-- if incoming melee was a tazer, apply headshot dmg increase. this is needed for electric boolets upgrade
 	if attack_data.bullet_taze == true then
 		local head = self._head_body_name and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
 		if not self._char_tweak.ignore_headshot and not self._damage_reduction_multiplier and head then
@@ -13,6 +14,7 @@ Hooks:PreHook(CopDamage, "damage_melee", "Gilza_new_melee_damage", function(self
 		end
 		return
 	end
+	
 	if not attack_data.Gilza_melee_damage_tweak_applied then
 	
 		local dmg_multiplier = 1
@@ -62,8 +64,8 @@ Gilza.first_pellet_headshot_bonus = {}
 Gilza.is_current_shotgun_critical = {}
 Gilza.rolled_shotgun_crit_already = {}
 
--- override damage_bullet function to add new armor pen skills, allow throawble weapons like axes to perice body armour,
--- added new shotgun damage based on COD:BO3 shotgun mechanics, and bodyshot buckshot dmg increase
+-- override damage_bullet function to add new armor pen skills, allow throawble weapons like axes to perice body armour
+-- and to add the new shotgun damage, based on COD:BO3 shotgun mechanics, and bodyshot buckshot ammo dmg increase
 Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 	
 	if self._dead or self._invulnerable then
@@ -96,7 +98,7 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 	-- reduce bullet damage for headless dozers, since they ignore headshot damage, and Gilza's bodyshot damage is higher with lower HS muls
 	-- cant change their health because of explosive weapon's breakpoints
 	if self._char_tweak.Gilza_headless_tag and attackerIsPlayer then
-		attack_data.damage = attack_data.damage * 0.5
+		attack_data.damage = attack_data.damage * 0.55
 	end
 
 	local is_civilian = CopDamage.is_civilian(self._unit:base()._tweak_table)
@@ -144,7 +146,7 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 		return
 	end
 	
-	-- new AP: if enemy is hit in the plate, reduce damage in half if we have armor peirce basic; dont reduce dmg if we have AP aced + basic
+	-- new AP: if enemy is hit in the body plate, reduce damage in half if we have armor peirce basic/aced; dont reduce dmg if we have AP aced + basic
 	if not attack_data.armor_piercing and attackerIsPlayer and self._has_plate and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_plate_name and not allow_pen_from_rng then
 		local has_basic = managers.player:has_category_upgrade("player", "ap_bullets_basic")
 		local has_aced = managers.player:has_category_upgrade("player", "ap_bullets_aced")
@@ -223,7 +225,7 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 			else
 				-- if we still did not land a headshot with any of our pellets, check if the currently proccessed pellet would hit a headshot
 				if is_headshot then
-					-- if we would, this pellet's damage is set to the same as the first pellet, but it's damage is multiplied by the (headshot multiplier of the enemy - 1)
+					-- if it would, this pellet's damage is set to the same as the first pellet, but it's damage is multiplied by the (headshot multiplier of the enemy - 1)
 					-- -1 because we allready dealt bodyshot damage to this enemy with the first pellet. then dmg is divided by original hs mul, 
 					-- because later in this function damage will be increased by the hs_mul again, regardless of if it's a shotgun or not
 					local hs_mul = 1
@@ -506,7 +508,7 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 end)
 
 -- same as the bullet function, but for fire damage. this is only used by the dragon's breath rounds, and it is a complete copy of the new shotgun damage mechanic
-Hooks:PreHook(CopDamage, "damage_fire", "Gilza_fire_shotgun_fix", function(self, attack_data)
+Hooks:PreHook(CopDamage, "damage_fire", "Gilza_CopDamage_damage_fire_pre", function(self, attack_data)
 	
 	-- reduce fire damage for headless dozers, since they ignore headshot damage, and Gilza's bodyshot damage is higher with lower HS muls
 	-- cant change their health because of explosive weapon's breakpoints
@@ -557,10 +559,10 @@ Hooks:PreHook(CopDamage, "damage_fire", "Gilza_fire_shotgun_fix", function(self,
 	end
 end)
 
--- make crits always deal 2x damage. this change only makes cloakers, dozers and Winters harder to kill, since everyone else has a 2x headshot multiplier allready
--- also make crits only evaluate chances only once,
+-- make crits always deal 2.25x damage. this change makes cloakers, dozers and Winters harder to kill, since everyone else has a 2x headshot multiplier
+-- also make crits only evaluate chances once per shotgun shot, instead of per pellet (if it's per pellet, literally every shot would have a crit hitmarker)
 local gilza_orig_roll_critical_hit = CopDamage.roll_critical_hit
-function CopDamage:roll_critical_hit(attack_data, damage)
+Hooks:OverrideFunction(CopDamage, "roll_critical_hit", function (self, attack_data, damage)
 	
 	local res1, res2 = gilza_orig_roll_critical_hit(self, attack_data, damage)
 	
@@ -585,11 +587,11 @@ function CopDamage:roll_critical_hit(attack_data, damage)
 	end
 	
 	return res1, res2
-end
+end)
 
--- sentry kill tracking
+-- sentry kill tracking for new technician skill
 local gilza_chk_killshot_orig = CopDamage.chk_killshot
-function CopDamage:chk_killshot(attacker_unit, variant, headshot, weapon_id)
+Hooks:OverrideFunction(CopDamage, "chk_killshot", function (self, attacker_unit, variant, headshot, weapon_id)
 	
 	-- if sentry
 	if alive(attacker_unit) and attacker_unit:in_slot(25) then
@@ -726,9 +728,10 @@ function CopDamage:chk_killshot(attacker_unit, variant, headshot, weapon_id)
 	end
 	
 	return gilza_chk_killshot_orig(self, attacker_unit, variant, headshot, weapon_id)
-end
+end)
 
-Hooks:PreHook(CopDamage, "die", "Gilza_itimidated_death_tracker", function(self, attack_data)
+-- stockholm menace and hitman checks
+Hooks:PreHook(CopDamage, "die", "Gilza_CopDamage_die_pre", function(self, attack_data)
 	local is_intimidated_cop = Gilza.intimidated_enemies[self._unit:id()] or false
 	
 	if is_intimidated_cop and attack_data.attacker_unit == managers.player:player_unit() then
@@ -755,7 +758,7 @@ Hooks:PreHook(CopDamage, "die", "Gilza_itimidated_death_tracker", function(self,
 	end
 end)
 
--- allow new agressive reload to get credit from graze kills
+-- allow new "agressive reload" (body economy) to get credit from graze kills
 local gilza_orig_copdamage_damage_simple = Hooks:GetFunction(CopDamage,"damage_simple")
 Hooks:OverrideFunction(CopDamage, "damage_simple", function (self, attack_data)
 	local res = gilza_orig_copdamage_damage_simple(self, attack_data)

@@ -1,3 +1,4 @@
+-- allowed to gain effect eligibility while crit bonus is active, but added a forced cooldown between re-activations.
 PlayerAction.UnseenStrike = {
 	Priority = 1,
 	Function = function (player_manager, min_time, max_duration, crit_chance)

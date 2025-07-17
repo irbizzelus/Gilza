@@ -1,5 +1,5 @@
--- vehicle fov adjustment based on user settings
--- vehicle fov redcued for passengers with weapons, to allow vehicle fov to be the same across all states
+-- vehicle FOV adjustment based on user settings
+-- vehicle FOV adjused for passengers with weapons, to allow vehicle FOV to be the same across all states
 Hooks:OverrideFunction(PlayerDriving, "get_zoom_fov", function (self, stance_data)
 	if self._vehicle == nil then
 		return PlayerStandard.get_zoom_fov(self, stance_data)

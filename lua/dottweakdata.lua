@@ -1,5 +1,5 @@
--- new poison damage stats
-Hooks:PostHook(DOTTweakData, "_init_dot_entries_poison", "Gilza_new_poison_dot", function(self)
+-- new poison DOT damage stats
+Hooks:PostHook(DOTTweakData, "_init_dot_entries_poison", "Gilza_DOTTweakData_init_dot_entries_poison_post", function(self)
 	-- shotgun poison
 	self.dot_entries.poison.ammo_rip = {
 		hurt_animation_chance = 1,

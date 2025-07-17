@@ -155,7 +155,7 @@ Hooks:OverrideFunction(BlackMarketGui, "_get_melee_weapon_stats", function (self
 end)
 
 -- update text for armor descriptions for ex-pres and anarchist perk decks
-Hooks:PostHook(BlackMarketGui, "update_info_text", "Gilza_BlackMarketGui_update_info_text", function(self)
+Hooks:PostHook(BlackMarketGui, "update_info_text", "Gilza_BlackMarketGui_update_info_text_post", function(self)
 	local slot_data = self._slot_data
 	local tab_data = self._tabs[self._selected]._data
 	local identifier = tab_data.identifier
@@ -203,7 +203,8 @@ Hooks:PostHook(BlackMarketGui, "update_info_text", "Gilza_BlackMarketGui_update_
 	end
 end)
 
-Hooks:PreHook(BlackMarketGui, "populate_buy_weapon", "Gilza_BlackMaaweaweawetGui_update_info_text", function(self, data)
+-- weapon sorting based on damage value
+Hooks:PreHook(BlackMarketGui, "populate_buy_weapon", "Gilza_BlackMarketGui_populate_buy_weapon_pre", function(self, data)
 	
 	-- 2 descend, 3 ascend, 1 disable
 	local order_preference = Gilza.settings.blackmarket_weapon_sorting

@@ -469,7 +469,7 @@ function Gilza.New_Skills_Informer:adjusted_stockholm_stacks(amount, cleared)
 end
 
 -- new aced agressive reload/body economy. reports total amount of stacks from 1 to 10. each stacks provides 7.5% reload speed. you can make a func that shows either buff
--- cleared triggers whenever stacks are reset to 0
+-- "cleared" triggers whenever stacks are reset to 0
 function Gilza.New_Skills_Informer:adjusted_body_economy_stacks(total_amount, cleared)
 	if total_amount and Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
 		managers.gameinfo:event("buff", "activate", "body_economy_stacks")
@@ -602,7 +602,7 @@ function Gilza.New_Skills_Informer:new_passive_health_regen_adjustment(amount)
 end
 
 -- reports current damage abosrption amount as total value
--- current absorb value is reported as 0.3 for 30% dodge
+-- current absorb value is reported as 1.5 for 15 abosrption
 function Gilza.New_Skills_Informer:update_current_dmg_absorb(current_DA)
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
 		if true then

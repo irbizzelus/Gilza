@@ -39,6 +39,7 @@ Hooks:PostHook(FPCameraPlayerBase, "stop_shooting", "GilzaCameraRecoil_stop", fu
 	end
 end)
 
+-- imrpoved recoil for first few bullets fired
 Hooks:OverrideFunction(FPCameraPlayerBase, "recoil_kick", function (self, up, down, left, right)
 	-- shot counter
 	self._Gilza_shot_counter = self._Gilza_shot_counter + 1
@@ -63,6 +64,7 @@ Hooks:OverrideFunction(FPCameraPlayerBase, "recoil_kick", function (self, up, do
 	-- if allowed, first 5-8 bullets have reduced recoil
 	-- this makes short 1-3 round burst feel like they have almost no recoil
 	if does_weapon_qualify() then
+		-- first shot has highest reduction (aka better recoil), going lower and lower for further shots
 		local shot_based_mul = {
 			0.62,
 			0.7,

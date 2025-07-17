@@ -2,7 +2,7 @@ if not Gilza then
 	dofile("mods/Gilza/lua/1_GilzaBase.lua")
 end
 
--- brawler max ammo cut @9
+-- brawler max ammo cut
 Hooks:OverrideFunction(RaycastWeaponBase, "replenish", function (self)
 	local ammo_max_multiplier = managers.player:upgrade_value("player", "extra_ammo_multiplier", 1)
 	
@@ -32,7 +32,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "replenish", function (self)
 	self:update_damage()
 end)
 
--- body expertise ammo penalty @31&33; all HV GL rounds will use standard ammo pick up if user is a network client @48; saw ammo pick up skill @81; brawler pick up @79
+-- ammo pickup - brawler, saw. all High velocity GL rounds will use standard ammo pick up if user is a network client
 Hooks:OverrideFunction(RaycastWeaponBase, "add_ammo", function (self, ratio, add_amount_override)
 	local mul_1 = managers.player:upgrade_value("player", "pick_up_ammo_multiplier", 1) - 1
 	local mul_2 = managers.player:upgrade_value("player", "pick_up_ammo_multiplier_2", 1) - 1
@@ -179,7 +179,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "is_knock_down", function (self)
 	local new_knock_down_chance = 0.2
 	local max_threat_bonus = 2 -- 1 + 2x = 3x
 	local max_req_threat = 4 -- 40
-	local wpn_threat = self._suppression - 0.2
+	local wpn_threat = self._suppression - 0.2 -- all weapons have +0.2 threat in code. reason yet unknown to me
 	local threat_percent = wpn_threat / max_req_threat
 	local total_threat_bonus = 1 + max_threat_bonus * threat_percent
 	
@@ -195,7 +195,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "is_knock_down", function (self)
 	return self._knock_down > 0 and math.random() < new_knock_down_chance
 end)
 
--- new reload speed from the akimbo skill @182-195 and also buffed overkill @197-203
+-- new reload speeds
 Hooks:OverrideFunction(RaycastWeaponBase, "reload_speed_multiplier", function (self)
 	local multiplier = 1
 
@@ -205,6 +205,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "reload_speed_multiplier", function (s
 		simplified_categories[category] = true
 	end
 	
+	-- akimbo
 	if simplified_categories.akimbo and managers.player:has_category_upgrade("akimbo", "pistol_improved_handling") then
 		if simplified_categories.pistol or (simplified_categories.smg and managers.player:has_category_upgrade("akimbo", "allow_smg_improved_handling")) then
 			local skill = managers.player:upgrade_value("akimbo", "pistol_improved_handling")
@@ -214,6 +215,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "reload_speed_multiplier", function (s
 		end
 	end
 	
+	-- junkie
 	if managers.player:has_category_upgrade("player", "speed_junkie_meter_boost_agility") then
 		local counter = managers.player._Gilza_junkie_counter or 0
 		local skill = managers.player:upgrade_value("player", "speed_junkie_meter_boost_agility")
@@ -223,6 +225,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "reload_speed_multiplier", function (s
 		end	
 	end
 	
+	-- overkill
 	if managers.player:has_category_upgrade("temporary", "overkill_damage_multiplier") and managers.player:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 then
 		if managers.player:has_category_upgrade("player", "overkill_all_weapons") then
 			multiplier = multiplier * 1.5
@@ -239,7 +242,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "reload_speed_multiplier", function (s
 end)
 
 -- if we are in swan song, consume reserve ammo, but dont consume ammo in the clip
-Hooks:PostHook(RaycastWeaponBase, "fire", "Gilza_swan_song_ammo", function(self, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit)
+Hooks:PostHook(RaycastWeaponBase, "fire", "Gilza_post_RaycastWeaponBase_fire", function(self, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit)
 	local is_player = self._setup.user_unit == managers.player:player_unit()
 	local consume_ammo = not managers.player:has_active_temporary_property("bullet_storm") and (not managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier") or not managers.player:has_category_upgrade("player", "berserker_no_ammo_cost")) or not is_player
 	local ammo_usage = self:ammo_usage()
@@ -365,11 +368,12 @@ Hooks:OverrideFunction(InstantBulletBase, "give_impact_damage", function (self, 
 	end
 end)
 
-Hooks:PreHook(RaycastWeaponBase, "_fire_raycast", "Gilza_bullet_fired_tracker", function(user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul)
+-- i forget what this is for
+Hooks:PreHook(RaycastWeaponBase, "_fire_raycast", "Gilza_pre_RaycastWeaponBase_fire_raycast", function(user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul)
 	Gilza.weapon_shot_id = Gilza.weapon_shot_id + 1
 end)
 
--- fix flamethrower magazines not adjusting dot type that is applied to the enemy
+-- fix flamethrower magazines not adjusting DOT type that is applied to the enemy
 Hooks:OverrideFunction(DOTBulletBase, "_dot_data_by_weapon", function (self, weapon_unit)
 	local weap_base = alive(weapon_unit) and weapon_unit:base()
 	local ammo_data = weap_base.ammo_data and weap_base:ammo_data()
@@ -380,15 +384,26 @@ Hooks:OverrideFunction(DOTBulletBase, "_dot_data_by_weapon", function (self, wea
 		dot_data_name = weapon_tweak_data and weapon_tweak_data.dot_data_name
 	end
 	
+	local function is_player_gun() -- snowman/mountain master boss crashfix
+		local name_id = weap_base:get_name_id()
+		if string.sub(name_id,-4,-1) == "_npc" or string.sub(name_id,-5,-1) == "_crew" then
+			return false
+		else
+			return true
+		end
+	end
+	
 	-- if dot requesting weapon has a mag, check if that mag has a custom_stats dot property and if so, return it
-	local mag_mods = managers.weapon_factory:get_parts_from_weapon_by_type_or_perk("magazine", weap_base._factory_id, weap_base._blueprint)
-	if #mag_mods >=1 then
-		for _, mag in ipairs(mag_mods) do
-			local factory_part = tweak_data.weapon.factory.parts[mag]
-			if factory_part then
-				if factory_part.custom_stats and factory_part.custom_stats.dot_data_name then
-					dot_data_name = factory_part.custom_stats.dot_data_name
-					break
+	if is_player_gun() then
+		local mag_mods = managers.weapon_factory:get_parts_from_weapon_by_type_or_perk("magazine", weap_base._factory_id, weap_base._blueprint)
+		if #mag_mods >=1 then
+			for _, mag in ipairs(mag_mods) do
+				local factory_part = tweak_data.weapon.factory.parts[mag]
+				if factory_part then
+					if factory_part.custom_stats and factory_part.custom_stats.dot_data_name then
+						dot_data_name = factory_part.custom_stats.dot_data_name
+						break
+					end
 				end
 			end
 		end
@@ -401,14 +416,16 @@ Hooks:OverrideFunction(DOTBulletBase, "_dot_data_by_weapon", function (self, wea
 	return nil
 end)
 
-
 -- adding AFSF because original version has a sound bug, and does not work properly with new pistol skill implementation
 -- because AFSF defaults to .single_fire sound instead of also checking for .fire sound
+-- globals and hook names kept intact for compatibility
 
 _G.AutoFireSoundFixBlacklist = {
 	["saw"] = true,
 	["saw_secondary"] = true,
 	["flamethrower_mk2"] = true,
+	["flamethrower_npc"] = true, -- mountaim master boss can damage cops so we avoid triggers off of his gun, to not crash ze game
+	["snowthrower_npc"] = true, -- same as above, tho i doubt its actually needed, since snowman doesnt damage enemies. better safe than sorry anyways
 	["m134"] = true,
 	["mg42"] = true,
 	["shuno"] = true,
@@ -440,11 +457,11 @@ end
 
 --Prevent playing sounds except for blacklisted weapons
 local orig_fire_sound = RaycastWeaponBase._fire_sound
-function RaycastWeaponBase:_fire_sound(...)
+Hooks:OverrideFunction(RaycastWeaponBase, "_fire_sound", function (self, ...)
 	if self:_soundfix_should_play_normal() then
 		return orig_fire_sound(self,...)
 	end
-end
+end)
 
 -- play single fire sound.
 -- also removed the stop_shooting function because it caused sounds of bullet casings to never play. this doesnt seem to affect anything else noticably

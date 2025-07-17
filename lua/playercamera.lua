@@ -1,4 +1,4 @@
--- Reduced camera shake skills
+-- Reduced melee camera shake skill
 Hooks:OverrideFunction(PlayerCamera, "play_shaker", function (self, effect, amplitude, frequency, offset)
 	if _G.IS_VR then
 		return

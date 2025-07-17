@@ -20,7 +20,7 @@ Hooks:PostHook(PlayerMovement, "on_morale_boost", "Gilza_PlayerMovement_inspire_
 	end
 end)
 -- P.S. this whole shabang has a bug, where after recieving a buff from someone else, you could theoretically keep the 20% bonus by just shouting at other players almost non-stop.
--- Even though this is not truly intentional, it's not that game breaking of a difference, plus it's way too easy to loose.
+-- Even though this is not truly intentional, it's not that game breaking of a difference, plus it's way too easy to lose.
 -- Fixing this would require a function override and dealing with callback id's, which wouldnt take that much effort, but lesser function overrides we have in the mod, the better.
 
 -- allow counterstrike skill to deal damage, cloaker's aced version
@@ -179,7 +179,7 @@ Hooks:PostHook(PlayerMovement, "on_SPOOCed", "Gilza_PlayerMovement_on_SPOOCed_2"
 end)
 
 -- update underdog and it's version activation trigger to a) always check for enemies and b) check for enemies in general instead of those attacking the player
-function PlayerMovement:_upd_underdog_skill(t)
+Hooks:OverrideFunction(PlayerMovement, "_upd_underdog_skill", function (self, t)
 	local data = self._underdog_skill_data
 
 	if not data.has_dmg_dampener and not data.has_dmg_mul and not data.has_dmg_dampener_close or t < self._underdog_skill_data.chk_t or not managers.player:player_unit() then
@@ -197,6 +197,7 @@ function PlayerMovement:_upd_underdog_skill(t)
 		return
 	end
 	
+	-- find all valid enemies within LOS
 	for i, enemy in pairs(enemies) do
 		local function is_enemy_enemy()
 			if not enemy or not self._unit or not self._unit:movement() or not enemy:movement() or not self._unit:movement():team() or not enemy:movement():team() then
@@ -247,9 +248,10 @@ function PlayerMovement:_upd_underdog_skill(t)
 		managers.player:activate_temporary_upgrade("temporary", "dmg_dampener_close_contact")
 	end
 
-	data.chk_t = t + (activated and 0.1 or 0.1) -- change re-activation timer check to 0.5 seconds and inactivity timer to 0.1 seconds to make this skill update more often
-end
+	data.chk_t = t + (activated and 0.1 or 0.1) -- change both re-activation timer check and inactivity timer to 0.1 seconds to make this skill update more often
+end)
 
+-- inspire range increase if we have crew chief skill
 Hooks:PostHook(PlayerMovement, "init", "Gilza_PlayerMovement_post_init", function(self, unit)
 	if managers.player:has_category_upgrade("player", "morale_boost") or managers.player:has_category_upgrade("cooldown", "long_dis_revive") and managers.player:has_category_upgrade("player", "passive_inspire_range_mul") then
 		local inspire_range = 900 * managers.player:upgrade_value("player", "passive_inspire_range_mul", 1)
@@ -257,7 +259,7 @@ Hooks:PostHook(PlayerMovement, "init", "Gilza_PlayerMovement_post_init", functio
 	end
 end)
 
--- update our own attention bonuses to exclude brawler from getting positive values from other skills. this is if we host, for client-play go to basenetworksession
+-- update our own attention bonuses to exclude brawler from getting positive values from other skills. this is used if we are the host, for client stuff go to basenetworksession
 Hooks:OverrideFunction(PlayerMovement, "_apply_attention_setting_modifications", function (self, setting)
 	setting.detection = self._unit:base():detection_settings()
 	

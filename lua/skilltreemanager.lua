@@ -1,7 +1,7 @@
 -- Spoof our custom perk decks if desired
 local orig_skilltreemanager_pack_string = SkillTreeManager.pack_to_string
-function SkillTreeManager:pack_to_string()
-	if not Gilza or not Gilza.custom_specialization_indexes or not Gilza.settings.spoof_custom_perks then
+Hooks:OverrideFunction(SkillTreeManager, "pack_to_string", function (self)
+	if not Gilza.custom_specialization_indexes or not Gilza.settings.spoof_custom_perks then
 		return orig_skilltreemanager_pack_string(self)
 	end
 
@@ -44,4 +44,4 @@ function SkillTreeManager:pack_to_string()
 	end
 
 	return packed_string
-end
+end)

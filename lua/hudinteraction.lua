@@ -1,3 +1,8 @@
+-- this file is used to set up new melee UI
+if not Gilza then
+	dofile("mods/Gilza/lua/1_GilzaBase.lua")
+end
+
 local function create_OutlinedText_class()
 	OutlinedText = OutlinedText or class()
 
@@ -286,14 +291,14 @@ Hooks:OverrideFunction(HUDInteraction, "set_interaction_bar_width", function (se
 	end
 end)
 
-Hooks:PostHook(HUDInteraction, "hide_interaction_bar", "Gilza_HUDInteraction_hide_interaction_bar_GUI", function(self, ...)
+Hooks:PostHook(HUDInteraction, "hide_interaction_bar", "Gilza_HUDInteraction_hide_interaction_bar_GUI_post", function(self, ...)
 	if self._Gilza_melee_damage then
 		self._Gilza_melee_damage:set_text("")
 		self._Gilza_melee_damage:set_visible(false)
 	end
 end)
 
-Hooks:PostHook(HUDInteraction, "destroy", "Gilza_HUDInteraction_destroy_GUI", function(self, ...)
+Hooks:PostHook(HUDInteraction, "destroy", "Gilza_HUDInteraction_destroy_GUI_post", function(self, ...)
 	if self._Gilza_melee_damage and self._hud_panel then
 		self._Gilza_melee_damage:remove()
 		self._Gilza_melee_damage = nil

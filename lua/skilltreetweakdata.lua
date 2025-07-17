@@ -1,4 +1,5 @@
-Hooks:PostHook(SkillTreeTweakData, "init", "swap_base_decks_and_skills", function(self, params)
+-- skill assignments
+Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post", function(self, params)
 	
 	local function updatePERKS()
 		
