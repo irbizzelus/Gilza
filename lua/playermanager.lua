@@ -362,7 +362,6 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 
 					if health_regen > 0 then
 						damage_ext:restore_health(health_regen * managers.player:upgrade_value("player", "copr_heal_during_invuln_increase", 1))
-						damage_ext:on_copr_killshot()
 						local teammate_heal_level = managers.player:upgrade_level_nil("player", "copr_teammate_heal")
 						if teammate_heal_level and damage_ext:get_real_health() > 0 then
 							player_unit:network():send("copr_teammate_heal", teammate_heal_level)
@@ -371,6 +370,7 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 								player_unit:network():send("copr_teammate_heal", teammate_heal_level)
 							end
 						end
+						-- deactivate temp upgrade to only allow to heal ourselves once per invuln period. invuln effect itself is not attached to this upgrade
 						managers.player:deactivate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss")
 					end
 				end
@@ -943,6 +943,69 @@ Hooks:OverrideFunction(PlayerManager, "clbk_copr_ability_ended", function (self)
 
 	self:set_property("copr_risen", nil)
 	managers.hud:set_copr_indicator(false)
+end)
+
+-- leech activate
+Hooks:OverrideFunction(PlayerManager, "_attempt_copr_ability", function (self)
+	if self:has_activate_temporary_upgrade("temporary", "copr_ability") then
+		return false
+	end
+
+	local character_damage = self:local_player():character_damage()
+	local duration = self:upgrade_value("temporary", "copr_ability")[2]
+	local now = managers.game_play_central:get_heist_timer()
+
+	managers.network:session():send_to_peers("sync_ability_hud", now + duration, duration)
+
+	local is_downed = game_state_machine:verify_game_state(GameStateFilters.downed)
+
+	self:set_property("copr_risen", is_downed)
+
+	if is_downed then
+		character_damage:revive(true)
+	end
+
+	self:activate_temporary_upgrade("temporary", "copr_ability")
+	
+	-- use our own BLT delayed call. i honestly have no idea why, but sometimes clbk_copr_ability_ended is not called after the 6-10 sec time window of the ampule effect expires
+	-- leading to player having no armor, segmented health UI (but not actualy segmented health) and no invulnerability/heal procing
+	-- todo: WHY IS IT HAPPENING?!?!
+	DelayedCalls:Add("Gilza_force_deactivate_leech_at_"..tostring(now), duration - 0.0001, function()
+		managers.player:clbk_copr_ability_ended()
+	end)
+	--local expire_time = self:get_activate_temporary_expire_time("temporary", "copr_ability")
+	--managers.enemy:add_delayed_clbk("copr_ability_active", callback(self, self, "clbk_copr_ability_ended"), expire_time)
+	
+	managers.hud:activate_teammate_ability_radial(HUDManager.PLAYER_PANEL, duration)
+
+	local bonus_health = self:upgrade_value("player", "copr_activate_bonus_health_ratio", tweak_data.upgrades.values.player.copr_activate_bonus_health_ratio[1])
+
+	character_damage:restore_health(bonus_health)
+	character_damage:set_armor(0)
+	character_damage:send_set_status()
+
+	local speed_up_on_kill_time = self:upgrade_value("player", "copr_speed_up_on_kill", 0)
+
+	if speed_up_on_kill_time > 0 then
+		local function speed_up_on_kill_func()
+			managers.player:speed_up_grenade_cooldown(speed_up_on_kill_time)
+		end
+
+		self:register_message(Message.OnEnemyKilled, "speed_up_copr_ability", speed_up_on_kill_func)
+	end
+
+	character_damage:on_copr_ability_activated()
+
+	self._copr_kill_life_leech_num = 0
+	local static_damage_ratio = self:upgrade_value("player", "copr_static_damage_ratio", 0)
+
+	managers.hud:set_copr_indicator(true, static_damage_ratio)
+
+	if is_downed then
+		self:register_message("ability_activated", "copr_risen_cooldown_key", callback(self, self, "add_copr_risen_cooldown"))
+	end
+
+	return true
 end)
 
 -- if we deal damage, delay maniac's decay by it's decay interval

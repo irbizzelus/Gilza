@@ -71,10 +71,17 @@
 		},
 		{
 			"type" : "button",
-			"id" : "Gilza_MWS_page",
-			"title" : "Gilza_MWS_page",
-			"description" : "Gilza_MWS_page_desc",
-			"callback" : "Gilza_MWS_page"
+			"id" : "Gilza_General_And_Skills_page",
+			"title" : "Gilza_General_And_Skills_page",
+			"description" : "Gilza_General_And_Skills_page_desc",
+			"callback" : "Gilza_General_And_Skills_page"
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_Perks_page",
+			"title" : "Gilza_Perks_page",
+			"description" : "Gilza_Perks_page_desc",
+			"callback" : "Gilza_Perks_page"
 		},
 		{
 			"type" : "button",

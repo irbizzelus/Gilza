@@ -1007,24 +1007,25 @@ Hooks:OverrideFunction(PlayerDamage, "restore_health", function (self, health_re
 	end
 end)
 
--- leech - after taking damage to a segment, activate 1 sec invuln. this is proccessed before damage_melee and such
+-- leech - after taking damage to a segment, activate (1) sec invuln. this is proccessed before damage_melee and such
 Hooks:OverrideFunction(PlayerDamage, "copr_update_attack_data", function (self, attack_data)
 	if managers.player:has_activate_temporary_upgrade("temporary", "copr_ability") then
 		local static_damage_ratio = managers.player:upgrade_value_nil("player", "copr_static_damage_ratio")
-		local next_allowed_dmg_t = type(self._next_allowed_dmg_t) == "number" and self._next_allowed_dmg_t or Application:digest_value(self._next_allowed_dmg_t, false)
 		
-		-- dont activate again if invuln is already active
-		if static_damage_ratio and attack_data.damage > 0 and (next_allowed_dmg_t < managers.player:player_timer():time()) then
+		if static_damage_ratio and attack_data.damage > 0 then
 			local high_damage_tweak = tweak_data.upgrades.copr_high_damage_multiplier
 			local damage_multiplier = high_damage_tweak[1] <= attack_data.damage and high_damage_tweak[2] or 1
 			attack_data.damage = self:_max_health() * static_damage_ratio * damage_multiplier
 			
-			self._Gilza_new_leech_invuln_activator = true
+			-- dont activate again if invuln is already active
+			if not self:_chk_dmg_too_soon(attack_data.damage) then
+				self._Gilza_new_leech_invuln_activator = true
+			end
 		end
 	end
 end)
 
--- following few posthooks activate the leech invuln upgrade itself
+-- following few posthooks activate the leech invuln upgrade itself. need to be done this way to allow for these funcs to deal damage to player first, and only afterwards we get invuln
 Hooks:PostHook(PlayerDamage, "damage_melee", "Gilza_post_PlayerDamage_damage_melee_leech_invuln_activator", function(self, attack_data)
 	if self._Gilza_new_leech_invuln_activator and managers.player:has_inactivate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss") then
 		self._Gilza_new_leech_invuln_activator = false
@@ -1102,6 +1103,9 @@ Hooks:PostHook(PlayerDamage, "update", "Gilza_post_player_dmg_update", function(
 		if out_of_health and not managers.player:has_activate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss") then
 			self._block_medkit_auto_revive = true
 			self._gilza_leech_dire_state = true
+		elseif not out_of_health then
+			self._block_medkit_auto_revive = false
+			self._gilza_leech_dire_state = false
 		end
 	end
 end)

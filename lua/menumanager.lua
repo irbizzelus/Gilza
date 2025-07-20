@@ -203,8 +203,12 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		end	
 	end
 	
-	MenuCallbackHandler.Gilza_MWS_page = function(this, item)
-		managers.network.account:overlay_activate("url", "https://modworkshop.net/mod/39854")
+	MenuCallbackHandler.Gilza_General_And_Skills_page = function(this, item)
+		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/random-noncode-stuff/blob/main/Gilza%20txts/General_and_Skills.md")
+	end
+	
+	MenuCallbackHandler.Gilza_Perks_page = function(this, item)
+		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/random-noncode-stuff/blob/main/Gilza%20txts/Perks.md")
 	end
 	
 	MenuCallbackHandler.Gilza_Weapons_page = function(this, item)
