@@ -4,5 +4,5 @@ Hooks:OverrideFunction(SentryGunBase, "on_picked_up", function (self, sentry_typ
 		managers.player.owned_broken_sentries[sentry_uid] = nil
 		ammo_ratio = 0
 	end
-	gilza_on_picked_up_orig(sentry_type, ammo_ratio, sentry_uid)
+	gilza_on_picked_up_orig(self, sentry_type, ammo_ratio, sentry_uid)
 end)
