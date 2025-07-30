@@ -1271,8 +1271,8 @@ function Gilza.applyCustomSHOTGUN_stats(id)
 		damage_near_mul = 1,
 		bullet_class = "InstantExplosiveBulletBase",
 		rays = 1,
-		ammo_pickup_max_mul = 0.45,
-		ammo_pickup_min_mul = 0.45
+		ammo_pickup_max_mul = 0.6,
+		ammo_pickup_min_mul = 0.6
 	}
 	local FAHEstats = {
 		value = 5,

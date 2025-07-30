@@ -1290,8 +1290,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				damage_near_mul = 1,
 				bullet_class = "InstantExplosiveBulletBase",
 				rays = 1,
-				ammo_pickup_max_mul = 0.45,
-				ammo_pickup_min_mul = 0.45
+				ammo_pickup_max_mul = 0.6,
+				ammo_pickup_min_mul = 0.6
 			}
 			self.parts.wpn_fps_upg_a_explosive.desc_id = "bm_wpn_fps_upg_a_explosive_desc_new"
 			
