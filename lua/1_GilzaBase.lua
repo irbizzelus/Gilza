@@ -22,6 +22,7 @@ _G.Gilza = {
 		junkie_icon_scale = 1,
 		junkie_icon_x_pos = 50,
 		junkie_icon_y_pos = 320,
+		single_fire_input_buffering = true,
 		-- VHUD STUFF
 		vhud_compat_new_melee_zerk = false,
 		vhud_compat_new_weapon_zerk = true,

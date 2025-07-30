@@ -1031,10 +1031,11 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		
 		---- M14 ----
 		local function Gilza_init_m14()
-			self.parts.wpn_fps_ass_m14_body_ruger.stats.spread = -3
+			self.parts.wpn_fps_ass_m14_body_ruger.stats.spread = -4
 			self.parts.wpn_fps_ass_m14_body_ruger.stats.total_ammo_mod = nil
 			self.parts.wpn_fps_ass_m14_body_ruger.stats.recoil = -4
 			self.parts.wpn_fps_ass_m14_body_ruger.stats.reload = 4
+			self.parts.wpn_fps_ass_m14_body_ruger.stats.concealment = 16
 			self.parts.wpn_fps_ass_m14_body_ebr.stats.recoil = -1
 			self.parts.wpn_fps_ass_m14_body_ebr.stats.spread = 2
 			self.parts.wpn_fps_ass_m14_body_ebr.stats.reload = 2
@@ -2587,6 +2588,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		local function Gilza_init_breech()
 			self.parts.wpn_fps_pis_breech_b_reinforced.stats.spread = 1
 			self.parts.wpn_fps_pis_breech_b_reinforced.stats.recoil = -1
+			self.parts.wpn_fps_pis_breech_g_custom.stats.spread = -1
+			self.parts.wpn_fps_pis_breech_g_custom.stats.recoil = 1
 		end
 		Gilza_init_breech()
 		

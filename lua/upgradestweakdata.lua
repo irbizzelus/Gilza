@@ -526,13 +526,13 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 		
 		-- skills that are used by multiple perks at once
 		local function Shared_updates()
-			-- 4th value added for ROGUE, mostly just the first value is used sometimes to add dodge. 5th value for COPYCAT
+			-- 4th value added for ROGUE, mostly just the first value is used sometimes to add dodge. 5th value deprecated, was used by COPYCAT
 			self.values.player.passive_dodge_chance = {
 				0.15,
 				0.3,
 				0.45,
 				0.5,
-				0.2
+				0
 			}
 			-- armour piercing buffs for ROGUE and CROOK
 			self.values.weapon.armor_piercing_chance = {
@@ -1283,10 +1283,6 @@ function UpgradesTweakData.mrwi_deck9_options_gilza_update()
 			tier = 1,
 			desc_id = "menu_deck23_9_rogue_desc",
 			upgrades = {
-				"player_passive_dodge_chance_2",
-				"player_passive_dodge_chance_3",
-				"player_passive_dodge_chance_4",
-				"player_passive_dodge_chance_5",
 				"player_crouch_dodge_chance_1",
 			},
 			icon_xy = {

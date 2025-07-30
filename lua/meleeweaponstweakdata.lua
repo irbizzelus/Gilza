@@ -124,6 +124,7 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_BlackMarketTw
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 2.5
 				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 8
 				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 8
+				self.melee_weapons[tostring(weapon)].stats.concealment = 31 -- buff weapon butt since its literally a "no melee weapon" option. also it doesnt charge for more dmg
 			elseif stats.class == 2 then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 2
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 5

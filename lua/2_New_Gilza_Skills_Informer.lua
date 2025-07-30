@@ -564,13 +564,10 @@ end
 -- will show lower resist than what they probably have
 function Gilza.New_Skills_Informer:update_current_passive_dmg_resist(total_resist)
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
-		if true then
-			managers.gameinfo:event("buff", "activate", "gilza_total_dmg_resist")
-			if total_resist then
-				managers.gameinfo:event("buff", "set_value", "gilza_total_dmg_resist", { value = total_resist })
-			end
-		else
-			managers.gameinfo:event("buff", "deactivate", "gilza_total_dmg_resist")
+		managers.gameinfo:event("buff", "deactivate", "damage_reduction") -- idk why vanilla's DR hud element rarely pops up, but it does, so always force disable it
+		managers.gameinfo:event("buff", "activate", "gilza_total_dmg_resist")
+		if total_resist then
+			managers.gameinfo:event("buff", "set_value", "gilza_total_dmg_resist", { value = total_resist })
 		end
 	end
 end
@@ -579,13 +576,9 @@ end
 -- current dodge value is reported as 0.3 for 30% dodge
 function Gilza.New_Skills_Informer:dodge_value_tracker(current_dodge)
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
-		if true then
-			managers.gameinfo:event("buff", "activate", "gilza_total_dodge")
-			if current_dodge then
-				managers.gameinfo:event("buff", "set_value", "gilza_total_dodge", { value = current_dodge })
-			end
-		else
-			managers.gameinfo:event("buff", "deactivate", "gilza_total_dodge")
+		managers.gameinfo:event("buff", "activate", "gilza_total_dodge")
+		if current_dodge then
+			managers.gameinfo:event("buff", "set_value", "gilza_total_dodge", { value = current_dodge })
 		end
 	end
 end
@@ -605,13 +598,9 @@ end
 -- current absorb value is reported as 1.5 for 15 abosrption
 function Gilza.New_Skills_Informer:update_current_dmg_absorb(current_DA)
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
-		if true then
-			managers.gameinfo:event("buff", "activate", "gilza_total_damage_absorb")
-			if current_DA then
-				managers.gameinfo:event("buff", "set_value", "gilza_total_damage_absorb", { value = current_DA })
-			end
-		else
-			managers.gameinfo:event("buff", "deactivate", "gilza_total_damage_absorb")
+		managers.gameinfo:event("buff", "activate", "gilza_total_damage_absorb")
+		if current_DA then
+			managers.gameinfo:event("buff", "set_value", "gilza_total_damage_absorb", { value = current_DA })
 		end
 	end
 end

@@ -3,6 +3,8 @@
 	"Gilza_blank": "",
 	
 	"Gilza_general_header": "----- General -----",
+	"Gilza_single_fire_input_buffering": "Input Buffering",
+	"Gilza_single_fire_input_buffering_desc": "If enabled, your \"Fire Weapon\" keybind inputs will be remembered if they were pressed in-between single fire mode weapon shots. This improves overall feel of single fire mode for low rate of fire weapons. This does not affect weapons with ROF lower than 150 rounds per minute.",
 	"Gilza_v_fov": "Vehicle FOV",
 	"Gilza_v_fov_desc": "Change vehicle FOV for both driver and passenger. Works in-game, but you will have to re-enter the vehicle to see the change. Range: 75-105",
 	"Gilza_melee_gui": "Melee UI",

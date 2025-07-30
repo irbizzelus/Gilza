@@ -28,11 +28,12 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 		
 		-- allow to potentially fire a shot even if we are not pressing mouse keys, if we requested a shot before
 		self._requested_fire_between_single_shots = self._requested_fire_between_single_shots or {nil, self._equipped_unit:base()._name_id}
-		if action_wanted or self._requested_fire_between_single_shots[1] then
+		if action_wanted or (Gilza.settings.single_fire_input_buffering and self._requested_fire_between_single_shots[1]) then
 			
 			local weap_base = self._equipped_unit:base()
 			local weapon_tweak_data = weap_base:weapon_tweak_data()
 			
+			-- new automatic single fire skill. currently based purely off the trigger happy skill, cause this is a laziness driven development enviroment
 			local _has_automatic_pistol_trigger_pull = false
 			if managers.player:has_category_upgrade("pistol", "stacking_hit_damage_multiplier") and weap_base:is_category("pistol") then
 				_has_automatic_pistol_trigger_pull = true
@@ -66,29 +67,31 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 				
 				-- if we request a mouse press action with single fire weapons, while we cant shoot (either cause we already are or gun's ROF delay is not done)
 				-- remember our mouse press request time. dont do this for weapons with too low ROF (<150 per min rn)
-				if action_wanted and fire_mode == "single" and input.btn_primary_attack_press and (self._shooting or not weap_base:start_shooting_allowed()) and (weap_base:weapon_fire_rate() / weap_base:fire_rate_multiplier() < 0.4) then
-					self._requested_fire_between_single_shots[1] = Application:time()
-					self._requested_fire_between_single_shots[2] = weap_base._name_id
-				elseif fire_mode == "single" and self._requested_fire_between_single_shots[1] and self._requested_fire_between_single_shots[2] == weap_base._name_id and weap_base:start_shooting_allowed() and not self._shooting and (weap_base:weapon_fire_rate() / weap_base:fire_rate_multiplier() < 0.4) then
-					-- if we can shoot and we requested a shot when we couldnt shoot, try to fire a shot automatically. dont do this for weapons with too low ROF (<150 per min rn)
-					local rof_based_delay_window = weap_base:weapon_fire_rate() / weap_base:fire_rate_multiplier() * 0.5
-					-- also dont do this if we requested a shot too long ago, or if firing a shot would be too late after the ROF delay has run out
-					if (weap_base._next_fire_allowed - self._requested_fire_between_single_shots[1] <= rof_based_delay_window) and (Application:time() - weap_base._next_fire_allowed <= rof_based_delay_window * 0.25) then
-						self._requested_fire_between_single_shots[1] = nil
-						-- to allow a shot, simulate a mouse press
-						input.btn_primary_attack_press = true
-					else
-						-- if timing was unfortunate, ignore our shot request
-						self._requested_fire_between_single_shots[1] = nil
-					end
-				else
-					-- clear var on weapon/fire mode change
-					if fire_mode ~= "single" or self._requested_fire_between_single_shots[2] ~= weap_base._name_id then
-						self._requested_fire_between_single_shots[1] = nil
-					elseif self._requested_fire_between_single_shots[1] then
-						-- if its been too long since last shot - clear
-						if Application:time() - self._requested_fire_between_single_shots[1] >= (weap_base:weapon_fire_rate() / weap_base:fire_rate_multiplier()) * 1.1 then
+				if Gilza.settings.single_fire_input_buffering then
+					if action_wanted and fire_mode == "single" and input.btn_primary_attack_press and (self._shooting or not weap_base:start_shooting_allowed()) and (weap_base:weapon_fire_rate() / weap_base:fire_rate_multiplier() < 0.4) then
+						self._requested_fire_between_single_shots[1] = Application:time()
+						self._requested_fire_between_single_shots[2] = weap_base._name_id
+					elseif fire_mode == "single" and self._requested_fire_between_single_shots[1] and self._requested_fire_between_single_shots[2] == weap_base._name_id and weap_base:start_shooting_allowed() and not self._shooting and (weap_base:weapon_fire_rate() / weap_base:fire_rate_multiplier() < 0.4) then
+						-- if we can shoot and we requested a shot when we couldnt shoot, try to fire a shot automatically. dont do this for weapons with too low ROF (<150 per min rn)
+						local rof_based_delay_window = weap_base:weapon_fire_rate() / weap_base:fire_rate_multiplier() * 0.5
+						-- also dont do this if we requested a shot too long ago, or if firing a shot would be too late after the ROF delay has run out
+						if (weap_base._next_fire_allowed - self._requested_fire_between_single_shots[1] <= rof_based_delay_window) and (Application:time() - weap_base._next_fire_allowed <= rof_based_delay_window * 0.25) then
 							self._requested_fire_between_single_shots[1] = nil
+							-- to allow a shot, simulate a mouse press
+							input.btn_primary_attack_press = true
+						else
+							-- if timing was unfortunate, ignore our shot request
+							self._requested_fire_between_single_shots[1] = nil
+						end
+					else
+						-- clear var on weapon/fire mode change
+						if fire_mode ~= "single" or self._requested_fire_between_single_shots[2] ~= weap_base._name_id then
+							self._requested_fire_between_single_shots[1] = nil
+						elseif self._requested_fire_between_single_shots[1] then
+							-- if its been too long since last shot - clear
+							if Application:time() - self._requested_fire_between_single_shots[1] >= (weap_base:weapon_fire_rate() / weap_base:fire_rate_multiplier()) * 1.1 then
+								self._requested_fire_between_single_shots[1] = nil
+							end
 						end
 					end
 				end

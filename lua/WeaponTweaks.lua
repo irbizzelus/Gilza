@@ -207,9 +207,9 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_post_WeaponTweakData_init_
 		},
 		SMGs = {
 			optimal_distance = 150,
-			optimal_range = 550,
+			optimal_range = 650,
 			near_falloff = 0,
-			far_falloff = 700,
+			far_falloff = 800,
 			near_multiplier = 1.2,
 			far_multiplier = 0.5
 		},
@@ -627,15 +627,15 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.ching.stats.reload = 14
 			self.ching.NR_CLIPS_MAX = 8
 			self.ching.AMMO_MAX = self.ching.CLIP_AMMO_MAX * self.ching.NR_CLIPS_MAX
-			self.ching.fire_mode_data = {fire_rate = 60/400}
-			self.ching.single = {fire_rate = 60/400}
+			self.ching.fire_mode_data = {fire_rate = 60/300}
+			self.ching.single = {fire_rate = 60/300}
 			
 			self.new_m14.stats.reload = 8
 			self.new_m14.CLIP_AMMO_MAX = 15
 			self.new_m14.NR_CLIPS_MAX = 5
 			self.new_m14.AMMO_MAX = self.new_m14.CLIP_AMMO_MAX * self.new_m14.NR_CLIPS_MAX
-			self.new_m14.fire_mode_data = {fire_rate = 60/400}
-			self.new_m14.single = {fire_rate = 60/400}
+			self.new_m14.fire_mode_data = {fire_rate = 60/300}
+			self.new_m14.single = {fire_rate = 60/300}
 			
 			self.shak12.CLIP_AMMO_MAX = 25
 			self.shak12.NR_CLIPS_MAX = 4
@@ -1763,6 +1763,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.x_schakal.AMMO_MAX = self.x_schakal.CLIP_AMMO_MAX * self.x_schakal.NR_CLIPS_MAX
 			self.x_schakal.fire_mode_data = {fire_rate = 60/666}
 			self.x_schakal.single = {fire_rate = 60/666}
+			if self.x_schakal.timers.reload_not_empty == 3 then
+				self.x_schakal.timers.reload_not_empty = 2.66
+			end
 			
 			self.x_sr2.stats.spread = 6
 			self.x_sr2.stats.recoil = 20

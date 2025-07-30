@@ -65,6 +65,11 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		Gilza:Save()
 	end
 	
+	MenuCallbackHandler.Gilza_single_fire_input_buffering = function(this, item)
+		Gilza.settings.single_fire_input_buffering = item:value() == 'on'
+		Gilza:Save()
+	end
+	
 	MenuCallbackHandler.Gilza_blackmarket_weapon_sorting = function(this, item)
 		Gilza.settings.blackmarket_weapon_sorting = tonumber(item:value())
 		Gilza:Save()

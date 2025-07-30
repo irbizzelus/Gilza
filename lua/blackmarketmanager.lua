@@ -87,27 +87,27 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 		end
 	end
 	
-	-- 28 points of inaccuracy for all weapon types if firing in full auto
+	-- 20 points of inaccuracy for all weapon types if firing in full auto
 	if fire_mode and fire_mode ~= "single" then
 		if managers.player:current_state() == "bipod" then
 			-- ignored
 		elseif fire_mode == "volley" then
 			-- buff volley mode, because this firemode is used by mostly inaccurate guns in this mod
-			index = index + 6
+			index = index + 5
 		elseif fire_mode == "burst" then
 			-- burst fire mode has slighlty better accuracy. only 1 vanilla weapon has this feature - ms3gl, other weapons gain this mode from gilza's weapon_tweaks
-			index = index - 4
+			index = index - 3
 		else
-			index = index - 6
+			index = index - 5
 		end
 	end
 	
-	-- 28 points of inaccuracy for hipfire, unless we have new skill
+	-- 20 points of inaccuracy for hipfire, unless we have new skill
 	if current_state and not current_state:in_steelsight() then
 		if managers.player:current_state() == "bipod" then
 			-- ignored
 		else
-			index = index - managers.player:upgrade_value("player", "hipfire_no_accuracy_penalty", 6)
+			index = index - managers.player:upgrade_value("player", "hipfire_no_accuracy_penalty", 5)
 		end
 	end
 

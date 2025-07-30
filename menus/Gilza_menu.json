@@ -18,6 +18,15 @@
 			"callback" : "Gilza_donothing"
 		},
 		{
+			"type" : "toggle",
+			"id" : "Gilza_single_fire_input_buffering",
+			"title" : "Gilza_single_fire_input_buffering",
+			"description" : "Gilza_single_fire_input_buffering_desc",
+			"callback" : "Gilza_single_fire_input_buffering",
+			"value" : "single_fire_input_buffering",
+			"default_value" : true
+		},
+		{
 			"type" : "slider",
 			"id" : "Gilza_v_fov",
 			"title" : "Gilza_v_fov",
