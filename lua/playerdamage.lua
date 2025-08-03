@@ -1071,9 +1071,9 @@ Hooks:PostHook(PlayerDamage, "on_downed", "Gilza_post_PlayerDamage_on_downed", f
 	if managers.player:has_category_upgrade("temporary", "copr_ability") then
 		self._gilza_leech_dire_state = false
 		local remaining_cooldown = managers.player:get_timer_remaining("replenish_grenades") or 0
-		if remaining_cooldown < 25 then -- todo: maybe make this into a proper upgradestweak?
+		if remaining_cooldown < 20 then -- todo: maybe make this into a proper upgradestweak?
 			if remaining_cooldown == 0 then
-				managers.player:replenish_grenades(25) -- cd
+				managers.player:replenish_grenades(20) -- cd
 				managers.player:add_grenade_amount(-1) -- remove ability
 				local speed_up_on_kill_time = managers.player:upgrade_value("player", "copr_speed_up_on_kill", 0)
 				local function speed_up_on_kill_func()
@@ -1081,7 +1081,7 @@ Hooks:PostHook(PlayerDamage, "on_downed", "Gilza_post_PlayerDamage_on_downed", f
 				end
 				managers.player:register_message(Message.OnEnemyKilled, "speed_up_copr_ability", speed_up_on_kill_func) -- add 1 sec on kill if we have skill
 			else
-				managers.player:speed_up_grenade_cooldown(-1 * (25 - remaining_cooldown))
+				managers.player:speed_up_grenade_cooldown(-1 * (20 - remaining_cooldown))
 			end
 		end
 	end
@@ -1092,6 +1092,10 @@ Hooks:PostHook(PlayerDamage, "on_copr_ability_deactivated", "Gilza_post_PlayerDa
 	if managers.player._Gilza_leech_did_revive_during_effect then -- this var is disabled in playermanager
 		self:restore_health(self:_max_health(), true, false)
 		self:restore_armor(self:_max_armor())
+		local secs = managers.player:upgrade_value("player", "copr_regain_cooldown_on_revives", 0)
+		if secs > 0 then
+			managers.player:speed_up_grenade_cooldown(secs)
+		end
 	end
 	self._gilza_leech_dire_state = false
 end)

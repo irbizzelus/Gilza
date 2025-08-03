@@ -639,8 +639,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				-- new "death dance" combo skill
 				self.values.temporary.death_dance_combo_invulnerability = {
 					{
-						5, -- base duration
-						20 -- CD. begins at the same time as the effect
+						10, -- base duration
+						30 -- CD. begins at the same time as the effect
 					}
 				}
 				-- new akimbo recovery proc from akimbos/pistols/smgs. yes it didnt have secondary smg's initialy, thus the name
@@ -1032,13 +1032,13 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				}
 				-- gain x seconds when either self is revived by any means other than ampule, on when revived another player
 				self.values.player.copr_regain_cooldown_on_revives = {
-					15
+					10
 				}
 				-- longer basic CD
-				self.copr_ability_cooldown = 80
-				-- increased CD return on kill, to incentivize a bit more agressive playstyle. overall time to get CD back is ~equal to vanilla, but without kills its slower.
+				self.copr_ability_cooldown = 60
+				-- increased CD return on kill
 				self.values.player.copr_speed_up_on_kill = {
-					1.5
+					1
 				}
 				-- reduced damage threshold to loose 2 segments at once, to avoid allowing player to run dmg resistance skills to get to this amount
 				self.copr_high_damage_multiplier = {
@@ -1455,6 +1455,7 @@ function UpgradesTweakData.mrwi_deck9_options_gilza_update()
 		{ -- STOIC
 			tree = 19,
 			tier = 1,
+			desc_id = "menu_deck23_9_stoic_desc",
 			icon_xy = {
 				0,
 				1

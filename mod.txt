@@ -32,6 +32,7 @@
 		{"hook_id": "lib/managers/menumanager", "script_path": "lua/menumanager.lua"},
 		{"hook_id": "lib/managers/moneymanager", "script_path": "lua/moneymanager.lua"},
 		{"hook_id": "lib/units/weapons/newraycastweaponbase", "script_path" : "lua/newraycastweaponbase.lua"},
+		{"hook_id": "lib/player_actions/skills/playeractiondamagecontrol", "script_path" : "lua/playeractiondamagecontrol.lua"},
 		{"hook_id": "lib/player_actions/skills/playeractionfullyloaded", "script_path" : "lua/playeractionfullyloaded.lua"},
 		{"hook_id": "lib/player_actions/skills/playeractionshockandawe", "script_path" : "lua/playeractionshockandawe.lua"},
 		{"hook_id": "lib/player_actions/skills/playeractionunseenstrike", "script_path" : "lua/playeractionunseenstrike.lua"},

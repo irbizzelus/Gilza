@@ -1764,7 +1764,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.x_schakal.fire_mode_data = {fire_rate = 60/666}
 			self.x_schakal.single = {fire_rate = 60/666}
 			if self.x_schakal.timers.reload_not_empty == 3 then
-				self.x_schakal.timers.reload_not_empty = 2.66
+				self.x_schakal.timers.reload_not_empty = 2.5
 			end
 			
 			self.x_sr2.stats.spread = 6
@@ -1820,8 +1820,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.vityaz.stats.recoil = 10
 			self.vityaz.NR_CLIPS_MAX = 5
 			self.vityaz.AMMO_MAX = self.vityaz.CLIP_AMMO_MAX * self.vityaz.NR_CLIPS_MAX
-			self.vityaz.fire_mode_data = {fire_rate = 60/710}
-			self.vityaz.auto = {fire_rate = 60/710}
+			self.vityaz.fire_mode_data = {fire_rate = 60/680}
+			self.vityaz.auto = {fire_rate = 60/680}
 			
 			self.new_mp5.stats.recoil = 18
 			self.new_mp5.stats.reload = 13
@@ -2554,7 +2554,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.holt.AMMO_MAX = self.holt.NR_CLIPS_MAX * self.holt.CLIP_AMMO_MAX
 			self.x_holt.stats.spread = 23
 			self.x_holt.stats.recoil = 20
-			self.x_holt.NR_CLIPS_MAX = 2
+			self.x_holt.NR_CLIPS_MAX = 1.5
 			self.x_holt.AMMO_MAX = self.x_holt.NR_CLIPS_MAX * self.x_holt.CLIP_AMMO_MAX
 			
 		end
