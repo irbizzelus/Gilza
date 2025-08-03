@@ -326,7 +326,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			self.values.temporary.player_dodge_armor_regen = {
 				{
 					1,
-					25
+					20
 				},
 				{
 					5,

@@ -592,6 +592,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 				}
 				self.specializations[22][7].upgrades = {
 					"player_passive_health_multiplier_3",
+					"player_passive_health_multiplier_4",
 					"player_copr_regain_cooldown_on_revives"
 				}
 				self.specializations[22][9].upgrades = {

@@ -205,9 +205,9 @@ Hooks:OverrideFunction(HUDInteraction, "show_interaction_bar", function (self, c
 			
 			min_dmg = min_dmg * dmg_multiplier
 			
-			local text = string.format("%.1f%%", min_dmg*10)
+			local text = string.format("%.0f%%", min_dmg*10)
 			if managers.player:player_unit():movement()._state_data.chainsaw_t then
-				text = string.format("%.1f%% DPS", min_dmg*10)
+				text = string.format("%.0f%% DPS", min_dmg*10)
 			end
 			self._Gilza_melee_damage:set_y(self._hud_panel:center_y() + self._circle_radius - (1.5 * self._Gilza_melee_damage:font_size()))
 			self._Gilza_melee_damage:set_text(text)
@@ -274,9 +274,9 @@ Hooks:OverrideFunction(HUDInteraction, "set_interaction_bar_width", function (se
 
 			cur_dmg = cur_dmg * dmg_multiplier
 			
-			local text = string.format("%.1f%%", math.max(cur_dmg*10, 0))
+			local text = string.format("%.0f%%", math.max(cur_dmg*10, 0))
 			if managers.player:player_unit():movement()._state_data.chainsaw_t then
-				text = string.format("%.1f%% DPS", cur_dmg*10)
+				text = string.format("%.0f%% DPS", cur_dmg*10)
 			end
 			if cur_charge_percent >= 1 then
 				self.hide_interaction_bar(self)
