@@ -691,7 +691,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.groza.NR_CLIPS_MAX = 4
 			self.groza.AMMO_MAX = self.groza.CLIP_AMMO_MAX * self.groza.NR_CLIPS_MAX
 			self.groza.stats.recoil = 13
-			self.groza.stats.spread = 11
+			self.groza.stats.spread = 13
 			self.groza.auto = {fire_rate = 60/700}
 			self.groza.fire_mode_data = {fire_rate = 60/700}
 			
