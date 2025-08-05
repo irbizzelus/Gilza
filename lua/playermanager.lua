@@ -916,7 +916,7 @@ Hooks:OverrideFunction(PlayerManager, "chk_wild_kill_counter", function (self, k
 	end
 end)
 
--- leech deactivation cleenup
+-- leech deactivation cleanup
 Hooks:OverrideFunction(PlayerManager, "clbk_copr_ability_ended", function (self)
 	self:deactivate_temporary_upgrade("temporary", "copr_ability")
 

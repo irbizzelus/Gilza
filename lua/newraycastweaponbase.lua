@@ -9,7 +9,7 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "conditional_accuracy_multiplier", 
 	local pm = managers.player
 	
 	-- GILZA START
-	-- increased bonus while bipoded, it also sorta sompensates the full auto penalty, since lmgs cant be in single fire without mods anyway
+	-- increased bonus while bipoded
 	if managers.player:current_state() == "bipod" then
 		mul = mul + 0.5
 	end

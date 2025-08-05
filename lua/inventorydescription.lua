@@ -110,7 +110,7 @@ Hooks:OverrideFunction(WeaponDescription, "get_weapon_ammo_info", function (weap
 end)
 
 -- faster reload with new akimbo skill and the overkill reload buff, both effect and UI
--- based on wpnlib's version
+-- based on wpnlib's func version
 Hooks:OverrideFunction(WeaponDescription, "_get_skill_stats", function (name, category, slot, base_stats, mods_stats, silencer, single_mod, auto_mod, blueprint)
 	override_tweak_data(name, blueprint)
 	local function original_skill_stats()

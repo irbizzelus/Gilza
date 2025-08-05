@@ -13,7 +13,7 @@ Hooks:PostHook(CopMovement, "action_request", "Gilza_CopMovement_action_request_
 		return
 	end
 	
-	-- clear bounty target if it's been alive for 40 secs after it was assigned
+	-- clear hitman's bounty target if it's been alive for 40 secs after it was assigned
 	if managers.player:has_category_upgrade("temporary", "player_bounty_hunter") and managers.player._gilza_hitman_has_active_bounty then
 		if self._unit == managers.player._gilza_hitman_bounty_target then
 			local is_alive = alive(self._unit) and not self._unit:character_damage():dead()

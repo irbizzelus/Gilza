@@ -21,7 +21,7 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_addend", function (self, na
 			end
 		end
 		
-		-- GILZA START
+		-- new akimbo handling skill
 		if simplified_categories.akimbo and managers.player:has_category_upgrade("akimbo", "pistol_improved_handling") then
 			if simplified_categories.pistol or (simplified_categories.smg and managers.player:has_category_upgrade("akimbo", "allow_smg_improved_handling")) then
 				local skill = managers.player:upgrade_value("akimbo", "pistol_improved_handling")
@@ -87,13 +87,13 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 		end
 	end
 	
-	-- 20 points of inaccuracy for all weapon types if firing in full auto
+	-- weapon inaccuracy for any weapon, based on fire mode. this was removed from "accuracy_addend" func above, since you should get your max single fire acuracy in menus
 	if fire_mode and fire_mode ~= "single" then
 		if managers.player:current_state() == "bipod" then
 			-- ignored
 		elseif fire_mode == "volley" then
 			-- buff volley mode, because this firemode is used by mostly inaccurate guns in this mod
-			index = index + 5
+			index = index + 4
 		elseif fire_mode == "burst" then
 			-- burst fire mode has slighlty better accuracy. only 1 vanilla weapon has this feature - ms3gl, other weapons gain this mode from gilza's weapon_tweaks
 			index = index - 3
@@ -102,7 +102,7 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 		end
 	end
 	
-	-- 20 points of inaccuracy for hipfire, unless we have new skill
+	-- 20 points of inaccuracy for hipfire, unless we have new version of fire control skill
 	if current_state and not current_state:in_steelsight() then
 		if managers.player:current_state() == "bipod" then
 			-- ignored
@@ -149,6 +149,7 @@ Hooks:OverrideFunction(BlackMarketManager, "recoil_addend", function (self, name
 			end
 		end
 		
+		-- new skimbo skill
 		if simplified_categories.akimbo and managers.player:has_category_upgrade("akimbo", "pistol_improved_handling") then
 			if simplified_categories.pistol or (simplified_categories.smg and managers.player:has_category_upgrade("akimbo", "allow_smg_improved_handling")) then
 				local skill = managers.player:upgrade_value("akimbo", "pistol_improved_handling")
@@ -180,7 +181,7 @@ Hooks:OverrideFunction(BlackMarketManager, "recoil_addend", function (self, name
 			end
 		end
 		
-		-- 36 points of recoil loss if hipfiring without new skill
+		-- 36 points of recoil penalty if hipfiring without new skill
 		if current_state and not current_state:in_steelsight() then
 			index = index - managers.player:upgrade_value("player", "hipfire_less_recoil", 9)
 		end
@@ -210,7 +211,7 @@ Hooks:OverrideFunction(BlackMarketManager, "recoil_addend", function (self, name
 	return addend
 end)
 
--- updates both GUI and the stats
+-- updates both GUI and in game stats for ROF
 Hooks:OverrideFunction(BlackMarketManager, "fire_rate_multiplier", function (self, name, categories, silencer, detection_risk, current_state, blueprint)
 	
 	local multiplier = 1

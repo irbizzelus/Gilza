@@ -407,8 +407,8 @@ Hooks:PreHook(PlayerDamage, "damage_melee", "Gilza_pre_player_damage_melee", fun
 	end
 end)
 
--- interupt melee hold after a counterattack, to stop chainsaw damage
--- this also causes a small bug where melee is almost instantly unequiped, but i deem it a feature and not a bug, since it's actually sometimes helpful. lazyness lead development.
+-- interupt melee hold after a counterattack, to specifically stop chainsaw damage
+-- this also causes all melees to almost instantly get unequiped. i deem this a feature and not a bug, since it's actually sometimes helpful. lazyness lead development.
 Hooks:PostHook(PlayerDamage, "damage_melee", "Gilza_post_player_damage_melee", function(self, attack_data)
 	if self._Gilza_WasCounterAttacking then
 		self._unit:movement():current_state():_interupt_action_melee(managers.player:player_timer():time())
@@ -568,15 +568,6 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_post_PlayerDamage_init", function(se
 			["arrested"] = true,
 			["jerry1"] = true
 		}
-		if managers.player:has_category_upgrade("temporary", "player_dodge_armor_regen") and not excluded_state[managers.player:current_state()] and self:get_real_armor() <= 0 then -- can it even be less?
-			if not managers.player:has_activate_temporary_upgrade("temporary", "player_dodge_armor_regen") then
-				if self._unit and alive(self._unit) and self._unit.character_damage then
-					managers.player:activate_temporary_upgrade("temporary", "player_dodge_armor_regen")
-					Gilza.NSI:activated_revitalized_cd()
-					self._unit:character_damage():restore_armor(managers.player:temporary_upgrade_value("temporary", "player_dodge_armor_regen", 0))
-				end
-			end
-		end
 		if managers.player:has_category_upgrade("temporary", "player_speed_junkie_armor_on_dodge") and not excluded_state[managers.player:current_state()] then
 			if not managers.player:has_activate_temporary_upgrade("temporary", "player_speed_junkie_armor_on_dodge") then
 				if self._unit and alive(self._unit) and self._unit.character_damage then
@@ -589,7 +580,15 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_post_PlayerDamage_init", function(se
 				end
 			end
 		end
-			
+		if managers.player:has_category_upgrade("temporary", "player_dodge_armor_regen") and not excluded_state[managers.player:current_state()] and self:get_real_armor() <= 0 then -- can it even be less?
+			if not managers.player:has_activate_temporary_upgrade("temporary", "player_dodge_armor_regen") then
+				if self._unit and alive(self._unit) and self._unit.character_damage then
+					managers.player:activate_temporary_upgrade("temporary", "player_dodge_armor_regen")
+					Gilza.NSI:activated_revitalized_cd()
+					self._unit:character_damage():restore_armor(managers.player:temporary_upgrade_value("temporary", "player_dodge_armor_regen", 0))
+				end
+			end
+		end
 	end)
 end)
 
@@ -597,7 +596,7 @@ Hooks:PreHook(PlayerDamage, "pre_destroy", "Gilza_pre_PlayerDamage_pre_destroy",
 	managers.player:unregister_message(Message.OnPlayerDodge, "Gilza_armor_on_dodge_skill")
 end)
 
--- armor recovery related skills. this func triggers, usually, after getting shot
+-- armor recovery related skills. this func triggers, after getting shot or supressed
 local orig_timer_to_max = PlayerDamage.set_regenerate_timer_to_max
 Hooks:OverrideFunction(PlayerDamage, "set_regenerate_timer_to_max", function (self)
 	local is_regenrating_armor = self._current_state and self._update_regenerate_timer and self._current_state == self._update_regenerate_timer
@@ -738,14 +737,7 @@ Hooks:OverrideFunction(PlayerDamage, "_calc_health_damage", function (self, atta
 
 	health_subtracted = health_subtracted - self:get_real_health()
 	
-	-- removed vanilla leech regen
-	-- if managers.player:has_activate_temporary_upgrade("temporary", "copr_ability") and health_subtracted > 0 then
-		-- local teammate_heal_level = managers.player:upgrade_level_nil("player", "copr_teammate_heal")
-
-		-- if teammate_heal_level and self:get_real_health() > 0 then
-			-- self._unit:network():send("copr_teammate_heal", teammate_heal_level)
-		-- end
-	-- end
+	-- removed vanilla leech teammate regen
 
 	local trigger_skills = table.contains({
 		"bullet",

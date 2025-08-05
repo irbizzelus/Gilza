@@ -1,5 +1,5 @@
 -- disallow brawler deck to have camouflage bonuses for enemy attention.
--- sadly this is the best way to get max attention, since i cant make "15% uncover" skill sync properly to modless clients if it's value is increased
+-- sadly this is the best way to get max enemy attention on local player, since i cant make "15% uncover" skill sync properly to modless clients if it's value is increased
 local gilza_orig_send_to_peers_synced = BaseNetworkSession.send_to_peers_synched
 Hooks:OverrideFunction(BaseNetworkSession, "send_to_peers_synched", function (self, ...)
 	if managers.player and managers.player:has_category_upgrade("player", "damage_resist_brawler") and managers.player:has_category_upgrade("player", "uncover_multiplier") then

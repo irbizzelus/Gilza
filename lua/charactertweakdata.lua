@@ -1,4 +1,4 @@
--- healthpool updates and knockdown effect for grey swats
+-- healthpool updates and knockdown effect for grey/zeal swats
 
 local city_swat_hurts = {
 	tase = true,
@@ -299,6 +299,6 @@ Hooks:PostHook(CharacterTweakData, "_set_sm_wish", "Gilza_CharacterTweakData_set
 	self.tank.HEALTH_INIT = 2400
 	self.tank_medic.HEALTH_INIT = 2400
 	self.tank_mini.HEALTH_INIT = 4800
-	-- why are you here as well?
+	-- why are you this way as well?
 	self.marshal_marksman.HEALTH_INIT = 250
 end)

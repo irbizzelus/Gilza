@@ -206,8 +206,8 @@ end)
 -- weapon sorting based on damage value
 Hooks:PreHook(BlackMarketGui, "populate_buy_weapon", "Gilza_BlackMarketGui_populate_buy_weapon_pre", function(self, data)
 	
-	-- 2 descend, 3 ascend, 1 disable
-	local order_preference = Gilza.settings.blackmarket_weapon_sorting
+	-- 1 disable, 2 descend, 3 ascend
+	local order_preference = Gilza.settings.blackmarket_weapon_sorting or 1
 	
 	if order_preference > 1 and data.name ~= "wpn_special" then
 		local default_data_clone = deep_clone(data.on_create_data)

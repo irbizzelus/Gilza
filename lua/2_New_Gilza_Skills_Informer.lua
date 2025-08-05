@@ -1,21 +1,19 @@
--- this file is loading all new skills that gilza adds (or at least most of them), that are not just vanilla skill value overrides
--- functions bellow are called by related skill every time they are activated or such
--- every skill may be activated differently, if so, it will be specified
+-- this file is handling all new skills that gilza adds (or at least most of them), that are not just vanilla skill value overrides
+-- functions bellow are called by related skills every time they are activated or such
+-- every skill may be activated differently, and if so it is specified
 
 -- use this file's functions to add Gilza's new skills to any infoHUD you use/develop
 -- by default only vanillaHUD+ is supported
 
 -- you can use semi overrides of these functions or posthooks to track when skills are activated
--- in order to properly work, your HUD/info mod needs to have lower priority then gilza (current Gilza priority: 19)
--- use Hooks:GetFunction(Gilza.New_Skills_Informer,"activated_new_zerk_melee") to grab the function itself to do a semi override
-
--- semi overrides are ones that copy original function to a local var, then do an override of the same function while running original func in the override
+-- in order to properly work, your HUD/info mod needs to have lower priority than gilza's (current Gilza priority: 19)
+-- use Hooks:GetFunction(Gilza.New_Skills_Informer,"activated_new_zerk_melee") to grab the function itself for either a semi override or a hook
 
 Gilza.New_Skills_Informer = {}
--- for ease of use run .NSI
+-- for ease of use, u can run Gilza.NSI
 Gilza.NSI = Gilza.New_Skills_Informer
 
--- add new skills to VHUD, fold this part to go bellow it where relevant functions are.
+-- add new skills for VHUD+. fold this part to go bellow it, where relevant functions are.
 if Gilza.VHP_enabled then
 	local function add_vhud_vars()
 		local buffs_loaded = false
@@ -439,14 +437,14 @@ if Gilza.VHP_enabled then
 	add_vhud_vars()
 end
 
--- activated on new melee zerk. can be activated even while its allready active like overkill. grab duration from tweakdata like vhud func bellow
+-- activated on new melee zerk. can be activated even while its allready active, like overkill. grab duration from tweakdata like vhud func bellow
 function Gilza.New_Skills_Informer:activated_new_zerk_melee()
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
 		managers.gameinfo:event("timed_buff", "activate", "new_berserk_melee_damage_multiplier_1", { duration = tweak_data.upgrades.values.temporary.new_berserk_weapon_damage_multiplier_cooldown[1][2] or 0 })
 	end
 end
 
--- new weapon berserk. activated 2 temporary buffs, one for duration, another for cooldown, because main buff has a dmg mul.
+-- new weapon berserk. activates 2 temporary buffs, one for duration, another for cooldown, because main buff has a dmg mul.
 -- grab duration info on both from tweakdata
 function Gilza.New_Skills_Informer:activated_new_zerk_firearms()
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
@@ -454,7 +452,7 @@ function Gilza.New_Skills_Informer:activated_new_zerk_firearms()
 	end
 end
 
--- called whenever new basic stockholm stacks are added/removed. amount of total stacks scales from 0 to 4. amount var this func gets represents amount of added stacks, not total
+-- called whenever new basic stockholm stacks are added/removed. amount of total stacks scales from 0 to 4. amount var this func gets represents amount of added stacks, not total.
 -- "cleared" is true only when going to custody, in such case amount is 0.
 -- for infohuds: new func needs to be made that adds up (stack amount / 100) and basic value of the skill via managers.player:upgrade_value("player", "menace_panic_spread").chance
 -- because we always start at 0 stacks, but always have our basic 10% chance (at least thats current value)
@@ -468,7 +466,7 @@ function Gilza.New_Skills_Informer:adjusted_stockholm_stacks(amount, cleared)
 	end
 end
 
--- new aced agressive reload/body economy. reports total amount of stacks from 1 to 10. each stacks provides 7.5% reload speed. you can make a func that shows either buff
+-- new aced agressive reload/body economy. reports total amount of stacks from 1 to 10. each stacks provides 7.5% reload speed. you can make a func that shows either total buff or stack count
 -- "cleared" triggers whenever stacks are reset to 0
 function Gilza.New_Skills_Informer:adjusted_body_economy_stacks(total_amount, cleared)
 	if total_amount and Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
@@ -507,7 +505,7 @@ function Gilza.New_Skills_Informer:activated_revitalized_cd()
 end
 
 -- due to the way unseen strike triggeres were redone, adjust your unseen strike effects.
--- this one triggeres when crits become active. this effect always has a (6) second cooldown, that is equal to "no taking dmg" duration.
+-- this one triggers when crits become active. this effect always has a (6) second cooldown, that is equal to "no taking dmg" duration.
 -- calculate stuff similarly to whats done bellow.
 function Gilza.New_Skills_Informer:activated_new_unseen_strike_crits()
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
@@ -559,9 +557,8 @@ function Gilza.New_Skills_Informer:new_lock_n_load_buff_update(total_percent)
 	end
 end
 
--- new dmg resist reporter - provides damage multiplier that you currently have from passive dmg resistances
--- so 0.3 means 70% total dmg resist. also, this does not take into account specific damage type resistances like bullet/melee, so perks like yakuza and brawler
--- will show lower resist than what they probably have
+-- new dmg resist reporter - provides damage multiplier that you currently have from passive dmg resistances, every time playerstandard:update is executed
+-- so 0.3 means 70% total dmg resist. also, this does not take into account specific damage type resistances like bullet/melee, so perks like yakuza and brawler will show lower resist than what they probably have
 function Gilza.New_Skills_Informer:update_current_passive_dmg_resist(total_resist)
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
 		managers.gameinfo:event("buff", "deactivate", "damage_reduction") -- idk why vanilla's DR hud element rarely pops up, but it does, so always force disable it
@@ -585,7 +582,7 @@ end
 
 -- any time PlayerManager:health_regen() caclulates amount of passive health regen, this function also gets triggered.
 -- it will report by how much health regen was adjusted. value can be both positive and negative. example: -0.015 to reduce 5 second heal by 1.5%
--- this skill is now part of copycat, and muscle but only on DS.
+-- this skill adjustment happens with copycat perk, and muscle perk on DS
 function Gilza.New_Skills_Informer:new_passive_health_regen_adjustment(amount)
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
 		if amount then
@@ -605,7 +602,7 @@ function Gilza.New_Skills_Informer:update_current_dmg_absorb(current_DA)
 	end
 end
 
--- 2nd card for hitman. reports activation of the skill, which like overkill, always resets self to maximum
+-- 2nd card for hitman. reports activation of the skill, which like overkill, always resets self to maximum on re-activation
 function Gilza.New_Skills_Informer:activated_new_hitman_akimbo_recovery()
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
 		local upg_values = managers.player:upgrade_value("temporary", "akimbo_pistol_armor_regen_timer_multiplier")

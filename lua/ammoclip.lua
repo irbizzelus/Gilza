@@ -1,4 +1,4 @@
--- this file is only here for the gambler buff, and that's it. @line 79
+-- this file is here for the gambler rework, and brawler's arrow pick up nerf
 
 local CABLE_TIE_GET_CHANCE = 0.2
 local CABLE_TIE_GET_AMOUNT = 1
@@ -36,7 +36,7 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 			for _, weapon in ipairs(available_selections) do
 				if not self._weapon_category or self._weapon_category == weapon.unit:base():weapon_tweak_data().categories[1] then
 					
-					-- if we pickup bow/crossbow bolt from enviroment with brawler deck, we only have a chance to get it back
+					-- if we pickup bow/crossbow bolt from enviroment with brawler deck, we only have a chance to get it back. chance is equal to total ammo multiplier
 					if self._pickup_event and (self._pickup_event == "wp_arrow_pick_up" or self._pickup_event == "wp_hunterarrow_pick_up") then
 						if managers.player:has_category_upgrade("player", "extra_ammo_cut") then
 							local rng_win = math.random() <= managers.player:upgrade_value("player", "extra_ammo_cut", 0)
@@ -149,7 +149,7 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 						end
 					end
 					
-					-- other players have an intended cap to how much health they can get from this effect. if they would recieve more health then 15, they get no healing at all
+					-- other players have an intended cap to how much health they can get from this effect. if they would recieve more health than 15, they get no healing at all
 					-- since we cant give other players more health, we will just always give them the max possible amount instead of 12-15 that we would get otherwise
 					-- this is both a buff and compensation for longer cooldown of 4 secs
 					if player_manager:has_category_upgrade("player", "loose_ammo_restore_health_give_team") then

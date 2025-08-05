@@ -63,6 +63,7 @@ _G.Gilza = {
 	intimidated_enemies = {}
 }
 
+-- settings file management, using gilza.settings list
 function Gilza:Save()
 	local file = io.open(Gilza._save_path, 'w+')
 	if file then

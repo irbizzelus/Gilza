@@ -1,4 +1,4 @@
--- updates UI for weapon's burst fire mode
+-- updates UI for weapon's burst fire mode, based on VHUD's implementation, since it should work with it.
 Hooks:OverrideFunction(HUDTeammate,"set_weapon_firemode",function(self,id, firemode, ...)
 	
 	local is_secondary = id == 1
