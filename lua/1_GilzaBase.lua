@@ -137,14 +137,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.4 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.5 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.4 changelog:\n\nThis patch is focused primarly on skills. Some new skills were added and a lot of skills were updated both numericaly and mechanically. A few weapon adjustments are also included. Most important parts:\n\n- Damage resistance skills are now additive instead of multiplicative, which makes stacking them more effective. Max possible damage resist is 90%\n- Added new Guardian perk\n- Updated stability to make difference between the same weapon at 0 and 100 stability less significant.\n\nMake sure to check the full changelog."
+			local message = "2.5 changelog:\n\nThis update required a full game restart.\n\nThis patch is focused on perks, and introduces, both minor and major, reworks to almost every perk in the game. This update also includes some new skills and updates to allready existing skills. Weapons now have 20 point innacuracy in full-auto fire mode instead of 28, and a bunch of minor adjustments to weapons and their attachments were added. Added support for VanillaHUD+.\n\nFor additional information go to the full changelog."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.4
+			Gilza.settings.version = 2.5
 			Gilza.Save()
 		end
 	end)
