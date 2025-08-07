@@ -23,10 +23,10 @@ Hooks:OverrideFunction(BlackMarketTweakData, "get_index_from_projectile_id", fun
 	return 0
 end)
 
-Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "Gilza_init_projectiles", function(self, params)
-	-- Change Sicario smoke grenade cooldown from 60 to 40
+Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "Gilza_post_BlackMarketTweakData_init_projectiles", function(self, params)
+	-- Change Sicario smoke grenade cooldown
 	self.projectiles.smoke_screen_grenade.base_cooldown = 45
-	-- Change Hacker ECM cooldown from 100 to 140
+	-- Change Hacker ECM cooldown
 	self.projectiles.pocket_ecm_jammer.base_cooldown = 140
 	
 	-- init new launcher velocity nades

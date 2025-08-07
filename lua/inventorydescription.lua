@@ -26,9 +26,9 @@ local function restore_tweak_data(weapon_id)
 	tweak_data.weapon[weapon_id] = backup_tweak_data[weapon_id] or tweak_data.weapon[weapon_id]
 end
 
--- update total ammo amount if we have brawler deck equipeed in blackmarket UI @50 and 92;
--- added ability to use float values with total_ammo_mod @90-91
--- fixed dumbass weapon max ammo overrides from weaponlib @83-88 and @94 and @98
+-- update total ammo amount if we have brawler deck equipeed
+-- added ability to use float values with total_ammo_mod attachment stat
+-- fixed dumbass weapon max ammo overrides from weaponlib
 Hooks:OverrideFunction(WeaponDescription, "get_weapon_ammo_info", function (weapon_id, extra_ammo, total_ammo_mod, is_override)
 	local weapon_tweak_data = tweak_data.weapon[weapon_id]
 	local ammo_max_multiplier = managers.player:upgrade_value("player", "extra_ammo_multiplier", 1)
@@ -47,6 +47,12 @@ Hooks:OverrideFunction(WeaponDescription, "get_weapon_ammo_info", function (weap
 
 	if managers.player:has_category_upgrade("player", "add_armor_stat_skill_ammo_mul") then
 		ammo_max_multiplier = ammo_max_multiplier * managers.player:body_armor_value("skill_ammo_mul", nil, 1)
+		category_skill_in_effect = true
+	end
+	
+	if managers.player:has_category_upgrade("player", "mrwi_ammo_supply_multiplier") then
+		ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value("player", "mrwi_ammo_supply_multiplier", 1) - 1
+		category_skill_in_effect = true
 	end
 	
 	ammo_max_multiplier = ammo_max_multiplier * managers.player:upgrade_value("player", "extra_ammo_cut", 1)
@@ -98,15 +104,14 @@ Hooks:OverrideFunction(WeaponDescription, "get_weapon_ammo_info", function (weap
 		mod = ammo_from_mods + override_total_ammo + managers.player:upgrade_value(weapon_id, "clip_amount_increase") * ammo_max_per_clip
 	}
 	ammo_data.skill = (ammo_data.base + ammo_data.mod) * ammo_max_multiplier - ammo_data.base - ammo_data.mod
-	ammo_data.skill_in_effect = managers.player:has_category_upgrade("player", "extra_ammo_multiplier") or category_skill_in_effect or managers.player:has_category_upgrade("player", "add_armor_stat_skill_ammo_mul") or managers.player:has_category_upgrade("player", "extra_ammo_cut")
+	ammo_data.skill_in_effect = managers.player:has_category_upgrade("player", "extra_ammo_multiplier") or category_skill_in_effect or managers.player:has_category_upgrade("player", "add_armor_stat_skill_ammo_mul") or managers.player:has_category_upgrade("player", "extra_ammo_cut") or managers.player:has_category_upgrade("player", "mrwi_ammo_supply_multiplier")
 	
 	return ammo_max_per_clip, ammo_max, ammo_data
 end)
 
--- blackmarket GUI yet again. this one is changed so that faster reload with new akimbo skill would work/show up in stats. also the overkill reload buff is here; @182-206
+-- faster reload with new akimbo skill and the overkill reload buff, both effect and UI
+-- based on wpnlib's func version
 Hooks:OverrideFunction(WeaponDescription, "_get_skill_stats", function (name, category, slot, base_stats, mods_stats, silencer, single_mod, auto_mod, blueprint)
-	-- due to weapon lib changes, and our need to keep hooks for this function by using hooksoverride, we will have to add weaponlib's code in here,
-	-- local function 'original_skill_stats' is pretty much the function itself, everything around it is weaponlib's stuff
 	override_tweak_data(name, blueprint)
 	local function original_skill_stats()
 		local skill_stats = {}
@@ -299,7 +304,7 @@ Hooks:OverrideFunction(WeaponDescription, "_get_skill_stats", function (name, ca
 	return return_data
 end)
 
--- update blackmarket UI, based on WeaponLib's function override, fixes the total ammo count @313-314 and @324
+-- update blackmarket UI; based on WeaponLib's function override; fixes total ammo count
 Hooks:OverrideFunction(WeaponDescription, "_get_stats", function (name, category, slot, blueprint)
 	local base_stats, mods_stats, skill_stats = WeaponDescription._weaponlib_pre_get_stats(name, category, slot, blueprint)
 	local factory_id = managers.weapon_factory:get_factory_id_by_weapon_id(name)
@@ -336,7 +341,7 @@ Hooks:OverrideFunction(WeaponDescription, "_get_stats", function (name, category
 	return base_stats, mods_stats, skill_stats
 end)
 
--- adding ability to use float values with total_ammo_mod @392-393
+-- adding ability to use float values with total_ammo_mod attachment stat
 -- this is an override of base game function "WeaponDescription._get_weapon_mod_stats". WeaponLib has it's own override for it,
 -- but still uses the original game function at the start, to update stats basaed of of it. So we simply override what would've been a copy of the original function.
 Hooks:OverrideFunction(WeaponDescription, "_weaponlib_pre_get_weapon_mod_stats", function (mod_name, weapon_name, base_stats, mods_stats, equipped_mods)

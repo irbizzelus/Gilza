@@ -29,7 +29,8 @@ local function on_ammo_pickup(unit, pickup_chance, increase)
 	return gained_throwable, chance
 end
 
--- base game code
+-- base game code. setting up a proper override for a coroutine would probably(?) not be easy
+-- and either way, nothing should hook to this function unless an infoHUD mod allows for exact % tracking for nade pick ups, in which case - too bad
 PlayerAction.FullyLoaded = {
 	Priority = 1,
 	Function = function (player_manager, pickup_chance, increase)

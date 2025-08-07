@@ -7,7 +7,10 @@ _G.Gilza = {
 	_save_path = "mods/saves/Gilza_save.txt",
 	settings = {
 		v_fov = 90,
+		blackmarket_weapon_sorting = 2,
 		shotgun_skill_notification = true,
+		menace_points_notification = true,
+		designated_marksman_zoom = 2,
 		melee_gui = 4,
 		flash_color_R = 255,
 		flash_color_G = 0,
@@ -19,23 +22,40 @@ _G.Gilza = {
 		junkie_icon_scale = 1,
 		junkie_icon_x_pos = 50,
 		junkie_icon_y_pos = 320,
+		single_fire_input_buffering = true,
+		-- VHUD STUFF
+		vhud_compat_new_melee_zerk = false,
+		vhud_compat_new_weapon_zerk = true,
+		vhud_compat_stockholm_menace = true,
+		vhud_compat_body_economy = true,
+		vhud_compat_fearmonger_speed = true,
+		vhud_compat_electric_bullets = true,
+		vhud_compat_dire_need_override = false,
+		vhud_compat_revitalized = true,
+		vhud_compat_unseen_strike_override = true,
+		vhud_compat_new_lock_n_load = true,
+		vhud_compat_total_dmg_resist = true,
+		vhud_compat_total_dmg_absorb = true,
+		vhud_compat_total_dodge = true,
+		vhud_compat_new_hitman_recovery = true,
+		vhud_compat_new_trigger_happy = true,
 	},
 	grenade_multipliers = {
 		dada_com = 0.6,
 		fir_com = 0.28,
 		frag_com = 0.6,
-		wpn_prj_ace = 2,
-		concussion = 0.28,
+		wpn_prj_ace = 1.25,
+		concussion = 0.3,
 		poison_gas_grenade = 0.2,
 		frag = 0.6,
 		molotov = 0.65,
 		dynamite = 0.6,
-		wpn_prj_four = 0.8,
+		wpn_prj_four = 0.75,
 		wpn_prj_jav = 0.32,
-		wpn_prj_target = 0.56,
-		wpn_prj_hur = 1,
-		sticky_grenade = 0.65,
-		wpn_gre_electric = 0.65,
+		wpn_prj_target = 0.85,
+		wpn_prj_hur = 0.55,
+		sticky_grenade = 0.7,
+		wpn_gre_electric = 0.7,
 	},
 	shotgun_minimal_damage_multipliers = {},
 	current_shotgun_shot_id = 0,
@@ -43,6 +63,7 @@ _G.Gilza = {
 	intimidated_enemies = {}
 }
 
+-- settings file management, using gilza.settings list
 function Gilza:Save()
 	local file = io.open(Gilza._save_path, 'w+')
 	if file then
@@ -80,30 +101,32 @@ function Gilza:modCompatibility()
 			end
 		end
 	end
+	-- based on folder name
 	for i, mod in pairs(BLT.FindMods(BLT)) do
 		if mod.id == "Bipods That Work" then
 			Gilza.BTAW_enabled = true
 		elseif mod.id == "VanillaHUD Plus" then
 			Gilza.VHP_enabled = true
-			-- add our skills to vanila hud's buff list so that it stops screaming about unknown effects in the logs
-			local function tryaddingbuffs()
-				if GameInfoManager and GameInfoManager._BUFFS and GameInfoManager._BUFFS.temporary then
-					GameInfoManager._BUFFS.temporary.player_new_hitman_regen = "player_new_hitman_regen"
-					GameInfoManager._BUFFS.temporary.player_dodge_armor_regen = "player_dodge_armor_regen"
-					GameInfoManager._BUFFS.temporary.player_speed_junkie_armor_on_dodge = "player_speed_junkie_armor_on_dodge"
-					GameInfoManager._BUFFS.temporary.speed_boost_on_panic_kill = "speed_boost_on_panic_kill"
-					GameInfoManager._BUFFS.temporary.tased_electric_bullets = "tased_electric_bullets"
-					GameInfoManager._BUFFS.temporary.new_berserk_melee_damage_multiplier_1 = "new_berserk_melee_damage_multiplier_1"
-					GameInfoManager._BUFFS.temporary.new_berserk_melee_damage_multiplier_2 = "new_berserk_melee_damage_multiplier_2"
-					GameInfoManager._BUFFS.temporary.new_berserk_weapon_damage_multiplier = "new_berserk_weapon_damage_multiplier"
-					GameInfoManager._BUFFS.temporary.new_berserk_weapon_damage_multiplier_cooldown = "new_berserk_weapon_damage_multiplier_cooldown"
-				else
-					DelayedCalls:Add("Gilza_wait_for_vhp_to_load", 0.25, function()
-						tryaddingbuffs()
-					end)
-				end
+		elseif mod.id == "AFSF2" then
+			local afsf = BLT.Mods:GetModByName("Auto-Fire Sound Fix")
+			if afsf then
+				afsf:SetEnabled(false, true)
+				Gilza.AFSF_force_disabled = true
 			end
-			tryaddingbuffs()
+		end
+	end
+	-- based on mod.txt name
+	if BLT.Mods:GetModByName("Bipods That (Actually) Work") then
+		Gilza.BTAW_enabled = true
+	end
+	if BLT.Mods:GetModByName("VanillaHUDPlus") then
+		Gilza.VHP_enabled = true
+	end
+	if BLT.Mods:GetModByName("Auto-Fire Sound Fix") then
+		local afsf = BLT.Mods:GetModByName("Auto-Fire Sound Fix")
+		if afsf then
+			afsf:SetEnabled(false, true)
+			Gilza.AFSF_force_disabled = true
 		end
 	end
 end
@@ -114,15 +137,17 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.4 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.5 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.4 changelog:\n\nThis patch is focused primarly on skills. Some new skills were added and a lot of skills were updated both numericaly and mechanically. A few weapon adjustments are also included. Most important parts:\n\n- Damage resistance skills are now additive instead of multiplicative, which makes stacking them more effective. Max possible damage resist is 90%\n- Added new Guardian perk\n- Updated stability to make difference between the same weapon at 0 and 100 stability less significant.\n\nMake sure to check the full changelog."
+			local message = "2.5 changelog:\n\nThis update required a full game restart.\n\nThis patch is focused on perks, and introduces, both minor and major, reworks to almost every perk in the game. This update also includes some new skills and updates to allready existing skills. Weapons now have 20 point innacuracy in full-auto fire mode instead of 28, and a bunch of minor adjustments to weapons and their attachments were added. Added support for VanillaHUD+.\n\nFor additional information go to the full changelog."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.4
+			Gilza.settings.version = 2.5
 			Gilza.Save()
 		end
 	end)
 end
+
+dofile(Gilza._path.."lua/2_New_Gilza_Skills_Informer.lua")

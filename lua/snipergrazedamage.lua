@@ -3,7 +3,8 @@ Hooks:OverrideFunction(SniperGrazeDamage, "on_weapon_fired", function (self, wea
 	if not alive(weapon_unit) then
 		return
 	end
-
+	
+	-- allow semi AR's and smg
 	if not weapon_unit:base():is_category("snp") then
 		if weapon_unit:base():is_category("assault_rifle") or weapon_unit:base():is_category("smg") then
 			local semi_auto = weapon_unit:base()._fire_mode == Idstring("single")
@@ -33,7 +34,7 @@ Hooks:OverrideFunction(SniperGrazeDamage, "on_weapon_fired", function (self, wea
 	local best_damage = 0
 	local sentry_mask = managers.slot:get_mask("sentry_gun")
 	local ally_mask = managers.slot:get_mask("all_criminals")
-	-- new requirment
+	-- new distance requirment
 	local max_distance = 0
 
 	for i, hit in ipairs(result.rays) do
@@ -58,6 +59,7 @@ Hooks:OverrideFunction(SniperGrazeDamage, "on_weapon_fired", function (self, wea
 				end
 				
 				-- check for max distance of the longest enemy collision ray so that graze doesnt activate if hitting targets too close to player
+				-- done in such a way to account for multiple enemy hits per shot
 				if max_distance < hit.distance then
 					max_distance = hit.distance
 				end
@@ -71,7 +73,7 @@ Hooks:OverrideFunction(SniperGrazeDamage, "on_weapon_fired", function (self, wea
 		return
 	end
 	
-	-- maximum distance check 6 meters
+	-- min distance requirment check of 6 meters
 	if max_distance < 600 then
 		return
 	end

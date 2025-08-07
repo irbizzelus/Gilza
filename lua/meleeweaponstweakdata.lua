@@ -2,7 +2,8 @@ if not Gilza then
 	dofile("mods/Gilza/lua/1_GilzaBase.lua")
 end
 
-Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats", function(self, tweak_data)
+-- new melee stats
+Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_BlackMarketTweakData_init_melee_weapons_post", function(self, tweak_data)
 	-- list in order of appearance in my game, im only missing hotline miami 1 and alienware melee, they are all at the end
 	-- also the event hammer is hidden outside of the event, so its at the end as well
 	local melee_ids = {
@@ -123,6 +124,7 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_NewMeleeStats
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 2.5
 				self.melee_weapons[tostring(weapon)].stats.min_damage_effect = 8
 				self.melee_weapons[tostring(weapon)].stats.max_damage_effect = 8
+				self.melee_weapons[tostring(weapon)].stats.concealment = 31 -- buff weapon butt since its literally a "no melee weapon" option. also it doesnt charge for more dmg
 			elseif stats.class == 2 then
 				self.melee_weapons[tostring(weapon)].stats.min_damage = 2
 				self.melee_weapons[tostring(weapon)].stats.max_damage = 5

@@ -1,4 +1,4 @@
--- accuracy adjustments @11-26
+-- accuracy adjustments
 Hooks:OverrideFunction(NewRaycastWeaponBase, "conditional_accuracy_multiplier", function (self, current_state)
 	local mul = 1
 
@@ -9,7 +9,7 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "conditional_accuracy_multiplier", 
 	local pm = managers.player
 	
 	-- GILZA START
-	-- increased bonus while bipoded, it also sorta sompensates the full auto penalty, since lmgs cant be in single fire without mods anyway
+	-- increased bonus while bipoded
 	if managers.player:current_state() == "bipod" then
 		mul = mul + 0.5
 	end
@@ -30,8 +30,8 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "conditional_accuracy_multiplier", 
 	return self:_convert_add_to_mul(mul)
 end)
 
--- code is based on WeaponLib's newraycast hook. ammo cut for brawler deck @93. ammo override/total_ammo_mod compatibility with total ammo skills fixed @87 and @99
-Hooks:PostHook(NewRaycastWeaponBase, "replenish", "Gilza_replenish", function(self)
+-- code is based on WeaponLib's newraycast hook. added ammo cut for brawler, ammo override/total_ammo_mod compatibility with total ammo skills
+Hooks:PostHook(NewRaycastWeaponBase, "replenish", "Gilza_NewRaycastWeaponBase_replenish_post", function(self)
 	local original_tweak_data = tweak_data.weapon[self._name_id]
 	local weapon_tweak_data = self:weapon_tweak_data()
 
@@ -39,6 +39,10 @@ Hooks:PostHook(NewRaycastWeaponBase, "replenish", "Gilza_replenish", function(se
 
 	for _, category in ipairs(weapon_tweak_data.categories) do
 		ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value(category, "extra_ammo_multiplier", 1) - 1
+	end
+	
+	if managers.player:has_category_upgrade("player", "mrwi_ammo_supply_multiplier") then
+		ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value("player", "mrwi_ammo_supply_multiplier", 1) - 1
 	end
 
 	--ammo_max_multiplier = ammo_max_multiplier + ammo_max_multiplier * (self._total_ammo_mod or 0)
@@ -64,7 +68,7 @@ Hooks:PostHook(NewRaycastWeaponBase, "replenish", "Gilza_replenish", function(se
 	self._ammo_pickup = weapon_tweak_data.AMMO_PICKUP
 end)
 
--- new reload speeds from tweaked 'overkill' and new akimbo skill; @116-137
+-- new reload speeds from tweaked 'overkill' and new akimbo skill
 Hooks:OverrideFunction(NewRaycastWeaponBase, "reload_speed_multiplier", function (self)
 	if self._current_reload_speed_multiplier then
 		return self._current_reload_speed_multiplier
@@ -126,6 +130,12 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "reload_speed_multiplier", function
 	if managers.player:has_activate_temporary_upgrade("temporary", "single_shot_fast_reload") then
 		multiplier = multiplier + 1 - managers.player:temporary_upgrade_value("temporary", "single_shot_fast_reload", 1)
 	end
+	
+	if managers.player:has_activate_temporary_upgrade("temporary", "single_body_shot_kill_reload") then
+		if managers.player._aggressive_reload_stacks and managers.player._aggressive_reload_stacks > 0 then
+			multiplier = multiplier - (managers.player:temporary_upgrade_value("temporary", "single_body_shot_kill_reload", 0) * managers.player._aggressive_reload_stacks)
+		end
+	end
 
 	multiplier = multiplier + 1 - managers.player:get_property("shock_and_awe_reload_multiplier", 1)
 	multiplier = multiplier + 1 - managers.player:get_temporary_property("bloodthirst_reload_speed", 1)
@@ -141,7 +151,7 @@ local ids_single = Idstring("single")
 local ids_auto = Idstring("auto")
 local ids_burst = Idstring("burst")
 local ids_volley = Idstring("volley")
--- allow total_ammo_mod stat to have float values @397-400
+-- allow total_ammo_mod stat to have float values
 Hooks:OverrideFunction(NewRaycastWeaponBase, "_update_stats_values", function (self, disallow_replenish, ammo_data)
 	self:_default_damage_falloff()
 	self:_check_sound_switch()
@@ -434,7 +444,7 @@ local mvec_up_ay = Vector3()
 local mvec_ax = Vector3()
 local mvec_ay = Vector3()
 
--- code is based on WeaponLib's newraycast code. due to an oversight @609, damage drop off for shotguns and other multi-ray weapons was broken.
+-- code is based on WeaponLib's newraycast code. due to an oversight (@134 in the wpnlib's raycast file), damage drop off for shotguns and other multi-ray weapons was broken.
 -- normaly drop off for multi-ray weapons is calculated for every ray seperately: by coping initial weapon's damage and applying fall-off to it for every ray
 -- weapon lib instead made an override for the initial weapon damage variable. to save on memory space by cutting out a local variable i guess?
 -- because of that, if a collision ray hit a wall somewhere far behind the enemy, next pallet after it would deal dmg * (drop off that is caculated as distance to the wall behind the enemy).
@@ -705,6 +715,221 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "_fire_raycast", function (self,use
 	if self._alert_events then
 		result.rays = hit_rays
 	end
-
+	
 	return result
+end)
+
+-- yet another fix for a weaponlib crash
+local empty_ids = Idstring("")
+Hooks:OverrideFunction(NewRaycastWeaponBase, "tweak_data_anim_play_redirect", function (self, anim, speed_multiplier)
+	local played = false
+	
+	-- this sanity check in particular
+	if not self._weapon_animation_redirects or not self._part_animation_redirects then
+		return false
+	end
+	
+	if self._weapon_animation_redirects[anim] then
+		local anim_name = self._weapon_animation_redirects[anim]
+		local ids_anim_name = Idstring(anim_name)
+
+		local offset = self:_get_anim_start_offset(anim_name)
+		local result = self._unit:play_redirect(ids_anim_name, offset)
+
+		if result ~= empty_ids and speed_multiplier then
+			self._unit:anim_state_machine():set_speed(result, speed_multiplier)
+			played = true
+		end
+	end
+
+	for part_id, part_redirects in pairs(self._part_animation_redirects) do
+		local unit = self._parts[part_id].unit
+
+		if unit and part_redirects[anim] then
+			local anim_name = part_redirects[anim]
+			local ids_anim_name = Idstring(anim_name)
+
+			local offset = self:_get_anim_start_offset(anim_name)
+			local result = unit:play_redirect(ids_anim_name, offset)
+
+			if result ~= empty_ids and speed_multiplier then
+				unit:anim_state_machine():set_speed(result, speed_multiplier)
+				played = true
+			end
+		end
+	end
+
+	return played
+end)
+
+-- allow for crossbows to also benefit from body expertise skill. for whatever reason only bows are allowed in vanilla
+Hooks:OverrideFunction(NewRaycastWeaponBase, "get_add_head_shot_mul", function (self)
+	if (self:is_category("smg", "lmg", "assault_rifle", "minigun") and (self._fire_mode == ids_auto or self._fire_mode == ids_burst)) or self:is_category("bow", "crossbow", "saw") then
+		return managers.player:upgrade_value("weapon", "automatic_head_shot_add", nil)
+	end
+	
+	return nil
+end)
+
+-- force body economy skill to reset bonuses on kill after reload is done
+Hooks:PreHook(NewRaycastWeaponBase, "on_reload", "Gilza_PreHook_NewRaycastWeaponBase_on_reload", function(self)
+	if managers.player:has_category_upgrade("temporary", "single_body_shot_kill_reload") then
+		managers.player._gilza_new_AR_should_cancel_on_kill = true
+	end
+end)
+
+-- add burst fire mode as third fire mod option if it was added to weapon's tweak data
+Hooks:PostHook(NewRaycastWeaponBase, "init", "Gilza_post_NewRaycastWeaponBase_init", function(self, unit)
+	local wtd = self:weapon_tweak_data()
+	if wtd.HAS_BURST_AS_THIRD then
+		self._burst_count = wtd.BURST_COUNT or 3
+		local fire_mode_data = wtd.fire_mode_data or {}
+		local toggable_fire_modes = fire_mode_data.toggable
+		if self._toggable_fire_modes and toggable_fire_modes then
+			if not table.contains(self._toggable_fire_modes,ids_burst) then
+				table.insert(self._toggable_fire_modes,ids_burst)
+			end
+		end
+	end
+end)
+
+-- if weapon has a burst mode, allow to switch to it. single->burst->auto cycle
+local gilza_orig_toggle_firemode = Hooks:GetFunction(NewRaycastWeaponBase,"toggle_firemode")
+Hooks:OverrideFunction(NewRaycastWeaponBase, "toggle_firemode", function(self, skip_post_event, ...)
+	local wtd = self:weapon_tweak_data()
+	if wtd and wtd.HAS_BURST_AS_THIRD then
+		local can_toggle = not self._locked_fire_mode and self:can_toggle_firemode()
+
+		if can_toggle then
+			if self._toggable_fire_modes then
+				local cur_fire_mode = table.index_of(self._toggable_fire_modes, self._fire_mode)
+
+				if cur_fire_mode > 0 then
+					cur_fire_mode = cur_fire_mode % #self._toggable_fire_modes + 1
+					self._fire_mode = self._toggable_fire_modes[cur_fire_mode]
+
+					if not skip_post_event then
+						self._sound_fire:post_event(cur_fire_mode % 2 == 0 and "wp_auto_switch_on" or "wp_auto_switch_off")
+					end
+
+					local fire_mode_data = self._fire_mode_data[self._fire_mode:key()]
+					local fire_effect = fire_mode_data and (self._silencer and fire_mode_data.muzzleflash_silenced or fire_mode_data.muzzleflash)
+
+					self:change_fire_effect(fire_effect)
+
+					local trail_effect = fire_mode_data and fire_mode_data.trail_effect
+
+					self:change_trail_effect(trail_effect)
+					self:call_on_digital_gui("set_firemode", self:fire_mode())
+					self:update_firemode_gui_ammo()
+
+					return true
+				end
+
+				return false
+			end
+			
+			if self._fire_mode == ids_single then
+				self._fire_mode = ids_burst
+				if not skip_post_event then
+					self._sound_fire:post_event("wp_auto_switch_on")
+				end
+			elseif self._fire_mode == ids_burst then
+				self._fire_mode = ids_auto
+				if not skip_post_event then
+					self._sound_fire:post_event("wp_auto_switch_on")
+				end
+			else
+				self._fire_mode = ids_single
+				if not skip_post_event then
+					self._sound_fire:post_event("wp_auto_switch_off")
+				end
+			end
+
+			return true
+		else
+			return false
+		end
+	else
+		return gilza_orig_toggle_firemode(self,skip_post_event,...)
+	end
+end)
+
+Hooks:PreHook(NewRaycastWeaponBase, "fire", "Gilza_pre_NewRaycastWeaponBase_fire", function(self,...)
+	-- fix for a crash from npcs or akimbo weapons with burst firemode
+	if self._fire_mode == ids_burst then
+		self._bullets_fired = self._bullets_fired or 0
+	end
+	-- lock n load hudinfo UI support
+	local is_player = self._setup.user_unit == managers.player:player_unit()
+	if is_player and managers.player:has_category_upgrade("player", "automatic_faster_reload") then
+		local upg_values = managers.player:upgrade_value("player", "automatic_faster_reload")
+		local consume_ammo = not managers.player:has_active_temporary_property("bullet_storm") and (not managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier") or not managers.player:has_category_upgrade("player", "berserker_no_ammo_cost")) or not is_player
+		if self:is_category("smg", "assault_rifle", "lmg") and consume_ammo and upg_values and self:get_ammo_remaining_in_clip() >= 1 then
+			
+			local reload_multiplier = upg_values.min_reload_increase
+			local min_bullets = upg_values.min_bullets
+
+			local ammo = self:get_ammo_max_per_clip()
+			
+			if managers.player:has_category_upgrade("player", "automatic_mag_increase") then
+				ammo = ammo - managers.player:upgrade_value("player", "automatic_mag_increase", 0)
+			end
+			
+			local ammo_fired = ammo - self:get_ammo_remaining_in_clip() + 1 -- since this is a prehook bullet wasnt yet fired, so we adjust for it. or maybe do it in a posthook
+			
+			if min_bullets < ammo_fired then
+				local num_bullets = ammo_fired - min_bullets
+
+				for i = 1, num_bullets do
+					reload_multiplier = reload_multiplier + (upg_values.penalty-1)
+				end
+			end
+			
+			reload_multiplier = math.clamp(reload_multiplier,upg_values.min_reload_increase,upg_values.max_reload_increase)
+			
+			Gilza.NSI:new_lock_n_load_buff_update(reload_multiplier)
+		end
+	end
+end)
+
+-- use weapon's burst fire rate, to determine ROF during the burst
+Hooks:OverrideFunction(NewRaycastWeaponBase,"weapon_fire_rate",function(self)
+	if self._alt_fire_active and self._alt_fire_data and self._alt_fire_data.fire_rate then
+		return self._alt_fire_data.fire_rate
+	elseif self._fire_mode == ids_burst then
+		return self:weapon_tweak_data().burst.fire_rate / self:fire_rate_multiplier() -- dont forget ROF skills
+	end
+
+	return NewRaycastWeaponBase.super.weapon_fire_rate(self)
+end)
+
+-- trigger happy stuff
+Hooks:OverrideFunction(NewRaycastWeaponBase,"fire_rate_multiplier",function(self)
+	
+	local le_pistole = false
+	for _, category in ipairs(self:weapon_tweak_data().categories) do
+		if category == "pistol" then
+			le_pistole = true
+			break
+		end
+	end
+	
+	-- if we have trigger happy, cache latest ROF. ROF itself depends on TH status and is re-calculated in blackmarket manager
+	if le_pistole and managers.player:has_category_upgrade("pistol", "stacking_hit_damage_multiplier") then
+		self._gilza_cahed_rof_state = self._gilza_cahed_rof_state or {skill_status = false, rof = self._fire_rate_multiplier}
+		local TH_status = managers.player._coroutine_mgr:is_running("trigger_happy") and true or false
+		if self._gilza_cahed_rof_state.skill_status ~= TH_status then
+			self._gilza_cahed_rof_state.skill_status = TH_status
+			local user_unit = self._setup and self._setup.user_unit
+			local current_state = alive(user_unit) and user_unit:movement() and user_unit:movement()._current_state
+			self._gilza_cahed_rof_state.rof = managers.blackmarket:fire_rate_multiplier(self._name_id, self:weapon_tweak_data().categories, self._silencer, nil, current_state, self._blueprint)
+			if self._ammo_data.fire_rate_multiplier then
+				self._gilza_cahed_rof_state.rof = self._gilza_cahed_rof_state.rof + self._ammo_data.fire_rate_multiplier
+			end
+		end
+		return self._gilza_cahed_rof_state.rof
+	else
+		return self._fire_rate_multiplier -- vanilla always returns this
+	end
 end)

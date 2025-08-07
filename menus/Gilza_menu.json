@@ -1,0 +1,121 @@
+{
+	"menu_id": "Gilza_menu",
+	"parent_menu_id": "blt_options",
+	"title": "Gilza_title",
+	"description": "Gilza_blank",
+	"back_callback": "Gilza_save",
+	"items":
+	[
+		{
+			"type" : "divider",
+			"size" : 22
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_general_header",
+			"title" : "Gilza_general_header",
+			"description" : "Gilza_blank",
+			"callback" : "Gilza_donothing"
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_single_fire_input_buffering",
+			"title" : "Gilza_single_fire_input_buffering",
+			"description" : "Gilza_single_fire_input_buffering_desc",
+			"callback" : "Gilza_single_fire_input_buffering",
+			"value" : "single_fire_input_buffering",
+			"default_value" : true
+		},
+		{
+			"type" : "slider",
+			"id" : "Gilza_v_fov",
+			"title" : "Gilza_v_fov",
+			"description" : "Gilza_v_fov_desc",
+			"callback" : "Gilza_v_fov",
+			"value" : "v_fov",
+			"default_value" : 90,
+			"min" : 75,
+			"max" : 105,
+			"step" : 1
+		},
+		{
+			"type" : "multiple_choice",
+			"id" : "Gilza_melee_gui",
+			"title" : "Gilza_melee_gui",
+			"description" : "Gilza_melee_gui_desc",
+			"callback" : "Gilza_melee_gui",
+			"items" : [
+				"Gilza_melee_gui_1",
+				"Gilza_melee_gui_2",
+				"Gilza_melee_gui_3",
+				"Gilza_melee_gui_4",
+			],
+			"value" : "melee_gui",
+			"default_value" : 4
+		},
+		{
+			"type" : "multiple_choice",
+			"id" : "Gilza_blackmarket_weapon_sorting",
+			"title" : "Gilza_blackmarket_weapon_sorting",
+			"description" : "Gilza_blackmarket_weapon_sorting_desc",
+			"callback" : "Gilza_blackmarket_weapon_sorting",
+			"items" : [
+				"Gilza_weapon_sorting_choise_1",
+				"Gilza_weapon_sorting_choise_2",
+				"Gilza_weapon_sorting_choise_3",
+			],
+			"value" : "blackmarket_weapon_sorting",
+			"default_value" : 2
+		},
+		{
+			"type" : "divider",
+			"size" : 22
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_misc_header",
+			"title" : "Gilza_misc_header",
+			"description" : "Gilza_blank",
+			"callback" : "Gilza_donothing"
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_General_And_Skills_page",
+			"title" : "Gilza_General_And_Skills_page",
+			"description" : "Gilza_General_And_Skills_page_desc",
+			"callback" : "Gilza_General_And_Skills_page"
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_Perks_page",
+			"title" : "Gilza_Perks_page",
+			"description" : "Gilza_Perks_page_desc",
+			"callback" : "Gilza_Perks_page"
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_Weapons_page",
+			"title" : "Gilza_Weapons_page",
+			"description" : "Gilza_Weapons_page_desc",
+			"callback" : "Gilza_Weapons_page"
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_patch_notes",
+			"title" : "Gilza_patch_notes",
+			"description" : "Gilza_patch_notes_desc",
+			"callback" : "Gilza_patch_notes"
+		},
+		{
+			"type" : "divider",
+			"size" : 22
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_skills_header",
+			"title" : "Gilza_skills_header",
+			"description" : "Gilza_blank",
+			"callback" : "Gilza_donothing"
+		},
+	]
+}

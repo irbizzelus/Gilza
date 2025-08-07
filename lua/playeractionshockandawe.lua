@@ -1,3 +1,4 @@
+-- new "lock n' load" skill reload adjusments
 PlayerAction.ShockAndAwe = {
 	Priority = 1,
 	Function = function (player_manager, target_enemies, max_reload_increase, min_reload_increase, penalty, min_bullets, weapon_unit)
@@ -26,6 +27,7 @@ PlayerAction.ShockAndAwe = {
 				reload_multiplier = math.clamp(reload_multiplier,min_reload_increase,max_reload_increase)
 				
 				player_manager:set_property("shock_and_awe_reload_multiplier", reload_multiplier)
+				Gilza.NSI:new_lock_n_load_status(false)
 			end
 		end
 
@@ -42,5 +44,6 @@ PlayerAction.ShockAndAwe = {
 
 		player_manager:unregister_message(Message.OnSwitchWeapon, co)
 		player_manager:unregister_message(Message.OnPlayerReload, co)
+		Gilza.NSI:new_lock_n_load_status(false)
 	end
 }

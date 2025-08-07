@@ -2,12 +2,36 @@ if not Gilza then
 	dofile("mods/Gilza/lua/1_GilzaBase.lua")
 end
 
+local afsf_warned = false -- only warn about afsf once per entry to main menu, to be less annoying, but annoying enough to make user uninstall original mod, cause otherwise shit dont work
+-- warnings about vhud's burst fire and afsf
 Hooks:PostHook(MenuManager, "_node_selected", "Gilza_patch_notification", function(self, menu_name, node)
 	if type(node) == "table" and node._parameters.name == "main" then
 		Gilza:changelog_message()
+		if Gilza.VHP_enabled then
+			if VHUDPlus:getSetting({"EQUIPMENT", "ENABLE_BURSTMODE"}, true) then
+				DelayedCalls:Add("Gilza_vhud_burst_warning", 0.3, function()
+					local menu_options = {}
+					menu_options[#menu_options+1] = {text = "OK", is_cancel_button = true}
+					local message = managers.localization:text("Gilza_vhud_burst_warning_str")
+					local menu = QuickMenu:new("Gilza", message, menu_options)
+					menu:Show()
+				end)
+			end
+		end
+		if Gilza.AFSF_force_disabled and not afsf_warned then
+			afsf_warned = true
+			DelayedCalls:Add("Gilza_vhud_burst_warning", 0.4, function()
+				local menu_options = {}
+				menu_options[#menu_options+1] = {text = "OK", is_cancel_button = true}
+				local message = managers.localization:text("Gilza_AFSF_warning_str")
+				local menu = QuickMenu:new("Gilza", message, menu_options)
+				menu:Show()
+			end)
+		end
 	end
 end)
 
+-- menu elements
 Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 	MenuCallbackHandler.Gilza_save = function(this, item)
 		Gilza:Save()
@@ -41,9 +65,35 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		Gilza:Save()
 	end
 	
+	MenuCallbackHandler.Gilza_single_fire_input_buffering = function(this, item)
+		Gilza.settings.single_fire_input_buffering = item:value() == 'on'
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_blackmarket_weapon_sorting = function(this, item)
+		Gilza.settings.blackmarket_weapon_sorting = tonumber(item:value())
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_menace_points_notification = function(this, item)
+		Gilza.settings.menace_points_notification = item:value() == 'on'
+		Gilza:Save()
+	end
+	
 	MenuCallbackHandler.Gilza_shotgun_skill_notification = function(this, item)
 		Gilza.settings.shotgun_skill_notification = item:value() == 'on'
 		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_designated_marksman_zoom = function(this, item)
+		Gilza.settings.designated_marksman_zoom = tonumber(item:value())
+		Gilza:Save()
+		tweak_data.upgrades.values.assault_rifle.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
+		tweak_data.upgrades.values.smg.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
+		tweak_data.upgrades.values.lmg.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
+		tweak_data.upgrades.values.snp.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
+		tweak_data.upgrades.values.pistol.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
+		tweak_data.upgrades.values.assault_rifle.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
 	end
 	
 	MenuCallbackHandler.Gilza_perk_reset = function(this, item)
@@ -158,8 +208,12 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		end	
 	end
 	
-	MenuCallbackHandler.Gilza_MWS_page = function(this, item)
-		managers.network.account:overlay_activate("url", "https://modworkshop.net/mod/39854")
+	MenuCallbackHandler.Gilza_General_And_Skills_page = function(this, item)
+		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/random-noncode-stuff/blob/main/Gilza%20txts/General_and_Skills.md")
+	end
+	
+	MenuCallbackHandler.Gilza_Perks_page = function(this, item)
+		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/random-noncode-stuff/blob/main/Gilza%20txts/Perks.md")
 	end
 	
 	MenuCallbackHandler.Gilza_Weapons_page = function(this, item)
@@ -169,8 +223,136 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 	MenuCallbackHandler.Gilza_patch_notes = function(this, item)
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
+	
+	-----------------------------------------------------------------------
+	------------------VHUD SUPPORT-----------------------------------------
+	-----------------------------------------------------------------------
+	-----------------------------------------------------------------------
+	
+	MenuCallbackHandler.Gilza_vhud_compat_new_melee_zerk = function(this, item)
+		Gilza.settings.vhud_compat_new_melee_zerk = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("new_berserk_melee_damage_multiplier_1", Gilza.settings.vhud_compat_new_melee_zerk)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_new_weapon_zerk = function(this, item)
+		Gilza.settings.vhud_compat_new_weapon_zerk = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("new_berserk_weapon_damage_multiplier", Gilza.settings.vhud_compat_new_weapon_zerk)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_stockholm_menace = function(this, item)
+		Gilza.settings.vhud_compat_stockholm_menace = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("stockholm_basic_stacks", Gilza.settings.vhud_compat_stockholm_menace)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_body_economy = function(this, item)
+		Gilza.settings.vhud_compat_body_economy = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("body_economy_stacks", Gilza.settings.vhud_compat_body_economy)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_fearmonger_speed = function(this, item)
+		Gilza.settings.vhud_compat_fearmonger_speed = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("speed_boost_on_panic_kill", Gilza.settings.vhud_compat_fearmonger_speed)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_electric_bullets = function(this, item)
+		Gilza.settings.vhud_compat_electric_bullets = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("tased_electric_bullets", Gilza.settings.vhud_compat_electric_bullets)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_dire_need_override = function(this, item)
+		Gilza.settings.vhud_compat_dire_need_override = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("dire_need", Gilza.settings.vhud_compat_dire_need_override)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_revitalized = function(this, item)
+		Gilza.settings.vhud_compat_revitalized = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("player_dodge_armor_regen", Gilza.settings.vhud_compat_revitalized)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_unseen_strike_override = function(this, item)
+		Gilza.settings.vhud_compat_unseen_strike_override = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("new_unseen_strike", Gilza.settings.vhud_compat_unseen_strike_override)
+			managers.hud:change_bufflist_setting("new_unseen_strike_eligibility", Gilza.settings.vhud_compat_unseen_strike_override)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_new_lock_n_load = function(this, item)
+		Gilza.settings.vhud_compat_new_lock_n_load = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("new_lock_n_load_bonus", Gilza.settings.vhud_compat_new_lock_n_load)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_total_dmg_resist = function(this, item)
+		Gilza.settings.vhud_compat_total_dmg_resist = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("gilza_total_dmg_resist", Gilza.settings.vhud_compat_total_dmg_resist)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_total_dmg_absorb = function(this, item)
+		Gilza.settings.vhud_compat_total_dmg_absorb = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("gilza_total_damage_absorb", Gilza.settings.vhud_compat_total_dmg_absorb)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_total_dodge = function(this, item)
+		Gilza.settings.vhud_compat_total_dodge = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("gilza_total_dodge", Gilza.settings.vhud_compat_total_dodge)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_new_hitman_recovery = function(this, item)
+		Gilza.settings.vhud_compat_new_hitman_recovery = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("new_hitman_recovery_bonus", Gilza.settings.vhud_compat_new_hitman_recovery)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_new_trigger_happy = function(this, item)
+		Gilza.settings.vhud_compat_new_trigger_happy = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("desperado", Gilza.settings.vhud_compat_new_trigger_happy)
+		end
+		Gilza:Save()
+	end
 
 	Gilza:Load()
 
-	MenuHelper:LoadFromJsonFile(Gilza._path .. 'menus/Gilza_menu.txt', Gilza, Gilza.settings)
+	MenuHelper:LoadFromJsonFile(Gilza._path .. 'menus/Gilza_menu.json', Gilza, Gilza.settings)
+	MenuHelper:LoadFromJsonFile(Gilza._path .. 'menus/Gilza_skills_sub_menu.json', Gilza, Gilza.settings)
+	MenuHelper:LoadFromJsonFile(Gilza._path .. 'menus/Gilza_vhud_skills_sub_menu.json', Gilza, Gilza.settings)
 end)

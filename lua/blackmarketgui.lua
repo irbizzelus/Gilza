@@ -1,4 +1,4 @@
--- adds weapon stat adjustments from new melee skills to blackmarket GUI. damage @35-36; charge time @73-84
+-- adds weapon stat adjustments from new melee skills to blackmarket GUI.
 Hooks:OverrideFunction(BlackMarketGui, "_get_melee_weapon_stats", function (self, name)
 	local base_stats = {}
 	local mods_stats = {}
@@ -152,4 +152,127 @@ Hooks:OverrideFunction(BlackMarketGui, "_get_melee_weapon_stats", function (self
 	end
 
 	return base_stats, mods_stats, skill_stats
+end)
+
+-- update text for armor descriptions for ex-pres and anarchist perk decks
+Hooks:PostHook(BlackMarketGui, "update_info_text", "Gilza_BlackMarketGui_update_info_text_post", function(self)
+	local slot_data = self._slot_data
+	local tab_data = self._tabs[self._selected]._data
+	local identifier = tab_data.identifier
+	
+	if identifier == self.identifiers.armor then
+		-- new ex-pres
+		if managers.player:has_category_upgrade("player", "armor_health_store_amount") then
+			local bm_armor_tweak = tweak_data.blackmarket.armors[slot_data.name]
+			local upgrade_level = bm_armor_tweak.upgrade_level
+			local amount = managers.player:body_armor_value("skill_max_health_store", upgrade_level, 1)
+			local multiplier = managers.player:upgrade_value("player", "armor_max_health_store_multiplier", 1)
+			local recovery_bonus = managers.player:body_armor_value("skill_store_armor_recovery_bonus_timer", upgrade_level, 1)
+			local new_info_str = managers.localization:text("bm_menu_armor_max_health_store", {
+				amount = (amount * multiplier * tweak_data.gui.stats_present_multiplier),
+				amount_2 = recovery_bonus
+			})
+			
+			self._info_texts[2]:set_text(tostring(new_info_str))
+		end
+		
+		-- new anarchist
+		if managers.player:has_category_upgrade("player", "armor_grinding") then
+			local bm_armor_tweak = tweak_data.blackmarket.armors[slot_data.name]
+			local upgrade_level = bm_armor_tweak.upgrade_level
+			local new_info_str = managers.localization:text("bm_menu_anarchist_armor_desc", {
+				amount_1 = tweak_data.upgrades.values.player.armor_grinding[1][upgrade_level][1] * 10,
+				amount_2 = tweak_data.upgrades.values.player.armor_grinding[1][upgrade_level][2],
+				amount_3 = tweak_data.upgrades.values.player.damage_to_armor[1][upgrade_level][1] * 10,
+				amount_4 = tweak_data.upgrades.values.player.damage_to_armor[1][upgrade_level][2],
+			})
+			if slot_data.unlocked then -- prevent ICTV's skill requirement text from overlapping with new description if we dont have it unlocked
+				self._info_texts[2]:set_text(tostring(new_info_str))
+			end
+			
+			-- ui activation and positioning
+			local info_text = self._info_texts[2]
+			local _, _, _, th = info_text:text_rect()
+			info_text:set_h(th)
+			info_text:set_w(self._info_texts_panel:w())
+			info_text:set_font_size(tweak_data.menu.pd2_small_font_size)
+			if slot_data.comparision_data and alive(self._stats_text_modslist) then
+				info_text:set_world_y(self._stats_text_modslist:world_top())
+			end
+		end
+	end
+end)
+
+-- weapon sorting based on damage value
+Hooks:PreHook(BlackMarketGui, "populate_buy_weapon", "Gilza_BlackMarketGui_populate_buy_weapon_pre", function(self, data)
+	
+	-- 1 disable, 2 descend, 3 ascend
+	local order_preference = Gilza.settings.blackmarket_weapon_sorting or 1
+	
+	if order_preference > 1 and data.name ~= "wpn_special" then
+		local default_data_clone = deep_clone(data.on_create_data)
+		local new_data = {}
+		for i=1, #data.on_create_data do
+			local wpn_id = data.on_create_data[i].weapon_id
+			local dmg = 0
+			if tweak_data.weapon[wpn_id] then
+				dmg = tweak_data.weapon[wpn_id].stats.damage
+			end
+			new_data[dmg] = new_data[dmg] or {}
+			table.insert(new_data[dmg], wpn_id)
+		end
+		
+		local new_new_data = {}
+		local import_order = 1
+		local function sort_weapon_order()
+			local positions = 0
+			for ___, ____ in pairs(new_data) do
+				positions = positions + 1
+			end
+			
+			if order_preference == 2 then
+				for i = 1, positions do
+					local highest_dmg = 0
+					for dmg_type, weapons in pairs(new_data) do
+						if highest_dmg < dmg_type then
+							highest_dmg = dmg_type
+						end
+					end
+					new_new_data[import_order] = deep_clone(new_data[highest_dmg])
+					import_order = import_order + 1
+					new_data[highest_dmg] = nil
+				end
+			elseif order_preference == 3 then
+				for i = 1, positions do
+					local lowest_dmg = 999999
+					for dmg_type, weapons in pairs(new_data) do
+						if lowest_dmg > dmg_type then
+							lowest_dmg = dmg_type
+						end
+					end
+					new_new_data[import_order] = deep_clone(new_data[lowest_dmg])
+					import_order = import_order + 1
+					new_data[lowest_dmg] = nil
+				end
+			end
+		end
+		sort_weapon_order()
+		
+		local table_fill_id = 1
+		for order, weapons in ipairs(new_new_data) do
+			for _, weapon in pairs(weapons) do
+				local orig_item_spot = 0
+				for i=1, #default_data_clone do
+					if default_data_clone[i].weapon_id == weapon then
+						orig_item_spot = i
+					end
+				end
+				if orig_item_spot ~= 0 then
+					data.on_create_data[table_fill_id] = deep_clone(default_data_clone[orig_item_spot])
+					table_fill_id = table_fill_id + 1
+				end
+			end
+		end
+	end
+	
 end)

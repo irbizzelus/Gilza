@@ -1,4 +1,4 @@
--- healthpool updates and knockdown effect for grey swats
+-- healthpool updates and knockdown effect for grey/zeal swats
 
 local city_swat_hurts = {
 	tase = true,
@@ -269,35 +269,36 @@ local function Gilza_set_new_health(self)
 	self.fbi_heavy_swat.damage.hurt_severity = heavy_swat_hurts
 end
 
-Hooks:PostHook(CharacterTweakData, "_set_normal", "Gilza_set_health_normal", function(self)
+Hooks:PostHook(CharacterTweakData, "_set_normal", "Gilza_CharacterTweakData_set_health_normal", function(self)
 	Gilza_set_new_health(self)
 end)
 
-Hooks:PostHook(CharacterTweakData, "_set_hard", "Gilza_set_health_hard", function(self)
+Hooks:PostHook(CharacterTweakData, "_set_hard", "Gilza_CharacterTweakData_set_health_hard", function(self)
 	Gilza_set_new_health(self)
 end)
 
-Hooks:PostHook(CharacterTweakData, "_set_overkill", "Gilza_set_health_veryHard", function(self)
+Hooks:PostHook(CharacterTweakData, "_set_overkill", "Gilza_CharacterTweakData_set_health_veryHard", function(self)
 	Gilza_set_new_health(self)
 end)
 
-Hooks:PostHook(CharacterTweakData, "_set_overkill_145", "Gilza_set_health_OVERKILL", function(self)
+Hooks:PostHook(CharacterTweakData, "_set_overkill_145", "Gilza_CharacterTweakData_set_health_OVERKILL", function(self)
 	Gilza_set_new_health(self)
 end)
 
-Hooks:PostHook(CharacterTweakData, "_set_easy_wish", "Gilza_set_health_mayhem", function(self)
+Hooks:PostHook(CharacterTweakData, "_set_easy_wish", "Gilza_CharacterTweakData_set_health_mayhem", function(self)
 	Gilza_set_new_health(self)
 end)
 
-Hooks:PostHook(CharacterTweakData, "_set_overkill_290", "Gilza_set_health_deathWish", function(self)
+Hooks:PostHook(CharacterTweakData, "_set_overkill_290", "Gilza_CharacterTweakData_set_health_deathWish", function(self)
 	Gilza_set_new_health(self)
 end)
 
-Hooks:PostHook(CharacterTweakData, "_set_sm_wish", "Gilza_set_health_deathSentence", function(self)
+Hooks:PostHook(CharacterTweakData, "_set_sm_wish", "Gilza_CharacterTweakData_set_health_deathSentence", function(self)
 	Gilza_set_new_health(self)
+	-- 2x to keep in line with DS
 	self.tank.HEALTH_INIT = 2400
 	self.tank_medic.HEALTH_INIT = 2400
 	self.tank_mini.HEALTH_INIT = 4800
-	-- why are you here as well?
+	-- why are you this way as well?
 	self.marshal_marksman.HEALTH_INIT = 250
 end)

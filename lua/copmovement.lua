@@ -1,7 +1,4 @@
--- tracker for the new shotgun panic skill
--- basically any time cop enters the 'im shiting my pants right now' state we add him to our list, to give player bonuses if that cop is killed by the player
--- enemy is cleared from the list after 4.25 seconds (animation duration + ~1 extra second) and the list is constantly cleared to avoid duplications and other issues
-Hooks:PostHook(CopMovement, "action_request", "Gilza_panic_tracker" , function(self,action_desc)
+Hooks:PostHook(CopMovement, "action_request", "Gilza_CopMovement_action_request_post" , function(self,action_desc)
 	
 	-- still have 0 clue what this prevents, yet im using it :)
 	if self._unit:base().mic_is_being_moved then
@@ -16,6 +13,20 @@ Hooks:PostHook(CopMovement, "action_request", "Gilza_panic_tracker" , function(s
 		return
 	end
 	
+	-- clear hitman's bounty target if it's been alive for 40 secs after it was assigned
+	if managers.player:has_category_upgrade("temporary", "player_bounty_hunter") and managers.player._gilza_hitman_has_active_bounty then
+		if self._unit == managers.player._gilza_hitman_bounty_target then
+			local is_alive = alive(self._unit) and not self._unit:character_damage():dead()
+			local is_enemy = is_alive and self._unit:brain():is_hostile()
+			if not is_alive or not_enemy then
+				managers.player._gilza_hitman_bounty_cooldown_end = Application:time() + 40
+				managers.player._gilza_hitman_has_active_bounty = false
+				self._unit:contour():remove("generic_interactable_selected" , false)
+			end
+		end
+	end
+	
+	-- enemy hostage tracker for murderhobo stockholm skill
 	if managers.player:has_category_upgrade("player", "menace_panic_spread") then
 		if action_desc.variant == "tied" or action_desc.variant == "tied_all_in_one" then
 			if not Gilza.intimidated_enemies[self._unit:id()] then
@@ -31,6 +42,9 @@ Hooks:PostHook(CopMovement, "action_request", "Gilza_panic_tracker" , function(s
 	if not managers.player:has_category_upgrade("shotgun", "panic_when_kill") then
 		return
 	end
+	-- tracker for the new shotgun panic skill
+	-- basically any time cop enters the 'im shiting my pants right now' animation state we add him to our list, to give player bonuses if that cop is killed by the player
+	-- enemy is cleared from the list after 4.25 seconds (animation duration + ~1 extra second) and the list is constantly cleared to avoid duplications and other issues
 	
 	-- loops itself every 5 seconds to clear the list off of dead units/cops and cops who no longer are panicking
 	function Gilza.panickedEnemiesCleanUp()

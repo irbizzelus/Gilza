@@ -20,7 +20,7 @@ Hooks:PostHook(PlayerMovement, "on_morale_boost", "Gilza_PlayerMovement_inspire_
 	end
 end)
 -- P.S. this whole shabang has a bug, where after recieving a buff from someone else, you could theoretically keep the 20% bonus by just shouting at other players almost non-stop.
--- Even though this is not truly intentional, it's not that game breaking of a difference, plus it's way too easy to loose.
+-- Even though this is not truly intentional, it's not that game breaking of a difference, plus it's way too easy to lose.
 -- Fixing this would require a function override and dealing with callback id's, which wouldnt take that much effort, but lesser function overrides we have in the mod, the better.
 
 -- allow counterstrike skill to deal damage, cloaker's aced version
@@ -175,5 +175,105 @@ end)
 Hooks:PostHook(PlayerMovement, "on_SPOOCed", "Gilza_PlayerMovement_on_SPOOCed_2", function(self, enemy_unit)
 	if self._Gilza_WasCounterAttacking then
 		self._unit:movement():current_state():_interupt_action_melee(managers.player:player_timer():time())
+	end
+end)
+
+-- update underdog and it's version activation trigger to a) always check for enemies and b) check for enemies in general instead of those attacking the player
+Hooks:OverrideFunction(PlayerMovement, "_upd_underdog_skill", function (self, t)
+	local data = self._underdog_skill_data
+
+	if not data.has_dmg_dampener and not data.has_dmg_mul and not data.has_dmg_dampener_close or t < self._underdog_skill_data.chk_t or not managers.player:player_unit() then
+		return
+	end
+
+	local my_pos = self._m_pos
+	local max_guys_to_check = data.nr_enemies
+	local nr_guys = 0
+	local activated = nil
+	
+	-- check for enemies in radius of the player instead of checking for enemies that are currently hostile to player
+	local enemies = World:find_units_quick(self._unit, "sphere", my_pos, math.sqrt(data.max_dis_sq), managers.slot:get_mask("enemies"))
+	if not enemies or #enemies <= 0 then
+		return
+	end
+	
+	-- find all valid enemies within LOS
+	for i, enemy in pairs(enemies) do
+		local function is_enemy_enemy()
+			if not enemy or not self._unit or not self._unit:movement() or not enemy:movement() or not self._unit:movement():team() or not enemy:movement():team() then
+				return false
+			end
+			if enemy:brain()._current_logic_name == "trade" then
+				return false
+			end
+			return self._unit:movement():team().foes[enemy:movement():team().id] and true or false
+		end
+		
+		if alive(enemy) and is_enemy_enemy() then
+			
+			local attacker_pos = enemy:movement():m_pos()
+			local dis_sq = mvector3.distance_sq(attacker_pos, my_pos)
+			local camera_pos = managers.player:player_unit():camera():position()
+			local LOS_ray = World:raycast("ray", Vector3(camera_pos.x, camera_pos.y, camera_pos.z), Vector3(attacker_pos.x, attacker_pos.y, attacker_pos.z+80), "slot_mask", managers.slot:get_mask("bullet_impact_targets"))
+			local is_LOS_clear = false
+			if LOS_ray and LOS_ray.unit and LOS_ray.unit == enemy then
+				is_LOS_clear = true
+			end
+			
+			if dis_sq < data.max_dis_sq and math.abs(attacker_pos.z - my_pos.z) < data.max_vert_dis and is_LOS_clear then
+				nr_guys = nr_guys + 1
+
+				if max_guys_to_check <= nr_guys then
+					break
+				end
+			end
+			
+		end
+	end
+	
+	if data.nr_enemies <= nr_guys then
+		activated = true
+
+		if data.has_dmg_mul then
+			managers.player:activate_temporary_upgrade("temporary", "dmg_multiplier_outnumbered")
+		end
+
+		if data.has_dmg_dampener then
+			managers.player:activate_temporary_upgrade("temporary", "dmg_dampener_outnumbered")
+			managers.player:activate_temporary_upgrade("temporary", "dmg_dampener_outnumbered_strong")
+		end
+	end
+
+	if data.has_dmg_dampener_close and nr_guys >= 1 then
+		managers.player:activate_temporary_upgrade("temporary", "dmg_dampener_close_contact")
+	end
+
+	data.chk_t = t + (activated and 0.1 or 0.1) -- change both re-activation timer check and inactivity timer to 0.1 seconds to make this skill update more often
+end)
+
+-- inspire range increase if we have crew chief skill
+Hooks:PostHook(PlayerMovement, "init", "Gilza_PlayerMovement_post_init", function(self, unit)
+	if managers.player:has_category_upgrade("player", "morale_boost") or managers.player:has_category_upgrade("cooldown", "long_dis_revive") and managers.player:has_category_upgrade("player", "passive_inspire_range_mul") then
+		local inspire_range = 900 * managers.player:upgrade_value("player", "passive_inspire_range_mul", 1)
+		self._rally_skill_data.range_sq = inspire_range * inspire_range
+	end
+end)
+
+-- update our own attention bonuses to exclude brawler from getting positive values from other skills. this is used if we are the host, for client stuff go to basenetworksession
+Hooks:OverrideFunction(PlayerMovement, "_apply_attention_setting_modifications", function (self, setting)
+	setting.detection = self._unit:base():detection_settings()
+	
+	if not (managers.player:has_category_upgrade("player", "damage_resist_brawler") and managers.player:has_category_upgrade("player", "uncover_multiplier")) then
+		if managers.player:has_category_upgrade("player", "camouflage_bonus") then
+			setting.weight_mul = (setting.weight_mul or 1) * managers.player:upgrade_value("player", "camouflage_bonus", 1)
+		end
+
+		if managers.player:has_category_upgrade("player", "camouflage_multiplier") then
+			setting.weight_mul = (setting.weight_mul or 1) * managers.player:upgrade_value("player", "camouflage_multiplier", 1)
+		end
+	end
+
+	if managers.player:has_category_upgrade("player", "uncover_multiplier") then
+		setting.weight_mul = (setting.weight_mul or 1) * managers.player:upgrade_value("player", "uncover_multiplier", 1)
 	end
 end)

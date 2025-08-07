@@ -8,7 +8,7 @@ end)
 -- Completely removes camera recoil compensation for shotguns, semi-auto weapons, and if recoil is high.
 -- Keep compensation if total recoil is not that high, or we fired a 3 or less round burst that doesnt have high recoil
 Hooks:PostHook(FPCameraPlayerBase, "stop_shooting", "GilzaCameraRecoil_stop", function(self, ...)
-	if (self._Gilza_shot_counter <= 3 and self._recoil_kick.accumulated <= 1.75) or self._recoil_kick.accumulated <= 1.5 then
+	if (self._Gilza_shot_counter <= 3 and self._recoil_kick.accumulated <= 1.25) or self._recoil_kick.accumulated <= 1 then
 		self._recoil_kick.to_reduce = self._recoil_kick.accumulated
 		self._recoil_kick.h.to_reduce = self._recoil_kick.h.accumulated
 	else
@@ -31,14 +31,6 @@ Hooks:PostHook(FPCameraPlayerBase, "stop_shooting", "GilzaCameraRecoil_stop", fu
 				return false
 			end
 		end
-		if wpn_base:is_category("assault_rifle") then
-			-- this weapon can only be single fire, so we treat it like a sniper rifle in terms of recoil compensation
-			if wpn_base._name_id == "ching" then
-				return true
-			else
-				return false
-			end
-		end
 		return false
 	end
 	if should_remove_compensation() then
@@ -47,6 +39,7 @@ Hooks:PostHook(FPCameraPlayerBase, "stop_shooting", "GilzaCameraRecoil_stop", fu
 	end
 end)
 
+-- imrpoved recoil for first few bullets fired
 Hooks:OverrideFunction(FPCameraPlayerBase, "recoil_kick", function (self, up, down, left, right)
 	-- shot counter
 	self._Gilza_shot_counter = self._Gilza_shot_counter + 1
@@ -68,19 +61,31 @@ Hooks:OverrideFunction(FPCameraPlayerBase, "recoil_kick", function (self, up, do
 		end
 		return true
 	end
-	-- if allowed, first 5 bullets have reduced recoil
+	-- if allowed, first 5-8 bullets have reduced recoil
 	-- this makes short 1-3 round burst feel like they have almost no recoil
 	if does_weapon_qualify() then
-		if self._Gilza_shot_counter == 5 then
-			mul = 0.92 * managers.player:upgrade_value("player", "less_start_recoil", 1)
-		elseif self._Gilza_shot_counter == 4 then
-			mul = 0.86 * managers.player:upgrade_value("player", "less_start_recoil", 1)
-		elseif self._Gilza_shot_counter == 3 then
-			mul = 0.78 * managers.player:upgrade_value("player", "less_start_recoil", 1)
-		elseif self._Gilza_shot_counter == 2 then
-			mul = 0.7 * managers.player:upgrade_value("player", "less_start_recoil", 1)
-		elseif self._Gilza_shot_counter == 1 then
-			mul = 0.62 * managers.player:upgrade_value("player", "less_start_recoil", 1)
+		-- first shot has highest reduction (aka better recoil), going lower and lower for further shots
+		local shot_based_mul = {
+			0.62,
+			0.7,
+			0.78,
+			0.86,
+			0.92,
+		}
+		if managers.player:has_category_upgrade("player", "less_start_recoil_for_longer") then
+			shot_based_mul = {
+				0.62,
+				0.66,
+				0.7,
+				0.75,
+				0.8,
+				0.85,
+				0.9,
+				0.95,
+			}
+		end
+		if self._Gilza_shot_counter <= 5 or (self._Gilza_shot_counter <= 8 and managers.player:has_category_upgrade("player", "less_start_recoil_for_longer")) then
+			mul = shot_based_mul[self._Gilza_shot_counter] * managers.player:upgrade_value("player", "less_start_recoil", 1)
 		end
 	end
 	

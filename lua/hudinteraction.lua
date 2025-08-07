@@ -1,3 +1,8 @@
+-- this file is used to set up new melee UI
+if not Gilza then
+	dofile("mods/Gilza/lua/1_GilzaBase.lua")
+end
+
 local function create_OutlinedText_class()
 	OutlinedText = OutlinedText or class()
 
@@ -200,9 +205,9 @@ Hooks:OverrideFunction(HUDInteraction, "show_interaction_bar", function (self, c
 			
 			min_dmg = min_dmg * dmg_multiplier
 			
-			local text = string.format("%.1f%%", min_dmg*10)
+			local text = string.format("%.0f%%", min_dmg*10)
 			if managers.player:player_unit():movement()._state_data.chainsaw_t then
-				text = string.format("%.1f%% DPS", min_dmg*10)
+				text = string.format("%.0f%% DPS", min_dmg*10)
 			end
 			self._Gilza_melee_damage:set_y(self._hud_panel:center_y() + self._circle_radius - (1.5 * self._Gilza_melee_damage:font_size()))
 			self._Gilza_melee_damage:set_text(text)
@@ -269,30 +274,31 @@ Hooks:OverrideFunction(HUDInteraction, "set_interaction_bar_width", function (se
 
 			cur_dmg = cur_dmg * dmg_multiplier
 			
-			local text = string.format("%.1f%%", math.max(cur_dmg*10, 0))
-			local show = cur_charge_percent < 1
+			local text = string.format("%.0f%%", math.max(cur_dmg*10, 0))
 			if managers.player:player_unit():movement()._state_data.chainsaw_t then
-				text = string.format("%.1f%% DPS", cur_dmg*10)
-				show = true
+				text = string.format("%.0f%% DPS", cur_dmg*10)
+			end
+			if cur_charge_percent >= 1 then
+				self.hide_interaction_bar(self)
 			end
 			self._Gilza_melee_damage:set_text(text)
 			self._Gilza_melee_damage:set_color(Color(1, 1, 1, 1))
 			self._Gilza_melee_damage:set_alpha(1)
-			self._Gilza_melee_damage:set_visible(show)
+			self._Gilza_melee_damage:set_visible(true)
 		end
 	else
 		orig_set_interaction_bar_width(self, current, total)
 	end
 end)
 
-Hooks:PostHook(HUDInteraction, "hide_interaction_bar", "Gilza_HUDInteraction_hide_interaction_bar_GUI", function(self, ...)
+Hooks:PostHook(HUDInteraction, "hide_interaction_bar", "Gilza_HUDInteraction_hide_interaction_bar_GUI_post", function(self, ...)
 	if self._Gilza_melee_damage then
 		self._Gilza_melee_damage:set_text("")
 		self._Gilza_melee_damage:set_visible(false)
 	end
 end)
 
-Hooks:PostHook(HUDInteraction, "destroy", "Gilza_HUDInteraction_destroy_GUI", function(self, ...)
+Hooks:PostHook(HUDInteraction, "destroy", "Gilza_HUDInteraction_destroy_GUI_post", function(self, ...)
 	if self._Gilza_melee_damage and self._hud_panel then
 		self._Gilza_melee_damage:remove()
 		self._Gilza_melee_damage = nil

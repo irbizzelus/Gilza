@@ -10,24 +10,15 @@ function SawWeaponBase:ammo_info()
 	return self:get_ammo_max_per_clip(), self:get_ammo_remaining_in_clip(), self:get_ammo_total(), self:get_ammo_max()
 end]]
 
--- reduced extra damage to dozers @19, increased damage towards everyone @22-24;
--- damage stats need to stay the same for the open locks sync code to work properly. also this way is easier
+-- reduced saw damage against locker units to compensate saw's weapon damage increase; removed dozer DPS buff for the same reason
 Hooks:OverrideFunction(SawHit, "on_collision", function (self, col_ray, weapon_unit, user_unit, damage)
 	local hit_unit = col_ray.unit
 	local base_ext = hit_unit:base() 
-
-	-- if base_ext and base_ext.has_tag and base_ext:has_tag("tank") then
-		-- damage = damage + 10
-	-- end
-
-	if hit_unit and hit_unit:character_damage() then
-		damage = damage * 10
-	end
-
+	
 	local result = InstantBulletBase.on_collision(self, col_ray, weapon_unit, user_unit, damage)
 
 	if hit_unit:damage() and col_ray.body:extension() and col_ray.body:extension().damage then
-		damage = math.clamp((damage/2) * managers.player:upgrade_value("saw", "lock_damage_multiplier", 1) * 4, 0, 200)
+		damage = math.clamp((damage/10) * managers.player:upgrade_value("saw", "lock_damage_multiplier", 1) * 4, 0, 200)
 
 		col_ray.body:extension().damage:damage_lock(user_unit, col_ray.normal, col_ray.position, col_ray.direction, damage)
 
@@ -39,7 +30,7 @@ Hooks:OverrideFunction(SawHit, "on_collision", function (self, col_ray, weapon_u
 	return result
 end)
 
--- make ammo use not retardo-random
+-- removed ammo consumption RNG
 Hooks:OverrideFunction(SawWeaponBase, "fire", function (self, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit)
 	if self:get_ammo_remaining_in_clip() == 0 then
 		return
@@ -126,7 +117,7 @@ local function ray_copy(table, ray)
 	end
 end
 
--- more saw range @139
+-- more saw range
 Hooks:OverrideFunction(SawWeaponBase, "_fire_raycast", function (self, user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul)
 	local result = {}
 	local hit_unit = nil

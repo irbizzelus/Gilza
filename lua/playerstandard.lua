@@ -3,106 +3,78 @@ if not Gilza then
 end
 
 -- new faster melee charge skill
+local gilza_orig_get_melee_charge_lerp_value = PlayerStandard._get_melee_charge_lerp_value
 Hooks:OverrideFunction(PlayerStandard, "_get_melee_charge_lerp_value", function (self, t, offset)
-	offset = offset or 0
-	local melee_entry = managers.blackmarket:equipped_melee_weapon()
-	local max_charge_time = tweak_data.blackmarket.melee_weapons[melee_entry].stats.charge_time
-
-	if not self._state_data.melee_start_t then
-		return 0
-	end
-
-	local original_result = math.clamp(t - self._state_data.melee_start_t - offset, 0, max_charge_time) / max_charge_time
-	return math.clamp(original_result / managers.player:upgrade_value("player", "melee_faster_charge", 1), 0, 1)
+	local res = gilza_orig_get_melee_charge_lerp_value(self, t, offset)
+	return math.clamp(res / managers.player:upgrade_value("player", "melee_faster_charge", 1), 0, 1)
 end)
 
--- sprint while melee'ing @38-51, @77-93
+-- if sprint button is pressed while melee'ing, allow for sprint if skill is equipped.
+local gilza_orig_start_action_running = PlayerStandard._start_action_running
 Hooks:OverrideFunction(PlayerStandard, "_start_action_running", function (self, t)
-	if not self._move_dir then
-		self._running_wanted = true
-
-		return
-	end
-
-	if self:on_ladder() or self:_on_zipline() then
-		return
-	end
-
-	if self._shooting and not self._equipped_unit:base():run_and_shoot_allowed() or self._use_item_expire_t or self._state_data.in_air or self:_is_throwing_projectile() or self:_is_charging_weapon() or self:_changing_weapon() then
-		self._running_wanted = true
-
-		return
-	end
-	
-	
-	if self:_is_meleeing() then -- moved melee check from block above for ease of access
-		if not managers.player:has_category_upgrade("player", "melee_sprint") then -- just like base game
-			self._running_wanted = true
-			return
-		else
-			-- if we have skill dont reset sprint
-		end
-	end
-
-	if self._state_data.ducking and not self:_can_stand() then
-		self._running_wanted = true
-
-		return
-	end
-
-	if not self:_can_run_directional() then
-		return
-	end
-
-	self._running_wanted = false
-
-	if managers.player:get_player_rule("no_run") then
-		return
-	end
-
-	if not self._unit:movement():is_above_stamina_threshold() then
-		return
-	end
-
-	if (not self._state_data.shake_player_start_running or not self._ext_camera:shaker():is_playing(self._state_data.shake_player_start_running)) and self._setting_use_headbob then
-		self._state_data.shake_player_start_running = self._ext_camera:play_shaker("player_start_running", 0.75)
-	end
-
-	self:set_running(true)
-
-	self._end_running_expire_t = nil
-	self._start_running_t = t
-	self._play_stop_running_anim = nil
-	
+	gilza_orig_start_action_running(self, t)
 	if managers.player:has_category_upgrade("player", "melee_sprint") then
-		if (not self:_is_reloading() or not self.RUN_AND_RELOAD) and not self:_is_meleeing() then
-			if not self._equipped_unit:base():run_and_shoot_allowed() then
-				self._ext_camera:play_redirect(self:get_animation("start_running"))
-			else
-				self._ext_camera:play_redirect(self:get_animation("idle"))
+		if self:_is_meleeing() then
+			if self._running then
+				self._running_wanted = false -- on another button press stop sprinting
 			end
-		end
-	else
-		if not self:_is_reloading() or not self.RUN_AND_RELOAD then
-			if not self._equipped_unit:base():run_and_shoot_allowed() then
-				self._ext_camera:play_redirect(self:get_animation("start_running"))
-			else
-				self._ext_camera:play_redirect(self:get_animation("idle"))
-			end
+			self:set_running(true)
+			self._end_running_expire_t = nil
+			self._start_running_t = t
+			self._play_stop_running_anim = nil
+			self:_interupt_action_ducking(t)
 		end
 	end
-
-	if not self.RUN_AND_RELOAD then
-		self:_interupt_action_reload(t)
-	end
-
-	self:_interupt_action_steelsight(t)
-	self:_interupt_action_ducking(t)
-
-	--self:_stance_entered()
 end)
 
--- fixes sprint reseting when starting melee charge with sprint skill @110 and adds chainsaw stuff @172
+-- fix sprinting animation with new melee sprint skill. these checks are a fucking mess, but this is the only way i can fucking read them
+Hooks:PostHook(PlayerStandard, "update", "Gilza_posthook_PlayerStandard_update", function(self, t, dt)
+	if managers.player:has_category_upgrade("player", "melee_sprint") then
+		if self._running then
+			if not self:_is_meleeing() and not self._in_melee_skill_sprint_animation then
+				if not self._equipped_unit:base():run_and_shoot_allowed() and not self._end_running_expire_t then
+					self._ext_camera:play_redirect(self:get_animation("start_running"))
+				end
+				self._in_melee_skill_sprint_animation = true
+			end
+		else
+			self._in_melee_skill_sprint_animation = false
+		end
+	end
+	
+	-- infohud ui
+	local pl_unit = self._unit
+	if pl_unit and alive(pl_unit) and pl_unit:movement() then
+		-- dodge
+		local dodge_value = tweak_data.player.damage.DODGE_INIT or 0
+		local armor_dodge_chance = managers.player:body_armor_value("dodge")
+		local skill_dodge_chance = managers.player:skill_dodge_chance(pl_unit:movement():running(), pl_unit:movement():crouching(), pl_unit:movement():zipline_unit())
+		dodge_value = dodge_value + armor_dodge_chance + skill_dodge_chance
+		local pl_dmg = pl_unit:character_damage()
+		if pl_dmg._temporary_dodge_t and TimerManager:game():time() < pl_dmg._temporary_dodge_t then
+			dodge_value = dodge_value + pl_dmg._temporary_dodge
+		end
+		local smoke_dodge = 0
+		for _, smoke_screen in ipairs(managers.player._smoke_screen_effects or {}) do
+			if smoke_screen:is_in_smoke(pl_unit) then
+				smoke_dodge = tweak_data.projectiles.smoke_screen_grenade.dodge_chance
+				break
+			end
+		end
+		dodge_value = 1 - (1 - dodge_value) * (1 - smoke_dodge)
+		Gilza.NSI:dodge_value_tracker(dodge_value)
+		
+		-- dmg resist
+		Gilza.NSI:update_current_passive_dmg_resist(managers.player:damage_reduction_skill_multiplier())
+		
+		-- dmg absorb
+		Gilza.NSI:update_current_dmg_absorb(managers.player:damage_absorption())
+	else
+		log("[Gilza] playerstandard:update cant report on current dodge/dmg resist/etc for infohuds")
+	end
+end)
+
+-- prevent sprint interupt when starting a melee charge with sprint skill. also adds chainsaw stuff
 Hooks:OverrideFunction(PlayerStandard, "_start_action_melee", function (self, t, input, instant)
 	self._equipped_unit:base():tweak_data_anim_stop("fire")
 	self:_interupt_action_reload(t)
@@ -172,72 +144,43 @@ Hooks:OverrideFunction(PlayerStandard, "_start_action_melee", function (self, t,
 	if tweak_data.blackmarket.melee_weapons[melee_entry].chainsaw == true then
 		self._state_data.chainsaw_t = t + (tweak_data.blackmarket.melee_weapons[melee_entry].chainsaw_delay or 0.8)
 	end
+	self._in_melee_skill_sprint_animation = false -- needed for sprint animation handling
 end)
 
--- fixes sprint stop animations while melee'ing @184-198
+-- fixes sprint stop animations while melee'ing
+local gilza_orig_end_action_running = PlayerStandard._end_action_running
 Hooks:OverrideFunction(PlayerStandard, "_end_action_running", function (self, t)
-	if not self._end_running_expire_t then
-		local speed_multiplier = self._equipped_unit:base():exit_run_speed_multiplier()
-		self._end_running_expire_t = t + 0.4 / speed_multiplier
-		local stop_running = not self._equipped_unit:base():run_and_shoot_allowed() and (not self.RUN_AND_RELOAD or not self:_is_reloading())
+	if managers.player:has_category_upgrade("player", "melee_sprint") and self:_is_meleeing() then
+		if not self._end_running_expire_t then
+			local speed_multiplier = self._equipped_unit:base():exit_run_speed_multiplier()
+			self._end_running_expire_t = t + 0.4 / speed_multiplier
+			local stop_running = not self._equipped_unit:base():run_and_shoot_allowed() and (not self.RUN_AND_RELOAD or not self:_is_reloading())
 
-		if not managers.player:has_category_upgrade("player", "melee_sprint") then 
-			if stop_running then
-				self._ext_camera:play_redirect(self:get_animation("stop_running"), speed_multiplier)
-			end
-		elseif self:_is_meleeing() then
 			if stop_running then
 				--charging weapon: doing melee anims
 				self._ext_camera:play_redirect(self:get_animation("melee_exit_state"), speed_multiplier)
 			end
-		else
-			if stop_running then
-				--not charging weapon: doing standard stuff
-				self._ext_camera:play_redirect(self:get_animation("stop_running"), speed_multiplier)
-			end
 		end
+	else
+		gilza_orig_end_action_running(self, t)
 	end
 end)
 
--- fixes melee sprint jump animations @206-216
+-- fixes melee sprint jump animations. i think
+local gilza_orig_start_action_jump = PlayerStandard._start_action_jump
 Hooks:OverrideFunction(PlayerStandard, "_start_action_jump", function (self, t, action_start_data)
-	if self._running and self:_is_reloading() and not self.RUN_AND_RELOAD and not self._equipped_unit:base():run_and_shoot_allowed() then
-		self:_interupt_action_reload(t)
-		if not managers.player:has_category_upgrade("player", "melee_sprint") then 
-			self._ext_camera:play_redirect(self:get_animation("stop_running"), self._equipped_unit:base():exit_run_speed_multiplier())
-		else
-			if self:_is_meleeing() then
-				--charging melee: no anim reset
-				self._ext_camera:play_redirect(self:get_animation("melee_exit_state"), speed_multiplier)
-			else
-				--standard stuff
-				self._ext_camera:play_redirect(self:get_animation("stop_running"), self._equipped_unit:base():exit_run_speed_multiplier())
-			end
-		end
-	end
-
-	self:_interupt_action_running(t)
-
-	self._jump_t = t
-	local jump_vec = action_start_data.jump_vel_z * math.UP
-
-	self._unit:mover():jump()
-
-	if self._move_dir then
-		local move_dir_clamp = self._move_dir:normalized() * math.min(1, self._move_dir:length())
-		self._last_velocity_xy = move_dir_clamp * action_start_data.jump_vel_xy
-		self._jump_vel_xy = mvector3.copy(self._last_velocity_xy)
+	if managers.player:has_category_upgrade("player", "melee_sprint") and self:_is_meleeing() then
+		self._ext_camera:play_redirect(self:get_animation("melee_exit_state"), speed_multiplier)
+		gilza_orig_start_action_jump(self, t, action_start_data)
 	else
-		self._last_velocity_xy = Vector3()
+		gilza_orig_start_action_jump(self, t, action_start_data)
 	end
-
-	self:_perform_jump(jump_vec)
 end)
 
 -- chainsaw check
-local old_cam = PlayerStandard._check_action_melee
+local gilza_orig_check_action_melee = PlayerStandard._check_action_melee
 Hooks:OverrideFunction(PlayerStandard, "_check_action_melee", function (self, t, input)
-	local cam = old_cam(self, t, input)
+	local cam = gilza_orig_check_action_melee(self, t, input)
 	if input.btn_melee_release then
 		self._state_data.chainsaw_t = nil
 	end
@@ -411,20 +354,20 @@ function PlayerStandard:_do_chainsaw_damage(t)
 end
 
 -- chainsaw check #2
-local old_meleetimers = PlayerStandard._update_melee_timers
+local gilza_orig_update_melee_timers = PlayerStandard._update_melee_timers
 Hooks:OverrideFunction(PlayerStandard, "_update_melee_timers", function (self, t, input)
 	-- CHAINSAW
 	if tweak_data.blackmarket.melee_weapons[managers.blackmarket:equipped_melee_weapon()].chainsaw == true and self._state_data.chainsaw_t and self._state_data.chainsaw_t < t then
 		self:_do_chainsaw_damage(t)
 		self._state_data.chainsaw_t = t + 0.2
 	end
-	old_meleetimers(self, t, input)
+	gilza_orig_update_melee_timers(self, t, input)
 end)
 
 -- disable chainsaw when interrupted
-local old_interrupt = PlayerStandard._interupt_action_melee
+local gilza_orig_interupt_action_melee = PlayerStandard._interupt_action_melee
 Hooks:OverrideFunction(PlayerStandard, "_interupt_action_melee", function (self, t)
-	old_interrupt(self, t)
+	gilza_orig_interupt_action_melee(self, t)
 	self._state_data.chainsaw_t = nil
 
 	local speed_multiplier = self:_get_swap_speed_multiplier()
@@ -436,7 +379,7 @@ Hooks:OverrideFunction(PlayerStandard, "_interupt_action_melee", function (self,
 	self._equipped_unit:base():tweak_data_anim_play("equip", speed_multiplier)
 end)
 
--- new akimbo swap speed bonus @683-700
+-- new akimbo swap speed bonus
 Hooks:OverrideFunction(PlayerStandard, "_get_swap_speed_multiplier", function (self)
 	local multiplier = 1
 	local weapon_tweak_data = self._equipped_unit:base():weapon_tweak_data()
@@ -494,7 +437,7 @@ if Gilza.BTAW_enabled then
 end
 
 -- if we are boosting another player with basic inspire, we get it ourselves as well
-Hooks:PreHook(PlayerStandard, "_get_intimidation_action", "Gilza_PlayerStandard_new_inspire", function(self, prime_target, char_table, amount, primary_only, detect_only, secondary)
+Hooks:PreHook(PlayerStandard, "_get_intimidation_action", "Gilza_PlayerStandard_get_intimidation_action", function(self, prime_target, char_table, amount, primary_only, detect_only, secondary)
 	local mvec3_dis_sq = mvector3.distance_sq
 	if prime_target and prime_target.unit_type == 2 then
 		
@@ -571,16 +514,13 @@ end)
 
 -- melee gui 3
 Hooks:PostHook(PlayerStandard, "_update_melee_timers", "Gilza_PlayerStandard_update_melee_timers_GUI", function(self, t, input)
-	if true and self._state_data.meleeing and self._state_data._Gilza_showing_melee then
+	if self._state_data.meleeing and self._state_data._Gilza_showing_melee then
 		local melee_lerp = self:_get_melee_charge_lerp_value(t)
 		if hide_int_state[managers.player:current_state()] then
 			managers.hud:hide_interaction_bar()
 			self._state_data._Gilza_showing_melee = false
-		elseif melee_lerp < 1 or self._state_data.chainsaw_t then
+		elseif self._state_data._Gilza_showing_melee or self._state_data.chainsaw_t then
 			managers.hud:set_interaction_bar_width(self._state_data._Gilza_melee_charge_duration * melee_lerp, self._state_data._Gilza_melee_charge_duration)
-		elseif self._state_data._Gilza_showing_melee then
-			managers.hud:hide_interaction_bar()
-			self._state_data._Gilza_showing_melee = false
 		end
 	end
 end)

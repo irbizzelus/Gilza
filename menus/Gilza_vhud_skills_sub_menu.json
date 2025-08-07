@@ -1,0 +1,222 @@
+{
+	"menu_id": "Gilza_vhud_skills_sub_menu",
+	"parent_menu_id": "Gilza_menu",
+	"title": "Gilza_vhud_skills_sub_menu",
+	"description": "Gilza_vhud_skills_sub_menu_desc",
+	"back_callback": "Gilza_save",
+	"items":
+	[
+		{
+			"type" : "divider",
+			"size" : 22
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_vhud_general_header",
+			"title" : "Gilza_vhud_general_header",
+			"description" : "Gilza_vhud_general_header_desc",
+			"callback" : "Gilza_donothing"
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_total_dmg_resist",
+			"title" : "Gilza_vhud_compat_total_dmg_resist",
+			"description" : "Gilza_vhud_compat_total_dmg_resist_desc",
+			"callback" : "Gilza_vhud_compat_total_dmg_resist",
+			"value" : "vhud_compat_total_dmg_resist",
+			"default_value" : true
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_total_dmg_absorb",
+			"title" : "Gilza_vhud_compat_total_dmg_absorb",
+			"description" : "Gilza_vhud_compat_total_dmg_absorb_desc",
+			"callback" : "Gilza_vhud_compat_total_dmg_absorb",
+			"value" : "vhud_compat_total_dmg_absorb",
+			"default_value" : true
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_total_dodge",
+			"title" : "Gilza_vhud_compat_total_dodge",
+			"description" : "Gilza_vhud_compat_total_dodge_desc",
+			"callback" : "Gilza_vhud_compat_total_dodge",
+			"value" : "vhud_compat_total_dodge",
+			"default_value" : true
+		},
+		{
+			"type" : "divider",
+			"size" : 8
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_vhud_mastermind_header",
+			"title" : "Gilza_vhud_mastermind_header",
+			"description" : "Gilza_blank",
+			"callback" : "Gilza_donothing"
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_stockholm_menace",
+			"title" : "Gilza_vhud_compat_stockholm_menace",
+			"description" : "Gilza_vhud_compat_stockholm_menace_desc",
+			"callback" : "Gilza_vhud_compat_stockholm_menace",
+			"value" : "vhud_compat_stockholm_menace",
+			"default_value" : true
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_body_economy",
+			"title" : "Gilza_vhud_compat_body_economy",
+			"description" : "Gilza_vhud_compat_body_economy_desc",
+			"callback" : "Gilza_vhud_compat_body_economy",
+			"value" : "vhud_compat_body_economy",
+			"default_value" : true
+		},
+		{
+			"type" : "divider",
+			"size" : 8
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_vhud_enforcer_header",
+			"title" : "Gilza_vhud_enforcer_header",
+			"description" : "Gilza_blank",
+			"callback" : "Gilza_donothing"
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_fearmonger_speed",
+			"title" : "Gilza_vhud_compat_fearmonger_speed",
+			"description" : "Gilza_vhud_compat_fearmonger_speed_desc",
+			"callback" : "Gilza_vhud_compat_fearmonger_speed",
+			"value" : "vhud_compat_fearmonger_speed",
+			"default_value" : true
+		},
+		{
+			"type" : "divider",
+			"size" : 8
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_vhud_technician_header",
+			"title" : "Gilza_vhud_technician_header",
+			"description" : "Gilza_blank",
+			"callback" : "Gilza_donothing"
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_new_lock_n_load",
+			"title" : "Gilza_vhud_compat_new_lock_n_load",
+			"description" : "Gilza_vhud_compat_new_lock_n_load_desc",
+			"callback" : "Gilza_vhud_compat_new_lock_n_load",
+			"value" : "vhud_compat_new_lock_n_load",
+			"default_value" : true
+		},
+		{
+			"type" : "divider",
+			"size" : 8
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_vhud_ghost_header",
+			"title" : "Gilza_vhud_ghost_header",
+			"description" : "Gilza_blank",
+			"callback" : "Gilza_donothing"
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_dire_need_override",
+			"title" : "Gilza_vhud_compat_dire_need_override",
+			"description" : "Gilza_vhud_compat_dire_need_override_desc",
+			"callback" : "Gilza_vhud_compat_dire_need_override",
+			"value" : "vhud_compat_dire_need_override",
+			"default_value" : false
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_electric_bullets",
+			"title" : "Gilza_vhud_compat_electric_bullets",
+			"description" : "Gilza_vhud_compat_electric_bullets_desc",
+			"callback" : "Gilza_vhud_compat_electric_bullets",
+			"value" : "vhud_compat_electric_bullets",
+			"default_value" : true
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_revitalized",
+			"title" : "Gilza_vhud_compat_revitalized",
+			"description" : "Gilza_vhud_compat_revitalized_desc",
+			"callback" : "Gilza_vhud_compat_revitalized",
+			"value" : "vhud_compat_revitalized",
+			"default_value" : true
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_unseen_strike_override",
+			"title" : "Gilza_vhud_compat_unseen_strike_override",
+			"description" : "Gilza_vhud_compat_unseen_strike_override_desc",
+			"callback" : "Gilza_vhud_compat_unseen_strike_override",
+			"value" : "vhud_compat_unseen_strike_override",
+			"default_value" : true
+		},
+		{
+			"type" : "divider",
+			"size" : 8
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_vhud_fugitive_header",
+			"title" : "Gilza_vhud_fugitive_header",
+			"description" : "Gilza_blank",
+			"callback" : "Gilza_donothing"
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_new_trigger_happy",
+			"title" : "Gilza_vhud_compat_new_trigger_happy",
+			"description" : "Gilza_vhud_compat_new_trigger_happy_desc",
+			"callback" : "Gilza_vhud_compat_new_trigger_happy",
+			"value" : "vhud_compat_new_trigger_happy",
+			"default_value" : true
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_new_melee_zerk",
+			"title" : "Gilza_vhud_compat_new_melee_zerk",
+			"description" : "Gilza_vhud_compat_new_melee_zerk_desc",
+			"callback" : "Gilza_vhud_compat_new_melee_zerk",
+			"value" : "vhud_compat_new_melee_zerk",
+			"default_value" : false
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_new_weapon_zerk",
+			"title" : "Gilza_vhud_compat_new_weapon_zerk",
+			"description" : "Gilza_vhud_compat_new_weapon_zerk_desc",
+			"callback" : "Gilza_vhud_compat_new_weapon_zerk",
+			"value" : "vhud_compat_new_weapon_zerk",
+			"default_value" : true
+		},
+		{
+			"type" : "divider",
+			"size" : 8
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_vhud_perks_header",
+			"title" : "Gilza_vhud_perks_header",
+			"description" : "Gilza_blank",
+			"callback" : "Gilza_donothing"
+		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_new_hitman_recovery",
+			"title" : "Gilza_vhud_compat_new_hitman_recovery",
+			"description" : "Gilza_vhud_compat_new_hitman_recovery_desc",
+			"callback" : "Gilza_vhud_compat_new_hitman_recovery",
+			"value" : "vhud_compat_new_hitman_recovery",
+			"default_value" : true
+		},
+	]
+}

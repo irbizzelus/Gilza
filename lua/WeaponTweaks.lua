@@ -2,7 +2,7 @@ if not Gilza then
 	dofile("mods/Gilza/lua/1_GilzaBase.lua")
 end
 
-Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_NewWeaponRecoilBaseStats", function(self)
+Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_post_WeaponTweakData_init_stats", function(self)
 	-- default recoil multiplier. in vanilla it goes from 3 to 0.5, practically allowing you to improve recoil by a magnitude of 6x with recoil adjusting attachments/skills
 	-- with new values maximum magnitude we will have is 3x. this makes weapons feel more unique because weapon's basic recoil is more important then what you can do with attachments/skills
 	self.stats.recoil = {
@@ -33,9 +33,295 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_NewWeaponRecoilBaseStats",
 		0.58,
 		0.54
 	}
+	
+	Gilza.Weapons_module = {}
+	
+	-- ammo pick up formula
+	function Gilza.Weapons_module:get_ammo_pickup(weapon_damage, expected_accuracy, diff_modifier)
+		if not weapon_damage then
+			return 0
+		end
+		local acc = expected_accuracy or 0.3
+		local diff = diff_modifier or 0.65
+		-- light swat and heavy swat health pool based vars
+		return (((math.ceil(250/weapon_damage) + math.ceil(450/weapon_damage)) / acc) / 2) * diff
+	end
+	
+	Gilza.Weapons_module.ammo_pickups = {
+		ARs = {
+			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.44),
+			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.4),
+			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.36) * 0.9, -- 10% less then 155
+			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.36),
+			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.34)
+		},
+		SHOTGUNs = {
+			_900 = Gilza.Weapons_module:get_ammo_pickup(900, 0.95),
+			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.8),
+			_325 = Gilza.Weapons_module:get_ammo_pickup(325, 0.85), -- better accuracy is not really expected, but their benefits from overkill skill are too good.
+			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.75)
+		},
+		LMGs = {
+			-- better ammo with easier diff modifiers, should incentivize defence playstyle by allowing to pick up less often, and reducing dmg up close
+			_325 = Gilza.Weapons_module:get_ammo_pickup(325, 0.36),
+			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.36, 0.85),
+			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.32, 0.85),
+			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.3, 0.85),
+			_95 = Gilza.Weapons_module:get_ammo_pickup(95, 0.28, 0.85),
+			_250_bipodless = Gilza.Weapons_module:get_ammo_pickup(250, 0.36, 0.75),
+			_200_bipodless = Gilza.Weapons_module:get_ammo_pickup(155, 0.32, 0.75) * 0.9,
+			_155_bipodless = Gilza.Weapons_module:get_ammo_pickup(155, 0.32, 0.75),
+			_125_bipodless = Gilza.Weapons_module:get_ammo_pickup(125, 0.3, 0.75),
+			_95_bipodless = Gilza.Weapons_module:get_ammo_pickup(95, 0.28, 0.85),
+		},
+		SNIPERs = {
+			-- all can do 1 tap headshots. balanced around special bodyshot breakpoints. manualy.
+			_650 = 0.75,
+			_950 = 0.7,
+			_1300 = 0.65,
+			_1600 = 0.55,
+			_50cal = 0.28
+		},
+		SMGs = {
+			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.43),
+			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.4) * 0.9,
+			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.4),
+			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.38),
+			_95 = Gilza.Weapons_module:get_ammo_pickup(95, 0.36),
+		},
+		PISTOLs = {
+			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.75),
+			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.5),
+			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.42) * 0.9,
+			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.42),
+			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.38),
+			_95 = Gilza.Weapons_module:get_ammo_pickup(95, 0.35),
+			_88 = Gilza.Weapons_module:get_ammo_pickup(88, 0.33),
+		},
+		GLs = {
+			_1300 = 0.26,
+			_960 = 0.32,
+			_480 = 0.56,
+			_360 = 0.62,
+			_underbarrel = 0.12
+		},
+	}
+	
+	Gilza.Weapons_module.recoil_stats = {
+		ARs = {
+			v_base = 0.7,
+			v_deviation = 1.8,
+			h_base = 0.65,
+			h_deviation = 0.65
+		},
+		SHOTGUNs = {
+			v_base = 2.3,
+			v_deviation = 2.3,
+			h_base = 0.6,
+			h_deviation = 1.6
+		},
+		LMGs = {
+			v_base = 1.3,
+			v_deviation = 1.4,
+			h_base = 1.2,
+			h_deviation = 0.75
+		},
+		SNIPERs = {
+			v_base = 1.8,
+			v_deviation = 1.8,
+			h_base = 0.3,
+			h_deviation = 0.5
+		},
+		SMGs = {
+			v_base = 0.75,
+			v_deviation = 1.3,
+			h_base = 0.9,
+			h_deviation = 1.1
+		},
+		PISTOLs = {
+			v_base = 0.2,
+			v_deviation = 2.2,
+			h_base = 0.3,
+			h_deviation = 2.8
+		}
+	}
+	
+	Gilza.Weapons_module.damage_dropoff = {
+		ARs = {
+			optimal_distance = 10,
+			optimal_range = 10,
+			near_falloff = 0,
+			far_falloff = 0,
+			near_multiplier = 1,
+			far_multiplier = 1
+		},
+		SHOTGUNs = {
+			_900 = {
+				optimal_distance = 0,
+				optimal_range = 1400,
+				near_falloff = 0,
+				far_falloff = 1000,
+				near_multiplier = 1,
+				far_multiplier = 0.5
+			},
+			_450 = {
+				optimal_distance = 0,
+				optimal_range = 1200,
+				near_falloff = 0,
+				far_falloff = 1000,
+				near_multiplier = 1,
+				far_multiplier = 0.5
+			},
+			_325 = {
+				optimal_distance = 0,
+				optimal_range = 1000,
+				near_falloff = 0,
+				far_falloff = 900,
+				near_multiplier = 1,
+				far_multiplier = 0.5
+			},
+			_155 = {
+				optimal_distance = 0,
+				optimal_range = 800,
+				near_falloff = 0,
+				far_falloff = 800,
+				near_multiplier = 1,
+				far_multiplier = 0.5
+			}
+		},
+		LMGs = {
+			optimal_distance = 150,
+			optimal_range = 1000,
+			near_falloff = 0,
+			far_falloff = 1000,
+			near_multiplier = 0.8,
+			far_multiplier = 1.5
+		},
+		SNIPERs = {
+			optimal_distance = 10,
+			optimal_range = 10,
+			near_falloff = 0,
+			far_falloff = 0,
+			near_multiplier = 1,
+			far_multiplier = 1
+		},
+		SMGs = {
+			optimal_distance = 150,
+			optimal_range = 650,
+			near_falloff = 0,
+			far_falloff = 800,
+			near_multiplier = 1.2,
+			far_multiplier = 0.5
+		},
+		PISTOLs = {
+			optimal_distance = 10,
+			optimal_range = 10,
+			near_falloff = 0,
+			far_falloff = 0,
+			near_multiplier = 1,
+			far_multiplier = 1
+		}
+	}
+	
+	function Gilza.Weapons_module:get_pickup_adjusments_for_wpn_mod(category, old_damage, new_damage, gained_ap, gained_underbarrel)
+		if not category or not old_damage or not new_damage then
+			return {min_mul = 1, max_mul = 1}
+		end
+		local cat_vars = Gilza.Weapons_module.ammo_pickups[category] or Gilza.Weapons_module.ammo_pickups[category.."s"]
+		if not cat_vars then
+			return {min_mul = 1, max_mul = 1}
+		end
+		
+		local old_min = cat_vars["_"..old_damage] * 0.9
+		local old_max = cat_vars["_"..old_damage] * 1.1
+		local new_min = cat_vars["_"..new_damage] * 0.9
+		local new_max = cat_vars["_"..new_damage] * 1.1
+		
+		if old_min == 0 or old_max == 0 then
+			return {min_mul = 1, max_mul = 1}
+		end
+		
+		local multiplier = 1
+		if gained_ap then
+			multiplier = multiplier * 0.5
+		end
+		if gained_underbarrel then
+			multiplier = multiplier * 0.7
+		end
+		
+		return {min_mul = new_min * multiplier / old_min, max_mul = new_max * multiplier / old_max}
+	end
+	
+	function Gilza.Weapons_module:set_new_weapon_recoil(recoil_data, weapon_data, lean, adjust_self_table)
+		
+		if not recoil_data or not type(weapon_data) == "table" then
+			log("[Gilza] Error: new weapon recoil was not set properly due to missing recoil data. Weapon(s): ")
+			Utils.PrintTable(weapon_data)
+			return
+		end
+		
+		if not weapon_data then
+			log("[Gilza] Error: new weapon recoil was not set properly due to missing weapon data.")
+			return
+		end
+		
+		local wpn_stat_dest
+		if adjust_self_table then
+			wpn_stat_dest = adjust_self_table
+		else
+			if tweak_data then
+				wpn_stat_dest = tweak_data.weapon
+			else
+				log("[Gilza] Error: new weapon recoil was not set properly because tweak_data is still loading.")
+				return
+			end
+		end
+		
+		lean = lean or "right"
+		if type(weapon_data) == "string" then
+			weapon_data = {[tostring(weapon_data)] = lean}
+		end
+		
+		local UPrecoil
+		local DOWNrecoil
+		local LEFTrecoil
+		local RIGHTrecoil
+		
+		local V_base_recoil = recoil_data.v_base
+		local V_recoil_deviation = recoil_data.v_deviation
+		local H_base_recoil = recoil_data.h_base
+		local H_recoil_deviation = recoil_data.h_deviation
+	
+		for weapon, recoil_lean in pairs(weapon_data) do
+			local recoil = wpn_stat_dest[weapon].stats.recoil * 4 - 4 -- in game calculator seems to be inaccurate or is coded to favour values down
+			local recoil_weight = 1 - (recoil/100)
+			UPrecoil = V_base_recoil + (recoil_weight * V_recoil_deviation)
+			DOWNrecoil = UPrecoil * 0.9
+			if recoil_lean == "left" then
+				LEFTrecoil = H_base_recoil + (recoil_weight * H_recoil_deviation)
+				RIGHTrecoil = LEFTrecoil * 0.05
+			else
+				RIGHTrecoil = H_base_recoil + (recoil_weight * H_recoil_deviation)
+				LEFTrecoil = RIGHTrecoil * 0.05
+			end
+			LEFTrecoil = LEFTrecoil * -1
+			wpn_stat_dest[weapon].kick = {
+				standing = {
+					UPrecoil,
+					DOWNrecoil,
+					LEFTrecoil,
+					RIGHTrecoil
+				}
+			}
+			wpn_stat_dest[weapon].kick.steelsight = wpn_stat_dest[weapon].kick.standing
+			wpn_stat_dest[weapon].kick.crouching = wpn_stat_dest[weapon].kick.standing
+		end
+		
+	end
+	
 end)
 
-Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", function(self, tweak_data)
+Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData_init_new_weapons", function(self, tweak_data)
 	local special_weapon_ids = { -- not used but handy to have
 		-- primary
 		"ecp",
@@ -297,16 +583,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	
 	local secondary_mul = 0.7
 	local secondary_to_primary_mul = 1/secondary_mul
+	local G_W_M = Gilza.Weapons_module
 	
 	-- Assault rifles --
 	local function setARs() -- using funcs for the sake of readability
-		
 		-- all reload timer overrides check if the reload speed is default, in case user runs custom animations that allready change the reload timers
 		
-		local avg_120_pickup = 6.92
-		local avg_155_pickup = 4.7
-		local avg_250_pickup = 2.56
-		local avg_450_pickup = 1.45
+		local pickups = G_W_M.ammo_pickups.ARs
 		
 		-- 1-1 headshot kill
 		local function init_super_heavy()
@@ -319,14 +602,16 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				contraband = "underbarrel",
 				fal = true
 			}
+			
+			local pick_up = pickups._450
 
 			for id, status in pairs(ARs_450) do
 				if self[id] then
 					self[id].stats.damage = 450
 					if ARs_450[id] == "underbarrel" then
-						self[id].AMMO_PICKUP = {((avg_450_pickup * 0.9) / 1.35) * 0.7,((avg_450_pickup * 1.1) / 1.35) * 0.7}
+						self[id].AMMO_PICKUP = {((pick_up * 0.9)) * 0.7,((pick_up * 1.1)) * 0.7}
 					else
-						self[id].AMMO_PICKUP = {(avg_450_pickup * 0.9) / 1.35,(avg_450_pickup * 1.1) / 1.35}
+						self[id].AMMO_PICKUP = {(pick_up * 0.9),(pick_up * 1.1)}
 					end	
 				end
 			end
@@ -335,31 +620,33 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.scar.NR_CLIPS_MAX = 4
 			self.scar.AMMO_MAX = self.scar.CLIP_AMMO_MAX * self.scar.NR_CLIPS_MAX
 			self.scar.stats.spread = 18
-			self.scar.stats.recoil = 9
+			self.scar.stats.recoil = 6
 			self.scar.fire_mode_data = {fire_rate = 60/600}
 			self.scar.auto = {fire_rate = 60/600}
 			
 			self.ching.stats.reload = 14
 			self.ching.NR_CLIPS_MAX = 8
 			self.ching.AMMO_MAX = self.ching.CLIP_AMMO_MAX * self.ching.NR_CLIPS_MAX
+			self.ching.fire_mode_data = {fire_rate = 60/300}
+			self.ching.single = {fire_rate = 60/300}
 			
 			self.new_m14.stats.reload = 8
 			self.new_m14.CLIP_AMMO_MAX = 15
 			self.new_m14.NR_CLIPS_MAX = 5
 			self.new_m14.AMMO_MAX = self.new_m14.CLIP_AMMO_MAX * self.new_m14.NR_CLIPS_MAX
-			self.new_m14.fire_mode_data = {fire_rate = 60/600}
-			self.new_m14.single = {fire_rate = 60/600}
+			self.new_m14.fire_mode_data = {fire_rate = 60/300}
+			self.new_m14.single = {fire_rate = 60/300}
 			
 			self.shak12.CLIP_AMMO_MAX = 25
 			self.shak12.NR_CLIPS_MAX = 4
 			self.shak12.AMMO_MAX = self.shak12.CLIP_AMMO_MAX * self.shak12.NR_CLIPS_MAX
-			self.shak12.stats.recoil = 11
+			self.shak12.stats.recoil = 9
 			self.shak12.stats.spread = 19
 			
 			self.contraband.CLIP_AMMO_MAX = 25
 			self.contraband.NR_CLIPS_MAX = 3
 			self.contraband.AMMO_MAX = self.contraband.CLIP_AMMO_MAX * self.contraband.NR_CLIPS_MAX
-			self.contraband.stats.recoil = 9
+			self.contraband.stats.recoil = 6
 			self.contraband.stats.spread = 19
 			self.contraband.fire_mode_data = {fire_rate = 60/600}
 			self.contraband.auto = {fire_rate = 60/600}
@@ -367,12 +654,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.fal.CLIP_AMMO_MAX = 20
 			self.fal.NR_CLIPS_MAX = 5
 			self.fal.AMMO_MAX = self.fal.CLIP_AMMO_MAX * self.fal.NR_CLIPS_MAX
-			self.fal.stats.recoil = 8
+			self.fal.stats.recoil = 7
 			self.fal.stats.spread = 16
 			self.fal.fire_mode_data = {fire_rate = 60/660}
 			self.fal.auto = {fire_rate = 60/660}
 			
 		end
+		init_super_heavy()
 		
 		-- 1-2 headshot kill
 		local function init_heavy()
@@ -385,14 +673,16 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				galil = true,
 				g3 = true
 			}
+			
+			local pick_up = pickups._250
 
 			for id, status in pairs(ARs_250) do
 				if self[id] then
 					self[id].stats.damage = 250
 					if ARs_250[id] == "underbarrel" then
-						self[id].AMMO_PICKUP = {((avg_250_pickup * 0.9) / 1.35) * 0.7,((avg_250_pickup * 1.1) / 1.35) * 0.7}
+						self[id].AMMO_PICKUP = {((pick_up * 0.9)) * 0.7,((pick_up * 1.1)) * 0.7}
 					else
-						self[id].AMMO_PICKUP = {(avg_250_pickup * 0.9) / 1.35,(avg_250_pickup * 1.1) / 1.35}
+						self[id].AMMO_PICKUP = {(pick_up * 0.9),(pick_up * 1.1)}
 					end	
 				end
 			end
@@ -401,7 +691,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.groza.NR_CLIPS_MAX = 4
 			self.groza.AMMO_MAX = self.groza.CLIP_AMMO_MAX * self.groza.NR_CLIPS_MAX
 			self.groza.stats.recoil = 13
-			self.groza.stats.spread = 11
+			self.groza.stats.spread = 13
 			self.groza.auto = {fire_rate = 60/700}
 			self.groza.fire_mode_data = {fire_rate = 60/700}
 			
@@ -451,6 +741,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.g3.auto = {fire_rate = 60/650}
 			
 		end
+		init_heavy()
 		
 		-- 2-3 headshot kill - 155 profile breakpoints on swats but tiny bit better breakpoints on specials
 		local function init_medium_heavy()
@@ -458,16 +749,17 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			local ARs_200 = {
 				amcar = true,
 				ak74 = true,
-				aug = true,
 				sub2000 = true,
 				l85a2 = true,
 				asval = true,		
 			}
+			
+			local pick_up = pickups._200
 
 			for id, status in pairs(ARs_200) do
 				if self[id] then
 					self[id].stats.damage = 200
-					self[id].AMMO_PICKUP = {((avg_155_pickup * 0.9) / 1.35) * 0.85,((avg_155_pickup * 1.1) / 1.35) * 0.85}
+					self[id].AMMO_PICKUP = {((pick_up * 0.9)),((pick_up * 1.1))}
 				end
 			end
 			
@@ -476,7 +768,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.amcar.AMMO_MAX = self.amcar.CLIP_AMMO_MAX * self.amcar.NR_CLIPS_MAX
 			self.amcar.fire_mode_data = {fire_rate = 60/650}
 			self.amcar.auto = {fire_rate = 60/650}
-			self.amcar.stats.recoil = 7
+			self.amcar.stats.recoil = 8
 			
 			self.ak74.NR_CLIPS_MAX = 5
 			self.ak74.AMMO_MAX = self.ak74.CLIP_AMMO_MAX * self.ak74.NR_CLIPS_MAX
@@ -485,35 +777,29 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.ak74.fire_mode_data = {fire_rate = 60/650}
 			self.ak74.auto = {fire_rate = 60/650}
 			
-			self.aug.stats.recoil = 13
-			self.aug.stats.spread = 17
-			self.aug.fire_mode_data = {fire_rate = 60/680}
-			self.aug.auto = {fire_rate = 60/680}
-			self.aug.NR_CLIPS_MAX = 5
-			self.aug.AMMO_MAX = self.aug.CLIP_AMMO_MAX * self.aug.NR_CLIPS_MAX
-			
-			self.sub2000.NR_CLIPS_MAX = 3
+			self.sub2000.NR_CLIPS_MAX = 4
 			self.sub2000.AMMO_MAX = self.sub2000.CLIP_AMMO_MAX * self.sub2000.NR_CLIPS_MAX
-			self.sub2000.stats.spread = 20
+			self.sub2000.stats.spread = 21
 			self.sub2000.fire_mode_data = {fire_rate = 60/669}
 			self.sub2000.single = {fire_rate = 60/669}
 			
 			self.l85a2.stats.reload = 15
-			self.l85a2.stats.recoil = 14
-			self.l85a2.stats.spread = 13
+			self.l85a2.stats.recoil = 16
+			self.l85a2.stats.spread = 14
 			self.l85a2.NR_CLIPS_MAX = 5
 			self.l85a2.AMMO_MAX = self.l85a2.CLIP_AMMO_MAX * self.l85a2.NR_CLIPS_MAX
 			
 			self.asval.CLIP_AMMO_MAX = 20
-			self.asval.NR_CLIPS_MAX = 6
+			self.asval.NR_CLIPS_MAX = 7
 			self.asval.AMMO_MAX = self.asval.CLIP_AMMO_MAX * self.asval.NR_CLIPS_MAX
 			self.asval.stats.spread = 22
 			self.asval.stats.reload = 20
-			self.asval.stats.recoil = 17
+			self.asval.stats.recoil = 16
 			self.asval.auto = {fire_rate = 60/900}
 			self.asval.fire_mode_data = {fire_rate = 60/900}
 			
 		end
+		init_medium_heavy()
 		
 		-- 2-3 headshot kill
 		local function init_medium()
@@ -527,11 +813,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				tecci = true,		
 				tkb = true,
 			}
+			
+			local pick_up = pickups._155
 
 			for id, status in pairs(ARs_155) do
 				if self[id] then
 					self[id].stats.damage = 155
-					self[id].AMMO_PICKUP = {(avg_155_pickup * 0.9) / 1.35,(avg_155_pickup * 1.1) / 1.35}
+					self[id].AMMO_PICKUP = {(pick_up * 0.9),(pick_up * 1.1)}
 				end
 			end
 			
@@ -540,18 +828,18 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.corgi.auto = {fire_rate = 60/875}
 			self.corgi.fire_mode_data = {fire_rate = 60/875}
 			self.corgi.stats.recoil = 15
-			self.corgi.stats.spread = 17
+			self.corgi.stats.spread = 19
 			self.corgi.stats.concealment = 19
 			
 			self.s552.NR_CLIPS_MAX = 7
 			self.s552.AMMO_MAX = self.s552.CLIP_AMMO_MAX * self.s552.NR_CLIPS_MAX
-			self.s552.stats.recoil = 13
-			self.s552.stats.spread = 10
+			self.s552.stats.recoil = 15
+			self.s552.stats.spread = 11
 			self.s552.fire_mode_data = {fire_rate = 60/700}
 			self.s552.auto = {fire_rate = 60/700}
 			self.s552.stats.reload = 15
 			
-			self.new_m4.stats.recoil = 8
+			self.new_m4.stats.recoil = 9
 			self.new_m4.stats.spread = 12
 			self.new_m4.NR_CLIPS_MAX = 6
 			self.new_m4.AMMO_MAX = self.new_m4.CLIP_AMMO_MAX * self.new_m4.NR_CLIPS_MAX
@@ -563,9 +851,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			end
 			
 			self.g36.NR_CLIPS_MAX = 6
-			self.g36.stats.spread = 5
+			self.g36.stats.spread = 9
 			self.g36.AMMO_MAX = self.g36.CLIP_AMMO_MAX * self.g36.NR_CLIPS_MAX
-			self.g36.stats.recoil = 23
+			self.g36.stats.recoil = 22
 			self.g36.stats.concealment = 20
 			self.g36.stats.reload = 13
 			self.g36.auto = {fire_rate = 60/750}
@@ -579,20 +867,21 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.flint.fire_mode_data = {fire_rate = 60/700}
 			self.flint.auto = {fire_rate = 60/700}
 			
-			self.tecci.stats.recoil = 20
-			self.tecci.stats.spread = 2
+			self.tecci.stats.recoil = 19
+			self.tecci.stats.spread = 6
 			self.tecci.NR_CLIPS_MAX = 2
 			self.tecci.AMMO_MAX = self.tecci.CLIP_AMMO_MAX * self.tecci.NR_CLIPS_MAX
-			self.tecci.fire_mode_data = {fire_rate = 60/600}
-			self.tecci.auto = {fire_rate = 60/600}
+			self.tecci.fire_mode_data = {fire_rate = 60/666}
+			self.tecci.auto = {fire_rate = 60/666}
 			
 			self.tkb.NR_CLIPS_MAX = 2
 			self.tkb.AMMO_MAX = self.tkb.CLIP_AMMO_MAX * self.tkb.NR_CLIPS_MAX
-			self.tkb.stats.spread = 5
+			self.tkb.stats.spread = 6
 			self.tkb.stats.reload = 9
 			self.tkb.stats.concealment = 12
 		
 		end
+		init_medium()
 		
 		-- 3-4 headshot kill
 		local function init_light()
@@ -600,14 +889,17 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			local ARs_120 = {
 				famas = true,
 				ak5 = true,
+				aug = true,
 				komodo = true,
 				m16 = true
 			}
+			
+			local pick_up = pickups._125
 
 			for id, status in pairs(ARs_120) do
 				if self[id] then
 					self[id].stats.damage = 125
-					self[id].AMMO_PICKUP = {(avg_120_pickup * 0.9) / 1.35,(avg_120_pickup * 1.1) / 1.35}
+					self[id].AMMO_PICKUP = {(pick_up * 0.9),(pick_up * 1.1)}
 				end
 			end	
 			
@@ -616,19 +908,28 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.famas.stats.recoil = 19
 			self.famas.stats.spread = 6
 		
-			self.ak5.NR_CLIPS_MAX = 6
+			self.ak5.NR_CLIPS_MAX = 7
 			self.ak5.AMMO_MAX = self.ak5.CLIP_AMMO_MAX * self.ak5.NR_CLIPS_MAX
-			self.ak5.stats.recoil = 19
-			self.ak5.stats.spread = 18		
+			self.ak5.fire_mode_data = {fire_rate = 60/680}
+			self.ak5.auto = {fire_rate = 60/680}
+			self.ak5.stats.recoil = 14
+			self.ak5.stats.spread = 16	
+
+			self.aug.stats.recoil = 18
+			self.aug.stats.spread = 18
+			self.aug.fire_mode_data = {fire_rate = 60/730}
+			self.aug.auto = {fire_rate = 60/730}
+			self.aug.NR_CLIPS_MAX = 6
+			self.aug.AMMO_MAX = self.aug.CLIP_AMMO_MAX * self.aug.NR_CLIPS_MAX
 			
 			self.komodo.fire_mode_data = {fire_rate = 60/850}
 			self.komodo.auto = {fire_rate = 60/850}
 			self.komodo.stats.recoil = 16
 			self.komodo.stats.spread = 16
-			self.komodo.NR_CLIPS_MAX = 7
+			self.komodo.NR_CLIPS_MAX = 6
 			self.komodo.AMMO_MAX = self.komodo.CLIP_AMMO_MAX * self.komodo.NR_CLIPS_MAX
 			
-			self.m16.NR_CLIPS_MAX = 6
+			self.m16.NR_CLIPS_MAX = 7
 			self.m16.AMMO_MAX = self.m16.CLIP_AMMO_MAX * self.m16.NR_CLIPS_MAX
 			self.m16.stats.recoil = 1
 			self.m16.stats.spread = 22
@@ -636,11 +937,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.m16.auto = {fire_rate = 60/900}
 		
 		end
-		
-		init_super_heavy()
-		init_heavy()
-		init_medium_heavy()
-		init_medium()
 		init_light()
 		
 	end
@@ -649,43 +945,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	-- Shotguns --
 	local function setSHOTGUNs()
 		
-		local avg_1000_pickup = 0.67
-		local avg_450_pickup = 0.77
-		local avg_310_pickup = 1.25
-		local avg_110_pickup = 2.33
-		
-		local new_DB_shotgun_damage_falloff = {
-			optimal_distance = 0,
-			optimal_range = 1400,
-			near_falloff = 0,
-			far_falloff = 1000,
-			near_multiplier = 1,
-			far_multiplier = 0.5
-		}
-		local new_pump_shotgun_damage_falloff = {
-			optimal_distance = 0,
-			optimal_range = 1200,
-			near_falloff = 0,
-			far_falloff = 1000,
-			near_multiplier = 1,
-			far_multiplier = 0.5
-		}
-		local new_semi_shotgun_damage_falloff = {
-			optimal_distance = 0,
-			optimal_range = 1000,
-			near_falloff = 0,
-			far_falloff = 900,
-			near_multiplier = 1,
-			far_multiplier = 0.5
-		}
-		local new_auto_shotgun_damage_falloff = {
-			optimal_distance = 0,
-			optimal_range = 800,
-			near_falloff = 0,
-			far_falloff = 800,
-			near_multiplier = 1,
-			far_multiplier = 0.5
-		}
+		local pickups = G_W_M.ammo_pickups.SHOTGUNs
 		
 		-- Double barrel
 		local function init_DB()
@@ -695,6 +955,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				b682 = true,
 				coach = "secondary"
 			}
+			
+			local pick_up = pickups._900
 
 			for id, status in pairs(DB_shotguns) do
 				if self[id] then
@@ -704,11 +966,11 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 					self[id].rays = 10
 					Gilza.shotgun_minimal_damage_multipliers[id] = 1
 					if status == "secondary" then
-						self[id].AMMO_PICKUP = {((avg_1000_pickup * 0.9) / 1.35) * secondary_mul,((avg_1000_pickup * 1.1) / 1.35) * secondary_mul}
+						self[id].AMMO_PICKUP = {((pick_up * 0.9)) * secondary_mul,((pick_up * 1.1)) * secondary_mul}
 					else
-						self[id].AMMO_PICKUP = {(avg_1000_pickup * 0.9) / 1.35,(avg_1000_pickup * 1.1) / 1.35}
+						self[id].AMMO_PICKUP = {(pick_up * 0.9),(pick_up * 1.1)}
 					end
-					self[id].damage_falloff = new_DB_shotgun_damage_falloff
+					self[id].damage_falloff = G_W_M.damage_dropoff.SHOTGUNs._900
 				end
 			end	
 			
@@ -745,6 +1007,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				serbu = "secondary",
 				m37 = "secondary"
 			}
+			
+			local pick_up = pickups._450
 
 			for id, status in pairs(PA_shotguns) do
 				if self[id] then
@@ -752,11 +1016,11 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 					self[id].rays = 10
 					Gilza.shotgun_minimal_damage_multipliers[id] = 0.8
 					if status == "secondary" then
-						self[id].AMMO_PICKUP = {((avg_450_pickup * 0.9) / 1.35) * secondary_mul,((avg_450_pickup * 1.1) / 1.35) * secondary_mul}
+						self[id].AMMO_PICKUP = {((pick_up * 0.9)) * secondary_mul,((pick_up * 1.1)) * secondary_mul}
 					else
-						self[id].AMMO_PICKUP = {(avg_450_pickup * 0.9) / 1.35,(avg_450_pickup * 1.1) / 1.35}
+						self[id].AMMO_PICKUP = {(pick_up * 0.9),(pick_up * 1.1)}
 					end
-					self[id].damage_falloff = new_pump_shotgun_damage_falloff
+					self[id].damage_falloff = G_W_M.damage_dropoff.SHOTGUNs._450
 				end
 			end	
 			
@@ -779,8 +1043,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.m590.AMMO_MAX = self.m590.CLIP_AMMO_MAX * self.m590.NR_CLIPS_MAX
 			self.m590.stats.recoil = 14
 			self.m590.stats.spread = 12
-			self.m590.fire_mode_data = {fire_rate = 60/130}
-			self.m590.single = {fire_rate = 60/130}
+			self.m590.fire_mode_data = {fire_rate = 60/120}
+			self.m590.single = {fire_rate = 60/120}
 			
 			self.ksg.CLIP_AMMO_MAX = 14
 			self.ksg.NR_CLIPS_MAX = 2
@@ -807,7 +1071,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.supernova.stats.recoil = 4
 			self.supernova.fire_mode_data = {fire_rate = 60/70}
 			self.supernova.single = {fire_rate = 60/70}
-			self.supernova.alt_fire_data.fire_rate = 60/280
+			self.supernova.alt_fire_data.fire_rate = 60/210
 			self.supernova.alt_fire_data.spread_mul = 3
 			self.supernova.alt_fire_data.damage_mul = 1
 			self.supernova.alt_fire_data.recoil_mul = 1.5
@@ -824,8 +1088,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.m37.AMMO_MAX = self.m37.CLIP_AMMO_MAX * self.m37.NR_CLIPS_MAX
 			self.m37.stats.recoil = 15
 			self.m37.stats.spread = 10
-			self.m37.fire_mode_data = {fire_rate = 60/110}
-			self.m37.single = {fire_rate = 60/110}
+			self.m37.fire_mode_data = {fire_rate = 60/120}
+			self.m37.single = {fire_rate = 60/120}
 		
 		end
 		init_PA()
@@ -841,25 +1105,27 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				judge = "secondary",
 				x_judge = "akimbo"
 			}
+			
+			local pick_up = pickups._325
 
 			for id, status in pairs(SA_shotguns) do
 				if self[id] then
 					self[id].stats.damage = 325
 					self[id].rays = 10
 					Gilza.shotgun_minimal_damage_multipliers[id] = 0.67
-					self[id].fire_mode_data = {fire_rate = 60/320}
-					self[id].single = {fire_rate = 60/320}
+					self[id].fire_mode_data = {fire_rate = 60/250}
+					self[id].single = {fire_rate = 60/250}
 					if status == "secondary" then
-						self[id].AMMO_PICKUP = {(avg_310_pickup * 0.9) / 1.35 * secondary_mul,(avg_310_pickup * 1.1) / 1.35 * secondary_mul}
+						self[id].AMMO_PICKUP = {(pick_up * 0.9) * secondary_mul,(pick_up * 1.1) * secondary_mul}
 					else
-						self[id].AMMO_PICKUP = {(avg_310_pickup * 0.9) / 1.35,(avg_310_pickup * 1.1) / 1.35}
+						self[id].AMMO_PICKUP = {(pick_up * 0.9),(pick_up * 1.1)}
 					end
 					if status == "akimbo" then
 						self[id].stats.damage = math.ceil(self[id].stats.damage/2)
 						self[id].AMMO_PICKUP[1] = self[id].AMMO_PICKUP[1] * 2
 						self[id].AMMO_PICKUP[2] = self[id].AMMO_PICKUP[2] * 2
 					end
-					self[id].damage_falloff = new_semi_shotgun_damage_falloff	
+					self[id].damage_falloff = G_W_M.damage_dropoff.SHOTGUNs._325
 				end
 			end
 			
@@ -879,28 +1145,28 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.striker.stats.recoil = 13
 			self.striker.stats.reload = 13
 			self.striker.stats.spread = 10
-			self.striker.fire_mode_data = {fire_rate = 60/380}
-			self.striker.single = {fire_rate = 60/380}
+			self.striker.fire_mode_data = {fire_rate = 60/280}
+			self.striker.single = {fire_rate = 60/280}
 			
 			self.ultima.NR_CLIPS_MAX = 4
 			self.ultima.AMMO_MAX = self.ultima.CLIP_AMMO_MAX * self.ultima.NR_CLIPS_MAX
-			self.ultima.stats.recoil = 5
+			self.ultima.stats.recoil = 6
 			self.ultima.stats.spread = 15
-			self.ultima.fire_mode_data = {fire_rate = 60/330}
-			self.ultima.single = {fire_rate = 60/330}
+			self.ultima.fire_mode_data = {fire_rate = 60/265}
+			self.ultima.single = {fire_rate = 60/265}
 			
 			self.judge.NR_CLIPS_MAX = 4
 			self.judge.AMMO_MAX = self.judge.CLIP_AMMO_MAX * self.judge.NR_CLIPS_MAX
 			self.judge.stats.recoil = 7
 			self.judge.stats.spread = 1
 			self.judge.stats.reload = 9
-			self.judge.fire_mode_data = {fire_rate = 60/250}
-			self.judge.single = {fire_rate = 60/250}
+			self.judge.fire_mode_data = {fire_rate = 60/210}
+			self.judge.single = {fire_rate = 60/210}
 			
 			self.x_judge.stats.recoil = 7
 			self.x_judge.stats.spread = 1
-			self.x_judge.fire_mode_data = {fire_rate = 60/250}
-			self.x_judge.single = {fire_rate = 60/250}
+			self.x_judge.fire_mode_data = {fire_rate = 60/210}
+			self.x_judge.single = {fire_rate = 60/210}
 			
 		end
 		init_SA()
@@ -918,6 +1184,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				basset = "secondary",
 				x_basset = "akimbo"
 			}
+			
+			local pick_up = pickups._155
 
 			for id, status in pairs(FA_shotguns) do
 				if self[id] then
@@ -927,16 +1195,16 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 					self[id].fire_mode_data = {fire_rate = 60/350}
 					self[id].single = {fire_rate = 60/350}
 					if status == "secondary" then
-						self[id].AMMO_PICKUP = {(avg_110_pickup * 0.9) / 1.35 * secondary_mul,(avg_110_pickup * 1.1) / 1.35 * secondary_mul}
+						self[id].AMMO_PICKUP = {(pick_up * 0.9) * secondary_mul,(pick_up * 1.1) * secondary_mul}
 					else
-						self[id].AMMO_PICKUP = {(avg_110_pickup * 0.9) / 1.35,(avg_110_pickup * 1.1) / 1.35}
+						self[id].AMMO_PICKUP = {(pick_up * 0.9),(pick_up * 1.1)}
 					end
 					if status == "akimbo" then
 						self[id].stats.damage = math.ceil(self[id].stats.damage/2)
 						self[id].AMMO_PICKUP[1] = self[id].AMMO_PICKUP[1] * 2
 						self[id].AMMO_PICKUP[2] = self[id].AMMO_PICKUP[2] * 2
 					end
-					self[id].damage_falloff = new_auto_shotgun_damage_falloff
+					self[id].damage_falloff = G_W_M.damage_dropoff.SHOTGUNs._155
 				end
 			end
 			
@@ -1004,21 +1272,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	-- Light Machine Guns --
 	local function setLMGs()
 		
-		-- +33% compared to AR, should incentivize defence playstyle by allowing to pick up less often, and reducing dmg up close
-		local avg_250_pickup = 3.4
-		local avg_155_pickup = 6.25
-		local avg_120_pickup = 9.2
-		-- m60
-		local avg_325_pickup = 2.72 -- avg_250_pickup * 0.8
-		
-		local new_lmg_damage_falloff = {
-			optimal_distance = 150,
-			optimal_range = 1000,
-			near_falloff = 0,
-			far_falloff = 1000,
-			near_multiplier = 0.8,
-			far_multiplier = 1.5
-		}
+		local pickups = G_W_M.ammo_pickups.LMGs
+		local new_lmg_damage_falloff = G_W_M.damage_dropoff.LMGs
 		
 		-- NO BIPOD --
 		self.hk51b.stats.damage = 200
@@ -1026,7 +1281,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.hk51b.stats.recoil = 10
 		self.hk51b.NR_CLIPS_MAX = 3
 		self.hk51b.AMMO_MAX = self.hk51b.CLIP_AMMO_MAX * self.hk51b.NR_CLIPS_MAX
-		self.hk51b.AMMO_PICKUP = {(5.6 * 0.9) / 1.35,(5.6 * 1.1) / 1.35}
+		self.hk51b.AMMO_PICKUP = {(pickups._200_bipodless * 0.9),(pickups._200_bipodless * 1.1)}
 		self.hk51b.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.hk51b.damage_falloff.far_multiplier = 1
 		self.hk51b.damage_falloff.near_multiplier = 1
@@ -1034,31 +1289,31 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.hcar.stats.damage = 250
 		self.hcar.NR_CLIPS_MAX = 8
 		self.hcar.AMMO_MAX = self.hcar.CLIP_AMMO_MAX * self.hcar.NR_CLIPS_MAX
-		self.hcar.AMMO_PICKUP = {(avg_250_pickup * 0.9) / 1.35,(avg_250_pickup * 1.1) / 1.35}
+		self.hcar.AMMO_PICKUP = {(pickups._250_bipodless * 0.9),(pickups._250_bipodless * 1.1)}
 		self.hcar.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.hcar.damage_falloff.far_multiplier = 1
 		self.hcar.damage_falloff.near_multiplier = 1
 		
 		self.kacchainsaw.stats.damage = 125
-		self.kacchainsaw.AMMO_PICKUP = {(avg_120_pickup * 0.9) / 1.35,(avg_120_pickup * 1.1) / 1.35}
+		self.kacchainsaw.AMMO_PICKUP = {(pickups._125_bipodless * 0.9),(pickups._125_bipodless * 1.1)}
 		self.kacchainsaw.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.kacchainsaw.damage_falloff.far_multiplier = 1
 		self.kacchainsaw.damage_falloff.near_multiplier = 1
 		self.kacchainsaw_flamethrower.CLIP_AMMO_MAX = 150
 		self.kacchainsaw_flamethrower.NR_CLIPS_MAX = 250/150
 		self.kacchainsaw_flamethrower.AMMO_MAX = self.kacchainsaw_flamethrower.CLIP_AMMO_MAX * self.kacchainsaw_flamethrower.NR_CLIPS_MAX
-		self.kacchainsaw_flamethrower.AMMO_PICKUP = {1.7,3.5}
+		self.kacchainsaw_flamethrower.AMMO_PICKUP = {8.1,9.9}
 		self.kacchainsaw_flamethrower.stats.damage = 25
 		
 		-- HEAVY --
-		self.hk21.AMMO_PICKUP = {(avg_250_pickup * 0.9) / 1.35,(avg_250_pickup * 1.1) / 1.35}
+		self.hk21.AMMO_PICKUP = {(pickups._250 * 0.9),(pickups._250 * 1.1)}
 		self.hk21.NR_CLIPS_MAX = 2
 		self.hk21.AMMO_MAX = self.hk21.CLIP_AMMO_MAX * self.hk21.NR_CLIPS_MAX
 		self.hk21.stats.spread = 10
 		self.hk21.stats.recoil = 12
 		self.hk21.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.hk21.stats.damage = 250
-		self.rpk.AMMO_PICKUP = {(avg_250_pickup * 0.9) / 1.35,(avg_250_pickup * 1.1) / 1.35}
+		self.rpk.AMMO_PICKUP = {(pickups._250 * 0.9),(pickups._250 * 1.1)}
 		self.rpk.NR_CLIPS_MAX = 3
 		self.rpk.AMMO_MAX = self.rpk.CLIP_AMMO_MAX * self.rpk.NR_CLIPS_MAX
 		self.rpk.stats.spread = 5
@@ -1068,7 +1323,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.rpk.stats.damage = 250
 		
 		self.m60.stats.damage = 325
-		self.m60.AMMO_PICKUP = {(avg_325_pickup * 0.9) / 1.35,(avg_325_pickup * 1.1) / 1.35}
+		self.m60.AMMO_PICKUP = {(pickups._325 * 0.9),(pickups._325 * 1.1)}
 		self.m60.CLIP_AMMO_MAX = 150
 		self.m60.NR_CLIPS_MAX = 2
 		self.m60.AMMO_MAX = self.m60.CLIP_AMMO_MAX * self.m60.NR_CLIPS_MAX
@@ -1079,14 +1334,14 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.m60.auto = {fire_rate = 60/420}
 		
 		-- LIGHT --
-		self.m249.AMMO_PICKUP = {(avg_155_pickup * 0.9) / 1.35,(avg_155_pickup * 1.1) / 1.35}
+		self.m249.AMMO_PICKUP = {(pickups._155 * 0.9),(pickups._155 * 1.1)}
 		self.m249.NR_CLIPS_MAX = 2
 		self.m249.AMMO_MAX = self.m249.CLIP_AMMO_MAX * self.m249.NR_CLIPS_MAX
 		self.m249.stats.spread = 8
 		self.m249.stats.recoil = 10
 		self.m249.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.m249.stats.damage = 155
-		self.par.AMMO_PICKUP = {(avg_155_pickup * 0.9) / 1.35,(avg_155_pickup * 1.1) / 1.35}
+		self.par.AMMO_PICKUP = {(pickups._155 * 0.9),(pickups._155 * 1.1)}
 		self.par.NR_CLIPS_MAX = 2
 		self.par.AMMO_MAX = self.par.CLIP_AMMO_MAX * self.par.NR_CLIPS_MAX
 		self.par.stats.spread = 8
@@ -1096,7 +1351,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		
 		-- SUPER LIGHT --
 		self.mg42.stats.damage = 125
-		self.mg42.AMMO_PICKUP = {(avg_120_pickup * 0.9) / 1.35,(avg_120_pickup * 1.1) / 1.35}
+		self.mg42.AMMO_PICKUP = {(pickups._125 * 0.9),(pickups._125 * 1.1)}
 		self.mg42.CLIP_AMMO_MAX = 100
 		self.mg42.NR_CLIPS_MAX = 5
 		self.mg42.AMMO_MAX = self.mg42.CLIP_AMMO_MAX * self.mg42.NR_CLIPS_MAX
@@ -1110,19 +1365,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	-- Snipers --
 	local function setSNIPERs()
 		
-		local sniper_SA_avg_pickup = 0.75
-		local sniper_LA_avg_pickup = 0.7
-		local sniper_BA_avg_pickup = 0.65
-		local sniper_BAH_avg_pickup = 0.55
+		local pickups = G_W_M.ammo_pickups.SNIPERs
 		
-		local new_sniper_damage_falloff = {
-			optimal_distance = 10,
-			optimal_range = 10,
-			near_falloff = 0,
-			far_falloff = 0,
-			near_multiplier = 1,
-			far_multiplier = 1
-		}
+		local new_sniper_damage_falloff = G_W_M.damage_dropoff.SNIPERs
 		
 		-- Semi autos
 		local function init_SA()
@@ -1139,9 +1384,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				if self[id] then
 					self[id].stats.damage = 650
 					if status == "secondary" then
-						self[id].AMMO_PICKUP = {((sniper_SA_avg_pickup * 0.9) / 1.35) * secondary_mul,((sniper_SA_avg_pickup * 1.1) / 1.35) * secondary_mul}
+						self[id].AMMO_PICKUP = {((pickups._650 * 0.9)) * secondary_mul,((pickups._650 * 1.1)) * secondary_mul}
 					else
-						self[id].AMMO_PICKUP = {(sniper_SA_avg_pickup * 0.9) / 1.35,(sniper_SA_avg_pickup * 1.1) / 1.35}
+						self[id].AMMO_PICKUP = {(pickups._650 * 0.9),(pickups._650 * 1.1)}
 					end
 					self[id].fire_mode_data = {fire_rate = 60/210}
 					self[id].single = {fire_rate = 60/210}
@@ -1197,9 +1442,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				if self[id] then
 					self[id].stats.damage = 950
 					if status == "secondary" then
-						self[id].AMMO_PICKUP = {((sniper_LA_avg_pickup * 0.9) / 1.35) * secondary_mul,((sniper_LA_avg_pickup * 1.1) / 1.35) * secondary_mul}
+						self[id].AMMO_PICKUP = {((pickups._950 * 0.9)) * secondary_mul,((pickups._950 * 1.1)) * secondary_mul}
 					else
-						self[id].AMMO_PICKUP = {(sniper_LA_avg_pickup * 0.9) / 1.35,(sniper_LA_avg_pickup * 1.1) / 1.35}
+						self[id].AMMO_PICKUP = {(pickups._950 * 0.9),(pickups._950 * 1.1)}
 					end
 					self[id].damage_falloff = new_sniper_damage_falloff
 					self[id].stats_modifiers = {damage = 1}
@@ -1240,9 +1485,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				if self[id] then
 					self[id].stats.damage = 1300
 					if status == "secondary" then
-						self[id].AMMO_PICKUP = {((sniper_BA_avg_pickup * 0.9) / 1.35) * secondary_mul,((sniper_BA_avg_pickup * 1.1) / 1.35) * secondary_mul}
+						self[id].AMMO_PICKUP = {((pickups._1300 * 0.9)) * secondary_mul,((pickups._1300 * 1.1)) * secondary_mul}
 					else
-						self[id].AMMO_PICKUP = {(sniper_BA_avg_pickup * 0.9) / 1.35,(sniper_BA_avg_pickup * 1.1) / 1.35}
+						self[id].AMMO_PICKUP = {(pickups._1300 * 0.9),(pickups._1300 * 1.1)}
 					end
 					self[id].NR_CLIPS_MAX = 2.5
 					self[id].AMMO_MAX = self[id].CLIP_AMMO_MAX * self[id].NR_CLIPS_MAX
@@ -1292,7 +1537,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			for id, status in pairs(Sniper_Bolt_heavy) do
 				if self[id] then
 					self[id].stats.damage = 1600
-					self[id].AMMO_PICKUP = {(sniper_BAH_avg_pickup * 0.9) / 1.35,(sniper_BAH_avg_pickup * 1.1) / 1.35}
+					self[id].AMMO_PICKUP = {(pickups._1600 * 0.9),(pickups._1600 * 1.1)}
 					self[id].NR_CLIPS_MAX = 4
 					self[id].AMMO_MAX = self[id].CLIP_AMMO_MAX * self[id].NR_CLIPS_MAX
 					self[id].fire_mode_data = {fire_rate = 60/60}
@@ -1309,7 +1554,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.desertfox.stats.spread = 17
 			
 			self.r93.stats.recoil = 7
-			self.r93.stats.spread = 22
+			self.r93.stats.spread = 21
 			self.r93.NR_CLIPS_MAX = 3.35
 			self.r93.AMMO_MAX = self.r93.CLIP_AMMO_MAX * self.r93.NR_CLIPS_MAX
 			
@@ -1321,13 +1566,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 
 		-- 50 cal
 		self.m95.stats.damage = 6500
-		self.m95.AMMO_PICKUP = {(0.28 * 0.8) / 1.35,(0.28 * 1.2) / 1.35}
+		self.m95.AMMO_PICKUP = {(pickups._50cal * 0.8),(pickups._50cal * 1.2)}
 		self.m95.damage_falloff = new_sniper_damage_falloff
 		self.m95.stats_modifiers = {damage = 1}
 		
 		-- Musket. Mwahahahaha
 		self.bessy.stats.damage = 12000
-		self.bessy.AMMO_PICKUP = {(0.14 * 0.8) / 1.35,(0.14 * 1.2) / 1.35}
+		self.bessy.AMMO_PICKUP = {((pickups._50cal * 0.5) * 0.8),((pickups._50cal * 0.5) * 1.2)}
 		self.bessy.damage_falloff = new_sniper_damage_falloff
 		self.bessy.stats_modifiers = {damage = 1}
 		
@@ -1337,12 +1582,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	-- Sub machine guns --
 	local function setSMGs()
 		
-		local avg_95_pickup = 8.28
-		local avg_120_pickup = 6.09
-		local avg_155_pickup = 4.76
-		local avg_250_pickup = 2.56
-		
-		local new_smg_damage_falloff = {optimal_distance = 150,optimal_range = 550,near_falloff = 0,far_falloff = 700,near_multiplier = 1.2,far_multiplier = 0.5}
+		local pickups = G_W_M.ammo_pickups.SMGs
+		local new_smg_damage_falloff = G_W_M.damage_dropoff.SMGs
 		
 		-- 1-2 headshot kill
 		local function init_heavy()
@@ -1353,11 +1594,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				erma = true,
 				sterling = true
 			}
+			
+			local pick_up = pickups._250
 
 			for id, status in pairs(SMGs_250) do
 				if self[id] then
 					self[id].stats.damage = 250
-					self[id].AMMO_PICKUP = {((avg_250_pickup * 0.9) / 1.35) * secondary_mul,((avg_250_pickup * 1.1) / 1.35) * secondary_mul}
+					self[id].AMMO_PICKUP = {((pick_up * 0.9)) * secondary_mul,((pick_up * 1.1)) * secondary_mul}
 					self[id].damage_falloff = new_smg_damage_falloff
 				end
 			end
@@ -1369,20 +1612,20 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.m45.NR_CLIPS_MAX = 3
 			self.m45.AMMO_MAX = self.m45.CLIP_AMMO_MAX * self.m45.NR_CLIPS_MAX
 			
-			self.hajk.stats.recoil = 14
-			self.hajk.stats.spread = 12
+			self.hajk.stats.recoil = 15
+			self.hajk.stats.spread = 13
 			self.hajk.NR_CLIPS_MAX = 3
 			self.hajk.AMMO_MAX = self.hajk.CLIP_AMMO_MAX * self.hajk.NR_CLIPS_MAX
 			self.hajk.fire_mode_data = {fire_rate = 60/775}
 			self.hajk.auto = {fire_rate = 60/775}
 			
 			self.erma.stats.recoil = 21
-			self.erma.stats.spread = 7
+			self.erma.stats.spread = 9
 			self.erma.NR_CLIPS_MAX = 3.5
 			self.erma.CLIP_AMMO_MAX = 32
 			self.erma.AMMO_MAX = self.erma.CLIP_AMMO_MAX * self.erma.NR_CLIPS_MAX
-			self.erma.fire_mode_data = {fire_rate = 60/550}
-			self.erma.auto = {fire_rate = 60/550}
+			self.erma.fire_mode_data = {fire_rate = 60/650}
+			self.erma.auto = {fire_rate = 60/650}
 			
 			self.sterling.stats.spread = 16
 			self.sterling.stats.recoil = 16
@@ -1410,20 +1653,20 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_m45.NR_CLIPS_MAX = 1.5
 			self.x_m45.AMMO_MAX = self.x_m45.CLIP_AMMO_MAX * self.x_m45.NR_CLIPS_MAX
 			
-			self.x_hajk.stats.recoil = 14
-			self.x_hajk.stats.spread = 12
+			self.x_hajk.stats.recoil = 15
+			self.x_hajk.stats.spread = 13
 			self.x_hajk.NR_CLIPS_MAX = 1.5
 			self.x_hajk.AMMO_MAX = self.x_hajk.CLIP_AMMO_MAX * self.x_hajk.NR_CLIPS_MAX
 			self.x_hajk.fire_mode_data = {fire_rate = 60/775}
 			self.x_hajk.single = {fire_rate = 60/775}
 			
 			self.x_erma.stats.recoil = 21
-			self.x_erma.stats.spread = 7
+			self.x_erma.stats.spread = 9
 			self.x_erma.NR_CLIPS_MAX = 1.75
 			self.x_erma.CLIP_AMMO_MAX = 64
 			self.x_erma.AMMO_MAX = self.x_erma.CLIP_AMMO_MAX * self.x_erma.NR_CLIPS_MAX
-			self.x_erma.fire_mode_data = {fire_rate = 60/550}
-			self.x_erma.auto = {fire_rate = 60/550}
+			self.x_erma.fire_mode_data = {fire_rate = 60/650}
+			self.x_erma.auto = {fire_rate = 60/650}
 			
 			self.x_sterling.stats.spread = 16
 			self.x_sterling.stats.recoil = 16
@@ -1434,6 +1677,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_sterling.AMMO_MAX = self.x_sterling.NR_CLIPS_MAX * self.x_sterling.CLIP_AMMO_MAX
 			
 		end
+		init_heavy()
 		
 		-- 2-3 headshot kill - extra damage
 		local function init_medium_heavy()
@@ -1445,11 +1689,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				coal = true,
 				uzi = true			
 			}
+			
+			local pick_up = pickups._200
 
 			for id, status in pairs(SMGs_200) do
 				if self[id] then
 					self[id].stats.damage = 200
-					self[id].AMMO_PICKUP = {((avg_155_pickup * 0.9) / 1.35) * 0.85 * secondary_mul,((avg_155_pickup * 1.1) / 1.35) * 0.85 * secondary_mul}
+					self[id].AMMO_PICKUP = {((pick_up * 0.9)) * secondary_mul,((pick_up * 1.1)) * secondary_mul}
 					self[id].damage_falloff = new_smg_damage_falloff
 				end
 			end
@@ -1461,13 +1707,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.olympic.fire_mode_data = {fire_rate = 60/710}
 			self.olympic.auto = {fire_rate = 60/710}
 			
-			self.schakal.stats.spread = 12
-			self.schakal.stats.recoil = 15
+			self.schakal.stats.spread = 18
+			self.schakal.stats.recoil = 17
 			self.schakal.CLIP_AMMO_MAX = 25
 			self.schakal.NR_CLIPS_MAX = 6
 			self.schakal.AMMO_MAX = self.schakal.CLIP_AMMO_MAX * self.schakal.NR_CLIPS_MAX
-			self.schakal.fire_mode_data = {fire_rate = 60/666}
-			self.schakal.auto = {fire_rate = 60/666}
+			self.schakal.fire_mode_data = {fire_rate = 60/690}
+			self.schakal.auto = {fire_rate = 60/690}
 			
 			self.sr2.stats.spread = 6
 			self.sr2.stats.recoil = 20
@@ -1510,13 +1756,16 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_olympic.fire_mode_data = {fire_rate = 60/710}
 			self.x_olympic.single = {fire_rate = 60/710}
 			
-			self.x_schakal.stats.spread = 12
-			self.x_schakal.stats.recoil = 15
+			self.x_schakal.stats.spread = 18
+			self.x_schakal.stats.recoil = 17
 			self.x_schakal.CLIP_AMMO_MAX = 50
 			self.x_schakal.NR_CLIPS_MAX = 3
 			self.x_schakal.AMMO_MAX = self.x_schakal.CLIP_AMMO_MAX * self.x_schakal.NR_CLIPS_MAX
 			self.x_schakal.fire_mode_data = {fire_rate = 60/666}
 			self.x_schakal.single = {fire_rate = 60/666}
+			if self.x_schakal.timers.reload_not_empty == 3 then
+				self.x_schakal.timers.reload_not_empty = 2.5
+			end
 			
 			self.x_sr2.stats.spread = 6
 			self.x_sr2.stats.recoil = 20
@@ -1543,6 +1792,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_uzi.single = {fire_rate = 60/625}
 			
 		end
+		init_medium_heavy()
 		
 		-- 2-3 headshot kill
 		local function init_medium()
@@ -1555,11 +1805,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				akmsu = true,
 				tec9 = true
 			}
+			
+			local pick_up = pickups._155
 
 			for id, status in pairs(SMGs_155) do
 				if self[id] then
 					self[id].stats.damage = 155
-					self[id].AMMO_PICKUP = {((avg_155_pickup * 0.9) / 1.35) * secondary_mul,((avg_155_pickup * 1.1) / 1.35) * secondary_mul}
+					self[id].AMMO_PICKUP = {((pick_up * 0.9)) * secondary_mul,((pick_up * 1.1)) * secondary_mul}
 					self[id].damage_falloff = new_smg_damage_falloff
 				end
 			end
@@ -1568,8 +1820,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.vityaz.stats.recoil = 10
 			self.vityaz.NR_CLIPS_MAX = 5
 			self.vityaz.AMMO_MAX = self.vityaz.CLIP_AMMO_MAX * self.vityaz.NR_CLIPS_MAX
-			self.vityaz.fire_mode_data = {fire_rate = 60/710}
-			self.vityaz.auto = {fire_rate = 60/710}
+			self.vityaz.fire_mode_data = {fire_rate = 60/680}
+			self.vityaz.auto = {fire_rate = 60/680}
 			
 			self.new_mp5.stats.recoil = 18
 			self.new_mp5.stats.reload = 13
@@ -1581,6 +1833,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			
 			self.m1928.stats.spread = 7
 			self.m1928.stats.recoil = 23
+			self.m1928.stats.reload = 12
 			self.m1928.NR_CLIPS_MAX = 3
 			self.m1928.AMMO_MAX = self.m1928.CLIP_AMMO_MAX * self.m1928.NR_CLIPS_MAX
 			
@@ -1599,8 +1852,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.akmsu.fire_mode_data = {fire_rate = 60/700}
 			self.akmsu.auto = {fire_rate = 60/700}
 			
-			self.tec9.stats.recoil = 17
-			self.tec9.stats.spread = 12
+			self.tec9.stats.recoil = 18
+			self.tec9.stats.spread = 11
 			self.tec9.stats.reload = 14
 			self.tec9.NR_CLIPS_MAX = 7.5
 			self.tec9.AMMO_MAX = self.tec9.CLIP_AMMO_MAX * self.tec9.NR_CLIPS_MAX
@@ -1652,12 +1905,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_akmsu.fire_mode_data = {fire_rate = 60/700}
 			self.x_akmsu.single = {fire_rate = 60/700}
 			
-			self.x_tec9.stats.recoil = 17
-			self.x_tec9.stats.spread = 12
+			self.x_tec9.stats.recoil = 18
+			self.x_tec9.stats.spread = 11
 			self.x_tec9.NR_CLIPS_MAX = 3.75
 			self.x_tec9.AMMO_MAX = self.x_tec9.CLIP_AMMO_MAX * self.x_tec9.NR_CLIPS_MAX
 			
 		end
+		init_medium()
 		
 		-- 3-4 headshot kill
 		local function init_light()
@@ -1669,15 +1923,19 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				mp9 = true,
 				p90 = true
 			}
+			
+			local pick_up = pickups._125
+			
 			for id, status in pairs(SMGs_120) do
 				if self[id] then
 					self[id].stats.damage = 125
-					self[id].AMMO_PICKUP = {((avg_120_pickup * 0.9) / 1.35) * secondary_mul,((avg_120_pickup * 1.1) / 1.35) * secondary_mul}
+					self[id].AMMO_PICKUP = {((pick_up * 0.9)) * secondary_mul,((pick_up * 1.1)) * secondary_mul}
 					self[id].damage_falloff = new_smg_damage_falloff
 				end
 			end
 			
-			self.mp7.stats.spread = 12
+			self.mp7.stats.spread = 18
+			self.mp7.stats.recoil = 12
 			self.mp7.stats.reload = 14
 			self.mp7.stats.concealment = 25
 			self.mp7.AMMO_MAX = 180
@@ -1704,7 +1962,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.mp9.auto = {fire_rate = 60/1000}
 			
 			self.p90.stats.spread = 16
-			self.p90.stats.recoil = 14
+			self.p90.stats.recoil = 15
 			self.p90.AMMO_MAX = 175
 			self.p90.NR_CLIPS_MAX = self.p90.AMMO_MAX / self.p90.CLIP_AMMO_MAX
 			self.p90.fire_mode_data = {fire_rate = 60/900}
@@ -1713,14 +1971,15 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			-- akimbo
 			for id, status in pairs(SMGs_120) do
 				if self["x_"..id] then
-					self["x_"..id].stats.damage = math.ceil(120/2)
+					self["x_"..id].stats.damage = math.ceil(126/2)
 					self["x_"..id].AMMO_PICKUP[1] = self[id].AMMO_PICKUP[1] * secondary_to_primary_mul * 2
 					self["x_"..id].AMMO_PICKUP[2] = self[id].AMMO_PICKUP[2] * secondary_to_primary_mul * 2
 					self["x_"..id].damage_falloff = new_smg_damage_falloff
 				end
 			end
 			
-			self.x_mp7.stats.spread = 12
+			self.x_mp7.stats.spread = 18
+			self.x_mp7.stats.recoil = 12
 			self.x_mp7.stats.reload = 14
 			self.x_mp7.stats.concealment = 25
 			self.x_mp7.AMMO_MAX = 180
@@ -1754,6 +2013,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_p90.single = {fire_rate = 60/900}
 			
 		end
+		init_light()
 		
 		-- 3-5 headshot kill
 		local function init_super_light()
@@ -1765,10 +2025,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				baka = true,
 				polymer = true
 			}
+			
+			local pick_up = pickups._95
+			
 			for id, status in pairs(SMGs_95) do
 				if self[id] then
 					self[id].stats.damage = 95
-					self[id].AMMO_PICKUP = {((avg_95_pickup * 0.9) / 1.35) * secondary_mul,((avg_95_pickup * 1.1) / 1.35) * secondary_mul}
+					self[id].AMMO_PICKUP = {((pick_up * 0.9)) * secondary_mul,((pick_up * 1.1)) * secondary_mul}
 					self[id].damage_falloff = new_smg_damage_falloff
 				end
 			end
@@ -1783,8 +2046,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.fmg9.AMMO_MAX = 210
 			self.fmg9.NR_CLIPS_MAX = self.fmg9.AMMO_MAX / self.fmg9.CLIP_AMMO_MAX
 			
-			self.scorpion.stats.spread = 12
-			self.scorpion.stats.recoil = 19
+			self.scorpion.stats.spread = 19
+			self.scorpion.stats.recoil = 13
 			self.scorpion.AMMO_MAX = 200
 			self.scorpion.NR_CLIPS_MAX = self.scorpion.AMMO_MAX / self.scorpion.CLIP_AMMO_MAX
 			
@@ -1813,8 +2076,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_mac10.AMMO_MAX = 200
 			self.x_mac10.NR_CLIPS_MAX = self.x_mac10.AMMO_MAX / self.x_mac10.CLIP_AMMO_MAX
 			
-			self.x_scorpion.stats.spread = 12
-			self.x_scorpion.stats.recoil = 19
+			self.x_scorpion.stats.spread = 19
+			self.x_scorpion.stats.recoil = 13
 			self.x_scorpion.AMMO_MAX = 200
 			self.x_scorpion.NR_CLIPS_MAX = self.x_scorpion.AMMO_MAX / self.x_scorpion.CLIP_AMMO_MAX
 			
@@ -1829,26 +2092,16 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_polymer.NR_CLIPS_MAX = self.x_polymer.AMMO_MAX / self.x_polymer.CLIP_AMMO_MAX	
 			
 		end
-		
-		init_heavy()
-		init_medium_heavy()
-		init_medium()
-		init_light()
 		init_super_light()
+		
 	end
 	setSMGs()
 	
 	-- Pistols --
 	local function setPISTOLs()
 	
-		local avg_88_pickup = 9.7
-		local avg_95_pickup = 8.6
-		local avg_120_pickup = 5.9
-		local avg_155_pickup = 4.01
-		local avg_250_pickup = 1.95
-		local avg_450_pickup = 0.9
-		
-		local new_pistol_damage_falloff = {optimal_distance = 10,optimal_range = 10,near_falloff = 0,far_falloff = 0,near_multiplier = 1,far_multiplier = 1}
+		local pickups = G_W_M.ammo_pickups.PISTOLs
+		local new_pistol_damage_falloff = G_W_M.damage_dropoff.PISTOLs
 
 		---- 88 pistols ----
 		local function Gilza_init_FA_very_low_pistols()
@@ -1858,37 +2111,31 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				beer = {fmd = "auto",akimbo = true}
 			}
 			
-			local new_fire_rate_multiplier = 1.2
+			local pick_up = pickups._88
 			local new_damage = 88
 			
 			for gun, tbl in pairs(low_FA_pistols) do
-				if tbl.fmd == "auto" then
-					new_fire_rate_multiplier = 0.8
-				else
-					new_fire_rate_multiplier = 1.2
-				end
 				local function apply_stats(id, is_akimbo)
 					if self[id] then
 						if self[id].fire_mode_data then
-							self[id].fire_mode_data.fire_rate = self[id].fire_mode_data.fire_rate * new_fire_rate_multiplier
+							self[id].fire_mode_data.fire_rate = 60/1150
 						end
 						if self[id].single then
-							self[id].single.fire_rate = self[id].single.fire_rate * new_fire_rate_multiplier
+							self[id].single.fire_rate = 60/1150
 						end
 						if self[id].auto then
-							self[id].auto.fire_rate = self[id].auto.fire_rate * new_fire_rate_multiplier
+							self[id].auto.fire_rate = 60/1150
 						end
 						self[id].damage_falloff = new_pistol_damage_falloff
 						if is_akimbo then
 							self[id].stats.damage = math.ceil(new_damage/2)
-							self[id].AMMO_PICKUP = {((avg_88_pickup * 0.9) / 1.35) * 2,((avg_88_pickup * 1.1) / 1.35) * 2}
+							self[id].AMMO_PICKUP = {((pick_up * 0.9)) * 2,((pick_up * 1.1)) * 2}
 						else
 							self[id].stats.damage = new_damage
-							self[id].AMMO_PICKUP = {((avg_88_pickup * 0.9) / 1.35) * secondary_mul,((avg_88_pickup * 1.1) / 1.35) * secondary_mul}
+							self[id].AMMO_PICKUP = {((pick_up * 0.9)) * secondary_mul,((pick_up * 1.1)) * secondary_mul}
 						end
 					end
 				end
-				
 				apply_stats(gun)
 				
 				if tbl.akimbo then
@@ -1905,13 +2152,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			
 			self.beer.stats.spread = 13
 			self.beer.stats.recoil = 19
-			self.beer.CLIP_AMMO_MAX = 20
-			self.beer.NR_CLIPS_MAX = 8
+			self.beer.CLIP_AMMO_MAX = 24
+			self.beer.NR_CLIPS_MAX = 6
 			self.beer.AMMO_MAX = self.beer.NR_CLIPS_MAX * self.beer.CLIP_AMMO_MAX
 			self.x_beer.stats.spread = 13
 			self.x_beer.stats.recoil = 19
-			self.x_beer.CLIP_AMMO_MAX = 40
-			self.x_beer.NR_CLIPS_MAX = 4
+			self.x_beer.CLIP_AMMO_MAX = 48
+			self.x_beer.NR_CLIPS_MAX = 3
 			self.x_beer.AMMO_MAX = self.x_beer.NR_CLIPS_MAX * self.x_beer.CLIP_AMMO_MAX
 			
 		end
@@ -1926,33 +2173,19 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				czech = {fmd = "auto",akimbo = true}
 			}
 			
-			local new_fire_rate_multiplier = 1.2
+			local pick_up = pickups._95
 			local new_damage = 95
 			
 			for gun, tbl in pairs(low_pistols) do
-				if tbl.fmd == "auto" then
-					new_fire_rate_multiplier = 0.8
-				else
-					new_fire_rate_multiplier = 1.2
-				end
 				local function apply_stats(id, is_akimbo)
 					if self[id] then
-						if self[id].fire_mode_data then
-							self[id].fire_mode_data.fire_rate = self[id].fire_mode_data.fire_rate * new_fire_rate_multiplier
-						end
-						if self[id].single then
-							self[id].single.fire_rate = self[id].single.fire_rate * new_fire_rate_multiplier
-						end
-						if self[id].auto then
-							self[id].auto.fire_rate = self[id].auto.fire_rate * new_fire_rate_multiplier
-						end
 						self[id].damage_falloff = new_pistol_damage_falloff
 						if is_akimbo then
 							self[id].stats.damage = math.ceil(new_damage/2)
-							self[id].AMMO_PICKUP = {((avg_95_pickup * 0.9) / 1.35) * 2,((avg_95_pickup * 1.1) / 1.35) * 2}
+							self[id].AMMO_PICKUP = {((pick_up * 0.9)) * 2,((pick_up * 1.1)) * 2}
 						else
 							self[id].stats.damage = new_damage
-							self[id].AMMO_PICKUP = {((avg_95_pickup * 0.9) / 1.35) * secondary_mul,((avg_95_pickup * 1.1) / 1.35) * secondary_mul}
+							self[id].AMMO_PICKUP = {((pick_up * 0.9)) * secondary_mul,((pick_up * 1.1)) * secondary_mul}
 						end
 					end
 				end
@@ -1973,28 +2206,64 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			
 			self.czech.stats.spread = 13
 			self.czech.stats.recoil = 17
-			self.czech.CLIP_AMMO_MAX = 16
-			self.czech.NR_CLIPS_MAX = 9
+			self.czech.CLIP_AMMO_MAX = 20
+			self.czech.NR_CLIPS_MAX = 7
 			self.czech.AMMO_MAX = self.czech.NR_CLIPS_MAX * self.czech.CLIP_AMMO_MAX
+			if self.czech.fire_mode_data then
+				self.czech.fire_mode_data.fire_rate = 60/1050
+			end
+			if self.czech.single then
+				self.czech.single.fire_rate = 60/1050
+			end
+			if self.czech.auto then
+				self.czech.auto.fire_rate = 60/1050
+			end
 			self.x_czech.stats.spread = 13
 			self.x_czech.stats.recoil = 17
-			self.x_czech.CLIP_AMMO_MAX = 32
-			self.x_czech.NR_CLIPS_MAX = 4.5
+			self.x_czech.CLIP_AMMO_MAX = 40
+			self.x_czech.NR_CLIPS_MAX = 3.5
 			self.x_czech.AMMO_MAX = self.x_czech.NR_CLIPS_MAX * self.x_czech.CLIP_AMMO_MAX
+			if self.x_czech.fire_mode_data then
+				self.x_czech.fire_mode_data.fire_rate = 60/1050
+			end
+			if self.x_czech.single then
+				self.x_czech.single.fire_rate = 60/1050
+			end
+			if self.x_czech.auto then
+				self.x_czech.auto.fire_rate = 60/1050
+			end
 			
 			self.glock_18c.stats.spread = 13
 			self.glock_18c.stats.recoil = 15
 			self.glock_18c.NR_CLIPS_MAX = 7
 			self.glock_18c.AMMO_MAX = self.glock_18c.NR_CLIPS_MAX * self.glock_18c.CLIP_AMMO_MAX
+			if self.glock_18c.fire_mode_data then
+				self.glock_18c.fire_mode_data.fire_rate = 60/950
+			end
+			if self.glock_18c.single then
+				self.glock_18c.single.fire_rate = 60/950
+			end
+			if self.glock_18c.auto then
+				self.glock_18c.auto.fire_rate = 60/950
+			end
 			self.x_g18c.stats.spread = 13
 			self.x_g18c.stats.recoil = 15
 			self.x_g18c.NR_CLIPS_MAX = 3.5
 			self.x_g18c.AMMO_MAX = self.x_g18c.NR_CLIPS_MAX * self.x_g18c.CLIP_AMMO_MAX
+			if self.x_g18c.fire_mode_data then
+				self.x_g18c.fire_mode_data.fire_rate = 60/950
+			end
+			if self.x_g18c.single then
+				self.x_g18c.single.fire_rate = 60/950
+			end
+			if self.x_g18c.auto then
+				self.x_g18c.auto.fire_rate = 60/950
+			end
 			
 		end
 		Gilza_init_FA_low_pistols()
 		
-		---- 120 pistols ----
+		---- 125 pistols ----
 		local function Gilza_init_mid_pistols()
 			
 			-- 2-4 headshot kill
@@ -2005,36 +2274,36 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				legacy = {fmd = "single",akimbo = true},
 				g26 = {fmd = "single",akimbo = "jowi"},
 				shrew = {fmd = "single",akimbo = true},
+				maxim9 = {fmd = "single",akimbo = true},
 				stech = {fmd = "auto",akimbo = true}
 			}
 			
-			local new_fire_rate_multiplier = 1.2
+			local pick_up = pickups._125
 			local new_damage = 125
 			
 			for gun, tbl in pairs(mid_pistols) do
+				local new_fire_rate = 60/360
 				if tbl.fmd == "auto" then
-					new_fire_rate_multiplier = 0.8
-				else
-					new_fire_rate_multiplier = 1.2
+					new_fire_rate = 60/540
 				end
 				local function apply_stats(id, is_akimbo)
 					if self[id] then
 						if self[id].fire_mode_data then
-							self[id].fire_mode_data.fire_rate = self[id].fire_mode_data.fire_rate * new_fire_rate_multiplier
+							self[id].fire_mode_data.fire_rate = new_fire_rate
 						end
 						if self[id].single then
-							self[id].single.fire_rate = self[id].single.fire_rate * new_fire_rate_multiplier
+							self[id].single.fire_rate = new_fire_rate
 						end
 						if self[id].auto then
-							self[id].auto.fire_rate = self[id].auto.fire_rate * new_fire_rate_multiplier
+							self[id].auto.fire_rate = new_fire_rate
 						end
 						self[id].damage_falloff = new_pistol_damage_falloff
 						if is_akimbo then
 							self[id].stats.damage = math.ceil(new_damage/2)
-							self[id].AMMO_PICKUP = {((avg_120_pickup * 0.9) / 1.35) * 2,((avg_120_pickup * 1.1) / 1.35) * 2}
+							self[id].AMMO_PICKUP = {((pick_up * 0.9)) * 2,((pick_up * 1.1)) * 2}
 						else
 							self[id].stats.damage = new_damage
-							self[id].AMMO_PICKUP = {((avg_120_pickup * 0.9) / 1.35) * secondary_mul,((avg_120_pickup * 1.1) / 1.35) * secondary_mul}
+							self[id].AMMO_PICKUP = {((pick_up * 0.9)) * secondary_mul,((pick_up * 1.1)) * secondary_mul}
 						end
 					end
 				end
@@ -2057,8 +2326,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.glock_17.stats.recoil = 23
 			self.glock_17.NR_CLIPS_MAX = 6
 			self.glock_17.AMMO_MAX = self.glock_17.NR_CLIPS_MAX * self.glock_17.CLIP_AMMO_MAX
-			self.x_g17.fire_mode_data.fire_rate = 60/455
-			self.x_g17.single.fire_rate = 60/455
 			self.x_g17.stats.spread = 9
 			self.x_g17.stats.recoil = 23
 			self.x_g17.NR_CLIPS_MAX = 3
@@ -2067,8 +2334,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.ppk.stats.recoil = 21
 			self.ppk.NR_CLIPS_MAX = 8
 			self.ppk.AMMO_MAX = self.ppk.NR_CLIPS_MAX * self.ppk.CLIP_AMMO_MAX
-			self.x_ppk.fire_mode_data.fire_rate = 60/455
-			self.x_ppk.single.fire_rate = 60/455
 			self.x_ppk.stats.recoil = 21
 			self.x_ppk.NR_CLIPS_MAX = 4
 			self.x_ppk.AMMO_MAX = self.x_ppk.NR_CLIPS_MAX * self.x_ppk.CLIP_AMMO_MAX
@@ -2077,20 +2342,18 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.b92fs.stats.recoil = 13
 			self.b92fs.NR_CLIPS_MAX = 5
 			self.b92fs.AMMO_MAX = self.b92fs.NR_CLIPS_MAX * self.b92fs.CLIP_AMMO_MAX
-			self.x_b92fs.fire_mode_data.fire_rate = 60/455
-			self.x_b92fs.single.fire_rate = 60/455
 			self.x_b92fs.stats.spread = 22
 			self.x_b92fs.stats.recoil = 13
 			self.x_b92fs.stats.concealment = 30
 			self.x_b92fs.NR_CLIPS_MAX = 2.5
 			self.x_b92fs.AMMO_MAX = self.x_b92fs.NR_CLIPS_MAX * self.x_b92fs.CLIP_AMMO_MAX
 			
-			self.legacy.stats.spread = 10
-			self.legacy.stats.recoil = 23
+			self.legacy.stats.spread = 15
+			self.legacy.stats.recoil = 17
 			self.legacy.NR_CLIPS_MAX = 7
 			self.legacy.AMMO_MAX = self.legacy.NR_CLIPS_MAX * self.legacy.CLIP_AMMO_MAX
-			self.x_legacy.stats.spread = 10
-			self.x_legacy.stats.recoil = 23
+			self.x_legacy.stats.spread = 15
+			self.x_legacy.stats.recoil = 17
 			self.x_legacy.NR_CLIPS_MAX = 3.5
 			self.x_legacy.AMMO_MAX = self.x_legacy.NR_CLIPS_MAX * self.x_legacy.CLIP_AMMO_MAX
 			
@@ -2098,8 +2361,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.g26.stats.recoil = 21
 			self.g26.NR_CLIPS_MAX = 11
 			self.g26.AMMO_MAX = self.g26.NR_CLIPS_MAX * self.g26.CLIP_AMMO_MAX
-			self.jowi.fire_mode_data.fire_rate = 60/455
-			self.jowi.single.fire_rate = 60/455
 			self.jowi.stats.spread = 9
 			self.jowi.stats.recoil = 21
 			self.jowi.NR_CLIPS_MAX = 5.5
@@ -2109,8 +2370,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.shrew.stats.recoil = 11
 			self.shrew.NR_CLIPS_MAX = 6
 			self.shrew.AMMO_MAX = self.shrew.NR_CLIPS_MAX * self.shrew.CLIP_AMMO_MAX
-			self.x_shrew.fire_mode_data.fire_rate = 60/455
-			self.x_shrew.single.fire_rate = 60/455
 			self.x_shrew.stats.spread = 22
 			self.x_shrew.stats.recoil = 11
 			self.x_shrew.NR_CLIPS_MAX = 3
@@ -2125,6 +2384,17 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_stech.NR_CLIPS_MAX = 3
 			self.x_stech.AMMO_MAX = self.x_stech.NR_CLIPS_MAX * self.x_stech.CLIP_AMMO_MAX
 			
+			self.maxim9.stats.spread = 19
+			self.maxim9.stats.recoil = 15
+			self.maxim9.CLIP_AMMO_MAX = 15
+			self.maxim9.NR_CLIPS_MAX = 6
+			self.maxim9.AMMO_MAX = self.maxim9.NR_CLIPS_MAX * self.maxim9.CLIP_AMMO_MAX
+			self.x_maxim9.stats.spread = 19
+			self.x_maxim9.stats.recoil = 15
+			self.x_maxim9.CLIP_AMMO_MAX = 30
+			self.x_maxim9.NR_CLIPS_MAX = 3
+			self.x_maxim9.AMMO_MAX = self.x_maxim9.NR_CLIPS_MAX * self.x_maxim9.CLIP_AMMO_MAX
+			
 		end
 		Gilza_init_mid_pistols()
 		
@@ -2136,43 +2406,40 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				usp = {fmd = "single",akimbo = true},
 				p226 = {fmd = "single",akimbo = true},
 				colt_1911 = {fmd = "single",akimbo = "x_1911"},
-				maxim9 = {fmd = "single",akimbo = true},
 				g22c = {fmd = "single",akimbo = true},
 				c96 = {fmd = "single",akimbo = true},
 				type54 = {fmd = "single",akimbo = true},
 				packrat = {fmd = "single",akimbo = true},
 				lemming = {fmd = "single",akimbo = false},
-				hs2000 = {fmd = "single",akimbo = true},
 				holt = {fmd = "single",akimbo = true}
 			}
 			
-			local new_fire_rate_multiplier = 1.2
+			local pick_up = pickups._155
 			local new_damage = 155
 			
 			for gun, tbl in pairs(upper_mid_pistols) do
+				local new_fire_rate = 60/330
 				if tbl.fmd == "auto" then
-					new_fire_rate_multiplier = 0.8
-				else
-					new_fire_rate_multiplier = 1.2
+					new_fire_rate = 60/500
 				end
 				local function apply_stats(id, is_akimbo)
 					if self[id] then
 						if self[id].fire_mode_data then
-							self[id].fire_mode_data.fire_rate = self[id].fire_mode_data.fire_rate * new_fire_rate_multiplier
+							self[id].fire_mode_data.fire_rate = new_fire_rate
 						end
 						if self[id].single then
-							self[id].single.fire_rate = self[id].single.fire_rate * new_fire_rate_multiplier
+							self[id].single.fire_rate = new_fire_rate
 						end
 						if self[id].auto then
-							self[id].auto.fire_rate = self[id].auto.fire_rate * new_fire_rate_multiplier
+							self[id].auto.fire_rate = new_fire_rate
 						end
 						self[id].damage_falloff = new_pistol_damage_falloff
 						if is_akimbo then
 							self[id].stats.damage = math.ceil(new_damage/2)
-							self[id].AMMO_PICKUP = {((avg_155_pickup * 0.9) / 1.35) * 2,((avg_155_pickup * 1.1) / 1.35) * 2}
+							self[id].AMMO_PICKUP = {((pick_up * 0.9)) * 2,((pick_up * 1.1)) * 2}
 						else
 							self[id].stats.damage = new_damage
-							self[id].AMMO_PICKUP = {((avg_155_pickup * 0.9) / 1.35) * secondary_mul,((avg_155_pickup * 1.1) / 1.35) * secondary_mul}
+							self[id].AMMO_PICKUP = {((pick_up * 0.9)) * secondary_mul,((pick_up * 1.1)) * secondary_mul}
 						end
 					end
 				end
@@ -2192,14 +2459,12 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			end
 			
 			self.usp.stats.spread = 21
-			self.usp.stats.recoil = 17
+			self.usp.stats.recoil = 15
 			self.usp.CLIP_AMMO_MAX = 12
 			self.usp.NR_CLIPS_MAX = 5.5
 			self.usp.AMMO_MAX = self.usp.NR_CLIPS_MAX * self.usp.CLIP_AMMO_MAX
-			self.x_usp.fire_mode_data.fire_rate = 60/400
-			self.x_usp.single.fire_rate = 60/400
 			self.x_usp.stats.spread = 21
-			self.x_usp.stats.recoil = 17
+			self.x_usp.stats.recoil = 15
 			self.x_usp.CLIP_AMMO_MAX = 24
 			self.x_usp.NR_CLIPS_MAX = 2.75
 			self.x_usp.AMMO_MAX = self.x_usp.NR_CLIPS_MAX * self.x_usp.CLIP_AMMO_MAX
@@ -2208,8 +2473,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.p226.stats.recoil = 22
 			self.p226.NR_CLIPS_MAX = 6
 			self.p226.AMMO_MAX = self.p226.NR_CLIPS_MAX * self.p226.CLIP_AMMO_MAX
-			self.x_p226.fire_mode_data.fire_rate = 60/400
-			self.x_p226.single.fire_rate = 60/400
 			self.x_p226.stats.spread = 13
 			self.x_p226.stats.recoil = 22
 			self.x_p226.NR_CLIPS_MAX = 3
@@ -2220,8 +2483,6 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.colt_1911.CLIP_AMMO_MAX = 8
 			self.colt_1911.NR_CLIPS_MAX = 7
 			self.colt_1911.AMMO_MAX = self.colt_1911.NR_CLIPS_MAX * self.colt_1911.CLIP_AMMO_MAX
-			self.x_1911.fire_mode_data.fire_rate = 60/400
-			self.x_1911.single.fire_rate = 60/400
 			self.x_1911.stats.spread = 19
 			self.x_1911.stats.recoil = 20
 			self.x_1911.stats.concealment = 29
@@ -2229,38 +2490,21 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_1911.NR_CLIPS_MAX = 3.5
 			self.x_1911.AMMO_MAX = self.x_1911.NR_CLIPS_MAX * self.x_1911.CLIP_AMMO_MAX
 			
-			self.maxim9.stats.spread = 20
-			self.maxim9.stats.recoil = 14
-			self.maxim9.CLIP_AMMO_MAX = 15
-			self.maxim9.NR_CLIPS_MAX = 5
-			self.maxim9.AMMO_MAX = self.maxim9.NR_CLIPS_MAX * self.maxim9.CLIP_AMMO_MAX
-			self.x_maxim9.fire_mode_data.fire_rate = 60/400
-			self.x_maxim9.single.fire_rate = 60/400
-			self.x_maxim9.stats.spread = 20
-			self.x_maxim9.stats.recoil = 14
-			self.x_maxim9.CLIP_AMMO_MAX = 30
-			self.x_maxim9.NR_CLIPS_MAX = 2.5
-			self.x_maxim9.AMMO_MAX = self.x_maxim9.NR_CLIPS_MAX * self.x_maxim9.CLIP_AMMO_MAX
-			
-			self.g22c.stats.spread = 18
-			self.g22c.stats.recoil = 19
+			self.g22c.stats.spread = 17
+			self.g22c.stats.recoil = 17
 			self.g22c.NR_CLIPS_MAX = 4
 			self.g22c.AMMO_MAX = self.g22c.NR_CLIPS_MAX * self.g22c.CLIP_AMMO_MAX
-			self.x_g22c.fire_mode_data.fire_rate = 60/400
-			self.x_g22c.single.fire_rate = 60/400
-			self.x_g22c.stats.spread = 18
-			self.x_g22c.stats.recoil = 19
+			self.x_g22c.stats.spread = 17
+			self.x_g22c.stats.recoil = 17
 			self.x_g22c.NR_CLIPS_MAX = 2
 			self.x_g22c.AMMO_MAX = self.x_g22c.NR_CLIPS_MAX * self.x_g22c.CLIP_AMMO_MAX
 			
-			self.c96.stats.recoil = 17
-			self.c96.stats.reload = 16
+			self.c96.stats.recoil = 15
+			self.c96.stats.reload = 20
 			self.c96.CLIP_AMMO_MAX = 10
 			self.c96.NR_CLIPS_MAX = 6
 			self.c96.AMMO_MAX = self.c96.NR_CLIPS_MAX * self.c96.CLIP_AMMO_MAX
-			self.x_c96.stats.recoil = 17
-			self.x_c96.fire_mode_data.fire_rate = 60/400
-			self.x_c96.single.fire_rate = 60/400
+			self.x_c96.stats.recoil = 15
 			self.x_c96.CLIP_AMMO_MAX = 20
 			self.x_c96.NR_CLIPS_MAX = 3
 			self.x_c96.AMMO_MAX = self.x_c96.NR_CLIPS_MAX * self.x_c96.CLIP_AMMO_MAX
@@ -2268,28 +2512,31 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.type54_underbarrel.rays = 10
 			self.type54_underbarrel.stats.damage = 66
 			self.type54_underbarrel.stats.spread = 10
-			self.type54_underbarrel.AMMO_PICKUP = {0.25,0.3}
+			self.type54_underbarrel.AMMO_PICKUP = {0.35,0.45}
 			Gilza.shotgun_minimal_damage_multipliers.type54_underbarrel = 1
 			self.x_type54_underbarrel.rays = 10
 			self.x_type54_underbarrel.stats.damage = 33
 			self.x_type54_underbarrel.stats.spread = 10
-			self.x_type54_underbarrel.AMMO_PICKUP = {0.5,0.6}
+			self.x_type54_underbarrel.AMMO_PICKUP = {0.8,1}
 			Gilza.shotgun_minimal_damage_multipliers.x_type54_underbarrel = 1
 			
+			self.type54.stats.recoil = 12
 			self.type54.NR_CLIPS_MAX = 5
 			self.type54.AMMO_MAX = self.type54.NR_CLIPS_MAX * self.type54.CLIP_AMMO_MAX
-			self.x_type54.fire_mode_data.fire_rate = 60/400
-			self.x_type54.single.fire_rate = 60/400
+			self.type54.AMMO_PICKUP = {((pick_up * 0.9 * 0.7)) * secondary_mul,((pick_up * 1.1 * 0.7)) * secondary_mul}
+			
+			self.x_type54.stats.recoil = 12
+			self.x_type54.fire_mode_data.fire_rate = 60/330
+			self.x_type54.single.fire_rate = 60/330
 			self.x_type54.NR_CLIPS_MAX = 2.5
 			self.x_type54.AMMO_MAX = self.x_type54.NR_CLIPS_MAX * self.x_type54.CLIP_AMMO_MAX
+			self.x_type54.AMMO_PICKUP = {((pick_up * 0.9 * 0.7)) * 2,((pick_up * 1.1 * 0.7)) * 2}
 			
-			self.packrat.stats.spread = 20
+			self.packrat.stats.spread = 22
 			self.packrat.stats.recoil = 13
 			self.packrat.NR_CLIPS_MAX = 4
 			self.packrat.AMMO_MAX = self.packrat.NR_CLIPS_MAX * self.packrat.CLIP_AMMO_MAX
-			self.x_packrat.fire_mode_data.fire_rate = 60/400
-			self.x_packrat.single.fire_rate = 60/400
-			self.x_packrat.stats.spread = 20
+			self.x_packrat.stats.spread = 22
 			self.x_packrat.stats.recoil = 13
 			self.x_packrat.NR_CLIPS_MAX = 2
 			self.x_packrat.AMMO_MAX = self.x_packrat.NR_CLIPS_MAX * self.x_packrat.CLIP_AMMO_MAX
@@ -2299,29 +2546,12 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.lemming.CLIP_AMMO_MAX = 20
 			self.lemming.NR_CLIPS_MAX = 2.5
 			self.lemming.AMMO_MAX = self.lemming.NR_CLIPS_MAX * self.lemming.CLIP_AMMO_MAX
-			self.lemming.AMMO_PICKUP = {((avg_155_pickup * 0.9) / 1.35) * 0.5 * secondary_mul,((avg_155_pickup * 1.1) / 1.35) * 0.5 * secondary_mul}
-			self.lemming.fire_mode_data.fire_rate = 60/400 -- why does it even have such high base rof?
-			self.lemming.single.fire_rate = 60/400
-			
-			self.hs2000.stats.spread = 16
-			self.hs2000.stats.recoil = 15
-			self.hs2000.CLIP_AMMO_MAX = 13
-			self.hs2000.NR_CLIPS_MAX = 6
-			self.hs2000.AMMO_MAX = self.hs2000.NR_CLIPS_MAX * self.hs2000.CLIP_AMMO_MAX
-			self.x_hs2000.fire_mode_data.fire_rate = 60/400
-			self.x_hs2000.single.fire_rate = 60/400
-			self.x_hs2000.stats.spread = 16
-			self.x_hs2000.stats.recoil = 15
-			self.x_hs2000.CLIP_AMMO_MAX = 26
-			self.x_hs2000.NR_CLIPS_MAX = 3
-			self.x_hs2000.AMMO_MAX = self.x_hs2000.NR_CLIPS_MAX * self.x_hs2000.CLIP_AMMO_MAX
+			self.lemming.AMMO_PICKUP = {((pick_up * 0.9 * 0.5)) * secondary_mul,((pick_up * 1.1 * 0.5)) * secondary_mul}
 			
 			self.holt.stats.spread = 23
 			self.holt.stats.recoil = 20
 			self.holt.NR_CLIPS_MAX = 2
 			self.holt.AMMO_MAX = self.holt.NR_CLIPS_MAX * self.holt.CLIP_AMMO_MAX
-			self.x_holt.fire_mode_data.fire_rate = 60/400
-			self.x_holt.single.fire_rate = 60/400
 			self.x_holt.stats.spread = 23
 			self.x_holt.stats.recoil = 20
 			self.x_holt.NR_CLIPS_MAX = 1.5
@@ -2339,30 +2569,32 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				pl14 = {fmd = "single",akimbo = true},
 				sparrow = {fmd = "single",akimbo = true},
 				deagle = {fmd = "single",akimbo = true},
-				breech = {fmd = "single",akimbo = true}
+				breech = {fmd = "single",akimbo = true},
+				hs2000 = {fmd = "single",akimbo = true},
 			}
 			
+			local pick_up = pickups._250
 			local new_damage = 250
 			
 			for gun, tbl in pairs(heavy_pistols) do
 				local function apply_stats(id, is_akimbo)
 					if self[id] then
 						if self[id].fire_mode_data then
-							self[id].fire_mode_data.fire_rate = 60/360
+							self[id].fire_mode_data.fire_rate = 60/300
 						end
 						if self[id].single then
-							self[id].single.fire_rate = 60/360
+							self[id].single.fire_rate = 60/300
 						end
 						if self[id].auto then
-							self[id].auto.fire_rate = 60/360
+							self[id].auto.fire_rate = 60/300
 						end
 						self[id].damage_falloff = new_pistol_damage_falloff
 						if is_akimbo then
 							self[id].stats.damage = math.ceil(new_damage/2)
-							self[id].AMMO_PICKUP = {((avg_250_pickup * 0.9) / 1.35) * 2,((avg_250_pickup * 1.1) / 1.35) * 2}
+							self[id].AMMO_PICKUP = {((pick_up * 0.9)) * 2,((pick_up * 1.1)) * 2}
 						else
 							self[id].stats.damage = new_damage
-							self[id].AMMO_PICKUP = {((avg_250_pickup * 0.9) / 1.35) * secondary_mul,((avg_250_pickup * 1.1) / 1.35) * secondary_mul}
+							self[id].AMMO_PICKUP = {((pick_up * 0.9)) * secondary_mul,((pick_up * 1.1)) * secondary_mul}
 						end
 					end
 				end
@@ -2382,11 +2614,11 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			end
 			
 			self.m1911.stats.spread = 14
-			self.m1911.stats.recoil = 13
+			self.m1911.stats.recoil = 12
 			self.m1911.NR_CLIPS_MAX = 4
 			self.m1911.AMMO_MAX = self.m1911.NR_CLIPS_MAX * self.m1911.CLIP_AMMO_MAX
 			self.x_m1911.stats.spread = 14
-			self.x_m1911.stats.recoil = 13
+			self.x_m1911.stats.recoil = 12
 			self.x_m1911.NR_CLIPS_MAX = 2
 			self.x_m1911.AMMO_MAX = self.x_m1911.NR_CLIPS_MAX * self.x_m1911.CLIP_AMMO_MAX
 			
@@ -2408,11 +2640,11 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_sparrow.NR_CLIPS_MAX = 2
 			self.x_sparrow.AMMO_MAX = self.x_sparrow.NR_CLIPS_MAX * self.x_sparrow.CLIP_AMMO_MAX
 			
-			self.breech.stats.spread = 19
+			self.breech.stats.spread = 21
 			self.breech.stats.recoil = 5
 			self.breech.NR_CLIPS_MAX = 6
 			self.breech.AMMO_MAX = self.breech.NR_CLIPS_MAX * self.breech.CLIP_AMMO_MAX
-			self.x_breech.stats.spread = 19
+			self.x_breech.stats.spread = 21
 			self.x_breech.stats.recoil = 5
 			self.x_breech.NR_CLIPS_MAX = 3
 			self.x_breech.AMMO_MAX = self.x_breech.NR_CLIPS_MAX * self.x_breech.CLIP_AMMO_MAX
@@ -2426,6 +2658,17 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_deagle.stats.concealment = 28
 			self.x_deagle.NR_CLIPS_MAX = 2.5
 			self.x_deagle.AMMO_MAX = self.x_deagle.NR_CLIPS_MAX * self.x_deagle.CLIP_AMMO_MAX
+			
+			self.hs2000.stats.spread = 11
+			self.hs2000.stats.recoil = 13
+			self.hs2000.CLIP_AMMO_MAX = 13
+			self.hs2000.NR_CLIPS_MAX = 4
+			self.hs2000.AMMO_MAX = self.hs2000.NR_CLIPS_MAX * self.hs2000.CLIP_AMMO_MAX
+			self.x_hs2000.stats.spread = 11
+			self.x_hs2000.stats.recoil = 13
+			self.x_hs2000.CLIP_AMMO_MAX = 26
+			self.x_hs2000.NR_CLIPS_MAX = 2
+			self.x_hs2000.AMMO_MAX = self.x_hs2000.NR_CLIPS_MAX * self.x_hs2000.CLIP_AMMO_MAX
 			
 		end
 		Gilza_init_heavy_pistols()
@@ -2444,28 +2687,28 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 				peacemaker = {fmd = "single",akimbo = false}
 			}
 			
+			local pick_up = pickups._450
 			local new_damage = 450
 			
 			for gun, tbl in pairs(heavy_pistol_ids) do
 				local function apply_stats(id, is_akimbo)
 					if self[id] then
 						if self[id].fire_mode_data then
-							self[id].fire_mode_data.fire_rate = 60/300
+							self[id].fire_mode_data.fire_rate = 60/240
 						end
 						if self[id].single then
-							self[id].single.fire_rate = 60/300
+							self[id].single.fire_rate = 60/240
 						end
 						if self[id].auto then
-							self[id].auto.fire_rate = 60/300
+							self[id].auto.fire_rate = 60/240
 						end
-						
 						self[id].damage_falloff = new_pistol_damage_falloff
 						if is_akimbo then
 							self[id].stats.damage = math.ceil(new_damage/2)
-							self[id].AMMO_PICKUP = {((avg_450_pickup * 0.9) / 1.35) * 2,((avg_450_pickup * 1.1) / 1.35) * 2}
+							self[id].AMMO_PICKUP = {((pick_up * 0.9)) * 2,((pick_up * 1.1)) * 2}
 						else
 							self[id].stats.damage = new_damage
-							self[id].AMMO_PICKUP = {((avg_450_pickup * 0.9) / 1.35) * secondary_mul,((avg_450_pickup * 1.1) / 1.35) * secondary_mul}
+							self[id].AMMO_PICKUP = {((pick_up * 0.9)) * secondary_mul,((pick_up * 1.1)) * secondary_mul}
 						end
 					end
 				end
@@ -2511,18 +2754,18 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			self.x_chinchilla.NR_CLIPS_MAX = 2.5
 			self.x_chinchilla.AMMO_MAX = self.x_chinchilla.NR_CLIPS_MAX * self.x_chinchilla.CLIP_AMMO_MAX
 			
-			self.model3.stats.spread = 17
+			self.model3.stats.spread = 18
 			self.model3.stats.recoil = 7
 			self.model3.NR_CLIPS_MAX = 7
 			self.model3.AMMO_MAX = self.model3.NR_CLIPS_MAX * self.model3.CLIP_AMMO_MAX
-			self.x_model3.stats.spread = 17
+			self.x_model3.stats.spread = 18
 			self.x_model3.stats.recoil = 7
 			self.x_model3.NR_CLIPS_MAX = 3.5
 			self.x_model3.AMMO_MAX = self.x_model3.NR_CLIPS_MAX * self.x_model3.CLIP_AMMO_MAX
 			
-			self.rsh12.stats.spread = 18
+			self.rsh12.stats.spread = 19
 			self.rsh12.stats.recoil = 3
-			self.rsh12.AMMO_PICKUP = {((avg_450_pickup * 0.9) / 1.35) * 0.5 * secondary_mul,((avg_450_pickup * 1.1) / 1.35) * 0.5 * secondary_mul}
+			self.rsh12.AMMO_PICKUP = {((pick_up * 0.9 * 0.5)) * secondary_mul,((pick_up * 1.1 * 0.5)) * secondary_mul}
 			self.rsh12.NR_CLIPS_MAX = 4
 			self.rsh12.AMMO_MAX = self.rsh12.NR_CLIPS_MAX * self.rsh12.CLIP_AMMO_MAX
 			self.rsh12.stats_modifiers = {damage = 1}
@@ -2540,6 +2783,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			-- 1 shot to the body on normal swats, 1 shot headshot on everyone else (except dozers)
 			-- the most badass cowboy in the west
 			self.peacemaker.stats.damage = 650
+			self.peacemaker.has_description = true
+			self.peacemaker.can_shoot_through_enemy = true
+			self.peacemaker.armor_piercing_chance = 1
 			self.peacemaker.stats.spread = 23
 			self.peacemaker.stats_modifiers = {damage = 1}
 			self.peacemaker.NR_CLIPS_MAX = 4
@@ -2553,8 +2799,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	
 	-- Grenade launchers, includes underbarrels
 	local function setGLs()
-		-- fml this thing is slow
-		self.m32.stats.reload = 17
+		
+		self.m32.stats.reload = 17 -- fml this thing is slow
 		self.m32.stats.recoil = 15
 		self.gre_m79.stats.recoil = 19
 		self.slap.stats.recoil = 19
@@ -2563,24 +2809,24 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.ms3gl.stats.recoil = 13
 		self.ms3gl.stats.spread = 18
 		
-		local gl_1300_avg_pickup = 0.26
+		local pickups = G_W_M.ammo_pickups.GLs
 		
-		self.m32.AMMO_PICKUP = {gl_1300_avg_pickup * 0.9 / 1.35, gl_1300_avg_pickup * 1.1 / 1.35}
+		self.m32.AMMO_PICKUP = {pickups._1300 * 0.9, pickups._1300 * 1.1}
 		Gilza.shotgun_minimal_damage_multipliers.m32 = 0.75
 		
-		self.slap.AMMO_PICKUP = {((gl_1300_avg_pickup * 0.9) / 1.35) * secondary_mul,((gl_1300_avg_pickup * 1.1) / 1.35) * secondary_mul}
+		self.slap.AMMO_PICKUP = {((pickups._1300 * 0.9)) * secondary_mul,((pickups._1300 * 1.1)) * secondary_mul}
 		Gilza.shotgun_minimal_damage_multipliers.slap = 0.75
 		
-		self.gre_m79.AMMO_PICKUP = {gl_1300_avg_pickup * 0.9 / 1.35, gl_1300_avg_pickup * 1.1 / 1.35}
+		self.gre_m79.AMMO_PICKUP = {pickups._1300 * 0.9, pickups._1300 * 1.1}
 		Gilza.shotgun_minimal_damage_multipliers.gre_m79 = 0.75
 		
-		self.china.AMMO_PICKUP = {((0.32 * 0.9) / 1.35) * secondary_mul,((0.32 * 1.1) / 1.35) * secondary_mul}
+		self.china.AMMO_PICKUP = {((pickups._960 * 0.9)) * secondary_mul,((pickups._960 * 1.1)) * secondary_mul}
 		Gilza.shotgun_minimal_damage_multipliers.china = 0.75
 		
-		self.ms3gl.AMMO_PICKUP = {((0.62 * 0.9) / 1.35) * secondary_mul,((0.62 * 1.1) / 1.35) * secondary_mul}
+		self.ms3gl.AMMO_PICKUP = {((pickups._360 * 0.9)) * secondary_mul,((pickups._360 * 1.1)) * secondary_mul}
 		Gilza.shotgun_minimal_damage_multipliers.ms3gl = 0.75
 		
-		self.arbiter.AMMO_PICKUP = {((0.56 * 0.9) / 1.35) * secondary_mul,((0.56 * 1.1) / 1.35) * secondary_mul}
+		self.arbiter.AMMO_PICKUP = {((pickups._480 * 0.9)) * secondary_mul,((pickups._480 * 1.1)) * secondary_mul}
 		Gilza.shotgun_minimal_damage_multipliers.arbiter = 0.75
 		
 		self.slap.projectile_types.launcher_velocity = "launcher_velocity_slap"
@@ -2588,9 +2834,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.m32.projectile_types.launcher_velocity = "launcher_velocity_m32"
 		self.china.projectile_types.launcher_velocity = "launcher_velocity_china"
 		
-		self.groza_underbarrel.AMMO_PICKUP = {0.12 * 0.9 / 1.35, 0.12 * 1.1 / 1.35}
+		self.groza_underbarrel.AMMO_PICKUP = {pickups._underbarrel * 0.9, pickups._underbarrel * 1.1}
 		Gilza.shotgun_minimal_damage_multipliers.groza_underbarrel = 0.75
-		self.contraband_m203.AMMO_PICKUP = {0.12 * 0.9 / 1.35, 0.12 * 1.1 / 1.35}
+		self.contraband_m203.AMMO_PICKUP = {pickups._underbarrel * 0.9, pickups._underbarrel * 1.1}
 		Gilza.shotgun_minimal_damage_multipliers.contraband_m203 = 0.75
 
 		self.contraband_m203.projectile_types.underbarrel_velocity_frag = "underbarrel_velocity_frag"
@@ -2603,20 +2849,20 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 	-- Flammenwerfers --
 	local function setFLAMENs()
 		
-		local flamen_pickup = 13.4
+		local flamen_pickup = 10.4
 		
 		self.flamethrower_mk2.stats.damage = 20
 		self.flamethrower_mk2.stats.reload = 18
 		self.flamethrower_mk2.CLIP_AMMO_MAX = 400
 		self.flamethrower_mk2.NR_CLIPS_MAX = 2
-		self.flamethrower_mk2.AMMO_PICKUP = {(flamen_pickup * 0.9) / 1.35,(flamen_pickup * 1.1) / 1.35}
+		self.flamethrower_mk2.AMMO_PICKUP = {(flamen_pickup * 0.9),(flamen_pickup * 1.1)}
 		self.flamethrower_mk2.AMMO_MAX = self.flamethrower_mk2.CLIP_AMMO_MAX * self.flamethrower_mk2.NR_CLIPS_MAX
 		
 		self.system.stats.damage = 20
 		self.system.stats.reload = 18
 		self.system.CLIP_AMMO_MAX = 300
 		self.system.NR_CLIPS_MAX = 2
-		self.system.AMMO_PICKUP = {((flamen_pickup * 0.9) / 1.35) * secondary_mul,((flamen_pickup * 1.1) / 1.35) * secondary_mul}
+		self.system.AMMO_PICKUP = {((flamen_pickup * 0.9)) * secondary_mul,((flamen_pickup * 1.1)) * secondary_mul}
 		self.system.AMMO_MAX = self.system.CLIP_AMMO_MAX * self.system.NR_CLIPS_MAX
 		
 		-- Event moneythrower, only dmg tweak since its op as fuck anyways and dot data wont change much, so just bring it up to new health values
@@ -2633,11 +2879,12 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.m134.stats.damage = 46
 		self.m134.stats.recoil = 23
 		self.m134.stats.spread = 10
-		self.m134.stats.suppression = 2
+		self.m134.stats.suppression = 1
 		self.m134.CLIP_AMMO_MAX = 600
 		self.m134.NR_CLIPS_MAX = 1.5
 		self.m134.AMMO_MAX = self.m134.CLIP_AMMO_MAX * self.m134.NR_CLIPS_MAX
-		self.m134.AMMO_PICKUP = {(17.5 * 0.7) / 1.35,(17.5 * 1.3) / 1.35}
+		local m134_avg = G_W_M:get_ammo_pickup(46, 0.25, 0.75)
+		self.m134.AMMO_PICKUP = {(m134_avg * 0.7),(m134_avg * 1.3)}
 		self.m134.stats.reload = 15
 		--the other one
 		self.shuno.CLIP_AMMO_MAX = 600
@@ -2647,114 +2894,76 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 		self.shuno.stats.recoil = 19
 		self.shuno.stats.spread = 10
 		self.shuno.stats.reload = 15
-		self.shuno.stats.suppression = 2
-		self.shuno.AMMO_PICKUP = {(11 * 0.7) / 1.35,(11 * 1.3) / 1.35}
+		self.shuno.stats.suppression = 1
+		local shuno_avg = G_W_M:get_ammo_pickup(68, 0.28, 0.75)
+		self.shuno.AMMO_PICKUP = {(shuno_avg * 0.7),(shuno_avg * 1.3)}
 		--the 'minigun' that is hailstorm
 		self.hailstorm.CLIP_AMMO_MAX = 210
 		self.hailstorm.NR_CLIPS_MAX = 3
 		self.hailstorm.AMMO_MAX = self.hailstorm.CLIP_AMMO_MAX * self.hailstorm.NR_CLIPS_MAX
 		self.hailstorm.stats.damage = 71
 		self.hailstorm.stats.recoil = 21
-		self.hailstorm.AMMO_PICKUP = {(8.1 * 0.9) / 1.35,(8.1 * 1.1) / 1.35}
-		self.hailstorm.damage_falloff = {
-			optimal_distance = 100,
-			optimal_range = 100,
-			near_falloff = 100,
-			far_falloff = 100,
-			near_multiplier = 1,
-			far_multiplier = 1
-		}
+		local hailstorm_avg = G_W_M:get_ammo_pickup(71, 0.34, 0.75)
+		self.hailstorm.AMMO_PICKUP = {(hailstorm_avg * 0.9),(hailstorm_avg * 1.1)}
+		self.hailstorm.damage_falloff = G_W_M.damage_dropoff.ARs
 	end
 	setMINIGUNs()
 	
 	--Bows--
 	local function setBOWs()
-		-- in their infinite wisdom overkill gave this bow a multiplier of 100, which means that any mod that adjusts damage stat, also has a multiplier of 100
+		
+		-- in their infinite wisdom overkill gave a multiplier of 100 to the "long" bow, which means that any mod that adjusts damage stat, also has a multiplier of 100
 		-- problem arises when you realise that attachments that change the projectile, take their new damage stat from the projectiletweakdata
 		-- instead of ammunition mod that updates the projectile
 		-- poison arrow projectile for example, has 300 damage, when the base arrow has 2k damage, but because of the damage multipliers,
 		-- poison arrow gets multiplied by 100 instead of 10, so the game thinks that the poision arrow would be 3000 damage total, which is higher then the base arrow
 		-- this fixes the issue by overriding the modifier to a value that actually works, and overrides the default damage so that default arrow's 2k damage is correct
 		-- godbless weapon lib that can handle weapons with high damage and doesnt clamp anything for no reason, so we don't have to use damage modifiers that fuck everything up
-		self.long.stats.damage = 200
-		self.long.stats_modifiers = {
-			damage = 10
-		}
-		-- same as longbow
-		self.elastic.stats.damage = 200
-		self.elastic.stats_modifiers = {
-			damage = 10
-		}
-		-- same as longbow
-		self.arblast.stats.damage = 200
-		self.arblast.stats_modifiers = {
-			damage = 10
-		}
-		-- crossbows
-		self.frankish.stats.spread = 20
+		
+		-- BOWS
+		self.long.stats.damage = 130
+		self.long.stats_modifiers = {damage = 10} -- same fix as longbow
+		self.long.stats.recoil = 17
+		
+		self.elastic.stats.damage = 130
+		self.elastic.stats_modifiers = {damage = 10} -- same fix as longbow
+		self.elastic.stats.recoil = 15
+		
+		self.plainsrider.stats.recoil = 21
+		self.plainsrider.stats.damage = 50
+		
+		-- CROSSBOWS
+		self.frankish.stats.spread = 18
 		self.frankish.fire_mode_data.fire_rate = 60/75
 		self.frankish.single.fire_rate = 60/75
-		self.arblast.stats.spread = 22
+		self.frankish.stats.damage = 41
+		
+		self.arblast.stats.damage = 90
+		self.arblast.stats_modifiers = {damage = 10} -- same fix as longbow
+		self.arblast.stats.spread = 20
 		self.arblast.fire_mode_data.fire_rate = 60/75
 		self.arblast.single.fire_rate = 60/75
-		self.ecp.stats.spread = 15
+		
+		self.ecp.stats.spread = 17
+		self.ecp.stats.damage = 20
+		self.ecp.stats.concealment = 12
+		
+		self.hunter.stats.damage = 41
 		self.hunter.stats.spread = 19
 		self.hunter.fire_mode_data.fire_rate = 60/75
 		self.hunter.single.fire_rate = 60/75
-		-- bows
-		self.plainsrider.stats.recoil = 21
-		self.long.stats.recoil = 17
-		self.elastic.stats.recoil = 15
+		
 	end
 	setBOWs()
 	
 	--Saws--
 	local function setSAWs()
-		self.saw.stats.damage = 22
-		self.saw_secondary.stats.damage = 22
+		self.saw.stats.damage = 220
+		self.saw_secondary.stats.damage = 220
 	end
 	setSAWs()
 	
 	local function setNewRecoil()
-		
-		local function set_new_weapon_recoil(weapon_table, recoil_data)
-		
-			local UPrecoil
-			local DOWNrecoil
-			local LEFTrecoil
-			local RIGHTrecoil
-			
-			local V_base_recoil = recoil_data.v_base
-			local V_recoil_deviation = recoil_data.v_deviation
-			local H_base_recoil = recoil_data.h_base
-			local H_recoil_deviation = recoil_data.h_deviation
-		
-			for weapon, recoil_lean in pairs(weapon_table) do
-				local recoil = self[weapon].stats.recoil * 4 - 4 -- in game calculator seems to be inaccurate or is coded to favour values down
-				local recoil_weight = 1 - (recoil/100)
-				UPrecoil = V_base_recoil + (recoil_weight * V_recoil_deviation)
-				DOWNrecoil = UPrecoil * 0.9
-				if recoil_lean == "left" then
-					LEFTrecoil = H_base_recoil + (recoil_weight * H_recoil_deviation)
-					RIGHTrecoil = LEFTrecoil * 0.05
-				else
-					RIGHTrecoil = H_base_recoil + (recoil_weight * H_recoil_deviation)
-					LEFTrecoil = RIGHTrecoil * 0.05
-				end
-				LEFTrecoil = LEFTrecoil * -1
-				self[weapon].kick = {
-					standing = {
-						UPrecoil,
-						DOWNrecoil,
-						LEFTrecoil,
-						RIGHTrecoil
-					}
-				}
-				self[weapon].kick.steelsight = self[weapon].kick.standing
-				self[weapon].kick.crouching = self[weapon].kick.standing
-			end
-			
-		end
 		
 		local AR_list = {
 			ak74 = "left",
@@ -2787,13 +2996,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			shak12 = "left",
 			tkb = "right"
 		}
-		local AR_recoil = {
-			v_base = 0.7,
-			v_deviation = 1.8,
-			h_base = 0.65,
-			h_deviation = 0.65
-		}
-		set_new_weapon_recoil(AR_list, AR_recoil)
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.ARs, AR_list, nil, self)
 		
 		local SMG_list = {
 			m45 = "left",
@@ -2856,13 +3059,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			stech = "right",
 			x_stech = "right",
 		}
-		local SMG_recoil = {
-			v_base = 0.75,
-			v_deviation = 1.3,
-			h_base = 0.9,
-			h_deviation = 1.1
-		}
-		set_new_weapon_recoil(SMG_list, SMG_recoil)
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.SMGs, SMG_list, nil, self)
 		
 		-- includes miniguns
 		local LMG_list = {
@@ -2879,13 +3076,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			m134 = "right",
 			hailstorm = "right",
 		}
-		local LMG_recoil = {
-			v_base = 1.3,
-			v_deviation = 1.4,
-			h_base = 1.2,
-			h_deviation = 0.75
-		}
-		set_new_weapon_recoil(LMG_list, LMG_recoil)
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.LMGs, LMG_list, nil, self)
 		
 		local Sniper_list = {
 			tti = "left",
@@ -2907,13 +3098,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			awp = "left",
 			bessy = "left",
 		}
-		local Sniper_recoil = {
-			v_base = 1.8,
-			v_deviation = 1.8,
-			h_base = 0.3,
-			h_deviation = 0.5
-		}
-		set_new_weapon_recoil(Sniper_list, Sniper_recoil)
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.SNIPERs, Sniper_list, nil, self)
 		
 		-- only semi auto, full autos are under smg's
 		local Pistol_list = {
@@ -2974,13 +3159,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			x_maxim9 = "right",
 			x_korth = "left",
 		}
-		local Pistol_recoil = {
-			v_base = 0.2,
-			v_deviation = 2.2,
-			h_base = 0.3,
-			h_deviation = 2.8
-		}
-		set_new_weapon_recoil(Pistol_list, Pistol_recoil)
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.PISTOLs, Pistol_list, nil, self)
 		
 		local Shotgun_list = {
 			boot = "left",
@@ -3010,16 +3189,186 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_NewWeaponStats", fun
 			x_basset = "left",
 			x_judge = "right",
 		}
-		local Shotgun_recoil = {
-			v_base = 2.3,
-			v_deviation = 2.3,
-			h_base = 0.6,
-			h_deviation = 1.6
-		}
-		set_new_weapon_recoil(Shotgun_list, Shotgun_recoil)
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.SHOTGUNs, Shotgun_list, nil, self)
 	
 	end
 	setNewRecoil()
+	
+	local function addBURSTFIRE()
+		-- add burst fire to whichever weapons i feel like here
+		-- this can be done with any weapon, even custom, by adding required properties to their tweak_data by whatever means you want
+		
+		-- add burst
+		self.m16.HAS_BURST_AS_THIRD = true
+		-- determine № of rounds per burst. if weapon is akimbo, both guns are fired out in the same fashion, so 3 round burst in the code = 6 round burst in practice in total
+		self.m16.BURST_COUNT = 3
+		-- determine delay between bursts in seconds. delay starts after last shot was fired
+		-- this, for example, specifically takes natural delay after firing 2 shots, instead of just 1, with default ROF, to reduce overall dps by 25% (total delay of 4 shots, after firing 3)
+		self.m16.fire_mode_data.burst_cooldown = self.m16.fire_mode_data.fire_rate * 2
+		-- ROF during the burst. reminder that this is a delay - set as 60/1200 if you want custom ROF of 1200, instead of weapon's vanilla ROF.
+		self.m16.burst = {fire_rate = self.m16.fire_mode_data.fire_rate}
+		self.m16.has_description = true
+		
+		-- fix ms3gl values for new burst system
+		self.ms3gl.fire_mode_data.burst_cooldown = 1
+		self.ms3gl.burst = {fire_rate = 0.33}
+		
+		self.famas.HAS_BURST_AS_THIRD = true
+		self.famas.BURST_COUNT = 3
+		self.famas.fire_mode_data.burst_cooldown = self.famas.fire_mode_data.fire_rate * 2
+		self.famas.burst = {fire_rate = self.famas.fire_mode_data.fire_rate}
+		self.famas.has_description = true
+		
+		self.flint.HAS_BURST_AS_THIRD = true
+		self.flint.BURST_COUNT = 2
+		self.flint.fire_mode_data.burst_cooldown = 60/1200 * 2 -- bootleg an94
+		self.flint.burst = {fire_rate = 60/1200}
+		self.flint.has_description = true
+		
+		self.g36.HAS_BURST_AS_THIRD = true
+		self.g36.BURST_COUNT = 2
+		self.g36.fire_mode_data.burst_cooldown = self.g36.fire_mode_data.fire_rate * 1.666
+		self.g36.burst = {fire_rate = self.g36.fire_mode_data.fire_rate}
+		self.g36.has_description = true
+		
+		self.komodo.HAS_BURST_AS_THIRD = true
+		self.komodo.BURST_COUNT = 3
+		self.komodo.fire_mode_data.burst_cooldown = self.komodo.fire_mode_data.fire_rate * 2
+		self.komodo.burst = {fire_rate = self.komodo.fire_mode_data.fire_rate}
+		self.komodo.has_description = true
+		
+		self.g3.HAS_BURST_AS_THIRD = true
+		self.g3.BURST_COUNT = 2
+		self.g3.fire_mode_data.burst_cooldown = self.g3.fire_mode_data.fire_rate * 1.666
+		self.g3.burst = {fire_rate = self.g3.fire_mode_data.fire_rate}
+		self.g3.has_description = true
+		
+		self.s552.HAS_BURST_AS_THIRD = true
+		self.s552.BURST_COUNT = 3
+		self.s552.fire_mode_data.burst_cooldown = self.s552.fire_mode_data.fire_rate * 2
+		self.s552.burst = {fire_rate = self.s552.fire_mode_data.fire_rate}
+		self.s552.has_description = true
+		
+		self.new_m4.HAS_BURST_AS_THIRD = true
+		self.new_m4.BURST_COUNT = 3
+		self.new_m4.fire_mode_data.burst_cooldown = self.new_m4.fire_mode_data.fire_rate * 2
+		self.new_m4.burst = {fire_rate = self.new_m4.fire_mode_data.fire_rate}
+		self.new_m4.has_description = true
+		
+		self.groza.HAS_BURST_AS_THIRD = true
+		self.groza.BURST_COUNT = 3
+		self.groza.fire_mode_data.burst_cooldown = self.groza.fire_mode_data.fire_rate * 2
+		self.groza.burst = {fire_rate = self.groza.fire_mode_data.fire_rate}
+		self.groza.has_description = true
+		
+		self.asval.HAS_BURST_AS_THIRD = true
+		self.asval.BURST_COUNT = 3
+		self.asval.fire_mode_data.burst_cooldown = self.asval.fire_mode_data.fire_rate * 2
+		self.asval.burst = {fire_rate = self.asval.fire_mode_data.fire_rate}
+		self.asval.has_description = true
+		
+		self.aug.HAS_BURST_AS_THIRD = true
+		self.aug.BURST_COUNT = 3
+		self.aug.fire_mode_data.burst_cooldown = self.aug.fire_mode_data.fire_rate * 2
+		self.aug.burst = {fire_rate = self.aug.fire_mode_data.fire_rate}
+		self.aug.has_description = true
+		
+		self.scar.HAS_BURST_AS_THIRD = true
+		self.scar.BURST_COUNT = 2
+		self.scar.fire_mode_data.burst_cooldown = self.scar.fire_mode_data.fire_rate * 1.666
+		self.scar.burst = {fire_rate = self.scar.fire_mode_data.fire_rate}
+		self.scar.has_description = true
+		
+		self.beer.HAS_BURST_AS_THIRD = true
+		self.beer.BURST_COUNT = 3
+		self.beer.fire_mode_data.burst_cooldown = self.beer.fire_mode_data.fire_rate * 2
+		self.beer.burst = {fire_rate = self.beer.fire_mode_data.fire_rate}
+		self.beer.has_description = true
+		self.x_beer.HAS_BURST_AS_THIRD = true
+		self.x_beer.BURST_COUNT = 3
+		self.x_beer.fire_mode_data.burst_cooldown = self.x_beer.fire_mode_data.fire_rate * 2
+		self.x_beer.burst = {fire_rate = self.x_beer.fire_mode_data.fire_rate}
+		self.x_beer.has_description = true
+		
+		self.hajk.HAS_BURST_AS_THIRD = true
+		self.hajk.BURST_COUNT = 3
+		self.hajk.fire_mode_data.burst_cooldown = self.hajk.fire_mode_data.fire_rate * 2
+		self.hajk.burst = {fire_rate = self.hajk.fire_mode_data.fire_rate}
+		self.hajk.has_description = true
+		self.x_hajk.HAS_BURST_AS_THIRD = true
+		self.x_hajk.BURST_COUNT = 3
+		self.x_hajk.fire_mode_data.burst_cooldown = self.x_hajk.fire_mode_data.fire_rate * 2
+		self.x_hajk.burst = {fire_rate = self.x_hajk.fire_mode_data.fire_rate}
+		self.x_hajk.has_description = true
+		
+		self.vityaz.HAS_BURST_AS_THIRD = true
+		self.vityaz.BURST_COUNT = 3
+		self.vityaz.fire_mode_data.burst_cooldown = self.vityaz.fire_mode_data.fire_rate * 2
+		self.vityaz.burst = {fire_rate = self.vityaz.fire_mode_data.fire_rate}
+		self.vityaz.has_description = true
+		self.x_vityaz.HAS_BURST_AS_THIRD = true
+		self.x_vityaz.BURST_COUNT = 3
+		self.x_vityaz.fire_mode_data.burst_cooldown = self.x_vityaz.fire_mode_data.fire_rate * 2
+		self.x_vityaz.burst = {fire_rate = self.x_vityaz.fire_mode_data.fire_rate}
+		self.x_vityaz.has_description = true
+		
+		self.new_mp5.HAS_BURST_AS_THIRD = true
+		self.new_mp5.BURST_COUNT = 3
+		self.new_mp5.fire_mode_data.burst_cooldown = self.new_mp5.fire_mode_data.fire_rate * 2
+		self.new_mp5.burst = {fire_rate = self.new_mp5.fire_mode_data.fire_rate}
+		self.new_mp5.has_description = true
+		self.x_mp5.HAS_BURST_AS_THIRD = true
+		self.x_mp5.BURST_COUNT = 3
+		self.x_mp5.fire_mode_data.burst_cooldown = self.x_mp5.fire_mode_data.fire_rate * 2
+		self.x_mp5.burst = {fire_rate = self.x_mp5.fire_mode_data.fire_rate}
+		self.x_mp5.has_description = true
+		
+		self.scorpion.HAS_BURST_AS_THIRD = true
+		self.scorpion.BURST_COUNT = 3
+		self.scorpion.fire_mode_data.burst_cooldown = self.scorpion.fire_mode_data.fire_rate * 2
+		self.scorpion.burst = {fire_rate = self.scorpion.fire_mode_data.fire_rate}
+		self.scorpion.has_description = true
+		self.x_scorpion.HAS_BURST_AS_THIRD = true
+		self.x_scorpion.BURST_COUNT = 3
+		self.x_scorpion.fire_mode_data.burst_cooldown = self.x_scorpion.fire_mode_data.fire_rate * 2
+		self.x_scorpion.burst = {fire_rate = self.x_scorpion.fire_mode_data.fire_rate}
+		self.x_scorpion.has_description = true
+		
+		self.mp9.HAS_BURST_AS_THIRD = true
+		self.mp9.BURST_COUNT = 3
+		self.mp9.fire_mode_data.burst_cooldown = self.mp9.fire_mode_data.fire_rate * 2
+		self.mp9.burst = {fire_rate = self.mp9.fire_mode_data.fire_rate}
+		self.mp9.has_description = true
+		self.x_mp9.HAS_BURST_AS_THIRD = true
+		self.x_mp9.BURST_COUNT = 3
+		self.x_mp9.fire_mode_data.burst_cooldown = self.x_mp9.fire_mode_data.fire_rate * 2
+		self.x_mp9.burst = {fire_rate = self.x_mp9.fire_mode_data.fire_rate}
+		self.x_mp9.has_description = true
+		
+		self.shepheard.HAS_BURST_AS_THIRD = true
+		self.shepheard.BURST_COUNT = 3
+		self.shepheard.fire_mode_data.burst_cooldown = self.shepheard.fire_mode_data.fire_rate * 2
+		self.shepheard.burst = {fire_rate = self.shepheard.fire_mode_data.fire_rate}
+		self.shepheard.has_description = true
+		self.x_shepheard.HAS_BURST_AS_THIRD = true
+		self.x_shepheard.BURST_COUNT = 3
+		self.x_shepheard.fire_mode_data.burst_cooldown = self.x_shepheard.fire_mode_data.fire_rate * 2
+		self.x_shepheard.burst = {fire_rate = self.x_shepheard.fire_mode_data.fire_rate}
+		self.x_shepheard.has_description = true
+		
+		self.polymer.HAS_BURST_AS_THIRD = true
+		self.polymer.BURST_COUNT = 2
+		self.polymer.fire_mode_data.burst_cooldown = self.polymer.fire_mode_data.fire_rate * 1.666
+		self.polymer.burst = {fire_rate = self.polymer.fire_mode_data.fire_rate}
+		self.polymer.has_description = true
+		self.x_polymer.HAS_BURST_AS_THIRD = true
+		self.x_polymer.BURST_COUNT = 2
+		self.x_polymer.fire_mode_data.burst_cooldown = self.x_polymer.fire_mode_data.fire_rate * 2
+		self.x_polymer.burst = {fire_rate = self.x_polymer.fire_mode_data.fire_rate}
+		self.x_polymer.has_description = true
+		
+	end
+	addBURSTFIRE()
 	
 	-- remove spread_moving stat from all weapons
 	for i=1, #Gilza.defaultWeapons do
