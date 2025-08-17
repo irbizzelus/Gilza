@@ -4713,6 +4713,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			
 		end
 		PlayBONK_offhand_knives()
+		
 	end
 	customWeaponMods()
 	

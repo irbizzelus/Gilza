@@ -198,7 +198,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 					chance_inc = 0.01
 				},
 				{
-					chance = 0.10,
+					chance = 0.03,
 					chance_inc = 0.03
 				}
 			}	

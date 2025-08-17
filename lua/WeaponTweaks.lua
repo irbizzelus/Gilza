@@ -99,11 +99,11 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_post_WeaponTweakData_init_
 			_88 = Gilza.Weapons_module:get_ammo_pickup(88, 0.33),
 		},
 		GLs = {
-			_1300 = 0.26,
-			_960 = 0.32,
-			_480 = 0.56,
-			_360 = 0.62,
-			_underbarrel = 0.12
+			_1300 = 0.372,
+			_960 = 0.455,
+			_480 = 0.795,
+			_360 = 0.88,
+			_underbarrel = 0.174
 		},
 	}
 	
@@ -2797,7 +2797,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 	end
 	setPISTOLs()
 	
-	-- Grenade launchers, includes underbarrels
+	-- Grenade launchers, includes underbarrels + rocket launchers
 	local function setGLs()
 		
 		self.m32.stats.reload = 17 -- fml this thing is slow
@@ -2808,6 +2808,13 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 		self.arbiter.stats.recoil = 21
 		self.ms3gl.stats.recoil = 13
 		self.ms3gl.stats.spread = 18
+		
+		self.rpg7.NR_CLIPS_MAX = 7
+		self.rpg7.AMMO_MAX = self.rpg7.CLIP_AMMO_MAX * self.rpg7.NR_CLIPS_MAX
+		self.rpg7.stats.reload = 13
+		self.ray.NR_CLIPS_MAX = 3
+		self.ray.AMMO_MAX = self.ray.CLIP_AMMO_MAX * self.ray.NR_CLIPS_MAX
+		self.ray.stats.reload = 10
 		
 		local pickups = G_W_M.ammo_pickups.GLs
 		

@@ -241,12 +241,13 @@ Hooks:OverrideFunction(RaycastWeaponBase, "reload_speed_multiplier", function (s
 	return multiplier
 end)
 
--- if we are in swan song, consume reserve ammo, but dont consume ammo in the clip
+-- swan song and bullet storm infinite ammo adjustments
 Hooks:PostHook(RaycastWeaponBase, "fire", "Gilza_post_RaycastWeaponBase_fire", function(self, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit)
 	local is_player = self._setup.user_unit == managers.player:player_unit()
 	local consume_ammo = not managers.player:has_active_temporary_property("bullet_storm") and (not managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier") or not managers.player:has_category_upgrade("player", "berserker_no_ammo_cost")) or not is_player
 	local ammo_usage = self:ammo_usage()
-
+	
+	-- swan song - consume reserve ammo, but dont consume ammo in the clip
 	if not consume_ammo and (is_player or Network:is_server()) and managers.player:has_category_upgrade("player", "berserker_no_ammo_cost") then
 		local base = self:ammo_base()
 
@@ -310,6 +311,59 @@ Hooks:PostHook(RaycastWeaponBase, "fire", "Gilza_post_RaycastWeaponBase_fire", f
 				base:set_ammo_remaining_in_clip(ammo_in_clip - ammo_usage)
 			end
 			self:use_ammo(base, ammo_usage)
+		end
+		
+	end
+	
+	-- bullet storm for GL's - consume reserve ammo, but dont consume ammo in the clip
+	if not consume_ammo and (is_player or Network:is_server()) and managers.player:has_active_temporary_property("bullet_storm") then
+		local base = self:ammo_base()
+		if base:get_ammo_remaining_in_clip() == 0 then
+			return
+		end
+		if is_player then
+			for _, category in ipairs(self:weapon_tweak_data().categories) do
+				if category == "grenade_launcher" then
+					local ammo_in_clip = base:get_ammo_remaining_in_clip()
+					local remaining_ammo = ammo_in_clip - ammo_usage
+
+					if remaining_ammo < 0 then
+						ammo_usage = ammo_usage + remaining_ammo
+						remaining_ammo = 0
+					end
+
+					if ammo_in_clip > 0 and remaining_ammo <= (self.AKIMBO and 1 or 0) then
+						local w_td = self:weapon_tweak_data()
+
+						if w_td.animations and w_td.animations.magazine_empty then
+							self:tweak_data_anim_play("magazine_empty")
+						end
+
+						if w_td.sounds and w_td.sounds.magazine_empty then
+							self:play_tweak_data_sound("magazine_empty")
+						end
+
+						if w_td.effects and w_td.effects.magazine_empty then
+							self:_spawn_tweak_data_effect("magazine_empty")
+						end
+
+						self:set_magazine_empty(true)
+					end
+					
+					local mutator = nil
+					if managers.mutators:is_mutator_active(MutatorPiggyRevenge) then
+						mutator = managers.mutators:get_mutator(MutatorPiggyRevenge)
+					end
+					if mutator and mutator.get_free_ammo_chance and mutator:get_free_ammo_chance() then
+						ammo_usage = 0
+					end
+					
+					if base:get_ammo_total() == base:get_ammo_remaining_in_clip() then
+						base:set_ammo_remaining_in_clip(ammo_in_clip - ammo_usage)
+					end
+					self:use_ammo(base, ammo_usage)
+				end
+			end
 		end
 		
 	end

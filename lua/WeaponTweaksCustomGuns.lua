@@ -102,6 +102,7 @@ function Gilza.applyCustomAR_stats(id)
 		"m14e2",
 		"soppo",
 		"kurisumasu",
+		"liberator",
 		"xeno"
 	}
 	local has_gl = table.contains(custom_ARs_with_GL,id)
@@ -1482,7 +1483,120 @@ function Gilza.applyCustomGunsIndividualStats()
 	end
 	adjustSniperScopeStats()
 	
-	-- might add custom guns later, i am too tired rn
+	local G_W_M = Gilza.Weapons_module
+	local pickupsAR = G_W_M.ammo_pickups.ARs
+	local pickupsGL = G_W_M.ammo_pickups.GLs
+	local pickupsSMG = G_W_M.ammo_pickups.SMGs
+	
+	-- https://modworkshop.net/mod/52553 M4 Liberator
+	if tweak_data.weapon.liberator then
+		tweak_data.weapon.liberator.stats.concealment = 9
+	end
+	
+	-- https://modworkshop.net/mod/23676 HK G3A3 HK79
+	if tweak_data.weapon.g3hk79 then
+		tweak_data.weapon.g3hk79.stats.damage = 250
+		tweak_data.weapon.g3hk79.AMMO_PICKUP = {(pickupsAR._250 * 0.9) * 0.7,(pickupsAR._250 * 1.1) * 0.7}
+		tweak_data.weapon.g3hk79.NR_CLIPS_MAX = 5
+		tweak_data.weapon.g3hk79.AMMO_MAX = tweak_data.weapon.g3hk79.CLIP_AMMO_MAX * tweak_data.weapon.g3hk79.NR_CLIPS_MAX
+		tweak_data.weapon.g3hk79.stats.recoil = 4
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.ARs, "g3hk79", "right")
+		-- add inherited 2 round burst desciption from g3
+		LocalizationManager:add_localized_strings({bm_w_g3hk79_desc = managers.localization:text("bm_w_g3_desc")})
+	end
+	
+	-- https://modworkshop.net/mod/35608 DT MDRX 7.62x51mm
+	if tweak_data.weapon.mdr_308 then
+		tweak_data.weapon.mdr_308.FIRE_MODE = "auto"
+		tweak_data.weapon.mdr_308.stats.damage = 155
+		tweak_data.weapon.mdr_308.AMMO_PICKUP = {(pickupsAR._155 * 0.9) * 0.7,(pickupsAR._155 * 1.1) * 0.7}
+		tweak_data.weapon.mdr_308.NR_CLIPS_MAX = 6
+		tweak_data.weapon.mdr_308.AMMO_MAX = tweak_data.weapon.mdr_308.CLIP_AMMO_MAX * tweak_data.weapon.mdr_308.NR_CLIPS_MAX
+		tweak_data.weapon.mdr_308.stats.spread = 16
+		tweak_data.weapon.mdr_308.stats.recoil = 12
+		tweak_data.weapon.mdr_308.fire_mode_data = {fire_rate = 60/680}
+		tweak_data.weapon.mdr_308.auto = {fire_rate = 60/680}
+		tweak_data.weapon.mdr_308.HAS_BURST_AS_THIRD = false
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.ARs, "mdr_308", "right")
+		-- UGL
+		tweak_data.weapon.mdr_308_underbarrel.NR_CLIPS_MAX = 2
+		tweak_data.weapon.mdr_308_underbarrel.AMMO_MAX = tweak_data.weapon.mdr_308_underbarrel.CLIP_AMMO_MAX * tweak_data.weapon.mdr_308_underbarrel.NR_CLIPS_MAX
+		tweak_data.weapon.mdr_308_underbarrel.AMMO_PICKUP = {(pickupsGL._underbarrel * 0.9),(pickupsGL._underbarrel * 1.1)}
+		-- sniper kit barrel
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_barrel_sniper.override_weapon_multiply.fire_mode_data.fire_rate = 2
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_barrel_sniper.stats.recoil = -5
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_barrel_sniper.stats.spread = 5
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_barrel_sniper.stats.damage = nil
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_barrel_sniper.stats.concealment = -4
+		-- sniper kit ammo
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_snp_am.stats.recoil = -2
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_snp_am.stats.spread = -2
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_snp_am.stats.damage = 295
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_snp_am.stats.total_ammo_mod = -3.33
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_snp_am.desc_id = "bm_wpn_fps_ass_mdr_308_snp_am_Gilza_desc"
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_snp_am.custom_stats.ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 155, 450, true).max_mul
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_snp_am.custom_stats.ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 155, 450, true).min_mul
+	end
+	
+	-- https://modworkshop.net/mod/37996 M4A1 Grenadier
+	if tweak_data.weapon.kurisumasu then
+		tweak_data.weapon.kurisumasu.AMMO_PICKUP = {(pickupsAR._125 * 0.9) * 0.7,(pickupsAR._125 * 1.1) * 0.7}
+		tweak_data.weapon.kurisumasu.NR_CLIPS_MAX = 5
+		tweak_data.weapon.kurisumasu.AMMO_MAX = tweak_data.weapon.kurisumasu.CLIP_AMMO_MAX * tweak_data.weapon.kurisumasu.NR_CLIPS_MAX
+		tweak_data.weapon.kurisumasu.stats.spread = 11
+		tweak_data.weapon.kurisumasu.stats.recoil = 18
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.ARs, "kurisumasu", "right")
+		LocalizationManager:add_localized_strings({bm_w_kurisumasu_desc = managers.localization:text("bm_w_m16_desc")})
+		-- 2 new stocks
+		tweak_data.weapon.factory.parts.wpn_fps_ass_kurisumasu_s_sopmod.stats.recoil = 3
+		tweak_data.weapon.factory.parts.wpn_fps_ass_kurisumasu_s_sopmod.stats.spread = 1
+		tweak_data.weapon.factory.parts.wpn_fps_ass_kurisumasu_s_sopmod.stats.concealment = -4
+		tweak_data.weapon.factory.parts.wpn_fps_ass_kurisumasu_s_m4ss.stats.recoil = -1
+		tweak_data.weapon.factory.parts.wpn_fps_ass_kurisumasu_s_m4ss.stats.spread = 3
+		tweak_data.weapon.factory.parts.wpn_fps_ass_kurisumasu_s_m4ss.stats.concealment = -3
+		-- m16 barrel from an addon mod - https://modworkshop.net/mod/40785
+		if tweak_data.weapon.factory.parts.wpn_fps_ass_kurisumasu_b_m16 then
+			tweak_data.weapon.factory.parts.wpn_fps_ass_kurisumasu_b_m16.stats.spread = 1
+			tweak_data.weapon.factory.parts.wpn_fps_ass_kurisumasu_b_m16.stats.recoil = 1
+		end
+	end
+	
+	-- https://modworkshop.net/mod/51546 Payday 3 Tribune 32
+	if tweak_data.weapon.tribune32 then
+		tweak_data.weapon.tribune32.stats.damage = 155
+		tweak_data.weapon.tribune32.AMMO_PICKUP = {(pickupsSMG._155 * 0.9),(pickupsSMG._155 * 1.1)}
+		tweak_data.weapon.tribune32.stats.recoil = 19
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.SMGs, "tribune32", "right")
+		tweak_data.weapon.tribune32.stats.reload = 9
+		-- remove the dumbass thing where default parts add stats, leading to attachments being useless/confusing in most cases
+		local default_parts = {
+			"wpn_fps_smg_tribune32_barrel",
+			"wpn_fps_smg_tribune32_bolt", 
+			"wpn_fps_smg_tribune32_charging_handle",
+			"wpn_fps_smg_tribune32_flash_hider", 
+			"wpn_fps_smg_tribune32_irons",
+			"wpn_fps_smg_tribune32_optic_rail",
+			"wpn_fps_smg_tribune32_receiver_lower",
+			"wpn_fps_smg_tribune32_receiver_upper",
+			"wpn_fps_smg_tribune32_magazine_release",
+			"wpn_fps_smg_tribune32_magazine",
+			"wpn_fps_smg_tribune32_stock",
+			"wpn_fps_smg_tribune32_stock_adapter",
+		}
+		for _, part in pairs(default_parts) do
+			if tweak_data.weapon.factory.parts[part] then
+				tweak_data.weapon.factory.parts[part].stats.spread = 0
+				tweak_data.weapon.factory.parts[part].stats.recoil = 0
+				tweak_data.weapon.factory.parts[part].stats.concealment = 0
+			end
+		end
+		-- mags
+		tweak_data.weapon.factory.parts.wpn_fps_smg_tribune32_magazine_short.stats.reload = 6
+		tweak_data.weapon.factory.parts.wpn_fps_smg_tribune32_magazine_fool.stats.reload = -3
+		tweak_data.weapon.factory.parts.wpn_fps_smg_tribune32_magazine_speedpull.stats.reload = 3
+		tweak_data.weapon.factory.parts.wpn_fps_smg_tribune32_xmag.stats.reload = -3
+	end
+	
 end
 
 function Gilza.checkforweapontweaks()

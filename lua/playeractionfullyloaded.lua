@@ -16,11 +16,15 @@ local function on_ammo_pickup(unit, pickup_chance, increase)
 
 	if unit == managers.player:player_unit() then
 		local random = math.random()
-
 		if random < chance then
 			gained_throwable = true
-
+			
 			managers.player:add_grenade_amount(1, true)
+			-- on nade pickup, reset current pick up chance. most likely becuase this is a coroutine, getting multiple pickups in one tick is not handled well, allowing players to gain 2 or more pickups on the same tick
+			-- without resetting the % to the starting value. normally starting value is reset on coroutine restart, but it doesnt happen in the "multiple packs in one tick" case, so we manualy reset it
+			if managers.player:upgrade_value("player", "regain_throwable_from_ammo") and managers.player:upgrade_value("player", "regain_throwable_from_ammo").chance then
+				chance = managers.player:upgrade_value("player", "regain_throwable_from_ammo").chance or 0
+			end
 		else
 			chance = chance + increase
 		end
