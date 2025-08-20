@@ -2811,11 +2811,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 		self.ms3gl.stats.recoil = 13
 		self.ms3gl.stats.spread = 18
 		
-		self.rpg7.NR_CLIPS_MAX = 6
+		self.rpg7.NR_CLIPS_MAX = 5
 		self.rpg7.AMMO_MAX = self.rpg7.CLIP_AMMO_MAX * self.rpg7.NR_CLIPS_MAX
 		self.rpg7.stats.reload = 13
-		self.ray.NR_CLIPS_MAX = 2.5
-		self.ray.AMMO_MAX = self.ray.CLIP_AMMO_MAX * self.ray.NR_CLIPS_MAX
 		self.ray.stats.reload = 10
 		
 		local pickups = G_W_M.ammo_pickups.GLs
