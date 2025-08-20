@@ -99,11 +99,11 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_post_WeaponTweakData_init_
 			_88 = Gilza.Weapons_module:get_ammo_pickup(88, 0.33),
 		},
 		GLs = {
-			_1300 = 0.372,
-			_960 = 0.455,
-			_480 = 0.795,
-			_360 = 0.88,
-			_underbarrel = 0.174
+			_1300 = 0.35,
+			_960 = 0.43,
+			_480 = 0.76,
+			_360 = 0.83,
+			_underbarrel = 0.16
 		},
 	}
 	
