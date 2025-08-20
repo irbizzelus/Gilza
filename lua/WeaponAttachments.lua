@@ -4714,6 +4714,182 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		end
 		PlayBONK_offhand_knives()
 		
+		local function Custom_ARs()
+			
+			-- https://modworkshop.net/mod/35608 DT MDRX 7.62x51mm
+			if self.parts.wpn_fps_ass_mdr_308_barrel then
+				-- sniper kit barrel
+				self.parts.wpn_fps_ass_mdr_308_barrel_sniper.stats.recoil = -5
+				self.parts.wpn_fps_ass_mdr_308_barrel_sniper.stats.spread = 5
+				self.parts.wpn_fps_ass_mdr_308_barrel_sniper.stats.damage = nil
+				self.parts.wpn_fps_ass_mdr_308_barrel_sniper.stats.concealment = -4
+				-- sniper kit ammo
+				self.parts.wpn_fps_ass_mdr_308_snp_am.stats.recoil = -2
+				self.parts.wpn_fps_ass_mdr_308_snp_am.stats.spread = -2
+				self.parts.wpn_fps_ass_mdr_308_snp_am.stats.damage = 295
+				self.parts.wpn_fps_ass_mdr_308_snp_am.stats.total_ammo_mod = -3.33
+				self.parts.wpn_fps_ass_mdr_308_snp_am.desc_id = "bm_wpn_fps_ass_mdr_308_snp_am_Gilza_desc"
+				self.parts.wpn_fps_ass_mdr_308_snp_am.custom_stats.ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 155, 450, true).max_mul
+				self.parts.wpn_fps_ass_mdr_308_snp_am.custom_stats.ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 155, 450, true).min_mul
+			end
+			
+			-- https://modworkshop.net/mod/37996 M4A1 Grenadier
+			if self.parts.wpn_fps_ass_kurisumasu_b_std then
+				self.parts.wpn_fps_ass_kurisumasu_s_sopmod.stats.recoil = 3
+				self.parts.wpn_fps_ass_kurisumasu_s_sopmod.stats.spread = 1
+				self.parts.wpn_fps_ass_kurisumasu_s_sopmod.stats.concealment = -4
+				self.parts.wpn_fps_ass_kurisumasu_s_m4ss.stats.recoil = -1
+				self.parts.wpn_fps_ass_kurisumasu_s_m4ss.stats.spread = 3
+				self.parts.wpn_fps_ass_kurisumasu_s_m4ss.stats.concealment = -3
+				-- m16 barrel from an addon mod - https://modworkshop.net/mod/40785
+				if self.parts.wpn_fps_ass_kurisumasu_b_m16 then
+					self.parts.wpn_fps_ass_kurisumasu_b_m16.stats.spread = 1
+					self.parts.wpn_fps_ass_kurisumasu_b_m16.stats.recoil = 1
+				end
+			end
+			
+			-- https://modworkshop.net/mod/17243 SKS
+			if self.parts.wpn_fps_ass_sks_sightrail then
+				self.parts.wpn_fps_upg_sks_sightrail_long.stats.recoil = nil
+				--self.parts.wpn_fps_upg_sks_mag_detach10[1].total_ammo_mod = -3.64
+				self.parts.wpn_fps_upg_sks_mag_detach10.stats.total_ammo_mod = -3.64
+				self.parts.wpn_fps_upg_sks_mag_detach10.stats.recoil = -1
+				self.parts.wpn_fps_upg_sks_mag_detach20.stats.total_ammo_mod = -5.45
+				self.parts.wpn_fps_upg_sks_mag_detach20.stats.spread = -1
+				self.parts.wpn_fps_upg_sks_mag_detach20.stats.recoil = 3
+				self.parts.wpn_fps_upg_sks_mag_detach20.stats.reload = -4
+				self.parts.wpn_fps_upg_sks_bayonet.stats = {
+					min_damage = 5,
+					max_damage = 5,
+					min_damage_effect = 8,
+					max_damage_effect = 8,
+					concealment = -2,
+					value = 1
+				}
+				self.parts.wpn_fps_upg_sks_bayonet.has_description = true
+				self.parts.wpn_fps_upg_sks_bayonet.desc_id = "bm_wp_mosin_ns_bayonet_desc"
+				
+				self.parts.wpn_fps_upg_sks_barrel_med.stats.damage = 200
+				self.parts.wpn_fps_upg_sks_barrel_med.stats.concealment = -2
+				self.parts.wpn_fps_upg_sks_barrel_med.stats.recoil = -6
+				self.parts.wpn_fps_upg_sks_barrel_med.custom_stats = {
+					ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 250, 450).max_mul,
+					ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 250, 450).min_mul,
+					fire_rate_multiplier = 0.769
+				}
+				self.parts.wpn_fps_upg_sks_barrel_med.has_description = true
+				self.parts.wpn_fps_upg_sks_barrel_med.desc_id = "bm_wpn_fps_upg_snp_awp_conversionkit_new_desc"
+				self.parts.wpn_fps_upg_sks_barrel_short.stats.concealment = 5
+				self.parts.wpn_fps_upg_sks_barrel_short.stats.reload = 2
+				self.parts.wpn_fps_upg_sks_barrel_short.stats.recoil = 2
+				self.parts.wpn_fps_upg_sks_barrel_short.stats.spread = -4
+			end
+		
+		end
+		Custom_ARs()
+		
+		local function Custom_SNIPERs()
+			
+			-- https://modworkshop.net/mod/17368 L115
+			if self.parts.wpn_fps_upg_l115_stock_ax then
+				self.parts.wpn_fps_upg_l115_stock_ax.stats.spread = -1
+			end
+			
+			-- https://modworkshop.net/mod/42220 MW2022 Marlin Model 336
+			if self.parts.wpn_fps_snp_sbeta_barrel then
+				
+				local default_parts = {
+					"wpn_fps_snp_sbeta_barrel",
+					"wpn_fps_snp_sbeta_lever",
+					"wpn_fps_snp_sbeta_handguard",
+					"wpn_fps_snp_sbeta_irons",				
+					"wpn_fps_snp_sbeta_magazine",
+					"wpn_fps_snp_sbeta_receiver",
+					"wpn_fps_snp_sbeta_stock",
+				}
+				for _, part in pairs(default_parts) do
+					if self.parts[part] then
+						self.parts[part].stats.damage = nil
+						self.parts[part].stats.spread = nil
+						self.parts[part].stats.recoil = nil
+						self.parts[part].stats.concealment = nil
+						self.parts[part].stats.suppression = nil
+					end
+				end
+				
+				self.parts.wpn_fps_snp_sbeta_barrel_fluted.stats.spread = 0
+				self.parts.wpn_fps_snp_sbeta_barrel_fluted.stats.recoil = 2
+				
+				self.parts.wpn_fps_snp_sbeta_barrel_heavy.stats.spread = -1
+				self.parts.wpn_fps_snp_sbeta_barrel_heavy.stats.damage = nil
+				self.parts.wpn_fps_snp_sbeta_barrel_heavy.stats.total_ammo_mod = nil
+				self.parts.wpn_fps_snp_sbeta_barrel_heavy.stats.reload = -2
+				
+				self.parts.wpn_fps_snp_sbeta_barrel_short.stats.damage = nil
+				self.parts.wpn_fps_snp_sbeta_barrel_short.stats.spread = -2
+				self.parts.wpn_fps_snp_sbeta_barrel_short.stats.total_ammo_mod = nil
+				self.parts.wpn_fps_snp_sbeta_barrel_short.stats.reload = 4
+				self.parts.wpn_fps_snp_sbeta_barrel_short.stats.concealment = 2
+				
+				self.parts.wpn_fps_snp_sbeta_barrel_sil.stats.damage = -3
+				self.parts.wpn_fps_snp_sbeta_barrel_sil.stats.concealment = 2
+				self.parts.wpn_fps_snp_sbeta_barrel_sil.stats.total_ammo_mod = nil
+				
+				self.parts.wpn_fps_snp_sbeta_barrel_sn.stats.damage = nil
+				self.parts.wpn_fps_snp_sbeta_barrel_sn.stats.spread = 1
+				self.parts.wpn_fps_snp_sbeta_barrel_sn.stats.concealment = -1
+			end
+		
+		end
+		Custom_SNIPERs()
+		
+		local function Custom_SMGs()
+			
+			-- https://modworkshop.net/mod/51546 Payday 3 Tribune 32
+			if self.parts.wpn_fps_smg_tribune32_barrel then
+				-- remove the dumbass thing where default parts add stats, leading to attachments being useless/confusing in most cases
+				local default_parts = {
+					"wpn_fps_smg_tribune32_barrel",
+					"wpn_fps_smg_tribune32_bolt", 
+					"wpn_fps_smg_tribune32_charging_handle",
+					"wpn_fps_smg_tribune32_flash_hider", 
+					"wpn_fps_smg_tribune32_irons",
+					"wpn_fps_smg_tribune32_optic_rail",
+					"wpn_fps_smg_tribune32_receiver_lower",
+					"wpn_fps_smg_tribune32_receiver_upper",
+					"wpn_fps_smg_tribune32_magazine_release",
+					"wpn_fps_smg_tribune32_magazine",
+					"wpn_fps_smg_tribune32_stock",
+					"wpn_fps_smg_tribune32_stock_adapter",
+				}
+				for _, part in pairs(default_parts) do
+					if self.parts[part] then
+						self.parts[part].stats.damage = nil
+						self.parts[part].stats.spread = nil
+						self.parts[part].stats.recoil = nil
+						self.parts[part].stats.concealment = nil
+						self.parts[part].stats.suppression = nil
+					end
+				end
+				-- mags
+				self.parts.wpn_fps_smg_tribune32_magazine_short.stats.reload = 6
+				self.parts.wpn_fps_smg_tribune32_magazine_fool.stats.reload = -3
+				self.parts.wpn_fps_smg_tribune32_magazine_speedpull.stats.reload = 3
+				self.parts.wpn_fps_smg_tribune32_xmag.stats.reload = -3
+				-- akimbo mag overrides
+				self.wpn_fps_smg_x_tribune32.override.wpn_fps_smg_tribune32_magazine_short = self.wpn_fps_smg_x_tribune32.override.wpn_fps_smg_tribune32_magazine_short or {stats={}}
+				self.wpn_fps_smg_x_tribune32.override.wpn_fps_smg_tribune32_magazine_short.stats.reload = 6
+				self.wpn_fps_smg_x_tribune32.override.wpn_fps_smg_tribune32_magazine_fool = self.wpn_fps_smg_x_tribune32.override.wpn_fps_smg_tribune32_magazine_fool or {stats={}}
+				self.wpn_fps_smg_x_tribune32.override.wpn_fps_smg_tribune32_magazine_fool.stats.reload = -3
+				self.wpn_fps_smg_x_tribune32.override.wpn_fps_smg_tribune32_magazine_speedpull = self.wpn_fps_smg_x_tribune32.override.wpn_fps_smg_tribune32_magazine_speedpull or {stats={}}
+				self.wpn_fps_smg_x_tribune32.override.wpn_fps_smg_tribune32_magazine_speedpull.stats.reload = 3
+				self.wpn_fps_smg_x_tribune32.override.wpn_fps_smg_tribune32_xmag = self.wpn_fps_smg_x_tribune32.override.wpn_fps_smg_tribune32_xmag or {stats={}}
+				self.wpn_fps_smg_x_tribune32.override.wpn_fps_smg_tribune32_xmag.stats.reload = -3
+			end
+			
+		end
+		Custom_SMGs()
+		
 	end
 	customWeaponMods()
 	

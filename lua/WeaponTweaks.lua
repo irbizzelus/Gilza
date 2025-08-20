@@ -1554,12 +1554,14 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.desertfox.stats.spread = 17
 			
 			self.r93.stats.recoil = 7
-			self.r93.stats.spread = 21
+			self.r93.stats.spread = 20
 			self.r93.NR_CLIPS_MAX = 3.35
 			self.r93.AMMO_MAX = self.r93.CLIP_AMMO_MAX * self.r93.NR_CLIPS_MAX
+			self.r93.stats.reload = 8
 			
 			self.mosin.stats.recoil = 7
 			self.mosin.stats.spread = 24	
+			self.mosin.stats.reload = 12
 			
 		end
 		init_bolt_heavy()
@@ -2809,10 +2811,10 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 		self.ms3gl.stats.recoil = 13
 		self.ms3gl.stats.spread = 18
 		
-		self.rpg7.NR_CLIPS_MAX = 7
+		self.rpg7.NR_CLIPS_MAX = 6
 		self.rpg7.AMMO_MAX = self.rpg7.CLIP_AMMO_MAX * self.rpg7.NR_CLIPS_MAX
 		self.rpg7.stats.reload = 13
-		self.ray.NR_CLIPS_MAX = 3
+		self.ray.NR_CLIPS_MAX = 2.5
 		self.ray.AMMO_MAX = self.ray.CLIP_AMMO_MAX * self.ray.NR_CLIPS_MAX
 		self.ray.stats.reload = 10
 		
