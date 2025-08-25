@@ -118,8 +118,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			-- Socio/Infil shared first card
 			LocalizationManager:add_localized_strings({
 				menu_sociopathinfil_1 = "OVERDOG",
-				menu_sociopathinfil_1_desc = "While you are surrounded by three or more visible enemies within ##18m## of you, you receive a ##12%## damage reduction. This damage reduction lingers for ##5## seconds after you are no longer surrounded.\n\nYour second and each consecutive melee hit within ##4## seconds of the last one will deal ##100%## more damage.",
-				menu_sociopathinfil_1_short = "While you are surrounded by three or more visible enemies within ##18m## of you, you receive a ##12%## damage reduction. Your second and each consecutive melee hit within ##4## seconds of the last one will deal ##100%## more damage.",
+				menu_sociopathinfil_1_desc = "While you are surrounded by three or more visible enemies within ##18m## of you, you receive a ##10%## damage reduction. This damage reduction lingers for ##5## seconds after you are no longer surrounded.\n\nYour second and each consecutive melee hit within ##4## seconds of the last one will deal ##100%## more damage.",
+				menu_sociopathinfil_1_short = "While you are surrounded by three or more visible enemies within ##18m## of you, you receive a ##10%## damage reduction. Your second and each consecutive melee hit within ##4## seconds of the last one will deal ##100%## more damage.",
 			})
 			
 			local function Infiltrator_str()
@@ -961,8 +961,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			-- Socio/Infil shared first card
 			LocalizationManager:add_localized_strings({
 				menu_sociopathinfil_1 = "OVERDOG",
-				menu_sociopathinfil_1_desc = "Пока вас окружают как минимум три видимых врага в пределах ##18## метров от вас, вы получаете ##12%## сопротивления урону. Это сопротивление остаеется с вами в течении еще ##5## секунд после того как вы больше не окружены.\n\nВаш второй и каждый последующий удар в ближнем бою с перерывом не более чем в ##4## секунды, нанесёт на ##100%## больше урона от базового урона оружия.",
-				menu_sociopathinfil_1_short = "Пока вас окружают как минимум три видимых врага в пределах ##18## метров от вас, вы получаете ##12%## сопротивления урону. Ваш второй и каждый последующий удар в ближнем бою с перерывом не более чем в ##4## секунды, нанесёт на ##100%## больше урона от базового урона оружия.",
+				menu_sociopathinfil_1_desc = "Пока вас окружают как минимум три видимых врага в пределах ##18## метров от вас, вы получаете ##10%## сопротивления урону. Это сопротивление остаеется с вами в течении еще ##5## секунд после того как вы больше не окружены.\n\nВаш второй и каждый последующий удар в ближнем бою с перерывом не более чем в ##4## секунды, нанесёт на ##100%## больше урона от базового урона оружия.",
+				menu_sociopathinfil_1_short = "Пока вас окружают как минимум три видимых врага в пределах ##18## метров от вас, вы получаете ##10%## сопротивления урону. Ваш второй и каждый последующий удар в ближнем бою с перерывом не более чем в ##4## секунды, нанесёт на ##100%## больше урона от базового урона оружия.",
 			})
 			
 			local function Infiltrator_str()
@@ -1599,6 +1599,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					bm_w_x_shepheard_desc = "CМожет быть использовано в режиме стрельбы очередью из 3 пуль.",
 					bm_w_polymer_desc = "Может быть использовано в режиме стрельбы очередью из 2 пуль.",
 					bm_w_x_polymer_desc = "Может быть использовано в режиме стрельбы очередью из 2 пуль.",
+					bm_w_olympic_desc = "Может быть использовано в режиме стрельбы очередью из 2 пуль. Сама очередь имеет скорострельность 1050.",
+					bm_w_x_olympic_desc = "Может быть использовано в режиме стрельбы очередью из 2 пуль. Сама очередь имеет скорострельность 1050.",
 				})
 			end
 			Weapon_descs()

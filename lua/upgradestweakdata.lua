@@ -697,10 +697,10 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				self.values.melee.stacking_hit_expire_t = {
 					4
 				}
-				-- overdog - 1st card dmg reduction duration compensation for new activation rules
+				-- overdog - 1st card dmg reduction duration and amount compensation for new activation rules and dmg resist
 				self.values.temporary.dmg_dampener_outnumbered_strong = {
 					{
-						0.88,
+						0.9,
 						5
 					}
 				}
