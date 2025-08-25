@@ -47,7 +47,7 @@ function Gilza.tryAddingNewGuns()
 					elseif tweak_data.weapon[customWeaponsList[j]].categories[i] == "pistol" then
 						local isRevolver = false
 						for k=1, #tweak_data.weapon[customWeaponsList[j]].categories do
-							if tweak_data.weapon[customWeaponsList[j]].categories[i] == "revolver" then
+							if tostring(tweak_data.weapon[customWeaponsList[j]].categories[k]) == "revolver" then
 								isRevolver = true
 							end							
 						end
@@ -835,7 +835,7 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 	local pickups = G_W_M.ammo_pickups.PISTOLs
 	
 	local isActuallyRevolver = false
-	if tweak_data.weapon[id].CLIP_AMMO_MAX <= 6 then
+	if tweak_data.weapon[id].stats.damage >= 220 and tweak_data.weapon[id].CLIP_AMMO_MAX <= 6 then
 		isActuallyRevolver = true
 	end
 	if isRevolver then
@@ -946,7 +946,22 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 			tweak_data.weapon[id].auto.fire_rate = new_rof
 		end
 		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._250 * 0.9)) * secondary_mul,((pickups._250 * 1.1)) * secondary_mul}
-	elseif tweak_data.weapon[id].stats.damage >= 300 and isActuallyRevolver then
+	elseif tweak_data.weapon[id].stats.damage >= 300 then
+		tweak_data.weapon[id].stats.damage = 450
+		local new_rof = 60/240
+		if tweak_data.weapon[id].fire_mode_data then
+			tweak_data.weapon[id].fire_mode_data.fire_rate = new_rof
+		end
+		if tweak_data.weapon[id].single then
+			tweak_data.weapon[id].single.fire_rate = new_rof
+		end
+		if tweak_data.weapon[id].auto then
+			tweak_data.weapon[id].auto.fire_rate = new_rof
+		end
+		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._450 * 0.9)) * secondary_mul,((pickups._450 * 1.1)) * secondary_mul}
+	end
+	
+	if isActuallyRevolver then
 		tweak_data.weapon[id].stats.damage = 450
 		local new_rof = 60/240
 		if tweak_data.weapon[id].fire_mode_data then
@@ -1524,8 +1539,9 @@ function Gilza.applyCustomGunsIndividualStats()
 		tweak_data.weapon.mdr_308_underbarrel.NR_CLIPS_MAX = 2
 		tweak_data.weapon.mdr_308_underbarrel.AMMO_MAX = tweak_data.weapon.mdr_308_underbarrel.CLIP_AMMO_MAX * tweak_data.weapon.mdr_308_underbarrel.NR_CLIPS_MAX
 		tweak_data.weapon.mdr_308_underbarrel.AMMO_PICKUP = {(pickupsGL._underbarrel * 0.9),(pickupsGL._underbarrel * 1.1)}
-		-- sniper kit barrel fire rate override. normaly weapon parts are adjusted in the attachments file, but this stat is added by the MDR mod in a post hook later, so we do it later as well
 		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_barrel_sniper.override_weapon_multiply.fire_mode_data.fire_rate = 2
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_snp_am.custom_stats.ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 155, 450, true).max_mul
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_snp_am.custom_stats.ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 155, 450, true).min_mul
 	end
 	
 	-- https://modworkshop.net/mod/37996 M4A1 Grenadier
@@ -1584,6 +1600,19 @@ function Gilza.applyCustomGunsIndividualStats()
 		tweak_data.weapon.sks.stats.recoil = 11
 		tweak_data.weapon.sks.stats.concealment = 20
 		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.ARs, "sks", "left")
+	end
+	
+	-- https://modworkshop.net/mod/42438 MW2022 S&W Model 500
+	if tweak_data.weapon.swhiskey then
+		tweak_data.weapon.swhiskey.NR_CLIPS_MAX = 7
+		tweak_data.weapon.swhiskey.AMMO_MAX = tweak_data.weapon.swhiskey.CLIP_AMMO_MAX * tweak_data.weapon.swhiskey.NR_CLIPS_MAX
+		tweak_data.weapon.swhiskey.stats.spread = 19
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.ARs, "sks", "left")
+		tweak_data.weapon.factory.parts.wpn_fps_pis_swhiskey_am_piercing.custom_stats.ammo_pickup_max_mul = 0.5
+		tweak_data.weapon.factory.parts.wpn_fps_pis_swhiskey_am_snakeshot.custom_stats.ammo_pickup_max_mul = 1.3235294117647
+		tweak_data.weapon.factory.parts.wpn_fps_pis_swhiskey_am_snakeshot.custom_stats.ammo_pickup_min_mul = 1.3235294117647
+		tweak_data.weapon.factory.parts.wpn_fps_pis_swhiskey_am_snakeshot.custom_stats.falloff_override = {optimal_distance = 0, optimal_range = 1000, near_falloff = 0, far_falloff = 900, near_mul = 1, far_mul = 0.5, _meta = "falloff_override"}
+		Gilza.shotgun_minimal_damage_multipliers.swhiskey = 0.67
 	end
 	
 end

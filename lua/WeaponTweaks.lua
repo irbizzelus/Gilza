@@ -3374,6 +3374,17 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 		self.x_polymer.burst = {fire_rate = self.x_polymer.fire_mode_data.fire_rate}
 		self.x_polymer.has_description = true
 		
+		self.olympic.HAS_BURST_AS_THIRD = true
+		self.olympic.BURST_COUNT = 2
+		self.olympic.fire_mode_data.burst_cooldown = 60/1050 * 2
+		self.olympic.burst = {fire_rate = 60/1050}
+		self.olympic.has_description = true
+		self.x_olympic.HAS_BURST_AS_THIRD = true
+		self.x_olympic.BURST_COUNT = 2
+		self.x_olympic.fire_mode_data.burst_cooldown = 60/1050 * 2
+		self.x_olympic.burst = {fire_rate = 60/1050}
+		self.x_olympic.has_description = true
+		
 	end
 	addBURSTFIRE()
 	

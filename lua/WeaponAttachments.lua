@@ -4729,8 +4729,6 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				self.parts.wpn_fps_ass_mdr_308_snp_am.stats.damage = 295
 				self.parts.wpn_fps_ass_mdr_308_snp_am.stats.total_ammo_mod = -3.33
 				self.parts.wpn_fps_ass_mdr_308_snp_am.desc_id = "bm_wpn_fps_ass_mdr_308_snp_am_Gilza_desc"
-				self.parts.wpn_fps_ass_mdr_308_snp_am.custom_stats.ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 155, 450, true).max_mul
-				self.parts.wpn_fps_ass_mdr_308_snp_am.custom_stats.ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 155, 450, true).min_mul
 			end
 			
 			-- https://modworkshop.net/mod/37996 M4A1 Grenadier
@@ -4889,6 +4887,39 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			
 		end
 		Custom_SMGs()
+		
+		local function Custom_PISTOLs()
+			
+			-- https://modworkshop.net/mod/42438 MW2022 S&W Model 500
+			if self.parts.wpn_fps_pis_swhiskey_barrel then
+				-- triggers, duh
+				self.parts.wpn_fps_pis_swhiskey_trigger_hair.stats.recoil = 5
+				self.parts.wpn_fps_pis_swhiskey_trigger_hair.stats.spread = -3
+				self.parts.wpn_fps_pis_swhiskey_trigger_hair.custom_stats = {fire_rate_multiplier = 1.1}
+				self.parts.wpn_fps_pis_swhiskey_trigger_heavy.stats.recoil = 1
+				self.parts.wpn_fps_pis_swhiskey_trigger_heavy.stats.spread = 1
+				self.parts.wpn_fps_pis_swhiskey_trigger_heavy.custom_stats = {fire_rate_multiplier = 0.95}
+				self.parts.wpn_fps_pis_swhiskey_trigger_heavy.has_description = false
+				self.parts.wpn_fps_pis_swhiskey_trigger_light.stats.recoil = 1
+				self.parts.wpn_fps_pis_swhiskey_trigger_light.stats.spread = -1
+				self.parts.wpn_fps_pis_swhiskey_trigger_light.custom_stats = {fire_rate_multiplier = 1.05}
+				-- barrels
+				self.parts.wpn_fps_pis_swhiskey_barrel_short.stats.spread = -3
+				self.parts.wpn_fps_pis_swhiskey_barrel_mini.stats.spread = -4
+				self.parts.wpn_fps_pis_swhiskey_barrel_long.stats.damage = nil
+				self.parts.wpn_fps_pis_swhiskey_barrel_long.stats.reload = -1
+				self.parts.wpn_fps_pis_swhiskey_barrel_heavy_long.stats.damage = nil
+				self.parts.wpn_fps_pis_swhiskey_barrel_heavy_long.stats.reload = -1
+				-- ammo
+				self.parts.wpn_fps_pis_swhiskey_am_piercing.stats.damage = nil
+				self.parts.wpn_fps_pis_swhiskey_am_piercing.stats.total_ammo_mod = -5.71
+				self.parts.wpn_fps_pis_swhiskey_am_snakeshot.stats.damage = -125
+				self.parts.wpn_fps_pis_swhiskey_am_snakeshot.stats.spread = -15
+				self.parts.wpn_fps_pis_swhiskey_am_snakeshot.stats.total_ammo_mod = -8.57
+			end
+			
+		end
+		Custom_PISTOLs()
 		
 	end
 	customWeaponMods()

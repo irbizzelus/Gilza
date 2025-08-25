@@ -716,6 +716,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					-- Frenchy's missing strings on some parts - no translations required
 					bm_wp_wpn_fps_upg_m_celerity = "\"Big Stick\" 30-round mag",
 					bm_wp_wpn_fps_upg_m_308dmmag = "Lightweight 30-round mag",
+					-- https://modworkshop.net/mod/42438 MW2022 S&W Model 500
+					bm_wp_wpn_fps_pis_swhiskey_am_snakeshot_desc = "Converts weapon to fire 8 pellets and counts as a shotgun for purposes of skills. Ammo pickup rate adjusted to match said changes.",
 				})
 			end
 			Custom_attachs_non_Gilza()
@@ -753,6 +755,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					bm_w_x_shepheard_desc = "Can be used in a 3 round burst fire mode.",
 					bm_w_polymer_desc = "Can be used in a 2 round burst fire mode.",
 					bm_w_x_polymer_desc = "Can be used in a 2 round burst fire mode.",
+					bm_w_olympic_desc = "Can be used in a 2 round burst fire mode. Burst itself is fired at 1050 RPM.",
+					bm_w_x_olympic_desc = "Can be used in a 2 round burst fire mode. Burst itself is fired at 1050 RPM.",
 				})
 			end
 			Weapon_descs()
@@ -1556,6 +1560,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					-- Frenchy's missing strings on some parts - no translations required
 					bm_wp_wpn_fps_upg_m_celerity = "\"Big Stick\" 30-round mag",
 					bm_wp_wpn_fps_upg_m_308dmmag = "Lightweight 30-round mag",
+					-- https://modworkshop.net/mod/42438 MW2022 S&W Model 500
+					bm_wp_wpn_fps_pis_swhiskey_am_snakeshot_desc = "Патрон с 8 дробинками. Оружие теперь будет получать бонусы от навыков для категории Дробовики. Подбор боеприпасов изменен в связи с данными изменениями.",
 				})
 			end
 			Custom_attachs_non_Gilza()
