@@ -3,7 +3,6 @@
 -- i honestly dont know why, but my suspicion lies with the way it's hooks are added in the supermod.xml file
 -- regardless, this will add anything that weaponlib is preventing me from adding through normal means
 if not Gilzas_weaponlib_overrides_and_fixes then
-	
 	-- keep track of when a user clicks their primary fire button. if they do while reloading,
 	-- and having run and reload skill, they can cancel the reload manualy
 	PlayerStandard = PlayerStandard or class(PlayerMovementState)
@@ -82,9 +81,20 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 								-- if timing was unfortunate, ignore our shot request
 								self._requested_fire_between_single_shots[1] = nil
 							end
+						elseif action_wanted and fire_mode == "burst" and input.btn_primary_attack_press and (self._shooting or not weap_base:start_shooting_allowed()) and (((weap_base:weapon_tweak_data().fire_mode_data.burst_cooldown or weap_base:weapon_fire_rate()) / weap_base:fire_rate_multiplier()) < 0.4) then
+							self._requested_fire_between_single_shots[1] = Application:time()
+							self._requested_fire_between_single_shots[2] = weap_base._name_id
+						elseif fire_mode == "burst" and self._requested_fire_between_single_shots[1] and self._requested_fire_between_single_shots[2] == weap_base._name_id and weap_base:start_shooting_allowed() and not self._shooting and (((weap_base:weapon_tweak_data().fire_mode_data.burst_cooldown or weap_base:weapon_fire_rate()) / weap_base:fire_rate_multiplier()) < 0.4) and weap_base:shooting_count() == 0 then
+							local rof_based_delay_window = (weap_base:weapon_tweak_data().fire_mode_data.burst_cooldown or weap_base:weapon_fire_rate()) / weap_base:fire_rate_multiplier() * 0.5
+							if (weap_base._next_fire_allowed - self._requested_fire_between_single_shots[1] <= rof_based_delay_window) and (Application:time() - weap_base._next_fire_allowed <= rof_based_delay_window * 0.25) then
+								self._requested_fire_between_single_shots[1] = nil
+								input.btn_primary_attack_press = true
+							else
+								self._requested_fire_between_single_shots[1] = nil
+							end
 						else
 							-- clear var on weapon/fire mode change
-							if fire_mode ~= "single" or self._requested_fire_between_single_shots[2] ~= weap_base._name_id then
+							if (fire_mode ~= "single" and fire_mode ~= "burst") or self._requested_fire_between_single_shots[2] ~= weap_base._name_id then
 								self._requested_fire_between_single_shots[1] = nil
 							elseif self._requested_fire_between_single_shots[1] then
 								-- if its been too long since last shot - clear

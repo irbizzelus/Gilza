@@ -619,7 +619,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.scar.CLIP_AMMO_MAX = 25
 			self.scar.NR_CLIPS_MAX = 4
 			self.scar.AMMO_MAX = self.scar.CLIP_AMMO_MAX * self.scar.NR_CLIPS_MAX
-			self.scar.stats.spread = 18
+			self.scar.stats.spread = 17
 			self.scar.stats.recoil = 6
 			self.scar.fire_mode_data = {fire_rate = 60/600}
 			self.scar.auto = {fire_rate = 60/600}
@@ -646,8 +646,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.contraband.CLIP_AMMO_MAX = 25
 			self.contraband.NR_CLIPS_MAX = 3
 			self.contraband.AMMO_MAX = self.contraband.CLIP_AMMO_MAX * self.contraband.NR_CLIPS_MAX
-			self.contraband.stats.recoil = 6
-			self.contraband.stats.spread = 19
+			self.contraband.stats.recoil = 5
+			self.contraband.stats.spread = 17
 			self.contraband.fire_mode_data = {fire_rate = 60/600}
 			self.contraband.auto = {fire_rate = 60/600}
 			
@@ -655,7 +655,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.fal.NR_CLIPS_MAX = 5
 			self.fal.AMMO_MAX = self.fal.CLIP_AMMO_MAX * self.fal.NR_CLIPS_MAX
 			self.fal.stats.recoil = 7
-			self.fal.stats.spread = 16
+			self.fal.stats.spread = 15
 			self.fal.fire_mode_data = {fire_rate = 60/660}
 			self.fal.auto = {fire_rate = 60/660}
 			
@@ -1026,10 +1026,10 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			
 			self.boot.NR_CLIPS_MAX = 5
 			self.boot.AMMO_MAX = self.boot.CLIP_AMMO_MAX * self.boot.NR_CLIPS_MAX
-			self.boot.stats.recoil = 21
+			self.boot.stats.recoil = 20
 			self.boot.stats.spread = 15
-			self.boot.fire_mode_data = {fire_rate = 60/85}
-			self.boot.single = {fire_rate = 60/85}
+			self.boot.fire_mode_data = {fire_rate = 60/90}
+			self.boot.single = {fire_rate = 60/90}
 			
 			self.r870.NR_CLIPS_MAX = 6
 			self.r870.AMMO_MAX = self.r870.CLIP_AMMO_MAX * self.r870.NR_CLIPS_MAX
@@ -1057,12 +1057,12 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.m1897.CLIP_AMMO_MAX = 7
 			self.m1897.NR_CLIPS_MAX = 5
 			self.m1897.AMMO_MAX = self.m1897.CLIP_AMMO_MAX * self.m1897.NR_CLIPS_MAX
-			self.m1897.stats.recoil = 18
+			self.m1897.stats.recoil = 19
 			self.m1897.stats.spread = 15
 			self.m1897.stats.reload = 14
 			self.m1897.stats.concealment = 15
-			self.m1897.fire_mode_data = {fire_rate = 60/90}
-			self.m1897.single = {fire_rate = 60/90}	
+			self.m1897.fire_mode_data = {fire_rate = 60/95}
+			self.m1897.single = {fire_rate = 60/95}	
 			
 			self.supernova.CLIP_AMMO_MAX = 6
 			self.supernova.NR_CLIPS_MAX = 5
@@ -1142,7 +1142,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			
 			self.striker.NR_CLIPS_MAX = 2.5
 			self.striker.AMMO_MAX = self.striker.CLIP_AMMO_MAX * self.striker.NR_CLIPS_MAX
-			self.striker.stats.recoil = 13
+			self.striker.stats.recoil = 11
 			self.striker.stats.reload = 13
 			self.striker.stats.spread = 10
 			self.striker.fire_mode_data = {fire_rate = 60/280}
@@ -1150,8 +1150,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			
 			self.ultima.NR_CLIPS_MAX = 4
 			self.ultima.AMMO_MAX = self.ultima.CLIP_AMMO_MAX * self.ultima.NR_CLIPS_MAX
-			self.ultima.stats.recoil = 6
-			self.ultima.stats.spread = 15
+			self.ultima.stats.recoil = 7
+			self.ultima.stats.spread = 16
 			self.ultima.fire_mode_data = {fire_rate = 60/265}
 			self.ultima.single = {fire_rate = 60/265}
 			
@@ -2643,7 +2643,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.x_sparrow.AMMO_MAX = self.x_sparrow.NR_CLIPS_MAX * self.x_sparrow.CLIP_AMMO_MAX
 			
 			self.breech.stats.spread = 21
-			self.breech.stats.recoil = 5
+			self.breech.stats.recoil = 7
 			self.breech.NR_CLIPS_MAX = 6
 			self.breech.AMMO_MAX = self.breech.NR_CLIPS_MAX * self.breech.CLIP_AMMO_MAX
 			self.x_breech.stats.spread = 21
@@ -2729,8 +2729,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 				
 			end
 			
-			self.new_raging_bull.stats.spread = 19
+			self.new_raging_bull.stats.spread = 17
 			self.new_raging_bull.stats.recoil = 4
+			self.new_raging_bull.stats.reload = 9
 			self.new_raging_bull.NR_CLIPS_MAX = 6
 			self.new_raging_bull.AMMO_MAX = self.new_raging_bull.NR_CLIPS_MAX * self.new_raging_bull.CLIP_AMMO_MAX
 			self.x_rage.stats.spread = 19
@@ -2756,7 +2757,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.x_chinchilla.NR_CLIPS_MAX = 2.5
 			self.x_chinchilla.AMMO_MAX = self.x_chinchilla.NR_CLIPS_MAX * self.x_chinchilla.CLIP_AMMO_MAX
 			
-			self.model3.stats.spread = 18
+			self.model3.stats.spread = 19
 			self.model3.stats.recoil = 7
 			self.model3.NR_CLIPS_MAX = 7
 			self.model3.AMMO_MAX = self.model3.NR_CLIPS_MAX * self.model3.CLIP_AMMO_MAX

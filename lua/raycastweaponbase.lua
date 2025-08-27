@@ -485,6 +485,7 @@ _G.AutoFireSoundFixBlacklist = {
 	["shuno"] = true,
 	["system"] = true,
 	["hailstorm"] = true,
+	["kacchainsaw_flamethrower"] = true,
 	["par"] = true
 }
 
