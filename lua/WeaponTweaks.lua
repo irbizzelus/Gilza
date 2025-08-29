@@ -1763,8 +1763,8 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.x_schakal.CLIP_AMMO_MAX = 50
 			self.x_schakal.NR_CLIPS_MAX = 3
 			self.x_schakal.AMMO_MAX = self.x_schakal.CLIP_AMMO_MAX * self.x_schakal.NR_CLIPS_MAX
-			self.x_schakal.fire_mode_data = {fire_rate = 60/666}
-			self.x_schakal.single = {fire_rate = 60/666}
+			self.x_schakal.fire_mode_data = {fire_rate = 60/690}
+			self.x_schakal.single = {fire_rate = 60/690}
 			if self.x_schakal.timers.reload_not_empty == 3 then
 				self.x_schakal.timers.reload_not_empty = 2.5
 			end

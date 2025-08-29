@@ -990,19 +990,19 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			
 			local function Hacker_updates()
 				-- PECM jammer longer feedback
-				-- BEWARE: duration lasts for 12/6 seconds based on game state (loud/stealth), code for that is in playermanager.lua
-				self.values.player.pocket_ecm_jammer_base[1].duration = 10
-				-- PECM jammer less cooldown on kill;
+				-- BEWARE: duration lasts for different duration, based on game state (loud/stealth), code for that is in playermanager.lua
+				self.values.player.pocket_ecm_jammer_base[1].duration = 9
+				-- PECM jammer less cooldown on kill
 				self.values.player.pocket_ecm_jammer_base[1].cooldown_drain = 4
-				-- heal from self during PECM - 1.5x the amount to compensate lower activation frequency
+				-- heal from self during PECM increased to compensate lower activation frequency
 				self.values.player.pocket_ecm_heal_on_kill = {
-					3
+					4
 				}
-				-- temp dodge - now requires 3 kills to trigger and lasts for 50 secs instead of 20, to compensate lower activation frequency
+				-- temp dodge - now requires 3 kills to trigger and lasts for longeer, to compensate lower activation frequency
 				self.values.temporary.pocket_ecm_kill_dodge = {
 					{
 						0.2,
-						50,
+						45,
 						3
 					}
 				}

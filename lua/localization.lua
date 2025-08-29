@@ -293,13 +293,13 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			
 			local function Hacker_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck21_1_desc = "Unlocks and equips the Pocket ECM Device.\n\nChanging to another perk deck will make the Pocket ECM Device unavailable again. The Pocket ECM Device replaces your current throwable, it can be switched out if desired.\n\nWhile in game you can use the throwable key ##$BTN_ABILITY;## to activate the Pocket ECM.\n\nActivating the Pocket ECM Device before the alarm is raised will trigger the jamming effect, disabling all electronics and pagers for a ##6## second duration.\n\nActivating the Pocket ECM Device after the alarm is raised will trigger the feedback effect, granting a chance to stun enemies on the map every second for a ##10## second duration.\n\nThe Pocket ECM Device has ##2## charges with a ##140## second cooldown timer, but each kill you perform will shorten the cooldown timer by ##4## seconds.",
-					menu_deck21_5_desc = "Killing an enemy while the feedback effect is active will regenerate ##30## health.\nYour chance to dodge is increased by ##15%##.",
-					menu_deck21_7_desc = "Killing at least ##3## enemies while the feedback or jamming effect is active will grant ##20## dodge for ##50## seconds.",
+					menu_deck21_1_desc = "Unlocks and equips the Pocket ECM Device.\n\nChanging to another perk deck will make the Pocket ECM Device unavailable again. The Pocket ECM Device replaces your current throwable, it can be switched out if desired.\n\nWhile in game you can use the throwable key ##$BTN_ABILITY;## to activate the Pocket ECM.\n\nActivating the Pocket ECM Device before the alarm is raised will trigger the jamming effect, disabling all electronics and pagers for a ##6## second duration.\n\nActivating the Pocket ECM Device after the alarm is raised will trigger the feedback effect, granting a chance to stun enemies on the map every second for a ##9## second duration.\n\nThe Pocket ECM Device has ##2## charges with a ##150## second cooldown timer, but each kill you perform will shorten the cooldown timer by ##4## seconds. Pocket ECM's don't recharge at the same time, but instead one after another.",
+					menu_deck21_5_desc = "Killing an enemy while the feedback effect is active will regenerate ##40## health.\nYour chance to dodge is increased by ##15%##.",
+					menu_deck21_7_desc = "Killing at least ##3## enemies while the feedback or jamming effect is active will grant ##20## dodge for ##45## seconds.",
 					-- short descs
 					menu_deck21_1_short = "Unlocks and equips the Pocket ECM.",
 					menu_deck21_5_short = "Killing an enemy while the feedback effect is active will regenerate ##40## health. Your chance to dodge is increased by ##15%##.",
-					menu_deck21_7_short = "Killing at least ##3## enemies while the feedback or jamming effect is active will grant ##20## dodge for ##50## seconds.",
+					menu_deck21_7_short = "Killing at least ##3## enemies while the feedback or jamming effect is active will grant ##20## dodge for ##45## seconds.",
 				})
 			end
 			Hacker_str()
@@ -1136,13 +1136,13 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			
 			local function Hacker_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck21_1_desc = "Разблокирует и позволяет взять с собой карманный генератор помех.\n\nЕсли вы смените набор перков на другой, карманный генератор помех будет недоступен для использования. Карманный генератор помех использует слот для метательного оружия, но вы можете взять вместо него что-нибудь другое.\nЧтобы воспользоваться карманным генератором помех, достаточно нажать на кнопку для метательного оружия ##$BTN_ABILITY;##.\n\nЕсли генератор помех был использован до поднятия тревоги, то он отключит все пейджеры и электронику на ##6## секунд. \n\nИспользование генератора помех после поднятия тревоги будет генерировать поле со Звуковой петлей в течении ##10## секунд. Данное поле имеет шанс оглушить противников.\n\nКарманный генератор помех имеет ##2## заряда с ##140## секундным кулдауном, но каждое убийтво уменьшает кулдаун на ##4## секунды.",
-					menu_deck21_5_desc = "При убийстве противников во время действия Звуковой петли вы будете восполнять ##30## единиц здоровья.\nШанс увернуться увеличен на ##15%##.",
-					menu_deck21_7_desc = "При убийстве как минимум ##3## противников во время Звуковой петли вы получаете ##20%## бонус к шансу уклонения на ##50## секунд.",
+					menu_deck21_1_desc = "Разблокирует и позволяет взять с собой карманный генератор помех.\n\nЕсли вы смените набор перков на другой, карманный генератор помех будет недоступен для использования. Карманный генератор помех использует слот для метательного оружия, но вы можете взять вместо него что-нибудь другое.\nЧтобы воспользоваться карманным генератором помех, достаточно нажать на кнопку для метательного оружия ##$BTN_ABILITY;##.\n\nЕсли генератор помех был использован до поднятия тревоги, то он отключит все пейджеры и электронику на ##6## секунд. \n\nИспользование генератора помех после поднятия тревоги будет генерировать поле со Звуковой петлей в течении ##9## секунд. Данное поле имеет шанс оглушить противников.\n\nКарманный генератор помех имеет ##2## заряда с ##150## секундным кулдауном, но каждое убийтво уменьшает кулдаун на ##4## секунды. Заряды карманного генератора помех восполняются не одновременно, а друг за другом.",
+					menu_deck21_5_desc = "При убийстве противников во время действия Звуковой петли вы будете восполнять ##40## единиц здоровья.\nШанс увернуться увеличен на ##15%##.",
+					menu_deck21_7_desc = "При убийстве как минимум ##3## противников во время Звуковой петли вы получаете ##20%## бонус к шансу уклонения на ##45## секунд.",
 					-- short descs
 					menu_deck21_1_short = "Разблокирует и позволяет взять с собой карманный генератор помех.",
 					menu_deck21_5_short = "При убийстве противников во время действия Звуковой петли вы будете восполнять ##40## единиц здоровья. Шанс увернуться увеличен на ##15%##.",
-					menu_deck21_7_short = "При убийстве как минимум ##3## противников во время Звуковой петли вы получаете ##20%## бонус к шансу уклонения на ##50## секунд.",
+					menu_deck21_7_short = "При убийстве как минимум ##3## противников во время Звуковой петли вы получаете ##20%## бонус к шансу уклонения на ##45## секунд.",
 				})
 			end
 			Hacker_str()

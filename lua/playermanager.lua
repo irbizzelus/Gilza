@@ -1156,7 +1156,7 @@ end)
 -- before activating PECM, set it's duration based on game state (stealth/loud)
 Hooks:PreHook(PlayerManager, "_attempt_pocket_ecm_jammer", "Gilza_attempt_pocket_ecm_jammer", function(self)
 	if managers.groupai and not managers.groupai:state():whisper_mode() then
-		tweak_data.upgrades.values.player.pocket_ecm_jammer_base[1].duration = 10
+		tweak_data.upgrades.values.player.pocket_ecm_jammer_base[1].duration = 9
 	else
 		tweak_data.upgrades.values.player.pocket_ecm_jammer_base[1].duration = 6
 	end
