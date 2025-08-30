@@ -29,6 +29,22 @@ end)
 
 -- fix sprinting animation with new melee sprint skill. these checks are a fucking mess, but this is the only way i can fucking read them
 Hooks:PostHook(PlayerStandard, "update", "Gilza_posthook_PlayerStandard_update", function(self, t, dt)
+	
+	-- STUPID FAILSAFE: for whatever reason combat medic's damage resist that you have during player revive can stick with you even after revive its complete/interupted, so force disable it if it's been active for too long
+	-- TODO: figure out the actual cause of the issue and fix it, instead of this
+	if managers.player._properties:get_property("revive_damage_reduction", 1) ~= 1 then
+		if not self._gilza_activated_CMDR_at then
+			self._gilza_activated_CMDR_at = Application:time()
+		end
+		if self._gilza_activated_CMDR_at and (Application:time() - self._gilza_activated_CMDR_at > 12) then
+			log("[Gilza] PlayerStandard update removed CM's DR that stayed for too long.")
+			managers.player:remove_property("revive_damage_reduction")
+			self._gilza_activated_CMDR_at = nil
+		end
+	elseif self._gilza_activated_CMDR_at then
+		self._gilza_activated_CMDR_at = nil
+	end
+	
 	if managers.player:has_category_upgrade("player", "melee_sprint") then
 		if self._running then
 			if not self:_is_meleeing() and not self._in_melee_skill_sprint_animation then

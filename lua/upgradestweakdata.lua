@@ -996,7 +996,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				self.values.player.pocket_ecm_jammer_base[1].cooldown_drain = 4
 				-- heal from self during PECM increased to compensate lower activation frequency
 				self.values.player.pocket_ecm_heal_on_kill = {
-					4
+					3
 				}
 				-- temp dodge - now requires 3 kills to trigger and lasts for longeer, to compensate lower activation frequency
 				self.values.temporary.pocket_ecm_kill_dodge = {

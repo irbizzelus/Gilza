@@ -879,6 +879,9 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.tkb.stats.spread = 6
 			self.tkb.stats.reload = 9
 			self.tkb.stats.concealment = 12
+			self.tkb.fire_mode_data.volley.spread_mul = 2
+			self.tkb.fire_mode_data.volley.damage_mul = 1
+			self.tkb.has_description = true
 		
 		end
 		init_medium()
@@ -1071,7 +1074,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 			self.supernova.stats.recoil = 4
 			self.supernova.fire_mode_data = {fire_rate = 60/70}
 			self.supernova.single = {fire_rate = 60/70}
-			self.supernova.alt_fire_data.fire_rate = 60/210
+			self.supernova.alt_fire_data.fire_rate = 60/175
 			self.supernova.alt_fire_data.spread_mul = 3
 			self.supernova.alt_fire_data.damage_mul = 1
 			self.supernova.alt_fire_data.recoil_mul = 1.5
@@ -2891,7 +2894,7 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 		self.m134.CLIP_AMMO_MAX = 600
 		self.m134.NR_CLIPS_MAX = 1.5
 		self.m134.AMMO_MAX = self.m134.CLIP_AMMO_MAX * self.m134.NR_CLIPS_MAX
-		local m134_avg = G_W_M:get_ammo_pickup(46, 0.25, 0.75)
+		local m134_avg = G_W_M:get_ammo_pickup(46, 0.25, 0.7)
 		self.m134.AMMO_PICKUP = {(m134_avg * 0.7),(m134_avg * 1.3)}
 		self.m134.stats.reload = 15
 		--the other one
@@ -2903,17 +2906,21 @@ Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "Gilza_post_WeaponTweakData
 		self.shuno.stats.spread = 10
 		self.shuno.stats.reload = 15
 		self.shuno.stats.suppression = 1
-		local shuno_avg = G_W_M:get_ammo_pickup(68, 0.28, 0.75)
+		local shuno_avg = G_W_M:get_ammo_pickup(68, 0.28, 0.7)
 		self.shuno.AMMO_PICKUP = {(shuno_avg * 0.7),(shuno_avg * 1.3)}
 		--the 'minigun' that is hailstorm
 		self.hailstorm.CLIP_AMMO_MAX = 210
-		self.hailstorm.NR_CLIPS_MAX = 3
+		self.hailstorm.NR_CLIPS_MAX = 2.5
 		self.hailstorm.AMMO_MAX = self.hailstorm.CLIP_AMMO_MAX * self.hailstorm.NR_CLIPS_MAX
 		self.hailstorm.stats.damage = 71
 		self.hailstorm.stats.recoil = 21
-		local hailstorm_avg = G_W_M:get_ammo_pickup(71, 0.34, 0.75)
+		self.hailstorm.stats.spread = 18
+		local hailstorm_avg = G_W_M:get_ammo_pickup(71, 0.34)
 		self.hailstorm.AMMO_PICKUP = {(hailstorm_avg * 0.9),(hailstorm_avg * 1.1)}
 		self.hailstorm.damage_falloff = G_W_M.damage_dropoff.ARs
+		self.hailstorm.fire_mode_data.volley.spread_mul = 1
+		self.hailstorm.fire_mode_data.volley.can_shoot_through_enemy = false
+		self.hailstorm.has_description = true
 	end
 	setMINIGUNs()
 	
