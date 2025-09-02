@@ -450,6 +450,11 @@ local mvec_ay = Vector3()
 -- because of that, if a collision ray hit a wall somewhere far behind the enemy, next pallet after it would deal dmg * (drop off that is caculated as distance to the wall behind the enemy).
 Hooks:OverrideFunction(NewRaycastWeaponBase, "_fire_raycast", function (self,user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, shoot_through_data, ammo_usage)
 	
+	-- adding new shotgun shot number for the new shotgun dmg system if a weapon is not classified as either of these categories, but is shooting multiple rays. currently only needed for custom weapon attachments
+	if self._rays and self._rays > 1 then
+		Gilza.current_shotgun_shot_id = Gilza.current_shotgun_shot_id + 1
+	end
+	
 	Gilza.weapon_shot_id = Gilza.weapon_shot_id + 1
 	
 	if self:gadget_overrides_weapon_functions() then
@@ -932,4 +937,19 @@ Hooks:OverrideFunction(NewRaycastWeaponBase,"fire_rate_multiplier",function(self
 	else
 		return self._fire_rate_multiplier -- vanilla always returns this
 	end
+end)
+
+-- fix for some custom weapons' underbarrel launchers animations not properly playing, by adding a sanity check that was removed in weaponLib in update 1.7.0 becase it was quote "unnecessary"
+Hooks:OverrideFunction(NewRaycastWeaponBase,"reload_name_id",function(self)
+	local initial_td = self:weapon_tweak_data()
+	if initial_td.animations and initial_td.animations.reload_name_id then
+		return initial_td.animations.reload_name_id
+	end
+
+	local second_td = self:weapon_tweak_data(self._name_id)
+	if second_td.animations and second_td.animations.reload_name_id then
+		return second_td.animations.reload_name_id -- thanks
+	end
+
+	return self._name_id
 end)

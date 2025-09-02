@@ -118,8 +118,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			-- Socio/Infil shared first card
 			LocalizationManager:add_localized_strings({
 				menu_sociopathinfil_1 = "OVERDOG",
-				menu_sociopathinfil_1_desc = "While you are surrounded by three or more visible enemies within ##18m## of you, you receive a ##12%## damage reduction. This damage reduction lingers for ##5## seconds after you are no longer surrounded.\n\nYour second and each consecutive melee hit within ##4## seconds of the last one will deal ##100%## more damage.",
-				menu_sociopathinfil_1_short = "While you are surrounded by three or more visible enemies within ##18m## of you, you receive a ##12%## damage reduction. Your second and each consecutive melee hit within ##4## seconds of the last one will deal ##100%## more damage.",
+				menu_sociopathinfil_1_desc = "While you are surrounded by three or more visible enemies within ##18m## of you, you receive a ##10%## damage reduction. This damage reduction lingers for ##5## seconds after you are no longer surrounded.\n\nYour second and each consecutive melee hit within ##4## seconds of the last one will deal ##100%## more damage.",
+				menu_sociopathinfil_1_short = "While you are surrounded by three or more visible enemies within ##18m## of you, you receive a ##10%## damage reduction. Your second and each consecutive melee hit within ##4## seconds of the last one will deal ##100%## more damage.",
 			})
 			
 			local function Infiltrator_str()
@@ -293,13 +293,13 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			
 			local function Hacker_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck21_1_desc = "Unlocks and equips the Pocket ECM Device.\n\nChanging to another perk deck will make the Pocket ECM Device unavailable again. The Pocket ECM Device replaces your current throwable, it can be switched out if desired.\n\nWhile in game you can use the throwable key ##$BTN_ABILITY;## to activate the Pocket ECM.\n\nActivating the Pocket ECM Device before the alarm is raised will trigger the jamming effect, disabling all electronics and pagers for a ##6## second duration.\n\nActivating the Pocket ECM Device after the alarm is raised will trigger the feedback effect, granting a chance to stun enemies on the map every second for a ##12## second duration.\n\nThe Pocket ECM Device has ##2## charges with a ##140## second cooldown timer, but each kill you perform will shorten the cooldown timer by ##4## seconds.",
+					menu_deck21_1_desc = "Unlocks and equips the Pocket ECM Device.\n\nChanging to another perk deck will make the Pocket ECM Device unavailable again. The Pocket ECM Device replaces your current throwable, it can be switched out if desired.\n\nWhile in game you can use the throwable key ##$BTN_ABILITY;## to activate the Pocket ECM.\n\nActivating the Pocket ECM Device before the alarm is raised will trigger the jamming effect, disabling all electronics and pagers for a ##6## second duration.\n\nActivating the Pocket ECM Device after the alarm is raised will trigger the feedback effect, granting a chance to stun enemies on the map every second for a ##9## second duration.\n\nThe Pocket ECM Device has ##2## charges with a ##150## second cooldown timer, but each kill you perform will shorten the cooldown timer by ##4## seconds. Pocket ECM's don't recharge at the same time, but instead one after another.",
 					menu_deck21_5_desc = "Killing an enemy while the feedback effect is active will regenerate ##30## health.\nYour chance to dodge is increased by ##15%##.",
-					menu_deck21_7_desc = "Killing at least ##3## enemies while the feedback or jamming effect is active will grant ##20## dodge for ##50## seconds.",
+					menu_deck21_7_desc = "Killing at least ##3## enemies while the feedback or jamming effect is active will grant ##20## dodge for ##45## seconds.",
 					-- short descs
 					menu_deck21_1_short = "Unlocks and equips the Pocket ECM.",
-					menu_deck21_5_short = "Killing an enemy while the feedback effect is active will regenerate ##40## health. Your chance to dodge is increased by ##15%##.",
-					menu_deck21_7_short = "Killing at least ##3## enemies while the feedback or jamming effect is active will grant ##20## dodge for ##50## seconds.",
+					menu_deck21_5_short = "Killing an enemy while the feedback effect is active will regenerate ##30## health. Your chance to dodge is increased by ##15%##.",
+					menu_deck21_7_short = "Killing at least ##3## enemies while the feedback or jamming effect is active will grant ##20## dodge for ##45## seconds.",
 				})
 			end
 			Hacker_str()
@@ -337,7 +337,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					menu_deck23_9_muscle_desc = "You gain an additional ##20%## more health.\n\nYou regenerate ##1.5%## of your health every ##5## seconds.\n\nWhile playing on Death Sentence difficulty your passive health regeneration is increased to ##2.5%## every ##5## seconds.",
 					menu_deck23_9_armorer_desc = "You gain ##10%## more armor.\n\nWhen your armor gets depleted you will be immune to health damage for ##2## seconds. This cannot occur more often than once every ##30## seconds.",
 					menu_deck23_9_rogue_desc = "Your chance to dodge is increased by ##15%##.\n\nYour chance to dodge while crouched is increased by ##5%##.",
-					menu_deck23_9_hitman_desc = "Securing a kill with a melee weapon or a throwable non-explosive weapon regenerates ##20%## of your armor.\n\nStability penalty that your akimbo weapons have is reduced by ##8##.\nAmmo capacity for your akimbo weapons is increased by ##50%##.\n\nKilling an enemy using a pistol, SMG or an akimbo weapon grants you ##25%## faster armor recovery rate for ##10## seconds. If you secure a kill with a pistol, SMG or akimbo weapon while this skill is already active, skill duration timer we be refreshed.",
+					menu_deck23_9_hitman_desc = "Securing a kill with a melee weapon or a throwable non-explosive weapon regenerates ##20%## of your armor.\n\nStability penalty that your akimbo weapons have is reduced by ##8##.\nAmmo capacity for your akimbo weapons is increased by ##50%##.\n\nKilling an enemy using a pistol, SMG or an akimbo weapon grants you ##25%## faster armor recovery rate for ##10## seconds.",
 					menu_deck23_9_crook_desc = "Your chance to dodge is increased by ##5%## for ballistic vests.\n\nYour armor is increased by ##20%## for ballistic vests.\n\nYour chances to pierce enemy body armor are increased by ##75%##.",
 					menu_deck23_9_burglar_desc = "Your chance to dodge is increased by ##10%## while using the Lightweight Ballistic Vest.\n\nYou gain ##2## concealment for each silenced weapon you equip.\n\nYou answer pagers ##25%## faster.\n\nStanding still and crouching decreases your chances to be targeted by ##10%##.",
 					menu_deck23_9_infil_desc = "Your second and each consecutive melee hit within ##4## seconds of the last one will deal ##100%## more damage.\n\nStriking an enemy with your melee weapon regenerates ##20%## of your health. This cannot occur more than once every ##10## seconds.",
@@ -423,7 +423,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					menu_deck_Gilza_guardian_3 = "Personal limits",
 					menu_deck_Gilza_guardian_3_desc = "While inside of your defensive area you can not receive more than ##160## damage per hit, but you also can not receive less than ##80## damage per hit.\nWhile outside of your defensive area you can not receive more than ##200## damage per hit, but but you also can not receive less than ##100## damage per hit.\n\nYou gain ##100%## extra health.\n\nYou now regenerate ##20## points of health every ##2## seconds while inside of your defensive area.",
 					menu_deck_Gilza_guardian_5 = "I am the wall afterall",
-					menu_deck_Gilza_guardian_5_desc = "You gain ##150%## more health.\n\nSecuring a kill by any means while inside of the defensive area heals you for ##20## points of health. Healing amount is ##doubled## while playing on Death Sentence difficulty.\n\nYou now regenerate ##30## points of health every ##2## seconds while inside of your defensive area.\n\nYour defensive area now has a range of ##5m##.\n\nDoctor bags and first aid kits can now heal you only for ##50%## of your health.",
+					menu_deck_Gilza_guardian_5_desc = "You gain ##150%## extra health total.\n\nSecuring a kill by any means while inside of the defensive area heals you for ##20## points of health. Healing amount is ##doubled## while playing on Death Sentence difficulty.\n\nYou now regenerate ##30## points of health every ##2## seconds while inside of your defensive area.\n\nYour defensive area now has a range of ##5m##.\n\nDoctor bags and first aid kits can now heal you only for ##50%## of your health.",
 					menu_deck_Gilza_guardian_7 = "Porcupine",
 					menu_deck_Gilza_guardian_7_desc = "For every ##10## armor points your equipped armor has, you gain a ##3%## chance for any bullet damage to be mirrored back at the target who damaged you.\n\nIt now only takes ##3## seconds of standing still to activate a defensive area.",
 					menu_deck_Gilza_guardian_9 = "Best defense...",
@@ -447,7 +447,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				LocalizationManager:add_localized_strings({
 					-- M1
 					menu_combat_medic_beta_desc = "BASIC: ##$basic;##\nYou gain ##25%## damage resistance for ##5## seconds both after and during reviving another player.\n\nACE: ##$pro;##\nReviving a crew member restores ##35%## of your maximum armor.\n\nIf you have Stoic or Guardian perk deck equiped, and upgraded to the level that completely removes your armor, you restore ##35%## of your maximum health instead.",
-					menu_inspire_beta_desc = "BASIC: ##$basic##\nYou revive crew members ##100%## faster.\n\nShouting at your teammates grants both you and your teammate a morale boost for ##10## seconds. This boost increases movement and reload speed by ##20%## for your teammate, and by ##10%## for you.\n\nACE: ##$pro##\nThere is a ##100%## chance that you can revive crew members at a distance of up to ##9## meters by shouting at them. This cannon occur more than once every ##20## seconds.",
+					menu_inspire_beta_desc = "BASIC: ##$basic##\nYou revive crew members ##100%## faster.\n\nShouting at your teammates grants both you and your teammate a morale boost for ##10## seconds. This boost increases movement and reload speed by ##20%## for your teammate, and by ##10%## for you.\n\nACE: ##$pro##\nThere is a ##100%## chance that you can revive crew members at a distance of up to ##9## meters by shouting at them. This cannot occur more than once every ##20## seconds.",
 					-- M2
 					menu_triathlete_beta_desc = "BASIC: ##$basic;##\nIncreases your supply of cable ties by ##4##. You can cable tie hostages ##75%## faster.\n\nYou and your crew gain ##0.5## damage absorption for each hostage you have. This effect stacks with up to a maximum of ##8## hostages.\n\nNote: This skill does not stack with other players' Forced Friendship skill.\n\nACE: ##$pro;##\nYou can convert a non-special enemy to fight on your side.\nThis can not be done during stealth and the enemy must have surrendered in order for you to convert them.\nYou can only convert one non-special enemy at a time.",
 					menu_joker_beta_desc = "BASIC: ##$basic;##\nYour converted enemy's damage penalty of ##35%## is removed. The time to convert an enemy is reduced by ##65%##.\n\nACE: ##$pro;##\nYou can now have ##2## converted enemies at the same time.",
@@ -483,9 +483,10 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					menu_pack_mule_beta_desc = "BASIC: ##$basic##\nFor each ##10## armor points, the bag movement penalty is reduced by ##1%##.\n\nACE: ##$pro##\nYou can sprint with any bag.",
 					menu_prison_wife_beta_desc = "BASIC: ##$basic;##\nYou regenerate ##5## armor for each successful headshot. This can not occur more than once every ##2## seconds.\n\nACE: ##$pro;##\nYour armor regeneration from this skill is increased to ##25##, and cooldown is decreased to ##1.5## seconds.",
 					-- E3
+					menu_ammo_reservoir_beta_desc = "BASIC: ##$basic;##\nAmmo bags placed by you grant players the ability to shoot without depleting their ammunition for up to ##5## seconds after interacting with it. The more ammo players replenish, the longer the duration of the effect.\n\nACE: ##$pro;##\nIncreases maximum duration of the effect to ##20## seconds.\n\nNotes:\n- Your Rocket and Grenade launchers will still consume ammunition while the Bullet Storm effect is active, but it will be taken directly from your ammo reserve instead of your magazine.\n- If interaction with an ammo bag completely consumes it, Bullet Storm will be applied to the player for it's maximum duration multiplied by ##4##, regardless of amount of ammo refilled.",
 					menu_ammo_2x_beta_desc = "BASIC: ##$basic;##\nYour ammo bags now contain ##50%## more ammunition.\n\nACE: ##$pro;##\nYou can now place ##2## ammo bags instead of just one.",
 					menu_carbon_blade_beta_desc = "BASIC: ##$basic##\nReducing the wear down of the blades on enemies by ##50%##.\n\nACE: ##$pro##\nYou can now saw through shield enemies with your OVER9000 portable saw. When killing an enemy with the saw, you have a ##50%## chance to cause nearby enemies in a ##10m## radius to panic. Panic will make enemies go into short bursts of uncontrollable fear.\n\nYou can now gain ammunition for the saw from dropped ammo boxes. Saw ammo pick up can't be increased/decreased by other ammo pick up related skills.",
-					menu_bandoliers_beta_desc = "BASIC: ##$basic##\nYour total ammo capacity is increased by ##25%##.\n\nACE: ##$pro##\nYour ammo pick up rate is increased by ##25%##. You also gain a base ##10%## chance to get a throwable from an ammo box. The base chance is increased by ##3% * x## (where x - throwable pick up multiplier) for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.\n\nNotes:\nThis skill does not stack with the perk skill \"Walk-in Closet\".\nThrowable pick up multipliers are different for each throwable - you can find them under throwable descriptions.",
+					menu_bandoliers_beta_desc = "BASIC: ##$basic##\nYour total ammo capacity is increased by ##25%##.\n\nACE: ##$pro##\nYour ammo pick up rate is increased by ##25%##. You also gain a base ##3%## chance to get a throwable from an ammo box. The base chance is increased by ##3% * x## (where x - throwable pick up multiplier) for each ammo box you pick up that does not contain a throwable. When a throwable has been found, the chance is reset to its base value.\n\nNotes:\nThis skill does not stack with the perk skill \"Walk-in Closet\".\nThrowable pick up multipliers are different for each throwable - you can find them under throwable descriptions.",
 				})
 			end
 			Enforcer_str()
@@ -536,7 +537,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					-- G3
 					menu_silence_expert_beta_desc = "BASIC: ##$basic;##\nYou gain ##8## weapon stability and ##100%## snap to zoom speed increase with silenced weapons.\n\nYou gain ##15%## chance to pierce enemy body armor while using silenced weapons.\n\nACE: ##$pro;##\nYou gain ##12## weapon accuracy with silenced weapons.\n\nYour chance to pierce enemy body armor while using silenced weapons is increased by an additional ##35%##.",
 					menu_backstab_beta_desc = "BASIC: ##$basic;##\nYou gain a ##3%## critical hit chance for every ##3## points of detection rate under ##35## up to ##30%##.\n\nACE: ##$pro;##\nYou gain ##3%## critical hit chance for every ##1## point of detection rate under ##35## up to ##30%##.\n\nNotes: \n-Landing a critical hit multiplies your damage by ##2.25x##\n-Critical hits can't be triggered by Grenade and Rocker Launchers",
-					menu_unseen_strike_beta_desc = "BASIC: ##$basic;##\nIf, after taking damage, you avoid further incoming damage for ##6## or more seconds, by either taking cover or dodging, you become eligible for an Unseen Strike effect. If you take damage while eligible, you lose your eligibility.\n\nYou can only receive Unseen Strike effect if you are eligible for it, you currently don't have it, and at least ##6## seconds have past since previous Unseen Strike effect has ended.\n\nOn activation Unseen Strike increases your critical hit chance by ##35%## for ##6## seconds.\n\nACE: ##$pro;##\nThe critical hit chance duration is increased to ##18## seconds.\n\nNotes: \n-Landing a critical hit multiplies your damage by ##2.25x##\n-Critical hits can't be triggered by Grenade and Rocker Launchers",
+					menu_unseen_strike_beta_desc = "BASIC: ##$basic;##\nIf, after taking damage, you avoid further incoming damage for ##6## or more seconds, by either taking cover or dodging, you become eligible for an Unseen Strike effect. If you take damage while eligible, you lose your eligibility.\n\nYou can only receive Unseen Strike effect if you are eligible for it, you currently don't have it, and at least ##6## seconds have passed since previous Unseen Strike effect has ended.\n\nOn activation Unseen Strike increases your critical hit chance by ##35%## for ##6## seconds.\n\nACE: ##$pro;##\nThe critical hit chance duration is increased to ##18## seconds.\n\nNotes: \n-Landing a critical hit multiplies your damage by ##2.25x##\n-Critical hits can't be triggered by Grenade and Rocker Launchers",
 				})
 			end
 			Ghost_str()
@@ -715,15 +716,19 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					-- Frenchy's missing strings on some parts - no translations required
 					bm_wp_wpn_fps_upg_m_celerity = "\"Big Stick\" 30-round mag",
 					bm_wp_wpn_fps_upg_m_308dmmag = "Lightweight 30-round mag",
+					-- https://modworkshop.net/mod/42438 MW2022 S&W Model 500
+					bm_wp_wpn_fps_pis_swhiskey_am_snakeshot_desc = "Converts weapon to fire 8 pellets and counts as a shotgun for purposes of skills. Ammo pickup rate adjusted to match said changes.",
 				})
 			end
 			Custom_attachs_non_Gilza()
 			
 			local function Weapon_descs()
 				LocalizationManager:add_localized_strings({
-					bm_w_supernova_desc = "Alt-fire: gain 3x rate of fire, but 3x worse accuracy and 1.5x worse stability.",
+					bm_w_supernova_desc = "Alt-fire: gain 2.5x rate of fire, but 3x worse accuracy and 1.5x worse stability.",
 					bm_w_saw_desc = "Ammo pickups are disabled unless \"Saw Massacre\" skill is used. Does not deal bonus damage on headshots, except for Bulldozers.",
 					bm_w_peacemaker_desc = "Penetrates enemy body armor and can shoot through multiple enemies.",
+					bm_w_hailstorm_desc = "Alt-fire: charge up a volley of bullets with increased accuracy, that can pierce through shields.",
+					bm_w_akm_tkb = "Alt-fire: fire a 3 round volley with increased accuracy.",
 					bm_w_m16_desc = "Can be used in a 3 round burst fire mode.",
 					bm_w_famas_desc = "Can be used in a 3 round burst fire mode.",
 					bm_w_ak12_desc = "Can be used in a 2 round burst fire mode. Burst itself is fired at 1200 RPM.",
@@ -752,6 +757,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					bm_w_x_shepheard_desc = "Can be used in a 3 round burst fire mode.",
 					bm_w_polymer_desc = "Can be used in a 2 round burst fire mode.",
 					bm_w_x_polymer_desc = "Can be used in a 2 round burst fire mode.",
+					bm_w_olympic_desc = "Can be used in a 2 round burst fire mode. Burst itself is fired at 1050 RPM.",
+					bm_w_x_olympic_desc = "Can be used in a 2 round burst fire mode. Burst itself is fired at 1050 RPM.",
 				})
 			end
 			Weapon_descs()
@@ -785,6 +792,14 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				})
 			end
 			Melee_descs()
+			
+			local function Supported_custom_weapons_strings()
+				LocalizationManager:add_localized_strings({
+					bm_wpn_fps_ass_mdr_308_snp_am_Gilza_desc = "Allows you to penetrate shields, walls and enemy body armor.\nAmmo pick up reduced to match both new damage class, and gained AP.",
+					bm_wp_wpn_fps_ass_mdr_308_barrel_sniper_desc = "Reduces fire rate and only allows the weapon to fire in single-fire mode.",
+				})
+			end
+			Supported_custom_weapons_strings()
 			
 		end
 		Weapon_strings()
@@ -834,7 +849,6 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				menu_tea_cookies_beta_desc = "BASIC: ##$basic;##\nYou can now take ##7## more First Aid Kits with you.\n\nACE: ##$pro;##\nYou can now take ##3## more First Aid Kits with you.\n\nYour deployed First Aid Kits will be automatically used if a player is downed within a ##5## meter radius of the First Aid Kit, preventing that player from going down.\nThis cannot occur more than once every ##20## seconds, but this cooldown is separate for each player on your team.",
 				menu_control_freak_beta_desc = "BASIC: ##$basic;##\nHaving a converted enemy increases your movement speed by ##10%##.\n\nYour converted enemy gains ##45%## damage resistance.\n\nACE: ##$pro;##\nHaving a converted enemy increases your health by ##30%##.\n\nYour converted enemy gains ##54%## more damage resistance.",
 				menu_iron_man_beta_desc = "BASIC: ##$basic;##\nIncreases the armor recovery rate for you and your crew by ##25%##.\n\nThis skill does not stack with other players' Shock And Awe skill.\n\nACE: ##$pro;##\nEnables your weapons to have a chance to knock back Shield enemies when attacking them. Ranged weapons' knock back chance is increased the higher the total damage of the weapon is. Melee weapons' knock back chance is ##100%##.",
-				menu_ammo_reservoir_beta_desc = "BASIC: ##$basic;##\nAmmo bags placed by you grant players the ability to shoot without depleting their ammunition for up to ##5## seconds after interacting with it. The more ammo players replenish, the longer the duration of the effect.\n\nACE: ##$pro;##\nIncreases maximum duration of the effect to ##15## seconds.\n\nNote: If interaction with an ammo bag completely consumes it, this effect will be applied to the player for it's maximum duration multiplied by ##4##, regardless of amount of ammo refilled.",
 				menu_frenzy_desc = "BASIC: ##$basic;##\nYou only get ##30%## of your maximum health and cannot heal above it, but you also gain ##10%## damage resistance.\n\nAll healing skills are now ##75%## less effective.\n\nACE: ##$pro;##\nDamage resistance you gain from this skill is now equal to ##25%##.\n\nAll healing skills now heal you for their full amount.",
 				-- perks
 				menu_deck12_3_desc = "The lower your health, the more movement speed you gain. This effect is active only while your health is bellow ##25%##. Maximum movement speed bonus you can get is ##20%##.",
@@ -949,8 +963,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			-- Socio/Infil shared first card
 			LocalizationManager:add_localized_strings({
 				menu_sociopathinfil_1 = "OVERDOG",
-				menu_sociopathinfil_1_desc = "Пока вас окружают как минимум три видимых врага в пределах ##18## метров от вас, вы получаете ##12%## сопротивления урону. Это сопротивление остаеется с вами в течении еще ##5## секунд после того как вы больше не окружены.\n\nВаш второй и каждый последующий удар в ближнем бою с перерывом не более чем в ##4## секунды, нанесёт на ##100%## больше урона от базового урона оружия.",
-				menu_sociopathinfil_1_short = "Пока вас окружают как минимум три видимых врага в пределах ##18## метров от вас, вы получаете ##12%## сопротивления урону. Ваш второй и каждый последующий удар в ближнем бою с перерывом не более чем в ##4## секунды, нанесёт на ##100%## больше урона от базового урона оружия.",
+				menu_sociopathinfil_1_desc = "Пока вас окружают как минимум три видимых врага в пределах ##18## метров от вас, вы получаете ##10%## сопротивления урону. Это сопротивление остаеется с вами в течении еще ##5## секунд после того как вы больше не окружены.\n\nВаш второй и каждый последующий удар в ближнем бою с перерывом не более чем в ##4## секунды, нанесёт на ##100%## больше урона от базового урона оружия.",
+				menu_sociopathinfil_1_short = "Пока вас окружают как минимум три видимых врага в пределах ##18## метров от вас, вы получаете ##10%## сопротивления урону. Ваш второй и каждый последующий удар в ближнем бою с перерывом не более чем в ##4## секунды, нанесёт на ##100%## больше урона от базового урона оружия.",
 			})
 			
 			local function Infiltrator_str()
@@ -1124,13 +1138,13 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			
 			local function Hacker_str()
 				LocalizationManager:add_localized_strings({
-					menu_deck21_1_desc = "Разблокирует и позволяет взять с собой карманный генератор помех.\n\nЕсли вы смените набор перков на другой, карманный генератор помех будет недоступен для использования. Карманный генератор помех использует слот для метательного оружия, но вы можете взять вместо него что-нибудь другое.\nЧтобы воспользоваться карманным генератором помех, достаточно нажать на кнопку для метательного оружия ##$BTN_ABILITY;##.\n\nЕсли генератор помех был использован до поднятия тревоги, то он отключит все пейджеры и электронику на ##6## секунд. \n\nИспользование генератора помех после поднятия тревоги будет генерировать поле со Звуковой петлей в течении ##12## секунд. Данное поле имеет шанс оглушить противников.\n\nКарманный генератор помех имеет ##2## заряда с ##140## секундным кулдауном, но каждое убийтво уменьшает кулдаун на ##4## секунды.",
+					menu_deck21_1_desc = "Разблокирует и позволяет взять с собой карманный генератор помех.\n\nЕсли вы смените набор перков на другой, карманный генератор помех будет недоступен для использования. Карманный генератор помех использует слот для метательного оружия, но вы можете взять вместо него что-нибудь другое.\nЧтобы воспользоваться карманным генератором помех, достаточно нажать на кнопку для метательного оружия ##$BTN_ABILITY;##.\n\nЕсли генератор помех был использован до поднятия тревоги, то он отключит все пейджеры и электронику на ##6## секунд. \n\nИспользование генератора помех после поднятия тревоги будет генерировать поле со Звуковой петлей в течении ##9## секунд. Данное поле имеет шанс оглушить противников.\n\nКарманный генератор помех имеет ##2## заряда с ##150## секундным кулдауном, но каждое убийтво уменьшает кулдаун на ##4## секунды. Заряды карманного генератора помех восполняются не одновременно, а друг за другом.",
 					menu_deck21_5_desc = "При убийстве противников во время действия Звуковой петли вы будете восполнять ##30## единиц здоровья.\nШанс увернуться увеличен на ##15%##.",
-					menu_deck21_7_desc = "При убийстве как минимум ##3## противников во время Звуковой петли вы получаете ##20%## бонус к шансу уклонения на ##50## секунд.",
+					menu_deck21_7_desc = "При убийстве как минимум ##3## противников во время Звуковой петли вы получаете ##20%## бонус к шансу уклонения на ##45## секунд.",
 					-- short descs
 					menu_deck21_1_short = "Разблокирует и позволяет взять с собой карманный генератор помех.",
-					menu_deck21_5_short = "При убийстве противников во время действия Звуковой петли вы будете восполнять ##40## единиц здоровья. Шанс увернуться увеличен на ##15%##.",
-					menu_deck21_7_short = "При убийстве как минимум ##3## противников во время Звуковой петли вы получаете ##20%## бонус к шансу уклонения на ##50## секунд.",
+					menu_deck21_5_short = "При убийстве противников во время действия Звуковой петли вы будете восполнять ##30## единиц здоровья. Шанс увернуться увеличен на ##15%##.",
+					menu_deck21_7_short = "При убийстве как минимум ##3## противников во время Звуковой петли вы получаете ##20%## бонус к шансу уклонения на ##45## секунд.",
 				})
 			end
 			Hacker_str()
@@ -1168,7 +1182,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					menu_deck23_9_muscle_desc = "Ваше здоровье увеличено на ##20%##. Вы будете восполнять ##1.5%## здоровья каждые ##5## секунд. При игре на сложности Смертный Приговор пассивное восполнение здоровья увеличено до ##2.5%## каждые ##5## секунд.",
 					menu_deck23_9_armorer_desc = "Прочность вашей брони увеличена на ##10%##.\n\nКогда ваша броня опустится до нуля, вы получите неуязвимость ко всем видам урона на ##2## секунды. Эффект срабатывает один раз в ##30## секунд.",
 					menu_deck23_9_rogue_desc = "Ваш шанс увернуться увеличен на ##15%##.\n\nШанс увернуться когда вы пригнулись увеличен на ##5%##.",
-					menu_deck23_9_hitman_desc = "Убийство врага оружием ближнего боя, или не-взрывчатым метательным оружием восполнит ##20%## вашей брони.\n\nШтраф к стабильности вашего парного оружия уменьшен на ##8##.\nКоличество переносимых боеприпасов для парного оружия увеличено на ##50%##.\n\nУбийство врага используя пистолет, пистолет-пулемет или парное оружие ускоряет скорость восставновления брони на ##25%## в течении ##10## секунд. Если вы опять убьете врага используя пистолет, пистолет-пулемет или парное оружие пока навык активен, таймер навыка будет пополнен до ##10## секунд.",
+					menu_deck23_9_hitman_desc = "Убийство врага оружием ближнего боя, или не-взрывчатым метательным оружием восполнит ##20%## вашей брони.\n\nШтраф к стабильности вашего парного оружия уменьшен на ##8##.\nКоличество переносимых боеприпасов для парного оружия увеличено на ##50%##.\n\nУбийство врага используя пистолет, пистолет-пулемет или парное оружие ускоряет скорость восставновления брони на ##25%## в течении ##10## секунд.",
 					menu_deck23_9_crook_desc = "При ношении баллистических бронежилетов, шанс увернуться от вражеского огня увеличен на ##5%##.\n\nПрочность брони всех баллистических бронежилетов увеличена на ##20%##.\n\nШансы пробития вражеской нательной брони увеличены на ##75%##.",
 					menu_deck23_9_burglar_desc = "Шанс увернуться увеличен на ##10%##, когда вы используете Легкий Баллистический Бронежилет.\n\nВы получаете ##2## очка скрытности за каждое используемое оружие с глушителем.\n\nСкорость ответа на пейджеры увеличена на ##25%##.\n\nВероятность того, что враги начнут стрелять по вам уменьшена на ##10%##, если вы пригнулись и не двигаетесь.",
 					menu_deck23_9_infil_desc = "Ваш второй и каждый последующий удар в ближнем бою с перерывом не более чем в ##4## секунды, нанесёт на ##100%## больше урона от базового урона оружия.\n\nВы восстановите ##20%## здоровья, если ударите врага оружием ближнего боя. Навык срабатывает только один раз за ##10## секунд.",
@@ -1255,7 +1269,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					menu_deck_Gilza_guardian_3 = "Личные границы",
 					menu_deck_Gilza_guardian_3_desc = "Пока вы находитесь внутри своей оборонной позиции вы не можете получить больше чем ##160## урона за попадание, но вы так же не можете получить меньше чем ##80## урона за попадание.\nПока вы находитесь вне своей оборонной позиции вы не можете получить больше чем ##200## урона за попадание, но вы так же не можете получить меньше чем ##100## урона за попадание.\n\nВы получаете ##100%## бонусного здоровья.\n\nПока вы стоите внутри вашей оборонной позиции, вы теперь будете восполнять ##20## единиц здоровья раз в ##2## секунды.",
 					menu_deck_Gilza_guardian_5 = "Я непробиваем",
-					menu_deck_Gilza_guardian_5_desc = "Вы получаете еще ##150%## бонусного здоровья.\n\nСовершая убийство находясь внутри вашей оборонной позиции вы восполняете ##20## единиц здоровья. Количество восполняемого здоровья ##множится на 3## если вы играете на сложности Смертный Приговор.\n\nПока вы стоите внутри вашей оборонной позиции, вы теперь будете восполнять ##30## единиц здоровья раз в ##2## секунды.\n\nВаша оборонная позиция теперь имеет ##5м## радиус.\n\nМедицинская сумка и Аптечка первой помощи теперь восполняют только ##50%## вашего здоровья.",
+					menu_deck_Gilza_guardian_5_desc = "Вы получаете ##150%## бонусного здоровья.\n\nСовершая убийство находясь внутри вашей оборонной позиции вы восполняете ##20## единиц здоровья. Количество восполняемого здоровья ##множится на 3## если вы играете на сложности Смертный Приговор.\n\nПока вы стоите внутри вашей оборонной позиции, вы теперь будете восполнять ##30## единиц здоровья раз в ##2## секунды.\n\nВаша оборонная позиция теперь имеет ##5м## радиус.\n\nМедицинская сумка и Аптечка первой помощи теперь восполняют только ##50%## вашего здоровья.",
 					menu_deck_Gilza_guardian_7 = "Дикобраз",
 					menu_deck_Gilza_guardian_7_desc = "За каждые ##10## единиц надетой вами брони вы получаете ##3%## шанс автоматически нанести урон врагу который выстрелил по вам. Данный урон идентичен полученому вами урону.\n\nВы теперь можете создать вашу оборонную позицию стоя на месте только ##3## секунды.",
 					menu_deck_Gilza_guardian_9 = "От обороны до атаки..",
@@ -1315,9 +1329,10 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					menu_pack_mule_beta_desc = "БАЗОВЫЙ: ##$basic;##\nЗа каждые ##10## единиц брони штраф к скорости передвижения при переносе сумок с добычей уменьшен на ##1%##.\n\nПРО: ##$pro;##\nВы теперь можете бегать с любой сумкой.",
 					menu_prison_wife_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВы восполняете ##5## единиц брони за удачное попадание в голову. Навык срабатывает только один раз в ##2## секунды.\n\nПРО: ##$pro;##\nКоличество восполняемой брони от данного навыка увеличено до ##25## единиц, а кулдаун снижен до ##1.5## секунд.",
 					-- E3
+					menu_ammo_reservoir_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПосле взаимодействия с установленной вами сумки с патронами, вы или ваши напарники можете стрелять из своего оружия не расходуя боеприпасы в течение ##5## или меньше секунд. Чем больше амуниции вы восстановите из сумки, тем дольше будет эффект непрерывной стрельбы.\n\nПРО: ##$pro;##\nМаксимальная продолжительность эффекта увеличена до ##20## секунд.\n\nПометки:\n- Ваши Гранатометы и Ракетометы будут расходовать боезапас во время действия данного навыка, но он будет исчерпываться напрямую из вашего запаса, вместо магазина.\n- Если взаимодействие с сумкой у которой есть данный эффект полностью ее расходует, данный эффект будет наложен на игрока в течении максимальной возможной продолжительности умноженой на ##4##.",
 					menu_ammo_2x_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВ каждой сумке с патронами на ##50%## больше патронов.\n\nПРО: ##$pro;##\nПозволяет устанавливать ##2## сумки с патронами вместо одной.",
 					menu_carbon_blade_beta_desc = "БАЗОВЫЙ: ##$basic;##\nАтака врагов портативной пилой OVE9000 изнашивает лезвия на ##50%## меньше.\n\nПРО: ##$pro;##\nТеперь вы можете прорезать щитовиков своей пилой OVE9000. Убив противника пилой, у вас есть ##50%## шанс посеять панику в ##10## метровом радиусе. Паника будет подавлять противника, заставляя его испытывать страх.\n\nВраги теперь оставляют боезапас к пиле. Подбор боезапаса пилы не может быть увеличен/уменьшен другими навыками влияющими на подбор боезапаса.",
-					menu_bandoliers_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает количество переносимых боеприпасов на ##25%##.\n\nПРО: ##$pro;##\nВы подбираете на ##25%## больше боеприпасов. У вас есть ##10%## шанс найти метательное оружие в оставленных врагами боеприпасах. Шанс увеличивается на ##3% * x## (где x - метательный множитель) за каждый подобранный боеприпас, в котором не было метательного оружия. Когда метательное оружие будет найдено в боеприпасах, шанс будет сброшен к стандартному значению.\n\nПометки:\nНавык не складывается с бонусом \"Тяжёлый пехотинец\" из набора перков.\nМетательный множитель зависит от используемого вами метательного оружия, а его значение можно узнать в описании каждого метательного оружия.",
+					menu_bandoliers_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает количество переносимых боеприпасов на ##25%##.\n\nПРО: ##$pro;##\nВы подбираете на ##25%## больше боеприпасов. У вас есть ##3%## шанс найти метательное оружие в оставленных врагами боеприпасах. Шанс увеличивается на ##3% * x## (где x - метательный множитель) за каждый подобранный боеприпас, в котором не было метательного оружия. Когда метательное оружие будет найдено в боеприпасах, шанс будет сброшен к стандартному значению.\n\nПометки:\nНавык не складывается с бонусом \"Тяжёлый пехотинец\" из набора перков.\nМетательный множитель зависит от используемого вами метательного оружия, а его значение можно узнать в описании каждого метательного оружия.",
 				})
 			end
 			Enforcer_str()
@@ -1547,15 +1562,19 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					-- Frenchy's missing strings on some parts - no translations required
 					bm_wp_wpn_fps_upg_m_celerity = "\"Big Stick\" 30-round mag",
 					bm_wp_wpn_fps_upg_m_308dmmag = "Lightweight 30-round mag",
+					-- https://modworkshop.net/mod/42438 MW2022 S&W Model 500
+					bm_wp_wpn_fps_pis_swhiskey_am_snakeshot_desc = "Патрон с 8 дробинками. Оружие теперь будет получать бонусы от навыков для категории Дробовики. Подбор боеприпасов изменен в связи с данными изменениями.",
 				})
 			end
 			Custom_attachs_non_Gilza()
 			
 			local function Weapon_descs()
 				LocalizationManager:add_localized_strings({
-					bm_w_supernova_desc = "Альтернативный режим: ускоряет скорострельность в 3x раза, ухудшая точность в 3x раза, а стабильность в 1.5x раза.",
+					bm_w_supernova_desc = "Альтернативный режим: ускоряет скорострельность в 2.5x раза, ухудшая точность в 3x раза, а стабильность в 1.5x раза.",
 					bm_w_saw_desc = "Подбор боеприпасов недоступен без использования навыка \"Резня Пилой\". Не наносит бонусный урон при попадании в голову, за исключением Бульдозеров.",
 					bm_w_peacemaker_desc = "Пробивает нательную броню, и может стрелять сквозь несколько врагов.",
+					bm_w_hailstorm_desc = "Альтернативный режим: зарядите залп пуль с увеличенной точностью, способными пробить щиты.",
+					bm_w_akm_tkb = "Альтернативный режим: выстрелите залп из 3 пуль с увеличенной точностью.",
 					bm_w_m16_desc = "Может быть использовано в режиме стрельбы очередью из 3 пуль.",
 					bm_w_famas_desc = "Может быть использовано в режиме стрельбы очередью из 3 пуль.",
 					bm_w_ak12_desc = "Может быть использовано в режиме стрельбы очередью из 2 пуль. Сама очередь имеет скорострельность 1200.",
@@ -1584,6 +1603,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					bm_w_x_shepheard_desc = "CМожет быть использовано в режиме стрельбы очередью из 3 пуль.",
 					bm_w_polymer_desc = "Может быть использовано в режиме стрельбы очередью из 2 пуль.",
 					bm_w_x_polymer_desc = "Может быть использовано в режиме стрельбы очередью из 2 пуль.",
+					bm_w_olympic_desc = "Может быть использовано в режиме стрельбы очередью из 2 пуль. Сама очередь имеет скорострельность 1050.",
+					bm_w_x_olympic_desc = "Может быть использовано в режиме стрельбы очередью из 2 пуль. Сама очередь имеет скорострельность 1050.",
 				})
 			end
 			Weapon_descs()
@@ -1617,6 +1638,14 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				})
 			end
 			Melee_descs()
+			
+			local function Supported_custom_weapons_strings()
+				LocalizationManager:add_localized_strings({
+					bm_wpn_fps_ass_mdr_308_snp_am_Gilza_desc = "Пробивает нательную броню, щиты и стены.\nПодбор боеприпасов уменьшен для соответствия новому классу урона и полученому бронебойному эффекту.",
+					bm_wp_wpn_fps_ass_mdr_308_barrel_sniper_desc = "Уменьшает скорострельность и позволяет вести огонь только в одиночном режиме стрельбы.",
+				})
+			end
+			Supported_custom_weapons_strings()
 			
 		end
 		Weapon_strings()
@@ -1669,7 +1698,6 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				menu_black_marketeer_beta_desc = "БАЗОВЫЙ: ##$basic;##\nЕсли у вас есть как минимум один заложник или переведённый на вашу сторону полицейский, то вы будете восполнять ##1.5%## здоровья каждые ##5## секунд.\n\nПРО: ##$pro;##\nЕсли у вас есть как минимум один заложник или переведённый на вашу сторону полицейский, то вы будете восполнять ##4.5%## здоровья каждые ##5## секунд.",
 				menu_stable_shot_beta = "Стабильный стрелок",
 				menu_iron_man_beta_desc = "БАЗОВЫЙ: ##$basic;##\nУвеличивает скорость восстановления брони у вас и у напарников на ##25%##.\n\nПометка: Данный навык не складывается сам с собой.\n\nПРО: ##$pro;##\nПри стрельбе по щитовику, у вас есть шанс отбросить его назад. Чем больше урона у вашего оружия, тем выше шанс.\n\nШанс отбросить щитовика назад при использовании оружия ближнего боя равен ##100%##.",
-				menu_ammo_reservoir_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПосле взаимодействия с установленной вами сумки с патронами, вы или ваша команда можете стрелять из своего оружия не расходуя боеприпасы в течение ##5## или меньше секунд. Чем больше амуниции вы восстановите из сумки, тем дольше будет эффект непрерывной стрельбы.\n\nПРО: ##$pro;##\nМаксимальная продолжительность эффекта увеличена до ##15## секунд.\n\nПометка: Если взаимодействие с сумкой у которой есть данный эффект полностью ее расходует, данный эффект будет наложен на игрока в течении максимальной возможной продолжительности умноженой на ##4##.",
 				menu_drill_expert_beta = "Майор дрель",
 				menu_drill_expert_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает эффективность ваших пил и дрелей, делая их на ##15%## быстрее.\n\nПРО: ##$pro;##\nУвеличивает эффективность ваших пил и дрелей на ещё ##15%##.\n\nПометка: действие навыка не распространяется на пилу OVE9000.",
 				menu_akimbo_skill_beta_desc = "БАЗОВЫЙ: ##$basic;##\nШтраф стабильности парного оружия снижен на ##8## единиц.\n\nПРО: ##$pro;##\nШтраф стабильности парного оружия снижен на еще ##8## единиц.\nКоличество переносимых боеприпасов для парного оружия увеличено на ##$multipro4;##.\n\nВнимание: количество дополнительных патронов для парного оружия от карточка перка \"Амбидекстрия\" и навыка \"Парное оружие\" суммируется.",

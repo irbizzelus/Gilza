@@ -27,7 +27,7 @@ Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "Gilza_post_BlackMarke
 	-- Change Sicario smoke grenade cooldown
 	self.projectiles.smoke_screen_grenade.base_cooldown = 45
 	-- Change Hacker ECM cooldown
-	self.projectiles.pocket_ecm_jammer.base_cooldown = 140
+	self.projectiles.pocket_ecm_jammer.base_cooldown = 150
 	
 	-- init new launcher velocity nades
 	self.projectiles.launcher_velocity = deep_clone(self.projectiles.launcher_frag)

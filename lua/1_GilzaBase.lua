@@ -41,21 +41,21 @@ _G.Gilza = {
 		vhud_compat_new_trigger_happy = true,
 	},
 	grenade_multipliers = {
-		dada_com = 0.6,
-		fir_com = 0.28,
-		frag_com = 0.6,
-		wpn_prj_ace = 1.25,
-		concussion = 0.3,
-		poison_gas_grenade = 0.2,
-		frag = 0.6,
-		molotov = 0.65,
-		dynamite = 0.6,
-		wpn_prj_four = 0.75,
-		wpn_prj_jav = 0.32,
-		wpn_prj_target = 0.85,
-		wpn_prj_hur = 0.55,
-		sticky_grenade = 0.7,
-		wpn_gre_electric = 0.7,
+		dada_com = 0.9,
+		fir_com = 0.4,
+		frag_com = 0.9,
+		wpn_prj_ace = 2,
+		concussion = 0.45,
+		poison_gas_grenade = 0.25,
+		frag = 0.9,
+		molotov = 1,
+		dynamite = 0.9,
+		wpn_prj_four = 1.1,
+		wpn_prj_jav = 0.5,
+		wpn_prj_target = 1.25,
+		wpn_prj_hur = 0.8,
+		sticky_grenade = 1.1,
+		wpn_gre_electric = 1.1,
 	},
 	shotgun_minimal_damage_multipliers = {},
 	current_shotgun_shot_id = 0,
@@ -137,14 +137,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.5 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.51 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.5 changelog:\n\nThis update required a full game restart.\n\nThis patch is focused on perks, and introduces, both minor and major, reworks to almost every perk in the game. This update also includes some new skills and updates to allready existing skills. Weapons now have 20 point innacuracy in full-auto fire mode instead of 28, and a bunch of minor adjustments to weapons and their attachments were added. Added support for VanillaHUD+.\n\nFor additional information go to the full changelog."
+			local message = "2.5.1 changelog:\n\n- Bullet storm skill no longer provides infinite ammo to grenade and rocket launchers.\n- Fully loaded aced grenade pick up rate adjusted.\n- Throwable pick up rates adjusted.\n- Reduced Sociopath/Infiltrator 1st card damage resistance by 2%.\n- Nerfed Hacker perk deck in a few ways.\n- Made a few minor adjustments to some weapons.\n- Added support for 8 custom weapons\n- Fixed some things."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.5
+			Gilza.settings.version = 2.51
 			Gilza.Save()
 		end
 	end)

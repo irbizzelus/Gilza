@@ -47,7 +47,7 @@ function Gilza.tryAddingNewGuns()
 					elseif tweak_data.weapon[customWeaponsList[j]].categories[i] == "pistol" then
 						local isRevolver = false
 						for k=1, #tweak_data.weapon[customWeaponsList[j]].categories do
-							if tweak_data.weapon[customWeaponsList[j]].categories[i] == "revolver" then
+							if tostring(tweak_data.weapon[customWeaponsList[j]].categories[k]) == "revolver" then
 								isRevolver = true
 							end							
 						end
@@ -102,6 +102,7 @@ function Gilza.applyCustomAR_stats(id)
 		"m14e2",
 		"soppo",
 		"kurisumasu",
+		"liberator",
 		"xeno"
 	}
 	local has_gl = table.contains(custom_ARs_with_GL,id)
@@ -834,7 +835,7 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 	local pickups = G_W_M.ammo_pickups.PISTOLs
 	
 	local isActuallyRevolver = false
-	if tweak_data.weapon[id].CLIP_AMMO_MAX <= 6 then
+	if tweak_data.weapon[id].stats.damage >= 220 and tweak_data.weapon[id].CLIP_AMMO_MAX <= 6 then
 		isActuallyRevolver = true
 	end
 	if isRevolver then
@@ -945,7 +946,22 @@ function Gilza.applyCustomPISTOL_stats(id, isRevolver)
 			tweak_data.weapon[id].auto.fire_rate = new_rof
 		end
 		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._250 * 0.9)) * secondary_mul,((pickups._250 * 1.1)) * secondary_mul}
-	elseif tweak_data.weapon[id].stats.damage >= 300 and isActuallyRevolver then
+	elseif tweak_data.weapon[id].stats.damage >= 300 then
+		tweak_data.weapon[id].stats.damage = 450
+		local new_rof = 60/240
+		if tweak_data.weapon[id].fire_mode_data then
+			tweak_data.weapon[id].fire_mode_data.fire_rate = new_rof
+		end
+		if tweak_data.weapon[id].single then
+			tweak_data.weapon[id].single.fire_rate = new_rof
+		end
+		if tweak_data.weapon[id].auto then
+			tweak_data.weapon[id].auto.fire_rate = new_rof
+		end
+		tweak_data.weapon[id].AMMO_PICKUP = {((pickups._450 * 0.9)) * secondary_mul,((pickups._450 * 1.1)) * secondary_mul}
+	end
+	
+	if isActuallyRevolver then
 		tweak_data.weapon[id].stats.damage = 450
 		local new_rof = 60/240
 		if tweak_data.weapon[id].fire_mode_data then
@@ -1482,7 +1498,123 @@ function Gilza.applyCustomGunsIndividualStats()
 	end
 	adjustSniperScopeStats()
 	
-	-- might add custom guns later, i am too tired rn
+	local secondary_mul = 0.7
+	local secondary_to_primary_mul = 1/secondary_mul
+	local G_W_M = Gilza.Weapons_module
+	local pickupsAR = G_W_M.ammo_pickups.ARs
+	local pickupsGL = G_W_M.ammo_pickups.GLs
+	local pickupsSMG = G_W_M.ammo_pickups.SMGs
+	
+	-- https://modworkshop.net/mod/52553 M4 Liberator
+	if tweak_data.weapon.liberator then
+		tweak_data.weapon.liberator.stats.concealment = 9
+	end
+	
+	-- https://modworkshop.net/mod/23676 HK G3A3 HK79
+	if tweak_data.weapon.g3hk79 then
+		tweak_data.weapon.g3hk79.stats.damage = 250
+		tweak_data.weapon.g3hk79.AMMO_PICKUP = {(pickupsAR._250 * 0.9) * 0.7,(pickupsAR._250 * 1.1) * 0.7}
+		tweak_data.weapon.g3hk79.NR_CLIPS_MAX = 5
+		tweak_data.weapon.g3hk79.AMMO_MAX = tweak_data.weapon.g3hk79.CLIP_AMMO_MAX * tweak_data.weapon.g3hk79.NR_CLIPS_MAX
+		tweak_data.weapon.g3hk79.stats.recoil = 4
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.ARs, "g3hk79", "right")
+		-- add inherited 2 round burst desciption from g3
+		LocalizationManager:add_localized_strings({bm_w_g3hk79_desc = managers.localization:text("bm_w_g3_desc")})
+	end
+	
+	-- https://modworkshop.net/mod/35608 DT MDRX 7.62x51mm
+	if tweak_data.weapon.mdr_308 then
+		tweak_data.weapon.mdr_308.FIRE_MODE = "auto"
+		tweak_data.weapon.mdr_308.stats.damage = 155
+		tweak_data.weapon.mdr_308.AMMO_PICKUP = {(pickupsAR._155 * 0.9) * 0.7,(pickupsAR._155 * 1.1) * 0.7}
+		tweak_data.weapon.mdr_308.NR_CLIPS_MAX = 6
+		tweak_data.weapon.mdr_308.AMMO_MAX = tweak_data.weapon.mdr_308.CLIP_AMMO_MAX * tweak_data.weapon.mdr_308.NR_CLIPS_MAX
+		tweak_data.weapon.mdr_308.stats.spread = 16
+		tweak_data.weapon.mdr_308.stats.recoil = 12
+		tweak_data.weapon.mdr_308.fire_mode_data = {fire_rate = 60/680}
+		tweak_data.weapon.mdr_308.auto = {fire_rate = 60/680}
+		tweak_data.weapon.mdr_308.HAS_BURST_AS_THIRD = false
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.ARs, "mdr_308", "right")
+		-- UGL
+		tweak_data.weapon.mdr_308_underbarrel.NR_CLIPS_MAX = 2
+		tweak_data.weapon.mdr_308_underbarrel.AMMO_MAX = tweak_data.weapon.mdr_308_underbarrel.CLIP_AMMO_MAX * tweak_data.weapon.mdr_308_underbarrel.NR_CLIPS_MAX
+		tweak_data.weapon.mdr_308_underbarrel.AMMO_PICKUP = {(pickupsGL._underbarrel * 0.9),(pickupsGL._underbarrel * 1.1)}
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_barrel_sniper.override_weapon_multiply.fire_mode_data.fire_rate = 2
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_snp_am.custom_stats.ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 155, 450, true).max_mul
+		tweak_data.weapon.factory.parts.wpn_fps_ass_mdr_308_snp_am.custom_stats.ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("AR", 155, 450, true).min_mul
+	end
+	
+	-- https://modworkshop.net/mod/37996 M4A1 Grenadier
+	if tweak_data.weapon.kurisumasu then
+		tweak_data.weapon.kurisumasu.AMMO_PICKUP = {(pickupsAR._125 * 0.9) * 0.7,(pickupsAR._125 * 1.1) * 0.7}
+		tweak_data.weapon.kurisumasu.NR_CLIPS_MAX = 5
+		tweak_data.weapon.kurisumasu.AMMO_MAX = tweak_data.weapon.kurisumasu.CLIP_AMMO_MAX * tweak_data.weapon.kurisumasu.NR_CLIPS_MAX
+		tweak_data.weapon.kurisumasu.stats.spread = 11
+		tweak_data.weapon.kurisumasu.stats.recoil = 18
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.ARs, "kurisumasu", "right")
+		LocalizationManager:add_localized_strings({bm_w_kurisumasu_desc = managers.localization:text("bm_w_m16_desc")})
+	end
+	
+	-- https://modworkshop.net/mod/51546 Payday 3 Tribune 32
+	if tweak_data.weapon.tribune32 then
+		tweak_data.weapon.tribune32.stats.damage = 155
+		tweak_data.weapon.tribune32.AMMO_PICKUP = {(pickupsSMG._155 * 0.9) * secondary_mul,(pickupsSMG._155 * 1.1) * secondary_mul}
+		tweak_data.weapon.tribune32.stats.recoil = 19
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.SMGs, "tribune32", "right")
+		tweak_data.weapon.tribune32.stats.reload = 9
+		-- akimbos
+		tweak_data.weapon.x_tribune32.stats.damage = 78
+		tweak_data.weapon.x_tribune32.AMMO_PICKUP = {(pickupsSMG._155 * 0.9) * 2,(pickupsSMG._155 * 1.1) * 2}
+		tweak_data.weapon.x_tribune32.AMMO_PICKUP[1] = tweak_data.weapon.tribune32.AMMO_PICKUP[1] * secondary_to_primary_mul * 2
+		tweak_data.weapon.x_tribune32.AMMO_PICKUP[2] = tweak_data.weapon.tribune32.AMMO_PICKUP[2] * secondary_to_primary_mul * 2
+		tweak_data.weapon.x_tribune32.NR_CLIPS_MAX = 2.25
+		tweak_data.weapon.x_tribune32.AMMO_MAX = tweak_data.weapon.x_tribune32.CLIP_AMMO_MAX * tweak_data.weapon.x_tribune32.NR_CLIPS_MAX
+		tweak_data.weapon.x_tribune32.stats.recoil = 19
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.SMGs, "x_tribune32", "right")
+	end
+	
+	-- https://modworkshop.net/mod/17368 L115
+	if tweak_data.weapon.l115 then
+		tweak_data.weapon.l115.NR_CLIPS_MAX = 5
+		tweak_data.weapon.l115.AMMO_MAX = tweak_data.weapon.l115.CLIP_AMMO_MAX * tweak_data.weapon.l115.NR_CLIPS_MAX
+	end
+	
+	-- https://modworkshop.net/mod/42220 MW2022 Marlin Model 336
+	if tweak_data.weapon.sbeta then
+		tweak_data.weapon.sbeta.NR_CLIPS_MAX = 5
+		tweak_data.weapon.sbeta.AMMO_MAX = tweak_data.weapon.sbeta.CLIP_AMMO_MAX * tweak_data.weapon.sbeta.NR_CLIPS_MAX
+		tweak_data.weapon.sbeta.fire_mode_data = {fire_rate = 60/85}
+		tweak_data.weapon.sbeta.single = {fire_rate = 60/85}
+		tweak_data.weapon.sbeta.stats.recoil = 13
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.SMGs, "sbeta", "right")
+		tweak_data.weapon.sbeta.stats.reload = 14
+	end
+	
+	-- https://modworkshop.net/mod/17243 SKS
+	if tweak_data.weapon.sks then
+		tweak_data.weapon.sks.NR_CLIPS_MAX = 11
+		tweak_data.weapon.sks.AMMO_MAX = tweak_data.weapon.sks.CLIP_AMMO_MAX * tweak_data.weapon.sks.NR_CLIPS_MAX
+		tweak_data.weapon.sks.fire_mode_data = {fire_rate = 60/390}
+		tweak_data.weapon.sks.single = {fire_rate = 60/390}
+		tweak_data.weapon.sks.stats.spread = 18
+		tweak_data.weapon.sks.stats.recoil = 11
+		tweak_data.weapon.sks.stats.concealment = 20
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.ARs, "sks", "left")
+	end
+	
+	-- https://modworkshop.net/mod/42438 MW2022 S&W Model 500
+	if tweak_data.weapon.swhiskey then
+		tweak_data.weapon.swhiskey.NR_CLIPS_MAX = 7
+		tweak_data.weapon.swhiskey.AMMO_MAX = tweak_data.weapon.swhiskey.CLIP_AMMO_MAX * tweak_data.weapon.swhiskey.NR_CLIPS_MAX
+		tweak_data.weapon.swhiskey.stats.spread = 19
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.ARs, "sks", "left")
+		tweak_data.weapon.factory.parts.wpn_fps_pis_swhiskey_am_piercing.custom_stats.ammo_pickup_max_mul = 0.5
+		tweak_data.weapon.factory.parts.wpn_fps_pis_swhiskey_am_snakeshot.custom_stats.ammo_pickup_max_mul = 1.3235294117647
+		tweak_data.weapon.factory.parts.wpn_fps_pis_swhiskey_am_snakeshot.custom_stats.ammo_pickup_min_mul = 1.3235294117647
+		tweak_data.weapon.factory.parts.wpn_fps_pis_swhiskey_am_snakeshot.custom_stats.falloff_override = {optimal_distance = 0, optimal_range = 1000, near_falloff = 0, far_falloff = 900, near_mul = 1, far_mul = 0.5, _meta = "falloff_override"}
+		Gilza.shotgun_minimal_damage_multipliers.swhiskey = 0.67
+	end
+	
 end
 
 function Gilza.checkforweapontweaks()
