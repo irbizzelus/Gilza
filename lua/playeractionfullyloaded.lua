@@ -2,6 +2,7 @@
 local function on_ammo_pickup(unit, pickup_chance, increase)
 	local gained_throwable = false
 	local chance = pickup_chance
+	local pickup_target = 100
 	
 	-- if currently equipped grenade has a multiplier in our list, we use it as a modifier for the 'increase' value. Allows to tweak grenade pick up chances for each nade
 	if Gilza and Gilza.grenade_multipliers then
@@ -10,13 +11,13 @@ local function on_ammo_pickup(unit, pickup_chance, increase)
 		local may_find_grenade = not grenade_tweak.base_cooldown
 		
 		if may_find_grenade and Gilza.grenade_multipliers[eqipped_nade] then
-			increase = increase * Gilza.grenade_multipliers[eqipped_nade]
+			pickup_target = Gilza.grenade_multipliers[eqipped_nade]
 		end
 	end
 
 	if unit == managers.player:player_unit() then
 		local random = math.random()
-		if random < chance then
+		if pickup_target <= (chance + 2) then -- comensate the coroutine nature of this skill, which usualy need at least 1 ammo pack to reset tracking after a pick up
 			gained_throwable = true
 			
 			managers.player:add_grenade_amount(1, true)

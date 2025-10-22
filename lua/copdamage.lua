@@ -510,6 +510,23 @@ end)
 -- same as the bullet function, but for fire damage. this is only used by the dragon's breath rounds, and it is a complete copy of the new shotgun damage mechanic
 Hooks:PreHook(CopDamage, "damage_fire", "Gilza_CopDamage_damage_fire_pre", function(self, attack_data)
 	
+	-- allow flamethrower to gain body expertise damage buffs
+	if attack_data.attacker_unit == managers.player:player_unit() then
+		local head = self._head_body_name and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
+		local is_flamenthrower = attack_data.weapon_unit:base():is_category("flamethrower") and managers.player:upgrade_value("weapon", "automatic_head_shot_add", nil)
+		if not head and not self._char_tweak.no_headshot_add_mul and is_flamenthrower then
+			local add_head_shot_mul = is_flamenthrower
+
+			if add_head_shot_mul and add_head_shot_mul > 0 then
+				if self._char_tweak.headshot_dmg_mul then
+					local tweak_headshot_mul = math.max(0, self._char_tweak.headshot_dmg_mul - 1)
+					local mul = tweak_headshot_mul * add_head_shot_mul + 1
+					attack_data.damage = attack_data.damage * mul
+				end
+			end
+		end
+	end
+	
 	-- reduce fire damage for headless dozers, since they ignore headshot damage, and Gilza's bodyshot damage is higher with lower HS muls
 	-- cant change their health because of explosive weapon's breakpoints
 	if self._char_tweak.Gilza_headless_tag then
@@ -584,7 +601,7 @@ Hooks:OverrideFunction(CopDamage, "roll_critical_hit", function (self, attack_da
 	end
 	
 	if res1 then
-		res2 = damage * 2.25 -- new crit mul
+		res2 = damage * 2.25 -- new crit mul; if its ever updated, dont forget to update it in graze as well, since it's reusing this mul
 	end
 	
 	return res1, res2
@@ -731,29 +748,20 @@ Hooks:OverrideFunction(CopDamage, "chk_killshot", function (self, attacker_unit,
 	return gilza_chk_killshot_orig(self, attacker_unit, variant, headshot, weapon_id)
 end)
 
--- stockholm menace and hitman checks
-Hooks:PreHook(CopDamage, "die", "Gilza_CopDamage_die_pre", function(self, attack_data)
-	local is_intimidated_cop = Gilza.intimidated_enemies[self._unit:id()] or false
-	
-	if is_intimidated_cop and attack_data.attacker_unit == managers.player:player_unit() then
-		local orig_amount = managers.player._Gilza_menace_kill_tracker
-		managers.player._Gilza_menace_kill_tracker = managers.player._Gilza_menace_kill_tracker + 0.5
-		if orig_amount < 4 and managers.player._Gilza_menace_kill_tracker > 4 then
-			Gilza.New_Skills_Informer:adjusted_stockholm_stacks(4-managers.player._Gilza_menace_kill_tracker)
-			managers.player._Gilza_menace_kill_tracker = 4
-		elseif managers.player._Gilza_menace_kill_tracker > 4 then
-			managers.player._Gilza_menace_kill_tracker = 4
-		else
-			Gilza.New_Skills_Informer:adjusted_stockholm_stacks(0.5)
-		end
-	end
-	
+-- hitman check for bounty target death by non-local entities. if unit dies i as client will get it's id as -1, instead of proper id, so we do some tracking
+local latest_unit = -1
+Hooks:PreHook(CopDamage, "_on_damage_received", "Gilza_CopDamage_on_damage_received_pre", function(self, attack_data)
+	latest_unit = self._unit
+end)
+
+-- hitman check pt2
+Hooks:PostHook(CopDamage, "_on_damage_received", "Gilza_CopDamage_on_damage_received_post", function(self, attack_data)
 	if managers.player:has_category_upgrade("temporary", "player_bounty_hunter") then
-		if self._unit == managers.player._gilza_hitman_bounty_target and attack_data.attacker_unit ~= managers.player:player_unit() then
+		if latest_unit == managers.player._gilza_hitman_bounty_target and attack_data.attacker_unit ~= managers.player:player_unit() then
 			managers.player._gilza_hitman_bounty_cooldown_end = Application:time() + 40
 			managers.player._gilza_hitman_has_active_bounty = false
 		end
-		if self._unit == managers.player._gilza_hitman_bounty_target then
+		if latest_unit == managers.player._gilza_hitman_bounty_target then
 			self._unit:contour():remove("generic_interactable_selected" , false)
 		end
 	end
@@ -772,4 +780,21 @@ Hooks:OverrideFunction(CopDamage, "damage_simple", function (self, attack_data)
 	end
 	
 	return res
+end)
+
+-- reduce incoming damage from projectile explosives for certain enemies to avoid confusion between host/client play, since host always handles projectile dmg, causing conflicts with new health
+Hooks:PreHook(CopDamage, "damage_explosion", "Gilza_CopDamage_damage_explosion_pre", function(self, attack_data)
+	if not (Network and Network:is_server()) then
+		return
+	end
+	local should_decrease_wpn = attack_data.weapon_unit and attack_data.weapon_unit:base() and not attack_data.weapon_unit:base().name_id and attack_data.weapon_unit:base()._projectile_entry
+	if should_decrease_wpn and self._char_tweak and self._char_tweak.tags then
+		if table.contains(self._char_tweak.tags, "taser") then
+			attack_data.damage = attack_data.damage * 0.69 -- unironically the ratio of new health to vanilla health - 1250/1800
+		elseif table.contains(self._char_tweak.tags, "medic") and not table.contains(self._char_tweak.tags, "tank") then
+			attack_data.damage = attack_data.damage * 0.69
+		elseif table.contains(self._char_tweak.tags, "spooc") then
+			attack_data.damage = attack_data.damage * 0.42
+		end
+	end
 end)

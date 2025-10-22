@@ -129,4 +129,6 @@
 	"Gilza_vhud_perks_header": "---- Перки ----",
 	"Gilza_vhud_compat_new_hitman_recovery": "Киллер - бонус регенерации",
 	"Gilza_vhud_compat_new_hitman_recovery_desc": "Включите HudList элемент мода VHUD+ отображающий продолжительность бонуса ускоряющего скорость регенерации брони после убийства из парного оружия/ПП/Пистолетов, из набора перков Киллер.",
+	"Gilza_vhud_compat_new_sicario": "Sicario - Момент удачи",
+	"Gilza_vhud_compat_new_sicario_desc": "Включите HudList элемент мода VHUD+ отображающий бонусы карточки перка Sicario - Момент удачи. Включает в себя бонус к увороту и кулдаун.",
 }

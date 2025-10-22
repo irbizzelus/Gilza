@@ -422,6 +422,28 @@ if Gilza.VHP_enabled then
 				ignore = not Gilza.settings.vhud_compat_new_hitman_recovery,
 			}
 			
+			-- new sicario
+			HUDList.BuffItemBase.MAP.sicario_dodge.ignore = true
+			HUDList.BuffItemBase.MAP.sicario_dodge_debuff.ignore = true
+			HUDListManager.BUFFS.composite_debuffs.sicario_dodge_debuff_gilza = "sicario_dodge_gilza"
+			HUDList.BuffItemBase.MAP.sicario_dodge_gilza = {
+				perks = {1, 0},
+				texture_bundle_folder = "max",
+				class = "TimedBuffItem",
+				priority = 4,
+				color = HUDListManager.ListOptions.buff_icon_color_standard,
+				show_value = HUDList.BuffItemBase.VALUE_FUNC.IN_PERCENT,
+				ignore = not Gilza.settings.vhud_compat_new_sicario,
+			}
+			HUDList.BuffItemBase.MAP.sicario_dodge_debuff_gilza = {
+				perks = {1, 0},
+				texture_bundle_folder = "max",
+				class = "TimedBuffItem",
+				priority = 8,
+				color = HUDListManager.ListOptions.buff_icon_color_debuff_fix,
+				ignore = true,
+			}
+			
 			map_loaded = true
 		end
 		if buffs_loaded and map_loaded then
@@ -610,6 +632,23 @@ function Gilza.New_Skills_Informer:activated_new_hitman_akimbo_recovery()
 		if dur > 0 then
 			managers.gameinfo:event("timed_buff", "deactivate", "new_hitman_recovery_bonus")
 			managers.gameinfo:event("timed_buff", "activate", "new_hitman_recovery_bonus", { duration = dur })
+		end
+	end
+end
+
+-- activated on _dodge_shot_gain func activation in player manager
+function Gilza.New_Skills_Informer:new_sicario_proc(action, cooldown, gain_value, in_smoke)
+	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
+		if action then
+			if action == "reset" then
+				managers.gameinfo:event("buff", "set_value", "sicario_dodge_gilza", { value = 0 })
+				managers.gameinfo:event("buff", "deactivate", "sicario_dodge_gilza")
+				managers.gameinfo:event("buff", "activate", "sicario_dodge_debuff_gilza")
+				managers.gameinfo:event("buff", "set_duration", "sicario_dodge_debuff_gilza", {duration = cooldown})
+			elseif action == "update" then
+				managers.gameinfo:event("buff", "activate", "sicario_dodge_gilza")
+				managers.gameinfo:event("buff", "set_value", "sicario_dodge_gilza", {value = gain_value})
+			end
 		end
 	end
 end

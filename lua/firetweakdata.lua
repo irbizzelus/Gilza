@@ -51,6 +51,14 @@ Hooks:PostHook(FireTweakData, "_init_dot_entries_fire", "Gilza_FireTweakData_ini
 		dot_trigger_max_distance = 1600,
 		dot_tick_period = 0.25
 	}
+	-- custom weapon: blast rifle
+	self.dot_entries.fire.ammo_blast_rifle_fire = {
+		dot_trigger_chance = 0.33,
+		dot_damage = 1.5,
+		dot_length = 1.501,
+		dot_trigger_max_distance = 10000,
+		dot_tick_period = 0.25
+	}
 	-- underbarrel lmg flamen
 	self.dot_entries.fire.weapon_kacchainsaw_flamethrower = {
 		dot_trigger_chance = 0.25,

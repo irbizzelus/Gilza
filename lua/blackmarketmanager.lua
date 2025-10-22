@@ -87,9 +87,17 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 		end
 	end
 	
+	-- ignore fire mode penalties if we r using pistols with new auto rapid fire skill
+	local active_trig_hap = false
+	for _, category in ipairs(categories) do
+		if category == "pistol" and managers.player:has_category_upgrade("pistol", "stacking_hit_damage_multiplier") then
+			active_trig_hap = true
+		end
+	end
+	
 	-- weapon inaccuracy for any weapon, based on fire mode. this was removed from "accuracy_addend" func above, since you should get your max single fire acuracy in menus
 	if fire_mode and fire_mode ~= "single" then
-		if managers.player:current_state() == "bipod" then
+		if managers.player:current_state() == "bipod" or active_trig_hap then
 			-- ignored
 		elseif fire_mode == "volley" then
 			-- buff volley mode, because this firemode is used by mostly inaccurate guns in this mod

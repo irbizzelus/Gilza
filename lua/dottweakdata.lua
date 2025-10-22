@@ -9,6 +9,15 @@ Hooks:PostHook(DOTTweakData, "_init_dot_entries_poison", "Gilza_DOTTweakData_ini
 		use_weapon_damage_falloff = false,
 		dot_tick_period = 0.5
 	}
+	-- custom weapon: blast rifle
+	self.dot_entries.poison.ammo_blast_rifle_rip = {
+		hurt_animation_chance = 1,
+		apply_hurt_once = true,
+		dot_damage = 4,
+		dot_length = 2.001,
+		use_weapon_damage_falloff = false,
+		dot_tick_period = 0.5
+	}
 	-- plainsrider
 	self.dot_entries.poison.ammo_proj_bow = {
 		damage_class = "ProjectilesPoisonBulletBase",
@@ -93,8 +102,9 @@ Hooks:PostHook(DOTTweakData, "_init_dot_entries_poison", "Gilza_DOTTweakData_ini
 	-- throwable nade
 	self.dot_entries.poison.proj_gas_grenade_cloud = {
 		apply_hurt_once = false,
-		dot_damage = 1.5,
-		dot_length = 15
+		dot_damage = 1,
+		dot_length = 13.01,
+		dot_tick_period = 1
 	}
 	-- shuriken
 	self.dot_entries.poison.proj_four = {
@@ -106,15 +116,15 @@ Hooks:PostHook(DOTTweakData, "_init_dot_entries_poison", "Gilza_DOTTweakData_ini
 	-- used by all GL's other then arbiter
 	self.dot_entries.poison.proj_launcher_cloud = {
 		apply_hurt_once = false,
-		dot_damage = 0.35,
-		dot_length = 16.01,
+		dot_damage = 1,
+		dot_length = 11.01,
 		dot_tick_period = 1
 	}
 	-- arbiter
 	self.dot_entries.poison.proj_launcher_arbiter_cloud = {
 		apply_hurt_once = false,
-		dot_damage = 0.7,
-		dot_length = 8.01,
+		dot_damage = 1,
+		dot_length = 7.01,
 		dot_tick_period = 1
 	}
 end)

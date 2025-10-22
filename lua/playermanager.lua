@@ -241,6 +241,20 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 			end
 		end
 		
+		-- stockholm menace cop kill
+		if managers.player:has_category_upgrade("player", "menace_panic_spread") and Gilza.intimidated_enemies[killed_unit:id()] then
+			local orig_amount = managers.player._Gilza_menace_kill_tracker
+			managers.player._Gilza_menace_kill_tracker = managers.player._Gilza_menace_kill_tracker + 0.5
+			if orig_amount < 4 and managers.player._Gilza_menace_kill_tracker > 4 then
+				Gilza.New_Skills_Informer:adjusted_stockholm_stacks(4-managers.player._Gilza_menace_kill_tracker)
+				managers.player._Gilza_menace_kill_tracker = 4
+			elseif managers.player._Gilza_menace_kill_tracker > 4 then
+				managers.player._Gilza_menace_kill_tracker = 4
+			else
+				Gilza.New_Skills_Informer:adjusted_stockholm_stacks(0.5)
+			end
+		end
+		
 	end
 	skill_triggers()
 	
@@ -761,6 +775,65 @@ Hooks:PostHook(PlayerManager, "check_skills", "Gilza_posthook_pm_check_skills", 
 		self._max_limited_fall_damage_charges = self._limited_fall_damage_charges
 		self._message_system:unregister(Message.OnDoctorBagUsed, "recharge_limited_fall_damage")
 	end
+	-- new sicario
+	if self:has_category_upgrade("player", "dodge_shot_gain_gilza") then
+		self._gilza_sicario_dodge_cd = self._gilza_sicario_dodge_cd or 0
+		local dodge_gain = self:upgrade_value("player", "dodge_shot_gain_gilza")[1]
+		local armor_id = tweak_data.blackmarket.armors[managers.blackmarket:equipped_armor(true, true)].upgrade_level
+		local cooldown = tweak_data.upgrades.values.player.new_armor_based_sicario_cd[armor_id] or 10
+		
+		local function on_player_damage(attack_data)
+			local t = TimerManager:game():time()
+			if (attack_data.variant == "bullet" or attack_data.variant == "melee") and t > self._gilza_sicario_dodge_cd + cooldown then
+				managers.player:_dodge_shot_gain(managers.player:_dodge_shot_gain() + dodge_gain)
+			end
+		end
+
+		self:register_message(Message.OnPlayerDodge, "dodge_shot_gain_dodge_gilza", callback(self, self, "_dodge_shot_gain", -69))
+		self:register_message(Message.OnPlayerDamage, "dodge_shot_gain_damage_gilza", on_player_damage)
+	else
+		self:unregister_message(Message.OnPlayerDodge, "dodge_shot_gain_dodge_gilza")
+		self:unregister_message(Message.OnPlayerDamage, "dodge_shot_gain_damage_gilza")
+	end
+	-- add a seperate function that adds smoke bomb CD while any smoke screen is active
+	if managers.blackmarket:equipped_grenade() == "smoke_screen_grenade" then
+		local function speed_up_on_kill()
+			if #managers.player:smoke_screens() >= 1 then
+				managers.player:speed_up_grenade_cooldown(1)
+			end
+		end
+		self:register_message(Message.OnEnemyKilled, "speed_up_smoke_grenade_while_active", speed_up_on_kill)
+	else
+		self:unregister_message(Message.OnEnemyKilled, "speed_up_smoke_grenade_while_active")
+	end
+end)
+
+-- new sicario
+Hooks:OverrideFunction(PlayerManager, "_dodge_shot_gain", function (self, gain_value)
+	if gain_value then
+		local in_smoke = false
+		for _, smoke_screen in ipairs(self._smoke_screen_effects or {}) do
+			if smoke_screen:is_in_smoke(self:player_unit()) then
+				if smoke_screen:mine() then
+					in_smoke = true
+				end
+			end
+		end
+		local armor_id = tweak_data.blackmarket.armors[managers.blackmarket:equipped_armor(true, true)].upgrade_level
+		local cooldown = tweak_data.upgrades.values.player.new_armor_based_sicario_cd[armor_id] or 10
+		if gain_value == -69 then
+			if self._dodge_shot_gain_value and self._dodge_shot_gain_value > 0 and not in_smoke then
+				self._gilza_sicario_dodge_cd = TimerManager:game():time()
+				self._dodge_shot_gain_value = 0
+				Gilza.NSI:new_sicario_proc("reset", cooldown)
+			end
+		else
+			self._dodge_shot_gain_value = gain_value
+			Gilza.NSI:new_sicario_proc("update", cooldown, gain_value)
+		end
+	else
+		return self._dodge_shot_gain_value or 0
+	end
 end)
 
 function PlayerManager:limited_fall_damage_charges()
@@ -851,6 +924,17 @@ Hooks:OverrideFunction(PlayerManager, "chk_wild_kill_counter", function (self, k
 		local less_armor_wild_cooldown = managers.player:upgrade_value("player", "less_armor_wild_cooldown", 0)
 		local missing_health_ratio = math.clamp(1 - damage_ext:health_ratio(), 0, 1)
 		local missing_armor_ratio = math.clamp(1 - damage_ext:armor_ratio(), 0, 1)
+		
+		-- copycat version nerfs
+		if managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
+			trigger_cooldown = 6
+			if wild_health_amount > 0 then
+				wild_health_amount = 0.4
+			end
+			if wild_armor_amount > 0 then
+				wild_armor_amount = 0.4
+			end
+		end
 
 		if less_health_wild_armor ~= 0 and less_health_wild_armor[1] ~= 0 then
 			local missing_health_stacks = math.floor(missing_health_ratio / less_health_wild_armor[1])

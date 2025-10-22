@@ -418,6 +418,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 			
 			local function Hitman_updates()
 				self.specializations[5][1].upgrades = {
+					"player_tier_armor_multiplier_1",
 					"temporary_badass_hitman_kill_armor_regen"
 				}
 				self.specializations[5][3].upgrades = {
@@ -580,6 +581,13 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 				}
 			end
 			Biker_updates()
+			
+			local function Sicario_updates()
+				self.specializations[18][3].upgrades = {
+					"player_dodge_shot_gain_gilza",
+				}
+			end
+			Sicario_updates()
 			
 			local function Leech_updates()
 				self.specializations[22][1].upgrades = {

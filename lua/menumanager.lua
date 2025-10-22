@@ -349,6 +349,14 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		end
 		Gilza:Save()
 	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_new_sicario = function(this, item)
+		Gilza.settings.vhud_compat_new_sicario = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("sicario_dodge_gilza", Gilza.settings.vhud_compat_new_sicario)
+		end
+		Gilza:Save()
+	end
 
 	Gilza:Load()
 

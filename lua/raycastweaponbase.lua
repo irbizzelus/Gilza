@@ -486,7 +486,8 @@ _G.AutoFireSoundFixBlacklist = {
 	["system"] = true,
 	["hailstorm"] = true,
 	["kacchainsaw_flamethrower"] = true,
-	["par"] = true
+	["par"] = true,
+	["crysis3_typhoon"] = true,
 }
 
 --Allows users/modders to easily edit this blacklist from outside of this mod

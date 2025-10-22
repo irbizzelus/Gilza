@@ -218,5 +218,14 @@
 			"value" : "vhud_compat_new_hitman_recovery",
 			"default_value" : true
 		},
+		{
+			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_new_sicario",
+			"title" : "Gilza_vhud_compat_new_sicario",
+			"description" : "Gilza_vhud_compat_new_sicario_desc",
+			"callback" : "Gilza_vhud_compat_new_sicario",
+			"value" : "vhud_compat_new_sicario",
+			"default_value" : true
+		},
 	]
 }

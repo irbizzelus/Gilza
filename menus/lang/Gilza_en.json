@@ -129,4 +129,6 @@
 	"Gilza_vhud_perks_header": "---- Perks ----",
 	"Gilza_vhud_compat_new_hitman_recovery": "Hitman - Temporary Recovery",
 	"Gilza_vhud_compat_new_hitman_recovery_desc": "Enable VHUD's buff list duration tracker for Hitman's temporary armor recovery bonus that you get after a kill with akimbos/smgs/pistols.",
+	"Gilza_vhud_compat_new_sicario": "Sicario - Twitch",
+	"Gilza_vhud_compat_new_sicario_desc": "Enable VHUD's buff list tracker Sicario's Twitch perk card. Included current bonus dodge and cooldown.",
 }

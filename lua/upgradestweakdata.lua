@@ -9,7 +9,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 	self.explosive_bullet = {
 		curve_pow = 0,
 		player_dmg_mul = 0.01,
-		range = 120
+		range = 200
 	}
 	self.explosive_bullet.feedback_range = self.explosive_bullet.range
 	
@@ -105,17 +105,21 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				0.1,
 				0.4
 			}
-			-- new graze values, they should be 1/3 and 2/3 but i dont trust damage calculation's rounding up values correctly
+			-- new graze values
 			self.values.snp.graze_damage = {
 				{
-					radius = 80,
-					damage_factor = 0.34,
-					damage_factor_headshot = 0
+					range_per_lvl = 600,
+					base_radius = 40,
+					radius_per_expansion = 30,
+					max_expansions = 3,
+					lvl_dmg_decrease = 0.3,
 				},
 				{
-					radius = 160,
-					damage_factor = 0.67,
-					damage_factor_headshot = 0
+					range_per_lvl = 300,
+					base_radius = 40,
+					radius_per_expansion = 40,
+					max_expansions = 9,
+					lvl_dmg_decrease = 0.1,
 				}
 			}
 		end
@@ -195,11 +199,11 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			self.values.player.regain_throwable_from_ammo = {
 				{
 					chance = 0,
-					chance_inc = 0.01
+					chance_inc = 1
 				},
 				{
-					chance = 0.03,
-					chance_inc = 0.03
+					chance = 5,
+					chance_inc = 1.5
 				}
 			}	
 		end
@@ -326,11 +330,11 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			self.values.temporary.player_dodge_armor_regen = {
 				{
 					1,
-					20
+					30
 				},
 				{
 					5,
-					10
+					15
 				}
 			}
 			-- ap chance for silencers - incremental
@@ -899,32 +903,32 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				self.values.player.damage_to_armor = {
 					{
 						{
-							7.5,
+							10,
+							4
+						},
+						{
+							6.75,
 							3
 						},
 						{
-							4.5,
-							2
+							6.2,
+							2.75
+						},
+						{
+							5.625,
+							2.5
 						},
 						{
 							4.5,
+							2.25
+						},
+						{
+							4,
 							2
 						},
 						{
-							4.5,
-							2
-						},
-						{
-							3,
+							2.25,
 							1.5
-						},
-						{
-							3,
-							1.5
-						},
-						{
-							1.875,
-							1.25
 						}
 					}
 				}
@@ -946,6 +950,25 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				}
 			end
 			Biker_updates()
+			
+			local function Sicario_updates()
+				self.values.player.dodge_shot_gain_gilza = {
+					{
+						0.15,
+						4
+					}
+				}
+				self.values.player.new_armor_based_sicario_cd = {
+					4,
+					5,
+					6,
+					8,
+					11,
+					13,
+					16
+				}
+			end
+			Sicario_updates()
 			
 			local function Stoic_updates()
 				-- 1st card
@@ -2253,6 +2276,19 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				}
 			end
 			Biker_definitions()
+			
+			local function Sicario_definitions()
+				self.definitions.player_dodge_shot_gain_gilza = {
+					name_id = "menu_player_dodge_shot_gain_gilza",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "dodge_shot_gain_gilza",
+						category = "player"
+					}
+				}
+			end
+			Sicario_definitions()
 			
 			local function Leech_definitions()
 				self.definitions.temporary_copr_invuln_on_segment_loss = {

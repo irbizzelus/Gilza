@@ -368,5 +368,77 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 		end)
 	end
 	
+	-- blast rifle weapon support
+	if tweak_data.weapon.blast then
+		SyphonAmmoBase = SyphonAmmoBase or class(InstantBulletBase)
+		SyphonAmmoBase.regen_cd = 1.5
+		SyphonAmmoBase.regen_timer = -1
+		function SyphonAmmoBase:on_collision(col_ray, weapon_unit, user_unit, damage, blank, no_sound)
+			local cd = user_unit.character_damage and user_unit:character_damage() 
+			if cd then
+				local hit_unit = col_ray.unit
+				if not (alive(hit_unit) and hit_unit.character_damage and hit_unit:character_damage()) then 
+					local weaponbase = weapon_unit and weapon_unit:base()
+					if weaponbase and weaponbase._blastrifle_ammocounter then 
+						weaponbase._blastrifle_ammocounter:refresh_syphon_spin_timer()
+					end
+					
+					local syphoned_amount = damage * -0.03
+					if cd.restore_armor then 
+						cd:restore_armor(syphoned_amount)
+						cd:set_regenerate_timer_to_max() -- start armor regen
+					end
+					if cd.restore_health then
+						cd:restore_health(syphoned_amount, true, false)
+					end
+				end
+			end
+			return SyphonAmmoBase.super.on_collision(self, col_ray, weapon_unit, user_unit, damage, blank, no_sound)
+		end
+		function SyphonAmmoBase:give_impact_damage(col_ray,weapon_unit,user_unit,damage,armor_piercing,shield_knock,knock_down,stagger,variant,...)
+			local cd = user_unit.character_damage and user_unit:character_damage() 
+			if cd then 
+				local hit_unit = col_ray.unit
+				if alive(hit_unit) and hit_unit.character_damage and hit_unit:character_damage() and self.regen_timer < Application:time() then 
+					local hit_cd = hit_unit:character_damage()
+					if hit_cd.can_kill and hit_cd:can_kill() and not hit_cd:dead() then 
+						local weaponbase = weapon_unit and weapon_unit:base()
+						if weaponbase and weaponbase._blastrifle_ammocounter then 
+							weaponbase._blastrifle_ammocounter:refresh_syphon_spin_timer()
+						end
+						
+						local syphoned_amount = damage * 0.15
+						if cd.restore_armor then 
+							cd:restore_armor(syphoned_amount)
+						end
+						if cd.restore_health then
+							cd:restore_health(syphoned_amount, true, false)
+						end
+						self.regen_timer = Application:time() + self.regen_cd
+					end
+				end
+			end
+			return SyphonAmmoBase.super.give_impact_damage(self,col_ray,weapon_unit,user_unit,damage,armor_piercing,shield_knock,knock_down,stagger,variant,...)
+		end
+		
+		InstantElectricBulletBase = InstantElectricBulletBase or class(InstantBulletBase)
+		function InstantElectricBulletBase:give_impact_damage(col_ray, weapon_unit, user_unit, damage, armor_piercing)
+			local hit_unit = col_ray.unit
+			local action_data = {
+				damage = damage,
+				weapon_unit = weapon_unit,
+				attacker_unit = user_unit,
+				col_ray = col_ray,
+				armor_piercing = armor_piercing,
+				attacker_unit = user_unit,
+				attack_dir = col_ray.ray,
+				variant = weapon_unit:base() and weapon_unit:base().get_tase_strength and weapon_unit:base():get_tase_strength() or "light"
+			}
+			local defense_data = hit_unit and hit_unit:character_damage().damage_tase and hit_unit:character_damage():damage_tase(action_data)
+
+			return defense_data
+		end
+	end
+	
 	_G.Gilzas_weaponlib_overrides_and_fixes = {} -- the needed global var
 end

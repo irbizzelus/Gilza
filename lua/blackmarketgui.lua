@@ -200,6 +200,24 @@ Hooks:PostHook(BlackMarketGui, "update_info_text", "Gilza_BlackMarketGui_update_
 				info_text:set_world_y(self._stats_text_modslist:world_top())
 			end
 		end
+		
+		-- new sicario
+		if managers.player:has_category_upgrade("player", "dodge_shot_gain_gilza") then
+			local bm_armor_tweak = tweak_data.blackmarket.armors[slot_data.name]
+			local upgrade_level = bm_armor_tweak.upgrade_level
+			local new_info_str = managers.localization:text("bm_menu_sicario_armor_CD_desc", {amount_1 = tweak_data.upgrades.values.player.new_armor_based_sicario_cd[upgrade_level]})
+			if slot_data.unlocked then
+				self._info_texts[2]:set_text(tostring(new_info_str))
+			end
+			local info_text = self._info_texts[2]
+			local _, _, _, th = info_text:text_rect()
+			info_text:set_h(th)
+			info_text:set_w(self._info_texts_panel:w())
+			info_text:set_font_size(tweak_data.menu.pd2_small_font_size)
+			if slot_data.comparision_data and alive(self._stats_text_modslist) then
+				info_text:set_world_y(self._stats_text_modslist:world_top())
+			end
+		end
 	end
 end)
 

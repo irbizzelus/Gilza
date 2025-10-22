@@ -39,29 +39,45 @@ _G.Gilza = {
 		vhud_compat_total_dodge = true,
 		vhud_compat_new_hitman_recovery = true,
 		vhud_compat_new_trigger_happy = true,
+		vhud_compat_new_sicario = true,
 	},
 	grenade_multipliers = {
-		dada_com = 0.9,
-		fir_com = 0.4,
-		frag_com = 0.9,
-		wpn_prj_ace = 2,
-		concussion = 0.45,
-		poison_gas_grenade = 0.25,
-		frag = 0.9,
-		molotov = 1,
-		dynamite = 0.9,
-		wpn_prj_four = 1.1,
-		wpn_prj_jav = 0.5,
-		wpn_prj_target = 1.25,
-		wpn_prj_hur = 0.8,
-		sticky_grenade = 1.1,
-		wpn_gre_electric = 1.1,
+		dada_com = 24,
+		fir_com = 26,
+		frag_com = 24,
+		wpn_prj_ace = 50,
+		concussion = 30,
+		poison_gas_grenade = 40,
+		frag = 24,
+		molotov = 22,
+		dynamite = 24,
+		wpn_prj_four = 50,
+		wpn_prj_jav = 50,
+		wpn_prj_target = 50,
+		wpn_prj_hur = 50,
+		sticky_grenade = 22,
+		wpn_gre_electric = 20,
 	},
 	shotgun_minimal_damage_multipliers = {},
 	current_shotgun_shot_id = 0,
 	weapon_shot_id = 0,
 	intimidated_enemies = {}
 }
+
+-- Add a posthook to beardlib's WeaponModule init to grab factory ids of custom weapons directly from the source,
+-- because they are needed during factory tweak data load. Normaly you can get factory id from normal id only after upgradestweak file is loaded,
+-- but since its loaded after factorytweaks, we cant use that function, so we do this arguably cursed workaround.
+WeaponModule = WeaponModule or BeardLib:ModuleClass("Weapon", ItemModuleBase)
+Hooks:PostHook(WeaponModule, "RegisterHook", "Gilza_post_beardlib_RegisterHook", function(self)
+	Gilza.customWeaponFactoryIDs = Gilza.customWeaponFactoryIDs or {}
+	if self._config and self._config.weapon and self._config.weapon.id and not Gilza.customWeaponFactoryIDs[self._config.weapon.id] then
+		local fac_id = ("wpn_fps_"..self._config.weapon.id)
+		if self._config.factory and self._config.factory.id then
+			fac_id = self._config.factory.id
+		end
+		Gilza.customWeaponFactoryIDs[self._config.weapon.id] = fac_id
+	end
+end)
 
 -- settings file management, using gilza.settings list
 function Gilza:Save()
@@ -137,14 +153,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.51 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.52 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.5.1 changelog:\n\n- Bullet storm skill no longer provides infinite ammo to grenade and rocket launchers.\n- Fully loaded aced grenade pick up rate adjusted.\n- Throwable pick up rates adjusted.\n- Reduced Sociopath/Infiltrator 1st card damage resistance by 2%.\n- Nerfed Hacker perk deck in a few ways.\n- Made a few minor adjustments to some weapons.\n- Added support for 8 custom weapons\n- Fixed some things."
+			local message = "2.5.2 Changelog:\nThis patch requires a complete game restart. (not just reLua)\n\n- Made tazers/medics/cloakers tankier against projectile explosives for a more consistent host/client experience.\n- All AP sources now have slightly less punishing ammo pick up penalties.\n- Throwables are now picked up after a certain amount of picked up boxes instead of being fully RNG based, affects both Fully Loaded and Walk-in-Closet.\n- Reworked Graze sniper skill.\n- Mini-reworked Sicario perk deck.\n- Improved custom weapon support.\n\nAnd much more, check the full changelog for more info."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.51
+			Gilza.settings.version = 2.52
 			Gilza.Save()
 		end
 	end)
