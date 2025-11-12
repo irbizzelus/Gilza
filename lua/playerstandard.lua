@@ -3,14 +3,14 @@ if not Gilza then
 end
 
 -- new faster melee charge skill
-local gilza_orig_get_melee_charge_lerp_value = PlayerStandard._get_melee_charge_lerp_value
+local gilza_orig_get_melee_charge_lerp_value = Hooks:GetFunction(PlayerStandard, "_get_melee_charge_lerp_value")
 Hooks:OverrideFunction(PlayerStandard, "_get_melee_charge_lerp_value", function (self, t, offset)
 	local res = gilza_orig_get_melee_charge_lerp_value(self, t, offset)
 	return math.clamp(res / managers.player:upgrade_value("player", "melee_faster_charge", 1), 0, 1)
 end)
 
 -- if sprint button is pressed while melee'ing, allow for sprint if skill is equipped.
-local gilza_orig_start_action_running = PlayerStandard._start_action_running
+local gilza_orig_start_action_running = Hooks:GetFunction(PlayerStandard, "_start_action_running")
 Hooks:OverrideFunction(PlayerStandard, "_start_action_running", function (self, t)
 	gilza_orig_start_action_running(self, t)
 	if managers.player:has_category_upgrade("player", "melee_sprint") then
@@ -164,7 +164,7 @@ Hooks:OverrideFunction(PlayerStandard, "_start_action_melee", function (self, t,
 end)
 
 -- fixes sprint stop animations while melee'ing
-local gilza_orig_end_action_running = PlayerStandard._end_action_running
+local gilza_orig_end_action_running = Hooks:GetFunction(PlayerStandard, "_end_action_running")
 Hooks:OverrideFunction(PlayerStandard, "_end_action_running", function (self, t)
 	if managers.player:has_category_upgrade("player", "melee_sprint") and self:_is_meleeing() then
 		if not self._end_running_expire_t then
@@ -183,7 +183,7 @@ Hooks:OverrideFunction(PlayerStandard, "_end_action_running", function (self, t)
 end)
 
 -- fixes melee sprint jump animations. i think
-local gilza_orig_start_action_jump = PlayerStandard._start_action_jump
+local gilza_orig_start_action_jump = Hooks:GetFunction(PlayerStandard, "_start_action_jump")
 Hooks:OverrideFunction(PlayerStandard, "_start_action_jump", function (self, t, action_start_data)
 	if managers.player:has_category_upgrade("player", "melee_sprint") and self:_is_meleeing() then
 		self._ext_camera:play_redirect(self:get_animation("melee_exit_state"), speed_multiplier)
@@ -194,7 +194,7 @@ Hooks:OverrideFunction(PlayerStandard, "_start_action_jump", function (self, t, 
 end)
 
 -- chainsaw check
-local gilza_orig_check_action_melee = PlayerStandard._check_action_melee
+local gilza_orig_check_action_melee = Hooks:GetFunction(PlayerStandard, "_check_action_melee")
 Hooks:OverrideFunction(PlayerStandard, "_check_action_melee", function (self, t, input)
 	local cam = gilza_orig_check_action_melee(self, t, input)
 	if input.btn_melee_release then
@@ -370,7 +370,7 @@ function PlayerStandard:_do_chainsaw_damage(t)
 end
 
 -- chainsaw check #2
-local gilza_orig_update_melee_timers = PlayerStandard._update_melee_timers
+local gilza_orig_update_melee_timers = Hooks:GetFunction(PlayerStandard, "_update_melee_timers")
 Hooks:OverrideFunction(PlayerStandard, "_update_melee_timers", function (self, t, input)
 	-- CHAINSAW
 	if tweak_data.blackmarket.melee_weapons[managers.blackmarket:equipped_melee_weapon()].chainsaw == true and self._state_data.chainsaw_t and self._state_data.chainsaw_t < t then
@@ -381,7 +381,7 @@ Hooks:OverrideFunction(PlayerStandard, "_update_melee_timers", function (self, t
 end)
 
 -- disable chainsaw when interrupted
-local gilza_orig_interupt_action_melee = PlayerStandard._interupt_action_melee
+local gilza_orig_interupt_action_melee = Hooks:GetFunction(PlayerStandard, "_interupt_action_melee")
 Hooks:OverrideFunction(PlayerStandard, "_interupt_action_melee", function (self, t)
 	gilza_orig_interupt_action_melee(self, t)
 	self._state_data.chainsaw_t = nil

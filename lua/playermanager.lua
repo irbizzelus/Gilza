@@ -121,7 +121,7 @@ Hooks:OverrideFunction(PlayerManager, "damage_reduction_skill_multiplier", funct
 end)
 
 -- new speed bonuses
-local gilza_orig_pm_movement_speed_multiplier = PlayerManager.movement_speed_multiplier
+local gilza_orig_pm_movement_speed_multiplier = Hooks:GetFunction(PlayerManager, "movement_speed_multiplier")
 Hooks:OverrideFunction(PlayerManager, "movement_speed_multiplier", function (self, speed_state, bonus_multiplier, upgrade_level, health_ratio)
 	
 	local multiplier = gilza_orig_pm_movement_speed_multiplier(self, speed_state, bonus_multiplier, upgrade_level, health_ratio)
@@ -151,7 +151,7 @@ Hooks:OverrideFunction(PlayerManager, "movement_speed_multiplier", function (sel
 end)
 
 -- new dodge bonuses
-local gilza_orig_pm_skill_dodge_chance = PlayerManager.skill_dodge_chance
+local gilza_orig_pm_skill_dodge_chance = Hooks:GetFunction(PlayerManager, "skill_dodge_chance")
 Hooks:OverrideFunction(PlayerManager, "skill_dodge_chance", function (self, running, crouching, on_zipline, override_armor, detection_risk)
 	local result = gilza_orig_pm_skill_dodge_chance(self, running, crouching, on_zipline, override_armor, detection_risk)
 	if managers.player:has_category_upgrade("player", "speed_junkie_meter") then
@@ -865,7 +865,7 @@ function PlayerManager:Gilza_is_close_to_sentry_gun()
 end
 
 -- muscle 9th card buff for DS
-local gilza_orig_PlayerManager_health_regen = PlayerManager.health_regen
+local gilza_orig_PlayerManager_health_regen = Hooks:GetFunction(PlayerManager, "health_regen")
 Hooks:OverrideFunction(PlayerManager, "health_regen", function (self)
 	local res = gilza_orig_PlayerManager_health_regen(self)
 	local adjustments_wanted = 0
@@ -1176,7 +1176,7 @@ Hooks:PostHook(PlayerManager, "chk_store_armor_health_kill_counter", "Gilza_post
 end)
 
 -- returns all armor stats. if we have static dodge, set armor's dodge stat to 0. static dodge itself is set in the dodge func
-local gilza_orig_pm_body_armor_value = PlayerManager.body_armor_value
+local gilza_orig_pm_body_armor_value = Hooks:GetFunction(PlayerManager, "body_armor_value")
 Hooks:OverrideFunction(PlayerManager, "body_armor_value", function (self, category, override_value, default)
 	if category == "dodge" then
 		if managers.player:has_category_upgrade("player", "static_dodge_chance") then
@@ -1199,7 +1199,7 @@ function PlayerManager:Gilza_new_expres_armor_regen_bonus_timer_on_kill_reset()
 end
 
 -- override tag team LOS check
-local orig_attempt_tag_team = PlayerManager._attempt_tag_team
+local orig_attempt_tag_team = Hooks:GetFunction(PlayerManager, "_attempt_tag_team")
 Hooks:OverrideFunction(PlayerManager, "_attempt_tag_team", function (self, ...)
 	local success = orig_attempt_tag_team(self, ...)
 	

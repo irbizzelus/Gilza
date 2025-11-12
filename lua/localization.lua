@@ -639,7 +639,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					
 					-- Shotgun mods
 					bm_wpn_fps_upg_a_rip_desc_new = "Poisoned bullet that causes enemies to vomit uncontrollably, preventing them from making any actions.\n\nDeals 250 poison damage over 6 seconds.\nAmmo pick up reduced by 20%",
-					bm_wpn_fps_upg_a_custom_desc_new = "12 pellets with stronger impact.\n\nPierces enemies and their body armor.\nDisables bonus damage from headshots.\nDamage range reduced by 25%.\nAmmo pick up reduced by 15%",
+					bm_wpn_fps_upg_a_custom_desc_new = "12 pellets with stronger impact.\n\nPierces enemies and their body armor.\nDisables bonus damage from headshots.\nDamage range reduced by 25%.\nAmmo pick up reduced by 20%",
 					bm_wpn_fps_upg_a_explosive_desc_new = "Fires one explosive charge that kills or stuns targets.\n\nDisables bonus damage from headshots.\nAmmo pick up reduced by 40%",
 					bm_wpn_fps_upg_a_piercing_desc_new = "Peirces enemy body armor.\nDamage range increased by 25%.\n\nAmount of darts per shell - 5.\nAmmo pick up reduced by 15%",
 					bm_wpn_fps_upg_a_slug_desc_new = "Fires a single lead slug that penetrates body armor, enemies, shields and walls.\n\nDamage range increased by 20%\nAmmo pick up reduced by 25%",
@@ -814,6 +814,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					-- Frenchy's missing strings on some parts - no translations required
 					bm_wp_wpn_fps_upg_m_celerity = "\"Big Stick\" 30-round mag",
 					bm_wp_wpn_fps_upg_m_308dmmag = "Lightweight 30-round mag",
+					bm_menu_lower_receiver = "Lower Receiver",
 					-- MW2022 S&W Model 500
 					bm_wp_wpn_fps_pis_swhiskey_am_snakeshot_desc = "Converts the weapon to fire 8 pellets and to count as a shotgun for purposes of skills. Ammo pickup rate adjusted to match said changes.",
 					bm_wp_wpn_fps_pis_swhiskey_am_piercing_desc = "Pierces through enemies, walls, body armor, and shields. Ammo pickup rate reduced by 40%.",
@@ -1514,7 +1515,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					
 					-- Shotgun mods
 					bm_wpn_fps_upg_a_rip_desc_new = "Пуля вызывающая у протвника неконтролируемую рвоту, блокируя их возможность делать какие либо действия.\n\nНаносит 250 урона в течение 6 секунд.\nПодбор боеприпасов уменьшен на 20%",
-					bm_wpn_fps_upg_a_custom_desc_new = "12 дробинок с увеличенным уроном.\nПробивает насквозь врагов и их нательную броню.\n\nОтключает возможность наносить бонусный урон при попадании в голову.\nЭффективная дистанция оружия уменьшена на 25%.\nПодбор боеприпасов уменьшен на 15%.",
+					bm_wpn_fps_upg_a_custom_desc_new = "12 дробинок с увеличенным уроном.\nПробивает насквозь врагов и их нательную броню.\n\nОтключает возможность наносить бонусный урон при попадании в голову.\nЭффективная дистанция оружия уменьшена на 25%.\nПодбор боеприпасов уменьшен на 20%.",
 					bm_wpn_fps_upg_a_explosive_desc_new = "Выстреливает один взрывной заряд, который убивает или оглушает цели.\nОтключает возможность наносить увеличенный урон при попадании в голову.\nПодбор боеприпасов уменьшен на 40%.",
 					bm_wpn_fps_upg_a_piercing_desc_new = "Пробивает нательную броню.\nЭффективная дистанция оружия увеличина на 25%.\n\nВыстреливает 5 дротиков за выстрел.\nПодбор боеприпасов уменьшен на 15%.",
 					bm_wpn_fps_upg_a_slug_desc_new = "Выстреливает один свинцовый снаряд, пробивающий насквозь нательную броню, щиты и стены.\n\nЭффективная дистанция оружия увеличина на 20%.\nПодбор боеприпасов уменьшен на 25%.",

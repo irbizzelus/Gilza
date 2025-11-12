@@ -1,4 +1,4 @@
-local gilza_orig_send_to_peers_synced = BaseNetworkSession.send_to_peers_synched
+local gilza_orig_send_to_peers_synced = Hooks:GetFunction(BaseNetworkSession, "send_to_peers_synched")
 Hooks:OverrideFunction(BaseNetworkSession, "send_to_peers_synched", function (self, ...)
 	local param_1, param_2, param_3, param_4, param_5 = select(1, ...)
 	-- disallow brawler deck to have camouflage bonuses for enemy attention.

@@ -2,6 +2,10 @@ if not Gilza then
 	dofile("mods/Gilza/lua/1_GilzaBase.lua")
 end
 
+if Gilza.files_loaded.copdamage then
+	return
+end
+
 -- convert melee damage to % based on the weapon's stat
 Hooks:PreHook(CopDamage, "damage_melee", "Gilza_CopDamage_damage_melee_pre", function(self,attack_data)
 	-- if incoming melee was a bullet_taze, apply headshot dmg increase. this is needed for electric boolets upgrade
@@ -245,6 +249,12 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 				end
 			end
 		end
+		managers.statistics:shot_fired({
+			weapon_unit = attack_data.weapon_unit,
+			hit = true,
+			gilza_authorized = true,
+			hit_unit = self._unit,
+		})
 	end
 	
 	local result = nil
@@ -574,12 +584,18 @@ Hooks:PreHook(CopDamage, "damage_fire", "Gilza_CopDamage_damage_fire_pre", funct
 				end
 			end
 		end
+		managers.statistics:shot_fired({
+			weapon_unit = attack_data.weapon_unit,
+			hit = true,
+			gilza_authorized = true,
+			hit_unit = self._unit,
+		})
 	end
 end)
 
 -- make crits always deal 2.25x damage. this change makes cloakers, dozers and Winters harder to kill, since everyone else has a 2x headshot multiplier
 -- also make crits only evaluate chances once per shotgun shot, instead of per pellet (if it's per pellet, literally every shot would have a crit hitmarker)
-local gilza_orig_roll_critical_hit = CopDamage.roll_critical_hit
+local gilza_orig_roll_critical_hit = Hooks:GetFunction(CopDamage, "roll_critical_hit")
 Hooks:OverrideFunction(CopDamage, "roll_critical_hit", function (self, attack_data, damage)
 	
 	local res1, res2 = gilza_orig_roll_critical_hit(self, attack_data, damage)
@@ -608,7 +624,7 @@ Hooks:OverrideFunction(CopDamage, "roll_critical_hit", function (self, attack_da
 end)
 
 -- sentry kill tracking for new technician skill and guardian deck
-local gilza_chk_killshot_orig = CopDamage.chk_killshot
+local gilza_chk_killshot_orig = Hooks:GetFunction(CopDamage, "chk_killshot")
 Hooks:OverrideFunction(CopDamage, "chk_killshot", function (self, attacker_unit, variant, headshot, weapon_id)
 	
 	-- if sentry. copied from... somewhere idk
@@ -798,3 +814,5 @@ Hooks:PreHook(CopDamage, "damage_explosion", "Gilza_CopDamage_damage_explosion_p
 		end
 	end
 end)
+
+Gilza.files_loaded.copdamage = true

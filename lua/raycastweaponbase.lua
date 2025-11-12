@@ -370,7 +370,7 @@ Hooks:PostHook(RaycastWeaponBase, "fire", "Gilza_post_RaycastWeaponBase_fire", f
 end)
 
 -- electric bullets + saw no headshot
-local instantbullet_give_impact_dmg_orig = InstantBulletBase.give_impact_damage
+local instantbullet_give_impact_dmg_orig = Hooks:GetFunction(InstantBulletBase, "give_impact_damage")
 Hooks:OverrideFunction(InstantBulletBase, "give_impact_damage", function (self, col_ray, weapon_unit, user_unit, damage, armor_piercing, shield_knock, knock_down, stagger, variant)
 	
 	-- don't do anything on bows and crossbows due to crashes. also they are not boolets
@@ -512,7 +512,7 @@ function RaycastWeaponBase:_soundfix_should_play_normal()
 end
 
 --Prevent playing sounds except for blacklisted weapons
-local orig_fire_sound = RaycastWeaponBase._fire_sound
+local orig_fire_sound = Hooks:GetFunction(RaycastWeaponBase, "_fire_sound")
 Hooks:OverrideFunction(RaycastWeaponBase, "_fire_sound", function (self, ...)
 	if self:_soundfix_should_play_normal() then
 		return orig_fire_sound(self,...)

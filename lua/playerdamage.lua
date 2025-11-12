@@ -1,3 +1,11 @@
+if not Gilza then
+	dofile("mods/Gilza/lua/1_GilzaBase.lua")
+end
+
+if Gilza.files_loaded.playerdamage then
+	return
+end
+
 -- new berserker - when armor breaks under half health gain damage bonuses and activate HUD flash
 Hooks:PreHook(PlayerDamage, "_calc_armor_damage", "Gilza_PlayerDamage_calc_armor_damage_pre", function(self, attack_data)
 	-- on armor break
@@ -597,7 +605,7 @@ Hooks:PreHook(PlayerDamage, "pre_destroy", "Gilza_pre_PlayerDamage_pre_destroy",
 end)
 
 -- armor recovery related skills. this func triggers, after getting shot or supressed
-local orig_timer_to_max = PlayerDamage.set_regenerate_timer_to_max
+local gilza_orig_timer_to_max = Hooks:GetFunction(PlayerDamage, "set_regenerate_timer_to_max")
 Hooks:OverrideFunction(PlayerDamage, "set_regenerate_timer_to_max", function (self)
 	local is_regenrating_armor = self._current_state and self._update_regenerate_timer and self._current_state == self._update_regenerate_timer
 	-- deprecated hitman rework
@@ -608,7 +616,7 @@ Hooks:OverrideFunction(PlayerDamage, "set_regenerate_timer_to_max", function (se
 		local skill_freeze_time = default_regen_timer * tweak_data.upgrades.values.temporary.player_new_hitman_regen[1][1]
 		-- if freeze timer would make total armor regen timer longer, ignore it
 		if default_regen_timer < self._regenerate_timer + skill_freeze_time then
-			orig_timer_to_max(self)
+			gilza_orig_timer_to_max(self)
 			return
 		end
 		-- adjust skill's duration value before enabling it. while buff is active armor regen is frozen
@@ -658,12 +666,12 @@ Hooks:OverrideFunction(PlayerDamage, "set_regenerate_timer_to_max", function (se
 		self._regenerate_speed = self._regenerate_speed or 1
 		self._current_state = self._update_regenerate_timer
 	else
-		orig_timer_to_max(self)
+		gilza_orig_timer_to_max(self)
 	end
 end)
 
 -- armor recovery progress
-local orig_update_regenerate_timer = PlayerDamage._update_regenerate_timer
+local gilza_orig_update_regenerate_timer = Hooks:GetFunction(PlayerDamage, "_update_regenerate_timer")
 Hooks:OverrideFunction(PlayerDamage, "_update_regenerate_timer", function (self, t, dt)
 	-- DEPRECATED: while new skill upgrade is active regen timer updates it's value to itself instead of reducing it, effectively freezing the timer
 	if managers.player:has_activate_temporary_upgrade("temporary", "player_new_hitman_regen") and self:get_real_armor() > 0 then
@@ -672,7 +680,7 @@ Hooks:OverrideFunction(PlayerDamage, "_update_regenerate_timer", function (self,
 	elseif managers.player:has_category_upgrade("player", "pause_armor_recovery_when_moving") and managers.player.local_player and alive(managers.player:local_player()) and managers.player:local_player().movement and managers.player:local_player():movement().current_state and managers.player:local_player():movement():current_state()._moving then
 		self:set_regenerate_timer_to_max()
 	else
-		orig_update_regenerate_timer(self, t, dt)
+		gilza_orig_update_regenerate_timer(self, t, dt)
 	end
 end)
 
@@ -766,7 +774,7 @@ Hooks:OverrideFunction(PlayerDamage, "_calc_health_damage", function (self, atta
 end)
 
 -- guardian armor cut
-local gilza_orig_max_armor = PlayerDamage._max_armor
+local gilza_orig_max_armor = Hooks:GetFunction(PlayerDamage, "_max_armor")
 Hooks:OverrideFunction(PlayerDamage, "_max_armor", function(self)
 	if managers.player:has_category_upgrade("player", "guardian_armor_remover") then
 		return 0
@@ -817,7 +825,7 @@ function PlayerDamage:Gilza_calculate_guardian_damage_clamp(incoming_dmg)
 end
 
 -- faks heal guardian less since he gets a fuck ton of healing allready with a stupid high health pool, sitting on top of FAK's with it would be even more stupid
-local gilza_orig_band_aid_health = PlayerDamage.band_aid_health
+local gilza_orig_band_aid_health = Hooks:GetFunction(PlayerDamage, "band_aid_health")
 Hooks:OverrideFunction(PlayerDamage, "band_aid_health", function (self)
 	if managers.platform:presence() == "Playing" and (self:arrested() or self:need_revive()) then
 		return
@@ -969,7 +977,7 @@ Hooks:OverrideFunction(PlayerDamage, "revive", function (self, silent)
 end)
 
 -- yakuza heal protection
-local gilza_orig_PlayerDamage_set_revive_boost = PlayerDamage.set_revive_boost
+local gilza_orig_PlayerDamage_set_revive_boost = Hooks:GetFunction(PlayerDamage, "set_revive_boost")
 Hooks:OverrideFunction(PlayerDamage, "set_revive_boost", function (self, revive_health_level)
 	if managers.player:has_category_upgrade("player", "armor_regen_damage_health_ratio_multiplier") then
 		-- ignore healing
@@ -979,7 +987,7 @@ Hooks:OverrideFunction(PlayerDamage, "set_revive_boost", function (self, revive_
 end)
 
 -- yakuza heal protection #2 + leech dire state
-local gilza_orig_PlayerDamage_restore_health = PlayerDamage.restore_health
+local gilza_orig_PlayerDamage_restore_health = Hooks:GetFunction(PlayerDamage, "restore_health")
 Hooks:OverrideFunction(PlayerDamage, "restore_health", function (self, health_restored, is_static, chk_health_ratio)
 	if managers.player:has_category_upgrade("player", "armor_regen_damage_health_ratio_multiplier") then
 		local has_health = managers.player:player_unit() and managers.player:player_unit():character_damage() and managers.player:player_unit():character_damage():get_real_health() > 0.01
@@ -1107,7 +1115,7 @@ Hooks:PostHook(PlayerDamage, "update", "Gilza_post_player_dmg_update", function(
 end)
 
 -- new fall damage immunity skill
-local gilza_orig_playerDamage_damage_fall = PlayerDamage.damage_fall
+local gilza_orig_playerDamage_damage_fall = Hooks:GetFunction(PlayerDamage, "damage_fall")
 Hooks:OverrideFunction(PlayerDamage, "damage_fall", function (self, data)
 	if managers.player:has_category_upgrade("player", "limited_fall_damage_immunity") then
 		local will_block_fall = false
@@ -1141,3 +1149,5 @@ Hooks:OverrideFunction(PlayerDamage, "damage_fall", function (self, data)
 		gilza_orig_playerDamage_damage_fall(self, data)
 	end
 end)
+
+Gilza.files_loaded.playerdamage = true

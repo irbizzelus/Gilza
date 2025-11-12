@@ -299,7 +299,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_upg_ns_ass_smg_tank.stats.recoil = 3
 			self.parts.wpn_fps_upg_ns_ass_smg_tank.stats.spread = 1
 			self.parts.wpn_fps_upg_ns_ass_smg_tank.stats.damage = 0
-			self.parts.wpn_fps_upg_ns_ass_smg_tank.stats.concealment = -2
+			self.parts.wpn_fps_upg_ns_ass_smg_tank.stats.concealment = -3
 			self.parts.wpn_fps_upg_ns_ass_smg_tank.stats.suppression = -8
 			
 			self.parts.wpn_fps_upg_ns_ass_smg_stubby.stats.recoil = 4
@@ -310,12 +310,12 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			
 			self.parts.wpn_fps_upg_ns_ass_smg_firepig.stats.recoil = 1
 			self.parts.wpn_fps_upg_ns_ass_smg_firepig.stats.spread = 1
-			self.parts.wpn_fps_upg_ns_ass_smg_firepig.stats.damage = 4
+			self.parts.wpn_fps_upg_ns_ass_smg_firepig.stats.damage = 6
 			self.parts.wpn_fps_upg_ns_ass_smg_firepig.stats.suppression = 0
 			
 			self.parts.wpn_fps_upg_ass_ns_linear.stats.recoil = 3
 			self.parts.wpn_fps_upg_ass_ns_linear.stats.spread = 2
-			self.parts.wpn_fps_upg_ass_ns_linear.stats.damage = -2
+			self.parts.wpn_fps_upg_ass_ns_linear.stats.damage = 0
 			self.parts.wpn_fps_upg_ass_ns_linear.stats.concealment = -5
 			self.parts.wpn_fps_upg_ass_ns_linear.stats.suppression = 0
 			
@@ -323,12 +323,12 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_upg_ass_ns_battle.stats.spread = -3
 			self.parts.wpn_fps_upg_ass_ns_battle.stats.damage = 0
 			self.parts.wpn_fps_upg_ass_ns_battle.stats.concealment = -3
-			self.parts.wpn_fps_upg_ass_ns_battle.stats.suppression = 3
+			self.parts.wpn_fps_upg_ass_ns_battle.stats.suppression = -9
 			
 			self.parts.wpn_fps_upg_ns_ass_pbs1.stats.spread = 2
 			self.parts.wpn_fps_upg_ns_ass_pbs1.stats.recoil = 2
 			self.parts.wpn_fps_upg_ns_ass_pbs1.stats.damage = -1
-			self.parts.wpn_fps_upg_ns_ass_pbs1.stats.concealment = -6
+			self.parts.wpn_fps_upg_ns_ass_pbs1.stats.concealment = -4
 			
 			self.parts.wpn_fps_lmg_hk51b_ns_jcomp.stats.recoil = -2
 			self.parts.wpn_fps_lmg_hk51b_ns_jcomp.stats.spread = 4
@@ -338,7 +338,13 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			
 			self.parts.wpn_fps_upg_ak_ns_jmac.stats.recoil = 0
 			
+			self.parts.wpn_fps_upg_ass_ns_jprifles.stats.recoil = 2
+			self.parts.wpn_fps_upg_ass_ns_jprifles.stats.suppression = 0
+			
+			self.parts.wpn_fps_ass_shak12_ns_muzzle.stats.damage = 4
+			
 			self.parts.wpn_fps_lmg_kacchainsaw_ns_muzzle.stats.recoil = 3
+			self.parts.wpn_fps_lmg_kacchainsaw_ns_muzzle.stats.damage = 0
 			
 			self.parts.wpn_fps_upg_ak_ns_tgp.stats.recoil = 1
 			self.parts.wpn_fps_upg_ak_ns_tgp.stats.spread = 2
@@ -582,15 +588,19 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_sho_sko12_stock.stats.recoil = 1
 			self.parts.wpn_fps_sho_sko12_stock.stats.spread = 0
 			self.parts.wpn_fps_sho_sko12_stock.stats.reload = 2
-			self.parts.wpn_fps_m4_uupg_s_zulu.stats.reload = 2
-			self.parts.wpn_fps_upg_m4_s_mk46.stats.recoil = 1
+			self.parts.wpn_fps_m4_uupg_s_zulu.stats.reload = 1
+			self.parts.wpn_fps_upg_m4_s_mk46.stats.recoil = 3
 			self.parts.wpn_fps_upg_m4_s_mk46.stats.spread = 0
-			self.parts.wpn_fps_upg_m4_s_mk46.stats.reload = 2
+			self.parts.wpn_fps_upg_m4_s_mk46.stats.reload = 3
 			self.parts.wpn_fps_upg_m4_s_pts.stats.reload = 4
+			self.parts.wpn_fps_upg_m4_s_ubr.stats.recoil = 3
+			self.parts.wpn_fps_upg_m4_s_ubr.stats.concealment = -3
 			self.parts.wpn_upg_ak_s_psl.stats.recoil = 6
-			self.parts.wpn_upg_ak_s_psl.stats.spread = 3
+			self.parts.wpn_upg_ak_s_psl.stats.spread = 4
 			self.parts.wpn_upg_ak_s_psl.stats.concealment = -10
 			self.parts.wpn_upg_ak_s_psl.stats.reload = -2
+			self.parts.wpn_fps_upg_ak_s_solidstock.stats.recoil = 4
+			self.parts.wpn_fps_upg_m4_s_standard.stats.reload = 4
 			self.parts.wpn_fps_ass_fal_s_03.stats.recoil = 2
 			self.parts.wpn_fps_ass_fal_s_03.stats.spread = 2
 			self.parts.wpn_fps_ass_fal_s_03.stats.concealment = -3
@@ -1309,8 +1319,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				damage_near_mul = 0.75,
 				armor_piercing_add = 1,
 				can_shoot_through_enemy = true,
-				ammo_pickup_max_mul = 0.85,
-				ammo_pickup_min_mul = 0.85,
+				ammo_pickup_max_mul = 0.8,
+				ammo_pickup_min_mul = 0.8,
 				is_buckshot = true,
 				rays = 12
 			}
@@ -1704,11 +1714,11 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_lmg_kacchainsaw_b_long.stats.spread = nil
 		self.parts.wpn_fps_lmg_kacchainsaw_mag_b.stats.spread = -2
 		self.parts.wpn_fps_lmg_kacchainsaw_mag_b.stats.recoil = 2
-		self.parts.wpn_fps_lmg_kacchainsaw_flamethrower.stats = {concealment = -9,spread = -5,value = 1,recoil = 3}
+		self.parts.wpn_fps_lmg_kacchainsaw_flamethrower.stats = {concealment = -9,spread = -4,value = 1,recoil = 2}
 		self.parts.wpn_fps_lmg_kacchainsaw_flamethrower.custom_stats = {ammo_pickup_min_mul = 0.7,ammo_pickup_max_mul = 0.7}
 		self.parts.wpn_fps_lmg_kacchainsaw_flamethrower.has_description = true
 		self.parts.wpn_fps_lmg_kacchainsaw_flamethrower.desc_id = "bm_wpn_fps_upg_lmg_kacchainsaw_underbarrel_flamethrower_desc"
-		self.parts.wpn_fps_lmg_kacchainsaw_conversionkit.stats = {extra_ammo = 50,damage = -30,value = 1,spread = 1,recoil = 4,total_ammo_mod = 6.67}
+		self.parts.wpn_fps_lmg_kacchainsaw_conversionkit.stats = {extra_ammo = 50,damage = -30,value = 1,spread = 6,recoil = 5,total_ammo_mod = 8.57}
 		self.parts.wpn_fps_lmg_kacchainsaw_conversionkit.custom_stats = {
 			fire_rate_multiplier = 1.25,
 			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("LMG", "125_bipodless", "95_bipodless").max_mul,
@@ -2440,6 +2450,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_pis_p226_co_comp_2.stats.recoil = -2
 			self.parts.wpn_fps_pis_p226_co_comp_2.stats.concealment = -2
 			self.parts.wpn_fps_pis_p226_m_extended.stats.reload = -4
+			self.parts.wpn_fps_pis_p226_g_ergo.stats.spread = 2
+			self.parts.wpn_fps_pis_p226_g_ergo.stats.concealment = -2
 			self.wpn_fps_pis_x_p226.override.wpn_fps_pis_p226_m_extended.stats.reload = -5
 		end
 		Gilza_init_p226()
@@ -2803,6 +2815,13 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_snp_qbu88_m_extended.stats.reload = -5
 		
 		-- AWP
+		self.parts.wpn_fps_snp_awp_conversion_dragonlore_switch.custom_stats.sounds = { -- dragonlore sound fix
+			fire_single = "awpc_fire",
+			fire = "awpc_fire",
+			dryfire = "primary_dryfire",
+			enter_steelsight = "lmg_steelsight_enter",
+			leave_steelsight = "lmg_steelsight_exit",		
+		}
 		self.parts.wpn_fps_snp_awp_conversion_dragonlore.stats.total_ammo_mod = -4
 		self.parts.wpn_fps_snp_awp_conversion_dragonlore.stats.damage = 300
 		self.parts.wpn_fps_snp_awp_conversion_dragonlore.custom_stats = {
@@ -2996,26 +3015,26 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				}
 				for i=1, #frenchyAU_supressors_BIG_acc do
 					if self.parts[frenchyAU_supressors_BIG_acc[i]] then
-						self.parts[frenchyAU_supressors_BIG_acc[i]].stats.recoil = -1
+						self.parts[frenchyAU_supressors_BIG_acc[i]].stats.recoil = 0
 						self.parts[frenchyAU_supressors_BIG_acc[i]].stats.spread = 4
 						self.parts[frenchyAU_supressors_BIG_acc[i]].stats.damage = -1
-						self.parts[frenchyAU_supressors_BIG_acc[i]].stats.concealment = -6
+						self.parts[frenchyAU_supressors_BIG_acc[i]].stats.concealment = -5
 					end
 				end
 				for i=1, #frenchyAU_supressors_BIG_stab do
 					if self.parts[frenchyAU_supressors_BIG_stab[i]] then
-						self.parts[frenchyAU_supressors_BIG_stab[i]].stats.recoil = 4
+						self.parts[frenchyAU_supressors_BIG_stab[i]].stats.recoil = 5
 						self.parts[frenchyAU_supressors_BIG_stab[i]].stats.spread = 0
 						self.parts[frenchyAU_supressors_BIG_stab[i]].stats.damage = -1
-						self.parts[frenchyAU_supressors_BIG_stab[i]].stats.concealment = -6
+						self.parts[frenchyAU_supressors_BIG_stab[i]].stats.concealment = -5
 					end
 				end
 				for i=1, #frenchyAU_supressors_BIG_avg do
 					if self.parts[frenchyAU_supressors_BIG_avg[i]] then
-						self.parts[frenchyAU_supressors_BIG_avg[i]].stats.recoil = 2
+						self.parts[frenchyAU_supressors_BIG_avg[i]].stats.recoil = 3
 						self.parts[frenchyAU_supressors_BIG_avg[i]].stats.spread = 2
 						self.parts[frenchyAU_supressors_BIG_avg[i]].stats.damage = -1
-						self.parts[frenchyAU_supressors_BIG_avg[i]].stats.concealment = -6
+						self.parts[frenchyAU_supressors_BIG_avg[i]].stats.concealment = -5
 					end
 				end
 				
@@ -3042,15 +3061,15 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				}
 				for i=1, #frenchyAU_supressors_AVERAGE_acc do
 					if self.parts[frenchyAU_supressors_AVERAGE_acc[i]] then
-						self.parts[frenchyAU_supressors_AVERAGE_acc[i]].stats.recoil = 0
-						self.parts[frenchyAU_supressors_AVERAGE_acc[i]].stats.spread = 2
+						self.parts[frenchyAU_supressors_AVERAGE_acc[i]].stats.recoil = -2
+						self.parts[frenchyAU_supressors_AVERAGE_acc[i]].stats.spread = 4
 						self.parts[frenchyAU_supressors_AVERAGE_acc[i]].stats.damage = -2
 						self.parts[frenchyAU_supressors_AVERAGE_acc[i]].stats.concealment = -3
 					end
 				end
 				for i=1, #frenchyAU_supressors_AVERAGE_stab do
 					if self.parts[frenchyAU_supressors_AVERAGE_stab[i]] then
-						self.parts[frenchyAU_supressors_AVERAGE_stab[i]].stats.recoil = 4
+						self.parts[frenchyAU_supressors_AVERAGE_stab[i]].stats.recoil = 5
 						self.parts[frenchyAU_supressors_AVERAGE_stab[i]].stats.spread = -1
 						self.parts[frenchyAU_supressors_AVERAGE_stab[i]].stats.damage = -2
 						self.parts[frenchyAU_supressors_AVERAGE_stab[i]].stats.concealment = -3
@@ -3058,8 +3077,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				end
 				for i=1, #frenchyAU_supressors_AVERAGE_avg do
 					if self.parts[frenchyAU_supressors_AVERAGE_avg[i]] then
-						self.parts[frenchyAU_supressors_AVERAGE_avg[i]].stats.recoil = 1
-						self.parts[frenchyAU_supressors_AVERAGE_avg[i]].stats.spread = 1
+						self.parts[frenchyAU_supressors_AVERAGE_avg[i]].stats.recoil = 2
+						self.parts[frenchyAU_supressors_AVERAGE_avg[i]].stats.spread = 2
 						self.parts[frenchyAU_supressors_AVERAGE_avg[i]].stats.damage = -2
 						self.parts[frenchyAU_supressors_AVERAGE_avg[i]].stats.concealment = -3
 					end
@@ -3083,17 +3102,17 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				}
 				for i=1, #frenchyAU_supressors_COMAPCT_acc do
 					if self.parts[frenchyAU_supressors_COMAPCT_acc[i]] then
-						self.parts[frenchyAU_supressors_COMAPCT_acc[i]].stats.recoil = -2
+						self.parts[frenchyAU_supressors_COMAPCT_acc[i]].stats.recoil = -1
 						self.parts[frenchyAU_supressors_COMAPCT_acc[i]].stats.spread = 2
-						self.parts[frenchyAU_supressors_COMAPCT_acc[i]].stats.damage = -3
+						self.parts[frenchyAU_supressors_COMAPCT_acc[i]].stats.damage = 0
 						self.parts[frenchyAU_supressors_COMAPCT_acc[i]].stats.concealment = -1
 					end
 				end
 				for i=1, #frenchyAU_supressors_COMAPCT_stab do
 					if self.parts[frenchyAU_supressors_COMAPCT_stab[i]] then
 						self.parts[frenchyAU_supressors_COMAPCT_stab[i]].stats.recoil = 3
-						self.parts[frenchyAU_supressors_COMAPCT_stab[i]].stats.spread = -2
-						self.parts[frenchyAU_supressors_COMAPCT_stab[i]].stats.damage = -3
+						self.parts[frenchyAU_supressors_COMAPCT_stab[i]].stats.spread = -1
+						self.parts[frenchyAU_supressors_COMAPCT_stab[i]].stats.damage = 0
 						self.parts[frenchyAU_supressors_COMAPCT_stab[i]].stats.concealment = -1
 					end
 				end
@@ -3101,7 +3120,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					if self.parts[frenchyAU_supressors_COMAPCT_avg[i]] then
 						self.parts[frenchyAU_supressors_COMAPCT_avg[i]].stats.recoil = 1
 						self.parts[frenchyAU_supressors_COMAPCT_avg[i]].stats.spread = 1
-						self.parts[frenchyAU_supressors_COMAPCT_avg[i]].stats.damage = -3
+						self.parts[frenchyAU_supressors_COMAPCT_avg[i]].stats.damage = 0
 						self.parts[frenchyAU_supressors_COMAPCT_avg[i]].stats.concealment = -1
 					end
 				end
@@ -3118,6 +3137,9 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			local function FrenchyAU_muzzle_devices()
 				if self.parts.wpn_fps_ass_ns_g_pws then
 					table.delete(self.parts.wpn_fps_ass_ns_g_pws.weapons, "wpn_fps_snp_m95")
+					table.delete(self.parts.wpn_fps_ass_ns_g_pws.weapons, "wpn_fps_snp_desertfox")
+					table.delete(self.parts.wpn_fps_ass_ns_g_pws.weapons, "wpn_fps_snp_r93")
+					table.delete(self.parts.wpn_fps_ass_ns_g_pws.weapons, "wpn_fps_snp_sbl")
 					self.parts.wpn_fps_ass_ns_g_pws.stats.recoil = 3
 					self.parts.wpn_fps_ass_ns_g_pws.stats.spread = 0
 					self.parts.wpn_fps_ass_ns_g_pws.stats.damage = 0
@@ -3126,30 +3148,42 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				end
 				if self.parts.wpn_fps_ass_ns_g_bulletec then
 					table.delete(self.parts.wpn_fps_ass_ns_g_bulletec.weapons, "wpn_fps_snp_m95")
+					table.delete(self.parts.wpn_fps_ass_ns_g_bulletec.weapons, "wpn_fps_snp_desertfox")
+					table.delete(self.parts.wpn_fps_ass_ns_g_bulletec.weapons, "wpn_fps_snp_r93")
+					table.delete(self.parts.wpn_fps_ass_ns_g_bulletec.weapons, "wpn_fps_snp_sbl")
 					self.parts.wpn_fps_ass_ns_g_bulletec.stats.recoil = 1
 					self.parts.wpn_fps_ass_ns_g_bulletec.stats.spread = 3
-					self.parts.wpn_fps_ass_ns_g_bulletec.stats.damage = -1
-					self.parts.wpn_fps_ass_ns_g_bulletec.stats.concealment = -3
+					self.parts.wpn_fps_ass_ns_g_bulletec.stats.damage = 0
+					self.parts.wpn_fps_ass_ns_g_bulletec.stats.concealment = -4
 					self.parts.wpn_fps_ass_ns_g_bulletec.stats.suppression = 3
 				end
 				if self.parts.wpn_fps_ass_ns_g_heart then
 					table.delete(self.parts.wpn_fps_ass_ns_g_heart.weapons, "wpn_fps_snp_m95")
-					self.parts.wpn_fps_ass_ns_g_heart.stats.recoil = 2
+					table.delete(self.parts.wpn_fps_ass_ns_g_heart.weapons, "wpn_fps_snp_desertfox")
+					table.delete(self.parts.wpn_fps_ass_ns_g_heart.weapons, "wpn_fps_snp_r93")
+					table.delete(self.parts.wpn_fps_ass_ns_g_heart.weapons, "wpn_fps_snp_sbl")
+					self.parts.wpn_fps_ass_ns_g_heart.stats.recoil = 3
 					self.parts.wpn_fps_ass_ns_g_heart.stats.spread = 2
 					self.parts.wpn_fps_ass_ns_g_heart.stats.damage = -1
-					self.parts.wpn_fps_ass_ns_g_heart.stats.concealment = -1
-					self.parts.wpn_fps_ass_ns_g_heart.stats.suppression = 2
+					self.parts.wpn_fps_ass_ns_g_heart.stats.concealment = -3
+					self.parts.wpn_fps_ass_ns_g_heart.stats.suppression = 0
 				end
 				if self.parts.wpn_fps_ass_ns_g_traptor then
 					table.delete(self.parts.wpn_fps_ass_ns_g_traptor.weapons, "wpn_fps_snp_m95")
-					self.parts.wpn_fps_ass_ns_g_traptor.stats.recoil = 3
-					self.parts.wpn_fps_ass_ns_g_traptor.stats.spread = 3
+					table.delete(self.parts.wpn_fps_ass_ns_g_traptor.weapons, "wpn_fps_snp_desertfox")
+					table.delete(self.parts.wpn_fps_ass_ns_g_traptor.weapons, "wpn_fps_snp_r93")
+					table.delete(self.parts.wpn_fps_ass_ns_g_traptor.weapons, "wpn_fps_snp_sbl")
+					self.parts.wpn_fps_ass_ns_g_traptor.stats.recoil = 4
+					self.parts.wpn_fps_ass_ns_g_traptor.stats.spread = 4
 					self.parts.wpn_fps_ass_ns_g_traptor.stats.damage = -10
 					self.parts.wpn_fps_ass_ns_g_traptor.stats.concealment = -6
 					self.parts.wpn_fps_ass_ns_g_traptor.stats.suppression = -8
 				end
 				if self.parts.wpn_fps_ass_ns_g_bmd then
 					table.delete(self.parts.wpn_fps_ass_ns_g_bmd.weapons, "wpn_fps_snp_m95")
+					table.delete(self.parts.wpn_fps_ass_ns_g_bmd.weapons, "wpn_fps_snp_desertfox")
+					table.delete(self.parts.wpn_fps_ass_ns_g_bmd.weapons, "wpn_fps_snp_r93")
+					table.delete(self.parts.wpn_fps_ass_ns_g_bmd.weapons, "wpn_fps_snp_sbl")
 					self.parts.wpn_fps_ass_ns_g_bmd.stats.recoil = 5
 					self.parts.wpn_fps_ass_ns_g_bmd.stats.spread = -2
 					self.parts.wpn_fps_ass_ns_g_bmd.stats.damage = 0
@@ -3158,14 +3192,20 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				end
 				if self.parts.wpn_fps_ass_ns_g_sf3p then
 					table.delete(self.parts.wpn_fps_ass_ns_g_sf3p.weapons, "wpn_fps_snp_m95")
+					table.delete(self.parts.wpn_fps_ass_ns_g_sf3p.weapons, "wpn_fps_snp_desertfox")
+					table.delete(self.parts.wpn_fps_ass_ns_g_sf3p.weapons, "wpn_fps_snp_r93")
+					table.delete(self.parts.wpn_fps_ass_ns_g_sf3p.weapons, "wpn_fps_snp_sbl")
 					self.parts.wpn_fps_ass_ns_g_sf3p.stats.recoil = -3
 					self.parts.wpn_fps_ass_ns_g_sf3p.stats.spread = 5
-					self.parts.wpn_fps_ass_ns_g_sf3p.stats.damage = -2
-					self.parts.wpn_fps_ass_ns_g_sf3p.stats.concealment = -1
+					self.parts.wpn_fps_ass_ns_g_sf3p.stats.damage = -1
+					self.parts.wpn_fps_ass_ns_g_sf3p.stats.concealment = -2
 					self.parts.wpn_fps_ass_ns_g_sf3p.stats.suppression = 0
 				end
 				if self.parts.wpn_fps_ass_ns_g_slr then
 					table.delete(self.parts.wpn_fps_ass_ns_g_slr.weapons, "wpn_fps_snp_m95")
+					table.delete(self.parts.wpn_fps_ass_ns_g_slr.weapons, "wpn_fps_snp_desertfox")
+					table.delete(self.parts.wpn_fps_ass_ns_g_slr.weapons, "wpn_fps_snp_r93")
+					table.delete(self.parts.wpn_fps_ass_ns_g_slr.weapons, "wpn_fps_snp_sbl")
 					self.parts.wpn_fps_ass_ns_g_slr.stats.recoil = 4
 					self.parts.wpn_fps_ass_ns_g_slr.stats.spread = -1
 					self.parts.wpn_fps_ass_ns_g_slr.stats.damage = 2
@@ -3174,11 +3214,14 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				end
 				if self.parts.wpn_fps_ass_ns_g_dmnoz then
 					table.delete(self.parts.wpn_fps_ass_ns_g_dmnoz.weapons, "wpn_fps_snp_m95")
-					self.parts.wpn_fps_ass_ns_g_dmnoz.stats.recoil = 2
+					table.delete(self.parts.wpn_fps_ass_ns_g_dmnoz.weapons, "wpn_fps_snp_desertfox")
+					table.delete(self.parts.wpn_fps_ass_ns_g_dmnoz.weapons, "wpn_fps_snp_r93")
+					table.delete(self.parts.wpn_fps_ass_ns_g_dmnoz.weapons, "wpn_fps_snp_sbl")
+					self.parts.wpn_fps_ass_ns_g_dmnoz.stats.recoil = 3
 					self.parts.wpn_fps_ass_ns_g_dmnoz.stats.spread = 2
-					self.parts.wpn_fps_ass_ns_g_dmnoz.stats.damage = -1
+					self.parts.wpn_fps_ass_ns_g_dmnoz.stats.damage = -2
 					self.parts.wpn_fps_ass_ns_g_dmnoz.stats.concealment = -1
-					self.parts.wpn_fps_ass_ns_g_dmnoz.stats.suppression = 2
+					self.parts.wpn_fps_ass_ns_g_dmnoz.stats.suppression = 0
 				end
 			end
 			
@@ -3288,6 +3331,46 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_upg_fl_las.stats.concealment = 0
 					self.parts.wpn_fps_upg_fl_las.has_description = true
 					self.parts.wpn_fps_upg_fl_las.desc_id = "bm_flashlight_gadget_module"
+				end
+				if self.parts.wpn_fps_upg_fl_eotech_ngal then
+					self.parts.wpn_fps_upg_fl_eotech_ngal.has_description = true
+					self.parts.wpn_fps_upg_fl_eotech_ngal.desc_id = "bm_laser_gadget_module"
+				end
+				if self.parts.wpn_fps_upg_fl_eotech_ogl then
+					self.parts.wpn_fps_upg_fl_eotech_ogl.has_description = true
+					self.parts.wpn_fps_upg_fl_eotech_ogl.desc_id = "bm_laser_gadget_module"
+				end
+				if self.parts.wpn_fps_upg_fl_dbal_a2 then
+					self.parts.wpn_fps_upg_fl_dbal_a2.has_description = true
+					self.parts.wpn_fps_upg_fl_dbal_a2.desc_id = "bm_laser_gadget_module"
+				end
+				if self.parts.wpn_fps_upg_fl_wilcox_raid_x then
+					self.parts.wpn_fps_upg_fl_wilcox_raid_x.has_description = true
+					self.parts.wpn_fps_upg_fl_wilcox_raid_x.desc_id = "bm_laser_gadget_module"
+				end
+				if self.parts.wpn_fps_upg_fl_wilcox_raid_xe then
+					self.parts.wpn_fps_upg_fl_wilcox_raid_xe.has_description = true
+					self.parts.wpn_fps_upg_fl_wilcox_raid_xe.desc_id = "bm_laser_gadget_module"
+				end
+				if self.parts.wpn_fps_upg_fl_inforce_wmlx then
+					self.parts.wpn_fps_upg_fl_inforce_wmlx.has_description = true
+					self.parts.wpn_fps_upg_fl_inforce_wmlx.desc_id = "bm_flashlight_gadget_module"
+				end
+				if self.parts.wpn_fps_upg_fl_insight_wmx200 then
+					self.parts.wpn_fps_upg_fl_insight_wmx200.has_description = true
+					self.parts.wpn_fps_upg_fl_insight_wmx200.desc_id = "bm_flashlight_gadget_module"
+				end
+				if self.parts.wpn_fps_upg_fl_surefire_m300c then
+					self.parts.wpn_fps_upg_fl_surefire_m300c.has_description = true
+					self.parts.wpn_fps_upg_fl_surefire_m300c.desc_id = "bm_flashlight_gadget_module"
+				end
+				if self.parts.wpn_fps_upg_fl_surefire_m600v then
+					self.parts.wpn_fps_upg_fl_surefire_m600v.has_description = true
+					self.parts.wpn_fps_upg_fl_surefire_m600v.desc_id = "bm_flashlight_gadget_module"
+				end
+				if self.parts.wpn_fps_upg_fl_surefire_m720v then
+					self.parts.wpn_fps_upg_fl_surefire_m720v.has_description = true
+					self.parts.wpn_fps_upg_fl_surefire_m720v.desc_id = "bm_flashlight_gadget_module"
 				end
 			end
 			
@@ -3438,6 +3521,36 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_upg_m4_g_stark.stats.spread = 3
 					self.parts.wpn_fps_upg_m4_g_stark.stats.recoil = -1
 					self.parts.wpn_fps_upg_m4_g_stark.stats.concealment = -3
+				end
+				if self.parts.wpn_fps_pis_p226_g_axel then
+					self.parts.wpn_fps_pis_p226_g_axel.stats.spread = 0
+					self.parts.wpn_fps_pis_p226_g_axel.stats.recoil = 1
+					self.parts.wpn_fps_pis_p226_g_axel.stats.concealment = 1
+				end
+				if self.parts.wpn_fps_pis_p226_g_elite then
+					self.parts.wpn_fps_pis_p226_g_elite.stats.spread = 3
+					self.parts.wpn_fps_pis_p226_g_elite.stats.recoil = 0
+					self.parts.wpn_fps_pis_p226_g_elite.stats.concealment = -2
+				end
+				if self.parts.wpn_fps_pis_p226_g_emperor then
+					self.parts.wpn_fps_pis_p226_g_emperor.stats.spread = 1
+					self.parts.wpn_fps_pis_p226_g_emperor.stats.recoil = 1
+					self.parts.wpn_fps_pis_p226_g_emperor.stats.concealment = -1
+				end
+				if self.parts.wpn_fps_pis_p226_g_houge then
+					self.parts.wpn_fps_pis_p226_g_houge.stats.spread = 1
+					self.parts.wpn_fps_pis_p226_g_houge.stats.recoil = 2
+					self.parts.wpn_fps_pis_p226_g_houge.stats.concealment = -2
+				end
+				if self.parts.wpn_fps_pis_p226_g_mascus then
+					self.parts.wpn_fps_pis_p226_g_mascus.stats.spread = 1
+					self.parts.wpn_fps_pis_p226_g_mascus.stats.recoil = 0
+					self.parts.wpn_fps_pis_p226_g_mascus.stats.concealment = 0
+				end
+				if self.parts.wpn_fps_pis_pl15_g_tark then
+					self.parts.wpn_fps_pis_pl15_g_tark.stats.spread = 1
+					self.parts.wpn_fps_pis_pl15_g_tark.stats.recoil = 1
+					self.parts.wpn_fps_pis_pl15_g_tark.stats.concealment = -2
 				end
 			end
 			
@@ -4024,14 +4137,51 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_smg_polymer_barrel_barsil.stats.recoil = -2
 					self.parts.wpn_fps_smg_polymer_barrel_barsil.stats.concealment = -3
 				end
+				if self.parts.wpn_fps_pis_p226_b_axel then
+					self.parts.wpn_fps_pis_p226_b_axel.stats.damage = 1
+					self.parts.wpn_fps_pis_p226_b_axel.stats.spread = 0
+					self.parts.wpn_fps_pis_p226_b_axel.stats.recoil = 1
+					self.parts.wpn_fps_pis_p226_b_axel.stats.concealment = 1
+					self.parts.wpn_fps_pis_p226_b_axel.stats.suppression = 0
+				end
+				if self.parts.wpn_fps_pis_p226_b_elite then
+					self.parts.wpn_fps_pis_p226_b_elite.stats.damage = 2
+					self.parts.wpn_fps_pis_p226_b_elite.stats.spread = 2
+					self.parts.wpn_fps_pis_p226_b_elite.stats.recoil = -1
+					self.parts.wpn_fps_pis_p226_b_elite.stats.concealment = -2
+					self.parts.wpn_fps_pis_p226_b_elite.stats.suppression = 0
+				end
+				if self.parts.wpn_fps_pis_p226_b_legion then
+					self.parts.wpn_fps_pis_p226_b_legion.stats.damage = 2
+					self.parts.wpn_fps_pis_p226_b_legion.stats.spread = 1
+					self.parts.wpn_fps_pis_p226_b_legion.stats.recoil = 2
+					self.parts.wpn_fps_pis_p226_b_legion.stats.concealment = -4
+					self.parts.wpn_fps_pis_p226_b_legion.stats.suppression = 0
+				end
+				if self.parts.wpn_fps_pis_p226_b_scorp then
+					self.parts.wpn_fps_pis_p226_b_scorp.stats.damage = 5
+					self.parts.wpn_fps_pis_p226_b_scorp.stats.spread = 1
+					self.parts.wpn_fps_pis_p226_b_scorp.stats.recoil = -3
+					self.parts.wpn_fps_pis_p226_b_scorp.stats.concealment = -3
+					self.parts.wpn_fps_pis_p226_b_scorp.stats.suppression = 0
+				end
+				-- slide, but whatever
+				if self.parts.wpn_fps_pis_pl15_sl_tark then
+					self.parts.wpn_fps_pis_pl15_sl_tark.stats.spread = 1
+					self.parts.wpn_fps_pis_pl15_sl_tark.stats.recoil = 1
+					self.parts.wpn_fps_pis_pl15_sl_tark.stats.concealment = -2
+				end
+				if self.parts.wpn_fps_pis_pl15_b_tark then
+					self.parts.wpn_fps_pis_pl15_b_tark.stats.concealment = 0
+				end
 			end
 			
 			-- STOCKS
 			local function FrenchyAU_stocks()
 				if self.parts.wpn_fps_upg_m4_s_a2 then
-					self.parts.wpn_fps_upg_m4_s_a2.stats.spread = -1
+					self.parts.wpn_fps_upg_m4_s_a2.stats.spread = 0
 					self.parts.wpn_fps_upg_m4_s_a2.stats.recoil = 3
-					self.parts.wpn_fps_upg_m4_s_a2.stats.concealment = -3
+					self.parts.wpn_fps_upg_m4_s_a2.stats.concealment = -2
 				end
 				if self.parts.wpn_fps_upg_m4_s_hera then				
 					table.insert(self.parts.wpn_fps_upg_m4_s_hera.forbids, "wpn_fps_upg_g_m4_surgeon")
@@ -4039,14 +4189,14 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					table.insert(self.parts.wpn_fps_upg_m4_s_hera.forbids, "wpn_fps_sho_sko12_body_grip")
 					table.insert(self.parts.wpn_fps_upg_m4_s_hera.forbids, "wpn_fps_snp_victor_g_mod3")
 					table.insert(self.parts.wpn_fps_upg_m4_s_hera.forbids, "wpn_fps_upg_m4_g_standard")
-					self.parts.wpn_fps_upg_m4_s_hera.stats.spread = 4
-					self.parts.wpn_fps_upg_m4_s_hera.stats.recoil = 4
+					self.parts.wpn_fps_upg_m4_s_hera.stats.spread = 5
+					self.parts.wpn_fps_upg_m4_s_hera.stats.recoil = 5
 					self.parts.wpn_fps_upg_m4_s_hera.stats.concealment = -10
 					self.parts.wpn_fps_upg_m4_s_hera.stats.reload = -1
 				end
 				if self.parts.wpn_fps_upg_m4_s_prs3 then
 					self.parts.wpn_fps_upg_m4_s_prs3.stats.spread = -1
-					self.parts.wpn_fps_upg_m4_s_prs3.stats.recoil = 4
+					self.parts.wpn_fps_upg_m4_s_prs3.stats.recoil = 5
 					self.parts.wpn_fps_upg_m4_s_prs3.stats.concealment = -5
 					self.parts.wpn_fps_upg_m4_s_prs3.stats.reload = -2
 				end
@@ -4054,6 +4204,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_upg_m4_s_ddun.stats.spread = 1
 					self.parts.wpn_fps_upg_m4_s_ddun.stats.recoil = 1
 					self.parts.wpn_fps_upg_m4_s_ddun.stats.concealment = -1
+					self.parts.wpn_fps_upg_m4_s_ddun.stats.reload = 2
 					-- i am not 100% sure why and how, but this stock crashes the game if equipped on the 'little friend' AR
 					-- it doesnt even really matter why it happens, since this is the only stock that was added to this gun by frenchy,
 					-- so even if it would work for other people, having a choice of either using a default or 1 custom stock would be kinda lame
@@ -4067,7 +4218,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				end
 				if self.parts.wpn_fps_upg_m4_s_prs2 then
 					self.parts.wpn_fps_upg_m4_s_prs2.stats.spread = 0
-					self.parts.wpn_fps_upg_m4_s_prs2.stats.recoil = 3
+					self.parts.wpn_fps_upg_m4_s_prs2.stats.recoil = 4
 					self.parts.wpn_fps_upg_m4_s_prs2.stats.concealment = -4
 					self.parts.wpn_fps_upg_m4_s_prs2.stats.reload = -1
 				end
@@ -4080,7 +4231,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				if self.parts.wpn_fps_upg_ak_s_arch then
 					self.parts.wpn_fps_upg_ak_s_arch.stats.spread = 3
 					self.parts.wpn_fps_upg_ak_s_arch.stats.recoil = 1
-					self.parts.wpn_fps_upg_ak_s_arch.stats.concealment = -2
+					self.parts.wpn_fps_upg_ak_s_arch.stats.concealment = -4
 				end
 				if self.parts.wpn_fps_upg_mpx_s_thin then
 					self.parts.wpn_fps_upg_mpx_s_thin.stats.spread = 1
@@ -4089,8 +4240,9 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				end
 				if self.parts.wpn_fps_upg_m4_s_core then
 					self.parts.wpn_fps_upg_m4_s_core.stats.spread = 3
-					self.parts.wpn_fps_upg_m4_s_core.stats.recoil = -1
-					self.parts.wpn_fps_upg_m4_s_core.stats.concealment = -3
+					self.parts.wpn_fps_upg_m4_s_core.stats.recoil = 0
+					self.parts.wpn_fps_upg_m4_s_core.stats.concealment = -2
+					self.parts.wpn_fps_upg_m4_s_core.stats.reload = -1
 				end
 				if self.parts.wpn_fps_upg_fal_s_prs then
 					self.parts.wpn_fps_upg_fal_s_prs.stats.spread = 3
@@ -4102,11 +4254,13 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_upg_m4_s_moe.stats.spread = -1
 					self.parts.wpn_fps_upg_m4_s_moe.stats.recoil = 0
 					self.parts.wpn_fps_upg_m4_s_moe.stats.concealment = 2
+					self.parts.wpn_fps_upg_m4_s_moe.stats.reload = 1
 				end
 				if self.parts.wpn_fps_upg_ak_s_zhu then
 					self.parts.wpn_fps_upg_ak_s_zhu.stats.spread = 2
 					self.parts.wpn_fps_upg_ak_s_zhu.stats.recoil = 1
-					self.parts.wpn_fps_upg_ak_s_zhu.stats.concealment = -2
+					self.parts.wpn_fps_upg_ak_s_zhu.stats.concealment = -1
+					self.parts.wpn_fps_upg_ak_s_zhu.stats.reload = -2
 				end
 				if self.parts.wpn_fps_upg_m4_s_cmmg then
 					self.parts.wpn_fps_upg_m4_s_cmmg.stats.spread = 0
@@ -4122,8 +4276,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				if self.parts.wpn_fps_upg_m4_s_gen2 then
 					self.parts.wpn_fps_upg_m4_s_gen2.stats.spread = 2
 					self.parts.wpn_fps_upg_m4_s_gen2.stats.recoil = 2
-					self.parts.wpn_fps_upg_m4_s_gen2.stats.concealment = -5
-					self.parts.wpn_fps_upg_m4_s_gen2.stats.reload = -2
+					self.parts.wpn_fps_upg_m4_s_gen2.stats.concealment = -4
 				end
 				if self.parts.wpn_fps_upg_mpx_s_ulss then
 					self.parts.wpn_fps_upg_mpx_s_ulss.stats.spread = 1
@@ -4137,9 +4290,10 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_upg_fal_s_brs.stats.reload = 3
 				end
 				if self.parts.wpn_fps_upg_m4_s_ds150 then
-					self.parts.wpn_fps_upg_m4_s_ds150.stats.spread = 2
+					self.parts.wpn_fps_upg_m4_s_ds150.stats.spread = 3
 					self.parts.wpn_fps_upg_m4_s_ds150.stats.recoil = 0
 					self.parts.wpn_fps_upg_m4_s_ds150.stats.concealment = -2
+					self.parts.wpn_fps_upg_m4_s_ds150.stats.reload = -1
 				end
 				if self.parts.wpn_fps_sho_ultima_s_ults then
 					self.parts.wpn_fps_sho_ultima_s_ults.stats.spread = 0
@@ -4150,7 +4304,6 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_upg_ak_s_plstc.stats.spread = 1
 					self.parts.wpn_fps_upg_ak_s_plstc.stats.recoil = 3
 					self.parts.wpn_fps_upg_ak_s_plstc.stats.concealment = -3
-					self.parts.wpn_fps_upg_ak_s_plstc.stats.reload = -1
 				end
 				if self.parts.wpn_fps_upg_m4_s_adar then
 					table.insert(self.parts.wpn_fps_upg_m4_s_adar.forbids, "wpn_fps_upg_g_m4_surgeon")
@@ -4158,8 +4311,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					table.insert(self.parts.wpn_fps_upg_m4_s_adar.forbids, "wpn_fps_sho_sko12_body_grip")
 					table.insert(self.parts.wpn_fps_upg_m4_s_adar.forbids, "wpn_fps_snp_victor_g_mod3")
 					table.insert(self.parts.wpn_fps_upg_m4_s_adar.forbids, "wpn_fps_upg_m4_g_standard")
-					self.parts.wpn_fps_upg_m4_s_adar.stats.spread = 4
-					self.parts.wpn_fps_upg_m4_s_adar.stats.recoil = 4
+					self.parts.wpn_fps_upg_m4_s_adar.stats.spread = 5
+					self.parts.wpn_fps_upg_m4_s_adar.stats.recoil = 5
 					self.parts.wpn_fps_upg_m4_s_adar.stats.concealment = -10
 					self.parts.wpn_fps_upg_m4_s_adar.stats.reload = -1
 				end
@@ -4176,12 +4329,11 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				if self.parts.wpn_fps_upg_ak_s_hex then
 					self.parts.wpn_fps_upg_ak_s_hex.stats.spread = 2
 					self.parts.wpn_fps_upg_ak_s_hex.stats.recoil = 1
-					self.parts.wpn_fps_upg_ak_s_hex.stats.concealment = -1
-					self.parts.wpn_fps_upg_ak_s_hex.stats.reload = -1
+					self.parts.wpn_fps_upg_ak_s_hex.stats.concealment = -2
 				end
 				if self.parts.wpn_fps_upg_m4_s_bus then
-					self.parts.wpn_fps_upg_m4_s_bus.stats.spread = 4
-					self.parts.wpn_fps_upg_m4_s_bus.stats.recoil = -1
+					self.parts.wpn_fps_upg_m4_s_bus.stats.spread = 5
+					self.parts.wpn_fps_upg_m4_s_bus.stats.recoil = -2
 					self.parts.wpn_fps_upg_m4_s_bus.stats.concealment = -5
 					self.parts.wpn_fps_upg_m4_s_bus.stats.reload = -2
 				end
@@ -4193,7 +4345,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				end
 				if self.parts.wpn_fps_upg_m4_s_hke1 then
 					self.parts.wpn_fps_upg_m4_s_hke1.stats.spread = -1
-					self.parts.wpn_fps_upg_m4_s_hke1.stats.recoil = 4
+					self.parts.wpn_fps_upg_m4_s_hke1.stats.recoil = 5
 					self.parts.wpn_fps_upg_m4_s_hke1.stats.concealment = -5
 					self.parts.wpn_fps_upg_m4_s_hke1.stats.reload = -2
 				end
@@ -4203,9 +4355,9 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_sho_ultima_s_ultl.stats.concealment = -3
 				end
 				if self.parts.wpn_fps_upg_m4_s_hkslim then
-					self.parts.wpn_fps_upg_m4_s_hkslim.stats.spread = 0
-					self.parts.wpn_fps_upg_m4_s_hkslim.stats.recoil = 2
-					self.parts.wpn_fps_upg_m4_s_hkslim.stats.concealment = -2
+					self.parts.wpn_fps_upg_m4_s_hkslim.stats.spread = 1
+					self.parts.wpn_fps_upg_m4_s_hkslim.stats.recoil = 3
+					self.parts.wpn_fps_upg_m4_s_hkslim.stats.concealment = -3
 				end
 				if self.parts.wpn_fps_upg_m4_s_troy then
 					self.parts.wpn_fps_upg_m4_s_troy.stats.spread = -1
@@ -4216,7 +4368,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				if self.parts.wpn_fps_upg_ak_s_akhera then
 					table.insert(self.parts.wpn_fps_upg_ak_s_akhera.forbids, "wpn_fps_upg_ak_g_hgrip")
 					table.insert(self.parts.wpn_fps_upg_ak_s_akhera.forbids, "wpn_fps_upg_ak_g_wgrip")
-					self.parts.wpn_fps_upg_ak_s_akhera.stats.spread = 3
+					self.parts.wpn_fps_upg_ak_s_akhera.stats.spread = 4
 					self.parts.wpn_fps_upg_ak_s_akhera.stats.recoil = 6
 					self.parts.wpn_fps_upg_ak_s_akhera.stats.reload = -2
 					self.parts.wpn_fps_upg_ak_s_akhera.stats.concealment = -10
@@ -4277,9 +4429,9 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				if self.parts.wpn_fps_upg_m_p40 then
 					self.parts.wpn_fps_upg_m_p40.stats.spread = -1
 					self.parts.wpn_fps_upg_m_p40.stats.recoil = 1
-					self.parts.wpn_fps_upg_m_p40.stats.concealment = -3
+					self.parts.wpn_fps_upg_m_p40.stats.concealment = -2
 					self.parts.wpn_fps_upg_m_p40.stats.reload = -3
-					self.wpn_fps_smg_x_olympic.override.wpn_fps_upg_m_p40 = {override_weapon = {_meta = "override_weapon",CLIP_AMMO_MAX = 60},stats = {spread = -1,recoil = 1,concealment = -3,reload = -3}}
+					self.wpn_fps_smg_x_olympic.override.wpn_fps_upg_m_p40 = {override_weapon = {_meta = "override_weapon",CLIP_AMMO_MAX = 60},stats = {spread = -1,recoil = 1,concealment = -2,reload = -3}}
 				end
 				if self.parts.wpn_fps_upg_m_battle then
 					self.parts.wpn_fps_upg_m_battle.stats.spread = 0
@@ -4341,13 +4493,13 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				if self.parts.wpn_fps_upg_m_45r then
 					self.parts.wpn_fps_upg_m_45r.stats.spread = -2
 					self.parts.wpn_fps_upg_m_45r.stats.recoil = 2
-					self.parts.wpn_fps_upg_m_45r.stats.concealment = -3
+					self.parts.wpn_fps_upg_m_45r.stats.concealment = -2
 					self.parts.wpn_fps_upg_m_45r.stats.reload = -3
 				end
 				if self.parts.wpn_fps_upg_m_rpk45 then
 					self.parts.wpn_fps_upg_m_rpk45.stats.spread = -1
 					self.parts.wpn_fps_upg_m_rpk45.stats.recoil = 1
-					self.parts.wpn_fps_upg_m_rpk45.stats.concealment = -3
+					self.parts.wpn_fps_upg_m_rpk45.stats.concealment = -2
 					self.parts.wpn_fps_upg_m_rpk45.stats.reload = -3
 				end
 				if self.parts.wpn_fps_upg_m_545pmag then
@@ -4407,14 +4559,14 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				if self.parts.wpn_fps_upg_m_rpk40 then
 					self.parts.wpn_fps_upg_m_rpk40.stats.spread = -1
 					self.parts.wpn_fps_upg_m_rpk40.stats.recoil = 1
-					self.parts.wpn_fps_upg_m_rpk40.stats.concealment = -3
+					self.parts.wpn_fps_upg_m_rpk40.stats.concealment = -2
 					self.parts.wpn_fps_upg_m_rpk40.stats.reload = -3
 					table.insert(self.parts.wpn_fps_upg_m_rpk40.weapons, "wpn_fps_ass_akm_gold")
 				end
 				if self.parts.wpn_fps_upg_m_rpkbake then
 					self.parts.wpn_fps_upg_m_rpkbake.stats.spread = -2
 					self.parts.wpn_fps_upg_m_rpkbake.stats.recoil = 2
-					self.parts.wpn_fps_upg_m_rpkbake.stats.concealment = -3
+					self.parts.wpn_fps_upg_m_rpkbake.stats.concealment = -2
 					self.parts.wpn_fps_upg_m_rpkbake.stats.reload = -3
 					table.insert(self.parts.wpn_fps_upg_m_rpkbake.weapons, "wpn_fps_ass_akm_gold")
 				end
@@ -4426,7 +4578,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					table.insert(self.parts.wpn_fps_upg_m_x47.weapons, "wpn_fps_ass_akm_gold")
 				end
 				if self.parts.wpn_fps_upg_m_308pmag then
-					self.parts.wpn_fps_upg_m_308pmag.stats.spread = 0
+					self.parts.wpn_fps_upg_m_308pmag.stats.spread = -2
 					self.parts.wpn_fps_upg_m_308pmag.stats.recoil = 0
 					self.parts.wpn_fps_upg_m_308pmag.stats.concealment = 1
 					self.parts.wpn_fps_upg_m_308pmag.stats.reload = 0
@@ -4435,22 +4587,22 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_upg_m_kac10.stats.spread = 2
 					self.parts.wpn_fps_upg_m_kac10.stats.recoil = -1
 					self.parts.wpn_fps_upg_m_kac10.stats.concealment = 2
-					self.parts.wpn_fps_upg_m_kac10.stats.reload = 8
+					self.parts.wpn_fps_upg_m_kac10.stats.reload = 3
 				end
 				if self.parts.wpn_fps_upg_m_308dmmag then
-					self.parts.wpn_fps_upg_m_308dmmag.stats.damage = -200
-					self.parts.wpn_fps_upg_m_308dmmag.stats.spread = -3
+					self.parts.wpn_fps_upg_m_308dmmag.stats.damage = -150
+					self.parts.wpn_fps_upg_m_308dmmag.stats.spread = 3
 					self.parts.wpn_fps_upg_m_308dmmag.stats.recoil = 3
 					self.parts.wpn_fps_upg_m_308dmmag.stats.concealment = -5
 					self.parts.wpn_fps_upg_m_308dmmag.stats.reload = -2
 					self.parts.wpn_fps_upg_m_308dmmag.override_weapon.CLIP_AMMO_MAX = 30
 					self.parts.wpn_fps_upg_m_308dmmag.override_weapon.AMMO_MAX = nil
-					self.parts.wpn_fps_upg_m_308dmmag.stats.total_ammo_mod = 5
+					self.parts.wpn_fps_upg_m_308dmmag.stats.total_ammo_mod = 10
 				end
 				if self.parts.wpn_fps_upg_m_kac20 then
-					self.parts.wpn_fps_upg_m_kac20.stats.spread = 1
-					self.parts.wpn_fps_upg_m_kac20.stats.recoil = -1
-					self.parts.wpn_fps_upg_m_kac20.stats.concealment = 1
+					self.parts.wpn_fps_upg_m_kac20.stats.spread = -1
+					self.parts.wpn_fps_upg_m_kac20.stats.recoil = 1
+					self.parts.wpn_fps_upg_m_kac20.stats.concealment = 0
 					self.parts.wpn_fps_upg_m_kac20.stats.reload = 0
 				end
 				if self.parts.wpn_fps_upg_m_sgmt then
@@ -4637,29 +4789,33 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_upg_m_g36_dura.stats.recoil = 1
 					self.parts.wpn_fps_upg_m_g36_dura.stats.concealment = -1
 					self.parts.wpn_fps_upg_m_g36_dura.stats.reload = -1
+					self.parts.wpn_fps_upg_m_g36_dura.pcs = {}
 				end
 				if self.parts.wpn_fps_upg_m_g36_d60 then
 					self.parts.wpn_fps_upg_m_g36_d60.stats.spread = -2
 					self.parts.wpn_fps_upg_m_g36_d60.stats.recoil = 3
 					self.parts.wpn_fps_upg_m_g36_d60.stats.concealment = -4
 					self.parts.wpn_fps_upg_m_g36_d60.stats.reload = -6
+					self.parts.wpn_fps_upg_m_g36_d60.pcs = {}
 				end
 				if self.parts.wpn_fps_upg_m_g36_p30 then
 					self.parts.wpn_fps_upg_m_g36_p30.stats.spread = 1
 					self.parts.wpn_fps_upg_m_g36_p30.stats.recoil = 1
 					self.parts.wpn_fps_upg_m_g36_p30.stats.concealment = -3
 					self.parts.wpn_fps_upg_m_g36_p30.stats.reload = 0
+					self.parts.wpn_fps_upg_m_g36_p30.pcs = {}
 				end
 				if self.parts.wpn_fps_upg_m_g36_p30w then
 					self.parts.wpn_fps_upg_m_g36_p30w.stats.spread = 2
 					self.parts.wpn_fps_upg_m_g36_p30w.stats.recoil = -1
 					self.parts.wpn_fps_upg_m_g36_p30w.stats.concealment = -2
 					self.parts.wpn_fps_upg_m_g36_p30w.stats.reload = 0
+					self.parts.wpn_fps_upg_m_g36_p30w.pcs = {}
 				end
 				if self.parts.wpn_fps_upg_m_g36_p40 then
 					self.parts.wpn_fps_upg_m_g36_p40.stats.spread = -1
 					self.parts.wpn_fps_upg_m_g36_p40.stats.recoil = 1
-					self.parts.wpn_fps_upg_m_g36_p40.stats.concealment = -3
+					self.parts.wpn_fps_upg_m_g36_p40.stats.concealment = -2
 					self.parts.wpn_fps_upg_m_g36_p40.stats.reload = -3
 				end
 				if self.parts.wpn_fps_upg_m_g36_battle then
@@ -4667,12 +4823,14 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_upg_m_g36_battle.stats.recoil = 0
 					self.parts.wpn_fps_upg_m_g36_battle.stats.concealment = 2
 					self.parts.wpn_fps_upg_m_g36_battle.stats.reload = 0
+					self.parts.wpn_fps_upg_m_g36_battle.pcs = {}
 				end
 				if self.parts.wpn_fps_upg_m_g36_poly then
 					self.parts.wpn_fps_upg_m_g36_poly.stats.spread = 3
 					self.parts.wpn_fps_upg_m_g36_poly.stats.recoil = -2
 					self.parts.wpn_fps_upg_m_g36_poly.stats.concealment = -3
 					self.parts.wpn_fps_upg_m_g36_poly.stats.reload = 0
+					self.parts.wpn_fps_upg_m_g36_poly.pcs = {}
 				end
 				if self.parts.wpn_fps_upg_m_g36_hksteel then
 					self.parts.wpn_fps_upg_m_g36_hksteel.stats.extra_ammo = 1
@@ -4680,24 +4838,28 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_upg_m_g36_hksteel.stats.recoil = 0
 					self.parts.wpn_fps_upg_m_g36_hksteel.stats.concealment = -2
 					self.parts.wpn_fps_upg_m_g36_hksteel.stats.reload = 0
+					self.parts.wpn_fps_upg_m_g36_hksteel.pcs = {}
 				end
 				if self.parts.wpn_fps_upg_m_g36_gen2 then
 					self.parts.wpn_fps_upg_m_g36_gen2.stats.spread = 1
 					self.parts.wpn_fps_upg_m_g36_gen2.stats.recoil = 1
 					self.parts.wpn_fps_upg_m_g36_gen2.stats.concealment = -3
 					self.parts.wpn_fps_upg_m_g36_gen2.stats.reload = 0
+					self.parts.wpn_fps_upg_m_g36_gen2.pcs = {}
 				end
 				if self.parts.wpn_fps_upg_m_g36_lanc then
 					self.parts.wpn_fps_upg_m_g36_lanc.stats.spread = 1
 					self.parts.wpn_fps_upg_m_g36_lanc.stats.recoil = 0
 					self.parts.wpn_fps_upg_m_g36_lanc.stats.concealment = 1
 					self.parts.wpn_fps_upg_m_g36_lanc.stats.reload = 0
+					self.parts.wpn_fps_upg_m_g36_lanc.pcs = {}
 				end
 				if self.parts.wpn_fps_upg_m_g36_dmmag then
 					self.parts.wpn_fps_upg_m_g36_dmmag.stats.spread = -1
 					self.parts.wpn_fps_upg_m_g36_dmmag.stats.recoil = 0
 					self.parts.wpn_fps_upg_m_g36_dmmag.stats.concealment = -1
 					self.parts.wpn_fps_upg_m_g36_dmmag.stats.reload = 2
+					self.parts.wpn_fps_upg_m_g36_dmmag.pcs = {}
 				end
 			end
 			

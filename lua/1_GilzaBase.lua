@@ -5,6 +5,7 @@ end
 _G.Gilza = {
 	_path = ModPath,
 	_save_path = "mods/saves/Gilza_save.txt",
+	files_loaded = {},
 	settings = {
 		v_fov = 90,
 		blackmarket_weapon_sorting = 2,
@@ -153,14 +154,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.52 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.53 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.5.2 Changelog:\nThis patch requires a complete game restart. (not just reLua)\n\n- Made tazers/medics/cloakers tankier against projectile explosives for a more consistent host/client experience.\n- All AP sources now have slightly less punishing ammo pick up penalties.\n- Throwables are now picked up after a certain amount of picked up boxes instead of being fully RNG based, affects both Fully Loaded and Walk-in-Closet.\n- Reworked Graze sniper skill.\n- Mini-reworked Sicario perk deck.\n- Improved custom weapon support.\n\nAnd much more, check the full changelog for more info."
+			local message = "2.5.3 Changelog:\n\n- Made huge improvements to the flashlight, which includes better range, brightness drop off, and a more clear texture (will conflict with other flashlight texture mods).\n- Reduced concealment for all sniper rifles by 1 to compensate new scope concealment rules.\n- Buffed ammo pick up for all SMG's and 160 damage class shotguns.\n- Updated stats on the majority of muzzle devices and stocks.\n- Graze skill will no longer affect shields if used weapon does not have shield AP.\n\nCheck the full changelog for more info."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.52
+			Gilza.settings.version = 2.53
 			Gilza.Save()
 		end
 	end)

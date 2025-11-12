@@ -89,7 +89,7 @@ Hooks:PostHook(ReviveInteractionExt, "interact", "Gilza_ReviveInteractionExt_int
 end)
 
 -- leech heal block in dire state
-local gilza_orig_doc_bag_interaction_blocked = DoctorBagBaseInteractionExt._interact_blocked
+local gilza_orig_doc_bag_interaction_blocked = Hooks:GetFunction(DoctorBagBaseInteractionExt, "_interact_blocked")
 Hooks:OverrideFunction(DoctorBagBaseInteractionExt, "_interact_blocked", function (self, player)
 	if player:character_damage()._gilza_leech_dire_state then
 		return true, false, "hint_health_berserking"

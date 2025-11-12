@@ -159,17 +159,29 @@ Hooks:OverrideFunction(SniperGrazeDamage, "on_weapon_fired", function (self, wea
 	
 	local shown_hitmarker = false
 	for enemy, data in pairs(enemies_to_hit) do
-		if not shown_hitmarker then
-			shown_hitmarker = true
-			if crit_indicator then
-				managers.hud:on_crit_confirmed(1)
-			else
-				managers.hud:on_hit_confirmed(1)
-			end
-		end
 		local actual_dmg = weap_base:get_damage_falloff(base_graze_dmg, {distance = data.data.distance}, managers.player:player_unit())
 		local char_dmg = enemy:character_damage()
-		if char_dmg and not char_dmg.is_civilian(enemy:base()._tweak_table) then
+		local function is_dmg_allowed()
+			if not char_dmg then
+				return false
+			end
+			if char_dmg.is_civilian(enemy:base()._tweak_table) then
+				return false
+			end
+			if (enemy:base()._tweak_table == "shield" or enemy:base()._tweak_table == "marshal_shield") and not weap_base:can_shoot_through_shield() then
+				return false
+			end
+			return true
+		end
+		if is_dmg_allowed() then
+			if not shown_hitmarker then
+				shown_hitmarker = true
+				if crit_indicator then
+					managers.hud:on_crit_confirmed(1)
+				else
+					managers.hud:on_hit_confirmed(1)
+				end
+			end
 			actual_dmg = char_dmg:_apply_damage_reduction(actual_dmg)
 			char_dmg:damage_simple({
 				variant = "graze",
@@ -182,11 +194,4 @@ Hooks:OverrideFunction(SniperGrazeDamage, "on_weapon_fired", function (self, wea
 		end
 	end
 	
-	-- local function debugdraw(from,to)
-		-- local brush = Draw:brush(Color.green:with_alpha(1),6)
-		-- brush:line(from,to)
-		-- brush:sphere(from,10)
-		-- brush:sphere(to,10)
-	-- end
-	-- debugdraw(from,mvec_to)
 end)

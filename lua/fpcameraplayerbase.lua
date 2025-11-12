@@ -89,7 +89,7 @@ Hooks:OverrideFunction(FPCameraPlayerBase, "recoil_kick", function (self, up, do
 		end
 	end
 	
-	if math.abs(self._recoil_kick.accumulated) < 20 then
+	if math.abs(self._recoil_kick.accumulated or 0) < 20 then
 		local v = math.lerp(up, down, math.random())
 		self._recoil_kick.accumulated = (self._recoil_kick.accumulated or 0) + v * mul
 	end

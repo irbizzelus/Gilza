@@ -136,26 +136,37 @@ if Gilza and not Gilza.VHP_enabled then
 	create_OutlinedText_class()
 end
 
-local orig_show_interaction_bar = HUDInteraction.show_interaction_bar
+local gilza_orig_show_interaction_bar = Hooks:GetFunction(HUDInteraction, "show_interaction_bar")
 Hooks:OverrideFunction(HUDInteraction, "show_interaction_bar", function (self, current, total)
-	local circlesetting = false
-	local damagesetting = false
-	if Gilza and Gilza.settings and Gilza.settings.melee_gui and Gilza.settings.melee_gui >= 1 then
-		if Gilza.settings.melee_gui == 2 then
-			circlesetting = true
-		elseif Gilza.settings.melee_gui == 3 then
-			damagesetting = true
-		elseif Gilza.settings.melee_gui == 4 then
-			circlesetting = true
-			damagesetting = true
-		end
-	end
 	if managers.player.player_unit and managers.player:player_unit() and alive(managers.player:player_unit()) and managers.player:player_unit().movement and managers.player:player_unit():movement()._state_data and managers.player:player_unit():movement()._state_data.meleeing then
-		if circlesetting then
-			orig_show_interaction_bar(self, current, total)
-		else
-			self.hide_interaction_bar(self)
+		local circlesetting = false
+		local damagesetting = false
+		if Gilza and Gilza.settings and Gilza.settings.melee_gui and Gilza.settings.melee_gui >= 1 then
+			if Gilza.settings.melee_gui == 2 then
+				circlesetting = true
+			elseif Gilza.settings.melee_gui == 3 then
+				damagesetting = true
+			elseif Gilza.settings.melee_gui == 4 then
+				circlesetting = true
+				damagesetting = true
+			end
 		end
+		
+		if Gilza.VHP_enabled then
+			gilza_orig_show_interaction_bar(self, current, total)
+			if HUDInteraction.SHOW_LOCK_INDICATOR then
+				if not circlesetting then
+					self.hide_interaction_bar(self)
+				end
+			end
+		else
+			if circlesetting then
+				gilza_orig_show_interaction_bar(self, current, total)
+			else
+				self.hide_interaction_bar(self)
+			end
+		end
+		
 		if damagesetting then
 			if Gilza.VHP_enabled then
 				-- this should disable the timer counter for melee interaction in vhp, but due to the way vhp function override works, i can only properly do it for the update func
@@ -215,28 +226,42 @@ Hooks:OverrideFunction(HUDInteraction, "show_interaction_bar", function (self, c
 			self._Gilza_melee_damage:show()
 		end
 	else
-		orig_show_interaction_bar(self, current, total)
+		gilza_orig_show_interaction_bar(self, current, total)
 	end
 end)
 
-local orig_set_interaction_bar_width = HUDInteraction.set_interaction_bar_width
+local gilza_orig_set_interaction_bar_width = Hooks:GetFunction(HUDInteraction, "set_interaction_bar_width")
 Hooks:OverrideFunction(HUDInteraction, "set_interaction_bar_width", function (self, current, total)
-	local circlesetting = false
-	local damagesetting = false
-	if Gilza and Gilza.settings and Gilza.settings.melee_gui and Gilza.settings.melee_gui >= 1 then
-		if Gilza.settings.melee_gui == 2 then
-			circlesetting = true
-		elseif Gilza.settings.melee_gui == 3 then
-			damagesetting = true
-		elseif Gilza.settings.melee_gui == 4 then
-			circlesetting = true
-			damagesetting = true
-		end
-	end
 	if managers.player.player_unit and managers.player:player_unit() and alive(managers.player:player_unit()) and managers.player:player_unit().movement and managers.player:player_unit():movement()._state_data and managers.player:player_unit():movement()._state_data.meleeing then
-		if circlesetting then
-			orig_set_interaction_bar_width(self, current, total)
+		local circlesetting = false
+		local damagesetting = false
+		if Gilza and Gilza.settings and Gilza.settings.melee_gui and Gilza.settings.melee_gui >= 1 then
+			if Gilza.settings.melee_gui == 2 then
+				circlesetting = true
+			elseif Gilza.settings.melee_gui == 3 then
+				damagesetting = true
+			elseif Gilza.settings.melee_gui == 4 then
+				circlesetting = true
+				damagesetting = true
+			end
+		end
+		
+		if Gilza.VHP_enabled then
+			gilza_orig_set_interaction_bar_width(self, current, total)
+			if HUDInteraction.SHOW_LOCK_INDICATOR then
+				if not circlesetting then
+					self.hide_interaction_bar(self)
+				end
+			end
 		else
+			if circlesetting then
+				gilza_orig_set_interaction_bar_width(self, current, total)
+			else
+				self.hide_interaction_bar(self)
+			end
+		end
+		local cur_charge_percent = current/total
+		if cur_charge_percent >= 1 then
 			self.hide_interaction_bar(self)
 		end
 		if damagesetting then
@@ -251,7 +276,6 @@ Hooks:OverrideFunction(HUDInteraction, "set_interaction_bar_width", function (se
 				min_dmg = (tweak_data.blackmarket.melee_weapons[managers.blackmarket:equipped_melee_weapon()].stats.tick_damage or 1) * 5 -- DPS, becuase all chainsaw wpns have 5 ticks/s
 				max_dmg = (tweak_data.blackmarket.melee_weapons[managers.blackmarket:equipped_melee_weapon()].stats.tick_damage or 1) * 5
 			end
-			local cur_charge_percent = current/total
 			local cur_dmg = min_dmg + ((max_dmg-min_dmg) * cur_charge_percent)
 			local dmg_multiplier = 1
 			
@@ -278,16 +302,14 @@ Hooks:OverrideFunction(HUDInteraction, "set_interaction_bar_width", function (se
 			if managers.player:player_unit():movement()._state_data.chainsaw_t then
 				text = string.format("%.0f%% DPS", cur_dmg*10)
 			end
-			if cur_charge_percent >= 1 then
-				self.hide_interaction_bar(self)
-			end
+			
 			self._Gilza_melee_damage:set_text(text)
 			self._Gilza_melee_damage:set_color(Color(1, 1, 1, 1))
 			self._Gilza_melee_damage:set_alpha(1)
 			self._Gilza_melee_damage:set_visible(true)
 		end
 	else
-		orig_set_interaction_bar_width(self, current, total)
+		gilza_orig_set_interaction_bar_width(self, current, total)
 	end
 end)
 
