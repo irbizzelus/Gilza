@@ -523,11 +523,24 @@ end)
 -- also removed the stop_shooting function because it caused sounds of bullet casings to never play. this doesnt seem to affect anything else noticably
 Hooks:PreHook(RaycastWeaponBase,"fire","autofiresoundfix2_raycastweaponbase_fire",function(self,...)
 	if not self:_soundfix_should_play_normal() then
-		self._bullets_fired = 0
-		if self:weapon_tweak_data().sounds.fire_single then
-			self:play_tweak_data_sound(self:weapon_tweak_data().sounds.fire_single,"fire_single")
-		else
-			self:play_tweak_data_sound(self:weapon_tweak_data().sounds.fire,"fire")
+		local function handle_sounds()
+			self._bullets_fired = 0
+			if self:weapon_tweak_data().sounds.fire_single then
+				self:play_tweak_data_sound(self:weapon_tweak_data().sounds.fire_single,"fire_single")
+			else
+				self:play_tweak_data_sound(self:weapon_tweak_data().sounds.fire,"fire")
+			end
+		end
+		if not self.AKIMBO then
+			handle_sounds()
+		else -- akimbos usualy call for sounds when they are fired, but since akimbo's now fire at the same time, it was causing the sounds to play at the exact same time, which sounds bad
+			if self._second_gun then
+				handle_sounds()
+			else
+				DelayedCalls:Add("Gilza_akimbo_second_gun_sound_delay_"..tostring(math.random()), 0.03 + math.rand(0.03), function() -- so now akimbo 2nd shot sound is delayed here
+					handle_sounds()
+				end)
+			end
 		end
 	end
 end)

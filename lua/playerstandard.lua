@@ -193,17 +193,107 @@ Hooks:OverrideFunction(PlayerStandard, "_start_action_jump", function (self, t, 
 	end
 end)
 
--- chainsaw check
-local gilza_orig_check_action_melee = Hooks:GetFunction(PlayerStandard, "_check_action_melee")
+function PlayerStandard:gilza_melee_toggle()
+	
+	local input = self:_get_input(Application:time(), 0.1, true)
+	
+	if Gilza.melee_toggle_state_active then
+		Gilza.melee_toggle_state_active = false
+		managers.player:Gilza_melee_toggle_updater(false)
+		self._state_data.chainsaw_t = nil
+		if not self._state_data.melee_attack_allowed_t and not self._state_data.melee_repeat_expire_t then
+			self:_do_action_melee(Application:time(), input)
+		elseif self._state_data.meleeing then
+			self._state_data.melee_attack_wanted = true
+		end
+	else
+		if self._ext_movement:current_state_name() == "standard" or self._ext_movement:current_state_name() == "carry" then
+			
+			local action_forbidden = not self:_melee_repeat_allowed() or self._use_item_expire_t or self:_changing_weapon() or self:_interacting() or self:_is_throwing_projectile() or self:_is_using_bipod() or self:is_shooting_count()
+
+			if action_forbidden then
+				return
+			end
+
+			local melee_entry = managers.blackmarket:equipped_melee_weapon()
+			local instant = tweak_data.blackmarket.melee_weapons[melee_entry].instant
+			
+			self:_start_action_melee(Application:time(), input, instant)
+			
+			Gilza.melee_toggle_state_active = true
+			managers.player:Gilza_melee_toggle_updater(true)
+		end
+	end
+end
+
+-- new melee hold + chainsaws
 Hooks:OverrideFunction(PlayerStandard, "_check_action_melee", function (self, t, input)
-	local cam = gilza_orig_check_action_melee(self, t, input)
-	if input.btn_melee_release then
+	
+	local mouse_pressed = input.btn_primary_attack_press
+	
+	if (input.btn_melee_release and not Gilza.melee_toggle_state_active) or (mouse_pressed and Gilza.melee_toggle_state_active) then
 		self._state_data.chainsaw_t = nil
 	end
+	
+	if self._state_data.melee_attack_wanted then
+		if not self._state_data.melee_attack_allowed_t then
+			self._state_data.melee_attack_wanted = nil
+
+			self:_do_action_melee(t, input)
+		end
+
+		return
+	end
+
+	local action_wanted = input.btn_melee_press or input.btn_melee_release or self._state_data.melee_charge_wanted
+	
+	if not action_wanted and not Gilza.melee_toggle_state_active then
+		return
+	end
+	
+	local cancel_melee_toggle = input.btn_melee_press or input.btn_melee_release or input.btn_switch_weapon_press -- or input.btn_throw_grenade_press or self._state_data.btn_projectile_press or self._state_data.btn_projectile_release or self._state_data.btn_projectile_state
+	
+	if Gilza.melee_toggle_state_active and cancel_melee_toggle then
+		Gilza.melee_toggle_state_active = false
+		managers.player:Gilza_melee_toggle_updater(false)
+		self._state_data.chainsaw_t = nil
+		if not self._state_data.melee_attack_allowed_t and not self._state_data.melee_repeat_expire_t then
+			self:_do_action_melee(t, input)
+		end
+	end
+
+	if (input.btn_melee_release and not Gilza.melee_toggle_state_active) or (mouse_pressed and Gilza.melee_toggle_state_active) then
+		if self._state_data.meleeing then
+			if self._state_data.melee_attack_allowed_t then
+				self._state_data.melee_attack_wanted = true
+
+				return
+			end
+
+			self:_do_action_melee(t, input)
+		end
+
+		return
+	end
+
+	local action_forbidden = not self:_melee_repeat_allowed() or self._use_item_expire_t or self:_changing_weapon() or self:_interacting() or self:_is_throwing_projectile() or self:_is_using_bipod() or self:is_shooting_count()
+
+	if action_forbidden then
+		return
+	end
+
 	local melee_entry = managers.blackmarket:equipped_melee_weapon()
-	if cam == true and tweak_data.blackmarket.melee_weapons[melee_entry].chainsaw == true and not self._state_data.chainsaw_t then -- don't override the other chainsaw timer on first swing
+	local instant = tweak_data.blackmarket.melee_weapons[melee_entry].instant
+
+	self:_start_action_melee(t, input, instant)
+	
+	-- chainsaw stuff
+	local melee_entry = managers.blackmarket:equipped_melee_weapon()
+	if tweak_data.blackmarket.melee_weapons[melee_entry].chainsaw == true and not self._state_data.chainsaw_t then -- don't override the other chainsaw timer on first swing
 		self._state_data.chainsaw_t = t + (tweak_data.blackmarket.melee_weapons[melee_entry].repeat_chainsaw_delay or 0.2)
 	end
+	
+	return true
 end)
 
 -- new function, mostly from irenfist, my beloved
@@ -370,14 +460,69 @@ function PlayerStandard:_do_chainsaw_damage(t)
 end
 
 -- chainsaw check #2
-local gilza_orig_update_melee_timers = Hooks:GetFunction(PlayerStandard, "_update_melee_timers")
 Hooks:OverrideFunction(PlayerStandard, "_update_melee_timers", function (self, t, input)
+	
 	-- CHAINSAW
 	if tweak_data.blackmarket.melee_weapons[managers.blackmarket:equipped_melee_weapon()].chainsaw == true and self._state_data.chainsaw_t and self._state_data.chainsaw_t < t then
 		self:_do_chainsaw_damage(t)
 		self._state_data.chainsaw_t = t + 0.2
 	end
-	gilza_orig_update_melee_timers(self, t, input)
+	
+	if self._state_data.meleeing then
+		local lerp_value = self:_get_melee_charge_lerp_value(t)
+
+		self._camera_unit:anim_state_machine():set_parameter(self:get_animation("melee_charge_state"), "charge_lerp", math.bezier({
+			0,
+			0,
+			1,
+			1
+		}, lerp_value))
+
+		if self._state_data.melee_charge_shake then
+			self._ext_camera:shaker():set_parameter(self._state_data.melee_charge_shake, "amplitude", math.bezier({
+				0,
+				0,
+				1,
+				1
+			}, lerp_value))
+		end
+	end
+
+	if self._state_data.melee_damage_delay_t and self._state_data.melee_damage_delay_t <= t then
+		self:_do_melee_damage(t, nil, self._state_data.melee_hit_ray)
+
+		self._state_data.melee_damage_delay_t = nil
+		self._state_data.melee_hit_ray = nil
+	end
+
+	if self._state_data.melee_attack_allowed_t and self._state_data.melee_attack_allowed_t <= t then
+		self._state_data.melee_start_t = t
+		local melee_entry = managers.blackmarket:equipped_melee_weapon()
+		local melee_charge_shaker = tweak_data.blackmarket.melee_weapons[melee_entry].melee_charge_shaker or "player_melee_charge"
+		self._state_data.melee_charge_shake = self._ext_camera:play_shaker(melee_charge_shaker, 0)
+		self._state_data.melee_attack_allowed_t = nil
+	end
+
+	if self._state_data.melee_repeat_expire_t and self._state_data.melee_repeat_expire_t <= t then
+		self._state_data.melee_repeat_expire_t = nil
+
+		if input.btn_meleet_state or Gilza.melee_toggle_state_active then
+			local melee_entry = managers.blackmarket:equipped_melee_weapon()
+			local instant_hit = tweak_data.blackmarket.melee_weapons[melee_entry].instant
+			self._state_data.melee_charge_wanted = not instant_hit and true
+		end
+	end
+
+	if self._state_data.melee_expire_t and self._state_data.melee_expire_t <= t then
+		self._state_data.melee_expire_t = nil
+		self._state_data.melee_repeat_expire_t = nil
+
+		self:_stance_entered()
+
+		if self._equipped_unit and input.btn_steelsight_state then
+			self._steelsight_wanted = true
+		end
+	end
 end)
 
 -- disable chainsaw when interrupted
@@ -385,6 +530,9 @@ local gilza_orig_interupt_action_melee = Hooks:GetFunction(PlayerStandard, "_int
 Hooks:OverrideFunction(PlayerStandard, "_interupt_action_melee", function (self, t)
 	gilza_orig_interupt_action_melee(self, t)
 	self._state_data.chainsaw_t = nil
+	
+	Gilza.melee_toggle_state_active = false
+	managers.player:Gilza_melee_toggle_updater(false)
 
 	local speed_multiplier = self:_get_swap_speed_multiplier()
 	local tweak_data = self._equipped_unit:base():weapon_tweak_data()

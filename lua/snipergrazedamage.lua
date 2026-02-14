@@ -168,7 +168,7 @@ Hooks:OverrideFunction(SniperGrazeDamage, "on_weapon_fired", function (self, wea
 			if char_dmg.is_civilian(enemy:base()._tweak_table) then
 				return false
 			end
-			if (enemy:base()._tweak_table == "shield" or enemy:base()._tweak_table == "marshal_shield") and not weap_base:can_shoot_through_shield() then
+			if (enemy:base()._tweak_table == "shield" or enemy:base()._tweak_table == "marshal_shield" or enemy:base()._tweak_table == "phalanx_minion" or enemy:base()._tweak_table == "phalanx_vip") and not weap_base:can_shoot_through_shield() then
 				return false
 			end
 			return true

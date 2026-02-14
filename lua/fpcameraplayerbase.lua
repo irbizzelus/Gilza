@@ -8,34 +8,50 @@ end)
 -- Completely removes camera recoil compensation for shotguns, semi-auto weapons, and if recoil is high.
 -- Keep compensation if total recoil is not that high, or we fired a 3 or less round burst that doesnt have high recoil
 Hooks:PostHook(FPCameraPlayerBase, "stop_shooting", "GilzaCameraRecoil_stop", function(self, ...)
-	if (self._Gilza_shot_counter <= 3 and self._recoil_kick.accumulated <= 1.25) or self._recoil_kick.accumulated <= 1 then
-		self._recoil_kick.to_reduce = self._recoil_kick.accumulated
-		self._recoil_kick.h.to_reduce = self._recoil_kick.h.accumulated
-	else
-		self._recoil_kick.to_reduce = 0
-		self._recoil_kick.h.to_reduce = 0
-	end
-	
-	local wpn_base = managers.player:equipped_weapon_unit():base()
-	local function should_remove_compensation()
-		if wpn_base:is_category("shotgun") then
-			return true
+	if managers.controller:get_default_wrapper_type() == "pc" then
+		if (self._Gilza_shot_counter <= 3 and self._recoil_kick.accumulated <= 1.25) or self._recoil_kick.accumulated <= 1 then
+			self._recoil_kick.to_reduce = self._recoil_kick.accumulated
+			self._recoil_kick.h.to_reduce = self._recoil_kick.h.accumulated
+		else
+			self._recoil_kick.to_reduce = 0
+			self._recoil_kick.h.to_reduce = 0
 		end
-		if wpn_base:is_category("snp") then
-			return true
-		end
-		if wpn_base:is_category("pistol") then
-			if wpn_base._fire_mode_category == Idstring("single") or wpn_base._fire_mode_category == "single" then
+		
+		local wpn_base = managers.player:equipped_weapon_unit():base()
+		local function should_remove_compensation()
+			if wpn_base:is_category("shotgun") then
 				return true
+			end
+			if wpn_base:is_category("snp") then
+				return true
+			end
+			if wpn_base:is_category("pistol") then
+				if wpn_base._fire_mode_category == Idstring("single") or wpn_base._fire_mode_category == "single" then
+					return true
+				else
+					return false
+				end
+			end
+			return false
+		end
+		if should_remove_compensation() then
+			self._recoil_kick.to_reduce = 0
+			self._recoil_kick.h.to_reduce = 0
+		end
+	else -- controller compensation
+		local wpn_base = managers.player:equipped_weapon_unit():base()
+		if (self._Gilza_shot_counter <= 5 and self._recoil_kick.accumulated <= 1.5) or self._recoil_kick.accumulated <= 1.25 then
+			self._recoil_kick.to_reduce = self._recoil_kick.accumulated
+			self._recoil_kick.h.to_reduce = self._recoil_kick.h.accumulated
+		else
+			if wpn_base._fire_mode == Idstring("single") or wpn_base._fire_mode_category == Idstring("single") or wpn_base._fire_mode_category == "single" then
+				self._recoil_kick.to_reduce = self._recoil_kick.to_reduce * 0.35
+				self._recoil_kick.h.to_reduce = self._recoil_kick.h.to_reduce * 0.35
 			else
-				return false
+				self._recoil_kick.to_reduce = 0
+				self._recoil_kick.h.to_reduce = 0
 			end
 		end
-		return false
-	end
-	if should_remove_compensation() then
-		self._recoil_kick.to_reduce = 0
-		self._recoil_kick.h.to_reduce = 0
 	end
 end)
 

@@ -40,6 +40,86 @@
 		},
 		{
 			"type" : "multiple_choice",
+			"id" : "Gilza_blackmarket_weapon_sorting",
+			"title" : "Gilza_blackmarket_weapon_sorting",
+			"description" : "Gilza_blackmarket_weapon_sorting_desc",
+			"callback" : "Gilza_blackmarket_weapon_sorting",
+			"items" : [
+				"Gilza_weapon_sorting_choise_1",
+				"Gilza_weapon_sorting_choise_2",
+				"Gilza_weapon_sorting_choise_3",
+			],
+			"value" : "blackmarket_weapon_sorting",
+			"default_value" : 2
+		},
+		{
+			"type" : "divider",
+			"size" : 22
+		},
+		{
+			"type" : "button",
+			"id" : "Gilza_melee_header",
+			"title" : "Gilza_melee_header",
+			"description" : "Gilza_blank",
+			"callback" : "Gilza_donothing"
+		},
+		{
+			"type" : "keybind",
+			"id" : "Gilza_melee_toggle_mode_keybind",
+			"title" : "Gilza_melee_toggle_mode_keybind",
+			"description" : "Gilza_melee_toggle_mode_keybind_desc",
+			"keybind_id" : "Gilza_melee_toggle_mode_keybind",
+			"run_in_game" : true,
+			"run_in_menu" : false,
+			"show_in_menu" : false,
+			"func" : "Gilza_melee_toggle_mode_keybind_pressed",
+		},
+		{
+			"type" : "divider",
+			"size" : 6
+		},
+		{
+			"type" : "slider",
+			"id" : "Gilza_melee_toggle_mode_icon_scale",
+			"title" : "Gilza_melee_toggle_mode_icon_scale",
+			"description" : "Gilza_melee_toggle_mode_icon_scale_desc",
+			"callback" : "Gilza_melee_toggle_mode_icon_scale",
+			"value" : "melee_toggle_mode_icon_scale",
+			"default_value" : 1,
+			"min" : 0,
+			"max" : 2,
+			"step" : 0.01
+		},
+		{
+			"type" : "slider",
+			"id" : "Gilza_melee_toggle_mode_icon_x_pos",
+			"title" : "Gilza_melee_toggle_mode_icon_x_pos",
+			"description" : "Gilza_melee_toggle_mode_icon_x_pos_desc",
+			"callback" : "Gilza_melee_toggle_mode_icon_x_pos",
+			"value" : "melee_toggle_mode_icon_x_pos",
+			"default_value" : 30,
+			"min" : 0,
+			"max" : 4000,
+			"step" : 1
+		},
+		{
+			"type" : "slider",
+			"id" : "Gilza_melee_toggle_mode_icon_y_pos",
+			"title" : "Gilza_melee_toggle_mode_icon_y_pos",
+			"description" : "Gilza_melee_toggle_mode_icon_y_pos_desc",
+			"callback" : "Gilza_melee_toggle_mode_icon_y_pos",
+			"value" : "melee_toggle_mode_icon_y_pos",
+			"default_value" : 380,
+			"min" : 0,
+			"max" : 2000,
+			"step" : 1
+		},
+		{
+			"type" : "divider",
+			"size" : 6
+		},
+		{
+			"type" : "multiple_choice",
 			"id" : "Gilza_melee_gui",
 			"title" : "Gilza_melee_gui",
 			"description" : "Gilza_melee_gui_desc",
@@ -52,20 +132,6 @@
 			],
 			"value" : "melee_gui",
 			"default_value" : 4
-		},
-		{
-			"type" : "multiple_choice",
-			"id" : "Gilza_blackmarket_weapon_sorting",
-			"title" : "Gilza_blackmarket_weapon_sorting",
-			"description" : "Gilza_blackmarket_weapon_sorting_desc",
-			"callback" : "Gilza_blackmarket_weapon_sorting",
-			"items" : [
-				"Gilza_weapon_sorting_choise_1",
-				"Gilza_weapon_sorting_choise_2",
-				"Gilza_weapon_sorting_choise_3",
-			],
-			"value" : "blackmarket_weapon_sorting",
-			"default_value" : 2
 		},
 		{
 			"type" : "divider",

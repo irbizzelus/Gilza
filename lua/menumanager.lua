@@ -97,16 +97,18 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 	end
 	
 	MenuCallbackHandler.Gilza_perk_reset = function(this, item)
-		local function Gilza_reset_perk_progression()
-			managers.skilltree:reset_specializations()
-			log("[Gilza] Perk Decks reset.")
+		if not Utils:IsInGameState() then
+			local function Gilza_reset_perk_progression()
+				managers.skilltree:reset_specializations()
+				log("[Gilza] Perk Decks reset.")
+			end
+			
+			local menu_options = {}
+			menu_options[#menu_options+1] ={text = managers.localization:text("menu_Gilza_perk_reset_confirm"), data = nil, callback = Gilza_reset_perk_progression}
+			menu_options[#menu_options+1] = {text = managers.localization:text("menu_Gilza_perk_reset_deny"), is_cancel_button = true}
+			local menu = QuickMenu:new("Gilza", managers.localization:text("menu_Gilza_perk_reset_text"), menu_options)
+			menu:Show()
 		end
-		
-		local menu_options = {}
-		menu_options[#menu_options+1] ={text = managers.localization:text("menu_Gilza_perk_reset_confirm"), data = nil, callback = Gilza_reset_perk_progression}
-		menu_options[#menu_options+1] = {text = managers.localization:text("menu_Gilza_perk_reset_deny"), is_cancel_button = true}
-		local menu = QuickMenu:new("Gilza", managers.localization:text("menu_Gilza_perk_reset_text"), menu_options)
-		menu:Show()
 	end
 	
 	MenuCallbackHandler.Gilza_spoof_custom_perks = function(this, item)
@@ -151,31 +153,57 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 			return
 		end
 		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
-		if hud.panel:child("Gilza_speed_junkie_GUI_icon") and hud.panel:child("Gilza_speed_junkie_GUI_counter") then
-			local Gilza_junkie_icon_GUI = hud.panel:child("Gilza_speed_junkie_GUI_icon")
-			local Gilza_junkie_counter_GUI = hud.panel:child("Gilza_speed_junkie_GUI_counter")
-			Gilza_junkie_icon_GUI:set_w(Gilza.settings.junkie_icon_scale * 60)
-			Gilza_junkie_counter_GUI:set_w(Gilza.settings.junkie_icon_scale * 60)
-			Gilza_junkie_icon_GUI:set_h(Gilza.settings.junkie_icon_scale * 60)
-			Gilza_junkie_counter_GUI:set_h(Gilza.settings.junkie_icon_scale * 60)
-			Gilza_junkie_counter_GUI:set_font_size(math.floor(24 * Gilza.settings.junkie_icon_scale))
-			Gilza_junkie_counter_GUI:set_y(60 * Gilza.settings.junkie_icon_scale + Gilza.settings.junkie_icon_y_pos)
+		local icon_panel = hud.panel:child("Gilza_speed_junkie_GUI_icon")
+		local text_panel = hud.panel:child("Gilza_speed_junkie_GUI_counter")
+		local panel_class = managers.player._Gilza_junkie_counter_GUI
+		-- support for all kinds of perk icons. probably should've built this shit differently, but oh well
+		if managers.player:has_category_upgrade("player", "guardian_area_passive") then
+			icon_panel = hud.panel:child("Gilza_guardian_GUI_icon")
+			panel_class = managers.player._Gilza_guardian_GUI_icon
+			text_panel = nil
+		end
+		if managers.player:has_category_upgrade("temporary", "loose_ammo_restore_health") then
+			icon_panel = hud.panel:child("Gilza_new_gambler_GUI_icon")
+			panel_class = managers.player._Gilza_new_gambler_dodge_counter_GUI
+			text_panel = hud.panel:child("Gilza_new_gambler_dodge_counter_GUI")
+		end
+		if managers.player:has_category_upgrade("temporary", "death_dance_combo_invulnerability") then
+			icon_panel = hud.panel:child("Gilza_new_hitman_GUI_icon")
+			panel_class = managers.player._Gilza_new_hitman_combo_counter_GUI
+			text_panel = hud.panel:child("Gilza_new_hitman_combo_counter_GUI")
+		end
+		if managers.player:has_category_upgrade("player", "damage_resist_teammates_brawler") or (managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") and managers.player:has_category_upgrade("player", "armor_regen_brawler")) then
+			icon_panel = hud.panel:child("Gilza_brawler_GUI_icon")
+			panel_class = managers.player._Gilza_new_brawler_regen_counter_GUI
+			if managers.player:has_category_upgrade("player", "armor_regen_brawler") then
+				text_panel = hud.panel:child("Gilza_new_brawler_regen_counter_GUI")
+			else
+				text_panel = nil
+			end
+		end
+		if icon_panel then
+			icon_panel:set_w(Gilza.settings.junkie_icon_scale * 60)
+			icon_panel:set_h(Gilza.settings.junkie_icon_scale * 60)
+		end
+		if text_panel then
+			text_panel:set_w(Gilza.settings.junkie_icon_scale * 60)
+			text_panel:set_h(Gilza.settings.junkie_icon_scale * 60)
+			text_panel:set_font_size(math.floor(24 * Gilza.settings.junkie_icon_scale))
+			text_panel:set_y(60 * Gilza.settings.junkie_icon_scale + Gilza.settings.junkie_icon_y_pos)
+			
 			-- an extremely dumb hack that gains access to the panel on a class level to force background text to update properly
 			-- idk why but both font size and set_w/h dont update background text parameters if main text is updated in vhp
 			-- i could obviously fix it up by tweaking those funcs, but im trying to make this compatible with the mod,
 			-- so in case user runs vhp with gilza, vhp's class is used instead of a copy of said class that gilza has
-			local panel_class_access = managers.player._Gilza_junkie_counter_GUI
-			for _, bg in ipairs(panel_class_access._bgs) do
-				if bg.set_w and bg.set_h then
+			if panel_class then
+				for _, bg in ipairs(panel_class._bgs) do
 					bg:set_w(Gilza.settings.junkie_icon_scale * 60)
 					bg:set_h(Gilza.settings.junkie_icon_scale * 60)
-				end
-				if bg.set_font_size then
 					bg:set_font_size(math.floor(24 * Gilza.settings.junkie_icon_scale))
+					bg:set_y(60 * Gilza.settings.junkie_icon_scale + Gilza.settings.junkie_icon_y_pos)
 				end
 			end
-			
-		end	
+		end
 	end
 	
 	MenuCallbackHandler.Gilza_junkie_icon_x_pos = function(this, item)
@@ -185,12 +213,44 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 			return
 		end
 		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
-		if hud.panel:child("Gilza_speed_junkie_GUI_icon") and hud.panel:child("Gilza_speed_junkie_GUI_counter") then
-			local Gilza_junkie_icon_GUI = hud.panel:child("Gilza_speed_junkie_GUI_icon")
-			local Gilza_junkie_counter_GUI = hud.panel:child("Gilza_speed_junkie_GUI_counter")
-			Gilza_junkie_icon_GUI:set_x(Gilza.settings.junkie_icon_x_pos)
-			Gilza_junkie_counter_GUI:set_x(Gilza.settings.junkie_icon_x_pos)
-		end	
+		local icon_panel = hud.panel:child("Gilza_speed_junkie_GUI_icon")
+		local text_panel = hud.panel:child("Gilza_speed_junkie_GUI_counter")
+		local panel_class = managers.player._Gilza_junkie_counter_GUI
+		if managers.player:has_category_upgrade("player", "guardian_area_passive") then
+			icon_panel = hud.panel:child("Gilza_guardian_GUI_icon")
+			panel_class = managers.player._Gilza_guardian_GUI_icon
+			text_panel = nil
+		end
+		if managers.player:has_category_upgrade("temporary", "loose_ammo_restore_health") then
+			icon_panel = hud.panel:child("Gilza_new_gambler_GUI_icon")
+			panel_class = managers.player._Gilza_new_gambler_dodge_counter_GUI
+			text_panel = hud.panel:child("Gilza_new_gambler_dodge_counter_GUI")
+		end
+		if managers.player:has_category_upgrade("temporary", "death_dance_combo_invulnerability") then
+			icon_panel = hud.panel:child("Gilza_new_hitman_GUI_icon")
+			panel_class = managers.player._Gilza_new_hitman_combo_counter_GUI
+			text_panel = hud.panel:child("Gilza_new_hitman_combo_counter_GUI")
+		end
+		if managers.player:has_category_upgrade("player", "damage_resist_teammates_brawler") or (managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") and managers.player:has_category_upgrade("player", "armor_regen_brawler")) then
+			icon_panel = hud.panel:child("Gilza_brawler_GUI_icon")
+			panel_class = managers.player._Gilza_new_brawler_regen_counter_GUI
+			if managers.player:has_category_upgrade("player", "armor_regen_brawler") then
+				text_panel = hud.panel:child("Gilza_new_brawler_regen_counter_GUI")
+			else
+				text_panel = nil
+			end
+		end
+		if icon_panel then
+			icon_panel:set_x(Gilza.settings.junkie_icon_x_pos)
+		end
+		if text_panel then
+			text_panel:set_x(Gilza.settings.junkie_icon_x_pos)
+		end
+		if panel_class then
+			for _, bg in ipairs(panel_class._bgs) do
+				bg:set_x(Gilza.settings.junkie_icon_x_pos)
+			end
+		end
 	end
 	
 	MenuCallbackHandler.Gilza_junkie_icon_y_pos = function(this, item)
@@ -200,12 +260,94 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 			return
 		end
 		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
-		if hud.panel:child("Gilza_speed_junkie_GUI_icon") and hud.panel:child("Gilza_speed_junkie_GUI_counter") then
-			local Gilza_junkie_icon_GUI = hud.panel:child("Gilza_speed_junkie_GUI_icon")
-			local Gilza_junkie_counter_GUI = hud.panel:child("Gilza_speed_junkie_GUI_counter")
-			Gilza_junkie_icon_GUI:set_y(Gilza.settings.junkie_icon_y_pos)
-			Gilza_junkie_counter_GUI:set_y(60 * Gilza.settings.junkie_icon_scale + Gilza.settings.junkie_icon_y_pos)
+		local icon_panel = hud.panel:child("Gilza_speed_junkie_GUI_icon")
+		local text_panel = hud.panel:child("Gilza_speed_junkie_GUI_counter")
+		local panel_class = managers.player._Gilza_junkie_counter_GUI
+		if managers.player:has_category_upgrade("player", "guardian_area_passive") then
+			icon_panel = hud.panel:child("Gilza_guardian_GUI_icon")
+			panel_class = managers.player._Gilza_guardian_GUI_icon
+			text_panel = nil
+		end
+		if managers.player:has_category_upgrade("temporary", "loose_ammo_restore_health") then
+			icon_panel = hud.panel:child("Gilza_new_gambler_GUI_icon")
+			panel_class = managers.player._Gilza_new_gambler_dodge_counter_GUI
+			text_panel = hud.panel:child("Gilza_new_gambler_dodge_counter_GUI")
+		end
+		if managers.player:has_category_upgrade("temporary", "death_dance_combo_invulnerability") then
+			icon_panel = hud.panel:child("Gilza_new_hitman_GUI_icon")
+			panel_class = managers.player._Gilza_new_hitman_combo_counter_GUI
+			text_panel = hud.panel:child("Gilza_new_hitman_combo_counter_GUI")
+		end
+		if managers.player:has_category_upgrade("player", "damage_resist_teammates_brawler") or (managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") and managers.player:has_category_upgrade("player", "armor_regen_brawler")) then
+			icon_panel = hud.panel:child("Gilza_brawler_GUI_icon")
+			panel_class = managers.player._Gilza_new_brawler_regen_counter_GUI
+			if managers.player:has_category_upgrade("player", "armor_regen_brawler") then
+				text_panel = hud.panel:child("Gilza_new_brawler_regen_counter_GUI")
+			else
+				text_panel = nil
+			end
+		end
+		if icon_panel then
+			icon_panel:set_y(Gilza.settings.junkie_icon_y_pos)
+		end
+		if text_panel then
+			text_panel:set_y(60 * Gilza.settings.junkie_icon_scale + Gilza.settings.junkie_icon_y_pos)
+		end
+		if panel_class then
+			for _, bg in ipairs(panel_class._bgs) do
+				bg:set_y(60 * Gilza.settings.junkie_icon_scale + Gilza.settings.junkie_icon_y_pos)
+			end
+		end
+	end
+	
+	-- melee toggle keybind itself
+	MenuCallbackHandler.Gilza_melee_toggle_mode_keybind_pressed = function()
+		if managers.player and managers.player:player_unit() and alive(managers.player:player_unit()) then
+			local cur_state = managers.player:player_unit():movement():current_state_name()
+			if cur_state == "standard" or cur_state == "carry" then
+				managers.player:player_unit():movement():current_state():gilza_melee_toggle()
+			end
+		end
+	end
+	
+	MenuCallbackHandler.Gilza_melee_toggle_mode_icon_scale = function(this, item)
+		Gilza.settings.melee_toggle_mode_icon_scale = tonumber(item:value())
+		Gilza:Save()
+		if not managers.hud or not managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2) then
+			return
+		end
+		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+		local panel = hud.panel:child("Gilza_melee_toggle_mode_GUI_icon")
+		if panel then
+			panel:set_w(Gilza.settings.melee_toggle_mode_icon_scale * 150)
+			panel:set_h(Gilza.settings.melee_toggle_mode_icon_scale * 75)
 		end	
+	end
+	
+	MenuCallbackHandler.Gilza_melee_toggle_mode_icon_x_pos = function(this, item)
+		Gilza.settings.melee_toggle_mode_icon_x_pos = tonumber(item:value())
+		Gilza:Save()
+		if not managers.hud or not managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2) then
+			return
+		end
+		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+		local panel = hud.panel:child("Gilza_melee_toggle_mode_GUI_icon")
+		if panel then
+			panel:set_x(Gilza.settings.melee_toggle_mode_icon_x_pos)
+		end
+	end
+	
+	MenuCallbackHandler.Gilza_melee_toggle_mode_icon_y_pos = function(this, item)
+		Gilza.settings.melee_toggle_mode_icon_y_pos = tonumber(item:value())
+		Gilza:Save()
+		if not managers.hud or not managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2) then
+			return
+		end
+		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+		local panel = hud.panel:child("Gilza_melee_toggle_mode_GUI_icon")
+		if panel then
+			panel:set_y(Gilza.settings.melee_toggle_mode_icon_y_pos)
+		end
 	end
 	
 	MenuCallbackHandler.Gilza_General_And_Skills_page = function(this, item)

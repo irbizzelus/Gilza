@@ -407,7 +407,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 				self.specializations[4][9].upgrades = {
 					"player_passive_loot_drop_multiplier",
 					"weapon_passive_armor_piercing_chance",
-					"weapon_passive_swap_speed_multiplier_1",
+					"weapon_passive_swap_speed_multiplier_2",
 					"player_movement_speed_multiplier_2",
 					"player_stamina_multiplier",
 					"player_passive_dodge_chance_4",
@@ -676,6 +676,9 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 	updatePERKS()
 	
 	local function updateSKILLS()
+		
+		-- default upgrades. the stuff that is available without skills/perks
+		table.insert(self.default_upgrades, "weapon_passive_swap_speed_multiplier_1") -- better swap speed. new ammo economy incentivizes using both guns actively, this should help
 		
 		---- MASTERMIND
 		self.skills.combat_medic[2].upgrades = { "player_revive_action_self_heal" }

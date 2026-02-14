@@ -35,23 +35,31 @@ Hooks:PreHook(CopDamage, "damage_melee", "Gilza_CopDamage_damage_melee_pre", fun
 		attack_data.damage = attack_data.damage * dmg_multiplier
 	
 		if self._char_tweak.Gilza_boss_tag then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 200)) -- bosses take 20x the amount of hits
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 300)) -- bosses take 30x the amount of hits
 		elseif self._char_tweak.Gilza_boss_tag_deep then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 400)) -- crude awakening boss takes 40x the amount of hits, because this fucker is tanky and techically last boss of the game
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 600)) -- crude awakening boss takes 60x the amount of hits, because this fucker is tanky and techically last boss of the game
 		elseif self._char_tweak.Gilza_winters_tag then
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 20)) -- winters takes 2x the amount of hits
-		elseif self._char_tweak.Gilza_headless_dozer_tag then
-			local reduction = 150
-			if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then -- 2x for DS
-				reduction = 300
-			end
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / reduction)) -- headless dozers take 15x the amount of hits, cuz thats like their only weakness
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / 30)) -- winters takes 3x the amount of hits
 		elseif self._char_tweak.access == "tank" then
-			local reduction = 100
-			if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
-				reduction = 200
+			local reduction = 120
+			if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then -- DS values
+				if self._char_tweak.Gilza_headless_dozer_tag then
+					reduction = 400
+				elseif self._char_tweak.Gilza_minigun_dozer_tag then
+					reduction = 350
+				else
+					reduction = 175
+				end
+			else
+				if self._char_tweak.Gilza_headless_dozer_tag then
+					reduction = 200
+				elseif self._char_tweak.Gilza_minigun_dozer_tag then
+					reduction = 175
+				else
+					reduction = 120
+				end
 			end
-			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / reduction)) -- dozers take 10-20x the amount of hits
+			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / reduction)) -- dozers take much less dmg from hits
 		else
 			attack_data.damage = self._HEALTH_INIT * (attack_data.damage / 10) + 0.1 -- +1 dmg is needed due to rounding calculations with low hp targets, like street cops, that leave them with 0.1 hp instead of killing them sometimes
 		end

@@ -104,9 +104,9 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 			index = index + 5
 		elseif fire_mode == "burst" then
 			-- burst fire mode has slighlty better accuracy. only 1 vanilla weapon has this feature - ms3gl, other weapons gain this mode from gilza's weapon_tweaks
-			index = index - 3
+			index = index - 2
 		else
-			index = index - 5
+			index = index - 4
 		end
 	end
 	
@@ -257,4 +257,157 @@ Hooks:OverrideFunction(BlackMarketManager, "fire_rate_multiplier", function (sel
 	end
 	
 	return self:_convert_add_to_mul(multiplier)
+end)
+
+-- new melee sort
+Hooks:OverrideFunction(BlackMarketManager, "get_sorted_melee_weapons", function (self, hide_locked, id_list_only)
+	local items = {}
+	local global_value, td, category = nil
+
+	for id, item in pairs(Global.blackmarket_manager.melee_weapons) do
+		td = tweak_data.blackmarket.melee_weapons[id]
+		global_value = td.dlc or td.global_value or "normal"
+		category = td.type or "unknown"
+		local add_item = item.unlocked or item.equipped or not hide_locked and not managers.dlc:should_hide_unavailable(global_value, true)
+
+		if add_item then
+			table.insert(items, {
+				id,
+				item
+			})
+		end
+	end
+
+	local xd, yd, x_td, y_td, x_sn, y_sn, x_gv, y_gv = nil
+	local m_tweak_data = tweak_data.blackmarket.melee_weapons
+	local l_tweak_data = tweak_data.lootdrop.global_values
+	local locked_sort_numbers = {}
+
+	for _, item in ipairs(items) do
+		local id = item[1]
+		local data = item[2]
+		local dlc = m_tweak_data[id] and m_tweak_data[id].dlc or managers.dlc:global_value_to_dlc(m_tweak_data[id].global_value)
+		local func = data.func_based or false
+		local skill = data.skill_based or false
+		locked_sort_numbers[id] = tweak_data.gui:get_locked_sort_number(dlc, func, skill)
+	end
+
+	local function sort_func(x, y)
+		xd = x[2]
+		yd = y[2]
+		x_td = m_tweak_data[x[1]]
+		y_td = m_tweak_data[y[1]]
+		
+		if not x_td.sort_order or not y_td.sort_order then
+			return x_td.sort_order and true
+		end
+		
+		if x_td.sort_order ~= y_td.sort_order then
+			return x_td.sort_order < y_td.sort_order
+		end
+		
+		-- vanilla stuff bellow, mostly ignored
+		if _G.IS_VR and xd.vr_locked ~= yd.vr_locked then
+			return not xd.vr_locked
+		end
+
+		if xd.unlocked ~= yd.unlocked then
+			return xd.unlocked
+		end
+
+		if not xd.unlocked then
+			x_sn = locked_sort_numbers[x[1]]
+			y_sn = locked_sort_numbers[y[1]]
+
+			if x_sn ~= y_sn then
+				return x_sn < y_sn
+			end
+		end
+
+		if xd.level ~= yd.level then
+			return xd.level < yd.level
+		end
+
+		if x_td.instant ~= y_td.instant then
+			return x_td.instant
+		end
+
+		if xd.skill_based ~= yd.skill_based then
+			return xd.skill_based
+		end
+
+		if x_td.free ~= y_td.free then
+			return x_td.free
+		end
+
+		x_gv = x_td.global_value or x_td.dlc or "normal"
+		y_gv = y_td.global_value or y_td.dlc or "normal"
+		x_sn = l_tweak_data[x_gv]
+		y_sn = l_tweak_data[y_gv]
+		x_sn = x_sn and x_sn.sort_number or 1
+		y_sn = y_sn and y_sn.sort_number or 1
+
+		if x_sn ~= y_sn then
+			return x_sn < y_sn
+		end
+
+		if xd.level ~= yd.level then
+			return xd.level < yd.level
+		end
+
+		return x[1] < y[1]
+	end
+
+	table.sort(items, sort_func)
+
+	if id_list_only then
+		local id_list = {}
+
+		for _, data in ipairs(items) do
+			table.insert(id_list, data[1])
+		end
+
+		return id_list
+	end
+
+	local override_slots = {
+		5,
+		5
+	}
+	local num_slots_per_category = override_slots[1] * override_slots[2]
+	local sorted_categories = {}
+	local item_categories = {}
+	local category = nil
+	local items_per_category = {}
+	local next_category_start = 1
+	local current_sort_order = -3
+	
+	for index, item in ipairs(items) do
+		if m_tweak_data[item[1]].sort_order then
+			items_per_category[next_category_start] = items_per_category[next_category_start] or 1
+			
+			if m_tweak_data[item[1]].sort_order <= 1 then
+				if items_per_category[next_category_start] > num_slots_per_category then
+					next_category_start = next_category_start + 1
+				end
+			elseif items_per_category[next_category_start] > num_slots_per_category or m_tweak_data[item[1]].sort_order > current_sort_order then
+				next_category_start = next_category_start + 1
+			end
+			
+			category = next_category_start
+			current_sort_order = m_tweak_data[item[1]].sort_order
+	
+			item_categories[category] = item_categories[category] or {}
+			table.insert(item_categories[category], item)
+			items_per_category[next_category_start] = (items_per_category[next_category_start] or 1) + 1
+		else
+			log("[Gilza] Melee without assigned sort order: "..item[1].." - it wont show up in the inventory! Someone pls fix.")
+		end
+	end
+
+	for i = 1, #item_categories do
+		table.insert(sorted_categories, i)
+	end
+
+	return sorted_categories, item_categories, override_slots
 end)

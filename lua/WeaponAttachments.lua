@@ -238,6 +238,9 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_upg_o_eotech_xps.stats.concealment = 0
 			self.parts.wpn_fps_upg_o_docter.stats.concealment = 0
 			
+			-- pay 2 win optic for pistols with 0 concealment from a dlc, trading sight picture for concealment is a fair trade, stop with this bullshit pls
+			self.parts.wpn_fps_upg_o_rms.stats.concealment = -1
+			
 			-- removing the default sniper scope so it doesnt have -3 by default, and also removing the winchester's scope, since it starts without a scope by default, so getting -3 makes sense
 			table.delete(sights_list,"wpn_fps_upg_o_shortdot")
 			table.delete(sights_list,"wpn_fps_upg_o_shortdot_vanilla")
@@ -1099,7 +1102,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		local function Gilza_init_asval()
 			self.parts.wpn_fps_ass_asval_s_solid.stats.recoil = 4
 			self.parts.wpn_fps_ass_asval_b_proto.stats.spread = -2
-			self.parts.wpn_fps_ass_asval_b_proto.stats.recoil = 1
+			self.parts.wpn_fps_ass_asval_b_proto.stats.recoil = -1
 			self.parts.wpn_fps_ass_asval_b_proto.stats.reload = 2
 		end
 		Gilza_init_asval()
@@ -4019,7 +4022,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					self.parts.wpn_fps_upg_m4_b_260rail.stats.concealment = 2
 				end
 				if self.parts.wpn_fps_upg_m4_b_370 then
-					self.parts.wpn_fps_upg_m4_b_370.stats.damage = -1
+					self.parts.wpn_fps_upg_m4_b_370.stats.damage = 0
 					self.parts.wpn_fps_upg_m4_b_370.stats.spread = 0
 					self.parts.wpn_fps_upg_m4_b_370.stats.recoil = 0
 					self.parts.wpn_fps_upg_m4_b_370.stats.concealment = 1

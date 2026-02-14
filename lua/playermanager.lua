@@ -720,6 +720,9 @@ Hooks:PreHook(PlayerManager, "on_enter_custody", "Gilza_pm_pre_on_enter_custody"
 		self._Gilza_menace_kill_tracker = 0
 		Gilza.New_Skills_Informer:adjusted_stockholm_stacks(0, true)
 	end
+	
+	-- clear melee toggle UI
+	managers.player:Gilza_melee_toggle_updater(false)
 end)
 
 -- aced bullseye
@@ -1893,4 +1896,25 @@ function PlayerManager:Gilza_brawler_recursive_updater()
 	DelayedCalls:Add("Gilza_brawler_recursive_updater", 0.05, function(self)
 		managers.player:Gilza_brawler_recursive_updater()
 	end)
+end
+
+function PlayerManager:Gilza_melee_toggle_updater(force_to)
+	
+	local info_hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+	local icon = info_hud.panel:child("Gilza_melee_toggle_mode_GUI_icon")
+	
+	if not icon then
+		return
+	end
+	
+	if force_to ~= nil then
+		icon:set_visible(force_to)
+	else
+		if Gilza.melee_toggle_state_active then
+			icon:set_visible(true)
+		else
+			icon:set_visible(false)
+		end
+	end
+	
 end

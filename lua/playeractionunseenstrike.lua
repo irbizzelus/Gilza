@@ -8,10 +8,15 @@ PlayerAction.UnseenStrike = {
 		local can_activate = true
 
 		local function on_damage_taken()
+			
 			Gilza.NSI:updated_new_unseen_strike_eligibility(false)
 			-- this is practically removal of previous instances of this delayed call, because removing it outright doesnt work like i want for it to
 			DelayedCalls:Add("Gilza_update_skill_info_on_unseen_strike_eligibility", 0, function(self) end)
 			DelayedCalls:Add("Gilza_clear_outdated_US_eligibility", 0, function(self) end)
+			
+			if not player_manager:has_category_upgrade("temporary", "unseen_strike") then
+				return
+			end
 			
 			can_activate = true
 			if player_manager:has_activate_temporary_upgrade("temporary", "unseen_strike") then
@@ -41,7 +46,7 @@ PlayerAction.UnseenStrike = {
 			current_time = Application:time()
 
 			if target_time <= current_time and can_activate then
-				if not player_manager:has_activate_temporary_upgrade("temporary", "unseen_strike") then
+				if not player_manager:has_activate_temporary_upgrade("temporary", "unseen_strike") and player_manager:has_category_upgrade("temporary", "unseen_strike") then
 					managers.player:activate_temporary_upgrade("temporary", "unseen_strike")
 					Gilza.NSI:activated_new_unseen_strike_crits()
 					DelayedCalls:Add("Gilza_update_skill_info_on_unseen_strike_eligibility", 0, function(self) end) -- clear delayedcalls

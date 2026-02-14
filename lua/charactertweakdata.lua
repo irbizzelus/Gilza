@@ -259,6 +259,7 @@ local function Gilza_set_new_health(self)
 	self.snowman_boss.Gilza_boss_tag = true
 	self.deep_boss.Gilza_boss_tag_deep = true
 	self.tank_hw.Gilza_headless_dozer_tag = true
+	self.tank_mini.Gilza_minigun_dozer_tag = true
 	
 	-- headless dozer tag used to reduce their bullet damage. needed to be done this way, because all bodyshot bullet damage in this mod is about 2x higher,
 	-- while bodyshots are about the same. also health can not be altered to avoid fucking with explosive breakpoints too much.

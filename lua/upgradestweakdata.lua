@@ -476,8 +476,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			
 			---- BRAWLER
 			self.values.player.melee_shake_reduction = {
-				0.7,
-				0.1
+				0.8,
+				0.25
 			}
 			-- blotdthirst basic adjustment to new melee system
 			self.values.player.melee_damage_stacking = {
@@ -530,6 +530,11 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 		
 		-- skills that are used by multiple perks at once
 		local function Shared_updates()
+			-- weapon swap speed used normally by rogue, but now part of default upgrades as well
+			self.values.weapon.passive_swap_speed_multiplier = {
+				1.5, -- default
+				2 -- rogue
+			}
 			-- 4th value added for ROGUE, mostly just the first value is used sometimes to add dodge. 5th value deprecated, was used by COPYCAT
 			self.values.player.passive_dodge_chance = {
 				0.15,
@@ -623,7 +628,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				-- extra 15% move speed. basic variant is given by parkour skill in vanilla, but now it's at perk card #8. this skill is added at #9, so no conflicts
 				self.values.player.movement_speed_multiplier = {
 					1.1,
-					1.25
+					1.2
 				}
 				-- extra 25% stamina
 				self.values.player.stamina_multiplier = {

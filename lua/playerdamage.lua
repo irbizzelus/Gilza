@@ -262,11 +262,16 @@ end)
 PlayerDamage._Gilza_WasCounterAttacking = false -- if we counterattacked, we reset chainsaw damage effect in a posthook for damage_melee func
 Hooks:PreHook(PlayerDamage, "damage_melee", "Gilza_pre_player_damage_melee", function(self, attack_data)
 	
+	-- reduce char knockback from melee attacks, funnily enough can prevent being pushed through walls by shields
+	if managers.player:has_category_upgrade("player", "melee_shake_reduction") then -- shares skill with camera shake cause im lazy :)
+		attack_data.push_vel = attack_data.push_vel * managers.player:upgrade_value("player", "melee_shake_reduction", 1)
+	end
+	
 	if attack_data.damage and managers.player:has_category_upgrade("player", "guardian_area_passive") then
 		attack_data.damage = self:Gilza_calculate_guardian_damage_clamp(attack_data.damage)
 	end
 	
-	-- mostly based on default melee attack code
+	-- mostly based on default melee attack code. counterstrike attack deals damage, when aced.
 	local can_counter_strike = managers.player:has_category_upgrade("player", "counter_strike_melee")
 	if can_counter_strike and self._unit:movement():current_state().in_melee and self._unit:movement():current_state():in_melee() then
 		self._Gilza_WasCounterAttacking = true
@@ -461,6 +466,48 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_post_PlayerDamage_init", function(se
 			managers.gameinfo:event("buff", "deactivate", "body_economy_stacks")
 		end
 	end
+	
+	local function AddMeleeToggleModeGUI()
+		if not managers.hud or not managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2) then
+			return
+		end
+		local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+		if not hud.panel:child("Gilza_melee_toggle_mode_GUI_icon") then
+			local image_scale = Gilza.settings.melee_toggle_mode_icon_scale
+			local x_position = Gilza.settings.melee_toggle_mode_icon_x_pos
+			local y_position = Gilza.settings.melee_toggle_mode_icon_y_pos
+			
+			local melee_icon = "guis/dlcs/Gilza/textures/pd2/specialization/brawler_icon"
+			
+			local equipped_string = managers.blackmarket:equipped_melee_weapon()
+			if equipped_string and type(equipped_string) == "string" then
+			
+				local m_tweak_data = tweak_data.blackmarket.melee_weapons[managers.blackmarket:equipped_melee_weapon()]
+				local guis_catalog = "guis/"
+				local bundle_folder = m_tweak_data.texture_bundle_folder
+
+				if bundle_folder then
+					guis_catalog = guis_catalog .. "dlcs/" .. tostring(bundle_folder) .. "/"
+				end
+				
+				melee_icon = guis_catalog .. "textures/pd2/blackmarket/icons/melee_weapons/" .. tostring(equipped_string)
+			end
+			
+			hud.panel:bitmap({
+				name = "Gilza_melee_toggle_mode_GUI_icon",
+				visible = false,
+				texture = melee_icon,
+				layer = 5,
+				color = Color(1, 1, 1, 1),
+				blend_mode = "add",
+				w = 150 * image_scale,
+				h = 75 * image_scale,
+				x = x_position,
+				y = y_position
+			})
+		end
+	end
+	AddMeleeToggleModeGUI()
 	
 	-- the so called "gilza perk UI". somewhat flexible if we decide to add this element to more perks
 	local function CreatePerkGUI()

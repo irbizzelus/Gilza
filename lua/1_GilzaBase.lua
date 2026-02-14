@@ -23,6 +23,9 @@ _G.Gilza = {
 		junkie_icon_scale = 1,
 		junkie_icon_x_pos = 50,
 		junkie_icon_y_pos = 320,
+		melee_toggle_mode_icon_scale = 1,
+		melee_toggle_mode_icon_x_pos = 30,
+		melee_toggle_mode_icon_y_pos = 380,
 		single_fire_input_buffering = true,
 		-- VHUD STUFF
 		vhud_compat_new_melee_zerk = false,
@@ -48,7 +51,7 @@ _G.Gilza = {
 		frag_com = 24,
 		wpn_prj_ace = 50,
 		concussion = 30,
-		poison_gas_grenade = 40,
+		poison_gas_grenade = 44,
 		frag = 24,
 		molotov = 22,
 		dynamite = 24,
@@ -154,14 +157,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.53 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.6 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.5.3 Changelog:\n\n- Made huge improvements to the flashlight, which includes better range, brightness drop off, and a more clear texture (will conflict with other flashlight texture mods).\n- Reduced concealment for all sniper rifles by 1 to compensate new scope concealment rules.\n- Buffed ammo pick up for all SMG's and 160 damage class shotguns.\n- Updated stats on the majority of muzzle devices and stocks.\n- Graze skill will no longer affect shields if used weapon does not have shield AP.\n\nCheck the full changelog for more info."
+			local message = "2.6 Changelog:\n\n- Improvements for all melee weapons which include: better animation timings, new damage classes and \"melee only\" toggle mode.\n- Default weapon swap speed is now 50% faster.\n- Fire mode penalties were eased up a little.\n- Akimbo weapons' usage updates and buffs.\n- Minor weapon rebalances.\n- Tough Guy skill now grants resistance to knockback from melee.\n- Recoil adjustments if game is played with a controller.\n- Flashlight improvements.\n- Various fixes.\n\nCheck the full changelog for more info."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.53
+			Gilza.settings.version = 2.6
 			Gilza.Save()
 		end
 	end)

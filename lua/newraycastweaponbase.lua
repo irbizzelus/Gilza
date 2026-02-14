@@ -11,7 +11,7 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "conditional_accuracy_multiplier", 
 	-- GILZA START
 	-- increased bonus while bipoded
 	if managers.player:current_state() == "bipod" then
-		mul = mul + 0.5
+		mul = mul + 0.66
 	end
 	-- GILZA END
 
