@@ -660,7 +660,64 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		
 		-- Miscellaneous
 		local function general_MISC()
+			
 			-- select fire mods
+			-- remove vanilla burst attachments, cuz we only add it to supported weapons
+			for weapon_id, weapon_data in pairs(self) do
+				if weapon_id ~= "parts" then
+					local uses_parts = self[weapon_id].uses_parts
+					if table.contains(uses_parts, "wpn_fps_upg_i_autofire") and table.contains(uses_parts, "wpn_fps_upg_i_burstfire") then
+						table.delete(uses_parts, "wpn_fps_upg_i_burstfire")
+					end
+				end
+			end
+			
+			local guns_with_burst = {
+				wpn_fps_ass_m16 = 3,
+				wpn_fps_ass_famas = 3,
+				wpn_fps_ass_flint = 2,
+				wpn_fps_ass_g36 = 2,
+				wpn_fps_ass_komodo = 3,
+				wpn_fps_ass_g3 = 2,
+				wpn_fps_ass_s552 = 3,
+				wpn_fps_ass_m4 = 3,
+				wpn_fps_ass_groza = 3,
+				wpn_fps_ass_asval = 3,
+				wpn_fps_ass_aug = 3,
+				wpn_fps_ass_scar = 2,
+				wpn_fps_pis_beer = 3,
+				wpn_fps_pis_x_beer = 3,
+				wpn_fps_smg_hajk = 3,
+				wpn_fps_smg_x_hajk = 3,
+				wpn_fps_smg_vityaz = 3,
+				wpn_fps_smg_x_vityaz = 3,
+				wpn_fps_smg_mp5 = 3,
+				wpn_fps_smg_x_mp5 = 3,
+				wpn_fps_smg_scorpion = 3,
+				wpn_fps_smg_x_scorpion = 3,
+				wpn_fps_smg_mp9 = 3,
+				wpn_fps_smg_x_mp9 = 3,
+				wpn_fps_smg_shepheard = 3,
+				wpn_fps_smg_x_shepheard = 3,
+				wpn_fps_smg_polymer = 2,
+				wpn_fps_smg_x_polymer = 2,
+				wpn_fps_smg_olympic = 2,
+				wpn_fps_smg_x_olympic = 2,
+			}
+			-- readd
+			for weapon_id, burst_count in pairs(guns_with_burst) do
+				table.insert(self[weapon_id].uses_parts, "wpn_fps_upg_i_burstfire")
+				if burst_count == 2 then
+					self[weapon_id].override = self[weapon_id].override or {}
+					self[weapon_id].override.wpn_fps_upg_i_burstfire = self[weapon_id].override.wpn_fps_upg_i_burstfire or {}
+					self[weapon_id].override.wpn_fps_upg_i_burstfire.desc_id = "bm_wp_upg_i_burstfire_2rnd_desc"
+				end
+			end
+			self.parts.wpn_fps_upg_i_burstfire.stats = {
+				spread = 1,
+				recoil = 1,
+				value = 8
+			}
 			self.parts.wpn_fps_upg_i_singlefire.stats = {
 				spread = 2,
 				recoil = -3,
@@ -673,6 +730,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				spread = -3,
 				recoil = 3
 			}
+			
 			-- ak charging handle
 			self.parts.wpn_fps_upg_ak_dh_zenitco.stats.spread = nil
 		end

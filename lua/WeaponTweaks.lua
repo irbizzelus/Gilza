@@ -582,6 +582,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		"rsh12",
 		"maxim9",
 		"korth",
+		"welrod",
 		-- shotguns
 		"boot",
 		"saiga",
@@ -2842,7 +2843,8 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 				model3 = {fmd = "single",akimbo = true},
 				rsh12 = {fmd = "single",akimbo = false},
 				korth = {fmd = "single",akimbo = true},
-				peacemaker = {fmd = "single",akimbo = false}
+				peacemaker = {fmd = "single",akimbo = false},
+				welrod = {fmd = "single",akimbo = false}
 			}
 			
 			local pick_up = pickups._450
@@ -2955,6 +2957,19 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			self.peacemaker.stats_modifiers = {damage = 1}
 			self.peacemaker.NR_CLIPS_MAX = 4
 			self.peacemaker.AMMO_MAX = self.peacemaker.NR_CLIPS_MAX * self.peacemaker.CLIP_AMMO_MAX
+			
+			-- 1 shot to the body on normal swats, 1 shot headshot on everyone else (except dozers)
+			-- the most badass cowboy in the west
+			self.welrod.stats.damage = 950
+			self.welrod.AMMO_PICKUP = {pick_up * 0.9 * 0.7 * secondary_mul, pick_up * 1.1 * 0.7 * secondary_mul}
+			self.welrod.has_description = true
+			self.welrod.stats_modifiers = {damage = 1}
+			self.welrod.stats.spread = 20
+			self.welrod.NR_CLIPS_MAX = 4
+			self.welrod.AMMO_MAX = self.welrod.NR_CLIPS_MAX * self.welrod.CLIP_AMMO_MAX
+			self.welrod.fire_mode_data = {fire_rate = 60/27}
+			self.welrod.single = {fire_rate = 60/27}
+			self.welrod.auto = {fire_rate = 60/27}
 			
 		end
 		Gilza_init_revolver_pistols()
@@ -3307,6 +3322,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			rsh12 = "right",
 			maxim9 = "right",
 			korth = "left",
+			welrod = "right",
 			-- akimbo
 			x_sparrow = "left",
 			x_b92fs = "right",

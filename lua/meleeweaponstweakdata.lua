@@ -107,6 +107,8 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_BlackMarketTw
 		rambo = {class = 4},
 		fireaxe = {class = 6},
 		
+		funder_strike = {class = "tazer"},
+		
 		-- this one i dont own
 		briefcase = {class = 5},
 		-- this one is not even shown
@@ -393,4 +395,7 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_BlackMarketTw
 	self.melee_weapons.fireaxe.expire_t = 1.5
 	self.melee_weapons.fireaxe.repeat_expire_t = 1.2
 	self.melee_weapons.briefcase.expire_t = 1.3
+	self.melee_weapons.funder_strike.expire_t = 0.7
+	self.melee_weapons.funder_strike.repeat_expire_t = 0.55
+	self.melee_weapons.funder_strike.stats.range = 175
 end)

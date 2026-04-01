@@ -41,7 +41,7 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_addend", function (self, na
 
 		if fire_mode == "single" and table.contains_any(tweak_data.upgrades.sharpshooter_categories, categories) then
 			index = index + managers.player:upgrade_value("weapon", "single_spread_index_addend", 0)
-		elseif fire_mode == "auto" then
+		elseif fire_mode == "auto" or fire_mode == "burst"  then
 			index = index + managers.player:upgrade_value("weapon", "auto_spread_index_addend", 0)
 		end
 
@@ -129,7 +129,7 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 
 	if fire_mode == "single" and table.contains_any(tweak_data.upgrades.sharpshooter_categories, categories) then
 		index = index + managers.player:upgrade_value("weapon", "single_spread_index_addend", 0)
-	elseif fire_mode == "auto" then
+	elseif fire_mode == "auto" or fire_mode == "burst"  then
 		index = index + managers.player:upgrade_value("weapon", "auto_spread_index_addend", 0)
 	end
 

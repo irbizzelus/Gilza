@@ -672,7 +672,7 @@ Hooks:OverrideFunction(PlayerManager, "_on_enter_shock_and_awe_event", function 
 		local data = self:upgrade_value("player", "automatic_faster_reload", nil)
 		local is_grenade_launcher = equipped_unit:base():is_category("grenade_launcher")
 
-		if data and equipped_unit and not is_grenade_launcher and (equipped_unit:base():fire_mode() == "auto" or equipped_unit:base():is_category("minigun", "flamethrower")) then
+		if data and equipped_unit and not is_grenade_launcher and (equipped_unit:base():fire_mode() == "auto" or equipped_unit:base():fire_mode() == "burst" or equipped_unit:base():is_category("minigun", "flamethrower")) then
 			self._coroutine_mgr:add_and_run_coroutine("automatic_faster_reload", PlayerAction.ShockAndAwe, self, data.target_enemies, data.max_reload_increase, data.min_reload_increase, data.penalty, data.min_bullets, equipped_unit)
 			
 			-- INFOHUD UI
@@ -798,17 +798,18 @@ Hooks:PostHook(PlayerManager, "check_skills", "Gilza_posthook_pm_check_skills", 
 		self:unregister_message(Message.OnPlayerDodge, "dodge_shot_gain_dodge_gilza")
 		self:unregister_message(Message.OnPlayerDamage, "dodge_shot_gain_damage_gilza")
 	end
+	-- DEPRECATED: was made a base game feature in U243.1
 	-- add a seperate function that adds smoke bomb CD while any smoke screen is active
-	if managers.blackmarket:equipped_grenade() == "smoke_screen_grenade" then
-		local function speed_up_on_kill()
-			if #managers.player:smoke_screens() >= 1 then
-				managers.player:speed_up_grenade_cooldown(1)
-			end
-		end
-		self:register_message(Message.OnEnemyKilled, "speed_up_smoke_grenade_while_active", speed_up_on_kill)
-	else
-		self:unregister_message(Message.OnEnemyKilled, "speed_up_smoke_grenade_while_active")
-	end
+	-- if managers.blackmarket:equipped_grenade() == "smoke_screen_grenade" then
+		-- local function speed_up_on_kill()
+			-- if #managers.player:smoke_screens() >= 1 then
+				-- managers.player:speed_up_grenade_cooldown(1)
+			-- end
+		-- end
+		-- self:register_message(Message.OnEnemyKilled, "speed_up_smoke_grenade_while_active", speed_up_on_kill)
+	-- else
+		-- self:unregister_message(Message.OnEnemyKilled, "speed_up_smoke_grenade_while_active")
+	-- end
 end)
 
 -- new sicario
