@@ -84,6 +84,7 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_post_WeaponTweakData_init_
 			_50cal = 0.28
 		},
 		SMGs = {
+			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.42),
 			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.38),
 			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.34) * 0.88,
 			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.34),
@@ -441,6 +442,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		"hunter",
 		"system",
 		"ms3gl",
+		"dart",
 		"money"
 	}
 	local weapon_ids = {
@@ -504,6 +506,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		"x_maxim9",
 		"x_korth",
 		"x_sko12",
+		"x_pmm",
 		--assault rifles
 		"ak74",
 		"akm",
@@ -583,6 +586,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		"maxim9",
 		"korth",
 		"welrod",
+		"pmm",
 		-- shotguns
 		"boot",
 		"saiga",
@@ -651,6 +655,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		"vityaz",
 		"pm9",
 		"fmg9",
+		"speen",
 	}
 	
 	local function TableConcat(t1,t2)
@@ -1716,6 +1721,50 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		local pickups = G_W_M.ammo_pickups.SMGs
 		local new_smg_damage_falloff = G_W_M.damage_dropoff.SMGs
 		
+		-- 1-1 headshot kill
+		local function init_super_heavy()
+			
+			local SMGs_450 = {
+				speen = true,
+			}
+			
+			local pick_up = pickups._450
+
+			for id, status in pairs(SMGs_450) do
+				if self[id] then
+					self[id].stats.damage = 450
+					self[id].AMMO_PICKUP = {((pick_up * 0.9)) * secondary_mul,((pick_up * 1.1)) * secondary_mul}
+					self[id].damage_falloff = new_smg_damage_falloff
+				end
+			end
+			
+			self.speen.stats.recoil = 11
+			self.speen.stats.spread = 19
+			self.speen.CLIP_AMMO_MAX = 12
+			self.speen.NR_CLIPS_MAX = 4
+			self.speen.AMMO_MAX = self.speen.CLIP_AMMO_MAX * self.speen.NR_CLIPS_MAX
+			
+			for id, status in pairs(SMGs_450) do
+				if self["x_"..id] then
+					self["x_"..id].stats.damage = math.ceil(450/2)
+					self["x_"..id].AMMO_PICKUP[1] = self[id].AMMO_PICKUP[1] * secondary_to_primary_mul * 2
+					self["x_"..id].AMMO_PICKUP[2] = self[id].AMMO_PICKUP[2] * secondary_to_primary_mul * 2
+					self["x_"..id].damage_falloff = new_smg_damage_falloff
+					if self["x_"..id].fire_mode_data then
+						self["x_"..id].fire_mode_data.fire_rate = self["x_"..id].fire_mode_data.fire_rate / akimbo_rof_mul
+					end
+					if self["x_"..id].single then
+						self["x_"..id].single.fire_rate = self["x_"..id].single.fire_rate / akimbo_rof_mul
+					end
+					if self["x_"..id].auto then
+						self["x_"..id].auto.fire_rate = self["x_"..id].auto.fire_rate / akimbo_rof_mul
+					end
+				end
+			end
+			
+		end
+		init_super_heavy()
+		
 		-- 1-2 headshot kill
 		local function init_heavy()
 			
@@ -2723,6 +2772,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 				deagle = {fmd = "single",akimbo = true},
 				breech = {fmd = "single",akimbo = true},
 				hs2000 = {fmd = "single",akimbo = true},
+				pmm = {fmd = "single",akimbo = true},
 			}
 			
 			local pick_up = pickups._250
@@ -2828,6 +2878,13 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			self.x_hs2000.CLIP_AMMO_MAX = 26
 			self.x_hs2000.NR_CLIPS_MAX = 3
 			self.x_hs2000.AMMO_MAX = self.x_hs2000.NR_CLIPS_MAX * self.x_hs2000.CLIP_AMMO_MAX
+			
+			self.pmm.stats.spread = 15
+			self.pmm.stats.recoil = 9
+			self.x_pmm.stats.spread = 15
+			self.x_pmm.stats.recoil = 9
+			self.x_pmm.stats.reload = 14
+			self.x_pmm.stats.concealment = 28
 			
 		end
 		Gilza_init_heavy_pistols()
@@ -3149,8 +3206,8 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 	
 	--Saws--
 	local function setSAWs()
-		self.saw.stats.damage = 220
-		self.saw_secondary.stats.damage = 220
+		self.saw.stats.damage = 250
+		self.saw_secondary.stats.damage = 250
 	end
 	setSAWs()
 	
@@ -3214,7 +3271,8 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			polymer = "left",
 			coal = "right",
 			sterling = "right",	
-			uzi = "left",			
+			uzi = "left",
+			speen = "right",
 			-- akimbos
 			x_m45 = "left",
 			x_hajk = "right",
@@ -3323,6 +3381,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			maxim9 = "right",
 			korth = "left",
 			welrod = "right",
+			pmm = "left",
 			-- akimbo
 			x_sparrow = "left",
 			x_b92fs = "right",
@@ -3350,6 +3409,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			x_type54 = "left",
 			x_maxim9 = "right",
 			x_korth = "left",
+			x_pmm = "left",
 		}
 		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.PISTOLs, Pistol_list, nil, self)
 		

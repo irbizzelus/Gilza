@@ -497,7 +497,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					-- E3
 					menu_ammo_reservoir_beta_desc = "BASIC: ##$basic;##\nAmmo bags placed by you grant players the ability to shoot without depleting their ammunition for up to ##5## seconds after interacting with it. The more ammo players replenish, the longer the duration of the effect.\n\nACE: ##$pro;##\nIncreases maximum duration of the effect to ##20## seconds.\n\nNotes:\n- Your Rocket and Grenade launchers will still consume ammunition while the Bullet Storm effect is active, but it will be taken directly from your ammo reserve instead of your magazine.\n- If interaction with an ammo bag completely consumes it, Bullet Storm will be applied to the player for it's maximum duration, regardless of amount of ammo refilled.",
 					menu_ammo_2x_beta_desc = "BASIC: ##$basic;##\nYour ammo bags now contain ##50%## more ammunition.\n\nACE: ##$pro;##\nYou can now place ##2## ammo bags instead of just one.",
-					menu_carbon_blade_beta_desc = "BASIC: ##$basic##\nReducing the wear down of the blades on enemies by ##50%##.\n\nACE: ##$pro##\nYou can now saw through shield enemies with your OVER9000 portable saw. When killing an enemy with the saw, you have a ##50%## chance to cause nearby enemies in a ##10m## radius to panic. Panic will make enemies go into short bursts of uncontrollable fear.\n\nYou can now gain ammunition for the saw from dropped ammo boxes. Saw ammo pick up can't be increased/decreased by other ammo pick up related skills.",
+					menu_carbon_blade_beta_desc = "BASIC: ##$basic##\nReducing the wear down of the blades on enemies by ##80%##.\n\nACE: ##$pro##\nYou can now saw through shield enemies with your OVER9000 portable saw. When killing an enemy with the saw, you have a ##50%## chance to cause nearby enemies in a ##10m## radius to panic. Panic will make enemies go into short bursts of uncontrollable fear.\n\nYou can now gain ammunition for the saw from dropped ammo boxes. Saw ammo pick up can't be increased/decreased by other ammo pick up related skills.",
 					menu_bandoliers_beta_desc = "BASIC: ##$basic##\nYour total ammo capacity is increased by ##25%##.\n\nACE: ##$pro##\nYour ammo pick up rate is increased by ##25%##.\n\nYou gain an ability to pick up throwables from ammo packs. You start at ##5## ammo pickups and get ##+1.5## for every ammo box you pick up. After reaching a \"pick up target\" you refill ##1## throwable and your pick up counter is reset to ##5##. Pick up targets are different for every throwable and can be found in their descriptions.\n\nNotes:\nThis skill does not stack with the perk skill \"Walk-in Closet\".",
 				})
 			end
@@ -769,22 +769,23 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			
 			local function Throwable_descs()
 				LocalizationManager:add_localized_strings({
-					bm_wpn_prj_ace_desc = "Damage: 300\nPick up target: "..tostring(Gilza.grenade_multipliers.wpn_prj_ace).."\n",
-					bm_grenade_frag_desc = "Damage: 1600\nRadius: 5m\nPick up target: "..tostring(Gilza.grenade_multipliers.frag).."\n",
-					bm_wpn_prj_four_desc = "Damage: 150\nPick up target: "..tostring(Gilza.grenade_multipliers.wpn_prj_four).."\n\nHit enemies become poisoned and begin to vomit uncontrollably, preventing them from making any other actions.\n\nPoison stats:\n -Duration: 5 seconds\n -Damage per second: 130",
-					bm_wpn_prj_hur_desc = "Damage: 1300\nPick up target: "..tostring(Gilza.grenade_multipliers.wpn_prj_hur).."\n",
-					bm_wpn_prj_jav_desc = "Damage: 3250\nPick up target: "..tostring(Gilza.grenade_multipliers.wpn_prj_jav).."\n",
-					bm_wpn_prj_target_desc = "Damage: 1000\nPick up target: "..tostring(Gilza.grenade_multipliers.wpn_prj_target).."\n",
-					bm_concussion_desc = "Damage: 0\nRadius: 15m\nPick up target: "..tostring(Gilza.grenade_multipliers.concussion).."\n",
-					bm_dynamite_desc = "Damage: 1600\nRadius: 5m\nPick up target: "..tostring(Gilza.grenade_multipliers.dynamite).."\n",
-					bm_grenade_frag_com_desc = "Damage: 1600\nRadius: 5m\nPick up target: "..tostring(Gilza.grenade_multipliers.frag_com).."\n",
-					bm_grenade_sticky_grenade_desc = "Damage: 1200\nRadius: 5m\nPick up target: "..tostring(Gilza.grenade_multipliers.sticky_grenade).."\n",
-					bm_grenade_xmas_snowball_desc = "Damage: 280\nRadius: 1m\n",
-					bm_grenade_fir_com_desc = "Damage: 30\nRadius: 5m\nPick up target: "..tostring(Gilza.grenade_multipliers.fir_com).."\n\nCreates an incendiary explosion. Enemies caught in the blast radius, receive afterburn.\n\nAfterburn stats:\n -Duration: 2 seconds\n Damage per second: 420",
-					bm_grenade_dada_com_desc = "Damage: 1600\nRadius: 5m\nPick up target: "..tostring(Gilza.grenade_multipliers.dada_com).."\n",
-					bm_grenade_molotov_desc = "Damage: 30\nRadius: 3,5m\nPick up target: "..tostring(Gilza.grenade_multipliers.molotov).."\n\nCreates a fire field for 15 seconds. Enemies that walk through it, receive afterburn.\n\nAfterburn stats:\n -Duration: 10 seconds\n Damage per second: 260\n\nIf you land a direct hit, afterburn damage per second is increased to 420 for hit target.",
-					bm_grenade_electric_desc = "Damage: 600\nRadius: 10m\nPick up target: "..tostring(Gilza.grenade_multipliers.wpn_gre_electric).."\n\nZap-zap.\nThis grenade has increased damage fall off, because of it, enemies caught in the blast radius, but not directly in the middle of it, will receive minuscular damage.\n",
-					bm_grenade_poison_gas_grenade_desc = "Damage: 1000\nRadius: 2m\nPick up target: "..tostring(Gilza.grenade_multipliers.poison_gas_grenade).."\n\nCreates a gas cloud for 20 seconds. Enemies caught in the cloud become poisoned and begin to vomit uncontrollably, preventing them from making any other actions.\n\nPoison stats:\n -Duration: 13 seconds\n -Damage per second: 10",
+					bm_wpn_prj_ace_desc = "Pick up target: "..tostring(Gilza.grenade_multipliers.wpn_prj_ace).."\n",
+					bm_grenade_frag_desc = "Radius: 5m\nPick up target: "..tostring(Gilza.grenade_multipliers.frag).."\n",
+					bm_wpn_prj_four_desc = "Pick up target: "..tostring(Gilza.grenade_multipliers.wpn_prj_four).."\n\nHit enemies become poisoned and begin to vomit uncontrollably, preventing them from making any other actions.\n\nPoison stats:\n -Duration: 5 seconds\n -Damage per second: 130",
+					bm_wpn_prj_hur_desc = "Pick up target: "..tostring(Gilza.grenade_multipliers.wpn_prj_hur).."\n",
+					bm_wpn_prj_jav_desc = "Pick up target: "..tostring(Gilza.grenade_multipliers.wpn_prj_jav).."\n",
+					bm_wpn_prj_target_desc = "Pick up target: "..tostring(Gilza.grenade_multipliers.wpn_prj_target).."\n",
+					bm_concussion_desc = "Radius: 15m\nPick up target: "..tostring(Gilza.grenade_multipliers.concussion).."\n",
+					bm_dynamite_desc = "Radius: 5m\nPick up target: "..tostring(Gilza.grenade_multipliers.dynamite).."\n",
+					bm_grenade_frag_com_desc = "Radius: 10m\nPick up target: "..tostring(Gilza.grenade_multipliers.frag_com).."\n",
+					bm_grenade_sticky_grenade_desc = "Radius: 5m\nPick up target: "..tostring(Gilza.grenade_multipliers.sticky_grenade).."\n",
+					bm_grenade_xmas_snowball_desc = "Radius: 1m\n",
+					bm_grenade_fir_com_desc = "Radius: 5m\nPick up target: "..tostring(Gilza.grenade_multipliers.fir_com).."\n\nCreates an incendiary explosion. Enemies caught in the blast radius, receive afterburn.\n\nAfterburn stats:\n -Duration: 2 seconds\n Damage per second: 420",
+					bm_grenade_dada_com_desc = "Radius: 5m\nPick up target: "..tostring(Gilza.grenade_multipliers.dada_com).."\n",
+					bm_grenade_molotov_desc = "Radius: 3,5m\nPick up target: "..tostring(Gilza.grenade_multipliers.molotov).."\n\nCreates a fire field for 15 seconds. Enemies that walk through it, receive afterburn.\n\nAfterburn stats:\n -Duration: 10 seconds\n Damage per second: 260\n\nIf you land a direct hit, afterburn damage per second is increased to 420 for hit target.",
+					bm_grenade_electric_desc = "Radius: 10m\nPick up target: "..tostring(Gilza.grenade_multipliers.wpn_gre_electric).."\n\nZap-zap.\nThis grenade has increased damage fall off, because of it, enemies caught in the blast radius, but not directly in the middle of it, will receive minuscular damage.\n",
+					bm_grenade_poison_gas_grenade_desc = "Radius: 2m\nPick up target: "..tostring(Gilza.grenade_multipliers.poison_gas_grenade).."\n\nCreates a gas cloud for 20 seconds. Enemies caught in the cloud become poisoned and begin to vomit uncontrollably, preventing them from making any other actions.\n\nPoison stats:\n -Duration: 13 seconds\n -Damage per second: 10",
+					bm_grenade_laser_watch_desc = "Range: 0.68m\nPick up target: "..tostring(Gilza.grenade_multipliers.laser_watch)..". Picks up 10 charges at once.\n\nCan be used to cut through locks and reinforced steel.",
 				})
 			end
 			Throwable_descs()
@@ -1376,7 +1377,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					-- E3
 					menu_ammo_reservoir_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПосле взаимодействия с установленной вами сумки с патронами, вы или ваши напарники можете стрелять из своего оружия не расходуя боеприпасы в течение ##5## или меньше секунд. Чем больше амуниции вы восстановите из сумки, тем дольше будет эффект непрерывной стрельбы.\n\nПРО: ##$pro;##\nМаксимальная продолжительность эффекта увеличена до ##20## секунд.\n\nПометки:\n- Ваши Гранатометы и Ракетометы будут расходовать боезапас во время действия данного навыка, но он будет исчерпываться напрямую из вашего запаса, вместо магазина.\n- Если взаимодействие с сумкой у которой есть данный эффект полностью ее расходует, данный эффект будет наложен на игрока в течении максимальной возможной продолжительности.",
 					menu_ammo_2x_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВ каждой сумке с патронами на ##50%## больше патронов.\n\nПРО: ##$pro;##\nПозволяет устанавливать ##2## сумки с патронами вместо одной.",
-					menu_carbon_blade_beta_desc = "БАЗОВЫЙ: ##$basic;##\nАтака врагов портативной пилой OVE9000 изнашивает лезвия на ##50%## меньше.\n\nПРО: ##$pro;##\nТеперь вы можете прорезать щитовиков своей пилой OVE9000. Убив противника пилой, у вас есть ##50%## шанс посеять панику в ##10## метровом радиусе. Паника будет подавлять противника, заставляя его испытывать страх.\n\nВраги теперь оставляют боезапас к пиле. Подбор боезапаса пилы не может быть увеличен/уменьшен другими навыками влияющими на подбор боезапаса.",
+					menu_carbon_blade_beta_desc = "БАЗОВЫЙ: ##$basic;##\nАтака врагов портативной пилой OVE9000 изнашивает лезвия на ##80%## меньше.\n\nПРО: ##$pro;##\nТеперь вы можете прорезать щитовиков своей пилой OVE9000. Убив противника пилой, у вас есть ##50%## шанс посеять панику в ##10## метровом радиусе. Паника будет подавлять противника, заставляя его испытывать страх.\n\nВраги теперь оставляют боезапас к пиле. Подбор боезапаса пилы не может быть увеличен/уменьшен другими навыками влияющими на подбор боезапаса.",
 					menu_bandoliers_beta_desc = "БАЗОВЫЙ: ##$basic;##\nПовышает количество переносимых боеприпасов на ##25%##.\n\nПРО: ##$pro;##\nВы подбираете на ##25%## больше боеприпасов.\n\nВы получаете возможность найти метательное оружие в оставленных врагами боеприпасах. Счетчик начинается с ##5## и поднимается на ##+1.5## за каждый подобранный боеприпас. После достижения необходимого количества найденных боеприпасов вы получите ##1## метательное оружие, после чего счетчик сбросится до ##5##. Каждое метательное оружие имеет уникальное необоходимое количество подобранных боеприпасов - конкретные значения можно узнать в их описании.\n\nПометки:\nНавык не складывается с бонусом \"Тяжёлый пехотинец\" из набора перков.",
 				})
 			end
@@ -1648,22 +1649,23 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			
 			local function Throwable_descs()
 				LocalizationManager:add_localized_strings({
-					bm_wpn_prj_ace_desc = "Урон: 300\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.wpn_prj_ace).." боеприпасов.\n",
-					bm_grenade_frag_desc = "Урон: 1600\nРадиус: 5м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.frag).." боеприпасов.\n",
-					bm_wpn_prj_four_desc = "Урон: 150\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.wpn_prj_four).." боеприпасов.\n\nПораженные враги поучают отравление вызывающее неконтролируемую рвоту, блокируя их возможность делать какие либо действия.\n\nСтата отравления:\n -Продолжительность: 5 секунд\n -Урон в секунду: 130",
-					bm_wpn_prj_hur_desc = "Урон: 1300\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.wpn_prj_hur).." боеприпасов.\n",
-					bm_wpn_prj_jav_desc = "Урон: 3250\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.wpn_prj_jav).." боеприпасов.\n",
-					bm_wpn_prj_target_desc = "Урон: 1000\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.wpn_prj_target).." боеприпасов.\n",
-					bm_concussion_desc = "Урон: 0\nРадиус: 15м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.concussion).." боеприпасов.\n",
-					bm_dynamite_desc = "Урон: 1600\nРадиус: 5м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.dynamite).." боеприпасов.\n",
-					bm_grenade_frag_com_desc = "Урон: 1600\nРадиус: 5м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.frag_com).." боеприпасов.\n",
-					bm_grenade_sticky_grenade_desc = "Урон: 1200\nРадиус: 5м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.sticky_grenade).." боеприпасов.\n",
-					bm_grenade_xmas_snowball_desc = "Урон: 280\nРадиус: 1м\n",
-					bm_grenade_fir_com_desc = "Урон: 30\nРадиус: 5м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.fir_com).." боеприпасов.\n\nСоздает зажигательный взрыв. Враги попавшие в радиус взрыва начинают гореть.\n\nСтата поджога:\n -Продолжительность: 2 секунды\n -Урон в секунду: 420",
-					bm_grenade_dada_com_desc = "Урон: 1600\nРадиус: 5м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.dada_com).." боеприпасов.\n",
-					bm_grenade_molotov_desc = "Урон: 30\nРадиус: 3,5м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.molotov).." боеприпасов.\n\nСоздает огненное поле на 15 секунд. Враги попавшие в это поле начинают гореть.\n\nСтата поджога:\n -Продолжительность: 10 секунд\n -Урон в секунду: 260\n\nЕсли вы попадете прямо по врагу, урон в секунду от поджога будет увеличен до 420 для этой цели.",
-					bm_grenade_electric_desc = "Урон: 600\nРадиус: 10м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.wpn_gre_electric).." боеприпасов.\n\nЗап-зап.\nДанная граната имеет увеличенный дроп-офф урона, из-за чего противники в радиусе взрыва, но не в его центре, будут получать очень маленький урон.\n",
-					bm_grenade_poison_gas_grenade_desc = "Урон: 1000\nРадиус: 2м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.poison_gas_grenade).." боеприпасов.\n\nСоздает облако газа на 20 секунд. Враги попавшие в данное облако поучат отравление вызывающее неконтролируемую рвоту, блокируя их возможность делать какие либо действия.\n\nСтата отравления:\n -Продолжительность: 13 секунд\n -Урон в секунду: 10",
+					bm_wpn_prj_ace_desc = "Пополняется после подбора "..tostring(Gilza.grenade_multipliers.wpn_prj_ace).." боеприпасов.\n",
+					bm_grenade_frag_desc = "Радиус: 5м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.frag).." боеприпасов.\n",
+					bm_wpn_prj_four_desc = "Пополняется после подбора "..tostring(Gilza.grenade_multipliers.wpn_prj_four).." боеприпасов.\n\nПораженные враги поучают отравление вызывающее неконтролируемую рвоту, блокируя их возможность делать какие либо действия.\n\nСтата отравления:\n -Продолжительность: 5 секунд\n -Урон в секунду: 130",
+					bm_wpn_prj_hur_desc = "Пополняется после подбора "..tostring(Gilza.grenade_multipliers.wpn_prj_hur).." боеприпасов.\n",
+					bm_wpn_prj_jav_desc = "Пополняется после подбора "..tostring(Gilza.grenade_multipliers.wpn_prj_jav).." боеприпасов.\n",
+					bm_wpn_prj_target_desc = "Пополняется после подбора "..tostring(Gilza.grenade_multipliers.wpn_prj_target).." боеприпасов.\n",
+					bm_concussion_desc = "Радиус: 15м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.concussion).." боеприпасов.\n",
+					bm_dynamite_desc = "Радиус: 5м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.dynamite).." боеприпасов.\n",
+					bm_grenade_frag_com_desc = "Радиус: 10м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.frag_com).." боеприпасов.\n",
+					bm_grenade_sticky_grenade_desc = "Радиус: 5м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.sticky_grenade).." боеприпасов.\n",
+					bm_grenade_xmas_snowball_desc = "Радиус: 1м\n",
+					bm_grenade_fir_com_desc = "Радиус: 5м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.fir_com).." боеприпасов.\n\nСоздает зажигательный взрыв. Враги попавшие в радиус взрыва начинают гореть.\n\nСтата поджога:\n -Продолжительность: 2 секунды\n -Урон в секунду: 420",
+					bm_grenade_dada_com_desc = "Радиус: 5м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.dada_com).." боеприпасов.\n",
+					bm_grenade_molotov_desc = "Радиус: 3,5м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.molotov).." боеприпасов.\n\nСоздает огненное поле на 15 секунд. Враги попавшие в это поле начинают гореть.\n\nСтата поджога:\n -Продолжительность: 10 секунд\n -Урон в секунду: 260\n\nЕсли вы попадете прямо по врагу, урон в секунду от поджога будет увеличен до 420 для этой цели.",
+					bm_grenade_electric_desc = "Радиус: 10м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.wpn_gre_electric).." боеприпасов.\n\nЗап-зап.\nДанная граната имеет увеличенный дроп-офф урона, из-за чего противники в радиусе взрыва, но не в его центре, будут получать очень маленький урон.\n",
+					bm_grenade_poison_gas_grenade_desc = "Радиус: 2м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.poison_gas_grenade).." боеприпасов.\n\nСоздает облако газа на 20 секунд. Враги попавшие в данное облако поучат отравление вызывающее неконтролируемую рвоту, блокируя их возможность делать какие либо действия.\n\nСтата отравления:\n -Продолжительность: 13 секунд\n -Урон в секунду: 10",
+					bm_grenade_laser_watch_desc = "Дистанция: 0.68м\nПополняется после подбора "..tostring(Gilza.grenade_multipliers.laser_watch).." боеприпасов. Подирает 10 зарядов за один побор.\n\nМогут быть использованы для прорези замков и армированной стали.",
 				})
 			end
 			Throwable_descs()

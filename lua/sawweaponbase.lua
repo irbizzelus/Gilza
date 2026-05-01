@@ -45,11 +45,7 @@ Hooks:OverrideFunction(SawWeaponBase, "fire", function (self, from_pos, directio
 		local ammo_usage = 5
 
 		if ray_res.hit_enemy then
-			if managers.player:has_category_upgrade("saw", "enemy_slicer") then
-				ammo_usage = managers.player:upgrade_value("saw", "enemy_slicer", 5)
-			else
-				ammo_usage = 10
-			end
+			ammo_usage = math.ceil(managers.player:upgrade_value("saw", "enemy_slicer", 5))
 		end
 
 		if managers.player:has_category_upgrade("saw", "consume_no_ammo_chance") then
@@ -121,8 +117,6 @@ end
 Hooks:OverrideFunction(SawWeaponBase, "_fire_raycast", function (self, user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul)
 	local result = {}
 	local hit_unit = nil
-	from_pos = self._obj_fire:position()
-	direction = self._obj_fire:rotation():y()
 
 	mvec3_add(from_pos, direction * -30)
 	mvector3.set(mvec_spread_direction, direction)

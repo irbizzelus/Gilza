@@ -20,7 +20,11 @@ local function on_ammo_pickup(unit, pickup_chance, increase)
 		if pickup_target <= (chance + 2) then -- comensate the coroutine nature of this skill, which usualy need at least 1 ammo pack to reset tracking after a pick up
 			gained_throwable = true
 			
-			managers.player:add_grenade_amount(1, true)
+			local grenade_id = managers.blackmarket:equipped_grenade()
+			local grenade_tweak = tweak_data.blackmarket.projectiles[grenade_id]
+			local pickup_amount = grenade_tweak.pickup_amount or 1
+			
+			managers.player:add_grenade_amount(pickup_amount, true)
 			-- on nade pickup, reset current pick up chance. most likely becuase this is a coroutine, getting multiple pickups in one tick is not handled well, allowing players to gain 2 or more pickups on the same tick
 			-- without resetting the % to the starting value. normally starting value is reset on coroutine restart, but it doesnt happen in the "multiple packs in one tick" case, so we manualy reset it
 			if managers.player:upgrade_value("player", "regain_throwable_from_ammo") and managers.player:upgrade_value("player", "regain_throwable_from_ammo").chance then

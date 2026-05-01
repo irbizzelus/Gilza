@@ -2202,6 +2202,24 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		end
 		Gilza_init_uzi()
 		
+		---- SPEEN ----
+		local function Gilza_init_speen()
+			self.parts.wpn_fps_smg_speen_magazine_extended.stats.reload = -4
+			self.parts.wpn_fps_smg_speen_extra_magazine.stats.total_ammo_mod = 5
+			self.parts.wpn_fps_smg_speen_barrel_dmr.stats.spread = -1
+			self.parts.wpn_fps_smg_speen_barrel_dmr.stats.damage = nil
+			self.parts.wpn_fps_smg_speen_barrel_dmr.custom_stats = {armor_piercing_add = 1,can_shoot_through_shield = true,can_shoot_through_wall = true,can_shoot_through_enemy = true} -- doesnt add stats because it's not ammo, but wont really do anything hurful
+			self.parts.wpn_fps_smg_speen_barrel_dmr.desc_id = G_W_M:set_pickup_mul_based_on_ap(self.parts.wpn_fps_smg_speen_barrel_dmr.custom_stats, true)
+			self.parts.wpn_fps_smg_speen_barrel_dmr.has_description = true
+			-- add invisible ammo that actually adds ap
+			self.parts.wpn_fps_smg_speen_barrel_dmr.adds = {"wpn_fps_upg_c96_ap_kit_ap_rounds"}
+			self.wpn_fps_smg_speen.override.wpn_fps_upg_c96_ap_kit_ap_rounds = {
+				stats = {},
+				custom_stats = {armor_piercing_add = 1,can_shoot_through_shield = true,can_shoot_through_wall = true,can_shoot_through_enemy = true}
+			}
+		end
+		Gilza_init_speen()
+		
 	end
 	init_SMG_mods()
 	
@@ -2229,8 +2247,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_hailstorm_conversion.stats.reload = 2
 		
 		-- SAWS
-		self.parts.wpn_fps_saw_body_speed.stats.damage = 40
-		self.parts.wpn_fps_saw_m_blade_sharp.stats.damage = 40
+		self.parts.wpn_fps_saw_body_speed.stats.damage = 0
+		self.parts.wpn_fps_saw_m_blade_sharp.stats.damage = 50
 		
 		-- PISTOL CROSSBOW
 		self.parts.wpn_fps_bow_hunter_m_standard.custom_stats = {armor_piercing_add = 1}
@@ -2826,6 +2844,32 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_pis_deagle_co_long.stats.spread = 2
 		end
 		Gilza_init_deagle()
+		
+		---- PMM ----
+		local function Gilza_init_pmm()
+			self.parts.wpn_fps_pis_pmm_slide_suppressed.stats.damage = -50
+			self.parts.wpn_fps_pis_pmm_slide_suppressed.stats.total_ammo_mod = 5.71
+			self.parts.wpn_fps_pis_pmm_slide_suppressed.stats.spread = 5
+			self.parts.wpn_fps_pis_pmm_slide_suppressed.stats.recoil = 2
+			self.parts.wpn_fps_pis_pmm_slide_suppressed.stats.concealment = 1
+			self.parts.wpn_fps_pis_pmm_slide_suppressed.custom_stats = {
+				fire_rate_multiplier = 1.066666666666667,
+				ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("PISTOL", 250, 200).max_mul,
+				ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("PISTOL", 250, 200).min_mul,
+			}
+			self.parts.wpn_fps_pis_pmm_slide_suppressed.desc_id = "bm_wpn_fps_damage_class_update_increase"
+			self.parts.wpn_fps_pis_pmm_slide_suppressed.has_description = true
+			self.wpn_fps_pis_x_pmm.override = self.wpn_fps_pis_x_pmm.override or {}
+			self.wpn_fps_pis_x_pmm.override.wpn_fps_pis_pmm_slide_suppressed = self.wpn_fps_pis_x_pmm.override.wpn_fps_pis_pmm_slide_suppressed or {}
+			self.wpn_fps_pis_x_pmm.override.wpn_fps_pis_pmm_slide_suppressed.stats = {
+				damage = -25,
+				total_ammo_mod = 6,
+				spread = 5,
+				recoil = 2,
+				concealment = 1
+			}
+		end
+		Gilza_init_pmm()
 		
 	end
 	init_Pistol_mods()

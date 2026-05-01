@@ -61,6 +61,7 @@ _G.Gilza = {
 		wpn_prj_hur = 50,
 		sticky_grenade = 22,
 		wpn_gre_electric = 20,
+		laser_watch = 30,
 	},
 	shotgun_minimal_damage_multipliers = {},
 	current_shotgun_shot_id = 0,
@@ -157,14 +158,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.6 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.602 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.6 Changelog:\n\n- Improvements for all melee weapons which include: better animation timings, new damage classes and \"melee only\" toggle mode.\n- Default weapon swap speed is now 50% faster.\n- Fire mode penalties were eased up a little.\n- Akimbo weapons' usage updates and buffs.\n- Minor weapon rebalances.\n- Tough Guy skill now grants resistance to knockback from melee.\n- Recoil adjustments if game is played with a controller.\n- Flashlight improvements.\n- Various fixes.\n\nCheck the full changelog for more info."
+			local message = "2.6.02 Changelog:\n\n- Compatibility with update 245 and Espionage DLC.\n- Saw stats reworked slighlty to match new vanilla stats better.\n\nBEWARE: More Weapon Stats mod will crash your game while trying to inspect/modify the new dart weapon. Either uninstall MWS untill a patch is released, or avoid interacting with said weapon."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.6
+			Gilza.settings.version = 2.602
 			Gilza.Save()
 		end
 	end)

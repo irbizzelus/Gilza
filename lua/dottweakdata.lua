@@ -27,6 +27,10 @@ Hooks:PostHook(DOTTweakData, "_init_dot_entries_poison", "Gilza_DOTTweakData_ini
 		dot_length = 6.001,
 		dot_tick_period = 0.25
 	}
+	-- dart gun
+	self.dot_entries.poison.ammo_proj_dart = clone(self.dot_entries.poison.ammo_proj_bow)
+	self.dot_entries.poison.ammo_proj_dart.dot_length = 6.501
+	self.dot_entries.poison.ammo_proj_dart.apply_hurt_once = true
 	-- pistol crossbow crossbow_poison_arrow
 	self.dot_entries.poison.ammo_proj_crossbow = {
 		damage_class = "ProjectilesPoisonBulletBase",

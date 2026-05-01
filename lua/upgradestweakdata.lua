@@ -184,7 +184,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			---- AMMO SPECIALIST
 			-- we consume less total ammo with saw, so skill is also reduced
 			self.values.saw.enemy_slicer = {
-				5
+				1
 			}
 			-- new saw massacre aced bonus
 			self.values.player.saw_ammo_pick_up = {

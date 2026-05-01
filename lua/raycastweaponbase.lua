@@ -103,7 +103,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "add_ammo", function (self, ratio, add
 			
 			-- saw pick up skill
 			if (ammo_base._factory_id == "wpn_fps_saw" or ammo_base._factory_id == "wpn_fps_saw_secondary") and managers.player:has_category_upgrade("player", "saw_ammo_pick_up") then
-				add_amount = 5
+				add_amount = 2
 			end
 			
 			picked_up = add_amount > 0
