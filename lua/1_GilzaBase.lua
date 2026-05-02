@@ -112,11 +112,11 @@ function Gilza:modCompatibility()
 			if mod.AssetUpdates.version then
 				if type(mod.AssetUpdates.version) == "string" then
 					local num_ver_str = string.gsub(mod.AssetUpdates.version,'%.','')
-					if tonumber(num_ver_str) and tonumber(num_ver_str) <= 175 then
+					if tonumber(num_ver_str) and tonumber(num_ver_str) <= 176 then
 						Gilza.isWeaponLibBroken = true
 						log("[Gilza] Found broken version of weaponlib, shotgun damage change applied.")
 					else
-						log("[Gilza] Found possibly unbroken version of weaponlib. If version is higher then 1.7.5, update Gilza to get rid of this log notification. Current weaponlib version: "..tostring(mod.AssetUpdates.version))
+						log("[Gilza] Found possibly unbroken version of weaponlib. If version is higher then 1.7.6, update Gilza to get rid of this log notification. Current weaponlib version: "..tostring(mod.AssetUpdates.version))
 					end
 				end
 			end
@@ -162,7 +162,7 @@ function Gilza:changelog_message()
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.6.02 Changelog:\n\n- Compatibility with update 245 and Espionage DLC.\n- Saw stats reworked slighlty to match new vanilla stats better.\n\nBEWARE: More Weapon Stats mod will crash your game while trying to inspect/modify the new dart weapon. Either uninstall MWS untill a patch is released, or avoid interacting with said weapon."
+			local message = "2.6.02 Changelog:\n\n- Compatibility with update 245 and Espionage DLC.\n- Saw stats reworked slighlty to match new vanilla stats better.\n\nBEWARE: More Weapon Stats mod may crash your game while trying to inspect/modify the new dart weapon. Either uninstall MWS untill a patch is released, or avoid interacting with said weapon."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
 			Gilza.settings.version = 2.602

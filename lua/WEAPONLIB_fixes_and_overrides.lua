@@ -440,51 +440,5 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 		end
 	end
 	
-	-- U245 weaponlib fix for throwables stat menu
-	if BlackMarketGui then
-		Hooks:RemovePostHook("weaponlib_blackmarketgui_show_stats")
-		Hooks:PostHook(BlackMarketGui, "show_stats", "weaponlib_blackmarketgui_show_stats", function(self, box)
-			if not self._stats_panel or not self._rweapon_stats_panel or not self._armor_stats_panel or not self._mweapon_stats_panel then
-				return
-			end
-
-			if not self._slot_data then
-				return
-			end
-
-			if not self._slot_data.comparision_data then
-				return
-			end
-			
-			if tweak_data.blackmarket.projectiles[self._slot_data.name] then
-				return
-			end
-
-			if self._slot_data.dont_compare_stats or (tweak_data.weapon[self._slot_data.name] or self._slot_data.default_blueprint) or tweak_data.blackmarket.armors[self._slot_data.name] or tweak_data.economy.armor_skins[self._slot_data.name] or tweak_data.blackmarket.melee_weapons[self._slot_data.name] then
-				return
-			end
-
-			local weapon = managers.blackmarket:get_crafted_category_slot(self._slot_data.category, self._slot_data.slot)
-			local name = weapon and weapon.weapon_id or self._slot_data.name
-			local category = self._slot_data.category
-			local slot = self._slot_data.slot
-
-			local mod_stats = WeaponDescription.get_stats_for_mod(self._slot_data.name, name, category, slot)
-
-			local value, stat_changed = nil
-
-			for _, stat in ipairs(self._stats_shown) do
-				if stat.name ~= "optimal_range" then
-					value = mod_stats.chosen[stat.name]
-					stat_changed = value ~= 0
-
-					for name, column in pairs(self._stats_texts[stat.name]) do
-						column:set_alpha(stat_changed and 1 or 0.5)
-					end
-				end
-			end
-		end)
-	end
-	
 	_G.Gilzas_weaponlib_overrides_and_fixes = {} -- the needed global var
 end
