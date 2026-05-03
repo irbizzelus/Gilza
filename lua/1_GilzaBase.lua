@@ -158,14 +158,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.602 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.604 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.6.02 Changelog:\n\n- Compatibility with update 245 and Espionage DLC.\n- Saw stats reworked slighlty to match new vanilla stats better.\n\nBEWARE: More Weapon Stats mod may crash your game while trying to inspect/modify the new dart weapon. Either uninstall MWS untill a patch is released, or avoid interacting with said weapon."
+			local message = "2.6.02 Changelog:\n\n- Compatibility with update 245 and Espionage DLC.\n- Saw stats reworked slighlty to match new vanilla stats better.\n\n2.6.04 Changelog:\n\n- Added the \"DECA dart gun inspect/modify crash fix\". If you have this mod installed, you can remove it."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.602
+			Gilza.settings.version = 2.604
 			Gilza.Save()
 		end
 	end)

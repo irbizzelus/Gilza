@@ -440,5 +440,10 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 		end
 	end
 	
+	-- dart gun crash fix for MWS
+	if not ProjectileWeaponBase then
+		require("lib/units/weapons/ProjectileWeaponBase")
+	end
+	
 	_G.Gilzas_weaponlib_overrides_and_fixes = {} -- the needed global var
 end
