@@ -4239,7 +4239,6 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_custom_
 				self[id].stats.damage = 250
 				self[id].AMMO_PICKUP = {pickups._250 * 0.9, pickups._250 * 1.1}
 			end
-			self[id].can_shoot_through_enemy = true
 		else
 			self[id].damage_falloff = G_W_M.damage_dropoff.ARs
 			if self[id].stats.damage <= 115 then
@@ -4256,6 +4255,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_custom_
 				self[id].AMMO_PICKUP = {pickups._250_bipodless * 0.9, pickups._250_bipodless * 1.1}
 			end
 		end
+		self[id].can_shoot_through_enemy = true
 
 		-- if not primary
 		if self[id].use_data and self[id].use_data.selection_index and self[id].use_data.selection_index == 1 then
