@@ -36,6 +36,7 @@ if Gilza.VHP_enabled then
 			GameInfoManager._BUFFS.temporary.player_wild_temporary_regen_pause = "player_wild_temporary_regen_pause"
 			GameInfoManager._BUFFS.temporary.copr_invuln_on_segment_loss = "copr_invuln_on_segment_loss"
 			GameInfoManager._BUFFS.temporary.single_body_shot_kill_reload = "single_body_shot_kill_reload"
+			GameInfoManager._BUFFS.temporary.dmg_immunity_while_sprinting = "dmg_immunity_while_sprinting"
 			
 			GameInfoManager._BUFFS.on_activate.new_berserk_weapon_damage_multiplier = function(id, data)
 				local upgrade_value = managers.player:upgrade_value("temporary", "new_berserk_weapon_damage_multiplier")
@@ -421,6 +422,16 @@ if Gilza.VHP_enabled then
 				color = HUDListManager.ListOptions.buff_icon_color_standard,
 				ignore = not Gilza.settings.vhud_compat_new_hitman_recovery,
 			}
+			-- running from death aced
+			HUDList.BuffItemBase.MAP.new_aced_running_from_death = {
+				skills_new = tweak_data.skilltree.skills.running_from_death.icon_xy,
+				class = "TimedBuffItem",
+				title = "wolfhud_hudlist_buff_aced",
+				localized = true,
+				priority = 8,
+				color = HUDListManager.ListOptions.buff_icon_color_standard,
+				ignore = not Gilza.settings.vhud_compat_new_aced_running_from_death,
+			}
 			
 			-- new sicario
 			HUDList.BuffItemBase.MAP.sicario_dodge.ignore = true
@@ -632,6 +643,18 @@ function Gilza.New_Skills_Informer:activated_new_hitman_akimbo_recovery()
 		if dur > 0 then
 			managers.gameinfo:event("timed_buff", "deactivate", "new_hitman_recovery_bonus")
 			managers.gameinfo:event("timed_buff", "activate", "new_hitman_recovery_bonus", { duration = dur })
+		end
+	end
+end
+
+-- aw yeap
+function Gilza.New_Skills_Informer:activated_new_aced_running_from_death()
+	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
+		local upg_values = managers.player:upgrade_value("temporary", "dmg_immunity_while_sprinting")
+		local dur = upg_values[2] or 0
+		if dur > 0 then
+			managers.gameinfo:event("timed_buff", "deactivate", "new_aced_running_from_death")
+			managers.gameinfo:event("timed_buff", "activate", "new_aced_running_from_death", { duration = dur })
 		end
 	end
 end

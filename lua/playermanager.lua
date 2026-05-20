@@ -41,14 +41,14 @@ Hooks:OverrideFunction(PlayerManager, "damage_reduction_skill_multiplier", funct
 			self._last_damage_taken_direction = 69
 		end
 		
-		-- brawler's passive
-		if managers.player:player_unit():character_damage():get_real_armor() > 0 then
-			if managers.player:has_category_upgrade("player", "damage_resist_brawler") then
+		-- brawler's melee hold dr
+		if managers.player:has_category_upgrade("player", "damage_resist_brawler") then
+			if managers.player:player_unit():character_damage():get_real_armor() > 0 and self:get_current_state():_is_meleeing() then
 				multiplier = multiplier - (1 - managers.player:upgrade_value("player", "damage_resist_brawler", 1))
 			end
 		end
 		
-		-- brawler teammate based
+		-- brawler teammate based dr
 		if managers.player:has_category_upgrade("player", "damage_resist_teammates_brawler") then
 			if ( managers.player:player_unit():character_damage():_max_health() / managers.player:player_unit():character_damage():get_real_health() ) >= 2 and managers.player:player_unit():character_damage():get_real_armor() > 0 then
 				if self._gilza_brawler_teammates_nearby and self._gilza_brawler_teammates_nearby >= 1 then
@@ -156,7 +156,7 @@ Hooks:OverrideFunction(PlayerManager, "skill_dodge_chance", function (self, runn
 	local result = gilza_orig_pm_skill_dodge_chance(self, running, crouching, on_zipline, override_armor, detection_risk)
 	if managers.player:has_category_upgrade("player", "speed_junkie_meter") then
 		self._Gilza_junkie_counter = self._Gilza_junkie_counter or 0
-		local junkie_adds_dodge = self._Gilza_junkie_counter / 100 * 0.4 -- up to 40% dodge max. probably should make this tweakable from upgradestweaks, but lazyness
+		local junkie_adds_dodge = self._Gilza_junkie_counter / 100 * 0.45 -- up to 40% dodge max. probably should make this tweakable from upgradestweaks, but lazyness
 		result = result + junkie_adds_dodge
 	end
 	-- new gambler 9th card
@@ -166,6 +166,41 @@ Hooks:OverrideFunction(PlayerManager, "skill_dodge_chance", function (self, runn
 	-- ex-president
 	if managers.player:has_category_upgrade("player", "static_dodge_chance") then
 		result = managers.player:upgrade_value("player", "static_dodge_chance", 0)
+	end
+	-- revitalized
+	local function should_allow_revitalized_dodge()
+		if not ( self:player_unit() and alive(self:player_unit()) ) then
+			return false
+		end
+		if not ( self:has_category_upgrade("temporary", "player_dodge_armor_regen") and not self:has_activate_temporary_upgrade("temporary", "player_dodge_armor_regen") ) then
+			return false
+		end
+		if not ( self:player_unit():character_damage() and (self:player_unit():character_damage():get_real_armor() <= 0) ) then
+			return false
+		end
+		local excluded_state = {
+			["bleed_out"] = true,
+			["fatal"] = true,
+			["incapacitated"] = true,
+			["arrested"] = true,
+			["jerry1"] = true
+		}
+		if not ( self:current_state() and not excluded_state[self:current_state()] ) then
+			return false
+		end
+		return true
+	end
+	if should_allow_revitalized_dodge() then
+		local to_add = 0
+		local skill = managers.player:upgrade_value("temporary", "player_dodge_armor_regen", 0)
+		if skill and type(skill) ~= "number" then
+			to_add = skill[1].dodge_gain
+		end
+		result = result + to_add
+	end
+	-- running from death
+	if self:has_activate_temporary_upgrade("temporary", "dmg_immunity_while_sprinting") and self:player_unit():movement():running() then
+		result = result + 2.22
 	end
 	return result
 end)
@@ -245,10 +280,10 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 		if managers.player:has_category_upgrade("player", "menace_panic_spread") and Gilza.intimidated_enemies[killed_unit:id()] then
 			local orig_amount = managers.player._Gilza_menace_kill_tracker
 			managers.player._Gilza_menace_kill_tracker = managers.player._Gilza_menace_kill_tracker + 0.5
-			if orig_amount < 4 and managers.player._Gilza_menace_kill_tracker > 4 then
-				Gilza.New_Skills_Informer:adjusted_stockholm_stacks(4-managers.player._Gilza_menace_kill_tracker)
+			if orig_amount < 4 and managers.player._Gilza_menace_kill_tracker >= 4 then
 				managers.player._Gilza_menace_kill_tracker = 4
-			elseif managers.player._Gilza_menace_kill_tracker > 4 then
+				Gilza.New_Skills_Informer:adjusted_stockholm_stacks(4-managers.player._Gilza_menace_kill_tracker)
+			elseif managers.player._Gilza_menace_kill_tracker >= 4 then
 				managers.player._Gilza_menace_kill_tracker = 4
 			else
 				Gilza.New_Skills_Informer:adjusted_stockholm_stacks(0.5)
@@ -262,8 +297,12 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 		
 		local function HITMAN()
 			
+			if not alive(player_unit) then
+				return
+			end
+			
 			-- akimbo/pistol/smg armor recovery temp buff
-			if managers.player:has_category_upgrade("temporary", "akimbo_pistol_armor_regen_timer_multiplier") and alive(player_unit) then
+			if managers.player:has_category_upgrade("temporary", "akimbo_pistol_armor_regen_timer_multiplier") then
 				if tweak_data.weapon[weapon_id] then
 					for i=1, #tweak_data.weapon[weapon_id].categories do
 						if tweak_data.weapon[weapon_id].categories[i] == "akimbo" or tweak_data.weapon[weapon_id].categories[i] == "pistol" or tweak_data.weapon[weapon_id].categories[i] == "smg" then
@@ -274,46 +313,36 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 				end
 			end
 			
+			local throwables_list = {
+				wpn_prj_ace = true,
+				wpn_prj_four = true,
+				wpn_prj_jav = true,
+				wpn_prj_target = true,
+				wpn_prj_hur = true
+			}
+			local badass_kill = (variant == "bullet" and throwables_list[weapon_id]) or variant == "melee"
+			
+			-- armor on "badass" kills
+			if badass_kill and managers.player:has_inactivate_temporary_upgrade("temporary", "badass_hitman_kill_armor_regen") then
+				managers.player:activate_temporary_upgrade("temporary", "badass_hitman_kill_armor_regen")
+				local armor_percent = 0.2
+				if managers.player:has_activate_temporary_upgrade("temporary", "player_bounty_hunter") then
+					armor_percent = 0.4
+				end
+				player_unit:character_damage():restore_armor(player_unit:character_damage():_max_armor() * armor_percent)
+			end
+			
 			-- "death dance" combo
-			if managers.player:has_category_upgrade("temporary", "death_dance_combo_invulnerability") then
-				
-				local player_unit = self:player_unit()
-				if not player_unit and not alive(player_unit) then
-					return
-				end
-				
-				if not managers.player:has_inactivate_temporary_upgrade("temporary", "death_dance_combo_invulnerability") then
-					return
-				end
+			if managers.player:has_category_upgrade("temporary", "death_dance_combo_invulnerability") and not managers.player:has_activate_temporary_upgrade("temporary", "death_dance_combo_invulnerability") then
 				
 				self._gilza_death_dance = self._gilza_death_dance or 0
 				self._gilza_death_dance_next_kill_expected_at = self._gilza_death_dance_next_kill_expected_at or 0
 				self._gilza_death_dance_invuln_end = self._gilza_death_dance_invuln_end or 0
 				
-				local throwables_list = {
-					wpn_prj_ace = true,
-					wpn_prj_four = true,
-					wpn_prj_jav = true,
-					wpn_prj_target = true,
-					wpn_prj_hur = true
-				}
-				local badass_kill = (variant == "bullet" and throwables_list[weapon_id]) or variant == "melee"
-				
 				local function reset_combo()
 					self._gilza_death_dance = 0
 					self._gilza_death_dance_next_kill_expected_at = -1
 					self._gilza_death_dance_invuln_end = 0
-				end
-				
-				if badass_kill then
-					if managers.player:has_inactivate_temporary_upgrade("temporary", "badass_hitman_kill_armor_regen") then
-						managers.player:activate_temporary_upgrade("temporary", "badass_hitman_kill_armor_regen")
-						local armor_percent = 0.2
-						if managers.player:has_activate_temporary_upgrade("temporary", "player_bounty_hunter") then
-							armor_percent = 0.4
-						end
-						player_unit:character_damage():restore_armor(player_unit:character_damage():_max_armor() * armor_percent)
-					end
 				end
 				
 				if badass_kill and self._gilza_death_dance == 0 then
@@ -336,8 +365,11 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 					if managers.player:has_inactivate_temporary_upgrade("temporary", "death_dance_combo_invulnerability") then
 						managers.player:activate_temporary_upgrade("temporary", "death_dance_combo_invulnerability")
 						duration_mul = 1
+						if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+							duration_mul = duration_mul * 1.5
+						end
 						if managers.player:has_activate_temporary_upgrade("temporary", "player_bounty_hunter") then
-							duration_mul = 2
+							duration_mul = duration_mul * 2
 						end
 						local duration = managers.player:temporary_upgrade_value("temporary", "death_dance_combo_invulnerability", 0) * duration_mul
 						player_unit:sound():play("perkdeck_activate", nil, false)
@@ -351,7 +383,7 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 			end
 			
 			-- bounty
-			if managers.player:has_category_upgrade("temporary", "player_bounty_hunter") and alive(player_unit) then
+			if managers.player:has_category_upgrade("temporary", "player_bounty_hunter") then
 				if self._gilza_hitman_has_active_bounty then
 					if killed_unit == self._gilza_hitman_bounty_target then
 						managers.player:activate_temporary_upgrade("temporary", "player_bounty_hunter")
@@ -415,39 +447,46 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 				return res
 			end
 			if managers.player:has_category_upgrade("player", "armor_regen_brawler") and player_unit:character_damage() and is_brawler_regen_allowed() then
+				-- instant regen
+				if variant == "melee" and not managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
+					if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+						player_unit:character_damage():restore_armor(12)
+					else
+						player_unit:character_damage():restore_armor(4)
+					end
+				end
 				self._gilza_brawler_melee_kill_count = self._gilza_brawler_melee_kill_count + 1
 				-- if we recieved a 4th stack, we reset very first regen effect, then next kill resets second, and so on. allows for better upkeep
+				-- works cause we reset the delayed calls with same names
 				if self._gilza_brawler_melee_kill_count >= 4 then
 					self._gilza_brawler_melee_kill_count = 1
 				end
 				-- i am too lazy to set up an proper overtime regeneration effect for armor, so here is a braindead solution
-				-- add 7 delayed calls with a 0.75 interval in between each call, as a result we get 8 "ticks" every 0.75s
+				-- add 5 delayed calls with a 1 interval in between each call, as a result we get 6 "ticks" every 1s
 				local total_regen = 0
 				if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
-					if managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
-						total_regen = 5.0 -- 50 hp points
-					else
-						total_regen = 10.0
-					end
+					total_regen = 12.0 -- 120 hp
 				else
-					-- <= DW
-					if managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
-						total_regen = 2.0
+					total_regen = 4.0
+				end
+				if managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
+					if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+						total_regen = 5.0
 					else
-						total_regen = 4.0
+						total_regen = 2.0
 					end
 				end
-				local regen_per_tick = total_regen / 8
+				local regen_per_tick = total_regen / 10
 				if self._gilza_brawler_regen_count < 3 then
 					self._gilza_brawler_regen_count = self._gilza_brawler_regen_count + 1
 				end
 				player_unit:character_damage():restore_armor(regen_per_tick)
-				for i=1,7 do
-					DelayedCalls:Add("Gilza_brawler_armor_regen_"..tostring(i).."_for_hit_number_"..tostring(self._gilza_brawler_melee_kill_count), 0.75 * i, function()
+				for i=1,9 do
+					DelayedCalls:Add("Gilza_brawler_armor_regen_"..tostring(i).."_for_hit_number_"..tostring(self._gilza_brawler_melee_kill_count), 1 * i, function()
 						if player_unit and alive(player_unit) and player_unit:character_damage() then
 							player_unit:character_damage():restore_armor(regen_per_tick)
 						end
-						if i == 7 then
+						if i == 9 then
 							self._gilza_brawler_regen_count = self._gilza_brawler_regen_count - 1
 						end
 					end)
@@ -465,14 +504,14 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 					local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
 					if hud.panel:child("Gilza_speed_junkie_GUI_icon") then
 						self._Gilza_junkie_counter = self._Gilza_junkie_counter or 0
-						local amount_to_add = managers.player:upgrade_value("player", "speed_junkie_meter_on_kill", 0)
-						if self._Gilza_junkie_counter < 90 and amount_to_add + self._Gilza_junkie_counter >= 90 then
-							amount_to_add = 90 - self._Gilza_junkie_counter
-						elseif self._Gilza_junkie_counter > 90 then
-							amount_to_add = amount_to_add * -1
-							if self._Gilza_junkie_counter + amount_to_add < 90 then
-								amount_to_add = (self._Gilza_junkie_counter - 90) * -1
-							end
+						local amount_to_add = 1
+						local skill = managers.player:upgrade_value("player", "speed_junkie_meter_on_kill")
+						if skill and type(skill) ~= "number" then
+							amount_to_add = math.lerp(skill[2], skill[1], self._Gilza_junkie_counter * 0.01)
+						end
+						if (self._Gilza_junkie_counter < 90 and (amount_to_add + self._Gilza_junkie_counter) >= 90) or self._Gilza_junkie_counter > 90 then
+							amount_to_add = 89.99 - self._Gilza_junkie_counter
+							self._Gilza_junkie_ticks_since_reached_high_stacks = 0
 						end
 						self._Gilza_junkie_counter = self._Gilza_junkie_counter + amount_to_add
 						-- 10% chance to enter adrenaline mode on kill if eligible
@@ -583,6 +622,43 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 	perk_triggers()
 	
 end)
+
+-- if brawler perk deck takes dmg x times, simulate one standard ammo pickup
+function PlayerManager:_Gilza_check_brawler_ammo_pickup()
+	
+	-- ammo pickup is further reduced in the add_ammo() func, so its effectively target * brawler's mul. other pickups, like nades, should happen every time this target is hit
+	local target = 4.5
+	
+	if self.brawler_damage_taken_instance >= target then
+		self.brawler_damage_taken_instance = self.brawler_damage_taken_instance - target
+		
+		-- cable ties
+		if math.random() <= 0.2 then
+			managers.player:add_cable_ties(1)
+		end
+		
+		-- nades
+		local grenade_tweak = tweak_data.blackmarket.projectiles[managers.blackmarket:equipped_grenade()]
+		local may_find_grenade = not grenade_tweak.base_cooldown and managers.player:has_category_upgrade("player", "regain_throwable_from_ammo")
+		if may_find_grenade then
+			local data = self:upgrade_value("player", "regain_throwable_from_ammo", nil)
+
+			if data and not self:got_max_grenades() then
+				self:add_coroutine("regain_throwable_from_ammo", PlayerAction.FullyLoaded, self, data.chance, data.chance_inc)
+			end
+		end
+		
+		-- ammo
+		local inventory = self:player_unit():inventory()
+		if not self:player_unit():character_damage():dead() and inventory then
+			for i, weapon in pairs(inventory:available_selections()) do
+				weapon.unit:base():add_ammo(1) -- this func reduced pickup even further, except for the saw
+				managers.hud:set_ammo_amount(i, weapon.unit:base():ammo_info())
+			end
+			self:send_message(Message.OnAmmoPickup, nil, self:player_unit()) -- also nades and maybe other stuff
+		end
+	end
+end
 
 -- reworked agressive reload, aka body economy
 function PlayerManager:_Gilza_activate_bodyshot_kill_aggressive_reload(attack_data, head)
@@ -747,21 +823,24 @@ Hooks:OverrideFunction(PlayerManager, "on_headshot_dealt", function (self)
 
 	self._on_headshot_dealt_t = t + (tweak_data.upgrades.on_headshot_dealt_cooldown or 0)
 	local damage_ext = player_unit:character_damage()
-	local regen_armor_bonus = managers.player:upgrade_value("player", "headshot_regen_armor_bonus", 0)
 
-	if damage_ext and regen_armor_bonus > 0 then
-		damage_ext:restore_armor(regen_armor_bonus)
-	end
+	if damage_ext then
+		
+		local regen_armor_bonus = managers.player:upgrade_value("player", "headshot_regen_armor_bonus", 0)
+		if regen_armor_bonus > 0 then
+			damage_ext:restore_armor(regen_armor_bonus)
+		end
 
-	local regen_health_bonus = managers.player:upgrade_value("player", "headshot_regen_health_bonus", 0)
-	
-	-- reduce heal for copycat's headshot heal amount. this keeps the heal per minute amount the same without breaking infohuds, but does make it slighlty harder to use.
-	if self:has_category_upgrade("player", "headshot_regen_armor_shorter_cooldown") and regen_health_bonus > 0 then
-		regen_health_bonus = regen_health_bonus * 0.75
-	end
-	
-	if damage_ext and regen_health_bonus > 0 then
-		damage_ext:restore_health(regen_health_bonus, true)
+		local regen_health_bonus = managers.player:upgrade_value("player", "headshot_regen_health_bonus", 0)
+		if regen_health_bonus > 0 then
+			-- reduce heal for copycat's headshot heal amount. this keeps the heal per minute amount the same without breaking infohuds, but does make it slighlty harder to use.
+			if self:has_category_upgrade("player", "headshot_regen_armor_shorter_cooldown") then
+				regen_health_bonus = regen_health_bonus * 0.75
+			end
+			
+			damage_ext:restore_health(regen_health_bonus, true)
+		end
+		
 	end
 end)
 
@@ -1096,6 +1175,11 @@ Hooks:OverrideFunction(PlayerManager, "_attempt_copr_ability", function (self)
 	return true
 end)
 
+-- if leech self-revives, force a longer CD
+Hooks:PostHook(PlayerManager, "add_copr_risen_cooldown", "Gilza_post_PlayerManager_add_copr_risen_cooldown", function(self)
+	self:speed_up_grenade_cooldown(-40)
+end)
+
 -- if we deal damage, delay maniac's decay by it's decay interval
 Hooks:PreHook(PlayerManager, "_update_damage_dealt", "Gilza_pre_update_damage_dealt", function(self, t, dt)
 	if self._damage_dealt_to_cops_recently and self._damage_dealt_to_cops_recently > 0 then
@@ -1133,7 +1217,7 @@ Hooks:OverrideFunction(PlayerManager, "damage_absorption", function (self)
 	
 	-- new dmg absorb bonuses for brawler
 	if managers.player:has_category_upgrade("player", "damage_resist_teammates_brawler") then
-		if self._gilza_brawler_teammates_nearby and self._gilza_brawler_teammates_nearby >= 1 and (managers.player:player_unit():character_damage():_max_health() / managers.player:player_unit():character_damage():get_real_health()) >= 2 then
+		if self._gilza_brawler_teammates_nearby and self._gilza_brawler_teammates_nearby >= 1 and self:player_unit() and self:player_unit():character_damage() and (self:player_unit():character_damage():_max_health() / self:player_unit():character_damage():get_real_health()) >= 2 then
 			local skill = managers.player:upgrade_value("player", "damage_resist_teammates_brawler")
 			local brawler_absorb = 0
 			if skill and type(skill) ~= "number" then
@@ -1509,7 +1593,7 @@ Hooks:OverrideFunction(PlayerManager, "body_armor_skill_addend", function (self,
 	return addend
 end)
 
--- speed junkie updater. affects current stack count and UI/sounds.
+-- speed junkie updater. affects current stack count and UI/sounds. p.s. this shit is a mess and needs a re-write lmao
 local spike_flash_timer = 0
 local junkie_exhausted = false
 function PlayerManager:Gilza_update_junkie_loop()
@@ -1521,87 +1605,90 @@ function PlayerManager:Gilza_update_junkie_loop()
 	self._Gilza_junkie_ticks_since_entered_adrenaline_spike_range = self._Gilza_junkie_ticks_since_entered_adrenaline_spike_range or 0
 	self._Gilza_junkie_exhausted = self._Gilza_junkie_exhausted or false
 	
-	-- speed and movement state related value updates
-	if managers.player:current_state() == "standard" or managers.player:current_state() == "carry" then
-		if self and self.local_player and alive(self:local_player()) and self:local_player().movement and self:local_player():movement().current_state and self:local_player():movement():current_state()._get_max_walk_speed then
-			if self:local_player():movement():current_state()._moving and not self:local_player():movement():current_state()._state_data.in_air then
-				-- if moving, update junkie stacks based on movement speed, higher speed = higher gain; low speed = lose stacks
-				local player_speed = self:local_player():movement():current_state():_get_max_walk_speed(managers.player:player_timer():time(),false)
-				local junkie_power_adust_mul = player_speed / 580 -- speed value where you dont loose the meter
-				local junkie_adjustment = -0.75 + (0.75 * junkie_power_adust_mul)
-				self._Gilza_junkie_counter = self._Gilza_junkie_counter + junkie_adjustment
-				-- tracks how many 'ticks' have passed since we stopped moving, a tick for this loop is 1/20 of a second
-				self._Gilza_junkie_ticks_since_stopped_moving = 0
-				self._Gilza_junkie_ticks_moving_in_air = 0
-			elseif self:local_player():movement():current_state()._state_data.in_air then
-				-- if we are in air, mostly from jumping, deplete really slowly
-				self._Gilza_junkie_ticks_moving_in_air = self._Gilza_junkie_ticks_moving_in_air + 1
-				if self._Gilza_junkie_counter > 0 then
-					if self._Gilza_junkie_ticks_moving_in_air >= 20 then
-						-- if a jump takes longer then 1 sec freeze the depletion
-					else
-						self._Gilza_junkie_counter = self._Gilza_junkie_counter - 0.1
-					end
-				end
-			else
-				-- if we dont't move start actively depleting junkie stacks
-				self._Gilza_junkie_ticks_since_stopped_moving = self._Gilza_junkie_ticks_since_stopped_moving + 1
-				if self._Gilza_junkie_counter > 0 then
-					-- first 1 second of not moving counter depletes at a stable rate, later it speeds up
-					if self._Gilza_junkie_ticks_since_stopped_moving <= 20 then
-						self._Gilza_junkie_counter = self._Gilza_junkie_counter - 0.4
-					else
-						self._Gilza_junkie_counter = self._Gilza_junkie_counter - (self._Gilza_junkie_ticks_since_stopped_moving * 0.02)
-					end
-				end
-			end
-		end
-	elseif managers.player:current_state() == "arrested" or managers.player:current_state() == "tased" or managers.player:current_state() == "player_turret" or managers.player:current_state() == "driving" or managers.player:current_state() == "bipod" then
-		-- player states where we loose stucks, but not that quickly
-		if self._Gilza_junkie_counter > 0 then
-			self._Gilza_junkie_counter = self._Gilza_junkie_counter - 0.08
-		end
-	elseif managers.player:current_state() == "jerry1" or managers.player:current_state() == "jerry2" then -- parachuting
-		if self._Gilza_junkie_counter < 90 then
-			self._Gilza_junkie_counter = self._Gilza_junkie_counter + 0.4
-		else
-			self._Gilza_junkie_counter = 90
-		end
-	else -- loose stacks, mostly on downs
-		self._Gilza_junkie_counter = 0
-	end
-	
-	-- this chunk applies exhaust if stacks are high and updates the icon flash animation based on current status
 	local info_hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
 	local icon = info_hud.panel:child("Gilza_speed_junkie_GUI_icon")
-	if self._Gilza_junkie_counter > 90 and not self._Gilza_junkie_adrenaline_spike then
-		icon:animate(info_hud.flash_icon, 999999)
-		self._Gilza_junkie_ticks_since_reached_high_stacks = self._Gilza_junkie_ticks_since_reached_high_stacks + 1
-		-- if we reach high stacks and maintain them for over 4 seconds, stamina gets drained to 0
-		if self._Gilza_junkie_ticks_since_reached_high_stacks >= 80 then
-			self._Gilza_junkie_counter = self._Gilza_junkie_counter * math.random(550,700)/1000 -- rand value between 0.55 and 0.7
-			if self:get_current_state()._unit and alive(self:get_current_state()._unit) and self:get_current_state()._unit:movement() then
-				self._Gilza_junkie_exhausted = true
-				self:get_current_state()._unit:movement():_change_stamina(-999999)
+	local current_state = self:get_current_state()
+	if current_state and not current_state:_interacting() then
+		-- speed and movement state related value updates
+		if managers.player:current_state() == "standard" or managers.player:current_state() == "carry" then
+			if self.local_player and alive(self:local_player()) and self:local_player().movement and self:local_player():movement().current_state and self:local_player():movement():current_state()._get_max_walk_speed then
+				if self:local_player():movement():current_state()._moving and not self:local_player():movement():current_state()._state_data.in_air then
+					-- if moving, update junkie stacks based on movement speed, higher speed = higher gain; low speed = lose stacks
+					local player_speed = self:local_player():movement():current_state():_get_max_walk_speed(managers.player:player_timer():time(),false)
+					local junkie_power_adust_mul = player_speed / 580 -- speed value where you dont loose the meter
+					local junkie_adjustment = -0.75 + (0.75 * junkie_power_adust_mul)
+					self._Gilza_junkie_counter = self._Gilza_junkie_counter + junkie_adjustment
+					-- tracks how many 'ticks' have passed since we stopped moving, a tick for this loop is 1/20 of a second
+					self._Gilza_junkie_ticks_since_stopped_moving = 0
+					self._Gilza_junkie_ticks_moving_in_air = 0
+				elseif self:local_player():movement():current_state()._state_data.in_air then
+					-- if we are in air, mostly from jumping, deplete really slowly
+					self._Gilza_junkie_ticks_moving_in_air = self._Gilza_junkie_ticks_moving_in_air + 1
+					if self._Gilza_junkie_counter > 0 then
+						if self._Gilza_junkie_ticks_moving_in_air >= 20 then
+							-- if a jump takes longer then 1 sec freeze the depletion
+						else
+							self._Gilza_junkie_counter = self._Gilza_junkie_counter - 0.1
+						end
+					end
+				else
+					-- if we dont't move start actively depleting junkie stacks
+					self._Gilza_junkie_ticks_since_stopped_moving = self._Gilza_junkie_ticks_since_stopped_moving + 1
+					if self._Gilza_junkie_counter > 0 then
+						-- first 1 second of not moving counter depletes at a stable rate, later it speeds up
+						if self._Gilza_junkie_ticks_since_stopped_moving <= 20 then
+							self._Gilza_junkie_counter = self._Gilza_junkie_counter - 0.4
+						else
+							self._Gilza_junkie_counter = self._Gilza_junkie_counter - (self._Gilza_junkie_ticks_since_stopped_moving * 0.02)
+						end
+					end
+				end
 			end
-			DelayedCalls:Add("Gilza_remove_junkie_status", 4, function()
-				self._Gilza_junkie_exhausted = false
-			end)
-		end
-	else
-		if self._Gilza_junkie_counter > 70 and not self._Gilza_junkie_eligible_for_spike and not self._Gilza_junkie_adrenaline_spike then
-			self._Gilza_junkie_eligible_for_spike = self._Gilza_junkie_eligible_for_spike or false
-			self._Gilza_junkie_ticks_since_entered_adrenaline_spike_range = self._Gilza_junkie_ticks_since_entered_adrenaline_spike_range + 1
-			if self._Gilza_junkie_ticks_since_entered_adrenaline_spike_range >= 400 then -- 20 seconds total
-				self._Gilza_junkie_eligible_for_spike = true
+		elseif managers.player:current_state() == "arrested" or managers.player:current_state() == "tased" or managers.player:current_state() == "player_turret" or managers.player:current_state() == "driving" or managers.player:current_state() == "bipod" then
+			-- player states where we loose stucks, but not that quickly
+			if self._Gilza_junkie_counter > 0 then
+				self._Gilza_junkie_counter = self._Gilza_junkie_counter - 0.08
 			end
+		elseif managers.player:current_state() == "jerry1" or managers.player:current_state() == "jerry2" then -- parachuting
+			if self._Gilza_junkie_counter < 90 then
+				self._Gilza_junkie_counter = self._Gilza_junkie_counter + 0.4
+			else
+				self._Gilza_junkie_counter = 90
+			end
+		else -- loose stacks, mostly on downs
+			self._Gilza_junkie_counter = 0
 		end
-		if self._Gilza_junkie_adrenaline_spike then
+		
+		-- this chunk applies exhaust if stacks are high and updates the icon flash animation based on current status
+		if self._Gilza_junkie_counter > 90 and not self._Gilza_junkie_adrenaline_spike then
 			icon:animate(info_hud.flash_icon, 999999)
+			self._Gilza_junkie_ticks_since_reached_high_stacks = self._Gilza_junkie_ticks_since_reached_high_stacks + 1
+			-- if we reach high stacks and maintain them for over 3 seconds, stamina gets drained to 0
+			if self._Gilza_junkie_ticks_since_reached_high_stacks >= 60 then
+				self._Gilza_junkie_counter = self._Gilza_junkie_counter * math.random(550,700)/1000 -- rand value between 0.55 and 0.7
+				if self:get_current_state()._unit and alive(self:get_current_state()._unit) and self:get_current_state()._unit:movement() then
+					self._Gilza_junkie_exhausted = true
+					self:get_current_state()._unit:movement():_change_stamina(-999999)
+				end
+				DelayedCalls:Add("Gilza_remove_junkie_status", 4, function()
+					self._Gilza_junkie_exhausted = false
+				end)
+			end
 		else
-			icon:stop()
+			if self._Gilza_junkie_counter > 70 and not self._Gilza_junkie_eligible_for_spike and not self._Gilza_junkie_adrenaline_spike then
+				self._Gilza_junkie_eligible_for_spike = self._Gilza_junkie_eligible_for_spike or false
+				self._Gilza_junkie_ticks_since_entered_adrenaline_spike_range = self._Gilza_junkie_ticks_since_entered_adrenaline_spike_range + 1
+				if self._Gilza_junkie_ticks_since_entered_adrenaline_spike_range >= 600 then -- 20 seconds total
+					self._Gilza_junkie_eligible_for_spike = true
+				end
+			end
+			if self._Gilza_junkie_adrenaline_spike then
+				icon:animate(info_hud.flash_icon, 999999)
+			else
+				icon:stop()
+			end
+			self._Gilza_junkie_ticks_since_reached_high_stacks = 0
 		end
-		self._Gilza_junkie_ticks_since_reached_high_stacks = 0
 	end
 	
 	-- avoid going below 0
@@ -1629,7 +1716,7 @@ function PlayerManager:Gilza_update_junkie_loop()
 		-- prevent this chunk from looping indefinetely
 		self._Gilza_junkie_eligible_for_spike = false
 		self._Gilza_junkie_ticks_since_entered_adrenaline_spike_range = 0
-		DelayedCalls:Add("Gilza_remove_junkie_spike", 8, function()
+		DelayedCalls:Add("Gilza_remove_junkie_spike", 12, function()
 			-- after spike is complete remove eligibility, reset values, and apply harsher version of exhaustion
 			self._Gilza_junkie_ticks_since_entered_adrenaline_spike_range = 0
 			self._Gilza_junkie_adrenaline_spike = false
@@ -1638,7 +1725,7 @@ function PlayerManager:Gilza_update_junkie_loop()
 			if self:get_current_state()._unit and alive(self:get_current_state()._unit) and self:get_current_state()._unit:movement() then
 				self:get_current_state()._unit:movement():_change_stamina(-999999)
 			end
-			DelayedCalls:Add("Gilza_remove_junkie_spike_pt2", 4, function()
+			DelayedCalls:Add("Gilza_remove_junkie_spike_pt2", 5, function()
 				self._Gilza_junkie_exhausted = false
 			end)
 		end)

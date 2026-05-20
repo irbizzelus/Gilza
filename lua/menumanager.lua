@@ -3,7 +3,9 @@ if not Gilza then
 end
 
 local afsf_warned = false -- only warn about afsf once per entry to main menu, to be less annoying, but annoying enough to make user uninstall original mod, cause otherwise shit dont work
--- warnings about vhud's burst fire and afsf
+local BTAW_warned = false -- only warn about BTAW once per entry to main menu
+local LMG_STEELSIGHTS_warned = false -- only warn about LMG_STEELSIGHTS once per entry to main menu
+-- warnings about mod compatibility
 Hooks:PostHook(MenuManager, "_node_selected", "Gilza_patch_notification", function(self, menu_name, node)
 	if type(node) == "table" and node._parameters.name == "main" then
 		Gilza:changelog_message()
@@ -20,10 +22,30 @@ Hooks:PostHook(MenuManager, "_node_selected", "Gilza_patch_notification", functi
 		end
 		if Gilza.AFSF_force_disabled and not afsf_warned then
 			afsf_warned = true
-			DelayedCalls:Add("Gilza_vhud_burst_warning", 0.4, function()
+			DelayedCalls:Add("Gilza_afsf_warning", 0.4, function()
 				local menu_options = {}
 				menu_options[#menu_options+1] = {text = "OK", is_cancel_button = true}
 				local message = managers.localization:text("Gilza_AFSF_warning_str")
+				local menu = QuickMenu:new("Gilza", message, menu_options)
+				menu:Show()
+			end)
+		end
+		if Gilza.BTAW_enabled and not BTAW_warned then
+			BTAW_warned = true
+			DelayedCalls:Add("Gilza_BTAW_warning", 0.5, function()
+				local menu_options = {}
+				menu_options[#menu_options+1] = {text = "OK", is_cancel_button = true}
+				local message = managers.localization:text("Gilza_BTAW_warning_str")
+				local menu = QuickMenu:new("Gilza", message, menu_options)
+				menu:Show()
+			end)
+		end
+		if Gilza.LMG_STEELSIGHTS_enabled and not LMG_STEELSIGHTS_warned then
+			LMG_STEELSIGHTS_warned = true
+			DelayedCalls:Add("Gilza_LMG_STEELSIGHTS_warning", 0.6, function()
+				local menu_options = {}
+				menu_options[#menu_options+1] = {text = "OK", is_cancel_button = true}
+				local message = managers.localization:text("Gilza_LMG_STEELSIGHTS_warning_str")
 				local menu = QuickMenu:new("Gilza", message, menu_options)
 				menu:Show()
 			end)
@@ -303,9 +325,26 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 	-- melee toggle keybind itself
 	MenuCallbackHandler.Gilza_melee_toggle_mode_keybind_pressed = function()
 		if managers.player and managers.player:player_unit() and alive(managers.player:player_unit()) then
-			local cur_state = managers.player:player_unit():movement():current_state_name()
-			if cur_state == "standard" or cur_state == "carry" then
+			local cur_state_name = managers.player:player_unit():movement():current_state_name()
+			if cur_state_name == "standard" or cur_state_name == "carry" then
 				managers.player:player_unit():movement():current_state():gilza_melee_toggle()
+			elseif cur_state_name == "bipod" then
+				local current_state = managers.player:get_current_state()
+				local weapon = current_state._equipped_unit:base()
+				local bipod_part = managers.weapon_factory:get_parts_from_weapon_by_perk("bipod", weapon._parts)
+				local bipod_unit = false
+				if bipod_part and bipod_part[1] then
+					bipod_unit = bipod_part[1].unit:base()
+				end
+				if bipod_unit and bipod_unit._bipod_entry_type == "entry_automatic" then
+					current_state:_unmount_bipod()
+					local new_state = managers.player:get_current_state()
+					local new_state_name = managers.player:player_unit():movement():current_state_name()
+					if new_state and (new_state_name == "standard" or new_state_name == "carry") then
+						new_state:gilza_melee_toggle()
+					end
+					return
+				end
 			end
 		end
 	end
@@ -348,6 +387,11 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		if panel then
 			panel:set_y(Gilza.settings.melee_toggle_mode_icon_y_pos)
 		end
+	end
+	
+	MenuCallbackHandler.Gilza_melee_charge_tilt = function(this, item)
+		Gilza.settings.melee_charge_tilt = tonumber(item:value())
+		Gilza:Save()
 	end
 	
 	MenuCallbackHandler.Gilza_General_And_Skills_page = function(this, item)
@@ -488,6 +532,14 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		Gilza.settings.vhud_compat_new_trigger_happy = item:value() == 'on'
 		if managers.hud and managers.hud.change_bufflist_setting then
 			managers.hud:change_bufflist_setting("desperado", Gilza.settings.vhud_compat_new_trigger_happy)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_new_aced_running_from_death = function(this, item)
+		Gilza.settings.vhud_compat_new_aced_running_from_death = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("new_aced_running_from_death", Gilza.settings.vhud_compat_new_aced_running_from_death)
 		end
 		Gilza:Save()
 	end

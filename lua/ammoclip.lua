@@ -2,6 +2,7 @@
 
 local CABLE_TIE_GET_CHANCE = 0.2
 local CABLE_TIE_GET_AMOUNT = 1
+local gilza_first_gambler_pack_collected = false
 
 Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 	if self._picked_up then
@@ -32,9 +33,8 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 			end
 
 			local success, add_amount = nil
-
 			for _, weapon in ipairs(available_selections) do
-				if not self._weapon_category or self._weapon_category == weapon.unit:base():weapon_tweak_data().categories[1] then
+				if not self._weapon_category or self._weapon_category == weapon.unit:base():categories()[1] then
 					
 					-- if we pickup bow/crossbow bolt from enviroment with brawler deck, we only have a chance to get it back. chance is equal to total ammo multiplier
 					if self._pickup_event and (self._pickup_event == "wp_arrow_pick_up" or self._pickup_event == "wp_hunterarrow_pick_up") then
@@ -48,15 +48,24 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 						end
 					end
 					
-					success, add_amount = weapon.unit:base():add_ammo(1, self._ammo_count)
-					picked_up = success or picked_up
+					-- brawler does not pickup ammo boxes
+					if managers.player:has_category_upgrade("player", "extra_ammo_cut") then
+						if not self._ammo_box then
+							if picked_up and tweak_data.achievement.pickup_sticks and self._weapon_category == tweak_data.achievement.pickup_sticks.weapon_category then
+								managers.achievment:award_progress(tweak_data.achievement.pickup_sticks.stat)
+							end
+						end
+					else
+						success, add_amount = weapon.unit:base():add_ammo(1, self._ammo_count)
+						picked_up = success or picked_up
 
-					if self._ammo_count then
-						self._ammo_count = math.max(math.floor(self._ammo_count - add_amount), 0)
-					end
+						if self._ammo_count then
+							self._ammo_count = math.max(math.floor(self._ammo_count - add_amount), 0)
+						end
 
-					if picked_up and tweak_data.achievement.pickup_sticks and self._weapon_category == tweak_data.achievement.pickup_sticks.weapon_category then
-						managers.achievment:award_progress(tweak_data.achievement.pickup_sticks.stat)
+						if picked_up and tweak_data.achievement.pickup_sticks and self._weapon_category == tweak_data.achievement.pickup_sticks.weapon_category then
+							managers.achievment:award_progress(tweak_data.achievement.pickup_sticks.stat)
+						end
 					end
 				end
 			end
@@ -94,6 +103,12 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 								end
 							end
 						end	
+					end
+					
+					-- first ammo pack always maxes out
+					if not gilza_first_gambler_pack_collected then
+						heal_gamble = {effect = "add", jackpot = true}
+						gilza_first_gambler_pack_collected = true
 					end
 					
 					player_manager:activate_temporary_upgrade("temporary", "loose_ammo_restore_health")

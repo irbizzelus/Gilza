@@ -108,6 +108,8 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_BlackMarketTw
 		fireaxe = {class = 6},
 		
 		funder_strike = {class = "tazer"},
+		bonk = {class = 4},
+		bonk2 = {class = 4},
 		
 		-- this one i dont own
 		briefcase = {class = 5},

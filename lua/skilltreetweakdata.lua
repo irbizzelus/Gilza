@@ -89,8 +89,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 						"player_perk_armor_regen_timer_multiplier_4",
 						"player_perk_armor_regen_timer_multiplier_5",
 						"player_perk_armor_regen_timer_multiplier_6", -- important one
-						"melee_stacking_hit_damage_multiplier_1",
-						"melee_stacking_hit_expire_t",
+						"player_melee_headshot_multiplier",
 					},
 					icon_xy = {
 						2,
@@ -179,6 +178,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 			local j = #self.specializations + 1
 			self.specializations[j] = brawler_deck
 			Gilza.custom_specialization_indexes = {brawler = j}
+			self.specializations[j].category = "defensive"
 			
 			-- Speed junkie perk deck
 			local speed_junkie_deck = {
@@ -278,6 +278,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 			j = #self.specializations + 1
 			self.specializations[j] = speed_junkie_deck
 			Gilza.custom_specialization_indexes.junkie = j
+			self.specializations[j].category = "offensive"
 			
 			-- Guardian perk deck
 			local guardian_deck = {
@@ -387,6 +388,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 			j = #self.specializations + 1
 			self.specializations[j] = guardian_deck
 			Gilza.custom_specialization_indexes.guardian = j
+			self.specializations[j].category = "defensive"
 		end
 		CUSTOM_PERKS()
 		
@@ -598,6 +600,12 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 					"player_copr_teammate_heal_1",
 					"temporary_copr_invuln_on_segment_loss"
 				}
+				self.specializations[22][5].upgrades = {
+					"temporary_copr_ability_2",
+					"player_copr_teammate_heal_2",
+					"player_copr_heal_on_teammate_revive",
+					"player_copr_speed_up_on_kill_1"
+				}
 				self.specializations[22][7].upgrades = {
 					"player_passive_health_multiplier_3",
 					"player_passive_health_multiplier_4",
@@ -679,6 +687,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 		
 		-- default upgrades. the stuff that is available without skills/perks
 		table.insert(self.default_upgrades, "weapon_passive_swap_speed_multiplier_1") -- better swap speed. new ammo economy incentivizes using both guns actively, this should help
+		table.insert(self.default_upgrades, "player_add_armor_ammo_pickup_stat_skill") -- armor based ammo pickups
 		
 		---- MASTERMIND
 		self.skills.combat_medic[2].upgrades = { "player_revive_action_self_heal" }
@@ -759,6 +768,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 		self.skills.body_expertise[2].upgrades = { "weapon_automatic_head_shot_add_2", "player_ap_bullets_aced"}
 		
 		---- GHOST
+		self.skills.sprinter[2].upgrades = { "player_run_dodge_chance", "player_on_zipline_dodge_chance" } -- they forgor lol
+		
 		self.skills.jail_workout[1].upgrades = { "player_additional_assets" }
 		self.skills.jail_workout[2].upgrades = { "player_small_loot_multiplier_1", "player_mask_off_pickup" }
 		self.skills.jail_workout.icon_xy = {0,8}
@@ -806,6 +817,9 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 		self.skills.trigger_happy.icon_xy = {11,0}
 		
 		self.skills.up_you_go[2].upgrades = {"player_revived_health_regain_V2"}
+		
+		self.skills.running_from_death[1].upgrades = {"player_temp_swap_weapon_faster_1", "player_temp_reload_weapon_faster_1", "player_temp_increased_movement_speed_1"}
+		self.skills.running_from_death[2].upgrades = {"player_temp_dmg_immunity_while_sprinting", "player_reload_weapons_on_revive"}
 		
 		self.skills.messiah[1].upgrades = {"player_messiah_revive_from_bleed_out_1","player_bleed_out_health_multiplier_2"}
 		

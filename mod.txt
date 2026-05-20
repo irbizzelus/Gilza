@@ -3,7 +3,7 @@
 	"description" : "Weapons, skills and perks rebalance.",
 	"author" : "irbizzelus",
 	"contact" : "Steam profile link is on my modworkshop account",
-	"version" : "2.6.04",
+	"version" : "2.7",
 	"color" : "0 204 193",
 	"blt_version" : 2,
 	"priority" : 19,
@@ -54,6 +54,7 @@
 		{"hook_id": "lib/units/weapons/raycastweaponbase", "script_path" : "lua/raycastweaponbase.lua"},
 		{"hook_id": "lib/units/weapons/sawweaponbase", "script_path" : "lua/sawweaponbase.lua"},
 		{"hook_id": "lib/units/equipment/sentry_gun/sentrygunbase", "script_path" : "lua/sentrygunbase.lua"},
+		{"hook_id": "lib/units/equipment/sentry_gun/sentrygundamage", "script_path" : "lua/sentrygundamage.lua"},
 		{"hook_id": "lib/units/weapons/shotgun/shotgunbase", "script_path" : "lua/shotgunbase.lua"},
 		{"hook_id": "lib/managers/skilltreemanager", "script_path" : "lua/skilltreemanager.lua"},
 		{"hook_id": "lib/tweak_data/skilltreetweakdata", "script_path" : "lua/skilltreetweakdata.lua"},
@@ -65,6 +66,7 @@
 		{"hook_id": "lib/units/weapons/weaponammo", "script_path" : "lua/weaponammo.lua"},
 		{"hook_id": "lib/tweak_data/weaponfactorytweakdata", "script_path" : "lua/WeaponAttachments.lua"},
 		{"hook_id": "lib/units/weapons/weaponflashlight", "script_path" : "lua/weaponflashlight.lua"},
+		{"hook_id": "lib/units/weapons/weaponliongadget1", "script_path" : "lua/weaponliongadget1.lua"},
 		{"hook_id": "lib/tweak_data/weapontweakdata", "script_path" : "lua/WeaponTweaks.lua"}
 	],
 }

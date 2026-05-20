@@ -41,7 +41,7 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_addend", function (self, na
 
 		if fire_mode == "single" and table.contains_any(tweak_data.upgrades.sharpshooter_categories, categories) then
 			index = index + managers.player:upgrade_value("weapon", "single_spread_index_addend", 0)
-		elseif fire_mode == "auto" or fire_mode == "burst"  then
+		elseif fire_mode == "auto" or fire_mode == "burst" then
 			index = index + managers.player:upgrade_value("weapon", "auto_spread_index_addend", 0)
 		end
 
@@ -97,8 +97,11 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 	
 	-- weapon inaccuracy for any weapon, based on fire mode. this was removed from "accuracy_addend" func above, since you should get your max single fire acuracy in menus
 	if fire_mode and fire_mode ~= "single" then
-		if managers.player:current_state() == "bipod" or active_trig_hap then
+		if active_trig_hap then
 			-- ignored
+		elseif managers.player:current_state() == "bipod" then
+			-- +40 acc for bipods, they also have a multiplier which depends on bipod deploy process
+			index = index + 10
 		elseif fire_mode == "volley" then
 			-- buff volley mode, because this firemode is used by mostly inaccurate guns in this mod
 			index = index + 5
@@ -129,7 +132,7 @@ Hooks:OverrideFunction(BlackMarketManager, "accuracy_index_addend", function (se
 
 	if fire_mode == "single" and table.contains_any(tweak_data.upgrades.sharpshooter_categories, categories) then
 		index = index + managers.player:upgrade_value("weapon", "single_spread_index_addend", 0)
-	elseif fire_mode == "auto" or fire_mode == "burst"  then
+	elseif fire_mode == "auto" or fire_mode == "burst" then
 		index = index + managers.player:upgrade_value("weapon", "auto_spread_index_addend", 0)
 	end
 

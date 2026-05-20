@@ -85,6 +85,43 @@ Hooks:PostHook(ReviveInteractionExt, "interact", "Gilza_ReviveInteractionExt_int
 		if managers.player:has_activate_temporary_upgrade("temporary", "copr_ability") then
 			managers.player._Gilza_leech_did_revive_during_effect = true
 		end
+		
+		if managers.player:has_category_upgrade("player", "copr_heal_on_teammate_revive")  then
+			-- heal self on teammate revive
+			local heal_level = managers.player:upgrade_level_nil("player", "copr_teammate_heal")
+			if not managers.player:player_unit():character_damage()._gilza_leech_dire_state then
+				managers.player:player_unit():character_damage():on_copr_heal_received(managers.player:player_unit(), heal_level)
+			end
+			-- heal teammate on revive. if we send heal immediately on revive, husk doesnt heal because they get said info while they are still down, thus missing out on heals
+			if self._unit:base().is_husk_player then
+				local limit = 300 -- 3 secs of ping delay
+				local function try_to_heal()
+					local prevented_states = {
+						"bleed_out",
+						"incapacitated",
+						"fatal",
+					}
+					if self._unit and alive(self._unit) and self._unit:movement() and self._unit:movement():current_state_name() and not prevented_states[self._unit:movement():current_state_name()] then
+						local peer = managers.network:session():peer_by_unit(self._unit)
+						if peer then
+							peer:send("copr_teammate_heal", managers.player:player_unit(), heal_level)
+							peer:send("copr_teammate_heal", managers.player:player_unit(), heal_level) -- 2 sends for 20% health at max
+							limit = 0
+						end
+					else
+						if limit > 0 then
+							limit = limit - 1
+							DelayedCalls:Add("Gilza_leech_heal_teammate_after_revival_ping_compensation", 0.1, function()
+								try_to_heal()
+							end)
+						end
+					end
+				end
+				DelayedCalls:Add("Gilza_leech_heal_teammate_after_revival_delayed", 1, function()
+					try_to_heal()
+				end)
+			end
+		end
 	end
 end)
 

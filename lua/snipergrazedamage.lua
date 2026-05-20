@@ -127,7 +127,7 @@ Hooks:OverrideFunction(SniperGrazeDamage, "on_weapon_fired", function (self, wea
 				dmg_mul = dmg_mul * managers.player:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1)
 			end
 			local health_ratio = pl_state._ext_damage:health_ratio()
-			local damage_health_ratio = managers.player:get_damage_health_ratio(health_ratio, weap_base:weapon_tweak_data().categories[1])
+			local damage_health_ratio = managers.player:get_damage_health_ratio(health_ratio, weap_base:categories()[1])
 			if damage_health_ratio > 0 then
 				local upgrade_name = weap_base:is_category("saw") and "melee_damage_health_ratio_multiplier" or "damage_health_ratio_multiplier"
 				local damage_ratio = damage_health_ratio
@@ -166,6 +166,9 @@ Hooks:OverrideFunction(SniperGrazeDamage, "on_weapon_fired", function (self, wea
 				return false
 			end
 			if char_dmg.is_civilian(enemy:base()._tweak_table) then
+				return false
+			end
+			if char_dmg._immortal or char_dmg._invulnerable then
 				return false
 			end
 			if (enemy:base()._tweak_table == "shield" or enemy:base()._tweak_table == "marshal_shield" or enemy:base()._tweak_table == "phalanx_minion" or enemy:base()._tweak_table == "phalanx_vip") and not weap_base:can_shoot_through_shield() then

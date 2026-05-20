@@ -2,11 +2,21 @@ if not Gilza then
 	dofile("mods/Gilza/lua/1_GilzaBase.lua")
 end
 
+-- if brawler's ammo cut is active, reduce ammo bag consumption rate while allowing to refill ammo to "full"
+local gilza_orig_add_ammo_from_bag = RaycastWeaponBase.add_ammo_from_bag
+Hooks:OverrideFunction(RaycastWeaponBase, "add_ammo_from_bag", function (self, available)
+	if managers.player:has_category_upgrade("player", "extra_ammo_cut") then
+		return gilza_orig_add_ammo_from_bag(self, available) * managers.player:upgrade_value("player", "extra_ammo_cut", 1)
+	else
+		return gilza_orig_add_ammo_from_bag(self, available)
+	end
+end)
+
 -- brawler max ammo cut
 Hooks:OverrideFunction(RaycastWeaponBase, "replenish", function (self)
 	local ammo_max_multiplier = managers.player:upgrade_value("player", "extra_ammo_multiplier", 1)
 	
-	for _, category in ipairs(self:weapon_tweak_data().categories) do
+	for _, category in ipairs(self:categories()) do
 		ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value(category, "extra_ammo_multiplier", 1) - 1
 	end
 	
@@ -96,6 +106,11 @@ Hooks:OverrideFunction(RaycastWeaponBase, "add_ammo", function (self, ratio, add
 			
 			if managers.player:has_category_upgrade("player", "secondary_weapons_pickup_bonus") and weapon_tweak_data.use_data and weapon_tweak_data.use_data.selection_index and weapon_tweak_data.use_data.selection_index == 1 then
 				pickup_mul = pickup_mul * managers.player:upgrade_value("player", "secondary_weapons_pickup_bonus", 1)
+			end
+			
+			-- armor-based mul
+			if managers.player:has_category_upgrade("player", "add_armor_ammo_pickup_stat_skill") then
+				pickup_mul = pickup_mul * managers.player:body_armor_value("skill_ammo_mul", upgrade_level, 1)
 			end
 			
 			pickup_mul = pickup_mul * managers.player:upgrade_value("player", "extra_ammo_cut", 1)
@@ -200,7 +215,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "reload_speed_multiplier", function (s
 	local multiplier = 1
 
 	local simplified_categories = {}
-	for _, category in ipairs(self:weapon_tweak_data().categories) do
+	for _, category in ipairs(self:categories()) do
 		multiplier = multiplier * managers.player:upgrade_value(category, "reload_speed_multiplier", 1)
 		simplified_categories[category] = true
 	end
@@ -256,7 +271,7 @@ Hooks:PostHook(RaycastWeaponBase, "fire", "Gilza_post_RaycastWeaponBase_fire", f
 		end
 
 		if is_player then
-			for _, category in ipairs(self:weapon_tweak_data().categories) do
+			for _, category in ipairs(self:categories()) do
 				if managers.player:has_category_upgrade(category, "consume_no_ammo_chance") then
 					local roll = math.rand(1)
 					local chance = managers.player:upgrade_value(category, "consume_no_ammo_chance", 0)
@@ -322,7 +337,7 @@ Hooks:PostHook(RaycastWeaponBase, "fire", "Gilza_post_RaycastWeaponBase_fire", f
 			return
 		end
 		if is_player then
-			for _, category in ipairs(self:weapon_tweak_data().categories) do
+			for _, category in ipairs(self:categories()) do
 				if category == "grenade_launcher" then
 					local ammo_in_clip = base:get_ammo_remaining_in_clip()
 					local remaining_ammo = ammo_in_clip - ammo_usage

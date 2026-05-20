@@ -1,8 +1,8 @@
--- brawler perk ammo override @9
+-- brawler and copycat perk ammo overrides
 Hooks:OverrideFunction(WeaponAmmo, "replenish", function (self)
 	local ammo_max_multiplier = managers.player:upgrade_value("player", "extra_ammo_multiplier", 1)
 
-	for _, category in ipairs(self:weapon_tweak_data().categories) do
+	for _, category in ipairs(self:categories()) do
 		ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value(category, "extra_ammo_multiplier", 1) - 1
 	end
 	

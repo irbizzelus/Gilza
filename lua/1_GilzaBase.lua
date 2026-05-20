@@ -12,6 +12,7 @@ _G.Gilza = {
 		shotgun_skill_notification = true,
 		menace_points_notification = true,
 		designated_marksman_zoom = 2,
+		melee_charge_tilt = 3,
 		melee_gui = 4,
 		flash_color_R = 255,
 		flash_color_G = 0,
@@ -44,23 +45,24 @@ _G.Gilza = {
 		vhud_compat_new_hitman_recovery = true,
 		vhud_compat_new_trigger_happy = true,
 		vhud_compat_new_sicario = true,
+		vhud_compat_new_aced_running_from_death = true,
 	},
 	grenade_multipliers = {
-		dada_com = 24,
-		fir_com = 26,
-		frag_com = 24,
-		wpn_prj_ace = 50,
-		concussion = 30,
-		poison_gas_grenade = 44,
-		frag = 24,
-		molotov = 22,
-		dynamite = 24,
-		wpn_prj_four = 50,
-		wpn_prj_jav = 50,
-		wpn_prj_target = 50,
-		wpn_prj_hur = 50,
-		sticky_grenade = 22,
-		wpn_gre_electric = 20,
+		dada_com = 33,
+		fir_com = 35,
+		frag_com = 33,
+		wpn_prj_ace = 99,
+		concussion = 40,
+		poison_gas_grenade = 55,
+		frag = 33,
+		molotov = 30,
+		dynamite = 33,
+		wpn_prj_four = 99,
+		wpn_prj_jav = 99,
+		wpn_prj_target = 33,
+		wpn_prj_hur = 99,
+		sticky_grenade = 30,
+		wpn_gre_electric = 25,
 		laser_watch = 30,
 	},
 	shotgun_minimal_damage_multipliers = {},
@@ -107,6 +109,7 @@ Gilza:Load()
 Gilza:Save()
 
 function Gilza:modCompatibility()
+	-- beardlib mods
 	for _, mod in pairs(BeardLib.Mods) do
 		if mod.Name == "WeaponLib" then
 			if mod.AssetUpdates.version then
@@ -122,33 +125,23 @@ function Gilza:modCompatibility()
 			end
 		end
 	end
-	-- based on folder name
-	for i, mod in pairs(BLT.FindMods(BLT)) do
-		if mod.id == "Bipods That Work" then
-			Gilza.BTAW_enabled = true
-		elseif mod.id == "VanillaHUD Plus" then
-			Gilza.VHP_enabled = true
-		elseif mod.id == "AFSF2" then
-			local afsf = BLT.Mods:GetModByName("Auto-Fire Sound Fix")
-			if afsf then
-				afsf:SetEnabled(false, true)
-				Gilza.AFSF_force_disabled = true
-			end
-		end
+	-- BLT mods
+	local LMG_STEELSIGHTS = BLT.Mods:GetModByName("LMG Steelsights v0.64") or BLT.Mods:GetMod("Steelsights")
+	if LMG_STEELSIGHTS and LMG_STEELSIGHTS._enabled then
+		Gilza.LMG_STEELSIGHTS_enabled = true
 	end
-	-- based on mod.txt name
-	if BLT.Mods:GetModByName("Bipods That (Actually) Work") then
+	local BTW = BLT.Mods:GetModByName("Bipods That (Actually) Work") or BLT.Mods:GetMod("Bipods That Work")
+	if BTW and BTW._enabled then
 		Gilza.BTAW_enabled = true
 	end
-	if BLT.Mods:GetModByName("VanillaHUDPlus") then
+	local VHUD = BLT.Mods:GetModByName("VanillaHUDPlus") or BLT.Mods:GetMod("VanillaHUD Plus")
+	if VHUD and VHUD._enabled then
 		Gilza.VHP_enabled = true
 	end
-	if BLT.Mods:GetModByName("Auto-Fire Sound Fix") then
-		local afsf = BLT.Mods:GetModByName("Auto-Fire Sound Fix")
-		if afsf then
-			afsf:SetEnabled(false, true)
-			Gilza.AFSF_force_disabled = true
-		end
+	local AFSF = BLT.Mods:GetModByName("Auto-Fire Sound Fix") or BLT.Mods:GetMod("Auto-Fire Sound Fix")
+	if AFSF then
+		AFSF:SetEnabled(false, true)
+		Gilza.AFSF_force_disabled = true
 	end
 end
 Gilza:modCompatibility()
@@ -158,14 +151,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.604 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.7 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.6.02 Changelog:\n\n- Compatibility with update 245 and Espionage DLC.\n- Saw stats reworked slighlty to match new vanilla stats better.\n\n2.6.04 Changelog:\n\n- Added the \"DECA dart gun inspect/modify crash fix\". If you have this mod installed, you can remove it."
+			local message = "2.7 Changelog:\n\nBig patch, big patch notes. It's recommended you read the full notes, as this menu is too small for this patch.\nNotable changes:\n- Compatibility with update 246\n- Complete bipod deploy system rework\n- Major LMG rebalance\n- Armor now affects ammo pick up rates\n- Updated 7 skills\n- Updated 6 perks, with Bralwer getting major changes\n- New melee charge tilt QOL option\n- A bunch of weapon stat updates\n- Various fixes"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.604
+			Gilza.settings.version = 2.7
 			Gilza.Save()
 		end
 	end)

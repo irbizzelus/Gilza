@@ -132,6 +132,12 @@ Hooks:PreHook(PlayerDamage, "damage_bullet", "Gilza_pre_player_damage_bullet", f
 	local att_unit = attack_data.attacker_unit
 	Gilza.latest_bullet_attacker_unit = att_unit
 	
+	-- on dmg taken add brawler instance
+	if managers.player:has_category_upgrade("player", "extra_ammo_cut") then
+		managers.player.brawler_damage_taken_instance = (managers.player.brawler_damage_taken_instance or 0) + 1
+		managers.player:_Gilza_check_brawler_ammo_pickup()
+	end
+	
 	-- check enemy unit position relative to camera direction
 	if managers.player:has_category_upgrade("player", "yakuza_behind_player_resist") then
 		local player_unit = managers.player:player_unit()
@@ -228,8 +234,8 @@ Hooks:PreHook(PlayerDamage, "damage_bullet", "Gilza_pre_player_damage_bullet", f
 	-- AP sniper shot resist. initially was made for brawler as a passive, but later added to yakuza while under half health, so yakuza's version has an additional check
 	if self:get_real_armor() > 0 then
 		if managers.player:has_category_upgrade("player", "AP_damage_resist_brawler") and attack_data.armor_piercing == true then
-			-- if we have yakuza, check under half health requirement
-			if managers.player:has_category_upgrade("player", "armor_regen_damage_health_ratio_multiplier") then
+			-- if we have standard or copycat yakuza, check under half health requirement
+			if managers.player:has_category_upgrade("player", "armor_regen_damage_health_ratio_multiplier") or (managers.player:has_category_upgrade("player", "yakuza_suppression_resist") and managers.player:has_category_upgrade("player", "copycat_9th_card_identifier")) then
 				if ( self:_max_health() / self:get_real_health() ) >= 2 then
 					attack_data.armor_piercing = nil
 				end
@@ -261,6 +267,12 @@ end)
 -- allow counterstrike skill to deal damage
 PlayerDamage._Gilza_WasCounterAttacking = false -- if we counterattacked, we reset chainsaw damage effect in a posthook for damage_melee func
 Hooks:PreHook(PlayerDamage, "damage_melee", "Gilza_pre_player_damage_melee", function(self, attack_data)
+	
+	-- on dmg taken add brawler instance
+	if managers.player:has_category_upgrade("player", "extra_ammo_cut") then
+		managers.player.brawler_damage_taken_instance = (managers.player.brawler_damage_taken_instance or 0) + 1
+		managers.player:_Gilza_check_brawler_ammo_pickup()
+	end
 	
 	-- reduce char knockback from melee attacks, funnily enough can prevent being pushed through walls by shields
 	if managers.player:has_category_upgrade("player", "melee_shake_reduction") then -- shares skill with camera shake cause im lazy :)
@@ -628,9 +640,9 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_post_PlayerDamage_init", function(se
 				if self._unit and alive(self._unit) and self._unit.character_damage then
 					managers.player:activate_temporary_upgrade("temporary", "player_speed_junkie_armor_on_dodge")
 					if self:get_real_armor() > 0 then
-						self._unit:character_damage():restore_armor(managers.player:temporary_upgrade_value("temporary", "player_speed_junkie_armor_on_dodge", 0))
+						self:restore_armor(managers.player:temporary_upgrade_value("temporary", "player_speed_junkie_armor_on_dodge", 0))
 					else
-						self._unit:character_damage():restore_armor(managers.player:temporary_upgrade_value("temporary", "player_speed_junkie_armor_on_dodge", 0) * 3)
+						self:restore_armor(managers.player:temporary_upgrade_value("temporary", "player_speed_junkie_armor_on_dodge", 0) * 3)
 					end
 				end
 			end
@@ -640,7 +652,12 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_post_PlayerDamage_init", function(se
 				if self._unit and alive(self._unit) and self._unit.character_damage then
 					managers.player:activate_temporary_upgrade("temporary", "player_dodge_armor_regen")
 					Gilza.NSI:activated_revitalized_cd()
-					self._unit:character_damage():restore_armor(managers.player:temporary_upgrade_value("temporary", "player_dodge_armor_regen", 0))
+					local armor_to_add = 0
+					local skill = managers.player:temporary_upgrade_value("temporary", "player_dodge_armor_regen", 0)
+					if skill and type(skill) ~= "number" then
+						armor_to_add = skill.armor_regen
+					end
+					self:restore_armor(armor_to_add)
 				end
 			end
 		end
@@ -1010,7 +1027,7 @@ Hooks:OverrideFunction(PlayerDamage, "revive", function (self, silent)
 	
 	-- add some junkie adrenaline after revival to avoid being instantly dead again
 	if managers.player:has_category_upgrade("player", "speed_junkie_meter") then
-		managers.player._Gilza_junkie_counter = (managers.player._Gilza_junkie_counter or 0) + math.random(18,42)
+		managers.player._Gilza_junkie_counter = (managers.player._Gilza_junkie_counter or 0) + math.random(53,77)
 	end
 	
 	-- leech CD speed up on reivival of local player
@@ -1018,6 +1035,27 @@ Hooks:OverrideFunction(PlayerDamage, "revive", function (self, silent)
 		local secs = managers.player:upgrade_value("player", "copr_regain_cooldown_on_revives", 0)
 		if secs > 0 then
 			managers.player:speed_up_grenade_cooldown(secs)
+		end
+	end
+	
+	-- new running from death aced
+	if managers.player:has_inactivate_temporary_upgrade("temporary", "dmg_immunity_while_sprinting") then
+		managers.player:activate_temporary_upgrade("temporary", "dmg_immunity_while_sprinting")
+		Gilza.NSI:activated_new_aced_running_from_death()
+	end
+	if managers.player:has_category_upgrade("player", "reload_weapons_on_revive") then
+		local pl_state = managers.player:get_current_state()
+		if pl_state:_is_reloading() then
+			pl_state:_interupt_action_reload()
+			pl_state._ext_camera:play_redirect(pl_state:get_animation("idle"))
+		end
+		local inventory = self._unit:inventory()
+		for i, weapon in pairs(inventory:available_selections()) do
+			if weapon.unit:base():can_reload() then
+				weapon.unit:base():on_reload()
+				managers.statistics:reloaded()
+				managers.hud:set_ammo_amount(weapon.unit:base():selection_index(), weapon.unit:base():ammo_info())
+			end
 		end
 	end
 	

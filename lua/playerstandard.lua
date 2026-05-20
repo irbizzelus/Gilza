@@ -2,6 +2,67 @@ if not Gilza then
 	dofile("mods/Gilza/lua/1_GilzaBase.lua")
 end
 
+Hooks:PostHook(PlayerStandard, "enter", "Gilza_posthook_PlayerStandard_enter", function(self, state_data, enter_data)
+	managers.player._gilza_flag_bipod_redeploy_delay = Application:time() + (1.2 * (1 / managers.player:upgrade_value("player", "bipod_deploy_speed", 1)))
+end)
+
+Hooks:OverrideFunction(PlayerStandard, "_check_action_deploy_bipod", function (self, t, input, ...)
+	local new_action = nil
+	local action_forbidden = false
+	
+	-- separate allowance by bipod entry method - automatic vs keybind press
+	if not input.btn_deploy_bipod then
+		-- auto checks
+		action_forbidden = ((managers.player._gilza_flag_bipod_redeploy_delay or 0) > Application:time()) or self:_on_zipline() or self:_is_throwing_projectile() or self:_is_meleeing() or self:is_equipping() or self:_changing_weapon() or self:_interacting() or self._moving or self:running() or self:_is_reloading() or self:in_air() or self:_is_using_bipod() or self._use_item_expire_t
+		if not action_forbidden then
+			if not self._gilza_auto_bipod_deploy then
+				self._gilza_auto_bipod_deploy = Application:time() + (0.3 * (1 / managers.player:upgrade_value("player", "bipod_deploy_speed", 1)))
+				action_forbidden = true
+			else
+				if Application:time() < self._gilza_auto_bipod_deploy then
+					action_forbidden = true
+				end
+			end
+		else
+			self._gilza_auto_bipod_deploy = nil
+		end
+	else
+		-- keybind checks
+		action_forbidden = self:_on_zipline() or self:_is_throwing_projectile() or self:_is_meleeing() or self:is_equipping() or self:_changing_weapon() or self:_interacting()
+	end
+	
+	-- clear auto deploy delay timer
+	if (self._gilza_auto_bipod_deploy and Application:time() > self._gilza_auto_bipod_deploy) or input.btn_deploy_bipod then
+		self._gilza_auto_bipod_deploy = nil
+	end
+	
+	-- not during crouch transition
+	local head_stance = self._camera_unit:base()._head_stance
+	if head_stance and head_stance.transition then
+		action_forbidden = true
+	end
+
+	if not action_forbidden then
+		
+		local weapon = self._equipped_unit:base()
+		local bipod_part = managers.weapon_factory:get_parts_from_weapon_by_perk("bipod", weapon._parts)
+
+		if bipod_part and bipod_part[1] then
+			local bipod_unit = bipod_part[1].unit:base()
+			
+			if input.btn_deploy_bipod then
+				bipod_unit:check_state("entry_standard")
+			else
+				bipod_unit:check_state("entry_automatic")
+			end
+
+			new_action = true
+		end
+	end
+
+	return new_action
+end)
+
 -- new faster melee charge skill
 local gilza_orig_get_melee_charge_lerp_value = Hooks:GetFunction(PlayerStandard, "_get_melee_charge_lerp_value")
 Hooks:OverrideFunction(PlayerStandard, "_get_melee_charge_lerp_value", function (self, t, offset)
@@ -469,22 +530,39 @@ Hooks:OverrideFunction(PlayerStandard, "_update_melee_timers", function (self, t
 	end
 	
 	if self._state_data.meleeing then
-		local lerp_value = self:_get_melee_charge_lerp_value(t)
+		local function should_allow_tilt()
+			if Gilza.settings.melee_charge_tilt == 1 then
+				return true
+			elseif Gilza.settings.melee_charge_tilt == 2 then
+				return false
+			elseif Gilza.settings.melee_charge_tilt == 3 then
+				if managers.player:has_category_upgrade("player", "damage_resist_brawler") then
+					return false
+				else
+					return true
+				end
+			else
+				return true
+			end
+		end
+		if should_allow_tilt() then
+			local lerp_value = self:_get_melee_charge_lerp_value(t)
 
-		self._camera_unit:anim_state_machine():set_parameter(self:get_animation("melee_charge_state"), "charge_lerp", math.bezier({
-			0,
-			0,
-			1,
-			1
-		}, lerp_value))
-
-		if self._state_data.melee_charge_shake then
-			self._ext_camera:shaker():set_parameter(self._state_data.melee_charge_shake, "amplitude", math.bezier({
+			self._camera_unit:anim_state_machine():set_parameter(self:get_animation("melee_charge_state"), "charge_lerp", math.bezier({
 				0,
 				0,
 				1,
 				1
 			}, lerp_value))
+
+			if self._state_data.melee_charge_shake then
+				self._ext_camera:shaker():set_parameter(self._state_data.melee_charge_shake, "amplitude", math.bezier({
+					0,
+					0,
+					1,
+					1
+				}, lerp_value))
+			end
 		end
 	end
 
@@ -589,16 +667,6 @@ Hooks:OverrideFunction(PlayerStandard, "_get_swap_speed_multiplier", function (s
 
 	return multiplier
 end)
-
--- adds bipod deploy speed multiplier if user has 'bipods that (actually) work'. for some reason playerbipod:_entry never triggers with this mod...
-if Gilza.BTAW_enabled then
-	local original_start_deploying_bipod = PlayerStandard.start_deploying_bipod
-	Hooks:OverrideFunction(PlayerStandard, "start_deploying_bipod", function (self, bipod_deploy_duration, ...)
-		local speed_multiplier = 1 * managers.player:upgrade_value("player", "bipod_deploy_speed", 1)
-		bipod_deploy_duration = (bipod_deploy_duration or 1) / speed_multiplier
-		return original_start_deploying_bipod(self,bipod_deploy_duration,...)
-	end)
-end
 
 -- if we are boosting another player with basic inspire, we get it ourselves as well
 Hooks:PreHook(PlayerStandard, "_get_intimidation_action", "Gilza_PlayerStandard_get_intimidation_action", function(self, prime_target, char_table, amount, primary_only, detect_only, secondary)

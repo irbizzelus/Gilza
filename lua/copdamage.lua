@@ -66,6 +66,18 @@ Hooks:PreHook(CopDamage, "damage_melee", "Gilza_CopDamage_damage_melee_pre", fun
 		-- failsafe to prevent from overwriting damage twice, which should never happen anyway
 		attack_data.Gilza_melee_damage_tweak_applied = true
 	end
+	
+	-- add bullseye/copycat-HS-skill procs, and increase dmg based on hs muls for brawler
+	local head = self._head_body_name and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
+	if head then
+		managers.player:on_headshot_dealt()
+		if managers.player:has_category_upgrade("player", "melee_headshot_multiplier") and not self._char_tweak.ignore_headshot and not self._damage_reduction_multiplier then
+			if self._char_tweak.headshot_dmg_mul then
+				attack_data.damage = attack_data.damage * self._char_tweak.headshot_dmg_mul
+			end
+		end
+	end
+	
 end)
 
 local mvec_1 = Vector3()
@@ -628,6 +640,10 @@ Hooks:OverrideFunction(CopDamage, "roll_critical_hit", function (self, attack_da
 		res2 = damage * 2.25 -- new crit mul; if its ever updated, dont forget to update it in graze as well, since it's reusing this mul
 	end
 	
+	if res1 and attack_data.col_ray and attack_data.col_ray.unit and alive(attack_data.col_ray.unit) and attack_data.col_ray.unit:slot() and (attack_data.col_ray.unit:slot() == 25 or attack_data.col_ray.unit:slot() == 26) then
+		res2 = damage * 10
+	end
+	
 	return res1, res2
 end)
 
@@ -770,6 +786,24 @@ Hooks:OverrideFunction(CopDamage, "chk_killshot", function (self, attacker_unit,
 	end
 	
 	return gilza_chk_killshot_orig(self, attacker_unit, variant, headshot, weapon_id)
+end)
+
+-- ammo pack spawn is rng now, scaling with player count
+Hooks:PreHook(CopDamage, "die", "Gilza_CopDamage_die_pre", function (self, attack_data)
+	-- if user has useful bots mod, avoid conflicts with amount of dropped ammo, otherwise chances could be lower than intended
+	if UsefulBots and UsefulBots.settings and UsefulBots.settings.ammo_drops then
+		if type(UsefulBots.settings.ammo_drops) == "number" then
+			UsefulBots.settings.ammo_drops = 1
+		else
+			UsefulBots.settings.ammo_drops = true
+		end
+	end
+	if Network:is_server() and self._pickup == "ammo" and alive(attack_data.attacker_unit) and managers.groupai:state():is_unit_team_AI(attack_data.attacker_unit) then
+		local spawn_chance = 0.25 * (managers.groupai:state():num_alive_players() or 1)
+		if math.random() >= spawn_chance then
+			self._pickup = nil
+		end
+	end
 end)
 
 -- hitman check for bounty target death by non-local entities. if unit dies i as client will get it's id as -1, instead of proper id, so we do some tracking

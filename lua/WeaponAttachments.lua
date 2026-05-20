@@ -40,10 +40,11 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			ammo_pickup_max_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("PISTOL", 155, 250, true).max_mul,
 			ammo_pickup_min_mul = G_W_M:get_pickup_adjusments_for_wpn_mod("PISTOL", 155, 250, true).min_mul
 		}
-		-- ammo that type54's underbarrel shotgun ammo adds to adjust ammo pickup for the gun itself
+		-- ammo that type54's underbarrel shotgun ammo removes to set ammo pickup for the gun itself to a reduced amount, -30% amount, while normally this mod is equipped by default
 		self.parts.wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster.name_id = "bm_wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster"
 		self.parts.wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster.stats = {}
-		self.parts.wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster.custom_stats = {ammo_pickup_max_mul = 0.7,ammo_pickup_min_mul = 0.7}
+		self.parts.wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster.custom_stats = {ammo_pickup_max_mul = 1.42857,ammo_pickup_min_mul = 1.42857}
+		
 		-- p90 AP rounds
 		self.parts.wpn_fps_upg_smg_p90_ap_rounds.name_id = "bm_wpn_fps_upg_smg_p90_ap_rounds"
 		self.parts.wpn_fps_upg_smg_p90_ap_rounds.stats = {value = 0,total_ammo_mod = -5.71,spread = -5,recoil = -3}
@@ -1340,6 +1341,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_upg_a_slug.custom_stats.damage_near_mul = 1.2
 			self.parts.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_min_mul = 0.75
 			self.parts.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_max_mul = 0.75
+			self.parts.wpn_fps_upg_a_slug.custom_stats.falloff_override = nil
 			self.parts.wpn_fps_upg_a_slug.desc_id = "bm_wpn_fps_upg_a_slug_desc_new"
 			
 			-- FLECHETTE
@@ -1851,7 +1853,269 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_lmg_hk21_b_long.stats.damage = nil
 		self.parts.wpn_fps_lmg_hk21_b_long.stats.spread = 2
 		self.parts.wpn_fps_lmg_hk21_b_long.stats.recoil = -1
-		self.parts.wpn_fps_lmg_hk21_fg_short.stats.recoil = 4
+		self.parts.wpn_fps_lmg_hk21_fg_short.stats.spread = 3
+		self.parts.wpn_fps_lmg_hk21_fg_short.stats.recoil = 8
+		
+		----------------------------------- NEW ADS OPTIC OPTIONS AND STANCES
+		local lmg_table = {
+			"wpn_fps_lmg_rpk",
+			"wpn_fps_lmg_hk21",
+			"wpn_fps_lmg_m249",
+			"wpn_fps_lmg_par",
+			"wpn_fps_lmg_mg42",
+			"wpn_fps_lmg_m60"
+		}
+		
+		local scopes_table = {
+			"wpn_fps_upg_o_specter",
+			"wpn_fps_upg_o_specter_piggyback",
+			"wpn_fps_upg_o_aimpoint",
+			"wpn_fps_upg_o_aimpoint_2",
+			"wpn_fps_upg_o_docter",
+			"wpn_fps_upg_o_eotech",
+			"wpn_fps_upg_o_t1micro",
+			"wpn_fps_upg_o_cmore",
+			"wpn_fps_upg_o_acog",
+			"wpn_fps_upg_o_cs",
+			"wpn_fps_upg_o_cs_piggyback",
+			"wpn_fps_upg_o_eotech_xps",
+			"wpn_fps_upg_o_reflex",
+			"wpn_fps_upg_o_rx01",
+			"wpn_fps_upg_o_rx30",
+			"wpn_fps_upg_o_spot",
+			"wpn_fps_upg_o_fc1",
+			"wpn_fps_upg_o_uh",
+			"wpn_fps_upg_o_bmg",
+			"wpn_fps_upg_o_tf90",
+			"wpn_fps_upg_o_poe",
+			"wpn_fps_upg_o_hamr",
+			"wpn_fps_upg_o_hamr_reddot",
+			"wpn_fps_upg_o_atibal",
+			"wpn_fps_upg_o_atibal_reddot",
+			"wpn_fps_upg_o_health",
+			-- zooms
+			"wpn_fps_upg_o_xpsg33_magnifier",
+			"wpn_fps_upg_o_sig",
+		}
+		
+		-- add scopes to lmgs
+		for index, weapon_id in ipairs(lmg_table) do
+			if self[tostring(weapon_id)] then
+				for index_2, scope_id in ipairs(scopes_table) do
+					if self.parts[tostring(scope_id)] then
+						table.insert(self[tostring(weapon_id)].uses_parts, tostring(scope_id))
+					end
+				end
+			end
+		end
+		
+		-- add custom optics
+		for id, _table_ in pairs(self.parts) do
+			if self.parts[id].type and (self.parts[id].type == "sight" or self.parts[id].type == "second_sight") and self.parts[id].based_on and table.contains(scopes_table,self.parts[id].based_on) then
+				table.insert(scopes_table, tostring(id))
+			end
+		end
+		
+		local lmg_translations = {
+			wpn_fps_lmg_rpk = Vector3(0,0,-2.97),
+			wpn_fps_lmg_hk21 = Vector3(0,0,-3.2),
+			wpn_fps_lmg_m249 = Vector3(0,-3,-3.47),
+			wpn_fps_lmg_par = Vector3(0,2.5,-3.2),
+			wpn_fps_lmg_mg42 = Vector3(0,8,-2.4),
+			wpn_fps_lmg_m60 = Vector3(2.074, 25, -4.74)
+		}
+		
+		-- add ADS stances for scoped ADS when they are attached to lmgs
+		for index, scope_id in ipairs(scopes_table) do
+			if self.parts[tostring(scope_id)] and self.parts[tostring(scope_id)].stance_mod then
+				for weapon_id, vec in pairs(lmg_translations) do
+					self.parts[tostring(scope_id)].stance_mod[tostring(weapon_id)] = {translation = vec}
+				end
+			end
+		end
+		
+		-- fix scopes that should have their own offsets, relative to default scope offset
+		local missaligned_scopes = {
+			wpn_fps_upg_o_specter_piggyback = Vector3(-0.02,-6,-3.15),
+			wpn_fps_upg_o_cs_piggyback = Vector3(-0.017,-6,-3.35),
+			wpn_fps_upg_o_hamr_reddot = Vector3(0,-6,-3.4),
+			wpn_fps_upg_o_atibal = Vector3(0,-6,-0.78), -- surprisingly the only vanilla optic in the game that doesnt match the "default" alignment vector, ignoring piggybacks
+			wpn_fps_upg_o_atibal_reddot = Vector3(-0.15,-6,-5.8),
+		}
+		for scope, adjustment in pairs(missaligned_scopes) do
+			if self.parts[tostring(scope)] and self.parts[tostring(scope)].stance_mod then
+				for weapon_id, vec in pairs(lmg_translations) do
+					self.parts[tostring(scope)].stance_mod[tostring(weapon_id)] = {translation = vec + adjustment}
+				end
+			end
+		end
+		
+		-- crash proofing
+		for index, weapon_id in ipairs(lmg_table) do
+			if not self[weapon_id].adds then
+				self[weapon_id].adds = {}
+			end
+			if not self[weapon_id].override then
+				self[weapon_id].override = {}
+			end
+		end
+		
+		-- rpk overrides
+		self.wpn_fps_lmg_rpk.override.wpn_fps_upg_o_ak_scopemount = self.wpn_fps_lmg_rpk.override.wpn_fps_upg_o_ak_scopemount or {}
+		self.wpn_fps_lmg_rpk.override.wpn_fps_upg_ak_fg_trax = self.wpn_fps_lmg_rpk.override.wpn_fps_upg_ak_fg_trax or {}
+		self.wpn_fps_lmg_rpk.override.wpn_fps_upg_ak_fg_krebs = self.wpn_fps_lmg_rpk.override.wpn_fps_upg_ak_fg_krebs or {}
+		-- picatinny rail that optics attach to the rpk foregrip. it has overrides for new hamr and atibal optics for some reason, which was causing alignment issues for those scopes
+		self.wpn_fps_lmg_rpk.override.wpn_fps_ak_extra_ris = {override = {}}
+		-- if "ласточкин хвост" style mount is used, clear default foregrip's optic overrides to use mount's overrides. + other stuff
+		self.wpn_fps_lmg_rpk.override.wpn_fps_upg_o_ak_scopemount = {
+			is_a_unlockable = true,
+			texture_bundle_folder = "dlc_akm4",
+			type = "extra",
+			a_obj = "a_g",
+			depends_on = "sight",
+			dlc = "akm4_pack",
+			name_id = "bm_wp_upg_o_ak_scopemount",
+			unit = "units/pd2_dlc_akm4_modpack/weapons/wpn_fps_upg_o_ak_scopemount/wpn_fps_upg_o_ak_scopemount",
+			pcs = {},
+			stats = {
+				value = 1,
+				recoil = 1,
+				concealment = -1
+			},
+			forbids = {
+				"wpn_fps_ak_extra_ris"
+			},
+			override = {
+				wpn_fps_upg_ak_fg_trax = {override = {}},
+				wpn_fps_upg_ak_fg_krebs = {override = {}}
+			}
+		}
+				
+		-- rpk scope mount adjustments
+		for index, scope_id in ipairs(scopes_table) do
+			if self.parts[tostring(scope_id)] and (scope_id == "wpn_fps_upg_o_xpsg33_magnifier" or scope_id == "wpn_fps_upg_o_sig") then
+				self.wpn_fps_lmg_rpk.override.wpn_fps_upg_o_ak_scopemount.override[tostring(scope_id)] = {
+					stance_mod = {wpn_fps_lmg_rpk = {translation = Vector3(0, 10, -4.6)}}
+				}
+			elseif self.parts[tostring(scope_id)] then
+				self.wpn_fps_lmg_rpk.override.wpn_fps_upg_o_ak_scopemount.override[tostring(scope_id)] = {
+					a_obj = "a_o_sm",
+					stance_mod = {wpn_fps_lmg_rpk = {translation = Vector3(0, 10, -4.6)}}
+				}
+			end
+		end
+		-- same for missaligned scopes
+		for scope, adjustment in pairs(missaligned_scopes) do
+			if self.parts[tostring(scope)] then
+				self.wpn_fps_lmg_rpk.override.wpn_fps_upg_o_ak_scopemount.override[tostring(scope)] = {
+					a_obj = "a_o_sm",
+					stance_mod = {wpn_fps_lmg_rpk = {translation = Vector3(0, 10, -4.6) + adjustment}}
+				}
+			end
+		end
+		
+		-- rpk foregrip mounts' adjustments
+		for index, scope_id in ipairs(scopes_table) do
+			if self.parts[tostring(scope_id)] then
+				self.parts.wpn_fps_upg_ak_fg_trax.override[tostring(scope_id)] = self.parts.wpn_fps_upg_ak_fg_trax.override[tostring(scope_id)] or {a_obj = "a_o_krebs", stance_mod = {}}
+				self.parts.wpn_fps_upg_ak_fg_trax.override[tostring(scope_id)].stance_mod.wpn_fps_lmg_rpk = {translation = Vector3(0, 0, -3.8)}
+				self.parts.wpn_fps_upg_ak_fg_krebs.override[tostring(scope_id)] = self.parts.wpn_fps_upg_ak_fg_krebs.override[tostring(scope_id)] or {a_obj = "a_o_krebs", stance_mod = {}}
+				self.parts.wpn_fps_upg_ak_fg_krebs.override[tostring(scope_id)].stance_mod.wpn_fps_lmg_rpk = {translation = Vector3(0, 0, -3.8)}
+			end
+		end
+		
+		-- same for missaligned scopes
+		for scope, adjustment in pairs(missaligned_scopes) do
+			if self.parts[tostring(scope)] then
+				self.parts.wpn_fps_upg_ak_fg_trax.override[tostring(scope)] = self.parts.wpn_fps_upg_ak_fg_trax.override[tostring(scope)] or {a_obj = "a_o_krebs", stance_mod = {}}
+				self.parts.wpn_fps_upg_ak_fg_trax.override[tostring(scope)].stance_mod.wpn_fps_lmg_rpk = {translation = Vector3(0, 0, -3.8) + adjustment}
+				self.parts.wpn_fps_upg_ak_fg_krebs.override[tostring(scope)] = self.parts.wpn_fps_upg_ak_fg_krebs.override[tostring(scope)] or {a_obj = "a_o_krebs", stance_mod = {}}
+				self.parts.wpn_fps_upg_ak_fg_krebs.override[tostring(scope)].stance_mod.wpn_fps_lmg_rpk = {translation = Vector3(0, 0, -3.8) + adjustment}
+			end
+		end
+		
+		-- mg42 stealth barrel adjustments???????????????????????????
+		self.wpn_fps_lmg_mg42.override.wpn_fps_lmg_mg42_b_vg38 = { 
+			stance_mod = {wpn_fps_lmg_mg42 = { translation = Vector3( 0, 3, 2.1)}}
+		}
+		self.wpn_fps_lmg_mg42.override.wpn_fps_lmg_mg42_b_vg38.override = self.wpn_fps_lmg_mg42.override.wpn_fps_lmg_mg42_b_vg38.override or {}
+		local vg38_offsets = {
+			wpn_fps_upg_o_specter = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_aimpoint = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_aimpoint_2 = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_docter = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_eotech = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_t1micro = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_cmore = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_acog = Vector3(0, 13, -4.5),
+			wpn_fps_upg_o_cs = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_eotech_xps = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_reflex = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_rx01 = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_rx30 = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_spot = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_xpsg33_magnifier = Vector3(0, 13, -4.5),
+			wpn_fps_upg_o_sig = Vector3(0, 13, -4.5),
+			wpn_fps_upg_o_fc1 = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_uh = Vector3(0,10,-4.5),
+			wpn_fps_upg_o_bmg = Vector3(0, 13, -4.5),
+		}
+		for part, vec in pairs(vg38_offsets) do
+			self.wpn_fps_lmg_mg42.override.wpn_fps_lmg_mg42_b_vg38.override[tostring(part)] = {			
+				stance_mod = {
+					wpn_fps_lmg_mg42 = {
+						translation = vec
+					}
+				}
+			}
+		end
+		
+		-- yup, we using val's mount for this gun, cause its dlc tag is empty aka free, and its tall enough
+		self.wpn_fps_lmg_m60.override.wpn_fps_ass_asval_scopemount = {
+			type = "extra",
+			a_obj = "a_g",
+			depends_on = "sight",
+			name_id = "bm_wp_asval_scopemount",
+			unit = "units/pd2_dlc_character_sokol/weapons/wpn_fps_ass_asval_pts/wpn_fps_ass_asval_scopemount",
+			stats = {
+				value = 1
+			},
+			stance_mod = {
+				wpn_fps_lmg_m60 = {
+					translation = Vector3(0, 0, 0),
+					rotation = Rotation(0, 0, 0)
+				}
+			}
+		}
+		
+		-- make scope mounts attach automatically to scopes for some lmgs that need em
+		for index, scope_id in ipairs(scopes_table) do
+			if self.parts[tostring(scope_id)] and not (scope_id == "wpn_fps_upg_o_xpsg33_magnifier" or scope_id == "wpn_fps_upg_o_sig") then
+				self.wpn_fps_lmg_rpk.adds[tostring(scope_id)] = {"wpn_fps_ak_extra_ris"}
+			end
+		end
+		for index, scope_id in ipairs(scopes_table) do
+			if self.parts[tostring(scope_id)] and not (scope_id == "wpn_fps_upg_o_xpsg33_magnifier" or scope_id == "wpn_fps_upg_o_sig") then
+				self.wpn_fps_lmg_hk21.adds[tostring(scope_id)] = {"wpn_fps_ass_g3_body_rail"}
+			end
+		end
+		for index, scope_id in ipairs(scopes_table) do
+			if self.parts[tostring(scope_id)] and not (scope_id == "wpn_fps_upg_o_xpsg33_magnifier" or scope_id == "wpn_fps_upg_o_sig") then
+				self.wpn_fps_lmg_mg42.adds[tostring(scope_id)] = {"wpn_fps_rpg7_sight_adapter"}
+			end
+		end
+		for index, scope_id in ipairs(scopes_table) do
+			if self.parts[tostring(scope_id)] and not (scope_id == "wpn_fps_upg_o_xpsg33_magnifier" or scope_id == "wpn_fps_upg_o_sig") then
+				self.wpn_fps_lmg_m60.adds[tostring(scope_id)] = {"wpn_fps_ass_asval_scopemount"}
+			end
+		end
+		
+		-- add scopemounts
+		table.insert(self.wpn_fps_lmg_rpk.uses_parts, "wpn_fps_upg_o_ak_scopemount")
+		table.insert(self.wpn_fps_lmg_rpk.uses_parts, "wpn_fps_ak_extra_ris")
+		table.insert(self.wpn_fps_lmg_hk21.uses_parts, "wpn_fps_ass_g3_body_rail")
+		table.insert(self.wpn_fps_lmg_mg42.uses_parts, "wpn_fps_rpg7_sight_adapter")
+		table.insert(self.wpn_fps_lmg_m60.uses_parts, "wpn_fps_ass_asval_scopemount")
 		
 	end
 	init_LMG_mods()
@@ -2225,6 +2489,24 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 	
 	-- Special individual
 	local function init_Special_mods()
+		
+		-- flare gun
+		self.parts.wpn_fps_upg_a_flun_shell.stats.damage = 1095
+		self.parts.wpn_fps_upg_a_flun_shell.stats.spread = -2
+		self.parts.wpn_fps_upg_a_flun_shell.custom_stats.rays = 10
+		self.parts.wpn_fps_upg_a_flun_shell.custom_stats.damage_falloff = nil
+		
+		self.wpn_fps_spe_flun.override.wpn_fps_upg_a_piercing.stats = {value = 5, damage = 1095, spread = -2, total_ammo_mod = 20}
+		self.wpn_fps_spe_flun.override.wpn_fps_upg_a_piercing.custom_stats = {rays = 5, armor_piercing_add = 1,damage_near_mul = 1.25,damage_far_mul = 1.25,ammo_pickup_max_mul = 1.7,ammo_pickup_min_mul = 1.7}
+		self.wpn_fps_spe_flun.override.wpn_fps_upg_a_piercing.custom_stats.weapon_unit = "units/pd2_dlc_unk/weapons/wpn_fps_spe_flun/wpn_fps_sho_flun"
+		self.wpn_fps_spe_flun.override.wpn_fps_upg_a_piercing.custom_stats.muzzleflash = "effects/payday2/particles/weapons/762_auto_fps"
+		
+		self.wpn_fps_spe_flun.override.wpn_fps_upg_a_slug.stats = {damage = 1095,value = 5,spread = 2,recoil = -2,total_ammo_mod = 10}
+		self.wpn_fps_spe_flun.override.wpn_fps_upg_a_slug.custom_stats.damage_far_mul = 1.2
+		self.wpn_fps_spe_flun.override.wpn_fps_upg_a_slug.custom_stats.damage_near_mul = 1.2
+		self.wpn_fps_spe_flun.override.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_min_mul = 1.5
+		self.wpn_fps_spe_flun.override.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_max_mul = 1.5
+		self.wpn_fps_spe_flun.override.wpn_fps_upg_a_slug.custom_stats.falloff_override = nil
 		
 		-- MICROGUN
 		self.parts.wpn_fps_lmg_shuno_b_heat_short.stats.recoil = 3
@@ -2689,22 +2971,22 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			-- underbarrel mods
 			self.parts.wpn_fps_pis_type54_underbarrel.desc_id = "bm_wpn_fps_pis_type54_underbarrel_desc"
 			self.parts.wpn_fps_pis_type54_underbarrel.has_description = true
-			self.parts.wpn_fps_pis_type54_underbarrel.adds = {"wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster"}
+			table.insert(self.parts.wpn_fps_pis_type54_underbarrel.forbids, "wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster") -- on underbarrel add, remove hidden ammo that provides 30% more ammo
 			self.parts.wpn_fps_pis_type54_underbarrel_slug.desc_id = "bm_wpn_fps_pis_type54_underbarrel_slug_desc"
 			self.parts.wpn_fps_pis_type54_underbarrel_slug.has_description = true
-			self.parts.wpn_fps_pis_type54_underbarrel_slug.adds = {"wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster"}
+			table.insert(self.parts.wpn_fps_pis_type54_underbarrel_slug.forbids, "wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster")
 			self.parts.wpn_fps_pis_type54_underbarrel_piercing.desc_id = "bm_wpn_fps_pis_type54_underbarrel_ap_desc"
 			self.parts.wpn_fps_pis_type54_underbarrel_piercing.has_description = true
-			self.parts.wpn_fps_pis_type54_underbarrel_piercing.adds = {"wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster"}
+			table.insert(self.parts.wpn_fps_pis_type54_underbarrel_piercing.forbids, "wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster")
 			self.parts.wpn_fps_pis_x_type54_underbarrel.desc_id = "bm_wpn_fps_pis_x_type54_underbarrel_desc"
 			self.parts.wpn_fps_pis_x_type54_underbarrel.has_description = true
-			self.parts.wpn_fps_pis_x_type54_underbarrel.adds = {"wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster"}
+			table.insert(self.parts.wpn_fps_pis_x_type54_underbarrel.forbids, "wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster")
 			self.parts.wpn_fps_pis_x_type54_underbarrel_slug.desc_id = "bm_wpn_fps_pis_x_type54_underbarrel_slug_desc"
 			self.parts.wpn_fps_pis_x_type54_underbarrel_slug.has_description = true
-			self.parts.wpn_fps_pis_x_type54_underbarrel_slug.adds = {"wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster"}
+			table.insert(self.parts.wpn_fps_pis_x_type54_underbarrel_slug.forbids, "wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster")
 			self.parts.wpn_fps_pis_x_type54_underbarrel_piercing.desc_id = "bm_wpn_fps_pis_x_type54_underbarrel_ap_desc"
 			self.parts.wpn_fps_pis_x_type54_underbarrel_piercing.has_description = true
-			self.parts.wpn_fps_pis_x_type54_underbarrel_piercing.adds = {"wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster"}
+			table.insert(self.parts.wpn_fps_pis_x_type54_underbarrel_piercing.forbids, "wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster")
 
 			self.parts.wpn_fps_pis_type54_m_ext.stats.reload = -3
 			self.wpn_fps_pis_x_type54.override.wpn_fps_pis_type54_m_ext.stats.reload = -3
@@ -2850,7 +3132,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_pis_pmm_slide_suppressed.stats.damage = -50
 			self.parts.wpn_fps_pis_pmm_slide_suppressed.stats.total_ammo_mod = 5.71
 			self.parts.wpn_fps_pis_pmm_slide_suppressed.stats.spread = 5
-			self.parts.wpn_fps_pis_pmm_slide_suppressed.stats.recoil = 2
+			self.parts.wpn_fps_pis_pmm_slide_suppressed.stats.recoil = 5
+			self.parts.wpn_fps_pis_pmm_slide_suppressed.stats.reload = 4
 			self.parts.wpn_fps_pis_pmm_slide_suppressed.stats.concealment = 1
 			self.parts.wpn_fps_pis_pmm_slide_suppressed.custom_stats = {
 				fire_rate_multiplier = 1.066666666666667,
@@ -5031,4 +5314,12 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		end
 	end
 	
+end)
+
+-- give appropriate ammo pickup by default for this gun
+Hooks:PostHook(WeaponFactoryTweakData, "_init_type54", "Gilza_weapon_attachments_data_type54", function(self)
+	table.insert(self.wpn_fps_pis_type54.default_blueprint, "wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster")
+end)
+Hooks:PostHook(WeaponFactoryTweakData, "_init_x_type54", "Gilza_weapon_attachments_data_x_type54", function(self)
+	table.insert(self.wpn_fps_pis_x_type54.default_blueprint, "wpn_fps_upg_type54_underbarrel_ammo_pickup_adjuster")
 end)

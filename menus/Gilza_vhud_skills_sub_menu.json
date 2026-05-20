@@ -182,6 +182,15 @@
 		},
 		{
 			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_new_aced_running_from_death",
+			"title" : "Gilza_vhud_compat_new_aced_running_from_death",
+			"description" : "Gilza_vhud_compat_new_aced_running_from_death_desc",
+			"callback" : "Gilza_vhud_compat_new_aced_running_from_death",
+			"value" : "vhud_compat_new_aced_running_from_death",
+			"default_value" : true
+		},
+		{
+			"type" : "toggle",
 			"id" : "Gilza_vhud_compat_new_melee_zerk",
 			"title" : "Gilza_vhud_compat_new_melee_zerk",
 			"description" : "Gilza_vhud_compat_new_melee_zerk_desc",

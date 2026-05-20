@@ -154,17 +154,18 @@ Hooks:OverrideFunction(BlackMarketGui, "_get_melee_weapon_stats", function (self
 	return base_stats, mods_stats, skill_stats
 end)
 
--- update text for armor descriptions for ex-pres and anarchist perk decks
+-- update armor description texts
 Hooks:PostHook(BlackMarketGui, "update_info_text", "Gilza_BlackMarketGui_update_info_text_post", function(self)
 	local slot_data = self._slot_data
 	local tab_data = self._tabs[self._selected]._data
 	local identifier = tab_data.identifier
 	
 	if identifier == self.identifiers.armor then
+		
+		local upgrade_level = tweak_data.blackmarket.armors[slot_data.name].upgrade_level
+		
 		-- new ex-pres
 		if managers.player:has_category_upgrade("player", "armor_health_store_amount") then
-			local bm_armor_tweak = tweak_data.blackmarket.armors[slot_data.name]
-			local upgrade_level = bm_armor_tweak.upgrade_level
 			local amount = managers.player:body_armor_value("skill_max_health_store", upgrade_level, 1)
 			local multiplier = managers.player:upgrade_value("player", "armor_max_health_store_multiplier", 1)
 			local recovery_bonus = managers.player:body_armor_value("skill_store_armor_recovery_bonus_timer", upgrade_level, 1)
@@ -172,52 +173,77 @@ Hooks:PostHook(BlackMarketGui, "update_info_text", "Gilza_BlackMarketGui_update_
 				amount = (amount * multiplier * tweak_data.gui.stats_present_multiplier),
 				amount_2 = recovery_bonus
 			})
-			
 			self._info_texts[2]:set_text(tostring(new_info_str))
 		end
 		
 		-- new anarchist
 		if managers.player:has_category_upgrade("player", "armor_grinding") then
-			local bm_armor_tweak = tweak_data.blackmarket.armors[slot_data.name]
-			local upgrade_level = bm_armor_tweak.upgrade_level
 			local new_info_str = managers.localization:text("bm_menu_anarchist_armor_desc", {
 				amount_1 = tweak_data.upgrades.values.player.armor_grinding[1][upgrade_level][1] * 10,
 				amount_2 = tweak_data.upgrades.values.player.armor_grinding[1][upgrade_level][2],
 				amount_3 = tweak_data.upgrades.values.player.damage_to_armor[1][upgrade_level][1] * 10,
 				amount_4 = tweak_data.upgrades.values.player.damage_to_armor[1][upgrade_level][2],
 			})
-			if slot_data.unlocked then -- prevent ICTV's skill requirement text from overlapping with new description if we dont have it unlocked
+			if slot_data.unlocked then
 				self._info_texts[2]:set_text(tostring(new_info_str))
-			end
-			
-			-- ui activation and positioning
-			local info_text = self._info_texts[2]
-			local _, _, _, th = info_text:text_rect()
-			info_text:set_h(th)
-			info_text:set_w(self._info_texts_panel:w())
-			info_text:set_font_size(tweak_data.menu.pd2_small_font_size)
-			if slot_data.comparision_data and alive(self._stats_text_modslist) then
-				info_text:set_world_y(self._stats_text_modslist:world_top())
 			end
 		end
 		
 		-- new sicario
 		if managers.player:has_category_upgrade("player", "dodge_shot_gain_gilza") then
-			local bm_armor_tweak = tweak_data.blackmarket.armors[slot_data.name]
-			local upgrade_level = bm_armor_tweak.upgrade_level
 			local new_info_str = managers.localization:text("bm_menu_sicario_armor_CD_desc", {amount_1 = tweak_data.upgrades.values.player.new_armor_based_sicario_cd[upgrade_level]})
 			if slot_data.unlocked then
 				self._info_texts[2]:set_text(tostring(new_info_str))
 			end
-			local info_text = self._info_texts[2]
-			local _, _, _, th = info_text:text_rect()
-			info_text:set_h(th)
-			info_text:set_w(self._info_texts_panel:w())
-			info_text:set_font_size(tweak_data.menu.pd2_small_font_size)
-			if slot_data.comparision_data and alive(self._stats_text_modslist) then
-				info_text:set_world_y(self._stats_text_modslist:world_top())
+		end
+		
+		-- add armor-based ammo pickup info
+		if managers.player:has_category_upgrade("player", "add_armor_ammo_pickup_stat_skill") then
+			local amount = managers.player:body_armor_value("skill_ammo_mul", upgrade_level, 1)
+			local new_desc = managers.localization:text("bm_menu_armor_pickup_desc", {amount = (amount * 100).."%"})
+			new_desc = new_desc.."\n"..self._info_texts[2]:text().."\n\n\n\n"
+			if slot_data.unlocked then -- prevent ICTV's skill requirement text from overlapping with new description if we dont have it unlocked
+				self._info_texts[2]:set_text(tostring(new_desc))
+				
+				-- gui activation, positioning and scaling
+				local info_text = self._info_texts[2]
+				local _, _, _, th = info_text:text_rect()
+				info_text:set_h(th)
+				info_text:set_w(self._info_texts_panel:w())
+				info_text:set_font_size(tweak_data.menu.pd2_small_font_size)
+				if slot_data.comparision_data and alive(self._stats_text_modslist) then
+					info_text:set_world_y(self._stats_text_modslist:world_top())
+				end
+				
+				local scale = 1
+				local attempts = 5
+				local max_h = self._info_texts_panel:h() - info_text:top()
+
+				if info_text:h() ~= 0 and max_h > 0 and max_h < info_text:h() then
+					local font_size = info_text:font_size()
+					local wanted_h = max_h
+
+					while info_text:h() ~= 0 and not math.within(math.ceil(info_text:h()), wanted_h - 10, wanted_h) and attempts > 0 do
+						scale = wanted_h / info_text:h()
+						font_size = math.clamp(font_size * scale, 0, tweak_data.menu.pd2_small_font_size)
+						info_text:set_font_size(font_size)
+						_, _, _, th = info_text:text_rect()
+						info_text:set_h(th)
+						attempts = attempts - 1
+					end
+
+					if info_text:h() ~= 0 and info_text:h() > self._info_texts_panel:h() - info_text:top() then
+						log("[Gilza - BlackMarketGui] Info text dynamic font sizer failed")
+						scale = (self._info_texts_panel:h() - info_text:top()) / info_text:h()
+						info_text:set_font_size(font_size * scale)
+						_, _, _, th = info_text:text_rect()
+						info_text:set_h(th)
+					end
+				end
+				
 			end
 		end
+		
 	end
 end)
 

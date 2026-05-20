@@ -113,3 +113,101 @@ Hooks:OverrideFunction(FPCameraPlayerBase, "recoil_kick", function (self, up, do
 	local h = math.lerp(left, right, math.random())
 	self._recoil_kick.h.accumulated = (self._recoil_kick.h.accumulated or 0) + h * mul
 end)
+
+-- adjust camera position when entering the bipod state, since it always forces un-toggleble ADS
+Hooks:PreHook(FPCameraPlayerBase, "clbk_stance_entered", "Gilza_FPCameraPlayerBase_clbk_stance_entered_pre", function(self, new_shoulder_stance, new_head_stance, new_vel_overshot, new_fov, new_shakers, stance_mod, duration_multiplier, duration, head_duration_multiplier, head_duration)
+	if managers.player.bipod_entry_started then
+		local weap_base = managers.player:player_unit():movement():current_state()._equipped_unit:base()
+		local wpn_id = weap_base.name_id or "new_m4"
+		if stance_mod and tweak_data.player.stances[wpn_id].bipod and tweak_data.player.stances[wpn_id].bipod.leaning_offsets then
+			local scope_part = managers.weapon_factory:get_parts_from_weapon_by_perk("scope", weap_base._parts)
+			local scope_id = false
+			local wpn_lean_offs = tweak_data.player.stances[wpn_id].bipod.leaning_offsets
+			
+			-- grab lean type
+			local lean = "default_lean"
+			if managers.player.bipod_entry_started == "right_lean" or managers.player.bipod_entry_started == "left_lean" then
+				lean = managers.player.bipod_entry_started
+			end
+			
+			if scope_part and scope_part[1] then
+				-- grab used scope id
+				for id, tbl in pairs(weap_base._parts) do
+					if tbl.name == scope_part[1].name then
+						scope_id = id
+						break
+					end
+				end
+				if weap_base:get_active_second_sight() then
+					scope_id = weap_base:get_active_second_sight().part_id
+				end
+				
+				-- if we have bipod scope adjustments
+				if scope_id and wpn_lean_offs.scope_adjustment then
+					-- we either use scope's individual values
+					if wpn_lean_offs.scope_adjustment[tostring(scope_id)] then
+						stance_mod.rotation = wpn_lean_offs.scope_adjustment[tostring(scope_id)][tostring(lean)].rotation or Rotation(0,0,0)
+						stance_mod.translation = stance_mod.translation + (wpn_lean_offs.scope_adjustment[tostring(scope_id)][tostring(lean)].translation or Vector3(0,0,0))
+						-- tweak value further if a scopemount (or any other weapon part) is present
+						if wpn_lean_offs.scope_adjustment[tostring(scope_id)].scopemount then
+							for id, tbl in pairs(weap_base._parts) do
+								if wpn_lean_offs.scope_adjustment[tostring(scope_id)].scopemount[tostring(id)] then
+									stance_mod.translation = stance_mod.translation + wpn_lean_offs.scope_adjustment[tostring(scope_id)].scopemount[tostring(id)][tostring(lean)]
+									break
+								end
+							end
+						end
+					else -- or we use a "default" value which should handle majority of scopes since they can work with same values
+						stance_mod.rotation = wpn_lean_offs.scope_adjustment.default[tostring(lean)].rotation or Rotation(0,0,0)
+						stance_mod.translation = stance_mod.translation + (wpn_lean_offs.scope_adjustment.default[tostring(lean)].translation or Vector3(0,0,0))
+						-- tweak value further if a scopemount (or any other weapon part) is present
+						if wpn_lean_offs.scope_adjustment.default.scopemount then
+							for id, tbl in pairs(weap_base._parts) do
+								if wpn_lean_offs.scope_adjustment.default.scopemount[tostring(id)] then
+									stance_mod.translation = stance_mod.translation + wpn_lean_offs.scope_adjustment.default.scopemount[tostring(id)][tostring(lean)]
+									break
+								end
+							end
+						end
+					end
+				end
+			elseif wpn_lean_offs.iron_sights and wpn_lean_offs.iron_sights[tostring(lean)] then -- if no scope detected
+				stance_mod.rotation = wpn_lean_offs.iron_sights[tostring(lean)].rotation or Rotation(0,0,0)
+				stance_mod.translation = stance_mod.translation + (wpn_lean_offs.iron_sights[tostring(lean)].translation or Vector3(0,0,0))
+			end
+		end
+	end
+end)
+
+-- new bipod camera limits func
+function FPCameraPlayerBase:set_standard_bipod_limits(spin, pitch, lean)
+	self._limits = {}
+	
+	local sentre_adjustment = 0
+	local spin_offset = nil
+	local pitch_offset = nil
+	-- if we lean on a right/left wall, we shit the camera centre away from the wall to make centre of camera limits make more sense
+	if lean == "right_lean" then
+		sentre_adjustment = 10
+		spin_offset = 24
+		pitch_offset = 10
+	elseif lean == "left_lean" then
+		sentre_adjustment = -10
+		spin_offset = 24
+		pitch_offset = 10
+	end
+	
+	if spin then
+		self._limits.spin = {
+			mid = self._camera_properties.spin + sentre_adjustment,
+			offset = spin_offset or spin
+		}
+	end
+
+	if pitch then
+		self._limits.pitch = {
+			mid = self._camera_properties.pitch,
+			offset = pitch_offset or pitch
+		}
+	end
+end

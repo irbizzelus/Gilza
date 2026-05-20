@@ -5,14 +5,6 @@ end
 -- actual values for all skills
 Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_init_pd2_values_post", function(self)
 	
-	-- Shotgun HE round. Why it would be here is beyond my understanding
-	self.explosive_bullet = {
-		curve_pow = 0,
-		player_dmg_mul = 0.01,
-		range = 200
-	}
-	self.explosive_bullet.feedback_range = self.explosive_bullet.range
-	
 	local function New_Skills()
 	
 		local function New_Mastermind_Skills()
@@ -143,10 +135,10 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			-- new shotgun expert skill
 			self.values.shotgun.recoil_multiplier = {
 				0.8,
-				0.50
+				0.4
 			}
 			self.values.shotgun.steelsight_accuracy_inc = {
-				0.7
+				0.5
 			}
 			-- new blast away skill - suprisingly still has native support, and does not require any code on my part
 			self.values.shotgun.consume_no_ammo_chance = {
@@ -329,12 +321,18 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			-- new dodge armor regen skill
 			self.values.temporary.player_dodge_armor_regen = {
 				{
-					1,
-					30
+					{
+						armor_regen = 2,
+						dodge_gain = 0.15,
+					},
+					45
 				},
 				{
-					5,
-					15
+					{
+						armor_regen = 5,
+						dodge_gain = 0.4,
+					},
+					25
 				}
 			}
 			-- ap chance for silencers - incremental
@@ -439,6 +437,13 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			}
 			
 			---- REVENANT
+			-- basic up you go duration buff
+			self.values.temporary.revived_damage_resist = {
+				{
+					0.7,
+					20
+				}
+			}
 			-- new version for self heal with up you go
 			self.values.player.health_regain_V2 = {
 				0.3
@@ -466,6 +471,14 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 					30
 				}
 			}
+			-- new running from death aced
+			self.values.temporary.dmg_immunity_while_sprinting = {
+				{
+					true,
+					6.66
+				}
+			}
+			self.values.player.reload_weapons_on_revive = {true}
 			-- messiah inf bleedout health
 			self.values.player.bleed_out_health_multiplier = {
 				1.5,
@@ -521,7 +534,27 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			}
 		end
 		New_Fugitive_Skills()
-	
+		
+		-- BASEKIT: armor based ammo pickup muls
+		self.values.player.body_armor.skill_ammo_mul = {
+			0.92,
+			0.94,
+			0.98,
+			1,
+			1.06,
+			1.08,
+			1.13
+		}
+		self.values.player.add_armor_ammo_pickup_stat_skill = {true}
+		
+		-- BASEKIT: shotgun HE round. Why it would be here is beyond my understanding
+		self.explosive_bullet = {
+			curve_pow = 0,
+			player_dmg_mul = 0.01,
+			range = 200
+		}
+		self.explosive_bullet.feedback_range = self.explosive_bullet.range
+		
 	end
 	New_Skills()
 	
@@ -648,7 +681,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				-- new "death dance" combo skill
 				self.values.temporary.death_dance_combo_invulnerability = {
 					{
-						10, -- base duration
+						8, -- base duration
 						30 -- CD. begins at the same time as the effect
 					}
 				}
@@ -776,8 +809,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 					{
 						addition_chance = 0.7,
 						removal_chance = 0.15,
-						addition_jackpot_chance = 0.2,
-						removal_jackpot_chance = 0.1
+						addition_jackpot_chance = 0.1,
+						removal_jackpot_chance = 0.05
 					}
 				}
 				-- dodge values for new galmbling system
@@ -1062,6 +1095,10 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				self.values.player.copr_regain_cooldown_on_revives = {
 					10
 				}
+				-- heal self and revived teammate on revive. uses standard health recovery values
+				self.values.player.copr_heal_on_teammate_revive = {
+					true
+				}
 				-- longer basic CD
 				self.copr_ability_cooldown = 60
 				-- increased CD return on kill
@@ -1093,7 +1130,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 					1 + health_boost * 3,
 					1 + health_boost * 4
 				}
-				local ammo_multiplier = 0.075
+				local ammo_multiplier = 0.05
 				self.values.player.mrwi_ammo_supply_multiplier = {
 					1 + ammo_multiplier * 1,
 					1 + ammo_multiplier * 2,
@@ -1132,6 +1169,9 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				self.values.player.armor_regen_brawler = {
 					true
 				}
+				self.values.player.melee_headshot_multiplier = {
+					true
+				}
 				self.values.player.damage_resist_faraway_brawler = { -- legacy
 					true
 				}
@@ -1154,8 +1194,12 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				self.values.player.speed_junkie_stamina_on_kill = {
 					0.05
 				}
+				-- add meter based on current meter - the higher current is, less points we get
 				self.values.player.speed_junkie_meter_on_kill = {
-					10
+					{
+						5,
+						20
+					}
 				}
 				self.values.temporary.player_speed_junkie_armor_on_dodge = {
 					{
@@ -1406,6 +1450,7 @@ function UpgradesTweakData.mrwi_deck9_options_gilza_update()
 			desc_id = "menu_deck23_9_yakuza_desc",
 			upgrades = {
 				"player_yakuza_suppression_resist",
+				"player_AP_damage_resist_brawler",
 				"player_movement_speed_damage_health_ratio_threshold_multiplier"
 			},
 			icon_xy = {
@@ -1559,6 +1604,17 @@ function UpgradesTweakData.mrwi_deck9_options_gilza_update()
 end
 
 Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definitions_1", function(self)	
+	
+	-- add ammo pickup alterations
+	self.definitions.player_add_armor_ammo_pickup_stat_skill = {
+		name_id = "menu_player_add_armor_ammo_pickup_stat_skill",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "add_armor_ammo_pickup_stat_skill",
+			category = "player"
+		}
+	}
 	
 	---- MASTERMIND
 	local function New_Mastermind_definitions()
@@ -1934,6 +1990,25 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 			upgrade = {
 				value = 1,
 				upgrade = "pistols_and_smgs_pick_up_increase",
+				category = "player"
+			}
+		}
+		-- new running from death aced
+		self.definitions.player_temp_dmg_immunity_while_sprinting = {
+			name_id = "menu_player_temp_dmg_immunity_while_sprinting",
+			category = "temporary",
+			upgrade = {
+				value = 1,
+				upgrade = "dmg_immunity_while_sprinting",
+				category = "temporary"
+			}
+		}
+		self.definitions.player_reload_weapons_on_revive = {
+			name_id = "menu_player_reload_weapons_on_revive",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "reload_weapons_on_revive",
 				category = "player"
 			}
 		}
@@ -2323,6 +2398,15 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 						category = "player"
 					}
 				}
+				self.definitions.player_copr_heal_on_teammate_revive = {
+					name_id = "menu_player_copr_heal_on_teammate_revive",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "copr_heal_on_teammate_revive",
+						category = "player"
+					}
+				}
 			end
 			Leech_definitions()
 			
@@ -2466,6 +2550,15 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 					upgrade = {
 						value = 1,
 						upgrade = "armor_regen_brawler",
+						category = "player"
+					}
+				}
+				self.definitions.player_melee_headshot_multiplier = {
+					name_id = "menu_melee_headshot_multiplier",
+					category = "feature",
+					upgrade = {
+						value = 1,
+						upgrade = "melee_headshot_multiplier",
 						category = "player"
 					}
 				}

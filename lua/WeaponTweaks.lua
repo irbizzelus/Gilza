@@ -50,16 +50,16 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_post_WeaponTweakData_init_
 	Gilza.Weapons_module.ammo_pickups = {
 		ARs = {
 			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.44),
-			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.4),
+			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.38),
 			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.36) * 0.88, -- 12% less then 155
 			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.36),
 			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.34)
 		},
 		SHOTGUNs = {
-			_900 = Gilza.Weapons_module:get_ammo_pickup(900, 0.95),
+			_900 = Gilza.Weapons_module:get_ammo_pickup(900, 0.85),
 			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.8),
-			_325 = Gilza.Weapons_module:get_ammo_pickup(325, 0.85), -- better accuracy is not really expected, but their benefits from overkill skill are too good.
-			_160 = Gilza.Weapons_module:get_ammo_pickup(160, 0.65)
+			_325 = Gilza.Weapons_module:get_ammo_pickup(325, 0.75),
+			_160 = Gilza.Weapons_module:get_ammo_pickup(160, 0.5)
 		},
 		LMGs = {
 			-- better ammo with easier diff modifiers, should incentivize defence playstyle by allowing to pick up less often, and reducing dmg up close
@@ -77,15 +77,15 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_post_WeaponTweakData_init_
 		},
 		SNIPERs = {
 			-- all can do 1 tap headshots. balanced around special bodyshot breakpoints. manualy.
-			_650 = 0.75,
-			_950 = 0.7,
-			_1300 = 0.65,
-			_1600 = 0.55,
-			_50cal = 0.28
+			_650 = 0.81,
+			_950 = 0.77,
+			_1300 = 0.7,
+			_1600 = 0.6,
+			_50cal = 0.3
 		},
 		SMGs = {
 			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.42),
-			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.38),
+			_250 = Gilza.Weapons_module:get_ammo_pickup(250, 0.36),
 			_200 = Gilza.Weapons_module:get_ammo_pickup(155, 0.34) * 0.88,
 			_155 = Gilza.Weapons_module:get_ammo_pickup(155, 0.34),
 			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.32),
@@ -142,11 +142,23 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_post_WeaponTweakData_init_
 			h_deviation = 1.1
 		},
 		PISTOLs = {
-			v_base = 0.2,
-			v_deviation = 2.2,
-			h_base = 0.3,
-			h_deviation = 2.8
-		}
+			v_base = 0.1,
+			v_deviation = 1.4,
+			h_base = 0.2,
+			h_deviation = 1.7
+		},
+		PISTOL_REVOLVERs = {
+			v_base = 3.6,
+			v_deviation = 0.8,
+			h_base = 2.6,
+			h_deviation = 0.8
+		},
+		MINIGUNs = {
+			v_base = 1.1,
+			v_deviation = 1.1,
+			h_base = 1,
+			h_deviation = 0.6
+		},
 	}
 	
 	Gilza.Weapons_module.damage_dropoff = {
@@ -210,11 +222,11 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_post_WeaponTweakData_init_
 		},
 		SMGs = {
 			optimal_distance = 150,
-			optimal_range = 650,
+			optimal_range = 750,
 			near_falloff = 0,
-			far_falloff = 800,
+			far_falloff = 1200,
 			near_multiplier = 1.2,
-			far_multiplier = 0.5
+			far_multiplier = 0.7
 		},
 		PISTOLs = {
 			optimal_distance = 10,
@@ -443,6 +455,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		"system",
 		"ms3gl",
 		"dart",
+		"flun",
 		"money"
 	}
 	local weapon_ids = {
@@ -727,15 +740,15 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			self.ching.stats.reload = 14
 			self.ching.NR_CLIPS_MAX = 8
 			self.ching.AMMO_MAX = self.ching.CLIP_AMMO_MAX * self.ching.NR_CLIPS_MAX
-			self.ching.fire_mode_data = {fire_rate = 60/300}
-			self.ching.single = {fire_rate = 60/300}
+			self.ching.fire_mode_data = {fire_rate = 60/350}
+			self.ching.single = {fire_rate = 60/350}
 			
 			self.new_m14.stats.reload = 8
 			self.new_m14.CLIP_AMMO_MAX = 15
 			self.new_m14.NR_CLIPS_MAX = 5
 			self.new_m14.AMMO_MAX = self.new_m14.CLIP_AMMO_MAX * self.new_m14.NR_CLIPS_MAX
-			self.new_m14.fire_mode_data = {fire_rate = 60/300}
-			self.new_m14.single = {fire_rate = 60/300}
+			self.new_m14.fire_mode_data = {fire_rate = 60/350}
+			self.new_m14.single = {fire_rate = 60/350}
 			
 			self.shak12.CLIP_AMMO_MAX = 25
 			self.shak12.NR_CLIPS_MAX = 4
@@ -825,7 +838,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			self.vhs.fire_mode_data = {fire_rate = 60/850}
 			
 			self.galil.stats.recoil = 17
-			self.galil.stats.spread = 8
+			self.galil.stats.spread = 10
 			self.galil.NR_CLIPS_MAX = 5
 			self.galil.AMMO_MAX = self.galil.CLIP_AMMO_MAX * self.galil.NR_CLIPS_MAX
 			self.galil.NR_CLIPS_MAX = 4
@@ -1010,7 +1023,8 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			self.famas.NR_CLIPS_MAX = 8
 			self.famas.AMMO_MAX = self.famas.CLIP_AMMO_MAX * self.famas.NR_CLIPS_MAX
 			self.famas.stats.recoil = 19
-			self.famas.stats.spread = 6
+			self.famas.stats.spread = 8
+			self.famas.stats.reload = 14
 		
 			self.ak5.NR_CLIPS_MAX = 7
 			self.ak5.AMMO_MAX = self.ak5.CLIP_AMMO_MAX * self.ak5.NR_CLIPS_MAX
@@ -1268,13 +1282,15 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			self.judge.stats.recoil = 7
 			self.judge.stats.spread = 1
 			self.judge.stats.reload = 9
-			self.judge.fire_mode_data = {fire_rate = 60/210}
+			self.judge.stats.concealment = 30
+			self.judge.fire_mode_data = {fire_rate = 60/290}
 			self.judge.single = {fire_rate = self.judge.fire_mode_data.fire_rate}
 			
 			self.x_judge.NR_CLIPS_MAX = 6
 			self.x_judge.AMMO_MAX = self.x_judge.CLIP_AMMO_MAX * self.x_judge.NR_CLIPS_MAX
 			self.x_judge.stats.recoil = 7
 			self.x_judge.stats.spread = 1
+			self.x_judge.stats.concealment = 30
 			self.x_judge.fire_mode_data = {fire_rate = self.judge.fire_mode_data.fire_rate / akimbo_rof_mul}
 			self.x_judge.single = {fire_rate = self.judge.fire_mode_data.fire_rate / akimbo_rof_mul}
 			self.x_judge.auto = {fire_rate = self.judge.fire_mode_data.fire_rate / akimbo_rof_mul}
@@ -1408,6 +1424,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		self.hk51b.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.hk51b.damage_falloff.far_multiplier = 1
 		self.hk51b.damage_falloff.near_multiplier = 1
+		self.hk51b.can_shoot_through_enemy = true
 		
 		self.hcar.stats.damage = 250
 		self.hcar.NR_CLIPS_MAX = 8
@@ -1416,6 +1433,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		self.hcar.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.hcar.damage_falloff.far_multiplier = 1
 		self.hcar.damage_falloff.near_multiplier = 1
+		self.hcar.can_shoot_through_enemy = true
 		
 		self.kacchainsaw.stats.damage = 125
 		self.kacchainsaw.stats.recoil = 13
@@ -1425,6 +1443,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		self.kacchainsaw.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.kacchainsaw.damage_falloff.far_multiplier = 1
 		self.kacchainsaw.damage_falloff.near_multiplier = 1
+		self.kacchainsaw.can_shoot_through_enemy = true
 		self.kacchainsaw_flamethrower.CLIP_AMMO_MAX = 150
 		self.kacchainsaw_flamethrower.NR_CLIPS_MAX = 250/150
 		self.kacchainsaw_flamethrower.AMMO_MAX = self.kacchainsaw_flamethrower.CLIP_AMMO_MAX * self.kacchainsaw_flamethrower.NR_CLIPS_MAX
@@ -1433,57 +1452,136 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		
 		-- HEAVY --
 		self.hk21.AMMO_PICKUP = {(pickups._250 * 0.9),(pickups._250 * 1.1)}
-		self.hk21.AMMO_MAX = 400
+		self.hk21.AMMO_MAX = 300
 		self.hk21.NR_CLIPS_MAX = self.hk21.AMMO_MAX / self.hk21.CLIP_AMMO_MAX
 		self.hk21.stats.spread = 10
 		self.hk21.stats.recoil = 12
 		self.hk21.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.hk21.stats.damage = 250
+		self.hk21.has_new_gilza_bipod_camera = true
+		self.hk21.can_shoot_through_enemy = true
+		
 		self.rpk.AMMO_PICKUP = {(pickups._250 * 0.9),(pickups._250 * 1.1)}
-		self.rpk.NR_CLIPS_MAX = 4
+		self.rpk.NR_CLIPS_MAX = 3
 		self.rpk.AMMO_MAX = self.rpk.CLIP_AMMO_MAX * self.rpk.NR_CLIPS_MAX
 		self.rpk.stats.spread = 5
 		self.rpk.stats.suppression = 5
 		self.rpk.stats.recoil = 13
 		self.rpk.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.rpk.stats.damage = 250
+		self.rpk.has_new_gilza_bipod_camera = true
+		self.rpk.can_shoot_through_enemy = true
 		
 		self.m60.stats.damage = 325
 		self.m60.AMMO_PICKUP = {(pickups._325 * 0.9),(pickups._325 * 1.1)}
-		self.m60.AMMO_MAX = 350
-		self.m60.NR_CLIPS_MAX = self.m60.AMMO_MAX / self.m60.CLIP_AMMO_MAX
+		self.m60.CLIP_AMMO_MAX = 125
+		self.m60.NR_CLIPS_MAX = 2
+		self.m60.AMMO_MAX = self.m60.CLIP_AMMO_MAX * self.m60.NR_CLIPS_MAX
 		self.m60.stats.spread = 10
 		self.m60.stats.recoil = 10
 		self.m60.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.m60.fire_mode_data = {fire_rate = 60/420}
 		self.m60.auto = {fire_rate = 60/420}
+		self.m60.has_new_gilza_bipod_camera = true
+		self.m60.can_shoot_through_enemy = true
 		
 		-- LIGHT --
 		self.m249.AMMO_PICKUP = {(pickups._155 * 0.9),(pickups._155 * 1.1)}
-		self.m249.NR_CLIPS_MAX = 2.5
+		self.m249.NR_CLIPS_MAX = 2
 		self.m249.AMMO_MAX = self.m249.CLIP_AMMO_MAX * self.m249.NR_CLIPS_MAX
 		self.m249.stats.spread = 8
 		self.m249.stats.recoil = 10
 		self.m249.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.m249.stats.damage = 155
+		self.m249.has_new_gilza_bipod_camera = true
+		self.m249.can_shoot_through_enemy = true
+		
 		self.par.AMMO_PICKUP = {(pickups._155 * 0.9),(pickups._155 * 1.1)}
-		self.par.NR_CLIPS_MAX = 2.5
+		self.par.NR_CLIPS_MAX = 2
 		self.par.AMMO_MAX = self.par.CLIP_AMMO_MAX * self.par.NR_CLIPS_MAX
 		self.par.stats.spread = 9
 		self.par.stats.recoil = 16
 		self.par.damage_falloff = deep_clone(new_lmg_damage_falloff)
 		self.par.stats.damage = 155
+		self.par.has_new_gilza_bipod_camera = true
+		self.par.can_shoot_through_enemy = true
 		
 		-- SUPER LIGHT --
 		self.mg42.stats.damage = 125
 		self.mg42.AMMO_PICKUP = {(pickups._125 * 0.9),(pickups._125 * 1.1)}
-		self.mg42.CLIP_AMMO_MAX = 100
-		self.mg42.NR_CLIPS_MAX = 6
+		self.mg42.CLIP_AMMO_MAX = 125
+		self.mg42.NR_CLIPS_MAX = 3.6
 		self.mg42.AMMO_MAX = self.mg42.CLIP_AMMO_MAX * self.mg42.NR_CLIPS_MAX
 		self.mg42.stats.spread = 7
-		self.mg42.stats.reload = 15
+		self.mg42.stats.reload = 16
 		self.mg42.stats.recoil = 15
 		self.mg42.damage_falloff = deep_clone(new_lmg_damage_falloff)
+		self.mg42.has_new_gilza_bipod_camera = true
+		self.mg42.can_shoot_through_enemy = true
+		
+		-- ask weaponlib to adjust scope placment on the weapon itself
+		self:SetupAttachmentPoint( "par", {
+			name = "a_o",
+			base_a_obj = "a_o",
+			part_attach_data = {
+				{"wpn_fps_lmg_par_upper_reciever"}, 
+				"g_cover"
+			},
+			position = Vector3( 0, 2, 0 )
+		})	 
+		 self:SetupAttachmentPoint( "rpk", {
+			name = "a_o_sm",
+			base_a_obj = "a_o",
+			position = Vector3(0, -27, 1.6),
+			rotation = RotationCAP(0, 0, 0)
+		})
+		 self:SetupAttachmentPoint( "rpk", {
+			name = "a_o_krebs",
+			base_a_obj = "a_o",
+			position = Vector3(0, -0, 0.7),
+			rotation = RotationCAP(0, 0, 0)
+		})
+		self:SetupAttachmentPoint( "m249", {
+			name = "a_o",
+			base_a_obj = "a_o",
+			part_attach_data = {
+				{"wpn_fps_lmg_m249_upper_reciever"}, 
+				"g_dustcover"
+			},
+			position = Vector3( 0, 7.4, 0 ), 
+			rotation = RotationCAP( 0, 0, 0 )
+		})
+		self:SetupAttachmentPoint( "mg42", {
+			name = "a_o",
+			base_a_obj = "a_o",
+			part_attach_data = {
+				{"wpn_fps_lmg_mg42_reciever"}, 
+				"g_lid"
+			},
+			position = Vector3( 0, 0, -0.45 ), 
+			rotation = RotationCAP( 0, 0, 0 )
+		})
+		self:SetupAttachmentPoint( "m60", {
+			name = "a_g",
+			base_a_obj = "a_o",
+			part_attach_data = {
+				{"wpn_fps_lmg_m60_upper_reciever"}, 
+				"g_dustcover"
+			},
+			position = Vector3( -2.1, -29, -19.6 ),
+			rotation = RotationCAP( 0, 0, 0 )
+		})
+		self:SetupAttachmentPoint( "m60", {
+			name = "a_o",
+			base_a_obj = "a_o",
+			part_attach_data = {
+				{"wpn_fps_lmg_m60_upper_reciever"}, 
+				"g_dustcover"
+			},
+			position = Vector3( -2.1, -19, -8.2 ), 
+			rotation = RotationCAP( 0, 0, 0 )
+		})
+		
 	end
 	setLMGs()
 	
@@ -1519,6 +1617,8 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 					self[id].damage_falloff = new_sniper_damage_falloff
 					self[id].AMMO_MAX = 40
 					self[id].NR_CLIPS_MAX = self[id].AMMO_MAX / self[id].CLIP_AMMO_MAX
+					self[id].can_shoot_through_wall = nil
+					self[id].desc_id = "bm_wpn_wallbangless_sniper"
 				end
 			end	
 			
@@ -1575,6 +1675,8 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 					end
 					self[id].damage_falloff = new_sniper_damage_falloff
 					self[id].stats_modifiers = {damage = 1}
+					self[id].can_shoot_through_wall = nil
+					self[id].desc_id = "bm_wpn_wallbangless_sniper"
 				end
 			end
 			
@@ -1623,6 +1725,8 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 					self[id].AMMO_MAX = self[id].CLIP_AMMO_MAX * self[id].NR_CLIPS_MAX
 					self[id].damage_falloff = new_sniper_damage_falloff
 					self[id].stats_modifiers = {damage = 1}
+					self[id].can_shoot_through_wall = nil
+					self[id].desc_id = "bm_wpn_wallbangless_sniper"
 				end
 			end
 			
@@ -2725,11 +2829,13 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			self.type54.stats.recoil = 12
 			self.type54.NR_CLIPS_MAX = 5
 			self.type54.AMMO_MAX = self.type54.NR_CLIPS_MAX * self.type54.CLIP_AMMO_MAX
+			self.type54.AMMO_PICKUP = {self.type54.AMMO_PICKUP[1] * 0.7, self.type54.AMMO_PICKUP[2] * 0.7} -- has 30% less ammo pick up by default, but comes with ammo that increases said pickup to standard values for it's damage class. whenever underbarrel is added, this ammo is removed, and pistol falls back to 30% less ammo. this is stupid, but easier than fixing underbarrel ammo vs normal ammo interactions
 			
 			self.x_type54.stats.recoil = 12
 			self.x_type54.stats.reload = 19
 			self.x_type54.NR_CLIPS_MAX = 3.75
 			self.x_type54.AMMO_MAX = self.x_type54.NR_CLIPS_MAX * self.x_type54.CLIP_AMMO_MAX
+			self.x_type54.AMMO_PICKUP = {self.x_type54.AMMO_PICKUP[1] * 0.7, self.x_type54.AMMO_PICKUP[2] * 0.7}
 			
 			self.packrat.stats.spread = 22
 			self.packrat.stats.recoil = 13
@@ -3015,9 +3121,8 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			self.peacemaker.NR_CLIPS_MAX = 4
 			self.peacemaker.AMMO_MAX = self.peacemaker.NR_CLIPS_MAX * self.peacemaker.CLIP_AMMO_MAX
 			
-			-- 1 shot to the body on normal swats, 1 shot headshot on everyone else (except dozers)
-			-- the most badass cowboy in the west
-			self.welrod.stats.damage = 950
+			-- this is a 9mm gun btw
+			self.welrod.stats.damage = 1000
 			self.welrod.AMMO_PICKUP = {pick_up * 0.9 * 0.7 * secondary_mul, pick_up * 1.1 * 0.7 * secondary_mul}
 			self.welrod.has_description = true
 			self.welrod.stats_modifiers = {damage = 1}
@@ -3039,12 +3144,23 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		
 		self.m32.stats.reload = 17 -- fml this thing is slow
 		self.m32.stats.recoil = 17
+		self.m32.NR_CLIPS_MAX = 3
+		self.m32.AMMO_MAX = self.m32.NR_CLIPS_MAX * self.m32.CLIP_AMMO_MAX
+		
 		self.gre_m79.stats.recoil = 19
+		self.gre_m79.NR_CLIPS_MAX = 9
+		self.gre_m79.AMMO_MAX = self.gre_m79.NR_CLIPS_MAX * self.gre_m79.CLIP_AMMO_MAX
+		
 		self.slap.stats.recoil = 19
 		self.china.stats.recoil = 17
 		self.arbiter.stats.recoil = 21
 		self.ms3gl.stats.recoil = 13
 		self.ms3gl.stats.spread = 18
+		
+		-- revert animation timings to the way they were before, but total reload speed should be about the same
+		self.slap.timers.reload_not_empty = 2.7
+		self.slap.timers.reload_empty = 2.7
+		self.slap.stats.reload = 9
 		
 		self.rpg7.stats.reload = 13
 		
@@ -3092,7 +3208,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 	-- Flammenwerfers --
 	local function setFLAMENs()
 		
-		local flamen_pickup = 13.2
+		local flamen_pickup = 9.8
 		
 		self.flamethrower_mk2.stats.damage = 15
 		self.flamethrower_mk2.stats.reload = 18
@@ -3211,6 +3327,16 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 	end
 	setSAWs()
 	
+	--Others--
+	local function setOTHERs()
+		-- flare gun
+		self.flun.stats.spread = 22
+		Gilza.shotgun_minimal_damage_multipliers.flun = 1
+		self.flun.AMMO_PICKUP = {((G_W_M.ammo_pickups.SHOTGUNs._900 * 0.9)) * secondary_mul * 0.5,((G_W_M.ammo_pickups.SHOTGUNs._900 * 1.1)) * secondary_mul * 0.5}
+		self.flun.damage_falloff = G_W_M.damage_dropoff.SHOTGUNs._900
+	end
+	setOTHERs()
+	
 	local function setNewRecoil()
 		
 		local AR_list = {
@@ -3272,7 +3398,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			coal = "right",
 			sterling = "right",	
 			uzi = "left",
-			speen = "right",
+			speen = "right",	
 			-- akimbos
 			x_m45 = "left",
 			x_hajk = "right",
@@ -3310,7 +3436,6 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		}
 		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.SMGs, SMG_list, nil, self)
 		
-		-- includes miniguns
 		local LMG_list = {
 			hk21 = "left",
 			mg42 = "left",
@@ -3321,11 +3446,15 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			hk51b = "right",
 			hcar = "right",
 			kacchainsaw = "right",
+		}
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.LMGs, LMG_list, nil, self)
+		
+		local MINIGUN_list = {
 			shuno = "right",
 			m134 = "right",
 			hailstorm = "right",
 		}
-		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.LMGs, LMG_list, nil, self)
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.MINIGUNs, MINIGUN_list, nil, self)
 		
 		local Sniper_list = {
 			tti = "left",
@@ -3349,14 +3478,12 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		}
 		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.SNIPERs, Sniper_list, nil, self)
 		
-		-- only semi auto, full autos are under smg's
+		-- only semi auto pistols, full autos are under smg's, and revolvers are separate
 		local Pistol_list = {
 			lemming = "right",
 			sparrow = "left",
 			b92fs = "right",
-			new_raging_bull = "left",
 			c96 = "right",
-			chinchilla = "right",
 			glock_17 = "left",
 			g26 = "left",
 			g22c = "left",
@@ -3367,27 +3494,19 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			ppk = "right",
 			usp = "right",
 			hs2000 = "left",
-			mateba = "left",
 			breech = "right",
-			peacemaker = "left",
 			p226 = "right",
 			pl14 = "right",
 			legacy = "right",
 			holt = "left",
-			model3 = "right",
 			m1911 = "left",
 			type54 = "left",
-			rsh12 = "right",
 			maxim9 = "right",
-			korth = "left",
-			welrod = "right",
 			pmm = "left",
 			-- akimbo
 			x_sparrow = "left",
 			x_b92fs = "right",
-			x_rage = "left",
 			x_c96 = "right",
-			x_chinchilla = "right",
 			x_g17 = "left",
 			jowi = "left",
 			x_g22c = "left",
@@ -3398,20 +3517,35 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			x_ppk = "right",
 			x_usp = "right",
 			x_hs2000 = "left",
-			x_2006m = "left",
 			x_breech = "right",
 			x_p226 = "right",
 			x_pl14 = "right",
 			x_legacy = "right",
 			x_holt = "left",
-			x_model3 = "right",
 			x_m1911 = "left",
 			x_type54 = "left",
 			x_maxim9 = "right",
-			x_korth = "left",
 			x_pmm = "left",
 		}
 		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.PISTOLs, Pistol_list, nil, self)
+		
+		local Pistol_Revolver_list = {
+			new_raging_bull = "left",
+			chinchilla = "right",
+			mateba = "left",
+			peacemaker = "left",
+			model3 = "right",
+			rsh12 = "right",
+			korth = "left",
+			welrod = "right",
+			-- akimbo
+			x_rage = "left",
+			x_chinchilla = "right",
+			x_2006m = "left",
+			x_model3 = "right",
+			x_korth = "left",
+		}
+		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.PISTOL_REVOLVERs, Pistol_Revolver_list, nil, self)
 		
 		local Shotgun_list = {
 			boot = "left",
@@ -3440,6 +3574,8 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			x_sko12 = "left",
 			x_basset = "left",
 			x_judge = "right",
+			-- flare gun
+			flun = "left",
 		}
 		G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.SHOTGUNs, Shotgun_list, nil, self)
 	
@@ -4042,6 +4178,8 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_custom_
 		end
 		if fire_mode == "auto" then
 			G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.SMGs, id, recoil_lean, self)
+		elseif self[id].stats.damage == 450 then -- revolver recoil
+			G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.PISTOL_REVOLVERs, id, recoil_lean, self)
 		else
 			G_W_M:set_new_weapon_recoil(G_W_M.recoil_stats.PISTOLs, id, recoil_lean, self)
 		end
@@ -4101,20 +4239,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_custom_
 				self[id].stats.damage = 250
 				self[id].AMMO_PICKUP = {pickups._250 * 0.9, pickups._250 * 1.1}
 			end
-			-- total ammo buff
-			local increase = 50
-			if self[id].AMMO_MAX < 150 then
-				-- dont bother
-				increase = 0
-			elseif self[id].AMMO_MAX <= 200 then
-				increase = 75
-			elseif self[id].AMMO_MAX <= 350 then
-				increase = 100
-			else
-				increase = 150
-			end
-			self[id].AMMO_MAX = self[id].AMMO_MAX + increase
-			self[id].NR_CLIPS_MAX = self[id].AMMO_MAX / self[id].CLIP_AMMO_MAX
+			self[id].can_shoot_through_enemy = true
 		else
 			self[id].damage_falloff = G_W_M.damage_dropoff.ARs
 			if self[id].stats.damage <= 115 then
@@ -4216,11 +4341,15 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_custom_
 				force_lever_action = true
 			else
 				self[id].stats.damage = 1300
+				self[id].can_shoot_through_wall = nil
+				self[id].desc_id = "bm_wpn_wallbangless_sniper"
 				self[id].AMMO_PICKUP = {pickups._1300 * 0.9, pickups._1300 * 1.1}
 			end
 		elseif self[id].stats.damage >= 501 and self[id].stats.damage <= 2200 then
 			if self[id].CLIP_AMMO_MAX > 6 then
 				self[id].stats.damage = 1300
+				self[id].can_shoot_through_wall = nil
+				self[id].desc_id = "bm_wpn_wallbangless_sniper"
 				self[id].AMMO_PICKUP = {pickups._1300 * 0.9, pickups._1300 * 1.1}
 			else
 				self[id].stats.damage = 1600
@@ -4231,11 +4360,15 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_custom_
 		
 		if force_lever_action then
 			self[id].stats.damage = 950
+			self[id].can_shoot_through_wall = nil
+			self[id].desc_id = "bm_wpn_wallbangless_sniper"
 			self[id].AMMO_PICKUP = {pickups._950 * 0.9, pickups._950 * 1.1}
 		elseif force_semi_auto then
 			self[id].fire_mode_data = {fire_rate = 60/210}
 			self[id].single = {fire_rate = 60/210}
 			self[id].stats.damage = 650
+			self[id].can_shoot_through_wall = nil
+			self[id].desc_id = "bm_wpn_wallbangless_sniper"
 			self[id].AMMO_PICKUP = {pickups._650 * 0.9, pickups._650 * 1.1}
 		end
 		

@@ -9,9 +9,12 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "conditional_accuracy_multiplier", 
 	local pm = managers.player
 	
 	-- GILZA START
-	-- increased bonus while bipoded
+	-- modify the mul between 0.2 and 1, scaling on deploy timer
 	if managers.player:current_state() == "bipod" then
-		mul = mul + 0.66
+		if current_state._deploy_bipod_start and current_state._deploy_bipod_end and Application:time() < current_state._deploy_bipod_end then
+			local normalized = (Application:time() - current_state._deploy_bipod_start) / (current_state._deploy_bipod_end - current_state._deploy_bipod_start)
+			mul = mul - 0.8 + (0.8 * normalized)
+		end
 	end
 	-- GILZA END
 
@@ -77,7 +80,7 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "reload_speed_multiplier", function
 	local multiplier = 1
 
 	local simplified_categories = {}
-	for _, category in ipairs(self:weapon_tweak_data().categories) do
+	for _, category in ipairs(self:categories()) do
 		multiplier = multiplier + 1 - managers.player:upgrade_value(category, "reload_speed_multiplier", 1)
 		simplified_categories[category] = true
 	end
@@ -177,7 +180,7 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "_update_stats_values", function (s
 	self._can_shoot_through_enemy = tweak_data.weapon[self._name_id].can_shoot_through_enemy
 	self._can_shoot_through_wall = tweak_data.weapon[self._name_id].can_shoot_through_wall
 	self._armor_piercing_chance = self:weapon_tweak_data().armor_piercing_chance or 0
-	local primary_category = self:weapon_tweak_data().categories and self:weapon_tweak_data().categories[1]
+	local primary_category = self:categories() and self:categories()[1]
 	self._movement_penalty = tweak_data.upgrades.weapon_movement_penalty[primary_category] or 1
 	self._burst_count = self:weapon_tweak_data().BURST_COUNT or 3
 	local fire_mode_data = self:weapon_tweak_data().fire_mode_data or {}
@@ -429,7 +432,7 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "_update_stats_values", function (s
 
 	local user_unit = self._setup and self._setup.user_unit
 	local current_state = alive(user_unit) and user_unit:movement() and user_unit:movement()._current_state
-	self._fire_rate_multiplier = managers.blackmarket:fire_rate_multiplier(self._name_id, self:weapon_tweak_data().categories, self._silencer, nil, current_state, self._blueprint)
+	self._fire_rate_multiplier = managers.blackmarket:fire_rate_multiplier(self._name_id, self:categories(), self._silencer, nil, current_state, self._blueprint)
 
 	if self._ammo_data.fire_rate_multiplier then
 		self._fire_rate_multiplier = self._fire_rate_multiplier + self._ammo_data.fire_rate_multiplier
@@ -913,7 +916,7 @@ end)
 Hooks:OverrideFunction(NewRaycastWeaponBase,"fire_rate_multiplier",function(self)
 	
 	local le_pistole = false
-	for _, category in ipairs(self:weapon_tweak_data().categories) do
+	for _, category in ipairs(self:categories()) do
 		if category == "pistol" then
 			le_pistole = true
 			break
@@ -928,7 +931,7 @@ Hooks:OverrideFunction(NewRaycastWeaponBase,"fire_rate_multiplier",function(self
 			self._gilza_cahed_rof_state.skill_status = TH_status
 			local user_unit = self._setup and self._setup.user_unit
 			local current_state = alive(user_unit) and user_unit:movement() and user_unit:movement()._current_state
-			self._gilza_cahed_rof_state.rof = managers.blackmarket:fire_rate_multiplier(self._name_id, self:weapon_tweak_data().categories, self._silencer, nil, current_state, self._blueprint)
+			self._gilza_cahed_rof_state.rof = managers.blackmarket:fire_rate_multiplier(self._name_id, self:categories(), self._silencer, nil, current_state, self._blueprint)
 			if self._ammo_data.fire_rate_multiplier then
 				self._gilza_cahed_rof_state.rof = self._gilza_cahed_rof_state.rof + self._ammo_data.fire_rate_multiplier
 			end

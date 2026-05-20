@@ -134,6 +134,20 @@
 			"default_value" : 4
 		},
 		{
+			"type" : "multiple_choice",
+			"id" : "Gilza_melee_charge_tilt",
+			"title" : "Gilza_melee_charge_tilt",
+			"description" : "Gilza_melee_charge_tilt_desc",
+			"callback" : "Gilza_melee_charge_tilt",
+			"items" : [
+				"Gilza_melee_charge_tilt_1",
+				"Gilza_melee_charge_tilt_2",
+				"Gilza_melee_charge_tilt_3",
+			],
+			"value" : "melee_charge_tilt",
+			"default_value" : 3
+		},
+		{
 			"type" : "divider",
 			"size" : 22
 		},

@@ -31,6 +31,9 @@ local function on_ammo_pickup(unit, pickup_chance, increase)
 				chance = managers.player:upgrade_value("player", "regain_throwable_from_ammo").chance or 0
 			end
 		else
+			if managers.player:has_category_upgrade("player", "add_armor_ammo_pickup_stat_skill") then
+				increase = increase * managers.player:body_armor_value("skill_ammo_mul", nil, 1)
+			end
 			chance = chance + increase
 		end
 	end

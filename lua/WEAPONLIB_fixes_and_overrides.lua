@@ -8,10 +8,19 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 	PlayerStandard = PlayerStandard or class(PlayerMovementState)
 	if PlayerStandard then
 		Hooks:PreHook(PlayerStandard, "_check_action_primary_attack", "Gilza_prehook_check_action_primary_attack", function(self, t, input, params)
-			local action_wanted = (not params or params.action_wanted == nil or params.action_wanted) and (input.btn_primary_attack_state or input.btn_primary_attack_release or self:is_shooting_count() or self:_is_charging_weapon())
-			local weapon = self._equipped_unit:base() -- dont cancel reload if weapon is empty
-			if weapon and weapon:can_reload() and weapon:clip_not_empty() and self.RUN_AND_RELOAD and self._running and action_wanted then
+			local action_wanted = (not params or params.action_wanted == nil or params.action_wanted) and (input.btn_primary_attack_press or self:is_shooting_count() or self:_is_charging_weapon())
+			local weapon = self._equipped_unit:base()
+			-- dont cancel reload if weapon is empty
+			if weapon and weapon:can_reload() and weapon:clip_not_empty() and self.RUN_AND_RELOAD and action_wanted and not self:shooting() and self:_is_reloading() then
 				self:_interupt_action_reload(t)
+			end
+		end)
+		
+		-- remove the god awful recoil animation on bipoded m60, it insanely kicks in every direction, and also missalisgns itself with the aim point
+		Hooks:PostHook(PlayerStandard, "_check_action_primary_attack", "Gilza_posthook_check_action_primary_attack", function(self)
+			local weap_base = self._equipped_unit:base()
+			if self._shooting and self:_is_using_bipod() and self._equipped_unit:base()._name_id == "m60" then
+				self._ext_camera:play_redirect(self:get_animation("recoil_exit"))
 			end
 		end)
 		
@@ -333,7 +342,16 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 					self._requested_fire_between_single_shots[1] = nil
 				end
 			end
-
+			
+			if new_action then
+				--managers.player._gilza_flag_bipod_redeploy_delay = Application:time() + (0.3 * (1 / managers.player:upgrade_value("player", "bipod_deploy_speed", 1)))
+				local bipoding_forbidden = input.btn_primary_choice or input.btn_projectile_press or input.btn_projectile_release or self._state_data.projectile_idle_wanted or input.btn_jump_press or input.btn_cash_inspect_press or input.btn_run_press or self._running or input.btn_run_release or self._moving or self._state_data.on_ladder or self._state_data.in_air or self._state_data.on_zipline
+				
+				if not bipoding_forbidden then
+					self:_check_action_deploy_bipod(t, input)
+				end
+			end
+			
 			if not new_action then
 				self:_check_stop_shooting()
 			end
@@ -348,6 +366,21 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 	PlayerBipod = PlayerBipod or class(PlayerStandard)
 	if PlayerBipod then
 		Hooks:OverrideFunction(PlayerBipod, "_check_action_reload", function (self, t, input)
+			
+			local melee_action_wanted = input.btn_melee_press
+			if melee_action_wanted then
+				if self._bipod_flag_entry_type == "entry_automatic" then
+					self:_unmount_bipod()
+					
+					local current_state = managers.player:get_current_state()
+
+					if current_state then
+						current_state:_check_action_melee(t, input)
+					end
+					return
+				end
+			end
+			
 			local new_action = nil
 			local action_wanted = input.btn_reload_press
 
