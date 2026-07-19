@@ -156,7 +156,7 @@ Hooks:OverrideFunction(PlayerManager, "skill_dodge_chance", function (self, runn
 	local result = gilza_orig_pm_skill_dodge_chance(self, running, crouching, on_zipline, override_armor, detection_risk)
 	if managers.player:has_category_upgrade("player", "speed_junkie_meter") then
 		self._Gilza_junkie_counter = self._Gilza_junkie_counter or 0
-		local junkie_adds_dodge = self._Gilza_junkie_counter / 100 * 0.45 -- up to 40% dodge max. probably should make this tweakable from upgradestweaks, but lazyness
+		local junkie_adds_dodge = self._Gilza_junkie_counter / 100 * 0.45 -- up to 45% dodge max. probably should make this tweakable from upgradestweaks, but lazyness
 		result = result + junkie_adds_dodge
 	end
 	-- new gambler 9th card
@@ -287,6 +287,15 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 				managers.player._Gilza_menace_kill_tracker = 4
 			else
 				Gilza.New_Skills_Informer:adjusted_stockholm_stacks(0.5)
+			end
+		end
+		
+		-- reworked "shock and awe" which is a skill named lock'n load
+		if self:has_category_upgrade("player", "automatic_faster_reload") then
+			self._num_SHOCK_AND_AWE_kills = (self._num_SHOCK_AND_AWE_kills or 0) + 1
+			
+			if self._num_SHOCK_AND_AWE_kills == self._SHOCK_AND_AWE_TARGET_KILLS then
+				self:_on_enter_shock_and_awe_event_Gilza()
 			end
 		end
 		
@@ -463,30 +472,35 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 				end
 				-- i am too lazy to set up an proper overtime regeneration effect for armor, so here is a braindead solution
 				-- add 5 delayed calls with a 1 interval in between each call, as a result we get 6 "ticks" every 1s
-				local total_regen = 0
+				local total_regen = 4 -- 40 hp
 				if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
-					total_regen = 12.0 -- 120 hp
-				else
-					total_regen = 4.0
+					total_regen = 12
 				end
+				local tick_delay = 2
+				local tick_total_count = 5
+				
 				if managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
 					if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
-						total_regen = 5.0
+						total_regen = 5
 					else
-						total_regen = 2.0
+						total_regen = 2
 					end
+					tick_delay = 2.5
+					tick_total_count = 4
 				end
-				local regen_per_tick = total_regen / 10
+				
+				local regen_per_tick = total_regen / tick_total_count
+				
+				-- current stacks
 				if self._gilza_brawler_regen_count < 3 then
 					self._gilza_brawler_regen_count = self._gilza_brawler_regen_count + 1
 				end
-				player_unit:character_damage():restore_armor(regen_per_tick)
-				for i=1,9 do
-					DelayedCalls:Add("Gilza_brawler_armor_regen_"..tostring(i).."_for_hit_number_"..tostring(self._gilza_brawler_melee_kill_count), 1 * i, function()
+				for i=0, (tick_total_count - 1) do
+					DelayedCalls:Add("Gilza_brawler_armor_regen_"..tostring(i).."_for_hit_number_"..tostring(self._gilza_brawler_melee_kill_count), tick_delay * i, function()
 						if player_unit and alive(player_unit) and player_unit:character_damage() then
 							player_unit:character_damage():restore_armor(regen_per_tick)
 						end
-						if i == 9 then
+						if i == (tick_total_count - 1) then
 							self._gilza_brawler_regen_count = self._gilza_brawler_regen_count - 1
 						end
 					end)
@@ -742,7 +756,7 @@ function PlayerManager:_Gilza_activate_bodyshot_kill_ammo_refill(attack_data)
 end
 
 -- lock n load's skill. a few adjustments to make infohud's track new reload bonus better
-Hooks:OverrideFunction(PlayerManager, "_on_enter_shock_and_awe_event", function (self)
+function PlayerManager:_on_enter_shock_and_awe_event_Gilza()
 	if not self._coroutine_mgr:is_running("automatic_faster_reload") then
 		local equipped_unit = self:get_current_state()._equipped_unit
 		local data = self:upgrade_value("player", "automatic_faster_reload", nil)
@@ -750,28 +764,18 @@ Hooks:OverrideFunction(PlayerManager, "_on_enter_shock_and_awe_event", function 
 
 		if data and equipped_unit and not is_grenade_launcher and (equipped_unit:base():fire_mode() == "auto" or equipped_unit:base():fire_mode() == "burst" or equipped_unit:base():is_category("minigun", "flamethrower")) then
 			self._coroutine_mgr:add_and_run_coroutine("automatic_faster_reload", PlayerAction.ShockAndAwe, self, data.target_enemies, data.max_reload_increase, data.min_reload_increase, data.penalty, data.min_bullets, equipped_unit)
-			
 			-- INFOHUD UI
-			-- current value calculations
-			local reload_multiplier = data.min_reload_increase
-			local ammo = equipped_unit:base():get_ammo_max_per_clip()
-			if self:has_category_upgrade("player", "automatic_mag_increase") and equipped_unit:base():is_category("smg", "assault_rifle", "lmg") then
-				ammo = ammo - self:upgrade_value("player", "automatic_mag_increase", 0)
-			end
-			local ammo_fired = ammo - equipped_unit:base():get_ammo_remaining_in_clip()
-			if data.min_bullets < ammo_fired then
-				local num_bullets = ammo_fired - data.min_bullets
-
-				for i = 1, num_bullets do
-					reload_multiplier = reload_multiplier + (data.penalty-1)
-				end
-			end
-			reload_multiplier = math.clamp(reload_multiplier,data.min_reload_increase,data.max_reload_increase)
-			-- enable and set value
 			Gilza.NSI:new_lock_n_load_status(true)
+			local reload_multiplier = data.min_reload_increase
+			reload_multiplier = reload_multiplier + self._num_SHOCK_AND_AWE_bullets_fired * data.penalty
+			reload_multiplier = math.clamp(reload_multiplier,data.min_reload_increase,data.max_reload_increase)
 			Gilza.NSI:new_lock_n_load_buff_update(reload_multiplier)
 		end
 	end
+end
+
+Hooks:OverrideFunction(PlayerManager, "_on_enter_shock_and_awe_event", function (self)
+	-- in vanilla this would activate the courotine, but now it activated in a on_killshot posthook and a new function, so the vanilla function is effectively disabled this way, to avoid overriding more larger functions.
 end)
 
 -- fix lock and load aced target kill propety being static, instead of being taken from the skill value
@@ -781,7 +785,7 @@ Hooks:PostHook(PlayerManager, "_setup", "Gilza_PlayerManager_post_setup", functi
 	if skill and type(skill) ~= "number" then
 		val = skill.target_enemies
 	end
-	self._SHOCK_AND_AWE_TARGET_KILLS = val or 3 -- but still default to our new value
+	self._SHOCK_AND_AWE_TARGET_KILLS = val or 5 -- but still default to our new value
 	self._Gilza_menace_kill_tracker = 0 -- murderhobo from stockholm syndrome
 end)
 
@@ -877,18 +881,55 @@ Hooks:PostHook(PlayerManager, "check_skills", "Gilza_posthook_pm_check_skills", 
 		self:unregister_message(Message.OnPlayerDodge, "dodge_shot_gain_dodge_gilza")
 		self:unregister_message(Message.OnPlayerDamage, "dodge_shot_gain_damage_gilza")
 	end
-	-- DEPRECATED: was made a base game feature in U243.1
-	-- add a seperate function that adds smoke bomb CD while any smoke screen is active
-	-- if managers.blackmarket:equipped_grenade() == "smoke_screen_grenade" then
-		-- local function speed_up_on_kill()
-			-- if #managers.player:smoke_screens() >= 1 then
-				-- managers.player:speed_up_grenade_cooldown(1)
-			-- end
-		-- end
-		-- self:register_message(Message.OnEnemyKilled, "speed_up_smoke_grenade_while_active", speed_up_on_kill)
-	-- else
-		-- self:unregister_message(Message.OnEnemyKilled, "speed_up_smoke_grenade_while_active")
-	-- end
+	-- new lock n load
+	if self:has_category_upgrade("player", "automatic_faster_reload") then
+		
+		local function on_weapon_fired(weapon_unit)
+			
+			if not alive(weapon_unit) then
+				return
+			end
+			
+			local is_player_weapon = weapon_unit == managers.player:equipped_weapon_unit()
+			local is_grenade_launcher = weapon_unit:base():is_category("grenade_launcher")
+			
+			if is_player_weapon and not is_grenade_launcher and (weapon_unit:base():fire_mode() == "auto" or weapon_unit:base():fire_mode() == "burst" or weapon_unit:base():is_category("minigun", "flamethrower")) then
+				self._num_SHOCK_AND_AWE_bullets_fired = (self._num_SHOCK_AND_AWE_bullets_fired or 0) + 1
+				
+				if self._coroutine_mgr:is_running("automatic_faster_reload") then
+					local upg_values = self:upgrade_value("player", "automatic_faster_reload", nil)
+					if upg_values ~= nil then
+						local reload_multiplier = upg_values.min_reload_increase
+						reload_multiplier = reload_multiplier + self._num_SHOCK_AND_AWE_bullets_fired * upg_values.penalty
+						reload_multiplier = math.clamp(reload_multiplier,upg_values.min_reload_increase,upg_values.max_reload_increase)
+						Gilza.NSI:new_lock_n_load_buff_update(reload_multiplier)
+					end
+				end
+				
+			end
+			
+		end
+		
+		local function on_switch_weapon()
+			self._num_SHOCK_AND_AWE_bullets_fired = 0
+			self._num_SHOCK_AND_AWE_kills = 0
+		end
+		
+		local function on_weapon_reload()
+			if not self._coroutine_mgr:is_running("automatic_faster_reload") then
+				self._num_SHOCK_AND_AWE_bullets_fired = 0
+				self._num_SHOCK_AND_AWE_kills = 0
+			end
+		end
+		
+		self:register_message(Message.OnWeaponFired, "locknload_bullets", on_weapon_fired)
+		self:register_message(Message.OnSwitchWeapon, "locknload_bullets", on_switch_weapon)
+		self:register_message(Message.OnPlayerReload, "locknload_bullets", on_weapon_reload)
+	else
+		self:unregister_message(Message.OnWeaponFired, "locknload_bullets")
+		self:unregister_message(Message.OnSwitchWeapon, "locknload_bullets")
+		self:unregister_message(Message.OnPlayerReload, "locknload_bullets")
+	end
 end)
 
 -- new sicario
@@ -969,6 +1010,59 @@ Hooks:OverrideFunction(PlayerManager, "health_regen", function (self)
 	end
 	Gilza.NSI:new_passive_health_regen_adjustment(adjustments_wanted)
 	return res + adjustments_wanted
+end)
+
+-- allowed for grinder to get regen stacks if shooting at a converted enemy
+Hooks:OverrideFunction(PlayerManager, "_check_damage_to_hot", function (self, t, unit, damage_info)
+	local player_unit = self:player_unit()
+
+	if not self:has_category_upgrade("player", "damage_to_hot") then
+		return
+	end
+
+	if not alive(player_unit) or player_unit:character_damage():need_revive() or player_unit:character_damage():dead() then
+		return
+	end
+
+	if not alive(unit) or not unit:base() or not damage_info then
+		return
+	end
+
+	local data = tweak_data.upgrades.damage_to_hot_data
+
+	if not data then
+		return
+	end
+
+	if self._next_allowed_doh_t and t < self._next_allowed_doh_t then
+		return
+	end
+
+	local add_stack_sources = data.add_stack_sources or {}
+
+	if not add_stack_sources.swat_van and unit:base().sentry_gun then
+		return
+	elseif not add_stack_sources.civilian and CopDamage.is_civilian(unit:base()._tweak_table) then
+		return
+	end
+
+	if not add_stack_sources[damage_info.variant] then
+		return
+	end
+
+	if not unit:brain():is_hostile() and not unit:character_damage()._converted then -- thx
+		return
+	end
+
+	local player_armor = managers.blackmarket:equipped_armor(data.works_with_armor_kit, true)
+
+	if not table.contains(data.armors_allowed or {}, player_armor) then
+		return
+	end
+
+	player_unit:character_damage():add_damage_to_hot()
+
+	self._next_allowed_doh_t = t + data.stacking_cooldown
 end)
 
 -- new biker preventions
@@ -1426,6 +1520,43 @@ function PlayerManager:Gilza_new_gambler_recursive_updater()
 	end)
 end
 
+function PlayerManager:Gilza_ex_pres_recovery_bonus_updater()
+	
+	local player_unit = self:player_unit()
+	local info_hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+	local icon = info_hud and info_hud.panel:child("Gilza_new_expres_GUI_icon")
+	
+	if player_unit and alive(player_unit) then
+		
+		local lowest_allowed = self:upgrade_value("player", "store_armor_recovery_bonus_timer", 4)
+		local potential_timer = math.max(tweak_data.player.damage.REGENERATE_TIME + self:Gilza_new_expres_armor_regen_bonus_timer_on_kill(), lowest_allowed)
+		self._Gilza_new_expres_recovery_bonus_GUI:set_visible(true)
+		self._Gilza_new_expres_recovery_bonus_GUI:set_text(string.format("%.2f", potential_timer))
+		self._Gilza_new_expres_recovery_bonus_GUI:set_outlines_visible(true)
+		self._Gilza_new_expres_recovery_bonus_GUI:show()
+		
+		if icon then
+			icon:set_visible(true)
+			local color = math.lerp(Color(1, 0.06, 0.65, 0.27), Color(1, 1, 1, 1), (potential_timer - lowest_allowed) / (tweak_data.player.damage.REGENERATE_TIME - lowest_allowed))
+			icon:set_color(color)
+		end
+		
+	else
+		
+		if icon then
+			icon:set_visible(false)
+		end
+		self._Gilza_new_expres_recovery_bonus_GUI:set_text("?")
+		self._Gilza_new_expres_recovery_bonus_GUI:set_visible(false)
+		self._Gilza_new_expres_recovery_bonus_GUI:set_outlines_visible(false)
+		
+	end
+	
+	DelayedCalls:Add("Gilza_ex_pres_recovery_bonus_updater", 0.05, function(self)
+		managers.player:Gilza_ex_pres_recovery_bonus_updater()
+	end)
+end
+
 -- ui/sound updates + bounty target finder/activator
 local new_hitman_bounty_notifier_flash_cycle = 0
 function PlayerManager:Gilza_new_hitman_recursive_updater()
@@ -1678,7 +1809,7 @@ function PlayerManager:Gilza_update_junkie_loop()
 			if self._Gilza_junkie_counter > 70 and not self._Gilza_junkie_eligible_for_spike and not self._Gilza_junkie_adrenaline_spike then
 				self._Gilza_junkie_eligible_for_spike = self._Gilza_junkie_eligible_for_spike or false
 				self._Gilza_junkie_ticks_since_entered_adrenaline_spike_range = self._Gilza_junkie_ticks_since_entered_adrenaline_spike_range + 1
-				if self._Gilza_junkie_ticks_since_entered_adrenaline_spike_range >= 600 then -- 20 seconds total
+				if self._Gilza_junkie_ticks_since_entered_adrenaline_spike_range >= 800 then -- 40 seconds total
 					self._Gilza_junkie_eligible_for_spike = true
 				end
 			end
@@ -2002,6 +2133,44 @@ function PlayerManager:Gilza_melee_toggle_updater(force_to)
 			icon:set_visible(true)
 		else
 			icon:set_visible(false)
+		end
+	end
+	
+end
+
+function PlayerManager:Gilza_locknload_aced_bullet_refund_on_hit_trigger(skill_data)
+	
+	if skill_data and skill_data.target_hits then
+		
+		local hit_range = skill_data.target_hits
+		
+		-- create bullet timings table
+		if not self._SHOCK_AND_AWE_latest_hits then
+			self._SHOCK_AND_AWE_latest_hits = {}
+			for i=1, hit_range do
+				self._SHOCK_AND_AWE_latest_hits[i] = 0
+			end
+		end
+		
+		-- fill the table
+		for i = hit_range, 1, -1 do
+			self._SHOCK_AND_AWE_latest_hits[i] = self._SHOCK_AND_AWE_latest_hits[i - 1] or Application:time()
+		end
+		
+		-- recover bullet if time between last 5 bullets is short enough
+		if self._SHOCK_AND_AWE_latest_hits[hit_range] > 0 and (self._SHOCK_AND_AWE_latest_hits[1] - self._SHOCK_AND_AWE_latest_hits[hit_range]) <= skill_data.max_duration then
+			
+			local weapon = self:equipped_weapon_unit():base()
+			local base = weapon:ammo_base()
+			local ammo_in_clip = base:get_ammo_remaining_in_clip()
+			base:set_ammo_remaining_in_clip(ammo_in_clip + skill_data.refund)
+			weapon:add_ammo_in_bullets(skill_data.refund)
+			
+			-- clear timer tracking on successful refund
+			for i=1, skill_data.target_hits do
+				self._SHOCK_AND_AWE_latest_hits[i] = 0
+			end
+			
 		end
 	end
 	

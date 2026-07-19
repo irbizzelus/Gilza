@@ -619,13 +619,19 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_post_PlayerDamage_init", function(se
 			end
 			managers.player:Gilza_brawler_recursive_updater()
 		end
+		
+		-- ex-president
+		if managers.player:has_category_upgrade("player", "store_armor_recovery_bonus_timer") then
+			AddDefaultPerkGUI("Gilza_new_expres_GUI_icon", true, "guis/dlcs/Gilza/textures/pd2/specialization/new_expres_gui_icon")
+			AddDefaultPerkGUITextAddon("_Gilza_new_expres_recovery_bonus_GUI", "Gilza_new_expres_recovery_bonus_GUI", "0")
+			managers.player:Gilza_ex_pres_recovery_bonus_updater()
+		end
 	
 	end
 	CreatePerkGUI()
 	
 	-- revitalized + speed junkie
 	managers.player:unregister_message(Message.OnPlayerDodge, "Gilza_armor_on_dodge_skill")
-	
 	managers.player:register_message(Message.OnPlayerDodge, "Gilza_armor_on_dodge_skill", function()
 		
 		local excluded_state = {
@@ -662,6 +668,52 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_post_PlayerDamage_init", function(se
 			end
 		end
 	end)
+	
+	-- make sentry gun's damage count towards anarchist's "on damage" recovery skill
+	if managers.player:has_category_upgrade("player", "damage_to_armor") then
+		
+		-- remove vanilla version
+		CopDamage.unregister_listener("on_damage")
+		
+		local damage_to_armor_data = managers.player:upgrade_value("player", "damage_to_armor", nil)
+		local armor_data = tweak_data.blackmarket.armors[managers.blackmarket:equipped_armor(true, true)]
+
+		if damage_to_armor_data and armor_data then
+			local idx = armor_data.upgrade_level
+			self._damage_to_armor = {
+				armor_value = damage_to_armor_data[idx][1],
+				target_tick = damage_to_armor_data[idx][2],
+				elapsed = 0
+			}
+
+			local function on_damage(damage_info)
+				local attacker_unit = damage_info and damage_info.attacker_unit
+				
+				if alive(attacker_unit) and attacker_unit:base() then
+					if attacker_unit:base().thrower_unit then
+						attacker_unit = attacker_unit:base():thrower_unit()
+					elseif attacker_unit:base().sentry_gun then
+						attacker_unit = attacker_unit:base():get_owner()
+					end
+				end
+
+				if self._unit == attacker_unit then
+					local time = Application:time()
+
+					if self._damage_to_armor.target_tick < time - self._damage_to_armor.elapsed then
+						self._damage_to_armor.elapsed = time
+
+						self:restore_armor(self._damage_to_armor.armor_value, true)
+					end
+				end
+			end
+
+			CopDamage.register_listener("on_damage", {
+				"on_damage"
+			}, on_damage)
+		end
+	end
+	
 end)
 
 Hooks:PreHook(PlayerDamage, "pre_destroy", "Gilza_pre_PlayerDamage_pre_destroy", function(self)
@@ -704,12 +756,9 @@ Hooks:OverrideFunction(PlayerDamage, "set_regenerate_timer_to_max", function (se
 	elseif managers.player:has_category_upgrade("player", "store_armor_recovery_bonus_timer") then
 		-- if we have new 9th card from ex-president, on taking damage, reduce armor regen timer, based on amount of kills
 		-- but never reduce it beyond a specified timer
-		-- this specifically applies before armor recovery boosting skills, to the flat 3 (in online) sec armor recovery timer 
-		if tweak_data.player.damage.REGENERATE_TIME + managers.player:Gilza_new_expres_armor_regen_bonus_timer_on_kill() >= 0.8 then
-			self._regenerate_timer = tweak_data.player.damage.REGENERATE_TIME + managers.player:Gilza_new_expres_armor_regen_bonus_timer_on_kill()
-		else
-			self._regenerate_timer = 0.8
-		end
+		-- this specifically applies before armor recovery boosting skills, to the flat 3 (in online) sec armor recovery timer
+		local lowest_allowed = managers.player:upgrade_value("player", "store_armor_recovery_bonus_timer", 4)
+		self._regenerate_timer = math.max(tweak_data.player.damage.REGENERATE_TIME + managers.player:Gilza_new_expres_armor_regen_bonus_timer_on_kill(), lowest_allowed)
 		
 		-- mostly vanilla
 		local mul = managers.player:body_armor_regen_multiplier(alive(self._unit) and self._unit:movement():current_state()._moving, self:health_ratio())
@@ -776,6 +825,8 @@ Hooks:OverrideFunction(PlayerDamage, "_calc_health_damage", function (self, atta
 				self:update_armor_stored_health()
 				return 0
 			end
+			-- reset new armor recovery bonus if stored health tanked damage
+			managers.player:Gilza_new_expres_armor_regen_bonus_timer_on_kill_reset()
 		end
 	end
 	
@@ -942,11 +993,6 @@ Hooks:OverrideFunction(PlayerDamage, "_update_armor_hud", function (self, t, dt)
 	if self._hurt_value then
 		self._hurt_value = math.min(1, self._hurt_value + dt)
 	end
-end)
-
--- when armor fully regens by any means, reset ex-president's 9th card bonus timer to 0
-Hooks:PostHook(PlayerDamage, "_regenerate_armor", "Gilza_post_PlayerDamage_regenerate_armor", function(self, no_sound)
-	managers.player:Gilza_new_expres_armor_regen_bonus_timer_on_kill_reset()
 end)
 
 -- hitman's combo
@@ -1233,6 +1279,33 @@ Hooks:OverrideFunction(PlayerDamage, "damage_fall", function (self, data)
 	else
 		gilza_orig_playerDamage_damage_fall(self, data)
 	end
+end)
+
+-- ex-president - dont lose all stored health on armor recovery
+Hooks:OverrideFunction(PlayerDamage, "consume_armor_stored_health", function (self, amount)
+	
+	local health_needed
+	if self._armor_stored_health and not self._dead and not self._bleed_out and not self._check_berserker_done then
+		health_needed = (self:_max_health() * self._max_health_reduction) - self:get_real_health()
+		self:change_health(self._armor_stored_health)
+	end
+	
+	-- reset new armor recovery bonus only if we consumed stored health to heal
+	if health_needed and health_needed > 0 and self._armor_stored_health > 0 then
+		managers.player:Gilza_new_expres_armor_regen_bonus_timer_on_kill_reset()
+	end
+	
+	-- if we got more stored health than we can recover, remove however much health we recovered and then reduce the remainder by a (currently hard coded) ammount
+	if health_needed and ((health_needed - self._armor_stored_health) <= 0) and not managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
+		self._armor_stored_health = self._armor_stored_health - health_needed
+		self._armor_stored_health = math.max(self._armor_stored_health - 4.8, 0)
+		if managers.hud then
+			managers.hud:set_stored_health(self._armor_stored_health / self:_max_health())
+		end
+	else
+		self:clear_armor_stored_health()
+	end
+	
 end)
 
 Gilza.files_loaded.playerdamage = true

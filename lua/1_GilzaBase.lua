@@ -151,14 +151,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.7 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.8 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.7 Changelog:\n\nBig patch, big patch notes. It's recommended you read the full notes, as this menu is too small for this patch.\nNotable changes:\n- Compatibility with update 246\n- Complete bipod deploy system rework\n- Major LMG rebalance\n- Armor now affects ammo pick up rates\n- Updated 7 skills\n- Updated 6 perks, with Bralwer getting major changes\n- New melee charge tilt QOL option\n- A bunch of weapon stat updates\n- Various fixes"
+			local message = "2.8 Changelog:\n\nAmmo economy shake up! A few skill reworks are also here. Things of note:\n- Made ammo economy easier by increasing ammo pickup across all weapons.\n- Reworks for \"Graze\" and \"Lock n Load\" skills\n- Adjustments to skills: \"Shotgun Expert\", \"Body Expertise\", \"Bloodthirst\"\n- Minor rework of \"Ex-President\" perk\n- Adjustments to perks: \"Rogue\", \"Hacker\", \"Grinder\", \"Anarchist\", \"Speed Junkie\", \"Brawler\"\n- Weapon tweaks, addition of new AP kits for some SMGs, shotgun ammunition adjustments"
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.7
+			Gilza.settings.version = 2.8
 			Gilza.Save()
 		end
 	end)

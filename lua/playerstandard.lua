@@ -2,6 +2,30 @@ if not Gilza then
 	dofile("mods/Gilza/lua/1_GilzaBase.lua")
 end
 
+-- since OnSwitchWeapon is literally never used (lock n load bonus just checks if current weapon matches previously tracked weapon for the switch check), it was broken if the direct "to weapon 1/2" keybind is used. this fixes said issue
+Hooks:OverrideFunction(PlayerStandard, "_check_action_equip", function (self, t, input)
+	local new_action = nil
+	local selection_wanted = input.btn_primary_choice
+
+	if selection_wanted then
+		local action_forbidden = self:chk_action_forbidden("equip")
+		action_forbidden = action_forbidden or not self._ext_inventory:is_selection_available(selection_wanted) or self:_is_meleeing() or self._use_item_expire_t or self:_changing_weapon() or self:_interacting() or self:_is_throwing_projectile()
+
+		if not action_forbidden then
+			local new_action = not self._ext_inventory:is_equipped(selection_wanted)
+
+			if new_action then
+				self:_start_action_unequip_weapon(t, {
+					selection_wanted = selection_wanted
+				})
+				managers.player:send_message(Message.OnSwitchWeapon) -- this lil guy
+			end
+		end
+	end
+
+	return new_action
+end)
+
 Hooks:PostHook(PlayerStandard, "enter", "Gilza_posthook_PlayerStandard_enter", function(self, state_data, enter_data)
 	managers.player._gilza_flag_bipod_redeploy_delay = Application:time() + (1.2 * (1 / managers.player:upgrade_value("player", "bipod_deploy_speed", 1)))
 end)

@@ -1,5 +1,5 @@
 <mod name="Gilza" author="irbizzelus" color="Color(0,0.8,0.76)">
-	<AssetUpdates id="irbizzelus/Gilza" provider="github" release="true" version="2.7.01"/>
+	<AssetUpdates id="irbizzelus/Gilza" provider="github" release="true" version="2.8"/>
 	<GlobalValue id="Gilza" color="Color(0,0.8,0.76)"/>
 	<AddFiles directory="assets">
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_br_shtgn"/>
@@ -23,12 +23,16 @@
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_pis_mid_ap_rounds_lv"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_sub2000_250_dmg_kit"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_shak12_250_dmg_kit"/>
+		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_smg_250_smg_ap_kit"/>
+		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_smg_155_smg_ap_kit"/>
+		<texture path="guis/dlcs/Gilza/textures/pd2/blackmarket/icons/mods/wpn_fps_upg_smg_100_smg_ap_kit"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/specialization/icons_atlas"/>
 		<texture path="guis/dlcs/Gilza_guardian/textures/pd2/specialization/icons_atlas"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/specialization/junkie_icon"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/specialization/guardian_icon"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/specialization/new_gambler_icon"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/specialization/new_hitman_icon"/>
+		<texture path="guis/dlcs/Gilza/textures/pd2/specialization/new_expres_gui_icon"/>
 		<texture path="guis/dlcs/Gilza/textures/pd2/specialization/brawler_icon"/>
 		<texture path="guis/textures/berserk_flash"/>
 		<texture path="guis/textures/berserk_flash_bigger"/>
@@ -130,6 +134,24 @@
 	<WeaponMod id="wpn_fps_upg_shak12_250_dmg_kit" based_on="wpn_fps_upg_a_custom" type="ammo" drop="false" global_value="Gilza" is_a_unlockable="true" texture_bundle_folder="Gilza">
 		<weapons>
 			<value_node value="wpn_fps_ass_shak12"/>
+		</weapons>
+	</WeaponMod>
+	<WeaponMod id="wpn_fps_upg_smg_250_smg_ap_kit" based_on="wpn_fps_upg_a_custom" type="ammo" drop="false" global_value="Gilza" is_a_unlockable="true" texture_bundle_folder="Gilza">
+		<weapons>
+			<value_node value="wpn_fps_smg_sterling"/>
+			<value_node value="wpn_fps_smg_x_sterling"/>
+		</weapons>
+	</WeaponMod>
+	<WeaponMod id="wpn_fps_upg_smg_155_smg_ap_kit" based_on="wpn_fps_upg_a_custom" type="ammo" drop="false" global_value="Gilza" is_a_unlockable="true" texture_bundle_folder="Gilza">
+		<weapons>
+			<value_node value="wpn_fps_smg_shepheard"/>
+			<value_node value="wpn_fps_smg_x_shepheard"/>
+		</weapons>
+	</WeaponMod>
+	<WeaponMod id="wpn_fps_upg_smg_100_smg_ap_kit" based_on="wpn_fps_upg_a_custom" type="ammo" drop="false" global_value="Gilza" is_a_unlockable="true" texture_bundle_folder="Gilza">
+		<weapons>
+			<value_node value="wpn_fps_smg_mac10"/>
+			<value_node value="wpn_fps_smg_x_mac10"/>
 		</weapons>
 	</WeaponMod>
 </mod>

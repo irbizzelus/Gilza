@@ -202,6 +202,17 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 		return
 	end
 	
+	-- new aced lock n load skill
+	if not is_civilian and attackerIsPlayer and managers.player:has_category_upgrade("player", "automatic_bullet_refund_on_hit_spree") then
+		local equipped_unit = managers.player:get_current_state()._equipped_unit
+		local is_grenade_launcher = equipped_unit:base():is_category("grenade_launcher")
+		local data = managers.player:upgrade_value("player", "automatic_bullet_refund_on_hit_spree", nil)
+		
+		if data and equipped_unit and not is_grenade_launcher and (equipped_unit:base():fire_mode() == "auto" or equipped_unit:base():fire_mode() == "burst" or equipped_unit:base():is_category("minigun", "flamethrower")) then
+			managers.player:Gilza_locknload_aced_bullet_refund_on_hit_trigger(data)
+		end
+	end
+	
 	local shotgun_min_mul = 1
 	local min_shot_dmg = 1
 	-- new shotgun damage
@@ -361,8 +372,12 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 			damage = self._health * 10
 		end
 	end
-
-	if not head and not self._char_tweak.no_headshot_add_mul and attack_data.weapon_unit:base().get_add_head_shot_mul then
+	
+	-- this one is BE aced exclusive, so use it for the check
+	local has_aced_BE = managers.player:has_category_upgrade("player", "ap_bullets_aced")
+	
+	-- if player has aced BE, allow for damage to increase based on BE damage bonus if cop is shot in the head
+	if (not head or head and has_aced_BE) and not self._char_tweak.no_headshot_add_mul and attack_data.weapon_unit:base().get_add_head_shot_mul then
 		local add_head_shot_mul = attack_data.weapon_unit:base():get_add_head_shot_mul()
 
 		if add_head_shot_mul then
@@ -370,6 +385,11 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 				local tweak_headshot_mul = math.max(0, self._char_tweak.headshot_dmg_mul - 1)
 				local mul = tweak_headshot_mul * add_head_shot_mul + 1
 				damage = damage * mul
+				
+				-- undo initial HS bonus damage if we land a headshot with BE aced
+				if has_aced_BE and head and not self._char_tweak.ignore_headshot and not self._damage_reduction_multiplier and self._char_tweak.headshot_dmg_mul then
+					damage = damage / self._char_tweak.headshot_dmg_mul / headshot_multiplier
+				end
 			else
 				damage = self._health * 10
 			end
@@ -845,6 +865,16 @@ Hooks:PreHook(CopDamage, "damage_explosion", "Gilza_CopDamage_damage_explosion_p
 	if not (Network and Network:is_server()) then
 		return
 	end
+	
+	-- reduce explosive damage against normal and headless dozers to compensate recently added 2x explosive vulnerability they got
+	local attackerIsPlayer = attack_data.attacker_unit == managers.player:player_unit()
+	if attackerIsPlayer and self._char_tweak.Gilza_headless_tag then -- and reduce headless dmg since they should be beefy, relative to new weapon damage
+		attack_data.damage = attack_data.damage * 0.55
+	end
+	if attackerIsPlayer and self._char_tweak.access == "tank" then
+		attack_data.damage = attack_data.damage * 0.5
+	end
+	
 	local should_decrease_wpn = attack_data.weapon_unit and attack_data.weapon_unit:base() and not attack_data.weapon_unit:base().name_id and attack_data.weapon_unit:base()._projectile_entry
 	if should_decrease_wpn and self._char_tweak and self._char_tweak.tags then
 		if table.contains(self._char_tweak.tags, "taser") then

@@ -21,10 +21,10 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "conditional_accuracy_multiplier", 
 	if current_state:in_steelsight() and self:is_single_shot() then
 		mul = mul + 1 - pm:upgrade_value("player", "single_shot_accuracy_inc", 1)
 	end
-
+	
 	if current_state:in_steelsight() then
 		for _, category in ipairs(self:categories()) do
-			mul = mul + 1 - pm:upgrade_value("player", "steelsight_accuracy_inc", 1)
+			mul = mul + 1 - pm:upgrade_value(category, "steelsight_accuracy_inc", 1)
 		end
 	end
 
@@ -180,6 +180,7 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "_update_stats_values", function (s
 	self._can_shoot_through_enemy = tweak_data.weapon[self._name_id].can_shoot_through_enemy
 	self._can_shoot_through_wall = tweak_data.weapon[self._name_id].can_shoot_through_wall
 	self._armor_piercing_chance = self:weapon_tweak_data().armor_piercing_chance or 0
+	self._knock_down_chance = tweak_data.weapon[self._name_id].knock_down_chance or 0 -- new knockdown % stat
 	local primary_category = self:categories() and self:categories()[1]
 	self._movement_penalty = tweak_data.upgrades.weapon_movement_penalty[primary_category] or 1
 	self._burst_count = self:weapon_tweak_data().BURST_COUNT or 3
@@ -275,7 +276,10 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "_update_stats_values", function (s
 		if self._ammo_data.can_shoot_through_shield ~= nil then
 			self._can_shoot_through_shield = self._ammo_data.can_shoot_through_shield
 		end
-
+		-- new knockdown % stat
+		if self._ammo_data.knock_down_chance then
+			self._knock_down_chance = self._ammo_data.knock_down_chance
+		end
 		if self._ammo_data.can_shoot_through_enemy ~= nil then
 			self._can_shoot_through_enemy = self._ammo_data.can_shoot_through_enemy
 		end
@@ -437,6 +441,37 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "_update_stats_values", function (s
 	if self._ammo_data.fire_rate_multiplier then
 		self._fire_rate_multiplier = self._fire_rate_multiplier + self._ammo_data.fire_rate_multiplier
 	end
+end)
+
+-- yet another weaponlib fix :D
+-- this time for muzzle flash and projectile trail overrides not working, even tho trail overrides are seemingly unused in vanilla
+Hooks:PostHook(NewRaycastWeaponBase, "_update_stats_values", "Gilza_fix_weaponlib_posthook-newraycastweaponbase_update_stats_values", function(self, disallow_replenish, ammo_data)
+	local weapon_tweak_data = self:weapon_tweak_data()
+
+	local muzzle_effect
+	if self._silencer then
+		muzzle_effect = Idstring(weapon_tweak_data.muzzleflash_silenced or "effects/payday2/particles/weapons/9mm_auto_silence_fps")
+	elseif self._ammo_data and self._ammo_data.muzzleflash ~= nil then
+		muzzle_effect = Idstring(self._ammo_data.muzzleflash)
+	else
+		muzzle_effect = Idstring(weapon_tweak_data.muzzleflash or "effects/particles/test/muzzleflash_maingun")
+	end
+	if muzzle_effect then
+		self._muzzle_effect = muzzle_effect
+		self._muzzle_effect_table.effect = self._muzzle_effect
+	end
+
+	local trail_effect
+	if self._ammo_data and self._ammo_data.trail_effect ~= nil then
+		trail_effect = Idstring(self._ammo_data.trail_effect)
+	else
+		trail_effect = weapon_tweak_data.trail_effect and Idstring(weapon_tweak_data.trail_effect) or self.TRAIL_EFFECT
+	end
+	if trail_effect then
+		self._trail_effect = trail_effect
+		self._trail_effect_table.effect = self._trail_effect
+	end
+
 end)
 
 local mvec_to = Vector3()
@@ -867,37 +902,6 @@ Hooks:PreHook(NewRaycastWeaponBase, "fire", "Gilza_pre_NewRaycastWeaponBase_fire
 	-- fix for a crash from npcs or akimbo weapons with burst firemode
 	if self._fire_mode == ids_burst then
 		self._bullets_fired = self._bullets_fired or 0
-	end
-	-- lock n load hudinfo UI support
-	local is_player = self._setup.user_unit == managers.player:player_unit()
-	if is_player and managers.player:has_category_upgrade("player", "automatic_faster_reload") then
-		local upg_values = managers.player:upgrade_value("player", "automatic_faster_reload")
-		local consume_ammo = not managers.player:has_active_temporary_property("bullet_storm") and (not managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier") or not managers.player:has_category_upgrade("player", "berserker_no_ammo_cost")) or not is_player
-		if self:is_category("smg", "assault_rifle", "lmg") and consume_ammo and upg_values and self:get_ammo_remaining_in_clip() >= 1 then
-			
-			local reload_multiplier = upg_values.min_reload_increase
-			local min_bullets = upg_values.min_bullets
-
-			local ammo = self:get_ammo_max_per_clip()
-			
-			if managers.player:has_category_upgrade("player", "automatic_mag_increase") then
-				ammo = ammo - managers.player:upgrade_value("player", "automatic_mag_increase", 0)
-			end
-			
-			local ammo_fired = ammo - self:get_ammo_remaining_in_clip() + 1 -- since this is a prehook bullet wasnt yet fired, so we adjust for it. or maybe do it in a posthook
-			
-			if min_bullets < ammo_fired then
-				local num_bullets = ammo_fired - min_bullets
-
-				for i = 1, num_bullets do
-					reload_multiplier = reload_multiplier + (upg_values.penalty-1)
-				end
-			end
-			
-			reload_multiplier = math.clamp(reload_multiplier,upg_values.min_reload_increase,upg_values.max_reload_increase)
-			
-			Gilza.NSI:new_lock_n_load_buff_update(reload_multiplier)
-		end
 	end
 end)
 

@@ -194,6 +194,11 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 			panel_class = managers.player._Gilza_new_hitman_combo_counter_GUI
 			text_panel = hud.panel:child("Gilza_new_hitman_combo_counter_GUI")
 		end
+		if managers.player:has_category_upgrade("player", "store_armor_recovery_bonus_timer") then
+			icon_panel = hud.panel:child("Gilza_new_expres_GUI_icon")
+			panel_class = managers.player._Gilza_new_expres_recovery_bonus_GUI
+			text_panel = hud.panel:child("Gilza_new_expres_recovery_bonus_GUI")
+		end
 		if managers.player:has_category_upgrade("player", "damage_resist_teammates_brawler") or (managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") and managers.player:has_category_upgrade("player", "armor_regen_brawler")) then
 			icon_panel = hud.panel:child("Gilza_brawler_GUI_icon")
 			panel_class = managers.player._Gilza_new_brawler_regen_counter_GUI

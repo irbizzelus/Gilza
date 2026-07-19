@@ -185,29 +185,35 @@ Hooks:OverrideFunction(RaycastWeaponBase, "add_ammo", function (self, ratio, add
 	return picked_up, add_amount
 end)
 
--- new knock down chances changes, affects the stagger skill from the body expertise tree
+-- new knock down stuff
 Hooks:OverrideFunction(RaycastWeaponBase, "is_knock_down", function (self)
-	if not self._knock_down then
-		return false
+	if self._knock_down and self._knock_down > 0 then -- knockdown player skill
+		local new_knock_down_chance = 0.2
+		local max_threat_bonus = 2 -- 1 + 2x = 3x
+		local max_req_threat = 4 -- 40
+		local wpn_threat = self._suppression - 0.2 -- all weapons have +0.2 threat in code. reason yet unknown to me
+		local threat_percent = wpn_threat / max_req_threat
+		local total_threat_bonus = 1 + max_threat_bonus * threat_percent
+		
+		if total_threat_bonus and total_threat_bonus > 1 then
+			new_knock_down_chance = new_knock_down_chance * total_threat_bonus
+		end
+		
+		-- if we only have the basic skill, use 1/5 the chance, according to skill power
+		if self._knock_down == 0.05 then
+			new_knock_down_chance = new_knock_down_chance / 4
+		end
+		
+		-- add ammo knock if we got it
+		if self._knock_down_chance and self._knock_down_chance > 0 then
+			new_knock_down_chance = new_knock_down_chance + self._knock_down_chance
+		end
+		
+		return self._knock_down > 0 and math.random() < new_knock_down_chance
+	else
+		-- weapon ammo knockdown
+		return (self._knock_down_chance and self._knock_down_chance > 0 and math.random() < self._knock_down_chance) or false
 	end
-	
-	local new_knock_down_chance = 0.2
-	local max_threat_bonus = 2 -- 1 + 2x = 3x
-	local max_req_threat = 4 -- 40
-	local wpn_threat = self._suppression - 0.2 -- all weapons have +0.2 threat in code. reason yet unknown to me
-	local threat_percent = wpn_threat / max_req_threat
-	local total_threat_bonus = 1 + max_threat_bonus * threat_percent
-	
-	if total_threat_bonus and total_threat_bonus > 1 then
-		new_knock_down_chance = new_knock_down_chance * total_threat_bonus
-	end
-	
-	-- if we only have the basic skill, use 1/5 the chance, according to skill power
-	if self._knock_down == 0.05 then
-		new_knock_down_chance = new_knock_down_chance / 4
-	end
-	
-	return self._knock_down > 0 and math.random() < new_knock_down_chance
 end)
 
 -- new reload speeds
@@ -540,11 +546,7 @@ Hooks:PreHook(RaycastWeaponBase,"fire","autofiresoundfix2_raycastweaponbase_fire
 	if not self:_soundfix_should_play_normal() then
 		local function handle_sounds()
 			self._bullets_fired = 0
-			if self:weapon_tweak_data().sounds.fire_single then
-				self:play_tweak_data_sound(self:weapon_tweak_data().sounds.fire_single,"fire_single")
-			else
-				self:play_tweak_data_sound(self:weapon_tweak_data().sounds.fire,"fire")
-			end
+			self:play_tweak_data_sound("fire_single","fire")
 		end
 		if not self.AKIMBO then
 			handle_sounds()

@@ -100,18 +100,18 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			-- new graze values
 			self.values.snp.graze_damage = {
 				{
-					range_per_lvl = 600,
-					base_radius = 40,
-					radius_per_expansion = 30,
-					max_expansions = 3,
-					lvl_dmg_decrease = 0.3,
+					base_radius = 30,
+					max_expansion_range = 500,
+					radius_gain_per_expansion = 30,
+					damage_loss_per_expansion = 0.3,
+					damage_loss_floor = 0.2,
 				},
 				{
-					range_per_lvl = 300,
-					base_radius = 40,
-					radius_per_expansion = 40,
-					max_expansions = 9,
-					lvl_dmg_decrease = 0.1,
+					base_radius = 50,
+					max_expansion_range = 1000,
+					radius_gain_per_expansion = 40,
+					damage_loss_per_expansion = 0.2,
+					damage_loss_floor = 0.35,
 				}
 			}
 		end
@@ -268,11 +268,19 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			-- lock n load aced, new version
 			self.values.player.automatic_faster_reload = {
 				{
-					min_reload_increase = 1.35,
-					penalty = 1.01,
-					target_enemies = 3,
-					min_bullets = 15,
+					min_reload_increase = 1.1,
+					penalty = 0.01, -- bonus reload % gained per bullet missing in clip
+					target_enemies = 4,
+					min_bullets = 0,
 					max_reload_increase = 2.25
+				}
+			}
+			-- lock n load aced hitspree ammo refund
+			self.values.player.automatic_bullet_refund_on_hit_spree = {
+				{
+					refund = 1,
+					target_hits = 3,
+					max_duration = 1,
 				}
 			}
 			-- Body expertise muls
@@ -492,11 +500,18 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				0.8,
 				0.25
 			}
-			-- blotdthirst basic adjustment to new melee system
+			-- blotdthirst ex-basic adjustment to new melee system
 			self.values.player.melee_damage_stacking = {
 				{
 					max_multiplier = 3,
-					melee_multiplier = 0.2
+					melee_multiplier = 0.40000001 -- float point error seems to cause this skill to be able to get 6 stacks instead of intended 5 if this val is set to 0.4 lmao. it wouldnt actually affect damage much, since it's always ceiled properly, but infohuds would track stack amounts incorrectly
+				}
+			}
+			-- blotdthirst ex-aced adjustment
+			self.values.player.melee_kill_increase_reload_speed = {
+				{
+					1.35,
+					6
 				}
 			}
 			-- melee sprint skill
@@ -537,9 +552,9 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 		
 		-- BASEKIT: armor based ammo pickup muls
 		self.values.player.body_armor.skill_ammo_mul = {
+			0.9,
 			0.92,
-			0.94,
-			0.98,
+			0.97,
 			1,
 			1.06,
 			1.08,
@@ -551,7 +566,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 		self.explosive_bullet = {
 			curve_pow = 0,
 			player_dmg_mul = 0.01,
-			range = 200
+			range = 150
 		}
 		self.explosive_bullet.feedback_range = self.explosive_bullet.range
 		
@@ -563,18 +578,17 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 		
 		-- skills that are used by multiple perks at once
 		local function Shared_updates()
+			-- vanilla neutral perk card upgrades. since they are no longer in use, nulify their bonuses, so that if player obtains them (most likely via custom perks), they dont get damage increases that break this mod's weapon balance
+			self.values.weapon.passive_headshot_damage_multiplier = {
+				1
+			}
+			self.values.weapon.passive_damage_multiplier = {
+				1
+			}
 			-- weapon swap speed used normally by rogue, but now part of default upgrades as well
 			self.values.weapon.passive_swap_speed_multiplier = {
 				1.5, -- default
 				2 -- rogue
-			}
-			-- 4th value added for ROGUE, mostly just the first value is used sometimes to add dodge. 5th value deprecated, was used by COPYCAT
-			self.values.player.passive_dodge_chance = {
-				0.15,
-				0.3,
-				0.45,
-				0.5,
-				0
 			}
 			-- armour piercing buffs for ROGUE and CROOK
 			self.values.weapon.armor_piercing_chance = {
@@ -833,6 +847,9 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 					0.1,
 					0.35
 				}
+				-- added 2 variants to allowed damage types to make it more consistent with other "on damage" skills/perks
+				self.damage_to_hot_data.add_stack_sources.stun = true
+				self.damage_to_hot_data.add_stack_sources.heavy = true
 			end
 			Grinder_updates()
 			
@@ -848,9 +865,9 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			Yakuza_updates()
 			
 			local function Ex_President_updates()
-				-- new 9th card - store armor recovery, similar to health
+				-- new 9th card - store armor recovery, similar to health. value is fastest possible recovery
 				self.values.player.store_armor_recovery_bonus_timer = {
-					1
+					0.8
 				}
 				-- new 9th card - armor type based amount of recovery
 				self.values.player.body_armor.skill_store_armor_recovery_bonus_timer = {
@@ -877,7 +894,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				self.values.player.static_dodge_chance = {
 					0.2
 				}
-				-- new health "shield" system from stored health. originaly stored health took this much more dmg before damage was applies to health
+				-- new health "shield" system from stored health. originaly stored health took this much more dmg before damage was applied to health
 				-- but this was both confusing, and unnecessarily harsh, so now it no longer gets multiplied.
 				self.values.player.armor_health_store_shield = {
 					1.5
@@ -906,20 +923,20 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				self.values.player.armor_grinding = {
 					{
 						{
-							5,
-							6
+							6,
+							7
 						},
 						{
-							2.35,
+							3.3,
+							5
+						},
+						{
+							2.5,
 							4
 						},
 						{
 							2.05,
 							3.5
-						},
-						{
-							1.75,
-							3
 						},
 						{
 							1.125,
@@ -930,7 +947,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 							2
 						},
 						{
-							0.875,
+							0.95,
 							1.75
 						}
 					}
@@ -965,7 +982,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 							2
 						},
 						{
-							2.25,
+							2.7,
 							1.5
 						}
 					}
@@ -1062,8 +1079,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				-- temp dodge - now requires 3 kills to trigger and lasts for longeer, to compensate lower activation frequency
 				self.values.temporary.pocket_ecm_kill_dodge = {
 					{
-						0.2,
-						45,
+						0.15,
+						50,
 						3
 					}
 				}
@@ -1856,6 +1873,16 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- new ammo refund bonus from aced lock n load
+		self.definitions.player_automatic_bullet_refund_on_hit_spree = {
+			name_id = "player_automatic_bullet_refund_on_hit_spree",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "automatic_bullet_refund_on_hit_spree",
+				category = "player"
+			}
+		}
 		-- new AP, used in surefire
 		self.definitions.player_ap_bullets_basic = {
 			name_id = "player_ap_bullets_basic",
@@ -2442,16 +2469,6 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 						value = 3,
 						upgrade = "armor_break_invulnerable",
 						category = "temporary"
-					}
-				}
-				-- rogue new dodge chance
-				self.definitions.player_passive_dodge_chance_5 = {
-					name_id = "menu_player_run_dodge_chance",
-					category = "feature",
-					upgrade = {
-						value = 5,
-						upgrade = "passive_dodge_chance",
-						category = "player"
 					}
 				}
 			end

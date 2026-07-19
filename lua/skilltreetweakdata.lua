@@ -412,7 +412,6 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 					"weapon_passive_swap_speed_multiplier_2",
 					"player_movement_speed_multiplier_2",
 					"player_stamina_multiplier",
-					"player_passive_dodge_chance_4",
 					"player_crouch_dodge_chance_1"
 				}
 			end
@@ -762,6 +761,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 		self.skills.fire_control[1].upgrades = { "player_hipfire_less_recoil" }
 		self.skills.fire_control[2].upgrades = { "player_hipfire_no_accuracy_penalty" }
 		
+		self.skills.shock_and_awe[2].upgrades = {"player_automatic_faster_reload_1", "player_automatic_bullet_refund_on_hit_spree"}
+		
 		self.skills.fast_fire[2].upgrades = {"player_ap_bullets_basic", "weapon_armor_piercing_chance_2"}
 		
 		self.skills.body_expertise[1].upgrades = { "weapon_automatic_head_shot_add_1"}
@@ -826,6 +827,9 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 		self.skills.martial_arts[1].upgrades = {"player_melee_knockdown_mul", "player_melee_shake_reduction_1"}
 		self.skills.martial_arts[2].upgrades = {"player_melee_damage_dampener", "player_melee_shake_reduction_2"}
 		self.skills.martial_arts.icon_xy = { 1, 1 }
+		
+		self.skills.bloodthirst[1].upgrades = {"player_temp_melee_kill_increase_reload_speed_1"}
+		self.skills.bloodthirst[2].upgrades = {"player_melee_damage_stacking_1"}
 		
 		self.skills.steroids[1].upgrades = { "player_melee_sprint" }
 		self.skills.steroids[2].upgrades = { "player_melee_faster_charge" }

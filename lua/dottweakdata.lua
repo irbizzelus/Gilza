@@ -4,10 +4,10 @@ Hooks:PostHook(DOTTweakData, "_init_dot_entries_poison", "Gilza_DOTTweakData_ini
 	self.dot_entries.poison.ammo_rip = {
 		hurt_animation_chance = 1,
 		apply_hurt_once = false,
-		dot_damage = 2.1,
-		dot_length = 6.001,
+		dot_damage = 0.001,
+		dot_length = 5,
 		use_weapon_damage_falloff = false,
-		dot_tick_period = 0.5
+		dot_tick_period = 0.2
 	}
 	-- custom weapon: blast rifle
 	self.dot_entries.poison.ammo_blast_rifle_rip = {

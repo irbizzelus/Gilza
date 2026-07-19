@@ -48,7 +48,7 @@ Hooks:PostHook(FireTweakData, "_init_dot_entries_fire", "Gilza_FireTweakData_ini
 		dot_trigger_chance = 1,
 		dot_damage = 3.5,
 		dot_length = 2.501,
-		dot_trigger_max_distance = 1600,
+		dot_trigger_max_distance = 1400,
 		dot_tick_period = 0.25
 	}
 	-- custom weapon: blast rifle
