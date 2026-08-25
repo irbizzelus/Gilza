@@ -226,6 +226,16 @@ if Gilza.VHP_enabled then
 			-- force disable vanilla lock n load
 			HUDList.BuffItemBase.MAP.lock_n_load.ignore = true
 			
+			HUDList.BuffItemBase.MAP.offhand_reload_duration = {
+				skills_new = {0,9},
+				class = "TimedBuffItem",
+				title = "Gilza_new_skill_offhand_reload_duration",
+				localized = true,
+				priority = 8,
+				color = HUDListManager.ListOptions.buff_icon_color_standard,
+				ignore = not Gilza.settings.vhud_compat_offhand_reload,
+			}
+			
 			-- fixes for desperado/trigger happy
 			HUDList.BuffItemBase.MAP.desperado.skills_new = {11,1}
 			HUDList.BuffItemBase.MAP.desperado.ignore = not Gilza.settings.vhud_compat_new_trigger_happy
@@ -595,9 +605,11 @@ end
 function Gilza.New_Skills_Informer:update_current_passive_dmg_resist(total_resist)
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
 		managers.gameinfo:event("buff", "deactivate", "damage_reduction") -- idk why vanilla's DR hud element rarely pops up, but it does, so always force disable it
-		managers.gameinfo:event("buff", "activate", "gilza_total_dmg_resist")
-		if total_resist then
+		if total_resist and total_resist < 1 then
+			managers.gameinfo:event("buff", "activate", "gilza_total_dmg_resist")
 			managers.gameinfo:event("buff", "set_value", "gilza_total_dmg_resist", { value = total_resist })
+		elseif total_resist and total_resist >= 1 then
+			managers.gameinfo:event("buff", "deactivate", "gilza_total_dmg_resist")
 		end
 	end
 end
@@ -606,8 +618,10 @@ end
 -- current dodge value is reported as 0.3 for 30% dodge
 function Gilza.New_Skills_Informer:dodge_value_tracker(current_dodge)
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
-		managers.gameinfo:event("buff", "activate", "gilza_total_dodge")
-		if current_dodge then
+		if current_dodge and current_dodge <= 0 then
+			managers.gameinfo:event("buff", "deactivate", "gilza_total_dodge")
+		elseif current_dodge and current_dodge > 0 then
+			managers.gameinfo:event("buff", "activate", "gilza_total_dodge")
 			managers.gameinfo:event("buff", "set_value", "gilza_total_dodge", { value = current_dodge })
 		end
 	end
@@ -628,8 +642,10 @@ end
 -- current absorb value is reported as 1.5 for 15 abosrption
 function Gilza.New_Skills_Informer:update_current_dmg_absorb(current_DA)
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
-		managers.gameinfo:event("buff", "activate", "gilza_total_damage_absorb")
-		if current_DA then
+		if current_DA and current_DA <= 0 then
+			managers.gameinfo:event("buff", "deactivate", "gilza_total_damage_absorb")
+		elseif current_DA and current_DA > 0 then
+			managers.gameinfo:event("buff", "activate", "gilza_total_damage_absorb")
 			managers.gameinfo:event("buff", "set_value", "gilza_total_damage_absorb", { value = current_DA })
 		end
 	end
@@ -673,5 +689,26 @@ function Gilza.New_Skills_Informer:new_sicario_proc(action, cooldown, gain_value
 				managers.gameinfo:event("buff", "set_value", "sicario_dodge_gilza", {value = gain_value})
 			end
 		end
+	end
+end
+
+-- activated on swap to secondary
+function Gilza.New_Skills_Informer:activated_offhand_reload(duration)
+	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
+		managers.gameinfo:event("timed_buff", "activate", "offhand_reload_duration", { duration = duration })
+	end
+end
+
+-- on pistol hit
+function Gilza.New_Skills_Informer:updated_offhand_reload(change)
+	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
+		managers.gameinfo:event("timed_buff", "change_expire", "offhand_reload_duration", { difference = change })
+	end
+end
+
+-- on swap to primary
+function Gilza.New_Skills_Informer:stopped_offhand_reload()
+	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
+		managers.gameinfo:event("timed_buff", "deactivate", "offhand_reload_duration")
 	end
 end

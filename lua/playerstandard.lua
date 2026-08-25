@@ -173,6 +173,12 @@ Hooks:PostHook(PlayerStandard, "update", "Gilza_posthook_PlayerStandard_update",
 	else
 		log("[Gilza] playerstandard:update cant report on current dodge/dmg resist/etc for infohuds")
 	end
+	
+	-- new pistol offhand reloads
+	if managers.player:has_category_upgrade("pistol", "reloads_primary_offhand") then
+		self:update_gilza_offhand_reload(t)
+	end
+	
 end)
 
 -- prevent sprint interupt when starting a melee charge with sprint skill. also adds chainsaw stuff
@@ -741,6 +747,101 @@ Hooks:PreHook(PlayerStandard, "_start_action_jump", "Gilza_PlayerStandard_start_
 		end
 	end
 end)
+
+Hooks:PreHook(PlayerStandard, "_start_action_unequip_weapon", "Gilza_PlayerStandard_start_action_unequip_weapon", function(self, t, data)
+	self:check_offhand_reload(t)
+end)
+
+-- reload primary weapon if swapped to pistol for long enough
+function PlayerStandard:update_gilza_offhand_reload(t)
+	
+	if not managers.player:has_category_upgrade("pistol", "reloads_primary_offhand") then
+		return
+	end
+	
+	local player = managers.player:player_unit()
+	if not player then
+		return
+	end
+	
+	local primary = player:inventory():unit_by_selection(2) and player:inventory():unit_by_selection(2):base()
+	if not primary then
+		return
+	end
+	
+	local has_enough_for_reload = (primary:get_ammo_total() - primary:get_ammo_remaining_in_clip()) > 0
+	local needs_to_reload = not primary:clip_full()
+	if self.offhand_reload_t and self.offhand_reload_t < t and has_enough_for_reload and needs_to_reload then
+		self.offhand_reload_t = nil
+		Gilza.NSI:stopped_offhand_reload()
+		if primary:can_reload() then
+			primary:on_reload()
+			managers.statistics:reloaded()
+			managers.hud:set_ammo_amount(primary:selection_index(), primary:ammo_info())
+		end
+	elseif self.offhand_reload_t and self.offhand_reload_t < t and not needs_to_reload then -- gosh darn copycat
+		self.offhand_reload_t = nil
+		Gilza.NSI:stopped_offhand_reload()
+	end
+	
+end
+
+-- activate offhand reload timer. currently equipped weapon should be whatever we are swapping from
+function PlayerStandard:check_offhand_reload(t)
+	
+	if not managers.player:has_category_upgrade("pistol", "reloads_primary_offhand") then
+		return
+	end
+	
+	local player = managers.player:player_unit()
+	if not player then
+		return
+	end
+	
+	local primary = player:inventory():unit_by_selection(2) and player:inventory():unit_by_selection(2):base()
+	local secondary = player:inventory():unit_by_selection(1) and player:inventory():unit_by_selection(1):base()
+	if not (primary and secondary) then
+		return
+	end
+	
+	if not secondary:is_category("pistol") then
+		return
+	end
+	
+	local swapped_to_secondary = primary == player:inventory():equipped_unit():base()
+	
+	local function get_offhand_reload_t()
+		local reload_t = 20
+		local wpn_timers = primary:weapon_tweak_data().timers
+		if primary._use_shotgun_reload then
+			local shells_missing = (primary:get_ammo_max_per_clip() - primary:get_ammo_remaining_in_clip()) or 1
+			-- some shotguns dont have appropriate shotgun timers in their tweak data seemingly, so use safety values for everything, funzies
+			local exit_timer = primary:clip_empty() and wpn_timers.shotgun_reload_exit_empty or wpn_timers.shotgun_reload_exit_not_empty or 0.9
+			reload_t = (wpn_timers.shotgun_reload_enter or 0.8) + (wpn_timers.shotgun_reload_first_shell_offset or 0.1) + shells_missing * (wpn_timers.shotgun_reload_shell or 0.65) + exit_timer
+		elseif primary:clip_empty() then
+			reload_t = wpn_timers.reload_empty
+		else
+			reload_t = wpn_timers.reload_not_empty
+		end
+		return (reload_t / primary:reload_speed_multiplier() * managers.player:upgrade_value("pistol", "reloads_primary_offhand", 1))
+	end
+	
+	local has_enough_for_reload = (primary:get_ammo_total() - primary:get_ammo_remaining_in_clip()) > 0
+	local needs_to_reload = not primary:clip_full()
+	if primary._underbarrel_part and self._equipped_unit:base():selection_index() ~= 2 then
+		local underbarrel = primary._underbarrel_part.unit:base()
+		has_enough_for_reload = (underbarrel._ammo._ammo_total - underbarrel._ammo._ammo_remaining_in_clip) > 0
+		needs_to_reload = underbarrel._ammo._ammo_remaining_in_clip < underbarrel._ammo._ammo_max_per_clip
+	end
+	if self.offhand_reload_t then
+		self.offhand_reload_t = nil -- cancel if switching to primary
+		Gilza.NSI:stopped_offhand_reload()
+	elseif swapped_to_secondary and needs_to_reload and has_enough_for_reload then
+		self.offhand_reload_t = t + get_offhand_reload_t()
+		Gilza.NSI:activated_offhand_reload(self.offhand_reload_t-t)
+	end
+	
+end
 
 local hide_int_state = {
 	["bleed_out"] = true,

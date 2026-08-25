@@ -134,9 +134,11 @@
 	"Gilza_vhud_compat_unseen_strike_override_desc": "Включите HudList элемент мода VHUD+ для навыка Исподтишка. Позволяет видеть продолжительность эффекта, кулдаун эффекта, и дает знать если вы имеете право на активацию.",
 	
 	"Gilza_vhud_fugitive_header": "---- Беглец ----",
+	"Gilza_vhud_compat_offhand_reload": "Беглые Руки (Про)",
+	"Gilza_vhud_compat_offhand_reload_desc": "Включите HudList элемент мода VHUD+ отображающий продолжительность перезарядки оружия на ремне навыком \"Беглые Руки\".",
 	"Gilza_vhud_compat_new_trigger_happy": "Однорукий бандит",
 	"Gilza_vhud_compat_new_trigger_happy_desc": "Включите HudList элемент мода VHUD+ отображающий продолжительность навыка Однорукий бандит.",
-	"Gilza_vhud_compat_new_aced_running_from_death": "Убегая от смерти (ПРО)",
+	"Gilza_vhud_compat_new_aced_running_from_death": "Убегая от смерти (Про)",
 	"Gilza_vhud_compat_new_aced_running_from_death_desc": "Включите HudList элемент мода VHUD+ отображающий продолжительность неуязвимости навыка \"Убегая от смерти\".",
 	"Gilza_vhud_compat_new_melee_zerk": "Берсеркер (Базовый)",
 	"Gilza_vhud_compat_new_melee_zerk_desc": "Включите HudList элемент мода VHUD+ отображающий продолжительность бонусного урона в ближнем бою активируемого после поломки брони, от навыка Берсеркер.",

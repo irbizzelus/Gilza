@@ -714,6 +714,118 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_post_PlayerDamage_init", function(se
 		end
 	end
 	
+	-- new knockdown skill
+	if managers.player:has_category_upgrade("player", "aoe_knock_down_on_enemy_hit") then
+		
+		local function on_damage(damage_info)
+			local attacker_unit = damage_info and damage_info.attacker_unit
+			if not (self._unit == attacker_unit) then
+				return
+			end
+			
+			local skill = managers.player:upgrade_value("player", "aoe_knock_down_on_enemy_hit", nil)
+			if skill and type(skill) == "table" and damage_info and damage_info.col_ray and damage_info.col_ray.unit and alive(damage_info.col_ray.unit) then
+				
+				-- dmg type check
+				if not (damage_info and damage_info.result and damage_info.result.variant == "bullet") then
+					return
+				end
+				
+				-- weapon check
+				local weapon_unit = damage_info and damage_info.weapon_unit and damage_info.weapon_unit:base()
+				if not (weapon_unit and (weapon_unit:fire_mode() == "auto" or weapon_unit:fire_mode() == "burst") and weapon_unit:is_category("smg", "lmg", "assault_rifle", "minigun")) then
+					return
+				end
+				
+				-- stun chance based on weapon threat
+				local knock_down_chance = skill.chance
+				local wpn_threat = weapon_unit._suppression - 0.2 -- all weapons have +0.2 threat in code. reason yet unknown to me
+				local threat_percent = wpn_threat / 4 -- 40 threat ceiling
+				local total_threat_bonus = 1 + 2 * threat_percent
+				knock_down_chance = knock_down_chance * total_threat_bonus
+				
+				local patient_zero = damage_info.col_ray.unit
+				local enemies = World:find_units_quick("sphere", patient_zero:position(), skill.range, managers.slot:get_mask("enemies"))
+				local vertical_axis = patient_zero:position().z -- to not touch enemies that are too far away vertically
+				
+				if enemies and #enemies >= 1 then
+					local function luck_check(cop)
+						local char_dmg = cop:character_damage()
+						if managers.player:has_category_upgrade("player", "cloaker_knock_down_on_bullet_hit") and char_dmg._char_tweak.access == "spooc" then
+							return true
+						else
+							if char_dmg._char_tweak.immune_to_knock_down or char_dmg._char_tweak.access == "shield" or char_dmg._char_tweak.access == "tank" then
+								return false
+							else
+								return math.random() <= knock_down_chance
+							end
+						end
+					end
+					for _, enemy in ipairs(enemies) do
+						if enemy ~= patient_zero and math.abs(vertical_axis - enemy:position().z) <= 150 and luck_check(enemy) then
+							local attack_data_to_use = deep_clone(damage_info)
+							attack_data_to_use.result.type = "knock_down"
+							attack_data_to_use.critical_hit = false
+							attack_data_to_use.armor_piercing = false
+							attack_data_to_use.raw_damage = 0
+							attack_data_to_use.headshot = false
+							attack_data_to_use.stagger = false
+							attack_data_to_use.damage = 0
+							attack_data_to_use.shield_knock = false
+							attack_data_to_use.col_ray.unit = enemy
+							attack_data_to_use.col_ray.body = enemy:body(0)
+							enemy:character_damage():_send_bullet_attack_result(attack_data_to_use, attacker_unit, 0, 0, 0, 1) -- cause stagger from other peers' POV. attack_data_to_use is never sent, and other values are relatively unimportant for proper stagger sync
+							enemy:character_damage():_call_listeners(attack_data_to_use) -- cause stagger from user's POV
+							break -- only 1 enemy can be stunned per bullet at max, otherwise with high ROF guns its all but guarnateed stuns
+						end
+					end
+				end
+			end
+		end
+
+		CopDamage.register_listener("on_damage", {"on_damage"}, on_damage)
+		
+	end
+	
+	-- reduce offhand timer on pistol hits. value is set here manually cause lazyyyyyy
+	if managers.player:has_category_upgrade("pistol", "reloads_primary_offhand") then
+		
+		local function on_damage(damage_info)
+			
+			local function should_reduce()
+				local attacker_unit = damage_info and damage_info.attacker_unit
+				if not (attacker_unit and alive(attacker_unit)) then
+					return
+				end
+				local attacker_weapon = damage_info and damage_info.weapon_unit
+				if not (attacker_weapon and alive(attacker_weapon)) then
+					return
+				end
+				local player_unit = managers.player:player_unit()
+				if not (player_unit and alive(player_unit)) then
+					return
+				end
+				local player_weapon = managers.player:equipped_weapon_unit()
+				if not (player_weapon and alive(player_weapon) and attacker_weapon == player_weapon and player_weapon:base():is_category("pistol") and player_weapon:base():selection_index() == 1) then
+					return
+				end
+				if not (player_unit:movement()._current_state and player_unit:movement()._current_state.offhand_reload_t) then
+					return
+				end
+				return true
+			end
+			
+			if should_reduce() then
+				managers.player:player_unit():movement()._current_state.offhand_reload_t = managers.player:player_unit():movement()._current_state.offhand_reload_t - 0.2
+				Gilza.NSI:updated_offhand_reload(-0.2)
+			end
+			
+		end
+		
+		CopDamage.register_listener("on_damage", {"on_damage"}, on_damage)
+		
+	end
+	
 end)
 
 Hooks:PreHook(PlayerDamage, "pre_destroy", "Gilza_pre_PlayerDamage_pre_destroy", function(self)

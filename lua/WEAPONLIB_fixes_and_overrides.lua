@@ -24,6 +24,29 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 			end
 		end)
 		
+		-- fix weaponlib/vhud+ compatibility issue where vhud's interaction circle during reloads wasn't showing up
+		if VHUDPlus and Gilza.VHP_enabled then
+			local gilza_vhud_helper_reload_override = PlayerStandard._start_action_reload
+			Hooks:OverrideFunction(PlayerStandard, "_start_action_reload", function (self, t, ...)
+				gilza_vhud_helper_reload_override(self, t, ...)
+				local hide_int_state = {
+					["bleed_out"] = true,
+					["fatal"] = true,
+					["incapacitated"] = true,
+					["arrested"] = true,
+					["jerry1"] = true
+				}
+				PlayerStandard.SHOW_RELOAD = VHUDPlus:getSetting({"INTERACTION", "SHOW_RELOAD"}, false)
+				if PlayerStandard.SHOW_RELOAD and not hide_int_state[managers.player:current_state()] and not PlayerStandard.HIDE_MELEE_RELOAD_PDTH and not PD3ReviveProgressDisplay then
+					if self._equipped_unit and not self._equipped_unit:base():clip_full() then
+						self._state_data.show_reload = true
+						managers.hud:show_interaction_bar(0, self._state_data.reload_expire_t or 0)
+						self._state_data.reload_offset = t
+					end
+				end
+			end)
+		end
+		
 		-- based on weaponlib's version. adds a check for new pistol full auto simulation skill. basically makes them fire in full auto even tho fire mode itself is single
 		Hooks:OverrideFunction(PlayerStandard, "_check_action_primary_attack", function (self, t, input)
 			if not self._equipped_unit then return false end

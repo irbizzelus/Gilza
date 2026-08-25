@@ -134,6 +134,8 @@
 	"Gilza_vhud_compat_unseen_strike_override_desc": "Enable VHUD's buff list tracker for Unseen Strike. Includes duration, cooldown and eligibility factor.",
 	
 	"Gilza_vhud_fugitive_header": "---- Fugitive ----",
+	"Gilza_vhud_compat_offhand_reload": "Swift Hands (Aced)",
+	"Gilza_vhud_compat_offhand_reload_desc": "Enable VHUD's buff list tracker for Swift Hands' offhand reload duration.",
 	"Gilza_vhud_compat_new_trigger_happy": "Trigger Happy",
 	"Gilza_vhud_compat_new_trigger_happy_desc": "Enable VHUD's buff list duration tracker for Trigger Happy.",
 	"Gilza_vhud_compat_new_aced_running_from_death": "Running From Death (Aced)",

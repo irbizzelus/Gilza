@@ -444,6 +444,23 @@ Hooks:OverrideFunction(CopDamage, "damage_bullet", function (self, attack_data)
 	else
 		attack_data.damage = damage
 		local result_type = not self._char_tweak.immune_to_knock_down and (attack_data.knock_down and "knock_down" or attack_data.stagger and not self._has_been_staggered and "stagger") or self:get_damage_type(damage_percent, "bullet")
+		
+		-- new cloaker specific knockdown for the new knockdown skill replacement
+		if attackerIsPlayer and self._char_tweak.access == "spooc" and managers.player:has_category_upgrade("player", "cloaker_knock_down_on_bullet_hit") and managers.player:has_category_upgrade("player", "aoe_knock_down_on_enemy_hit") then
+			local skill = managers.player:upgrade_value("player", "aoe_knock_down_on_enemy_hit", nil)
+			if skill and type(skill) == "table" then
+				-- stun chance based on weapon threat
+				local knock_down_chance = skill.chance
+				local wpn_threat = (attack_data.weapon_unit and attack_data.weapon_unit:base() and attack_data.weapon_unit:base()._suppression) or 0.2 -- all weapons have +0.2 threat in code. reason yet unknown to me
+				local threat_percent = (wpn_threat - 0.2) / 4 -- 40 threat ceiling
+				local total_threat_bonus = 1 + 2 * threat_percent
+				knock_down_chance = knock_down_chance * total_threat_bonus
+				if math.random() <= knock_down_chance then
+					result_type = "stagger"
+				end
+			end
+		end
+		
 		result = {
 			type = result_type,
 			variant = attack_data.variant

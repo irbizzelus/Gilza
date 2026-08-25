@@ -248,10 +248,19 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				1,
 				4
 			}
-			-- heavy impact
-			self.values.weapon.knock_down = {
-				0.05,
-				0.2
+			-- new "heavy impact" - shockwave
+			self.values.player.aoe_knock_down_on_enemy_hit = {
+				{
+					chance = 0.025,
+					range = 200
+				},
+				{
+					chance = 0.07,
+					range = 400
+				}
+			}
+			self.values.player.cloaker_knock_down_on_bullet_hit = {
+				true
 			}
 			-- new fire control basic - removed 40% recoil penalty while hipfiring
 			self.values.player.hipfire_less_recoil = {
@@ -270,7 +279,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				{
 					min_reload_increase = 1.1,
 					penalty = 0.01, -- bonus reload % gained per bullet missing in clip
-					target_enemies = 4,
+					target_enemies = 5,
 					min_bullets = 0,
 					max_reload_increase = 2.25
 				}
@@ -376,13 +385,29 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 		
 		local function New_Fugitive_Skills()
 			---- GUNSLINGER
-			-- equilibrium aced buffs
+			-- equilibrium giga buffs
 			self.values.pistol.swap_speed_multiplier = {
-				1.5,
 				2
 			}
 			self.values.pistol.spread_index_addend = {
-				3
+				4
+			}
+			self.values.pistol.enter_steelsight_speed_multiplier = {
+				2
+			}
+			self.values.player.pistol_eqipped_move_speed_bonus = {
+				0.1
+			}
+			self.values.player.pistol_eqipped_or_holstered_move_speed_bonus = {
+				true
+			}
+			-- gun nut
+			self.values.pistol.reload_speed_multiplier = {
+				1.3
+			}
+			-- gun nut aced reloads primary, value is how much slower the reload is
+			self.values.pistol.reloads_primary_offhand = {
+				2.5
 			}
 			-- pistol passive ROF
 			self.values.pistol.fire_rate_multiplier = {
@@ -403,7 +428,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			}
 			-- rof buff during trigger happy
 			self.values.pistol.trigger_happpy_rof_increase = {
-				1.3
+				1.25
 			}
 			-- new desperado
 			self.values.pistol.stacked_accuracy_bonus = {
@@ -427,13 +452,13 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			}
 			-- new bottomless pockets skill
 			self.values.pistol.extra_ammo_multiplier = {
-				1.5,
-				2.5
+				1.3,
+				1.8
 			}
 			-- new bottomless pockets skill - ammo total
 			self.values.smg.extra_ammo_multiplier = {
-				1.4,
-				2
+				1.3,
+				1.8
 			}
 			-- bottomless pockets basic
 			self.values.player.secondary_weapons_pickup_bonus = {
@@ -1014,13 +1039,13 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 					}
 				}
 				self.values.player.new_armor_based_sicario_cd = {
+					2.5,
+					3,
 					4,
-					5,
 					6,
 					8,
-					11,
-					13,
-					16
+					10,
+					14
 				}
 			end
 			Sicario_updates()
@@ -1873,6 +1898,34 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 				category = "player"
 			}
 		}
+		-- new knockdown skill
+		self.definitions.player_aoe_knock_down_on_enemy_hit_1 = {
+			name_id = "player_aoe_knock_down_on_enemy_hit_1",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "aoe_knock_down_on_enemy_hit",
+				category = "player"
+			}
+		}
+		self.definitions.player_aoe_knock_down_on_enemy_hit_2 = {
+			name_id = "player_aoe_knock_down_on_enemy_hit_2",
+			category = "feature",
+			upgrade = {
+				value = 2,
+				upgrade = "aoe_knock_down_on_enemy_hit",
+				category = "player"
+			}
+		}
+		self.definitions.player_cloaker_knock_down_on_bullet_hit = {
+			name_id = "player_cloaker_knock_down_on_bullet_hit",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "cloaker_knock_down_on_bullet_hit",
+				category = "player"
+			}
+		}
 		-- new ammo refund bonus from aced lock n load
 		self.definitions.player_automatic_bullet_refund_on_hit_spree = {
 			name_id = "player_automatic_bullet_refund_on_hit_spree",
@@ -2017,6 +2070,24 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 			upgrade = {
 				value = 1,
 				upgrade = "pistols_and_smgs_pick_up_increase",
+				category = "player"
+			}
+		}
+		self.definitions.player_pistol_eqipped_move_speed_bonus = {
+			name_id = "menu_player_pistol_eqipped_move_speed_bonus",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "pistol_eqipped_move_speed_bonus",
+				category = "player"
+			}
+		}
+		self.definitions.player_pistol_eqipped_or_holstered_move_speed_bonus = {
+			name_id = "menu_pistol_eqipped_or_holstered_move_speed_bonus",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "pistol_eqipped_or_holstered_move_speed_bonus",
 				category = "player"
 			}
 		}
@@ -2969,16 +3040,6 @@ Hooks:PostHook(UpgradesTweakData, "_pistol_definitions", "Gilza_skill_definition
 			category = "pistol"
 		}
 	}
-	-- new ACED tier 1 upgrade
-	self.definitions.pistol_swap_speed_multiplier_2 = {
-		name_id = "menu_pistol_swap_speed_multiplier_2",
-		category = "feature",
-		upgrade = {
-			value = 2,
-			upgrade = "swap_speed_multiplier",
-			category = "pistol"
-		}
-	}
 	-- new trigger happy buff
 	self.definitions.pistol_trigger_happpy_rof_increase = {
 		name_id = "menu_pistol_trigger_happpy_rof_increase",
@@ -2986,6 +3047,26 @@ Hooks:PostHook(UpgradesTweakData, "_pistol_definitions", "Gilza_skill_definition
 		upgrade = {
 			value = 1,
 			upgrade = "trigger_happpy_rof_increase",
+			category = "pistol"
+		}
+	}
+	-- new ads speed
+	self.definitions.pistol_enter_steelsight_speed_multiplier = {
+		name_id = "menu_pistol_enter_steelsight_speed_multiplier",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "enter_steelsight_speed_multiplier",
+			category = "pistol"
+		}
+	}
+	-- offhand reload
+	self.definitions.pistol_reloads_primary_offhand = {
+		name_id = "menu_pistol_reloads_primary_offhand",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "reloads_primary_offhand",
 			category = "pistol"
 		}
 	}

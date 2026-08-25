@@ -46,6 +46,7 @@ _G.Gilza = {
 		vhud_compat_new_trigger_happy = true,
 		vhud_compat_new_sicario = true,
 		vhud_compat_new_aced_running_from_death = true,
+		vhud_compat_offhand_reload = true,
 	},
 	grenade_multipliers = {
 		dada_com = 33,
@@ -151,14 +152,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.8 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.81 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.8 Changelog:\n\nAmmo economy shake up! A few skill reworks are also here. Things of note:\n- Made ammo economy easier by increasing ammo pickup across all weapons.\n- Reworks for \"Graze\" and \"Lock n Load\" skills\n- Adjustments to skills: \"Shotgun Expert\", \"Body Expertise\", \"Bloodthirst\"\n- Minor rework of \"Ex-President\" perk\n- Adjustments to perks: \"Rogue\", \"Hacker\", \"Grinder\", \"Anarchist\", \"Speed Junkie\", \"Brawler\"\n- Weapon tweaks, addition of new AP kits for some SMGs, shotgun ammunition adjustments"
+			local message = "2.8.1 Changelog:\n\n- Updated maximum damage resistance rules, especially for DW and lower difficulties.\n- Reworked \"Heavy Impact\" skill.\n- Improved \"Lock N' Load\" skill.\n- Buffed Sicario's \"Twitch\" card cooldowns.\n- Pistols now have more total ammo and higher base ROF to make them more usable without skills. Some pistol specific skills were compensated for this change.\n- A few additional changes to some weapon categories and their damage classes.\n- VHUD+ compatibility fixes."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.8
+			Gilza.settings.version = 2.81
 			Gilza.Save()
 		end
 	end)

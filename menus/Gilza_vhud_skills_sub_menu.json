@@ -173,6 +173,15 @@
 		},
 		{
 			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_offhand_reload",
+			"title" : "Gilza_vhud_compat_offhand_reload",
+			"description" : "Gilza_vhud_compat_offhand_reload_desc",
+			"callback" : "Gilza_vhud_compat_offhand_reload",
+			"value" : "vhud_compat_offhand_reload",
+			"default_value" : true
+		},
+		{
+			"type" : "toggle",
 			"id" : "Gilza_vhud_compat_new_trigger_happy",
 			"title" : "Gilza_vhud_compat_new_trigger_happy",
 			"description" : "Gilza_vhud_compat_new_trigger_happy_desc",

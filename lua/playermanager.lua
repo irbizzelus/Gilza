@@ -1,30 +1,39 @@
 -- made dmg resistance additive instead of multiplicative. to avoid god mode, max dmg resist is capped
 Hooks:OverrideFunction(PlayerManager, "damage_reduction_skill_multiplier", function (self, damage_type)
+	
 	local multiplier = 1
-	multiplier = multiplier - (1 - self:temporary_upgrade_value("temporary", "dmg_dampener_outnumbered", 1))
-	multiplier = multiplier - (1 - self:temporary_upgrade_value("temporary", "dmg_dampener_outnumbered_strong", 1))
-	multiplier = multiplier - (1 - self:temporary_upgrade_value("temporary", "dmg_dampener_close_contact", 1))
-	multiplier = multiplier - (1 - self:temporary_upgrade_value("temporary", "revived_damage_resist", 1))
-	multiplier = multiplier - (1 - self:upgrade_value("player", "damage_dampener", 1))
-	multiplier = multiplier - (1 - self:upgrade_value("player", "health_damage_reduction", 1))
-	multiplier = multiplier - (1 - self:temporary_upgrade_value("temporary", "first_aid_damage_reduction", 1))
-	multiplier = multiplier - (1 - self:temporary_upgrade_value("temporary", "revive_damage_reduction", 1))
-	multiplier = multiplier - (1 - self:get_hostage_bonus_multiplier("damage_dampener"))
-	multiplier = multiplier - (1 - self._properties:get_property("revive_damage_reduction", 1))
-	multiplier = multiplier - (1 - self._temporary_properties:get_property("revived_damage_reduction", 1))
-	local dmg_red_mul = self:team_upgrade_value("damage_dampener", "team_damage_reduction", 1)
-
+	local highest_singular_source = 0
+	
+	local function reduce_mul_by(reduction)
+		multiplier = multiplier - reduction
+		if reduction > highest_singular_source then
+			highest_singular_source = reduction
+		end
+	end
+	
+	reduce_mul_by(1 - self:temporary_upgrade_value("temporary", "dmg_dampener_outnumbered", 1))
+	reduce_mul_by(1 - self:temporary_upgrade_value("temporary", "dmg_dampener_outnumbered_strong", 1))
+	reduce_mul_by(1 - self:temporary_upgrade_value("temporary", "dmg_dampener_close_contact", 1))
+	reduce_mul_by(1 - self:temporary_upgrade_value("temporary", "revived_damage_resist", 1))
+	reduce_mul_by(1 - self:upgrade_value("player", "damage_dampener", 1))
+	reduce_mul_by(1 - self:upgrade_value("player", "health_damage_reduction", 1))
+	reduce_mul_by(1 - self:temporary_upgrade_value("temporary", "first_aid_damage_reduction", 1))
+	reduce_mul_by(1 - self:temporary_upgrade_value("temporary", "revive_damage_reduction", 1))
+	reduce_mul_by(1 - self:get_hostage_bonus_multiplier("damage_dampener"))
+	reduce_mul_by(1 - self._properties:get_property("revive_damage_reduction", 1))
+	reduce_mul_by(1 - self._temporary_properties:get_property("revived_damage_reduction", 1))
+	
 	-- 2 slow and steady buffs
 	if managers.network:session():local_peer():unit():movement()._current_state._moving == false or managers.player:current_state() == "bipod" then
-		multiplier = multiplier - (1 - managers.player:upgrade_value("player", "not_moving_damage_reduction_bonus", 1))
+		reduce_mul_by(1 - managers.player:upgrade_value("player", "not_moving_damage_reduction_bonus", 1))
 	end
 	if managers.player:current_state() == "bipod" then
-		multiplier = multiplier - (1 - managers.player:upgrade_value("player", "not_moving_damage_reduction_bonus_bipoded", 1))
+		reduce_mul_by(1 - managers.player:upgrade_value("player", "not_moving_damage_reduction_bonus_bipoded", 1))
 	end
 	
 	-- new technician skill
 	if self:Gilza_is_close_to_sentry_gun() then
-		multiplier = multiplier - (1 - managers.player:upgrade_value("player", "sentry_proximity_damage_resist", 1))
+		reduce_mul_by(1 - managers.player:upgrade_value("player", "sentry_proximity_damage_resist", 1))
 	end
 	
 	if damage_type == "bullet" then
@@ -36,7 +45,7 @@ Hooks:OverrideFunction(PlayerManager, "damage_reduction_skill_multiplier", funct
 				if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
 					yakuza_bhind_resist = yakuza_bhind_resist * 2
 				end
-				multiplier = multiplier - (1 - self:upgrade_value("player", "yakuza_behind_player_resist", 1)) * yakuza_bhind_resist
+				reduce_mul_by(1 - self:upgrade_value("player", "yakuza_behind_player_resist", 1) * yakuza_bhind_resist)
 			end
 			self._last_damage_taken_direction = 69
 		end
@@ -44,7 +53,7 @@ Hooks:OverrideFunction(PlayerManager, "damage_reduction_skill_multiplier", funct
 		-- brawler's melee hold dr
 		if managers.player:has_category_upgrade("player", "damage_resist_brawler") then
 			if managers.player:player_unit():character_damage():get_real_armor() > 0 and self:get_current_state():_is_meleeing() then
-				multiplier = multiplier - (1 - managers.player:upgrade_value("player", "damage_resist_brawler", 1))
+				reduce_mul_by(1 - managers.player:upgrade_value("player", "damage_resist_brawler", 1))
 			end
 		end
 		
@@ -66,36 +75,14 @@ Hooks:OverrideFunction(PlayerManager, "damage_reduction_skill_multiplier", funct
 					brawler_resist = brawler_resist * self._gilza_brawler_teammates_nearby
 					
 					if brawler_resist > 0 then
-						multiplier = multiplier - brawler_resist
-					end
-				end
-			end
-		end
-		
-		-- brawler legacy, distance based
-		if managers.player:has_category_upgrade("player", "damage_resist_faraway_brawler") then
-			local att_unit = alive(Gilza.latest_bullet_attacker_unit) and Gilza.latest_bullet_attacker_unit
-			if ( managers.player:player_unit():character_damage():_max_health() / managers.player:player_unit():character_damage():get_real_health() ) >= 2 and managers.player:player_unit():character_damage():get_real_armor() > 0 then
-				if managers.player:player_unit():camera() and managers.player:player_unit():camera():position() and att_unit and att_unit:position() then
-					local dist = mvector3.distance(managers.player:player_unit():camera():position(), att_unit:position())
-					local diff_mul = 1
-					if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty ~= "sm_wish" then
-						diff_mul = 0.5
-					end
-					if dist and dist <= 1800 then
-						multiplier = multiplier - 0.08 * diff_mul
-					end
-					if dist and dist <= 1000 then
-						multiplier = multiplier - 0.1 * diff_mul
-					end
-					if dist and dist <= 500 then
-						multiplier = multiplier - 0.14 * diff_mul
+						reduce_mul_by(brawler_resist)
 					end
 				end
 			end
 		end
 	end
 
+	local dmg_red_mul = self:team_upgrade_value("damage_dampener", "team_damage_reduction", 1)
 	if self:has_category_upgrade("player", "passive_damage_reduction") then
 		local health_ratio = self:player_unit():character_damage():health_ratio()
 		local min_ratio = self:upgrade_value("player", "passive_damage_reduction")
@@ -105,19 +92,30 @@ Hooks:OverrideFunction(PlayerManager, "damage_reduction_skill_multiplier", funct
 		end
 	end
 	
-	multiplier = multiplier - (1 - dmg_red_mul)
+	reduce_mul_by(1 - dmg_red_mul)
 
 	if damage_type == "melee" then
-		multiplier = multiplier - (1 - managers.player:upgrade_value("player", "melee_damage_dampener", 1))
+		reduce_mul_by(1 - managers.player:upgrade_value("player", "melee_damage_dampener", 1))
 	end
 
 	local current_state = self:get_current_state()
 
 	if current_state and current_state:_interacting() then
-		multiplier = multiplier - (1 - managers.player:upgrade_value("player", "interacting_damage_multiplier", 1))
+		reduce_mul_by(1 - managers.player:upgrade_value("player", "interacting_damage_multiplier", 1))
 	end
 	
-	return math.round(math.clamp(multiplier, 0.2, 1) * 1000) / 1000 -- no idea why math.clamp has floating point errors, but it does.
+	local max_resist = 0.4
+	if Global.game_settings and Global.game_settings.difficulty and Global.game_settings.difficulty == "sm_wish" then
+		max_resist = 0.25
+	end
+	
+	-- if a single upgrade is higher than max allowed DR, allow it to be used as new ceiling (should only really affect the painkillers aced effect, and not much else)
+	if (1-highest_singular_source) <= max_resist then
+		return 1-highest_singular_source
+	else
+		return math.round(math.clamp(multiplier, max_resist, 1) * 1000) / 1000 -- no idea why math.clamp has floating point errors, but it does.
+	end
+	
 end)
 
 -- new speed bonuses
@@ -138,6 +136,24 @@ Hooks:OverrideFunction(PlayerManager, "movement_speed_multiplier", function (sel
 		if max_armor and cur_armor then
 			local addin = skill_max_value - (skill_max_value * (cur_armor / max_armor))
 			multiplier = multiplier + addin
+		end
+	end
+	
+	-- pistol wielding skill
+	if self:has_category_upgrade("player", "pistol_eqipped_move_speed_bonus") and self:player_unit() and alive(self:player_unit()) then
+		local active_at_all_times = self:has_category_upgrade("player", "pistol_eqipped_or_holstered_move_speed_bonus")
+		local pistol_eqipped = false
+		local pistol_eqipped_now = false
+		for i, weapon in pairs(self:player_unit():inventory():available_selections()) do
+			if weapon.unit:base():is_category("pistol") then
+				pistol_eqipped = true
+				if self:equipped_weapon_unit() == weapon.unit then
+					pistol_eqipped_now = true
+				end
+			end
+		end
+		if (active_at_all_times and pistol_eqipped) or pistol_eqipped_now then
+			multiplier = multiplier + self:upgrade_value("player", "pistol_eqipped_move_speed_bonus", 0)
 		end
 	end
 	
@@ -242,8 +258,9 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 		local shotgun_panic_on_kill = self:has_category_upgrade("shotgun", "panic_when_kill")
 		if shotgun_panic_on_kill and variant ~= "melee" then
 			local equipped_unit = self:get_current_state()._equipped_unit:base()
+			local held_weapon = weapon_id == equipped_unit.name_id
 			-- only for shotguns with threat of 35 and above (idk where the extra 0.2 comes from yet)
-			if equipped_unit:is_category("shotgun") and equipped_unit._suppression >= 3.7 then
+			if held_weapon and equipped_unit:is_category("shotgun") and equipped_unit._suppression >= 3.7 then
 				local pos = player_unit:position()
 				local skill = self:upgrade_value("shotgun", "panic_when_kill")
 
@@ -292,10 +309,16 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 		
 		-- reworked "shock and awe" which is a skill named lock'n load
 		if self:has_category_upgrade("player", "automatic_faster_reload") then
-			self._num_SHOCK_AND_AWE_kills = (self._num_SHOCK_AND_AWE_kills or 0) + 1
-			
-			if self._num_SHOCK_AND_AWE_kills == self._SHOCK_AND_AWE_TARGET_KILLS then
-				self:_on_enter_shock_and_awe_event_Gilza()
+			local equipped_unit = self:get_current_state()._equipped_unit:base()
+			local held_weapon = weapon_id == equipped_unit.name_id
+			local selection_index = equipped_unit and equipped_unit and equipped_unit:selection_index() or nil
+			if held_weapon and selection_index and (selection_index == 1 or selection_index == 2) then
+				if equipped_unit:is_category("flamethrower") or ((equipped_unit:fire_mode() == "auto" or equipped_unit:fire_mode() == "burst") and equipped_unit:is_category("smg", "lmg", "assault_rifle", "minigun")) then
+					self._num_SHOCK_AND_AWE_kills[selection_index] = self._num_SHOCK_AND_AWE_kills[selection_index] + 1
+					if self._num_SHOCK_AND_AWE_kills[selection_index] >= self._SHOCK_AND_AWE_TARGET_KILLS then
+						self:_on_enter_shock_and_awe_event_Gilza()
+					end
+				end
 			end
 		end
 		
@@ -760,17 +783,21 @@ function PlayerManager:_on_enter_shock_and_awe_event_Gilza()
 	if not self._coroutine_mgr:is_running("automatic_faster_reload") then
 		local equipped_unit = self:get_current_state()._equipped_unit
 		local data = self:upgrade_value("player", "automatic_faster_reload", nil)
-		local is_grenade_launcher = equipped_unit:base():is_category("grenade_launcher")
-
-		if data and equipped_unit and not is_grenade_launcher and (equipped_unit:base():fire_mode() == "auto" or equipped_unit:base():fire_mode() == "burst" or equipped_unit:base():is_category("minigun", "flamethrower")) then
+		local selection_index = equipped_unit:base():selection_index() or nil
+		if not (selection_index == 1 or selection_index == 2) then
+			return
+		end
+		if data and equipped_unit and (equipped_unit:base():is_category("flamethrower") or ((equipped_unit:base():fire_mode() == "auto" or equipped_unit:base():fire_mode() == "burst") and equipped_unit:base():is_category("smg", "lmg", "assault_rifle", "minigun"))) then
 			self._coroutine_mgr:add_and_run_coroutine("automatic_faster_reload", PlayerAction.ShockAndAwe, self, data.target_enemies, data.max_reload_increase, data.min_reload_increase, data.penalty, data.min_bullets, equipped_unit)
 			-- INFOHUD UI
 			Gilza.NSI:new_lock_n_load_status(true)
 			local reload_multiplier = data.min_reload_increase
-			reload_multiplier = reload_multiplier + self._num_SHOCK_AND_AWE_bullets_fired * data.penalty
+			reload_multiplier = reload_multiplier + self._num_SHOCK_AND_AWE_bullets_fired[selection_index] * data.penalty
 			reload_multiplier = math.clamp(reload_multiplier,data.min_reload_increase,data.max_reload_increase)
 			Gilza.NSI:new_lock_n_load_buff_update(reload_multiplier)
 		end
+	else
+		Gilza.NSI:new_lock_n_load_status(true)
 	end
 end
 
@@ -786,6 +813,8 @@ Hooks:PostHook(PlayerManager, "_setup", "Gilza_PlayerManager_post_setup", functi
 		val = skill.target_enemies
 	end
 	self._SHOCK_AND_AWE_TARGET_KILLS = val or 5 -- but still default to our new value
+	self._num_SHOCK_AND_AWE_kills = {[1] = 0,[2] = 0}
+	self._num_SHOCK_AND_AWE_bullets_fired = {[1] = 0,[2] = 0}
 	self._Gilza_menace_kill_tracker = 0 -- murderhobo from stockholm syndrome
 end)
 
@@ -891,16 +920,20 @@ Hooks:PostHook(PlayerManager, "check_skills", "Gilza_posthook_pm_check_skills", 
 			end
 			
 			local is_player_weapon = weapon_unit == managers.player:equipped_weapon_unit()
-			local is_grenade_launcher = weapon_unit:base():is_category("grenade_launcher")
 			
-			if is_player_weapon and not is_grenade_launcher and (weapon_unit:base():fire_mode() == "auto" or weapon_unit:base():fire_mode() == "burst" or weapon_unit:base():is_category("minigun", "flamethrower")) then
-				self._num_SHOCK_AND_AWE_bullets_fired = (self._num_SHOCK_AND_AWE_bullets_fired or 0) + 1
+			local selection_index = weapon_unit:base():selection_index() or nil
+			if not (selection_index == 1 or selection_index == 2) then
+				return
+			end
+			
+			if is_player_weapon and (weapon_unit:base():is_category("flamethrower") or ((weapon_unit:base():fire_mode() == "auto" or weapon_unit:base():fire_mode() == "burst") and weapon_unit:base():is_category("smg", "lmg", "assault_rifle", "minigun"))) then
+				self._num_SHOCK_AND_AWE_bullets_fired[selection_index] = self._num_SHOCK_AND_AWE_bullets_fired[selection_index] + 1
 				
 				if self._coroutine_mgr:is_running("automatic_faster_reload") then
 					local upg_values = self:upgrade_value("player", "automatic_faster_reload", nil)
 					if upg_values ~= nil then
 						local reload_multiplier = upg_values.min_reload_increase
-						reload_multiplier = reload_multiplier + self._num_SHOCK_AND_AWE_bullets_fired * upg_values.penalty
+						reload_multiplier = reload_multiplier + self._num_SHOCK_AND_AWE_bullets_fired[selection_index] * upg_values.penalty
 						reload_multiplier = math.clamp(reload_multiplier,upg_values.min_reload_increase,upg_values.max_reload_increase)
 						Gilza.NSI:new_lock_n_load_buff_update(reload_multiplier)
 					end
@@ -911,14 +944,50 @@ Hooks:PostHook(PlayerManager, "check_skills", "Gilza_posthook_pm_check_skills", 
 		end
 		
 		local function on_switch_weapon()
-			self._num_SHOCK_AND_AWE_bullets_fired = 0
-			self._num_SHOCK_AND_AWE_kills = 0
+			local equipped_unit = self:get_current_state()._equipped_unit
+			local selection_index = equipped_unit:base():selection_index() or nil
+			if not (selection_index == 1 or selection_index == 2) then
+				return
+			end
+			local index_to_check = 1
+			if selection_index == 1 then
+				index_to_check = 2
+			end
+			for i, weapon in pairs(self:player_unit():inventory():available_selections()) do
+				if weapon.unit:base():selection_index() == index_to_check then
+					local equipped_unit = weapon.unit
+					if equipped_unit and (equipped_unit:base():is_category("flamethrower") or ((equipped_unit:base():fire_mode() == "auto" or equipped_unit:base():fire_mode() == "burst") and equipped_unit:base():is_category("smg", "lmg", "assault_rifle", "minigun"))) then
+						if self._num_SHOCK_AND_AWE_kills[index_to_check] >= self._SHOCK_AND_AWE_TARGET_KILLS then
+							local data = self:upgrade_value("player", "automatic_faster_reload", nil)
+							if data and not self._coroutine_mgr:is_running("automatic_faster_reload") then
+								self._coroutine_mgr:add_and_run_coroutine("automatic_faster_reload", PlayerAction.ShockAndAwe, self, data.target_enemies, data.max_reload_increase, data.min_reload_increase, data.penalty, data.min_bullets, equipped_unit)
+							end
+							-- INFOHUD UI
+							Gilza.NSI:new_lock_n_load_status(true)
+							local reload_multiplier = data.min_reload_increase
+							reload_multiplier = reload_multiplier + self._num_SHOCK_AND_AWE_bullets_fired[index_to_check] * data.penalty
+							reload_multiplier = math.clamp(reload_multiplier,data.min_reload_increase,data.max_reload_increase)
+							Gilza.NSI:new_lock_n_load_buff_update(reload_multiplier)
+						else
+							Gilza.NSI:new_lock_n_load_status(false)
+						end
+					else
+						Gilza.NSI:new_lock_n_load_status(false)
+					end
+				end
+			end
 		end
 		
 		local function on_weapon_reload()
-			if not self._coroutine_mgr:is_running("automatic_faster_reload") then
-				self._num_SHOCK_AND_AWE_bullets_fired = 0
-				self._num_SHOCK_AND_AWE_kills = 0
+			local equipped_unit = self:get_current_state()._equipped_unit
+			local selection_index = equipped_unit:base():selection_index() or nil
+			if not (selection_index == 1 or selection_index == 2) then
+				return
+			end
+			if self._num_SHOCK_AND_AWE_kills[selection_index] > 0 and self._num_SHOCK_AND_AWE_kills[selection_index] < self._SHOCK_AND_AWE_TARGET_KILLS then
+				self._num_SHOCK_AND_AWE_bullets_fired[selection_index] = 0
+				self._num_SHOCK_AND_AWE_kills[selection_index] = 0
+				Gilza.NSI:new_lock_n_load_status(false)
 			end
 		end
 		

@@ -758,6 +758,9 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 		self.skills.steady_grip[1].upgrades = { "player_stability_increase_bonus_3" }
 		self.skills.steady_grip[2].upgrades = { "player_stability_increase_bonus_4" }
 		
+		self.skills.heavy_impact[1].upgrades = { "player_aoe_knock_down_on_enemy_hit_1" }
+		self.skills.heavy_impact[2].upgrades = { "player_aoe_knock_down_on_enemy_hit_2", "player_cloaker_knock_down_on_bullet_hit" }
+		
 		self.skills.fire_control[1].upgrades = { "player_hipfire_less_recoil" }
 		self.skills.fire_control[2].upgrades = { "player_hipfire_no_accuracy_penalty" }
 		
@@ -799,10 +802,11 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 		self.skills.silence_expert[2].upgrades = {"weapon_silencer_spread_index_addend", "weapon_silencer_armor_piercing_chance_2"}
 		
 		---- FUGITIVE
-		self.skills.equilibrium[2].upgrades = {"pistol_swap_speed_multiplier_2", "pistol_spread_index_addend"}
+		self.skills.equilibrium[1].upgrades = {"pistol_swap_speed_multiplier", "player_pistol_eqipped_move_speed_bonus"}
+		self.skills.equilibrium[2].upgrades = {"player_pistol_eqipped_or_holstered_move_speed_bonus", "pistol_spread_index_addend", "pistol_enter_steelsight_speed_multiplier"}
 		
-		self.skills.dance_instructor[1].upgrades = {"pistol_fire_rate_multiplier"}
-		self.skills.dance_instructor[2].upgrades = {"pistol_reload_speed_multiplier"}
+		self.skills.dance_instructor[1].upgrades = {"pistol_reload_speed_multiplier"}
+		self.skills.dance_instructor[2].upgrades = {"pistol_reloads_primary_offhand"}
 		self.skills.dance_instructor.icon_xy = {0,9}
 		
 		self.skills.gun_fighter[1].upgrades = {"pistol_stacked_accuracy_bonus_1"}

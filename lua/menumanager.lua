@@ -501,6 +501,14 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		Gilza:Save()
 	end
 	
+	MenuCallbackHandler.Gilza_vhud_compat_offhand_reload = function(this, item)
+		Gilza.settings.vhud_compat_offhand_reload = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("offhand_reload_duration", Gilza.settings.vhud_compat_offhand_reload)
+		end
+		Gilza:Save()
+	end
+	
 	MenuCallbackHandler.Gilza_vhud_compat_total_dmg_resist = function(this, item)
 		Gilza.settings.vhud_compat_total_dmg_resist = item:value() == 'on'
 		if managers.hud and managers.hud.change_bufflist_setting then
