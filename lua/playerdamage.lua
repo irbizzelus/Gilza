@@ -250,6 +250,10 @@ Hooks:PreHook(PlayerDamage, "damage_explosion", "Gilza_pre_player_damage_explosi
 	if managers.player:has_category_upgrade("player", "guardian_area_passive") then
 		attack_data.damage = self:Gilza_calculate_guardian_damage_clamp(attack_data.damage)
 	end
+	-- leech is using grace mechanic for it's invlun which does not apply to damage_explosion, so this should make it work now
+	if attack_data.damage and self:_chk_dmg_too_soon(attack_data.damage) and managers.player:has_activate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss") then
+		attack_data.damage = 0
+	end
 end)
 
 Hooks:PreHook(PlayerDamage, "damage_fire", "Gilza_pre_player_damage_fire", function(self, attack_data)
@@ -268,6 +272,11 @@ end)
 PlayerDamage._Gilza_WasCounterAttacking = false -- if we counterattacked, we reset chainsaw damage effect in a posthook for damage_melee func
 Hooks:PreHook(PlayerDamage, "damage_melee", "Gilza_pre_player_damage_melee", function(self, attack_data)
 	
+	-- leech is using grace mechanic for it's invlun which does not apply to damage_melee, so this should make it work now
+	if attack_data.damage and self:_chk_dmg_too_soon(attack_data.damage) and managers.player:has_activate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss") then
+		attack_data.damage = 0
+	end
+	
 	-- on dmg taken add brawler instance
 	if managers.player:has_category_upgrade("player", "extra_ammo_cut") then
 		managers.player.brawler_damage_taken_instance = (managers.player.brawler_damage_taken_instance or 0) + 1
@@ -283,7 +292,7 @@ Hooks:PreHook(PlayerDamage, "damage_melee", "Gilza_pre_player_damage_melee", fun
 		attack_data.damage = self:Gilza_calculate_guardian_damage_clamp(attack_data.damage)
 	end
 	
-	-- mostly based on default melee attack code. counterstrike attack deals damage, when aced.
+	-- mostly based on default melee attack code. counterstrike attack deals damage, doubled if aced.
 	local can_counter_strike = managers.player:has_category_upgrade("player", "counter_strike_melee")
 	if can_counter_strike and self._unit:movement():current_state().in_melee and self._unit:movement():current_state():in_melee() then
 		self._Gilza_WasCounterAttacking = true
@@ -430,38 +439,6 @@ Hooks:PreHook(PlayerDamage, "damage_melee", "Gilza_pre_player_damage_melee", fun
 	else
 		self._Gilza_WasCounterAttacking = false
 	end
-end)
-
--- interupt melee hold after a counterattack, to specifically stop chainsaw damage
--- this also causes all melees to almost instantly get unequiped. i deem this a feature and not a bug, since it's actually sometimes helpful. lazyness lead development.
-Hooks:PostHook(PlayerDamage, "damage_melee", "Gilza_post_player_damage_melee", function(self, attack_data)
-	if self._Gilza_WasCounterAttacking then
-		self._unit:movement():current_state():_interupt_action_melee(managers.player:player_timer():time())
-	end
-end)
-
--- apply swan song speed boost if a human player is downed at moment of swang song activation. TODO: add checks for friendly AI as well
-Hooks:PostHook(PlayerDamage, "_on_enter_swansong_event", "Gilza_post_PlayerDamage_on_enter_swansong_event", function(self)
-	
-	if not managers.network or not managers.network:session() or not managers.network:session().peers then
-		return
-	end
-	
-	for _, peer in pairs(managers.network:session():peers()) do
-		if peer then
-			local player_unit = peer and peer:unit() or nil
-			if player_unit and alive(player_unit) then
-				if player_unit:interaction():active() and player_unit:movement():need_revive() then
-					tweak_data.upgrades.berserker_movement_speed_multiplier = 1
-					DelayedCalls:Add("Gilza_reset_swan_song_speed", 3, function()
-						tweak_data.upgrades.berserker_movement_speed_multiplier = 0.4
-					end)
-					break
-				end
-			end
-		end
-	end
-	
 end)
 
 -- add armor on dodge from new skill and a bunch of UI stuff
@@ -726,8 +703,8 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_post_PlayerDamage_init", function(se
 			local skill = managers.player:upgrade_value("player", "aoe_knock_down_on_enemy_hit", nil)
 			if skill and type(skill) == "table" and damage_info and damage_info.col_ray and damage_info.col_ray.unit and alive(damage_info.col_ray.unit) then
 				
-				-- dmg type check
-				if not (damage_info and damage_info.result and damage_info.result.variant == "bullet") then
+				-- bullet dmg type check, if electric bullets are active allow it as well
+				if not ((damage_info and damage_info.result and damage_info.result.variant == "bullet") or damage_info.bullet_taze) then
 					return
 				end
 				
@@ -836,21 +813,7 @@ end)
 local gilza_orig_timer_to_max = Hooks:GetFunction(PlayerDamage, "set_regenerate_timer_to_max")
 Hooks:OverrideFunction(PlayerDamage, "set_regenerate_timer_to_max", function (self)
 	local is_regenrating_armor = self._current_state and self._update_regenerate_timer and self._current_state == self._update_regenerate_timer
-	-- deprecated hitman rework
-	if managers.player:has_category_upgrade("temporary", "player_new_hitman_regen") and is_regenrating_armor then
-		local mul = managers.player:body_armor_regen_multiplier(alive(self._unit) and self._unit:movement():current_state()._moving, self:health_ratio())
-		local default_regen_timer = tweak_data.player.damage.REGENERATE_TIME * mul * managers.player:upgrade_value("player", "armor_regen_time_mul", 1)
-		-- first value of this skill is a % value of the default regen timer. this makes all armors have unique freeze time for their recovery
-		local skill_freeze_time = default_regen_timer * tweak_data.upgrades.values.temporary.player_new_hitman_regen[1][1]
-		-- if freeze timer would make total armor regen timer longer, ignore it
-		if default_regen_timer < self._regenerate_timer + skill_freeze_time then
-			gilza_orig_timer_to_max(self)
-			return
-		end
-		-- adjust skill's duration value before enabling it. while buff is active armor regen is frozen
-		tweak_data.upgrades.values.temporary.player_new_hitman_regen[1][2] = skill_freeze_time
-		managers.player:activate_temporary_upgrade("temporary", "player_new_hitman_regen")
-	elseif managers.player:has_category_upgrade("player", "yakuza_suppression_resist") then
+	if managers.player:has_category_upgrade("player", "yakuza_suppression_resist") then
 		-- if we have the new supression resist skill from yakuza, make supression delay 0. this completely removes the supression armor delay effect
 		if tweak_data.player.suppression.decay_start_delay ~= 0 then
 			tweak_data.player.suppression.decay_start_delay = 0
@@ -895,14 +858,10 @@ Hooks:OverrideFunction(PlayerDamage, "set_regenerate_timer_to_max", function (se
 	end
 end)
 
--- armor recovery progress
+-- junkie armor recovery progress reset if moving
 local gilza_orig_update_regenerate_timer = Hooks:GetFunction(PlayerDamage, "_update_regenerate_timer")
 Hooks:OverrideFunction(PlayerDamage, "_update_regenerate_timer", function (self, t, dt)
-	-- DEPRECATED: while new skill upgrade is active regen timer updates it's value to itself instead of reducing it, effectively freezing the timer
-	if managers.player:has_activate_temporary_upgrade("temporary", "player_new_hitman_regen") and self:get_real_armor() > 0 then
-		self._regenerate_timer = self._regenerate_timer
-	-- junkie
-	elseif managers.player:has_category_upgrade("player", "pause_armor_recovery_when_moving") and managers.player.local_player and alive(managers.player:local_player()) and managers.player:local_player().movement and managers.player:local_player():movement().current_state and managers.player:local_player():movement():current_state()._moving then
+	if managers.player:has_category_upgrade("player", "pause_armor_recovery_when_moving") and managers.player.local_player and alive(managers.player:local_player()) and managers.player:local_player().movement and managers.player:local_player():movement().current_state and managers.player:local_player():movement():current_state()._moving then
 		self:set_regenerate_timer_to_max()
 	else
 		gilza_orig_update_regenerate_timer(self, t, dt)
@@ -1233,7 +1192,7 @@ end)
 local gilza_orig_PlayerDamage_restore_health = Hooks:GetFunction(PlayerDamage, "restore_health")
 Hooks:OverrideFunction(PlayerDamage, "restore_health", function (self, health_restored, is_static, chk_health_ratio)
 	if managers.player:has_category_upgrade("player", "armor_regen_damage_health_ratio_multiplier") then
-		local has_health = managers.player:player_unit() and managers.player:player_unit():character_damage() and managers.player:player_unit():character_damage():get_real_health() > 0.01
+		local has_health = alive(self._unit) and self:get_real_health() > 0.01
 		if has_health and health_restored > 0 then
 			return false
 		else -- idk when and how this can happen, but why not
@@ -1268,8 +1227,8 @@ Hooks:OverrideFunction(PlayerDamage, "copr_update_attack_data", function (self, 
 	end
 end)
 
--- following few posthooks activate the leech invuln upgrade itself. need to be done this way to allow for these funcs to deal damage to player first, and only afterwards we get invuln
-Hooks:PostHook(PlayerDamage, "damage_melee", "Gilza_post_PlayerDamage_damage_melee_leech_invuln_activator", function(self, attack_data)
+-- activate leech invuln upgrade. needs to be activated after the dmg funcs to allow for these funcs to deal damage to player first, and only afterwards to proc invuln
+function PlayerDamage:copr_activate_gilza_invuln()
 	if self._Gilza_new_leech_invuln_activator and managers.player:has_inactivate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss") then
 		self._Gilza_new_leech_invuln_activator = false
 		managers.player:activate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss")
@@ -1277,36 +1236,32 @@ Hooks:PostHook(PlayerDamage, "damage_melee", "Gilza_post_PlayerDamage_damage_mel
 		self._next_allowed_dmg_t = Application:digest_value(managers.player:player_timer():time() + invuln_timer_dur, true)
 		self._last_received_dmg = self:_max_health() * 5
 	end
+end
+
+Hooks:PostHook(PlayerDamage, "damage_melee", "Gilza_post_player_damage_melee", function(self, attack_data)
+	-- interupt melee hold after a counterattack, to specifically stop chainsaw damage
+	-- this also causes all melees to almost instantly get unequiped. i deem this a feature and not a bug, since it's actually sometimes helpful. lazyness lead development.
+	if self._Gilza_WasCounterAttacking then
+		self._unit:movement():current_state():_interupt_action_melee(managers.player:player_timer():time())
+	end
+	
+	-- new leech
+	self:copr_activate_gilza_invuln()
 end)
 
 Hooks:PostHook(PlayerDamage, "damage_bullet", "Gilza_post_PlayerDamage_damage_bullet_leech_invuln_activator", function(self, attack_data)
-	if self._Gilza_new_leech_invuln_activator and managers.player:has_inactivate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss") then
-		self._Gilza_new_leech_invuln_activator = false
-		managers.player:activate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss")
-		local invuln_timer_dur = tweak_data.upgrades.values.temporary.copr_invuln_on_segment_loss[1][2]
-		self._next_allowed_dmg_t = Application:digest_value(managers.player:player_timer():time() + invuln_timer_dur, true)
-		self._last_received_dmg = self:_max_health() * 5
-	end
+	-- new leech
+	self:copr_activate_gilza_invuln()
 end)
 
 Hooks:PostHook(PlayerDamage, "damage_explosion", "Gilza_post_PlayerDamage_damage_explosion_leech_invuln_activator", function(self, attack_data)
-	if self._Gilza_new_leech_invuln_activator and managers.player:has_inactivate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss") then
-		self._Gilza_new_leech_invuln_activator = false
-		managers.player:activate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss")
-		local invuln_timer_dur = tweak_data.upgrades.values.temporary.copr_invuln_on_segment_loss[1][2]
-		self._next_allowed_dmg_t = Application:digest_value(managers.player:player_timer():time() + invuln_timer_dur, true)
-		self._last_received_dmg = self:_max_health() * 5
-	end
+	-- new leech
+	self:copr_activate_gilza_invuln()
 end)
 
 Hooks:PostHook(PlayerDamage, "damage_fire_hit", "Gilza_post_PlayerDamage_damage_fire_hit_leech_invuln_activator", function(self, attack_data)
-	if self._Gilza_new_leech_invuln_activator and managers.player:has_inactivate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss") then
-		self._Gilza_new_leech_invuln_activator = false
-		managers.player:activate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss")
-		local invuln_timer_dur = tweak_data.upgrades.values.temporary.copr_invuln_on_segment_loss[1][2]
-		self._next_allowed_dmg_t = Application:digest_value(managers.player:player_timer():time() + invuln_timer_dur, true)
-		self._last_received_dmg = self:_max_health() * 5
-	end
+	-- new leech
+	self:copr_activate_gilza_invuln()
 end)
 
 -- force leech cooldown after going down
@@ -1330,23 +1285,17 @@ Hooks:PostHook(PlayerDamage, "on_downed", "Gilza_post_PlayerDamage_on_downed", f
 	end
 end)
 
--- leech ampule end cleanup and heal
+-- leech ampule end cleanup
 Hooks:PostHook(PlayerDamage, "on_copr_ability_deactivated", "Gilza_post_PlayerDamage_on_copr_ability_deactivated", function(self)
-	if managers.player._Gilza_leech_did_revive_during_effect then -- this var is disabled in playermanager
-		self:restore_health(self:_max_health(), true, false)
-		self:restore_armor(self:_max_armor())
-		local secs = managers.player:upgrade_value("player", "copr_regain_cooldown_on_revives", 0)
-		if secs > 0 then
-			managers.player:speed_up_grenade_cooldown(secs)
-		end
-	end
 	self._gilza_leech_dire_state = false
 end)
 
 -- leech dire state tracker
 Hooks:PostHook(PlayerDamage, "update", "Gilza_post_player_dmg_update", function(self, unit, t, dt)
 	if managers.player:has_activate_temporary_upgrade("temporary", "copr_ability") then
-		local out_of_health = self:health_ratio() + 0.01 < managers.player:upgrade_value("player", "copr_static_damage_ratio", 0)
+		local health_ratio = math.round(self:health_ratio() * 10000) / 10000
+		local static_damage_ratio = math.round(managers.player:upgrade_value("player", "copr_static_damage_ratio", 0) * 10000) / 10000
+		local out_of_health = health_ratio < static_damage_ratio
 		if out_of_health and not managers.player:has_activate_temporary_upgrade("temporary", "copr_invuln_on_segment_loss") then
 			self._block_medkit_auto_revive = true
 			self._gilza_leech_dire_state = true

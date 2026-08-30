@@ -20,7 +20,10 @@ if Gilza.VHP_enabled then
 		local map_loaded = false
 		-- add our skills to vanila hud's buff list so that it stops screaming about unknown effects in the logs
 		if GameInfoManager and GameInfoManager._BUFFS and GameInfoManager._BUFFS.temporary then
-			GameInfoManager._BUFFS.temporary.player_new_hitman_regen = "player_new_hitman_regen" -- deprecated
+			-- fixed vhud+'s "bug" where copycat instant swap upgrade was never added to the list of existing temp upgrades. doesnt break anything, but it fills logs with errors, which is annoying.
+			GameInfoManager._BUFFS.temporary.intant_swap_to_primary = "intant_swap_to_primary"
+			GameInfoManager._BUFFS.temporary.intant_swap_to_secondary = "intant_swap_to_secondary"
+			-- gilza temp buffs
 			GameInfoManager._BUFFS.temporary.player_dodge_armor_regen = "player_dodge_armor_regen"
 			GameInfoManager._BUFFS.temporary.player_speed_junkie_armor_on_dodge = "player_speed_junkie_armor_on_dodge"
 			GameInfoManager._BUFFS.temporary.speed_boost_on_panic_kill = "speed_boost_on_panic_kill"

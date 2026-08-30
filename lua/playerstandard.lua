@@ -26,6 +26,16 @@ Hooks:OverrideFunction(PlayerStandard, "_check_action_equip", function (self, t,
 	return new_action
 end)
 
+-- fix a weapon swap explot which was allowing primaries to use ROF of secondaries and vice versa after a copycat instant swap. caused by order of operations error in _update_check_actions. prob not fixed because no one normally uses weapon swap keybind bcuz direct swap to primary/secondary keybinds exist
+local gilza_orig_PlayerStandard_check_change_weapon = PlayerStandard._check_change_weapon
+Hooks:OverrideFunction(PlayerStandard, "_check_change_weapon", function (self, ...)
+	local res = gilza_orig_PlayerStandard_check_change_weapon(self, ...)
+	if res then
+		self:_check_stop_shooting()
+	end
+	return res
+end)
+
 Hooks:PostHook(PlayerStandard, "enter", "Gilza_posthook_PlayerStandard_enter", function(self, state_data, enter_data)
 	managers.player._gilza_flag_bipod_redeploy_delay = Application:time() + (1.2 * (1 / managers.player:upgrade_value("player", "bipod_deploy_speed", 1)))
 end)

@@ -710,13 +710,6 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			Rogue_updates()
 			
 			local function Hitman_updates()
-				-- legacy upgrade that paused armor regen. not the worst idea, but just boring.
-				self.values.temporary.player_new_hitman_regen = {
-					{
-						0.25, -- % of the base recovery timer that is used for the actual duration
-						0.5, -- default duration
-					}
-				}
 				-- new "death dance" combo skill
 				self.values.temporary.death_dance_combo_invulnerability = {
 					{
@@ -2256,16 +2249,6 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 			Rogue_definitions()
 			
 			local function Hitman_definitions()
-				-- legacy
-				self.definitions.player_new_hitman_regen = {
-					name_id = "menu_player_new_hitman_regen",
-					category = "temporary",
-					upgrade = {
-						value = 1,
-						upgrade = "player_new_hitman_regen",
-						category = "temporary"
-					}
-				}
 				self.definitions.temporary_death_dance_combo_invulnerability = {
 					name_id = "menu_temporary_death_dance_combo_invulnerability",
 					category = "temporary",

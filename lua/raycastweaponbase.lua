@@ -404,8 +404,8 @@ Hooks:OverrideFunction(InstantBulletBase, "give_impact_damage", function (self, 
 	local is_target_tank = is_valid_target and hit_unit:character_damage()._char_tweak.access == "tank"
 	local is_target_winters = is_valid_target and hit_unit:base():char_tweak().Gilza_winters_tag
 	
-	-- remove saw's headshot damage for non-dozer enemies
-	if weapon_unit:base():is_category("saw") then
+	-- remove saw's headshot damage for non-dozer enemies if player doesnt use body expertise skill
+	if weapon_unit:base():is_category("saw") and managers.player:upgrade_value("weapon", "automatic_head_shot_add", "false") == "false" then
 		if is_valid_target and not is_target_tank then
 			local head = hit_unit:character_damage()._head_body_name and col_ray.body and col_ray.body:name() == hit_unit:character_damage()._ids_head_body_name
 			if not hit_unit:character_damage()._char_tweak.ignore_headshot and not hit_unit:character_damage()._damage_reduction_multiplier and head and hit_unit:character_damage()._char_tweak.headshot_dmg_mul then

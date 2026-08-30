@@ -117,6 +117,7 @@ Hooks:PostHook(ReviveInteractionExt, "interact", "Gilza_ReviveInteractionExt_int
 						end
 					end
 				end
+				-- first we delay peer heal by 1 second, and then wait until they report to us that they arent dead, afterwards send heal
 				DelayedCalls:Add("Gilza_leech_heal_teammate_after_revival_delayed", 1, function()
 					try_to_heal()
 				end)
@@ -125,7 +126,7 @@ Hooks:PostHook(ReviveInteractionExt, "interact", "Gilza_ReviveInteractionExt_int
 	end
 end)
 
--- leech heal block in dire state
+-- leech doc bag/fak heal block in dire state
 local gilza_orig_doc_bag_interaction_blocked = Hooks:GetFunction(DoctorBagBaseInteractionExt, "_interact_blocked")
 Hooks:OverrideFunction(DoctorBagBaseInteractionExt, "_interact_blocked", function (self, player)
 	if player:character_damage()._gilza_leech_dire_state then

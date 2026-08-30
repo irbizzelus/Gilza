@@ -572,7 +572,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					-- F2
 					menu_running_from_death_beta_desc = "BASIC: ##$basic;##\nYou reload and swap weapons ##100%## faster for ##30## seconds after being revived.\nYou move ##30%## faster for ##30## seconds after being revived.\n\nACE: ##$pro;##\nYou gain ##222%## dodge while sprinting for ##6.66## seconds after being revived.\n\nAll your weapons are instantly reloaded after being revived.",
 					menu_up_you_go_beta_desc = "BASIC: ##$basic##\nYou gain ##30%## damage resistance for ##20## seconds after being revived.\n\nACE: ##$pro##\nYou receive additional ##30%## of your maximum health when revived.",
-					menu_perseverance_beta_desc = "BASIC: ##$basic##\nInstead of getting downed instantly, you gain the ability to keep on fighting for ##4## seconds with a ##60%## movement penalty before going down.\nDoes not trigger on fall of fire damage.\n\nYour Swan Song speed penalty will be ignored for ##3## seconds, if at the moment of skill activation or at any point during it's duration, one of your crew members is downed.\n\nACE: ##$pro##\nIncreases Swan Song's duration to ##8## seconds.\n\nWhile the effect is active you now deal ##50%## more damage, and ammunition will be depleted directly from your total ammo reserve, instead of your magazine.\nBonus damage does not apply to Grenade and Rocket launchers.",
+					menu_perseverance_beta_desc = "BASIC: ##$basic##\nInstead of getting downed instantly, you gain the ability to keep on fighting for ##4## seconds with a ##60%## movement penalty before going down.\nDoes not trigger on fall of fire damage.\n\nMovement speed penalty is disabled while any of your crew members are downed.\n\nACE: ##$pro##\nIncreases Swan Song's duration to ##8## seconds.\n\nWhile the effect is active you now deal ##50%## more damage, and ammunition will be depleted directly from your total ammo reserve, instead of your magazine.\nBonus damage does not apply to Grenade and Rocket launchers.",
 					menu_pistol_beta_messiah_desc = "BASIC: ##$basic;##\nWhile in bleedout, you can revive yourself if you kill an enemy. You only have ##1## charge.\n\nYou gain near infinite health while in bleedout.\n\nACE: ##$pro;##\nYour messiah charge is replenished whenever you use a doctor bag.",
 					-- F3
 					menu_martial_arts_beta = "Tough Guy",
@@ -742,7 +742,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				LocalizationManager:add_localized_strings({
 					bm_w_welrod_desc = "This weapon is suppressed and can shoot through multiple enemies.",
 					bm_w_supernova_desc = "Alt-fire: gain 2.5x rate of fire, but 3x worse accuracy and 1.5x worse stability.",
-					bm_w_saw_desc = "Ammo pickups are disabled unless \"Saw Massacre\" skill is used. Does not deal bonus damage on headshots, except for Bulldozers.",
+					bm_w_saw_desc = "Ammo pickups disabled. Can only deal bonus headshot damage to Bulldozers.",
 					bm_w_peacemaker_desc = "Penetrates enemy body armor and can shoot through multiple enemies.",
 					bm_w_hailstorm_desc = "Can pierce through multiple enemies. Alt-fire-mode: charge up a volley of bullets with increased accuracy, capable of piercing through shields.",
 					bm_w_generic_weapon_with_enemy_ap = "Can pierce through multiple enemies.",
@@ -830,9 +830,11 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					-- playbonk offhand kniv
 					bm_wp_wpn_fps_offhandknif_Gilza_desc = "Increases melee damage and knockdown while using weapon butt. Also adds style points.\nStats:\n -Damage: 50\n -Knockdown: 400",
 					-- Frenchy's missing strings on some parts - no translations required
-					bm_wp_wpn_fps_upg_m_celerity = "\"Big Stick\" 30-round mag",
+					bm_wp_wpn_fps_upg_m_celerity = "Celerity X9 Magazine",
 					bm_wp_wpn_fps_upg_m_308dmmag = "Lightweight 30-round mag",
 					bm_menu_lower_receiver = "Lower Receiver",
+					bm_wp_wpn_fps_upg_m_103 = "AK-103 30-round magazine",
+					bm_wp_wpn_fps_upg_m_vityazpmag = "PMAG Style 33-round",
 					-- MW2022 S&W Model 500
 					bm_wp_wpn_fps_pis_swhiskey_am_snakeshot_desc = "Converts the weapon to fire 8 pellets and to count as a shotgun for purposes of skills. Ammo pickup rate adjusted to match said changes.",
 					bm_wp_wpn_fps_pis_swhiskey_am_piercing_desc = "Pierces through enemies, walls, body armor, and shields. Ammo pickup rate reduced by 40%.",
@@ -1472,7 +1474,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					-- F2
 					menu_running_from_death_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВы перезаряжаете и переключаетесь между оружием на ##100%## быстрее в течение ##30## секунд после того, как вас подняли.\nСкорость вашего передвижения увеличена на ##30%## в течение ##30## секунд после того, как вас подняли.\n\nПРО: ##$pro;##\nШанс уворота увеличен на ##222%## во время бега в течение ##6.66## секунд после того, как вас подняли.\n\nВсе ваши оружия будут автоматически перезаряжены после того, как вас подняли.",
 					menu_up_you_go_beta_desc = "БАЗОВЫЙ: ##$basic;##\nВы получаете ##30%## сопротивления урону в течение ##20## секунд после того, как вас подняли.\n\nПРО: ##$pro;##\nВы получаете дополнительные ##30%## от своего максимального здоровья когда вас подняли.",
-					menu_perseverance_beta_desc = "БАЗОВЫЙ: ##$basic##\nВместо того чтобы сразу упасть, вы сможете сражаться ещё ##4## секунды. Скорость передвижения при этом будет уменьшена на ##60%##.\nДанный навык не срабатывает при падении с высоты или если вы упали под воздействием огня.\n\nШтраф к скорости передвижения Лебединой Песни будет проигнорирован на ##3## секунды, если в момент активации навыка, или на протяжении его действия, ваш союзник упал.\n\nПРО: ##$pro##\nВремя действия навыка увеличено до ##8## секунд.\n\nВо время действия навыка ваш боезопас будет исчерпываться напрямую из вашего запаса, вместо магазина, а ваш урон будет увеличен на ##50%##.\nБонус к урону не распространяется на ракетометы и гранатомёты.",
+					menu_perseverance_beta_desc = "БАЗОВЫЙ: ##$basic##\nВместо того чтобы сразу упасть, вы сможете сражаться ещё ##4## секунды. Скорость передвижения при этом будет уменьшена на ##60%##.\nДанный навык не срабатывает при падении с высоты или если вы упали под воздействием огня.\n\nШтраф к скорости передвижения не накладывается если кто-то из ваших союзников лежит.\n\nПРО: ##$pro##\nВремя действия навыка увеличено до ##8## секунд.\n\nВо время действия навыка ваш боезопас будет исчерпываться напрямую из вашего запаса, вместо магазина, а ваш урон будет увеличен на ##50%##.\nБонус к урону не распространяется на ракетометы и гранатомёты.",
 					menu_pistol_beta_messiah_desc = "БАЗОВЫЙ: ##$basic;##\nВы самостоятельно подниметесь на ноги, если убьёте врага когда вы лежите. Навык срабатывает только ##1## раз.\n\nКогда вы лежите, вы имеете почти бесконечное здоровье.\n\nПРО: ##$pro;##\nВы сможете снова использовать навык, если воспользуетесь медицинской сумкой.",
 					-- F3
 					menu_martial_arts_beta = "КРЕПКИЙ ПАРЕНЬ",
@@ -1642,7 +1644,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				LocalizationManager:add_localized_strings({
 					bm_w_welrod_desc = "Оружие имеет глушитель и может стрелять сквозь несколько врагов.",
 					bm_w_supernova_desc = "Альтернативный режим: ускоряет скорострельность в 2.5x раза, ухудшая точность в 3x раза, а стабильность в 1.5x раза.",
-					bm_w_saw_desc = "Подбор боеприпасов недоступен без использования навыка \"Резня Пилой\". Не наносит бонусный урон при попадании в голову, за исключением Бульдозеров.",
+					bm_w_saw_desc = "Подбор боеприпасов недоступен. Наносит бонусный урон за попадание в голову только по Бульдозерам.",
 					bm_w_peacemaker_desc = "Пробивает нательную броню, и может стрелять сквозь несколько врагов.",
 					bm_w_hailstorm_desc = "Может пробить несколько врагов насквозь. Альтернативный режим стрельбы: заряжает залп пуль с увеличенной точностью, способный пробить щиты.",
 					bm_w_generic_weapon_with_enemy_ap = "Может пробить несколько врагов насквозь.",

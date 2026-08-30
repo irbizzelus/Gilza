@@ -178,11 +178,17 @@ Hooks:PostHook(PlayerMovement, "on_SPOOCed", "Gilza_PlayerMovement_on_SPOOCed_2"
 	end
 end)
 
--- update underdog and it's version activation trigger to a) always check for enemies and b) check for enemies in general instead of those attacking the player
+-- update underdog's activation trigger to a) constantly check for enemies and b) check for enemies within LOS instead of those that target the player
 Hooks:OverrideFunction(PlayerMovement, "_upd_underdog_skill", function (self, t)
 	local data = self._underdog_skill_data
-
-	if not data.has_dmg_dampener and not data.has_dmg_mul and not data.has_dmg_dampener_close or t < self._underdog_skill_data.chk_t or not managers.player:player_unit() then
+	
+	-- vanilla checks
+	if not data.has_dmg_dampener and not data.has_dmg_mul and not data.has_dmg_dampener_close or t < self._underdog_skill_data.chk_t then
+		return
+	end
+	
+	-- my checks
+	if not (self._unit and alive(self._unit) and self._unit:movement() and self._unit:movement():team()) then
 		return
 	end
 
@@ -191,44 +197,68 @@ Hooks:OverrideFunction(PlayerMovement, "_upd_underdog_skill", function (self, t)
 	local nr_guys = 0
 	local activated = nil
 	
-	-- check for enemies in radius of the player instead of checking for enemies that are currently hostile to player
 	local enemies = World:find_units_quick(self._unit, "sphere", my_pos, math.sqrt(data.max_dis_sq), managers.slot:get_mask("enemies"))
-	if not enemies or #enemies <= 0 then
+	if not (enemies and #enemies >= 1) then
 		return
 	end
 	
-	-- find all valid enemies within LOS
-	for i, enemy in pairs(enemies) do
-		local function is_enemy_enemy()
-			if not enemy or not self._unit or not self._unit:movement() or not enemy:movement() or not self._unit:movement():team() or not enemy:movement():team() then
-				return false
-			end
-			if enemy:brain()._current_logic_name == "trade" then
-				return false
-			end
-			return self._unit:movement():team().foes[enemy:movement():team().id] and true or false
+	local player_camera_pos = Vector3()
+	mvector3.set(player_camera_pos, self._unit:camera():position())
+	local enemy_eye_pos = Vector3()
+	local attacker_pos = Vector3()
+	-- units that LOS check ignores and goes through
+	local ignored_slot_units = managers.slot:get_mask("enemies","enemy_shield_check","players","corpses","civilians","hostages","crowd")
+	
+	local function is_enemy_hostile(enemy_unit)
+		if enemy_unit and enemy_unit:movement() and enemy_unit:movement():team() and enemy_unit:brain() and not (enemy_unit:brain()._current_logic_name == "trade") then
+			return self._unit:movement():team().foes[enemy_unit:movement():team().id] and true or false
 		end
+		return false
+	end
+	
+	-- find enemies within LOS
+	for i, enemy in pairs(enemies) do
 		
-		if alive(enemy) and is_enemy_enemy() then
+		if alive(enemy) and is_enemy_hostile(enemy) then
 			
-			local attacker_pos = enemy:movement():m_pos()
-			local dis_sq = mvector3.distance_sq(attacker_pos, my_pos)
-			local camera_pos = managers.player:player_unit():camera():position()
-			local LOS_ray = World:raycast("ray", Vector3(camera_pos.x, camera_pos.y, camera_pos.z), Vector3(attacker_pos.x, attacker_pos.y, attacker_pos.z+80), "slot_mask", managers.slot:get_mask("bullet_impact_targets"))
-			local is_LOS_clear = false
-			if LOS_ray and LOS_ray.unit and LOS_ray.unit == enemy then
-				is_LOS_clear = true
-			end
+			mvector3.set(attacker_pos, enemy:movement():m_pos())
 			
-			if dis_sq < data.max_dis_sq and math.abs(attacker_pos.z - my_pos.z) < data.max_vert_dis and is_LOS_clear then
-				nr_guys = nr_guys + 1
+			-- vanilla dist check
+			if mvector3.distance_sq(attacker_pos, my_pos) < data.max_dis_sq and math.abs(attacker_pos.z - my_pos.z) < data.max_vert_dis then
+				
+				mvector3.set(enemy_eye_pos, enemy:movement():m_head_pos())
+				
+				-- raycast that doesnt stop after hitting something because if 2 enemies stand in a row, first enemy shouldn't block LOS validity for the dude behind him
+				local is_LOS_clear = false
+				local LOS_ray = World:raycast_all("ray", player_camera_pos, enemy_eye_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets"))
+				
+				if LOS_ray then
+					for j, hit in ipairs(LOS_ray) do
+						if hit.unit then
+							if hit.unit == enemy then
+								is_LOS_clear = true
+								break
+							else
+								-- if we hit something like a wall before hitting the LOS check target, break this enemy's LOS check and move onto another enemy
+								if not hit.unit:in_slot(ignored_slot_units) then
+									break
+								end
+							end
+						end
+					end
+				end
+				
+				if is_LOS_clear then
+					nr_guys = nr_guys + 1
 
-				if max_guys_to_check <= nr_guys then
-					break
+					if max_guys_to_check <= nr_guys then
+						break
+					end
 				end
 			end
 			
 		end
+		
 	end
 	
 	if data.nr_enemies <= nr_guys then
@@ -248,7 +278,7 @@ Hooks:OverrideFunction(PlayerMovement, "_upd_underdog_skill", function (self, t)
 		managers.player:activate_temporary_upgrade("temporary", "dmg_dampener_close_contact")
 	end
 
-	data.chk_t = t + (activated and 0.1 or 0.1) -- change both re-activation timer check and inactivity timer to 0.1 seconds to make this skill update more often
+	data.chk_t = t + 0.04 -- check if skill should be activated more often
 end)
 
 -- inspire range increase if we have crew chief skill

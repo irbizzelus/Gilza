@@ -124,6 +124,35 @@ Hooks:OverrideFunction(PlayerManager, "movement_speed_multiplier", function (sel
 	
 	local multiplier = gilza_orig_pm_movement_speed_multiplier(self, speed_state, bonus_multiplier, upgrade_level, health_ratio)
 	
+	-- swan song speed adjustments
+	if managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier") then
+		
+		local grpai = managers.groupai:state()
+		local disabled_allies = 0
+		
+		for u_key, u_data in pairs(grpai._player_criminals) do
+			if u_data.status == "disabled" then
+				disabled_allies = disabled_allies + 1
+				break
+			end
+		end
+		
+		if disabled_allies == 0 then
+			for u_key, u_data in pairs(grpai._ai_criminals) do
+				if u_data.status == "disabled" then
+					disabled_allies = disabled_allies + 1
+					break
+				end
+			end
+		end
+		
+		-- revert vanilla penalty
+		if disabled_allies > 0 then
+			multiplier = multiplier / (tweak_data.upgrades.berserker_movement_speed_multiplier or 1)
+		end
+		
+	end
+	
 	-- fearmonger
 	local panic_speed_multiplier = managers.player:temporary_upgrade_value("temporary", "speed_boost_on_panic_kill", 0)
 	multiplier = multiplier + panic_speed_multiplier
@@ -756,14 +785,13 @@ function PlayerManager:_Gilza_activate_bodyshot_kill_ammo_refill(attack_data)
 						end
 
 						for _, weapon in ipairs(available_selections) do
-							local success, add_amount = nil
 							local pick_up_mul = managers.player:upgrade_value("player", "single_body_shot_kill_refill_ammo", 0)
-							success, add_amount = weapon.unit:base():add_ammo(pick_up_mul)
+							local success, add_amount = weapon.unit:base():add_ammo(pick_up_mul)
 							picked_up = success or picked_up
 						end
 						
 						if picked_up then
-							player_unit:sound():play(self._pickup_event or "pickup_ammo", nil, true)
+							player_unit:sound():play("pickup_ammo", nil, true)
 							for id, weapon in pairs(inventory:available_selections()) do
 								managers.hud:set_ammo_amount(id, weapon.unit:base():ammo_info())
 							end
@@ -1171,7 +1199,7 @@ Hooks:OverrideFunction(PlayerManager, "chk_wild_kill_counter", function (self, k
 		local missing_health_ratio = math.clamp(1 - damage_ext:health_ratio(), 0, 1)
 		local missing_armor_ratio = math.clamp(1 - damage_ext:armor_ratio(), 0, 1)
 		
-		-- copycat version nerfs
+		-- copycat version nerfs, hardcoded because lazynessssss
 		if managers.player:has_category_upgrade("player", "copycat_9th_card_identifier") then
 			trigger_cooldown = 6
 			if wild_health_amount > 0 then
@@ -1254,17 +1282,21 @@ Hooks:OverrideFunction(PlayerManager, "clbk_copr_ability_ended", function (self)
 	local character_damage = alive(player_unit) and player_unit:character_damage()
 
 	if character_damage then
-		local health_ratio = character_damage:health_ratio()
-		local static_damage_ratio = self:upgrade_value("player", "copr_static_damage_ratio", 0) - 1e-08
+		local health_ratio = math.round(character_damage:health_ratio() * 10000) / 10000
+		local static_damage_ratio = math.round(self:upgrade_value("player", "copr_static_damage_ratio", 0) * 10000) / 10000
 		local out_of_health = health_ratio < static_damage_ratio
 		local risen_from_dead = self:get_property("copr_risen", false) == true
 
 		character_damage:on_copr_ability_deactivated()
 
 		if self._Gilza_leech_did_revive_during_effect then
-			managers.player._block_medkit_auto_revive = false
+			self._block_medkit_auto_revive = false
 			character_damage:restore_health(character_damage:_max_health() * 0.5, true, false)
 			character_damage:restore_armor(character_damage:_max_armor())
+			local secs = self:upgrade_value("player", "copr_regain_cooldown_on_revives", 0)
+			if secs > 0 then
+				self:speed_up_grenade_cooldown(secs)
+			end
 			self._Gilza_leech_did_revive_during_effect = false
 		elseif out_of_health or risen_from_dead then
 			character_damage:force_into_bleedout(false, risen_from_dead)
@@ -1297,15 +1329,9 @@ Hooks:OverrideFunction(PlayerManager, "_attempt_copr_ability", function (self)
 
 	self:activate_temporary_upgrade("temporary", "copr_ability")
 	
-	-- use our own BLT delayed call. i honestly have no idea why, but sometimes clbk_copr_ability_ended is not called after the 6-10 sec time window of the ampule effect expires
-	-- leading to player having no armor, segmented health UI (but not actualy segmented health) and no invulnerability/heal procing
-	-- todo: WHY IS IT HAPPENING?!?!
-	DelayedCalls:Add("Gilza_force_deactivate_leech_at_"..tostring(now), duration - 0.0001, function()
-		managers.player:clbk_copr_ability_ended()
-	end)
-	--local expire_time = self:get_activate_temporary_expire_time("temporary", "copr_ability")
-	--managers.enemy:add_delayed_clbk("copr_ability_active", callback(self, self, "clbk_copr_ability_ended"), expire_time)
+	local expire_time = self:get_activate_temporary_expire_time("temporary", "copr_ability")
 	
+	managers.enemy:add_delayed_clbk("copr_ability_active", callback(self, self, "clbk_copr_ability_ended"), expire_time)
 	managers.hud:activate_teammate_ability_radial(HUDManager.PLAYER_PANEL, duration)
 
 	local bonus_health = self:upgrade_value("player", "copr_activate_bonus_health_ratio", tweak_data.upgrades.values.player.copr_activate_bonus_health_ratio[1])
@@ -1488,7 +1514,7 @@ Hooks:OverrideFunction(PlayerManager, "_attempt_tag_team", function (self, ...)
 	return success
 end)
 
--- before activating PECM, set it's duration based on game state (stealth/loud)
+-- before activating PECM, set it's duration based on game state (stealth/loud). hardcoded duration because lazynessssss
 Hooks:PreHook(PlayerManager, "_attempt_pocket_ecm_jammer", "Gilza_attempt_pocket_ecm_jammer", function(self)
 	if managers.groupai and not managers.groupai:state():whisper_mode() then
 		tweak_data.upgrades.values.player.pocket_ecm_jammer_base[1].duration = 9
@@ -1639,13 +1665,16 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 	
 	local player_unit = managers.player:player_unit()
 	
-	if player_unit and alive(player_unit) and not self._gilza_hitman_has_active_bounty and Application:time() >= self._gilza_hitman_bounty_cooldown_end then
+	if player_unit and alive(player_unit) and self:has_category_upgrade("temporary", "player_bounty_hunter") and not self._gilza_hitman_has_active_bounty and Application:time() >= self._gilza_hitman_bounty_cooldown_end then
 		
 		local enemies = World:find_units_quick(player_unit, "sphere", player_unit:position(), 2500, managers.slot:get_mask("enemies"))
 		if enemies and #enemies > 0 then
 			
-			local best_dist = 999999
 			local prefered_bounty = false
+			local prefered_min_dist = 900
+			local prefered_max_dist = 1800
+			local middle_dist = prefered_min_dist + (prefered_max_dist - prefered_min_dist * 0.5)
+			local best_dist = 99999999
 			for i, enemy in pairs(enemies) do
 				local function is_enemy_enemy()
 					if not enemy or not player_unit or not player_unit:movement() or not enemy:movement() or not player_unit:movement():team() or not enemy:movement():team() then
@@ -1661,17 +1690,19 @@ function PlayerManager:Gilza_new_hitman_recursive_updater()
 					
 					local dist = mvector3.distance(enemy:position(), player_unit:position())
 
-					if dist < best_dist then
-						best_dist = dist
-						if best_dist <= 1500 then -- prioritise first found enemy within 15m
-							if prefered_bounty then
-								break
-							else
-								prefered_bounty = enemy
-								break
-							end
+					if dist > prefered_min_dist and dist < prefered_max_dist then
+						if (middle_dist - dist) < best_dist then
+							best_dist = dist
+							prefered_bounty = enemy
+						elseif not prefered_bounty then
+							prefered_bounty = enemy
 						end
-						prefered_bounty = enemy
+					else
+						if dist > prefered_max_dist and not prefered_bounty then
+							prefered_bounty = enemy
+						elseif dist < prefered_min_dist and not prefered_bounty then
+							prefered_bounty = enemy
+						end
 					end
 					
 				end

@@ -9,7 +9,7 @@ end
 -- convert melee damage to % based on the weapon's stat
 Hooks:PreHook(CopDamage, "damage_melee", "Gilza_CopDamage_damage_melee_pre", function(self,attack_data)
 	-- if incoming melee was a bullet_taze, apply headshot dmg increase. this is needed for electric boolets upgrade
-	if attack_data.bullet_taze == true then
+	if attack_data.bullet_taze then
 		local head = self._head_body_name and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
 		if not self._char_tweak.ignore_headshot and not self._damage_reduction_multiplier and head then
 			if self._char_tweak.headshot_dmg_mul then

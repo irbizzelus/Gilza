@@ -302,6 +302,7 @@ Hooks:OverrideFunction(AkimboWeaponBase, "fire", function (self, ...)
 					...
 				})
 			})
+			self._unit:set_extension_update_enabled(Idstring("base"), true)
 		end
 
 		return result
