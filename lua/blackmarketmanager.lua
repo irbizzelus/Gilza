@@ -404,7 +404,7 @@ Hooks:OverrideFunction(BlackMarketManager, "get_sorted_melee_weapons", function 
 			table.insert(item_categories[category], item)
 			items_per_category[next_category_start] = (items_per_category[next_category_start] or 1) + 1
 		else
-			log("[Gilza] Melee without assigned sort order: "..item[1].." - it wont show up in the inventory! Someone pls fix.")
+			log("[Gilza] Melee without assigned sort order: \""..item[1].."\" - it wont show up in the inventory! Someone pls fix.")
 		end
 	end
 

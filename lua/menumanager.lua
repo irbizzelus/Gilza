@@ -72,13 +72,14 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 			tweak_data.vehicle.forklift.fov = tonumber(item:value())
 			tweak_data.vehicle.forklift_2.fov = tonumber(item:value())
 			tweak_data.vehicle.box_truck_1.fov = tonumber(item:value())
-			tweak_data.vehicle.boat_rib_1.fov = tonumber(item:value())
 			tweak_data.vehicle.mower_1.fov = tonumber(item:value())
+			tweak_data.vehicle.boat_rib_1.fov = tonumber(item:value())
 			tweak_data.vehicle.blackhawk_1.fov = tonumber(item:value())
 			tweak_data.vehicle.bike_1.fov = tonumber(item:value())
 			tweak_data.vehicle.bike_2.fov = tonumber(item:value())
 			tweak_data.vehicle.wanker.fov = tonumber(item:value())	
 			tweak_data.vehicle.golfcart.fov = tonumber(item:value())
+			tweak_data.vehicle.kubelwagen.fov = tonumber(item:value())
 		end
 	end
 	

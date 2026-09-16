@@ -646,12 +646,12 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					bm_wp_hcar_barrel_standard = "Standard Akron HC Barrel",
 					
 					-- Shotgun mods
-					bm_wpn_fps_upg_a_rip_desc_new = "Fires 6 pellets capable of making enemies vomit uncontrollably or knocking them down, preventing them from making aggressive actions.\nCan pierce through multiple enemies, and has 50% chance to pierce enemy body armor.\n\nPoison damages enemies for roughly 1% of their health per second over the course of 5 seconds, with 0.2 second intervals between damage instances.\nDamage range increased by 20%.\nAmmo pick up reduced by 20%",
-					bm_wpn_fps_upg_a_custom_desc_new = "12 pellets with stronger impact.\n\nPierces enemies and their body armor.\nDisables bonus damage from headshots.\nDamage range reduced by 25%.\nAmmo pick up reduced by 25%",
-					bm_wpn_fps_upg_a_explosive_desc_new = "Fires one explosive charge that kills or stuns targets.\n\nDisables bonus damage from headshots.\nAmmo pick up reduced by 60%",
-					bm_wpn_fps_upg_a_piercing_desc_new = "Peirces enemy body armor.\nDamage range increased by 30%.\n\nAmount of darts per shell - 5.\nAmmo pick up reduced by 15%",
-					bm_wpn_fps_upg_a_slug_desc_new = "Fires a single lead slug that penetrates body armor, enemies, shields and walls.\n\nDamage range increased by 50%\nAmmo pick up reduced by 20%",
-					bm_wpn_fps_upg_a_dragons_breath_desc_new = "Fires 8 pellets that go up in sparks and flames, capable of igniting enemies within 14 meters.\nBurns through shields and body armor.\n\nIgnited enemies receive 350 fire damage over 2.5 seconds.\nDamage range decreased by 20%.\nAmmo pick up reduced by 30%",
+					bm_wpn_fps_upg_a_rip_desc_new = "Fires 6 pellets capable of making enemies vomit uncontrollably or knocking them down, preventing them from making aggressive actions.\nCan pierce through multiple enemies, and has 50% chance to pierce enemy body armor.\n\nPoison damages enemies for roughly 1% of their health per second over the course of 5 seconds, with 0.2 second intervals between damage instances.\nDamage range increased by 20%.\nAmmo pick up reduced by 33%",
+					bm_wpn_fps_upg_a_custom_desc_new = "12 pellets with stronger impact.\n\nPierces enemies and their body armor.\nDisables bonus damage from headshots.\nDamage range reduced by 25%.\nAmmo pick up reduced by 37%",
+					bm_wpn_fps_upg_a_explosive_desc_new = "Fires one explosive charge that kills or stuns targets.\n\nDisables bonus damage from headshots.\nAmmo pick up reduced by 66%",
+					bm_wpn_fps_upg_a_piercing_desc_new = "Peirces enemy body armor.\nDamage range increased by 30%.\n\nAmount of darts per shell - 5.\nAmmo pick up reduced by 29%",
+					bm_wpn_fps_upg_a_slug_desc_new = "Fires a single lead slug that penetrates body armor, enemies, shields and walls.\n\nDamage range increased by 50%\nAmmo pick up reduced by 33%",
+					bm_wpn_fps_upg_a_dragons_breath_desc_new = "Fires 8 pellets that go up in sparks and flames, capable of igniting enemies within 14 meters.\nBurns through shields and body armor.\n\nIgnited enemies receive 350 fire damage over 2.5 seconds.\nDamage range decreased by 20%.\nAmmo pick up reduced by 41%",
 					wpn_fps_upg_ns_duck_desc = "Reduces vertical pellet spread to 50%, increases horizontal pellet spread to 225%",
 					
 					-- Flamethrower mods
@@ -692,7 +692,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			local function Custom_Gilza_attachs()
 				LocalizationManager:add_localized_strings({
 					bm_wpn_fps_upg_br_shtgn = "Breaching round",
-					bm_wpn_fps_upg_br_shtgn_desc = "Fires a single slug round that allows you to breach everything that saw OVE9000 usually can. Also penetrates shield and body armor.\n\nDamage range decreased by 50%.\nAmmo pick up reduced by 20%.",
+					bm_wpn_fps_upg_br_shtgn_desc = "Fires a single slug round that allows you to breach everything that saw OVE9000 usually can. Also penetrates shield and body armor.\n\nDamage range decreased by 50%.\nAmmo pick up reduced by 33%.",
 					bm_wpn_fps_upg_ar_dmr_ap_rounds = "DMR AP rounds",
 					bm_wpn_fps_upg_ar_dmr_ap_rounds_desc = "Pierce enemy body armor, shields and walls.\n\nAmmo pick up reduced by 50%.",
 					bm_wpn_fps_upg_ap_kit_ap_rounds = "AP ammunition", -- hidden
@@ -1548,12 +1548,12 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					bm_wp_hcar_barrel_standard = "Стандартный ствол для Akron HC",
 					
 					-- Shotgun mods
-					bm_wpn_fps_upg_a_rip_desc_new = "Выстреливает 6 дробинок, способных вызывать у противников неконтролируемую рвоту или сбивать их с ног, из-за чего они не смогут совершать агрессивные действия.\nПробивает насквозь врагов, и имеет 50% шанс пробить нательную броню.\n\nЯд наносит урон в размере около 1% вражеского здоровья в секунду, в течении 5 секунд, с интервалами в 0.2 секунды между частичным уроном.\nЭффективная дистанция оружия увеличена на 20%.\nПодбор боеприпасов уменьшен на 20%",
-					bm_wpn_fps_upg_a_custom_desc_new = "12 дробинок с увеличенным уроном.\n\nПробивает насквозь врагов и их нательную броню.\nОтключает возможность наносить бонусный урон при попадании в голову.\nЭффективная дистанция оружия уменьшена на 25%.\nПодбор боеприпасов уменьшен на 25%.",
-					bm_wpn_fps_upg_a_explosive_desc_new = "Выстреливает один взрывной заряд, который убивает или оглушает цели.\n\nОтключает возможность наносить увеличенный урон при попадании в голову.\nПодбор боеприпасов уменьшен на 60%.",
-					bm_wpn_fps_upg_a_piercing_desc_new = "Пробивает нательную броню.\nЭффективная дистанция оружия увеличена на 30%.\n\nВыстреливает 5 дротиков за выстрел.\nПодбор боеприпасов уменьшен на 15%.",
-					bm_wpn_fps_upg_a_slug_desc_new = "Выстреливает один свинцовый снаряд, пробивающий насквозь нательную броню, щиты и стены.\n\nЭффективная дистанция оружия увеличена на 50%.\nПодбор боеприпасов уменьшен на 20%.",
-					bm_wpn_fps_upg_a_dragons_breath_desc_new = "Выстреливает 8 дробинок, превращающиеся в искры и пламя, способные поджигать врагов в пределах 14 метров.\nПрожигает насквозь щиты и нательную броню врагов.\n\nПодоженные враги получают 350 урона в течении 2.5 секунд.\nЭффективная дистанция оружия уменьшена на 20%.\nПодбор боеприпасов уменьшен на 30%.",
+					bm_wpn_fps_upg_a_rip_desc_new = "Выстреливает 6 дробинок, способных вызывать у противников неконтролируемую рвоту или сбивать их с ног, из-за чего они не смогут совершать агрессивные действия.\nПробивает насквозь врагов, и имеет 50% шанс пробить нательную броню.\n\nЯд наносит урон в размере около 1% вражеского здоровья в секунду, в течении 5 секунд, с интервалами в 0.2 секунды между частичным уроном.\nЭффективная дистанция оружия увеличена на 20%.\nПодбор боеприпасов уменьшен на 33%",
+					bm_wpn_fps_upg_a_custom_desc_new = "12 дробинок с увеличенным уроном.\n\nПробивает насквозь врагов и их нательную броню.\nОтключает возможность наносить бонусный урон при попадании в голову.\nЭффективная дистанция оружия уменьшена на 25%.\nПодбор боеприпасов уменьшен на 37%.",
+					bm_wpn_fps_upg_a_explosive_desc_new = "Выстреливает один взрывной заряд, который убивает или оглушает цели.\n\nОтключает возможность наносить увеличенный урон при попадании в голову.\nПодбор боеприпасов уменьшен на 66%.",
+					bm_wpn_fps_upg_a_piercing_desc_new = "Пробивает нательную броню.\nЭффективная дистанция оружия увеличена на 30%.\n\nВыстреливает 5 дротиков за выстрел.\nПодбор боеприпасов уменьшен на 29%.",
+					bm_wpn_fps_upg_a_slug_desc_new = "Выстреливает один свинцовый снаряд, пробивающий насквозь нательную броню, щиты и стены.\n\nЭффективная дистанция оружия увеличена на 50%.\nПодбор боеприпасов уменьшен на 33%.",
+					bm_wpn_fps_upg_a_dragons_breath_desc_new = "Выстреливает 8 дробинок, превращающиеся в искры и пламя, способные поджигать врагов в пределах 14 метров.\nПрожигает насквозь щиты и нательную броню врагов.\n\nПодоженные враги получают 350 урона в течении 2.5 секунд.\nЭффективная дистанция оружия уменьшена на 20%.\nПодбор боеприпасов уменьшен на 41%.",
 					wpn_fps_upg_ns_duck_desc = "Уменьшеает вертикальный разброс дроби до 50%, увеличивает горизонтальный разброс дроби до 225%.",
 			
 					-- Flamethrower mods
@@ -1594,7 +1594,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 			local function Custom_Gilza_attachs()
 				LocalizationManager:add_localized_strings({
 					bm_wpn_fps_upg_br_shtgn = "Пробивной патрон",
-					bm_wpn_fps_upg_br_shtgn_desc = "Пуля позволяющая вам пробивать все, что обычно может пробить пила OVE9000. Также может пробивать насквозь щиты и нательную броню врагов.\nЭффективная дистанция оружия уменьшена на 50%.\nПодбор боеприпасов уменьшен на 20%.",
+					bm_wpn_fps_upg_br_shtgn_desc = "Пуля позволяющая вам пробивать все, что обычно может пробить пила OVE9000. Также может пробивать насквозь щиты и нательную броню врагов.\nЭффективная дистанция оружия уменьшена на 50%.\nПодбор боеприпасов уменьшен на 33%.",
 					bm_wpn_fps_upg_ar_dmr_ap_rounds = "Бронебойный DMR патрон",
 					bm_wpn_fps_upg_ar_dmr_ap_rounds_desc = "Пробивает нательную броню, щиты и стены.\n\nПодбор боеприпасов уменьшен на 50%.",
 					bm_wpn_fps_upg_ap_kit_ap_rounds = "AP ammunition", -- hidden

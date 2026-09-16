@@ -107,9 +107,11 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_BlackMarketTw
 		rambo = {class = 4},
 		fireaxe = {class = 6},
 		
+		-- newly added dlc ones
 		funder_strike = {class = "tazer"},
 		bonk = {class = 4},
 		bonk2 = {class = 4},
+		order = {class = 5},
 		
 		-- this one i dont own
 		briefcase = {class = 5},
@@ -382,6 +384,7 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "Gilza_BlackMarketTw
 	self.melee_weapons.whiskey.repeat_expire_t = 0.5
 	self.melee_weapons.freedom.expire_t = 1.25
 	self.melee_weapons.dingdong.repeat_expire_t = 0.9
+	self.melee_weapons.order.repeat_expire_t = 0.9
 	self.melee_weapons.tenderizer.expire_t = 0.65
 	self.melee_weapons.tenderizer.repeat_expire_t = 0.5
 	self.melee_weapons.machete.anim_global_param = "melee_agave"

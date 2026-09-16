@@ -152,14 +152,14 @@ function Gilza:changelog_message()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.81 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.812 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.8.1 Changelog:\n\n- Updated maximum damage resistance rules, especially for DW and lower difficulties.\n- Reworked \"Heavy Impact\" skill.\n- Improved \"Lock N' Load\" skill.\n- Buffed Sicario's \"Twitch\" card cooldowns.\n- Pistols now have more total ammo and higher base ROF to make them more usable without skills. Some pistol specific skills were compensated for this change.\n- A few additional changes to some weapon categories and their damage classes.\n- VHUD+ compatibility fixes."
+			local message = "2.8.12 Changelog:\n\n- Compatibility with update 248 and new content.\n-Shotguns now have roughly 20% more ammo pickup by default, but all ammunition options now have higher ammo pickup penalties with the end pickup value being the same as before this patch. This should make default shotgun ammunition a more appleaing choice and allow for greater build variety, as skills that deal with body armor and shields can now be valuable on default round shotguns."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.81
+			Gilza.settings.version = 2.812
 			Gilza.Save()
 		end
 	end)

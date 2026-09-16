@@ -892,14 +892,18 @@ Hooks:PreHook(CopDamage, "damage_explosion", "Gilza_CopDamage_damage_explosion_p
 		attack_data.damage = attack_data.damage * 0.5
 	end
 	
-	local should_decrease_wpn = attack_data.weapon_unit and attack_data.weapon_unit:base() and not attack_data.weapon_unit:base().name_id and attack_data.weapon_unit:base()._projectile_entry
-	if should_decrease_wpn and self._char_tweak and self._char_tweak.tags then
+	local projectile_exlposive = attack_data.weapon_unit and attack_data.weapon_unit:base() and not attack_data.weapon_unit:base().name_id and attack_data.weapon_unit:base()._projectile_entry
+	if projectile_exlposive and self._char_tweak and self._char_tweak.tags then
 		if table.contains(self._char_tweak.tags, "taser") then
 			attack_data.damage = attack_data.damage * 0.69 -- unironically the ratio of new health to vanilla health - 1250/1800
 		elseif table.contains(self._char_tweak.tags, "medic") and not table.contains(self._char_tweak.tags, "tank") then
 			attack_data.damage = attack_data.damage * 0.69
 		elseif table.contains(self._char_tweak.tags, "spooc") then
 			attack_data.damage = attack_data.damage * 0.42
+		end
+		-- arbiter in vanilla now deals 500 dmg instead of 480 which allows it to one shot light swat. Gilza's light swat HP is 500, so we compensate the dmg in a similar way
+		if projectile_exlposive == "launcher_frag_arbiter" and self._HEALTH_INIT == 50 then
+			attack_data.damage = attack_data.damage * 1.042
 		end
 	end
 end)

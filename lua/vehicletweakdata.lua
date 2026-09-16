@@ -24,6 +24,10 @@ Hooks:PostHook( VehicleTweakData , "_init_data_box_truck_1" , "Gilza_new_boxtruc
 	self.box_truck_1.fov = newFOV
 end)
 
+Hooks:PostHook( VehicleTweakData , "_init_data_mower_1" , "Gilza_new_mower_1fov" , function( self , params )
+	self.mower_1.fov = newFOV
+end)
+
 Hooks:PostHook( VehicleTweakData , "_init_data_boat_rib_1" , "Gilza_new_ribfov" , function( self , params )
 	self.boat_rib_1.fov = newFOV
 end)
@@ -52,4 +56,8 @@ end)
 
 Hooks:PostHook( VehicleTweakData , "_init_data_golfcart" , "Gilza_new_golfcart" , function( self , params )
 	self.golfcart.fov = newFOV
+end)
+
+Hooks:PostHook( VehicleTweakData , "_init_data_kubelwagen" , "Gilza_new_kubelwagenfov" , function( self , params )
+	self.kubelwagen.fov = newFOV
 end)

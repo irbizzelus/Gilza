@@ -24,29 +24,6 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 			end
 		end)
 		
-		-- fix weaponlib/vhud+ compatibility issue where vhud's interaction circle during reloads wasn't showing up
-		if VHUDPlus and Gilza.VHP_enabled then
-			local gilza_vhud_helper_reload_override = PlayerStandard._start_action_reload
-			Hooks:OverrideFunction(PlayerStandard, "_start_action_reload", function (self, t, ...)
-				gilza_vhud_helper_reload_override(self, t, ...)
-				local hide_int_state = {
-					["bleed_out"] = true,
-					["fatal"] = true,
-					["incapacitated"] = true,
-					["arrested"] = true,
-					["jerry1"] = true
-				}
-				PlayerStandard.SHOW_RELOAD = VHUDPlus:getSetting({"INTERACTION", "SHOW_RELOAD"}, false)
-				if PlayerStandard.SHOW_RELOAD and not hide_int_state[managers.player:current_state()] and not PlayerStandard.HIDE_MELEE_RELOAD_PDTH and not PD3ReviveProgressDisplay then
-					if self._equipped_unit and not self._equipped_unit:base():clip_full() then
-						self._state_data.show_reload = true
-						managers.hud:show_interaction_bar(0, self._state_data.reload_expire_t or 0)
-						self._state_data.reload_offset = t
-					end
-				end
-			end)
-		end
-		
 		-- based on weaponlib's version. adds a check for new pistol full auto simulation skill. basically makes them fire in full auto even tho fire mode itself is single
 		Hooks:OverrideFunction(PlayerStandard, "_check_action_primary_attack", function (self, t, input)
 			if not self._equipped_unit then return false end
@@ -380,6 +357,136 @@ if not Gilzas_weaponlib_overrides_and_fixes then
 			end
 
 			return new_action
+		end)
+		
+		-- weaponlib fix #2451 - this time a reload animation issue with the rotating mag shotgun added with the "under the hammer" auction heist DLC
+		-- updated the reload_anim assignemnt logic to match vanilla better and made tweak_data_anim_play play a proper anim instead of assuming the same reload all the time
+		Hooks:OverrideFunction(PlayerStandard, "_start_action_reload_enter", function (self, t)
+		
+			local weapon = self._equipped_unit:base()
+
+			if weapon and weapon:can_reload() then
+				
+				if weapon.enter_reload then
+					weapon:enter_reload()
+				end
+
+				weapon:tweak_data_anim_stop("fire")
+
+				managers.player:send_message_now(Message.OnPlayerReload, nil, self._equipped_unit)
+				self:_interupt_action_steelsight(t)
+
+				if not self.RUN_AND_RELOAD then
+					self:_interupt_action_running(t)
+				end
+
+				self:_interupt_action_charging_weapon(t)
+
+				local is_reload_not_empty = not weapon:should_do_empty_reload()
+				local base_reload_enter_expire_t = weapon:reload_enter_expire_t(is_reload_not_empty)
+
+				if base_reload_enter_expire_t and base_reload_enter_expire_t > 0 then
+					weapon:cache_reload_speed_multiplier()
+
+					local speed_multiplier = weapon:reload_speed_multiplier()
+					local reload_bipod_prefix = self:_is_using_bipod() and "bipod_" or ""
+					local reload_prefix = reload_bipod_prefix .. (weapon:reload_prefix() or "")
+					local reload_name_id = weapon:reload_name_id()
+					
+					local reload_anim = "reload_enter"
+					if is_reload_not_empty and weapon:weapon_tweak_data().animations and weapon:weapon_tweak_data().animations.reload_not_empty_enter then
+						reload_anim = "reload_not_empty_enter"
+					end
+
+					local redirect_name = reload_prefix .. string.format("%s_%s", reload_anim, reload_name_id)
+					self._ext_camera:play_redirect(Idstring(redirect_name), speed_multiplier)
+
+					self._state_data.reload_enter_expire_t = t + base_reload_enter_expire_t / speed_multiplier
+
+					weapon:tweak_data_anim_play(reload_anim, speed_multiplier)
+
+					return
+				end
+
+				self:_start_action_reload(t)
+			end
+		
+		end)
+		
+		-- weaponlib fix #2451 - this time a reload animation issue with the rotating mag shotgun added with the "under the hammer" auction heist DLC
+		-- firstly reversed the assumption of empty reload before overriding to tactical reload like how vanilla does it (even if this makes less sense)
+		-- secondly updated code that figures out the reload_expire_t to be more similar to vanilla
+		-- lastly moved the VHUD+ compatibility fix to the end, since previously it was a func override that ran "vanilla" func first and then it's own code, but now since we have a full func override its now here
+		Hooks:OverrideFunction(PlayerStandard, "_start_action_reload", function (self, t)
+			
+			local weapon = self._equipped_unit:base()
+
+			if weapon and weapon:can_reload() then
+				local should_do_empty_reload = weapon:should_do_empty_reload()
+
+				local speed_multiplier = weapon:reload_speed_multiplier()
+
+				local tweak_data = weapon:weapon_tweak_data()
+				local reload_anim = "reload"
+				
+				local reload_bipod_prefix = self:_is_using_bipod() and "bipod_" or ""
+				
+				local reload_prefix = reload_bipod_prefix .. (weapon:reload_prefix() or "")
+				local reload_name_id = weapon:reload_name_id()
+				local reload_default_expire_t = 2.6
+				local reload_tweak = tweak_data.timers.reload_empty
+				local reload_steelsight_expire_t = tweak_data.timers.reload_steelsight
+
+				if not should_do_empty_reload then
+					reload_anim = "reload_not_empty"
+					reload_default_expire_t = 2.2
+					reload_tweak = tweak_data.timers.reload_not_empty
+					reload_steelsight_expire_t = tweak_data.timers.reload_steelsight_not_empty
+				end
+
+				local empty_reload = should_do_empty_reload and 1 or 0
+				if weapon:use_shotgun_reload() then
+					empty_reload = weapon:get_ammo_max_per_clip() - weapon:get_ammo_remaining_in_clip()
+					reload_tweak = weapon:reload_expire_t(should_do_empty_reload)
+				end
+
+				local reload_ids = Idstring(string.format("%s%s_%s", reload_prefix, reload_anim, reload_name_id))
+				local result = self._ext_camera:play_redirect(reload_ids, speed_multiplier)
+				
+				self._state_data.reload_expire_t = t + (reload_tweak or weapon:reload_expire_t(not should_do_empty_reload) or reload_default_expire_t) / speed_multiplier
+				if reload_steelsight_expire_t then
+				
+					self._state_data.reload_steelsight_expire_t = t + reload_steelsight_expire_t / speed_multiplier
+				end
+
+				weapon:start_reload()
+
+				if not weapon:tweak_data_anim_play(reload_anim, speed_multiplier) then
+					weapon:tweak_data_anim_play("reload", speed_multiplier)
+				end
+
+				self._ext_network:send("reload_weapon", empty_reload, speed_multiplier)
+			end
+			
+			-- fix weaponlib/vhud+ compatibility issue where vhud's interaction circle during reloads wasn't showing up due to function's overrides application order
+			if VHUDPlus and Gilza.VHP_enabled then
+				local hide_int_state = {
+					["bleed_out"] = true,
+					["fatal"] = true,
+					["incapacitated"] = true,
+					["arrested"] = true,
+					["jerry1"] = true
+				}
+				PlayerStandard.SHOW_RELOAD = VHUDPlus:getSetting({"INTERACTION", "SHOW_RELOAD"}, false)
+				if PlayerStandard.SHOW_RELOAD and not hide_int_state[managers.player:current_state()] and not PlayerStandard.HIDE_MELEE_RELOAD_PDTH and not PD3ReviveProgressDisplay then
+					if self._equipped_unit and not self._equipped_unit:base():clip_full() then
+						self._state_data.show_reload = true
+						managers.hud:show_interaction_bar(0, self._state_data.reload_expire_t or 0)
+						self._state_data.reload_offset = t
+					end
+				end
+			end
+			
 		end)
 	end
 	

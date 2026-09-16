@@ -54,6 +54,10 @@ if Gilza.VHP_enabled then
 			-- add weapon buff to global dmg increase
 			HUDListManager.BUFFS.new_berserk_weapon_damage_multiplier = { "new_berserk_weapon_damage_multiplier", "damage_increase" }
 			
+			-- reverse titles since blootdthirst dmg bonus and reload had their places swapped
+			HUDList.BuffItemBase.MAP.bloodthirst_aced.title = "wolfhud_hudlist_buff_basic"
+			HUDList.BuffItemBase.MAP.bloodthirst_basic.title = "wolfhud_hudlist_buff_aced"
+			
 			-- new zerk in 3 parts
 			HUDList.BuffItemBase.MAP.new_berserk_weapon_damage_multiplier = {
 				skills_new = tweak_data.skilltree.skills.wolverine.icon_xy,

@@ -56,10 +56,10 @@ Hooks:PostHook(WeaponTweakData, "_init_stats", "Gilza_post_WeaponTweakData_init_
 			_125 = Gilza.Weapons_module:get_ammo_pickup(125, 0.31)
 		},
 		SHOTGUNs = {
-			_900 = Gilza.Weapons_module:get_ammo_pickup(900, 0.85),
-			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.8),
-			_325 = Gilza.Weapons_module:get_ammo_pickup(325, 0.75),
-			_160 = Gilza.Weapons_module:get_ammo_pickup(160, 0.5)
+			_900 = Gilza.Weapons_module:get_ammo_pickup(900, 0.7),
+			_450 = Gilza.Weapons_module:get_ammo_pickup(450, 0.66),
+			_325 = Gilza.Weapons_module:get_ammo_pickup(325, 0.62),
+			_160 = Gilza.Weapons_module:get_ammo_pickup(160, 0.41)
 		},
 		LMGs = {
 			-- better ammo with easier diff modifiers, should incentivize defence playstyle by allowing to pick up less often, and reducing dmg up close
@@ -619,6 +619,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 		"m590",
 		"sko12",
 		"supernova",
+		"bleckert",
 		-- secondary shotguns
 		"basset",
 		"m37",
@@ -1133,6 +1134,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 				ksg = true,
 				m1897 = true,
 				supernova = true, -- technically a hybrid
+				bleckert = true, -- technically a revolving semi auto
 				serbu = "secondary",
 				m37 = "secondary"
 			}
@@ -1205,6 +1207,13 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			self.supernova.alt_fire_data.damage_mul = 1
 			self.supernova.alt_fire_data.recoil_mul = 1.5
 			self.supernova.has_description = true
+			
+			self.bleckert.NR_CLIPS_MAX = 4.2
+			self.bleckert.AMMO_MAX = self.bleckert.CLIP_AMMO_MAX * self.bleckert.NR_CLIPS_MAX
+			self.bleckert.stats.spread = 18
+			self.bleckert.stats.recoil = 3
+			self.bleckert.fire_mode_data = {fire_rate = 60/160}
+			self.bleckert.single = {fire_rate = 60/160}
 			
 			self.serbu.NR_CLIPS_MAX = 4
 			self.serbu.AMMO_MAX = self.serbu.CLIP_AMMO_MAX * self.serbu.NR_CLIPS_MAX
@@ -3598,6 +3607,7 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_new_van
 			m590 = "left",
 			sko12 = "left",
 			supernova = "left",
+			bleckert = "right",
 			basset = "left",
 			m37 = "left",
 			rota = "right",
@@ -4719,14 +4729,14 @@ Hooks:PostHook(WeaponTweakData, "_init_data_player_weapons", "Gilza_init_custom_
 						tweak_data.blackmarket.melee_weapons[melee].stats.charge_time = 1.9
 						tweak_data.blackmarket.melee_weapons[melee].sort_order = 4
 					elseif stats.repeat_expire_t > 0.75 then
-						if stats.melee_damage_delay <= 0.35 and stats.repeat_expire_t < 1 then
+						if stats.melee_damage_delay <= 0.35 and stats.repeat_expire_t <= 1 then
 							tweak_data.blackmarket.melee_weapons[melee].stats.min_damage = 6.8
 							tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 20.5
 							tweak_data.blackmarket.melee_weapons[melee].stats.min_damage_effect = 7
 							tweak_data.blackmarket.melee_weapons[melee].stats.max_damage_effect = 7
 							tweak_data.blackmarket.melee_weapons[melee].stats.charge_time = 2.5
 							tweak_data.blackmarket.melee_weapons[melee].sort_order = 5
-						elseif stats.melee_damage_delay > 0.35 then
+						else
 							tweak_data.blackmarket.melee_weapons[melee].stats.min_damage = 10
 							tweak_data.blackmarket.melee_weapons[melee].stats.max_damage = 30
 							tweak_data.blackmarket.melee_weapons[melee].stats.min_damage_effect = 7

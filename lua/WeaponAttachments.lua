@@ -13,8 +13,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			rays = 1,
 			damage_near_mul = 0.5,
 			damage_far_mul = 0.5,
-			ammo_pickup_min_mul = 0.8,
-			ammo_pickup_max_mul = 0.8,
+			ammo_pickup_min_mul = 0.67,
+			ammo_pickup_max_mul = 0.67,
 			armor_piercing_add = 1,
 			can_shoot_through_shield = true,
 			can_breach = true
@@ -1341,14 +1341,14 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_upg_a_slug.stats = {value = 5,spread = 4,recoil = -2,total_ammo_mod = -4}
 			self.parts.wpn_fps_upg_a_slug.custom_stats.damage_far_mul = 1.5
 			self.parts.wpn_fps_upg_a_slug.custom_stats.damage_near_mul = 1.5
-			self.parts.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_min_mul = 0.8
-			self.parts.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_max_mul = 0.8
+			self.parts.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_min_mul = 0.67
+			self.parts.wpn_fps_upg_a_slug.custom_stats.ammo_pickup_max_mul = 0.67
 			self.parts.wpn_fps_upg_a_slug.custom_stats.falloff_override = nil
 			self.parts.wpn_fps_upg_a_slug.desc_id = "bm_wpn_fps_upg_a_slug_desc_new"
 			
 			-- FLECHETTE
 			self.parts.wpn_fps_upg_a_piercing.stats = {value = 5}
-			self.parts.wpn_fps_upg_a_piercing.custom_stats = {rays = 5, armor_piercing_add = 1,damage_near_mul = 1.3,damage_far_mul = 1.3,ammo_pickup_max_mul = 0.85,ammo_pickup_min_mul = 0.85}
+			self.parts.wpn_fps_upg_a_piercing.custom_stats = {rays = 5, armor_piercing_add = 1,damage_near_mul = 1.3,damage_far_mul = 1.3,ammo_pickup_max_mul = 0.71,ammo_pickup_min_mul = 0.71}
 			self.parts.wpn_fps_upg_a_piercing.desc_id = "bm_wpn_fps_upg_a_piercing_desc_new"
 			
 			-- FIRE
@@ -1356,14 +1356,14 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.damage_near_mul = 0.8
 			self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.damage_far_mul = 0.8
 			self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.rays = 8
-			self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.ammo_pickup_max_mul = 0.7
-			self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.ammo_pickup_min_mul = 0.7
+			self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.ammo_pickup_max_mul = 0.59
+			self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.ammo_pickup_min_mul = 0.59
 			self.parts.wpn_fps_upg_a_dragons_breath.desc_id = "bm_wpn_fps_upg_a_dragons_breath_desc_new"
 			
 			-- TOXIC SLUG
 			self.parts.wpn_fps_upg_a_rip.stats = {value = 5,spread = 3,damage = 10}
-			self.parts.wpn_fps_upg_a_rip.custom_stats.ammo_pickup_max_mul = 0.8
-			self.parts.wpn_fps_upg_a_rip.custom_stats.ammo_pickup_min_mul = 0.8
+			self.parts.wpn_fps_upg_a_rip.custom_stats.ammo_pickup_max_mul = 0.67
+			self.parts.wpn_fps_upg_a_rip.custom_stats.ammo_pickup_min_mul = 0.67
 			self.parts.wpn_fps_upg_a_rip.custom_stats.damage_near_mul = 1.2
 			self.parts.wpn_fps_upg_a_rip.custom_stats.damage_far_mul = 1.2
 			self.parts.wpn_fps_upg_a_rip.custom_stats.armor_piercing_add = 0.5
@@ -1379,8 +1379,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				damage_near_mul = 1,
 				bullet_class = "InstantExplosiveBulletBase",
 				rays = 1,
-				ammo_pickup_max_mul = 0.4,
-				ammo_pickup_min_mul = 0.4
+				ammo_pickup_max_mul = 0.34,
+				ammo_pickup_min_mul = 0.34
 			}
 			self.parts.wpn_fps_upg_a_explosive.desc_id = "bm_wpn_fps_upg_a_explosive_desc_new"
 			
@@ -1390,8 +1390,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 				damage_near_mul = 0.75,
 				armor_piercing_add = 1,
 				can_shoot_through_enemy = true,
-				ammo_pickup_max_mul = 0.75,
-				ammo_pickup_min_mul = 0.75,
+				ammo_pickup_max_mul = 0.63,
+				ammo_pickup_min_mul = 0.63,
 				is_buckshot = true,
 				rays = 12
 			}
@@ -1418,9 +1418,9 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					if not self[double_barrels[i]].override.wpn_fps_upg_a_explosive then
 						self[double_barrels[i]].override.wpn_fps_upg_a_explosive = {}
 					end
-					self[double_barrels[i]].override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 5,damage = 900}
+					self[double_barrels[i]].override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 3,damage = 900}
 					self[double_barrels[i]].override.wpn_fps_upg_a_custom.custom_stats = BS_custom_stats
-					self[double_barrels[i]].override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 5,damage = 900}
+					self[double_barrels[i]].override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 3,damage = 900}
 					self[double_barrels[i]].override.wpn_fps_upg_a_custom_free.custom_stats = BS_custom_stats
 					self[double_barrels[i]].override.wpn_fps_upg_a_explosive.stats = {value = 5,total_ammo_mod = -6.66,damage = 1050,recoil = -8}
 					self[double_barrels[i]].override.wpn_fps_upg_a_explosive.custom_stats = HE_custom_stats
@@ -1437,7 +1437,8 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					"wpn_fps_shot_m1897",
 					"wpn_fps_shot_serbu",
 					"wpn_fps_shot_m37",
-					"wpn_fps_sho_supernova"
+					"wpn_fps_sho_supernova",
+					"wpn_fps_sho_bleckert"
 				}
 				for i=1, #pump_action do
 					if not self[pump_action[i]].override then
@@ -1452,9 +1453,9 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					if not self[pump_action[i]].override.wpn_fps_upg_a_explosive then
 						self[pump_action[i]].override.wpn_fps_upg_a_explosive = {}
 					end
-					self[pump_action[i]].override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 5,damage = 450}
+					self[pump_action[i]].override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 3,damage = 450}
 					self[pump_action[i]].override.wpn_fps_upg_a_custom.custom_stats = BS_custom_stats
-					self[pump_action[i]].override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 5,damage = 450}
+					self[pump_action[i]].override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 3,damage = 450}
 					self[pump_action[i]].override.wpn_fps_upg_a_custom_free.custom_stats = BS_custom_stats
 					self[pump_action[i]].override.wpn_fps_upg_a_explosive.stats = {value = 5,total_ammo_mod = -6.66,damage = 550,recoil = -8}
 					self[pump_action[i]].override.wpn_fps_upg_a_explosive.custom_stats = HE_custom_stats
@@ -1484,15 +1485,15 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					if not self[semi_auto[i]].override.wpn_fps_upg_a_explosive then
 						self[semi_auto[i]].override.wpn_fps_upg_a_explosive = {}
 					end
-					self[semi_auto[i]].override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 5,damage = 325}
+					self[semi_auto[i]].override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 3,damage = 325}
 					self[semi_auto[i]].override.wpn_fps_upg_a_custom.custom_stats = BS_custom_stats
-					self[semi_auto[i]].override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 5,damage = 325}
+					self[semi_auto[i]].override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 3,damage = 325}
 					self[semi_auto[i]].override.wpn_fps_upg_a_custom_free.custom_stats = BS_custom_stats
 					self[semi_auto[i]].override.wpn_fps_upg_a_explosive.stats = {value = 5,total_ammo_mod = -6.66,damage = 400,recoil = -8}
 					self[semi_auto[i]].override.wpn_fps_upg_a_explosive.custom_stats = HE_custom_stats
 				end
-				self.wpn_fps_pis_x_judge.override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 5,damage = 163}
-				self.wpn_fps_pis_x_judge.override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 5,damage = 163}
+				self.wpn_fps_pis_x_judge.override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 3,damage = 163}
+				self.wpn_fps_pis_x_judge.override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 3,damage = 163}
 				self.wpn_fps_pis_x_judge.override.wpn_fps_upg_a_explosive.stats = {value = 5,total_ammo_mod = -6.66,damage = 200,recoil = -8}
 			end
 			init_SA()
@@ -1521,21 +1522,21 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 					if not self[full_auto[i]].override.wpn_fps_upg_a_explosive then
 						self[full_auto[i]].override.wpn_fps_upg_a_explosive = {}
 					end
-					self[full_auto[i]].override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 5,damage = 160}
+					self[full_auto[i]].override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 3,damage = 160}
 					self[full_auto[i]].override.wpn_fps_upg_a_custom.custom_stats = BS_custom_stats
-					self[full_auto[i]].override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 5,damage = 160}
+					self[full_auto[i]].override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 3,damage = 160}
 					self[full_auto[i]].override.wpn_fps_upg_a_custom_free.custom_stats = BS_custom_stats
 					self[full_auto[i]].override.wpn_fps_upg_a_explosive.stats = {value = 5,total_ammo_mod = -6.66,damage = 192,recoil = -8}
 					self[full_auto[i]].override.wpn_fps_upg_a_explosive.custom_stats = HE_custom_stats
 				end
-				self.wpn_fps_sho_x_sko12.override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 5,damage = 80}
-				self.wpn_fps_sho_x_sko12.override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 5,damage = 80}
+				self.wpn_fps_sho_x_sko12.override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 3,damage = 80}
+				self.wpn_fps_sho_x_sko12.override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 3,damage = 80}
 				self.wpn_fps_sho_x_sko12.override.wpn_fps_upg_a_explosive.stats = {value = 5,total_ammo_mod = -6.66,damage = 96,recoil = -8}
-				self.wpn_fps_sho_x_rota.override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 5,damage = 80}
-				self.wpn_fps_sho_x_rota.override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 5,damage = 80}
+				self.wpn_fps_sho_x_rota.override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 3,damage = 80}
+				self.wpn_fps_sho_x_rota.override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 3,damage = 80}
 				self.wpn_fps_sho_x_rota.override.wpn_fps_upg_a_explosive.stats = {value = 5,total_ammo_mod = -6.66,damage = 96,recoil = -8}
-				self.wpn_fps_sho_x_basset.override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 5,damage = 80}
-				self.wpn_fps_sho_x_basset.override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 5,damage = 80}
+				self.wpn_fps_sho_x_basset.override.wpn_fps_upg_a_custom.stats = {total_ammo_mod = 3,damage = 80}
+				self.wpn_fps_sho_x_basset.override.wpn_fps_upg_a_custom_free.stats = {total_ammo_mod = 3,damage = 80}
 				self.wpn_fps_sho_x_basset.override.wpn_fps_upg_a_explosive.stats = {value = 5,total_ammo_mod = -6.66,damage = 96,recoil = -8}
 			end
 			init_FA()
@@ -1678,6 +1679,26 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 			self.parts.wpn_fps_sho_supernova_conversion.stats = {value = 1,total_ammo_mod = 1.33,concealment = 3,recoil = 2,extra_ammo = 1}
 		end
 		Gilza_init_supernova()
+		
+		---- BLECKERT ----
+		local function Gilza_init_bleckert()
+			self.parts.wpn_fps_sho_bleckert_barrel_long.stats.concealment = -3
+			self.parts.wpn_fps_sho_bleckert_barrel_long.stats.recoil = 5
+			self.parts.wpn_fps_sho_bleckert_barrel_long.stats.concealment = -4
+			self.parts.wpn_fps_sho_bleckert_barrel_short.stats.concealment = 4
+			self.parts.wpn_fps_sho_bleckert_magazine_horse.stats.recoil = 2
+			self.parts.wpn_fps_sho_bleckert_stock_sawnoff.stats.spread = -2
+			self.parts.wpn_fps_sho_bleckert_stock_sawnoff.stats.recoil = -2
+			self.parts.wpn_fps_sho_bleckert_stock_sawnoff.stats.concealment = 4
+			self.parts.wpn_fps_sho_bleckert_stock_sawnoff.stats.reload = 3
+			self.parts.wpn_fps_sho_bleckert_stock_precision.stats.concealment = -5
+			self.parts.wpn_fps_sho_bleckert_stock_precision.stats.spread = 2
+			self.parts.wpn_fps_sho_bleckert_stock_precision.stats.recoil = 3
+			self.parts.wpn_fps_sho_bleckert_stock_standard_pouch.stats.concealment = -5
+			self.parts.wpn_fps_sho_bleckert_stock_standard_pouch.stats.recoil = -4
+			self.parts.wpn_fps_sho_bleckert_stock_standard_pouch.stats.total_ammo_mod = 6.67
+		end
+		Gilza_init_bleckert()
 		
 		---- HUMTSMAN ----
 		local function Gilza_init_humtsman()

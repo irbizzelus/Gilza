@@ -63,7 +63,7 @@ Hooks:PostHook(NewRaycastWeaponBase, "replenish", "Gilza_NewRaycastWeaponBase_re
 	local ammo_max = math.round(((original_tweak_data.AMMO_MAX + (managers.player:upgrade_value(self._name_id, "clip_amount_increase") * ammo_max_per_clip) + ammo_max_override_delta + math.round(original_tweak_data.AMMO_MAX * (self._total_ammo_mod or 0))) * ammo_max_multiplier))
 	ammo_max_per_clip = math.min(ammo_max_per_clip, ammo_max)
 
-	self:set_ammo_max_per_clip(ammo_max_per_clip + self:get_chamber_size())
+	self:set_ammo_max_per_clip(ammo_max_per_clip + (self:weapon_tweak_data().chamber_size or 0))
 	self:set_ammo_max(ammo_max)
 	self:set_ammo_total(ammo_max)
 	self:set_ammo_remaining_in_clip(ammo_max_per_clip)
@@ -959,4 +959,101 @@ Hooks:OverrideFunction(NewRaycastWeaponBase,"reload_name_id",function(self)
 	end
 
 	return self._name_id
+end)
+
+-- weaponlib fix #2451 - this time a reload animation issue with the rotating mag shotgun added with the "under the hammer" auction heist DLC
+Hooks:OverrideFunction(NewRaycastWeaponBase,"tweak_data_anim_play",function(self, anim, speed_multiplier)
+	local orig_anim = anim
+	local unit_anim = self:_get_tweak_data_weapon_animation(orig_anim)
+
+	local played = self:tweak_data_anim_play_redirect(unit_anim, speed_multiplier)
+
+	local effect_manager = World:effect_manager()
+
+	if self._active_animation_effects[anim] then
+		for _, effect in ipairs(self._active_animation_effects[anim]) do
+			World:effect_manager():kill(effect)
+		end
+	end
+
+	self._active_animation_effects[anim] = {}
+	local data = tweak_data.weapon.factory[self._factory_id]
+
+	if data.animations and data.animations[unit_anim] then
+		-- this part in particular is now different
+		local animation_data = data.animations[unit_anim]
+		local anim_name = type(animation_data) == "table" and animation_data.anim or animation_data
+		if type(anim_name) == "string" then
+			local ids_anim_name = Idstring(anim_name)
+			local length = self._unit:anim_length(ids_anim_name)
+			speed_multiplier = speed_multiplier or 1
+
+			self._unit:anim_stop(ids_anim_name)
+			
+			local offset = self:_get_anim_start_offset(animation_data)
+			if offset then
+				self._unit:anim_set_time(ids_anim_name, offset)
+			end
+			
+			length = self:_get_anim_legth_modifier(animation_data, length)
+			
+			self._unit:anim_play_to(ids_anim_name, length, speed_multiplier)
+
+			played = true
+		end
+	end
+
+	if data.animation_effects and data.animation_effects[unit_anim] then
+		local effect_table = data.animation_effects[unit_anim]
+
+		if effect_table then
+			effect_table = clone(effect_table)
+			effect_table.parent = effect_table.parent and self._unit:get_object(effect_table.parent)
+			local effect = effect_manager:spawn(effect_table)
+
+			table.insert(self._active_animation_effects[anim], effect)
+		end
+	end
+
+	for part_id, data in pairs(self._parts) do
+		if data.unit and data.animations and data.animations[unit_anim] then
+			local animation_data = data.animations[unit_anim] -- same here
+			local anim_name = type(animation_data) == "table" and animation_data.anim or animation_data
+			if type(anim_name) == "string" then
+				local ids_anim_name = Idstring(anim_name)
+				local length = data.unit:anim_length(ids_anim_name)
+				speed_multiplier = speed_multiplier or 1
+
+				data.unit:anim_stop(ids_anim_name)
+
+				local offset = self:_get_anim_start_offset(animation_data)
+				if offset then
+					data.unit:anim_set_time(ids_anim_name, offset)
+				end
+				
+				length = self:_get_anim_legth_modifier(animation_data, length)
+				
+				data.unit:anim_play_to(ids_anim_name, length, speed_multiplier)
+
+				played = true
+			end
+		end
+
+		if data.unit and data.animation_effects and data.animation_effects[unit_anim] then
+			local effect_table = data.animation_effects[unit_anim]
+
+			if effect_table then
+				effect_table = clone(effect_table)
+				effect_table.parent = effect_table.parent and data.unit:get_object(effect_table.parent)
+				local effect = effect_manager:spawn(effect_table)
+
+				table.insert(self._active_animation_effects[anim], effect)
+			end
+		end
+	end
+
+	self:set_reload_objects_visible(true, anim)
+	NewRaycastWeaponBase.super.tweak_data_anim_play(self, orig_anim, speed_multiplier)
+
+	return played
 end)
