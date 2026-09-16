@@ -69,7 +69,8 @@ _G.Gilza = {
 	shotgun_minimal_damage_multipliers = {},
 	current_shotgun_shot_id = 0,
 	weapon_shot_id = 0,
-	intimidated_enemies = {}
+	intimidated_enemies = {},
+	customWeaponFactoryIDs = {}
 }
 
 -- Add a posthook to beardlib's WeaponModule init to grab factory ids of custom weapons directly from the source,
@@ -156,7 +157,7 @@ function Gilza:changelog_message()
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.8.12 Changelog:\n\n- Compatibility with update 248 and new content.\n-Shotguns now have roughly 20% more ammo pickup by default, but all ammunition options now have higher ammo pickup penalties with the end pickup value being the same as before this patch. This should make default shotgun ammunition a more appleaing choice and allow for greater build variety, as skills that deal with body armor and shields can now be valuable on default round shotguns."
+			local message = "2.8.12 Changelog:\n\n- Compatibility with update 248 and new content.\n- Shotguns now have roughly 20% more ammo pickup by default, but all ammunition options now have higher ammo pickup penalties with the end pickup value being the same as before this patch. This should make default shotgun ammunition a more appleaing choice and allow for greater build variety, as skills that deal with body armor and shields can now be valuable on default round shotguns."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
 			Gilza.settings.version = 2.812
