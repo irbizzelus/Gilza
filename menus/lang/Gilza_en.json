@@ -2,6 +2,11 @@
 	"Gilza_title": "Gilza",
 	"Gilza_blank": "",
 	
+	"Gilza_keybind_rifleman_zoom_increase": "Designated Marksman zoom increase",
+	"Gilza_keybind_rifleman_zoom_increase_desc": "Press this key to increase your ADS zoom level while using the \"Designated Marksman\" skill. Mouse scrool wheel up is recommended.",
+	"Gilza_keybind_rifleman_zoom_decrease": "Designated Marksman zoom decrease",
+	"Gilza_keybind_rifleman_zoom_decrease_desc": "Press this key to decrease your ADS zoom level while using the \"Designated Marksman\" skill. Mouse scrool wheel down is recommended.",
+	
 	"Gilza_general_header": "----- General -----",
 	"Gilza_single_fire_input_buffering": "Input Buffering",
 	"Gilza_single_fire_input_buffering_desc": "If enabled, your \"Fire Weapon\" keybind inputs will be remembered if they were pressed in-between single fire mode weapon shots. This improves overall feel of single fire mode for low rate of fire weapons. This does not affect weapons with ROF lower than 150 rounds per minute.",
@@ -56,8 +61,6 @@
 	"Gilza_shotgun_skill_notification_desc": "Adds a pop up notification when you recieve a speed bonus from \"fearmonger\" skill.",
 	"Gilza_menace_points_notification": "Stockholm (Basic) notification",
 	"Gilza_menace_points_notification_desc": "Adds a pop up notification when you gain menace points while using Stockholm Syndrome skill.",
-	"Gilza_designated_marksman_zoom": "Marksman Zoom Skill",
-	"Gilza_designated_marksman_zoom_desc": "Change how much extra zoom \"Designated Marksman\" skill will provide. Vanilla PayDay 2 provides you with 1.5x zoom by default. Heist restart is required for changes to apply.",
 	"Gilza_designated_marksman_zoom_1": "0x",
 	"Gilza_designated_marksman_zoom_2": "1.5x",
 	"Gilza_designated_marksman_zoom_3": "2x",

@@ -561,3 +561,50 @@ Hooks:PreHook(RaycastWeaponBase,"fire","autofiresoundfix2_raycastweaponbase_fire
 		end
 	end
 end)
+
+-- reduce damage dealt to planks by sometimes completely preventing damage to planks, since the damage amount is irrelevant to how quickly they break, they only care for № of hits
+-- since the check is consistent, override all funcs in the same way
+local bullet_bases = {
+	_InstantBulletBase = InstantBulletBase,
+	_InstantExplosiveBulletBase = InstantExplosiveBulletBase,
+	_FlameBulletBase = FlameBulletBase,
+	_DOTBulletBase = DOTBulletBase,
+	_ProjectilesPoisonBulletBase = ProjectilesPoisonBulletBase,
+	_DazingInstantBulletBase = DazingInstantBulletBase,
+	_ReviveInstantBulletBase = ReviveInstantBulletBase,
+}
+
+for base_name, base in pairs(bullet_bases) do
+	
+	Gilza.og_bullet_bases = Gilza.og_bullet_bases or {}
+	Gilza.og_bullet_bases["og_function"..tostring(base_name).."_on_collision"] = base.on_collision
+	Hooks:OverrideFunction(base, "on_collision", function (self, col_ray, weapon_unit, user_unit, damage, blank, no_sound)
+		
+		local hit_unit = col_ray.unit
+		local local_damage = not blank or hit_unit:id() == -1
+		if hit_unit:damage() and local_damage then
+			local plank_dmg_ext = col_ray.body:extension() and
+			col_ray.body:extension().damage and
+			col_ray.body:extension().damage._unit_extension and
+			col_ray.body:extension().damage._unit_extension._unit_element and
+			col_ray.body:extension().damage._unit_extension._unit_element._sequence_elements and
+			col_ray.body:extension().damage._unit_extension._unit_element._sequence_elements.destroy_planks
+			if plank_dmg_ext then
+				local chance = 0.3
+				local dmg_factor = math.clamp((damage * 10 - 60) / (450 - 60), 0, 1) -- value from 0 to 1 representing the range between min and max allowed dmg ranges: 60-450
+				chance = chance + (0.4 * dmg_factor)
+				local gun = alive(weapon_unit) and weapon_unit and weapon_unit:base() or nil
+				if gun and gun.is_category and (gun:is_category("shotgun") or gun:is_category("grenade_launcher")) and gun._rays and gun._rays >= 2 then
+					chance = chance / (gun._rays * 0.33) -- shotguns should be more effective, so instead of being reduced by pellet count its reduced by only third of pellet count
+				end
+				if math.random() > chance then
+					log("[Gilza] Prevented damage to planks.")
+					return nil
+				end
+			end
+		end
+		
+		return Gilza.og_bullet_bases["og_function"..tostring(base_name).."_on_collision"](self, col_ray, weapon_unit, user_unit, damage, blank, no_sound)
+	end)
+
+end

@@ -704,7 +704,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 		self.skills.stable_shot[1].upgrades = { "player_weapon_accuracy_increase_1" }
 		self.skills.stable_shot[2].upgrades = { "player_weapon_accuracy_increase_2" }
 		
-		self.skills.rifleman[1].upgrades = { "weapon_enter_steelsight_speed_multiplier", "assault_rifle_zoom_increase", "snp_zoom_increase", "smg_zoom_increase", "lmg_zoom_increase", "pistol_zoom_increase", "player_less_start_recoil" }
+		self.skills.rifleman[1].upgrades = { "weapon_enter_steelsight_speed_multiplier", "player_adjustable_zoom_level", "player_less_start_recoil" }
 		self.skills.rifleman[2].upgrades = { "player_steelsight_normal_movement_speed", "player_less_start_recoil_2", "player_less_start_recoil_for_longer" }
 		
 		self.skills.sharpshooter[1].upgrades = { "player_not_moving_damage_reduction_bonus_1" }

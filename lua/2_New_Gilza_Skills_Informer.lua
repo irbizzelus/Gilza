@@ -719,3 +719,18 @@ function Gilza.New_Skills_Informer:stopped_offhand_reload()
 		managers.gameinfo:event("timed_buff", "deactivate", "offhand_reload_duration")
 	end
 end
+
+-- procs on pistol hits
+function Gilza.New_Skills_Informer:activated_trigger_happy(expire_t)
+	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
+		managers.gameinfo:event("buff", "activate", "desperado")
+		managers.gameinfo:event("buff", "set_duration", "desperado", { expire_t = expire_t })
+	end
+end
+
+-- on timer running out or swapping to non-pistol wpn
+function Gilza.New_Skills_Informer:stopped_trigger_happy()
+	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
+		managers.gameinfo:event("buff", "deactivate", "desperado")
+	end
+end

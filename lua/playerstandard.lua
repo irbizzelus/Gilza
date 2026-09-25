@@ -186,7 +186,13 @@ Hooks:PostHook(PlayerStandard, "update", "Gilza_posthook_PlayerStandard_update",
 	
 	-- new pistol offhand reloads
 	if managers.player:has_category_upgrade("pistol", "reloads_primary_offhand") then
-		self:update_gilza_offhand_reload(t)
+		local offhand_status = self:update_gilza_offhand_reload(t)
+		if offhand_status == "cancel" then
+			if self.offhand_reload_t then
+				self.offhand_reload_t = nil
+				Gilza.NSI:stopped_offhand_reload()
+			end
+		end
 	end
 	
 end)
@@ -770,13 +776,24 @@ function PlayerStandard:update_gilza_offhand_reload(t)
 	end
 	
 	local player = managers.player:player_unit()
-	if not player then
-		return
+	if not (player and alive(player)) then
+		return "cancel"
 	end
 	
 	local primary = player:inventory():unit_by_selection(2) and player:inventory():unit_by_selection(2):base()
 	if not primary then
-		return
+		return "cancel"
+	end
+	
+	local cancel_states = {
+		["bleed_out"] = true,
+		["fatal"] = true,
+		["incapacitated"] = true,
+		["arrested"] = true,
+		["jerry1"] = true
+	}
+	if cancel_states[managers.player:current_state()] then
+		return "cancel"
 	end
 	
 	local has_enough_for_reload = (primary:get_ammo_total() - primary:get_ammo_remaining_in_clip()) > 0

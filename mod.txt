@@ -35,6 +35,7 @@
 		{"hook_id": "lib/units/weapons/newnpcraycastweaponbase", "script_path" : "lua/newnpcraycastweaponbase.lua"},
 		{"hook_id": "lib/units/weapons/newraycastweaponbase", "script_path" : "lua/newraycastweaponbase.lua"},
 		{"hook_id": "lib/player_actions/skills/playeractiondamagecontrol", "script_path" : "lua/playeractiondamagecontrol.lua"},
+		{"hook_id": "lib/player_actions/skills/playeractionexperthandling", "script_path" : "lua/playeractionexperthandling.lua"},
 		{"hook_id": "lib/player_actions/skills/playeractionfullyloaded", "script_path" : "lua/playeractionfullyloaded.lua"},
 		{"hook_id": "lib/player_actions/skills/playeractionshockandawe", "script_path" : "lua/playeractionshockandawe.lua"},
 		{"hook_id": "lib/player_actions/skills/playeractionunseenstrike", "script_path" : "lua/playeractionunseenstrike.lua"},
@@ -69,4 +70,24 @@
 		{"hook_id": "lib/units/weapons/weaponliongadget1", "script_path" : "lua/weaponliongadget1.lua"},
 		{"hook_id": "lib/tweak_data/weapontweakdata", "script_path" : "lua/WeaponTweaks.lua"}
 	],
+	"keybinds" : [
+        {
+            "keybind_id" : "Gilza_keybind_rifleman_zoom_increase",
+            "name" : "Gilza_keybind_rifleman_zoom_increase",
+            "description" : "Gilza_keybind_rifleman_zoom_increase_desc"
+            "script_path" : "keybinds/rifleman_zoom_increase.lua",
+            "run_in_menu" : false,
+            "run_in_game" : true,	
+			"localized"   : true,
+		},
+        {         
+		    "keybind_id" : "Gilza_keybind_rifleman_zoom_decrease",
+            "name" : "Gilza_keybind_rifleman_zoom_decrease",
+            "description" : "Gilza_keybind_rifleman_zoom_decrease_desc"
+            "script_path" : "keybinds/rifleman_zoom_decrease.lua",
+            "run_in_menu" : false,
+            "run_in_game" : true,
+			"localized"   : true,
+        }
+    ]
 }

@@ -46,20 +46,25 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			self.values.player.less_start_recoil_for_longer = {
 				true
 			}
+			-- new zoom skill
+			self.values.player.adjustable_zoom_level = {
+				true
+			}
+			-- clear vanilla zoom skills to avoid conflicts
 			self.values.smg.zoom_increase = {
-				(Gilza.settings.designated_marksman_zoom - 1) or 2
+				0
 			}
 			self.values.assault_rifle.zoom_increase = {
-				(Gilza.settings.designated_marksman_zoom - 1) or 2
+				0
 			}
 			self.values.lmg.zoom_increase = {
-				(Gilza.settings.designated_marksman_zoom - 1) or 2
+				0
 			}
 			self.values.snp.zoom_increase = {
-				(Gilza.settings.designated_marksman_zoom - 1) or 2
+				0
 			}
 			self.values.pistol.zoom_increase = {
-				(Gilza.settings.designated_marksman_zoom - 1) or 2
+				0
 			}
 			-- new slow and steady skill - dmg resist if not moving
 			self.values.player.not_moving_damage_reduction_bonus = {
@@ -1674,6 +1679,15 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 			}
 		}
 		-- new stuff
+		self.definitions.player_adjustable_zoom_level = {
+			name_id = "menu_player_adjustable_zoom_level",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "adjustable_zoom_level",
+				category = "player"
+			}
+		}
 		self.definitions.player_less_start_recoil = {
 			name_id = "menu_player_less_start_recoil",
 			category = "feature",

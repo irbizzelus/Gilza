@@ -1057,3 +1057,72 @@ Hooks:OverrideFunction(NewRaycastWeaponBase,"tweak_data_anim_play",function(self
 
 	return played
 end)
+
+-- adjustable zoom levels skill
+local gilza_og_NewRaycastWeaponBase_zoom = NewRaycastWeaponBase.zoom
+Hooks:OverrideFunction(NewRaycastWeaponBase,"zoom",function(self)
+	
+	if managers.player:has_category_upgrade("player", "adjustable_zoom_level") then
+	
+		local stats_table = tweak_data.weapon.stats.zoom
+		local second_sight = self:get_active_second_sight()
+		local selection_index = tweak_data.weapon[self._name_id].use_data.selection_index or nil
+
+		if second_sight then
+			local zoom_stats = tweak_data.weapon.factory.parts[second_sight.part_id].stats.gadget_zoom
+
+			if not zoom_stats then
+				local tweak_stats = tweak_data.weapon.factory.parts[second_sight.part_id].stats
+
+				zoom_stats = math.min(NewRaycastWeaponBase.super.zoom(self) + tweak_stats.gadget_zoom_add, #stats_table)
+			end
+			
+			zoom_stats = zoom_stats + (Gilza.zoomleveloffset[selection_index] or 0)
+			zoom_stats = math.clamp(zoom_stats, 1, #stats_table)
+			
+			local fov = stats_table[zoom_stats]
+
+			return fov
+		end
+
+		if self:is_second_sight_on() and self._second_sight_data then
+			local gadget_zoom_stats = tweak_data.weapon.factory.parts[self._second_sight_data.part_id].stats.gadget_zoom
+
+			if not gadget_zoom_stats then
+				local tweak_stats = tweak_data.weapon.factory.parts[self._second_sight_data.part_id].stats
+
+				gadget_zoom_stats = math.min(NewRaycastWeaponBase.super.zoom(self) + tweak_stats.gadget_zoom_add, #stats_table)
+			end
+			
+			gadget_zoom_stats = gadget_zoom_stats + (Gilza.zoomleveloffset[selection_index] or 0)
+			gadget_zoom_stats = math.clamp(gadget_zoom_stats, 1, #stats_table)
+
+			local fov = stats_table[gadget_zoom_stats]
+
+			return fov
+		end
+		
+		local default_fov = NewRaycastWeaponBase.super.zoom(self)
+		local zoom = -1
+		for level, fov in ipairs(stats_table) do
+			if fov == default_fov then
+				zoom = level
+				break
+			end
+		end
+		
+		if zoom >= 1 then
+			zoom = zoom + (Gilza.zoomleveloffset[selection_index] or 0)
+			zoom = math.clamp(zoom, 1, #stats_table)
+			return stats_table[zoom]
+		else
+			return default_fov
+		end
+		
+	else
+		
+		return gilza_og_NewRaycastWeaponBase_zoom(self)
+		
+	end
+	
+end)

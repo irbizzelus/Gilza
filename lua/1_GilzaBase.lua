@@ -11,7 +11,6 @@ _G.Gilza = {
 		blackmarket_weapon_sorting = 2,
 		shotgun_skill_notification = true,
 		menace_points_notification = true,
-		designated_marksman_zoom = 2,
 		melee_charge_tilt = 3,
 		melee_gui = 4,
 		flash_color_R = 255,
@@ -69,6 +68,7 @@ _G.Gilza = {
 	shotgun_minimal_damage_multipliers = {},
 	current_shotgun_shot_id = 0,
 	weapon_shot_id = 0,
+	zoomleveloffset = {[1] = 0, [2] = 0},
 	intimidated_enemies = {},
 	customWeaponFactoryIDs = {}
 }
