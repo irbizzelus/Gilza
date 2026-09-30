@@ -161,7 +161,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			-- shotgun panic - speed boost
 			self.values.temporary.speed_boost_on_panic_kill = {
 				{
-					0.25,
+					0.2,
 					20
 				}
 			}
@@ -189,7 +189,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			}
 			-- fully loaded aced pickup. basic version is noramlly under perks, but no more - its fucking annoying
 			self.values.player.pick_up_ammo_multiplier = {
-				1.25,
+				1.35,
 				1
 			}
 			-- make old fully loaded aced grenade pick up base kit with perks, buff the skill values. nerf grenade pick ups depending on the grenade
