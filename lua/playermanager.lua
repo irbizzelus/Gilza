@@ -2275,3 +2275,8 @@ function PlayerManager:Gilza_locknload_aced_bullet_refund_on_hit_trigger(skill_d
 	end
 	
 end
+
+-- new func needed for fully loaded temporary bulletstorm buff
+function PlayerManager:get_property_end_time(name)
+	return self._temporary_properties:get_property_end_time(name)
+end

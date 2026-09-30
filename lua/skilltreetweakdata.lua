@@ -738,7 +738,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 		
 		self.skills.carbon_blade[2].upgrades = {"saw_ignore_shields_1","saw_panic_when_kill_1","player_saw_ammo_pick_up"}
 		
-		self.skills.bandoliers[2].upgrades = {"player_regain_throwable_from_ammo_2", "player_pick_up_ammo_multiplier"}
+		self.skills.bandoliers[2].upgrades = {"player_regain_throwable_from_ammo_2", "player_pick_up_ammo_multiplier", "player_temp_bulletstorm_from_ammo_pick_ups"}
 		
 		---- TECHICIAN
 		self.skills.defense_up[1].upgrades = {"sentry_gun_cost_reduction_1", "sentry_gun_cost_reduction_2"}

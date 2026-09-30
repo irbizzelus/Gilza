@@ -192,6 +192,10 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				1.35,
 				1
 			}
+			-- fully loaded aced provides temp bulletstorm effect for this amount of seconds to make it more fun
+			self.values.player.temp_bulletstorm_from_ammo_pick_ups = {
+				1
+			}
 			-- make old fully loaded aced grenade pick up base kit with perks, buff the skill values. nerf grenade pick ups depending on the grenade
 			self.values.player.regain_throwable_from_ammo = {
 				{
@@ -1826,6 +1830,16 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 			upgrade = {
 				value = 2,
 				upgrade = "regain_throwable_from_ammo",
+				category = "player"
+			}
+		}
+		-- new temp upgrade for fully loaded to make it less boring
+		self.definitions.player_temp_bulletstorm_from_ammo_pick_ups = {
+			name_id = "player_temp_bulletstorm_from_ammo_pick_ups",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "temp_bulletstorm_from_ammo_pick_ups",
 				category = "player"
 			}
 		}

@@ -38,8 +38,8 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 					
 					-- if we pickup bow/crossbow bolt from enviroment with brawler deck, we only have a chance to get it back. chance is equal to total ammo multiplier
 					if self._pickup_event and (self._pickup_event == "wp_arrow_pick_up" or self._pickup_event == "wp_hunterarrow_pick_up") then
-						if managers.player:has_category_upgrade("player", "extra_ammo_cut") then
-							local rng_win = math.random() <= managers.player:upgrade_value("player", "extra_ammo_cut", 0)
+						if player_manager:has_category_upgrade("player", "extra_ammo_cut") then
+							local rng_win = math.random() <= player_manager:upgrade_value("player", "extra_ammo_cut", 0)
 							if not rng_win then
 								-- no bueno
 								picked_up = true
@@ -49,7 +49,7 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 					end
 					
 					-- brawler does not pickup ammo boxes
-					if managers.player:has_category_upgrade("player", "extra_ammo_cut") then
+					if player_manager:has_category_upgrade("player", "extra_ammo_cut") then
 						if not self._ammo_box then
 							if picked_up and tweak_data.achievement.pickup_sticks and self._weapon_category == tweak_data.achievement.pickup_sticks.weapon_category then
 								managers.achievment:award_progress(tweak_data.achievement.pickup_sticks.stat)
@@ -76,7 +76,25 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 			local rand = math.random()
 
 			if rand <= CABLE_TIE_GET_CHANCE and self._ammo_box then
-				managers.player:add_cable_ties(CABLE_TIE_GET_AMOUNT)
+				player_manager:add_cable_ties(CABLE_TIE_GET_AMOUNT)
+			end
+			
+			-- new fully loaded aced
+			if player_manager:has_category_upgrade("player", "temp_bulletstorm_from_ammo_pick_ups") then
+				local skill_duration = player_manager:upgrade_value("player", "temp_bulletstorm_from_ammo_pick_ups")
+				local time_to_add = player_manager:upgrade_value("player", "temp_bulletstorm_from_ammo_pick_ups")
+				if player_manager:has_active_temporary_property("bullet_storm") then
+					local remained = player_manager:get_property_end_time("bullet_storm") - Application:time()
+					if remained >= skill_duration then
+						time_to_add = 0
+					elseif remained < skill_duration then
+						time_to_add = skill_duration - remained
+					end
+				end
+				if time_to_add > 0 then
+					player_manager:add_to_temporary_property("bullet_storm", time_to_add, 1)
+					Gilza.NSI:updated_bulletstorm(time_to_add)
+				end
 			end
 
 			if not self._projectile_id and not self._weapon_category then

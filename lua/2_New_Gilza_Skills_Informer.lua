@@ -734,3 +734,11 @@ function Gilza.New_Skills_Informer:stopped_trigger_happy()
 		managers.gameinfo:event("buff", "deactivate", "desperado")
 	end
 end
+
+-- update current bulletstorm effect remaining duration timer, end time is applicationtime + dur. used by aced fully loaded
+function Gilza.New_Skills_Informer:updated_bulletstorm(dur)
+	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
+		managers.gameinfo:event("timed_buff", "deactivate", "bullet_storm")
+		managers.gameinfo:event("timed_buff", "activate", "bullet_storm", { duration = dur })
+	end
+end
