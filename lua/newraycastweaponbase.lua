@@ -23,8 +23,17 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "conditional_accuracy_multiplier", 
 	end
 	
 	if current_state:in_steelsight() then
+		local is_shotgun = false
 		for _, category in ipairs(self:categories()) do
 			mul = mul + 1 - pm:upgrade_value(category, "steelsight_accuracy_inc", 1)
+			if category == "shotgun" then
+				is_shotgun = true
+			end
+		end
+		
+		-- new overkill aced
+		if not is_shotgun and pm:has_category_upgrade("temporary", "overkill_damage_multiplier") and pm:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 and pm:has_category_upgrade("player", "overkill_all_weapons") then
+			mul = mul + 1 - pm:upgrade_value("shotgun", "steelsight_accuracy_inc", 1)
 		end
 	end
 
@@ -85,6 +94,7 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "reload_speed_multiplier", function
 		simplified_categories[category] = true
 	end
 	
+	-- double trouble
 	if simplified_categories.akimbo and managers.player:has_category_upgrade("akimbo", "pistol_improved_handling") then
 		if simplified_categories.pistol or (simplified_categories.smg and managers.player:has_category_upgrade("akimbo", "allow_smg_improved_handling")) then
 			local skill = managers.player:upgrade_value("akimbo", "pistol_improved_handling")
@@ -103,11 +113,17 @@ Hooks:OverrideFunction(NewRaycastWeaponBase, "reload_speed_multiplier", function
 		end	
 	end
 	
+	-- overkill
 	if managers.player:has_category_upgrade("temporary", "overkill_damage_multiplier") and managers.player:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 then
+		-- new reload buff
 		if managers.player:has_category_upgrade("player", "overkill_all_weapons") then
 			multiplier = multiplier - 0.5
 		elseif simplified_categories.shotgun or simplified_categories.saw then
 			multiplier = multiplier - 0.5
+		end
+		-- aced version provides reload boost from "shotgun cqb" to other weapons
+		if not simplified_categories.shotgun and managers.player:has_category_upgrade("player", "overkill_all_weapons") then
+			multiplier = multiplier + 1 - managers.player:upgrade_value("shotgun", "reload_speed_multiplier", 1)
 		end
 	end
 
@@ -1125,4 +1141,37 @@ Hooks:OverrideFunction(NewRaycastWeaponBase,"zoom",function(self)
 		
 	end
 	
+end)
+
+-- new overkill aced
+Hooks:OverrideFunction(NewRaycastWeaponBase,"enter_steelsight_speed_multiplier",function(self)
+	local multiplier = 1
+	local categories = self:categories()
+	
+	local is_shotgun = false
+	for _, category in ipairs(categories) do
+		multiplier = multiplier + (1 - managers.player:upgrade_value(category, "enter_steelsight_speed_multiplier", 1))
+		if category == "shotgun" then
+			is_shotgun = true
+		end
+	end
+	
+	-- here
+	if not is_shotgun and managers.player:has_category_upgrade("temporary", "overkill_damage_multiplier") and managers.player:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 and managers.player:has_category_upgrade("player", "overkill_all_weapons") then
+		multiplier = multiplier + (1 - managers.player:upgrade_value("shotgun", "enter_steelsight_speed_multiplier", 1))
+	end
+
+	multiplier = multiplier + (1 - managers.player:temporary_upgrade_value("temporary", "combat_medic_enter_steelsight_speed_multiplier", 1))
+	multiplier = multiplier + (1 - managers.player:upgrade_value(self._name_id, "enter_steelsight_speed_multiplier", 1))
+	multiplier = multiplier + (1 - managers.player:upgrade_value("weapon", "enter_steelsight_speed_multiplier", 1))
+
+	if self._silencer then
+		multiplier = multiplier + (1 - managers.player:upgrade_value("weapon", "silencer_enter_steelsight_speed_multiplier", 1))
+
+		for _, category in ipairs(categories) do
+			multiplier = multiplier + (1 - managers.player:upgrade_value(category, "silencer_enter_steelsight_speed_multiplier", 1))
+		end
+	end
+
+	return self:_convert_add_to_mul(multiplier)
 end)

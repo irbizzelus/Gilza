@@ -93,7 +93,7 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 				end
 				if time_to_add > 0 then
 					player_manager:add_to_temporary_property("bullet_storm", time_to_add, 1)
-					Gilza.NSI:updated_bulletstorm(time_to_add)
+					Gilza.NSI:updated_bulletstorm(skill_duration)
 				end
 			end
 

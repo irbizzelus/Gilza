@@ -288,8 +288,12 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 		if shotgun_panic_on_kill and variant ~= "melee" then
 			local equipped_unit = self:get_current_state()._equipped_unit:base()
 			local held_weapon = weapon_id == equipped_unit.name_id
-			-- only for shotguns with threat of 35 and above (idk where the extra 0.2 comes from yet)
-			if held_weapon and equipped_unit:is_category("shotgun") and equipped_unit._suppression >= 3.7 then
+			local valid_weapon = equipped_unit:is_category("shotgun")
+			-- ovk aced allows all weapons
+			if self:has_category_upgrade("temporary", "overkill_damage_multiplier") and self:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 and self:has_category_upgrade("player", "overkill_all_weapons") then
+				valid_weapon = true
+			end
+			if held_weapon and valid_weapon and equipped_unit._suppression >= 3.7 then -- only for weapons with threat of 35 and above (idk where the extra base 0.2 comes from ngl)
 				local pos = player_unit:position()
 				local skill = self:upgrade_value("shotgun", "panic_when_kill")
 

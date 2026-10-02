@@ -414,3 +414,62 @@ Hooks:OverrideFunction(BlackMarketManager, "get_sorted_melee_weapons", function 
 
 	return sorted_categories, item_categories, override_slots
 end)
+
+-- currently only needed for overkill aced
+Hooks:OverrideFunction(BlackMarketManager, "recoil_multiplier", function (self, name, categories, silencer, blueprint, is_moving)
+	local multiplier = 1
+	
+	local is_shotgun = false
+	for _, category in ipairs(categories) do
+		multiplier = multiplier + (1 - managers.player:upgrade_value(category, "recoil_multiplier", 1))
+		multiplier = multiplier + (1 - managers.player:upgrade_value(category, "passive_recoil_multiplier", 1))
+		if category == "shotgun" then
+			is_shotgun = true
+		end
+	end
+	
+	-- overkill aced shares recoil buffs with all weapons
+	if not is_shotgun and managers.player:has_category_upgrade("temporary", "overkill_damage_multiplier") and managers.player:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 and managers.player:has_category_upgrade("player", "overkill_all_weapons") then
+		multiplier = multiplier + (1 - managers.player:upgrade_value("shotgun", "recoil_multiplier", 1))
+	end
+
+	if managers.player:player_unit() and managers.player:player_unit():character_damage():is_suppressed() then
+		for _, category in ipairs(categories) do
+			if managers.player:has_team_category_upgrade(category, "suppression_recoil_multiplier") then
+				multiplier = multiplier + (1 - managers.player:team_upgrade_value(category, "suppression_recoil_multiplier", 1))
+			end
+		end
+
+		if managers.player:has_team_category_upgrade("weapon", "suppression_recoil_multiplier") then
+			multiplier = multiplier + (1 - managers.player:team_upgrade_value("weapon", "suppression_recoil_multiplier", 1))
+		end
+	else
+		for _, category in ipairs(categories) do
+			if managers.player:has_team_category_upgrade(category, "recoil_multiplier") then
+				multiplier = multiplier + (1 - managers.player:team_upgrade_value(category, "recoil_multiplier", 1))
+			end
+		end
+
+		if managers.player:has_team_category_upgrade("weapon", "recoil_multiplier") then
+			multiplier = multiplier + (1 - managers.player:team_upgrade_value("weapon", "recoil_multiplier", 1))
+		end
+	end
+
+	multiplier = multiplier + (1 - managers.player:upgrade_value(name, "recoil_multiplier", 1))
+	multiplier = multiplier + (1 - managers.player:upgrade_value("weapon", "passive_recoil_multiplier", 1))
+	multiplier = multiplier + (1 - managers.player:upgrade_value("player", "recoil_multiplier", 1))
+
+	if silencer then
+		multiplier = multiplier + (1 - managers.player:upgrade_value("weapon", "silencer_recoil_multiplier", 1))
+
+		for _, category in ipairs(categories) do
+			multiplier = multiplier + (1 - managers.player:upgrade_value(category, "silencer_recoil_multiplier", 1))
+		end
+	end
+
+	if blueprint and self:is_weapon_modified(managers.weapon_factory:get_factory_id_by_weapon_id(name), blueprint) then
+		multiplier = multiplier + (1 - managers.player:upgrade_value("weapon", "modded_recoil_multiplier", 1))
+	end
+
+	return self:_convert_add_to_mul(multiplier)
+end)

@@ -573,7 +573,6 @@ local bullet_bases = {
 	_DazingInstantBulletBase = DazingInstantBulletBase,
 	_ReviveInstantBulletBase = ReviveInstantBulletBase,
 }
-
 for base_name, base in pairs(bullet_bases) do
 	
 	Gilza.og_bullet_bases = Gilza.og_bullet_bases or {}
@@ -608,3 +607,199 @@ for base_name, base in pairs(bullet_bases) do
 	end)
 
 end
+
+-- override based on weaponlib's stuff. was done to make overkill aced share the "consume_no_ammo_chance" upgrade to other weapons
+Hooks:OverrideFunction(RaycastWeaponBase, "fire", function (self, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit)
+
+	-- Functionality:
+	if managers.player:has_activate_temporary_upgrade("temporary", "no_ammo_cost_buff") then
+		managers.player:deactivate_temporary_upgrade("temporary", "no_ammo_cost_buff")
+
+		if managers.player:has_category_upgrade("temporary", "no_ammo_cost") then
+			managers.player:activate_temporary_upgrade("temporary", "no_ammo_cost")
+		end
+	end
+
+	local w_td = self:weapon_tweak_data()
+
+	if self._bullets_fired then
+		if self._bullets_fired == 1 and w_td.sounds.fire_single then
+			self:play_tweak_data_sound("stop_fire")
+			self:play_tweak_data_sound("fire_auto", "fire")
+		end
+
+		self._bullets_fired = self._bullets_fired + 1
+	end
+
+	local user_unit = self._setup.user_unit
+	local is_player = user_unit == managers.player:player_unit()
+	local consume_ammo = not managers.player:has_active_temporary_property("bullet_storm") and (not managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier") or not managers.player:has_category_upgrade("player", "berserker_no_ammo_cost")) or not is_player
+	
+	local ammo_usage = self:ammo_usage()
+	local base = self:ammo_base()
+
+	local ammo_in_clip = base:get_ammo_remaining_in_clip()
+
+	local is_empty = false
+	if consume_ammo and (is_player or Network:is_server()) then
+		if ammo_in_clip == 0 then
+			return
+		end
+
+		if is_player then
+			for _, category in ipairs(self:weapon_tweak_data().categories) do
+				if managers.player:has_category_upgrade(category, "consume_no_ammo_chance") then
+					local roll = math.rand(1)
+					local chance = managers.player:upgrade_value(category, "consume_no_ammo_chance", 0)
+
+					if roll < chance then
+						ammo_usage = 0
+					end
+				end
+			end
+			-- new overkill aced
+			if managers.player:has_category_upgrade("temporary", "overkill_damage_multiplier") and managers.player:has_category_upgrade("player", "overkill_all_weapons") and managers.player:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 and managers.player:has_category_upgrade("shotgun", "consume_no_ammo_chance") then
+				local roll = math.rand(1)
+				local chance = managers.player:upgrade_value("shotgun", "consume_no_ammo_chance", 0)
+
+				if roll < chance then
+					ammo_usage = 0
+				end
+			end
+		end
+
+		local remaining_ammo = ammo_in_clip - ammo_usage
+		if ammo_in_clip < ammo_usage then
+			ammo_usage = ammo_usage + remaining_ammo
+			remaining_ammo = 0
+
+			if self._fire_mode ~= Idstring("volley") then
+				return -- Volley is weird and lets you fire a bunch of ammo at once no matter what or something.
+			end
+		end
+
+		-- Flip the execution order here so that total ammo gets accurately updated.
+		self:use_ammo(base, ammo_usage)
+		base:set_ammo_remaining_in_clip(base:get_ammo_remaining_in_clip() - ammo_usage)
+
+		is_empty =  ammo_in_clip > 0 and remaining_ammo <= (self.AKIMBO and 1 or 0)
+	end
+
+	local ray_res = self:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit, ammo_usage)
+
+	if self._alert_events and ray_res.rays then
+		self:_check_alert(ray_res.rays, from_pos, direction, user_unit)
+	end
+
+	self:_build_suppression(ray_res.enemies_in_cone, suppr_mul)
+	managers.player:send_message(Message.OnWeaponFired, nil, self._unit, ray_res)
+
+	local bullets_fired = self.parent_weapon and self.parent_weapon:base() and self.parent_weapon:base()._bullets_fired or self._bullets_fired or 1
+
+	local is_jammed = math.random() < self:jam_chance(not self:clip_empty())
+	self:set_jammed(is_jammed)
+
+	-- Animation & Sounds:
+	self:tweak_data_anim_stop("unequip")
+	self:tweak_data_anim_stop("equip")
+
+	local function attempt_tweak_data_function(tweak_data_function, attempt_data_list, ...)
+		for _, attempt_data in pairs(attempt_data_list) do
+			local attempt_name = attempt_data[1]
+			local attempt_conditional = attempt_data[2]
+
+			if attempt_conditional and tweak_data_function(self, attempt_name, ...) then
+				return
+			end
+		end
+	end
+
+	local current_state = user_unit and user_unit:movement() and user_unit:movement()._current_state
+	local in_steelsight = current_state and current_state:in_steelsight()
+
+	local attempts = {
+		{ "jam",             is_jammed     },
+		{ "magazine_empty",  is_empty      },
+		{ "fire_steelsight", in_steelsight },
+		{ "fire",            true          }
+	}
+
+	local anim_multiplier = is_player and self:fire_rate_multiplier() or 1
+	attempt_tweak_data_function(self.tweak_data_anim_play,    attempts, anim_multiplier)
+	attempt_tweak_data_function(self.spawn_tweak_data_effect, attempts)
+
+	if is_jammed then
+		self:play_tweak_data_sound("jam")
+	end
+
+	if is_empty then
+		self:play_tweak_data_sound("magazine_empty")
+	end
+
+	-- Play the out of ammo voiceline if we're empty. (g81x_plu)
+	self:_check_ammo_total(user_unit)
+
+	if alive(self._obj_fire) then
+		self:_spawn_muzzle_effect(from_pos, direction)
+	end
+
+	if self._fire_mode == Idstring("burst") and bullets_fired > 1 and not self:weapon_tweak_data().sounds.fire_single then
+		self:_fire_sound()
+	end
+
+	local shell_eject_effect_wanted = false
+
+	if is_empty then
+		shell_eject_effect_wanted = not w_td.disable_empty_shell_eject
+	else
+		shell_eject_effect_wanted = not w_td.disable_not_empty_shell_eject
+	end
+
+	if self:jammed() then
+		shell_eject_effect_wanted = not not w_td.jammed_shell_eject
+	end
+
+	if shell_eject_effect_wanted then
+		self:_spawn_shell_eject_effect()
+	end
+
+	return ray_res
+end)
+
+-- new overkill aced
+Hooks:OverrideFunction(RaycastWeaponBase, "enter_steelsight_speed_multiplier", function (self)
+	local multiplier = 1
+
+	local is_shotgun = false
+	for _, category in ipairs(self:categories()) do
+		multiplier = multiplier * managers.player:upgrade_value(category, "enter_steelsight_speed_multiplier", 1)
+		if category == "shotgun" then
+			is_shotgun = true
+		end
+	end
+	
+	-- here
+	if not is_shotgun and managers.player:has_category_upgrade("temporary", "overkill_damage_multiplier") and managers.player:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 and managers.player:has_category_upgrade("player", "overkill_all_weapons") then
+		multiplier = multiplier * managers.player:upgrade_value("shotgun", "enter_steelsight_speed_multiplier", 1)
+	end
+
+	multiplier = multiplier * managers.player:temporary_upgrade_value("temporary", "combat_medic_enter_steelsight_speed_multiplier", 1)
+	multiplier = multiplier * managers.player:upgrade_value(self._name_id, "enter_steelsight_speed_multiplier", 1)
+
+	return multiplier
+end)
+
+-- new overkill aced
+Hooks:OverrideFunction(RaycastWeaponBase, "run_and_shoot_allowed", function (self)
+	
+	if managers.player:has_category_upgrade("player", "run_and_shoot") then
+		return true
+	else
+		if managers.player:has_category_upgrade("temporary", "overkill_damage_multiplier") and managers.player:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 and managers.player:has_category_upgrade("player", "overkill_all_weapons") then
+			return managers.player:has_category_upgrade("shotgun", "hip_run_and_shoot")
+		else
+			return false
+		end
+	end
+	
+end)

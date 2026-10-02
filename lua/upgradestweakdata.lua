@@ -153,8 +153,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			-- fearmonger's shotgun panic spread
 			self.values.shotgun.panic_when_kill = {
 				{
-					chance = 0.75,
-					area = 1500,
+					chance = 0.666,
+					area = 1000,
 					amount = 750
 				}
 			}
@@ -166,7 +166,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 				}
 			}
 			-- overkill
-			self.values.temporary.overkill_damage_multiplier = {{1.40,30}}
+			self.values.temporary.overkill_damage_multiplier = {{1.40,15}}
 			
 			---- TANK
 			-- interaction dmg resist reduced for new dmg resist properties
@@ -189,7 +189,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			}
 			-- fully loaded aced pickup. basic version is noramlly under perks, but no more - its fucking annoying
 			self.values.player.pick_up_ammo_multiplier = {
-				1.35,
+				1.2,
 				1
 			}
 			-- fully loaded aced provides temp bulletstorm effect for this amount of seconds to make it more fun
