@@ -46,6 +46,7 @@ _G.Gilza = {
 		vhud_compat_new_sicario = true,
 		vhud_compat_new_aced_running_from_death = true,
 		vhud_compat_offhand_reload = true,
+		vhud_compat_new_aced_shotgunCQB = true,
 	},
 	grenade_multipliers = {
 		dada_com = 33,

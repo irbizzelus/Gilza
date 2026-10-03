@@ -62,22 +62,34 @@ end)
 
 -- player revive skills
 Hooks:PostHook(ReviveInteractionExt, "interact", "Gilza_ReviveInteractionExt_interact_post", function (self,reviving_unit)
+	
+	local player_unit = managers.player:player_unit()
+	
 	-- new combat medic aced
-	if reviving_unit and reviving_unit == managers.player:player_unit() and managers.player:has_category_upgrade("player", "revive_action_self_heal") then
+	if reviving_unit and reviving_unit == player_unit and self._unit ~= player_unit and managers.player:has_category_upgrade("player", "revive_action_self_heal") then
 		local stoic = managers.player:has_category_upgrade("player", "armor_to_health_conversion")
 		local guardian = managers.player:has_category_upgrade("player", "guardian_armor_remover")
-		local player_dmg = managers.player:player_unit():character_damage()
-		if stoic or guardian then -- health
-			local heal = managers.player:upgrade_value("player", "revive_action_self_heal", 0) * player_dmg:_max_health()
-			player_dmg:restore_health(heal, true)
-		else -- armor
-			local armor = managers.player:upgrade_value("player", "revive_action_self_heal", 0) * player_dmg:_max_armor()
-			player_dmg:restore_armor(armor)
+		local player_dmg = player_unit:character_damage()
+		local skill = managers.player:upgrade_value("player", "revive_action_self_heal", 0)
+		if type(skill) == "table" then
+			if stoic or guardian then
+				local health = skill.instant_health_percent * player_dmg:_max_health()
+				player_dmg:restore_health(health, true)
+			else
+				local armor = skill.armor_percent_per_tick * player_dmg:_max_armor()
+				for i = 0, (skill.armor_ticks_total - 1) do
+					DelayedCalls:Add("Gilza_combat_medic_armor_regen_"..tostring(i), skill.armor_tick_delay * i, function()
+						if player_unit and alive(player_unit) and player_dmg then
+							player_dmg:restore_armor(armor)
+						end
+					end)
+				end
+			end
 		end
 	end
 	
 	-- new leech heal bonus
-	if reviving_unit and reviving_unit == managers.player:player_unit() and managers.player:has_category_upgrade("temporary", "copr_ability") then
+	if reviving_unit and reviving_unit == player_unit and managers.player:has_category_upgrade("temporary", "copr_ability") then
 		local secs = managers.player:upgrade_value("player", "copr_regain_cooldown_on_revives", 0)
 		if secs > 0 then
 			managers.player:speed_up_grenade_cooldown(secs)
@@ -89,8 +101,8 @@ Hooks:PostHook(ReviveInteractionExt, "interact", "Gilza_ReviveInteractionExt_int
 		if managers.player:has_category_upgrade("player", "copr_heal_on_teammate_revive")  then
 			-- heal self on teammate revive
 			local heal_level = managers.player:upgrade_level_nil("player", "copr_teammate_heal")
-			if not managers.player:player_unit():character_damage()._gilza_leech_dire_state then
-				managers.player:player_unit():character_damage():on_copr_heal_received(managers.player:player_unit(), heal_level)
+			if not player_unit:character_damage()._gilza_leech_dire_state then
+				player_unit:character_damage():on_copr_heal_received(player_unit, heal_level)
 			end
 			-- heal teammate on revive. if we send heal immediately on revive, husk doesnt heal because they get said info while they are still down, thus missing out on heals
 			if self._unit:base().is_husk_player then
@@ -104,8 +116,8 @@ Hooks:PostHook(ReviveInteractionExt, "interact", "Gilza_ReviveInteractionExt_int
 					if self._unit and alive(self._unit) and self._unit:movement() and self._unit:movement():current_state_name() and not prevented_states[self._unit:movement():current_state_name()] then
 						local peer = managers.network:session():peer_by_unit(self._unit)
 						if peer then
-							peer:send("copr_teammate_heal", managers.player:player_unit(), heal_level)
-							peer:send("copr_teammate_heal", managers.player:player_unit(), heal_level) -- 2 sends for 20% health at max
+							peer:send("copr_teammate_heal", player_unit, heal_level)
+							peer:send("copr_teammate_heal", player_unit, heal_level) -- 2 sends for 20% health at max
 							limit = 0
 						end
 					else

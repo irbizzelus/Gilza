@@ -647,7 +647,11 @@ Hooks:OverrideFunction(RaycastWeaponBase, "fire", function (self, from_pos, dire
 		end
 
 		if is_player then
+			local is_shotgun = false
 			for _, category in ipairs(self:weapon_tweak_data().categories) do
+				if category == "shotgun" then
+					is_shotgun = true
+				end
 				if managers.player:has_category_upgrade(category, "consume_no_ammo_chance") then
 					local roll = math.rand(1)
 					local chance = managers.player:upgrade_value(category, "consume_no_ammo_chance", 0)
@@ -658,7 +662,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "fire", function (self, from_pos, dire
 				end
 			end
 			-- new overkill aced
-			if managers.player:has_category_upgrade("temporary", "overkill_damage_multiplier") and managers.player:has_category_upgrade("player", "overkill_all_weapons") and managers.player:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 and managers.player:has_category_upgrade("shotgun", "consume_no_ammo_chance") then
+			if not is_shotgun and managers.player:has_category_upgrade("temporary", "overkill_damage_multiplier") and managers.player:has_category_upgrade("player", "overkill_all_weapons") and managers.player:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 and managers.player:has_category_upgrade("shotgun", "consume_no_ammo_chance") then
 				local roll = math.rand(1)
 				local chance = managers.player:upgrade_value("shotgun", "consume_no_ammo_chance", 0)
 

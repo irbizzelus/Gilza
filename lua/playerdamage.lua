@@ -1369,4 +1369,10 @@ Hooks:OverrideFunction(PlayerDamage, "consume_armor_stored_health", function (se
 	
 end)
 
+-- prevent combat medic basic from activating damage reist whenever we as player are revived, since its suppose to help other players, not self
+-- idk if it was an oversight or bad description, but either way we already have self DR on revive in fugitive in vanilla, so this shouldnt exist
+Hooks:OverrideFunction(PlayerDamage, "_activate_combat_medic_damage_reduction", function (self)
+	log("prevented basic combat medic self heal")
+end)
+
 Gilza.files_loaded.playerdamage = true

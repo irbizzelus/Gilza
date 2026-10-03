@@ -19,9 +19,14 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			self.values.player.revive_damage_reduction = {
 				0.75
 			}
-			-- new on revive bonus
+			-- new bonuses to self on revival of another player
 			self.values.player.revive_action_self_heal = {
-				0.35
+				{
+					instant_health_percent = 0.35,
+					armor_percent_per_tick = 0.1,
+					armor_tick_delay = 0.5,
+					armor_ticks_total = 10,
+				}
 			}
 			---- CONTROLLER
 			-- new murder hobo skill
@@ -137,6 +142,13 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 					5
 				}
 			}
+			-- new shotgun CQB aced
+			self.values.temporary.instant_melee_kill_after_shotgun_kill = {
+				{
+					true,
+					3
+				}
+			}
 			-- new shotgun expert skill
 			self.values.shotgun.recoil_multiplier = {
 				0.8,
@@ -175,6 +187,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			}
 			-- Sprint with any bag
 			self.values.player.sprint_any_bag = {true}
+			-- shield knockdown easier to achieve dmg value (is it even suppose to be 2k damage in vanilla?)
+			self.values.player.shield_knock_bullet.max_damage = 50
 			-- bullseye aced
 			self.values.player.headshot_regen_armor_shorter_cooldown = {true}
 			
@@ -1783,6 +1797,16 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 	
 	---- ENFORCER
 	local function New_Enforcer_definitions()
+		-- aced shotgun cqb
+		self.definitions.temporary_instant_melee_kill_after_shotgun_kill = {
+			name_id = "menu_temporary_instant_melee_kill_after_shotgun_kill",
+			category = "temporary",
+			upgrade = {
+				value = 1,
+				upgrade = "instant_melee_kill_after_shotgun_kill",
+				category = "temporary"
+			}
+		}
 		-- fearmonger
 		self.definitions.player_speed_boost_on_panic_kill = {
 			name_id = "menu_player_speed_boost_on_panic_kill",

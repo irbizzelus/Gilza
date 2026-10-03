@@ -62,6 +62,14 @@ Hooks:PreHook(CopDamage, "damage_melee", "Gilza_CopDamage_damage_melee_pre", fun
 			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / reduction)) -- dozers take much less dmg from hits
 		else
 			attack_data.damage = self._HEALTH_INIT * (attack_data.damage / 10) + 0.1 -- +1 dmg is needed due to rounding calculations with low hp targets, like street cops, that leave them with 0.1 hp instead of killing them sometimes
+			if managers.player:has_activate_temporary_upgrade("temporary", "instant_melee_kill_after_shotgun_kill") then
+				-- only weapon butt, no specials
+				if attack_data.name_id == "weapon" and not table.contains(self._char_tweak.tags,"special") then
+					attack_data.damage = self._HEALTH_INIT + 1
+					managers.player:deactivate_temporary_upgrade("temporary", "instant_melee_kill_after_shotgun_kill")
+					Gilza.NSI:deactivated_new_shotgunCQB_aced()
+				end
+			end
 		end
 		-- failsafe to prevent from overwriting damage twice, which should never happen anyway
 		attack_data.Gilza_melee_damage_tweak_applied = true

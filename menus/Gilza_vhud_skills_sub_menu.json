@@ -86,6 +86,15 @@
 		},
 		{
 			"type" : "toggle",
+			"id" : "Gilza_vhud_compat_new_aced_shotgunCQB",
+			"title" : "Gilza_vhud_compat_new_aced_shotgunCQB",
+			"description" : "Gilza_vhud_compat_new_aced_shotgunCQB_desc",
+			"callback" : "Gilza_vhud_compat_new_aced_shotgunCQB",
+			"value" : "vhud_compat_new_aced_shotgunCQB",
+			"default_value" : true
+		},
+		{
+			"type" : "toggle",
 			"id" : "Gilza_vhud_compat_fearmonger_speed",
 			"title" : "Gilza_vhud_compat_fearmonger_speed",
 			"description" : "Gilza_vhud_compat_fearmonger_speed_desc",

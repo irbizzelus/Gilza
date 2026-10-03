@@ -40,6 +40,7 @@ if Gilza.VHP_enabled then
 			GameInfoManager._BUFFS.temporary.copr_invuln_on_segment_loss = "copr_invuln_on_segment_loss"
 			GameInfoManager._BUFFS.temporary.single_body_shot_kill_reload = "single_body_shot_kill_reload"
 			GameInfoManager._BUFFS.temporary.dmg_immunity_while_sprinting = "dmg_immunity_while_sprinting"
+			GameInfoManager._BUFFS.temporary.instant_melee_kill_after_shotgun_kill = "instant_melee_kill_after_shotgun_kill"
 			
 			GameInfoManager._BUFFS.on_activate.new_berserk_weapon_damage_multiplier = function(id, data)
 				local upgrade_value = managers.player:upgrade_value("temporary", "new_berserk_weapon_damage_multiplier")
@@ -449,7 +450,16 @@ if Gilza.VHP_enabled then
 				color = HUDListManager.ListOptions.buff_icon_color_standard,
 				ignore = not Gilza.settings.vhud_compat_new_aced_running_from_death,
 			}
-			
+			-- shotgun CQB aced
+			HUDList.BuffItemBase.MAP.new_aced_shotgunCQB = {
+				skills_new = tweak_data.skilltree.skills.shotgun_cqb.icon_xy,
+				class = "TimedBuffItem",
+				title = "wolfhud_hudlist_buff_aced",
+				localized = true,
+				priority = 8,
+				color = HUDListManager.ListOptions.buff_icon_color_standard,
+				ignore = not Gilza.settings.vhud_compat_new_aced_shotgunCQB,
+			}
 			-- new sicario
 			HUDList.BuffItemBase.MAP.sicario_dodge.ignore = true
 			HUDList.BuffItemBase.MAP.sicario_dodge_debuff.ignore = true
@@ -740,5 +750,24 @@ function Gilza.New_Skills_Informer:updated_bulletstorm(dur)
 	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
 		managers.gameinfo:event("timed_buff", "deactivate", "bullet_storm")
 		managers.gameinfo:event("timed_buff", "activate", "bullet_storm", { duration = dur })
+	end
+end
+
+-- re-activatable like overkill
+function Gilza.New_Skills_Informer:activated_new_shotgunCQB_aced()
+	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
+		local upg_values = managers.player:upgrade_value("temporary", "instant_melee_kill_after_shotgun_kill")
+		local dur = upg_values[2] or 0
+		if dur > 0 then
+			managers.gameinfo:event("timed_buff", "deactivate", "new_aced_shotgunCQB")
+			managers.gameinfo:event("timed_buff", "activate", "new_aced_shotgunCQB", { duration = dur })
+		end
+	end
+end
+
+-- but gets disabled after a kill
+function Gilza.New_Skills_Informer:deactivated_new_shotgunCQB_aced()
+	if Gilza.VHP_enabled and Gilza.vhud_compatibility_loaded then
+		managers.gameinfo:event("timed_buff", "deactivate", "new_aced_shotgunCQB")
 	end
 end

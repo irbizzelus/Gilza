@@ -547,6 +547,14 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		Gilza:Save()
 	end
 	
+	MenuCallbackHandler.Gilza_vhud_compat_new_aced_shotgunCQB = function(this, item)
+		Gilza.settings.vhud_compat_new_aced_shotgunCQB = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("new_aced_shotgunCQB", Gilza.settings.vhud_compat_new_aced_shotgunCQB)
+		end
+		Gilza:Save()
+	end
+	
 	MenuCallbackHandler.Gilza_vhud_compat_new_sicario = function(this, item)
 		Gilza.settings.vhud_compat_new_sicario = item:value() == 'on'
 		if managers.hud and managers.hud.change_bufflist_setting then

@@ -119,6 +119,8 @@
 	"Gilza_vhud_compat_body_economy_desc": "Enable VHUD's buff list tracker for Body Economy reload speed bonus.",
 	
 	"Gilza_vhud_enforcer_header": "---- Enforcer ----",
+	"Gilza_vhud_compat_new_aced_shotgunCQB": "Shotgun CQB (Aced)",
+	"Gilza_vhud_compat_new_aced_shotgunCQB_desc": "Enable VHUD's buff list tracker for Shotgun CQB melee instant kill time window.",
 	"Gilza_vhud_compat_fearmonger_speed": "Fearmonger",
 	"Gilza_vhud_compat_fearmonger_speed_desc": "Enable VHUD's buff list tracker for Fearmonger movement speed bonus duration.",
 	

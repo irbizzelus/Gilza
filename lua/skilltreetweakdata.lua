@@ -715,7 +715,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "Gilza_SkillTreeTweakData_init_post",
 		
 		---- ENFORCER
 		self.skills.shotgun_cqb[1].upgrades = { "shotgun_reload_speed_multiplier_1" }
-		self.skills.shotgun_cqb[2].upgrades = { "shotgun_reload_speed_multiplier_2" }
+		self.skills.shotgun_cqb[2].upgrades = { "shotgun_reload_speed_multiplier_2", "temporary_instant_melee_kill_after_shotgun_kill" }
 		
 		self.skills.shotgun_impact[1].upgrades = { "shotgun_recoil_multiplier_1", "shotgun_enter_steelsight_speed_multiplier" }
 		self.skills.shotgun_impact[2].upgrades = { "shotgun_recoil_multiplier_2", "shotgun_steelsight_accuracy_inc_1" }

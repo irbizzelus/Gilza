@@ -119,6 +119,8 @@
 	"Gilza_vhud_compat_body_economy_desc": "Включите HudList элемент мода VHUD+ отображающий бонус к скорости перезарядки навыка Экономика тел.",
 	
 	"Gilza_vhud_enforcer_header": "---- Штурмовик ----",
+	"Gilza_vhud_compat_new_aced_shotgunCQB": "Профессионал ближ. боя (Про)",
+	"Gilza_vhud_compat_new_aced_shotgunCQB_desc": "Включите HudList элемент мода VHUD+ отображающий продолжительность временного промежутка в течении которого вы можете моментально убить врага.",
 	"Gilza_vhud_compat_fearmonger_speed": "Разжигатель страха",
 	"Gilza_vhud_compat_fearmonger_speed_desc": "Включите HudList элемент мода VHUD+ отображающий продолжительность бонуса с скорости передвижения навыка Разжигатель страха.",
 	
