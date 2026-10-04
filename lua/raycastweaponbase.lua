@@ -416,28 +416,34 @@ Hooks:OverrideFunction(InstantBulletBase, "give_impact_damage", function (self, 
 	
 	-- adds new electric bullets skill, for x seconds after getting tazed
 	if user_unit == managers.player:player_unit() and managers.player:has_activate_temporary_upgrade("temporary", "tased_electric_bullets") and not is_target_tank and not is_target_winters then
+		
+		-- call damage_bullet to actually deal damage and then use damage_tase for tazing with adjusted properties
 		local action_data = {}
+		action_data.variant = variant or "bullet"
+		action_data.damage = damage
 		action_data.weapon_unit = weapon_unit
 		action_data.attacker_unit = user_unit
 		action_data.col_ray = col_ray
-		action_data.armor_piercing = armor_piercing
-		action_data.attack_dir = col_ray.ray
-		action_data.variant = "taser_tased"
-		action_data.damage = damage
-		action_data.damage_effect = 1
-		action_data.name_id = "taser"
-		action_data.charge_lerp_value = 0
-		action_data.bullet_taze = true
+		action_data.armor_piercing = true -- cute
+		action_data.shield_knock = shield_knock
+		action_data.origin = alive(user_unit) and user_unit:position() or Vector3()
+		action_data.knock_down = knock_down
+		action_data.stagger = stagger
+
+		local defense_data = hit_unit and hit_unit:character_damage() and hit_unit:character_damage().damage_bullet and hit_unit:character_damage():damage_bullet(action_data)
 		
-		defense_data = hit_unit and hit_unit:character_damage().damage_tase and hit_unit:character_damage().damage_melee and hit_unit:character_damage():damage_melee(action_data)
-		if defense_data and hit_unit and hit_unit:character_damage().damage_tase then
+		if defense_data and hit_unit:character_damage().damage_tase then
 			action_data.damage = 0
 			action_data.damage_effect = nil
+			action_data.variant = "taser_tased"
+			action_data.damage_effect = 1
+			action_data.name_id = "taser"
+			action_data.charge_lerp_value = 0
+			action_data.bullet_taze = true -- avoid retrying crits
 			hit_unit:character_damage():damage_tase(action_data)
-			return defense_data
-		else
-			return instantbullet_give_impact_dmg_orig(self, col_ray, weapon_unit, user_unit, damage, armor_piercing, shield_knock, knock_down, stagger, variant)
 		end
+		
+		return defense_data
 	else
 		return instantbullet_give_impact_dmg_orig(self, col_ray, weapon_unit, user_unit, damage, armor_piercing, shield_knock, knock_down, stagger, variant)
 	end

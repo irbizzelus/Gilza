@@ -704,7 +704,7 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_post_PlayerDamage_init", function(se
 			if skill and type(skill) == "table" and damage_info and damage_info.col_ray and damage_info.col_ray.unit and alive(damage_info.col_ray.unit) then
 				
 				-- bullet dmg type check, if electric bullets are active allow it as well
-				if not ((damage_info and damage_info.result and damage_info.result.variant == "bullet") or damage_info.bullet_taze) then
+				if not (damage_info and damage_info.result and damage_info.result.variant == "bullet") then
 					return
 				end
 				

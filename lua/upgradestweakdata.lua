@@ -146,7 +146,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			self.values.temporary.instant_melee_kill_after_shotgun_kill = {
 				{
 					true,
-					3
+					4
 				}
 			}
 			-- new shotgun expert skill
