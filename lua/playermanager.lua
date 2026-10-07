@@ -201,7 +201,11 @@ Hooks:OverrideFunction(PlayerManager, "skill_dodge_chance", function (self, runn
 	local result = gilza_orig_pm_skill_dodge_chance(self, running, crouching, on_zipline, override_armor, detection_risk)
 	if managers.player:has_category_upgrade("player", "speed_junkie_meter") then
 		self._Gilza_junkie_counter = self._Gilza_junkie_counter or 0
-		local junkie_adds_dodge = self._Gilza_junkie_counter / 100 * 0.45 -- up to 45% dodge max. probably should make this tweakable from upgradestweaks, but lazyness
+		local max_junkie_dodge = 0.45 -- up to 45% dodge max. probably should make this tweakable from upgradestweaks, but lazyness
+		if self:has_category_upgrade("player", "copycat_9th_card_identifier") then
+			max_junkie_dodge = 0.3
+		end
+		local junkie_adds_dodge = self._Gilza_junkie_counter / 100 * max_junkie_dodge 
 		result = result + junkie_adds_dodge
 	end
 	-- new gambler 9th card
@@ -292,7 +296,7 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 			if self:has_category_upgrade("temporary", "overkill_damage_multiplier") and self:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 and self:has_category_upgrade("player", "overkill_all_weapons") then
 				valid_weapon = true
 			end
-			local valid_range = mvector3.distance(player_unit:position(), killed_unit:position()) <= 300
+			local valid_range = mvector3.distance(player_unit:position(), killed_unit:position()) <= 500
 			if held_weapon and valid_weapon and valid_range then
 				Gilza.NSI:activated_new_shotgunCQB_aced()
 				managers.player:activate_temporary_upgrade("temporary", "instant_melee_kill_after_shotgun_kill")

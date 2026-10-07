@@ -146,13 +146,13 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			self.values.temporary.instant_melee_kill_after_shotgun_kill = {
 				{
 					true,
-					4
+					5
 				}
 			}
 			-- new shotgun expert skill
 			self.values.shotgun.recoil_multiplier = {
-				0.8,
-				0.4
+				0.85,
+				0.55
 			}
 			self.values.shotgun.steelsight_accuracy_inc = {
 				0.5
@@ -464,9 +464,9 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			-- new akimbo skill
 			self.values.akimbo.pistol_improved_handling = {
 				{
-				recoil = 4,
-				accuracy = 3,
-				reload = 1.35,
+				recoil = 5,
+				accuracy = 4,
+				reload = 1.5,
 				swap_speed = 2
 				},
 			}
