@@ -8,16 +8,6 @@ end
 
 -- convert melee damage to % based on the weapon's stat
 Hooks:PreHook(CopDamage, "damage_melee", "Gilza_CopDamage_damage_melee_pre", function(self,attack_data)
-	-- if incoming melee was a bullet_taze, apply headshot dmg increase. this is needed for electric boolets upgrade
-	if attack_data.bullet_taze then
-		local head = self._head_body_name and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
-		if not self._char_tweak.ignore_headshot and not self._damage_reduction_multiplier and head then
-			if self._char_tweak.headshot_dmg_mul then
-				attack_data.damage = attack_data.damage * self._char_tweak.headshot_dmg_mul
-			end
-		end
-		return -- dont do the usual % damage stuff since this damage is already taken from weapon's bullet damage
-	end
 	
 	if not attack_data.Gilza_melee_damage_tweak_applied then
 	
@@ -62,6 +52,15 @@ Hooks:PreHook(CopDamage, "damage_melee", "Gilza_CopDamage_damage_melee_pre", fun
 			attack_data.damage = (self._HEALTH_INIT * (attack_data.damage / reduction)) -- dozers take much less dmg from hits
 		else
 			attack_data.damage = self._HEALTH_INIT * (attack_data.damage / 10) + 0.1 -- +1 dmg is needed due to rounding calculations with low hp targets, like street cops, that leave them with 0.1 hp instead of killing them sometimes
+			if managers.player:has_activate_temporary_upgrade("temporary", "instant_melee_kill_after_shotgun_kill") then
+				-- only weapon butt, no specials
+				local is_special = self._char_tweak and self._char_tweak.tags and table.contains(self._char_tweak.tags,"special") or false
+				if attack_data.name_id == "weapon" and not is_special then
+					attack_data.damage = self._HEALTH_INIT + 1
+					managers.player:deactivate_temporary_upgrade("temporary", "instant_melee_kill_after_shotgun_kill")
+					Gilza.NSI:deactivated_new_shotgunCQB_aced()
+				end
+			end
 		end
 		-- failsafe to prevent from overwriting damage twice, which should never happen anyway
 		attack_data.Gilza_melee_damage_tweak_applied = true
@@ -604,6 +603,8 @@ Hooks:PreHook(CopDamage, "damage_fire", "Gilza_CopDamage_damage_fire_pre", funct
 	if managers.player:has_category_upgrade("temporary", "new_berserk_weapon_damage_multiplier") then
 		attack_data.damage = attack_data.damage * managers.player:temporary_upgrade_value("temporary", "new_berserk_weapon_damage_multiplier", 1)
 	end
+	
+	-- shotgun dmg
 	if attack_data and attack_data.weapon_unit and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_category and (attack_data.weapon_unit:base():is_category("shotgun") or attack_data.weapon_unit:base():is_category("grenade_launcher")) and attack_data.weapon_unit:base()._rays and attack_data.weapon_unit:base()._rays >= 2 then
 		if not Gilza.isWeaponLibBroken then
 			attack_data.damage = attack_data.damage * attack_data.weapon_unit:base()._rays
@@ -657,6 +658,13 @@ Hooks:OverrideFunction(CopDamage, "roll_critical_hit", function (self, attack_da
 	
 	local res1, res2 = gilza_orig_roll_critical_hit(self, attack_data, damage)
 	
+	-- electric bullets quick - they roll crits via damage_bullet first and then call for damage_tase which also asks for crits, so dont re-roll crits for damage_tase
+	if attack_data.bullet_taze then
+		res1 = false
+		res2 = damage
+		return res1, res2
+	end
+	
 	local shotgun_check = attack_data.weapon_unit and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_category and (attack_data.weapon_unit:base():is_category("shotgun") or attack_data.weapon_unit:base():is_category("grenade_launcher")) and attack_data.weapon_unit:base()._rays and attack_data.weapon_unit:base()._rays >= 2
 	if shotgun_check then
 		if Gilza.rolled_shotgun_crit_already[tostring(self._unit:id())] then
@@ -677,6 +685,7 @@ Hooks:OverrideFunction(CopDamage, "roll_critical_hit", function (self, attack_da
 		res2 = damage * 2.25 -- new crit mul; if its ever updated, dont forget to update it in graze as well, since it's reusing this mul
 	end
 	
+	-- dmg against swat turrets, simulates vanilla 10x behaviour
 	if res1 and attack_data.col_ray and attack_data.col_ray.unit and alive(attack_data.col_ray.unit) and attack_data.col_ray.unit:slot() and (attack_data.col_ray.unit:slot() == 25 or attack_data.col_ray.unit:slot() == 26) then
 		res2 = damage * 10
 	end

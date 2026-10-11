@@ -57,6 +57,11 @@ if tweak_data and tweak_data.projectiles then
 	tweak_data.projectiles.wpn_prj_target.damage = 100
 	tweak_data.projectiles.wpn_prj_hur.damage = 130
 	
+	-- fix for the community "HEF" grenade having incorrect display damage and range values.
+	-- techically it should have the values that the game shows in menus, but due to an oversight in fraggrenade.lua it incorrectly defaults to the standard "frag" projectile stats
+	tweak_data.projectiles.frag_com.damage = 160
+	tweak_data.projectiles.frag_com.range = 500
+	
 end
 
 -- set up weapon hold while ADS'ing with all lmg's and their new bipod states, like wall leaning

@@ -704,7 +704,7 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_post_PlayerDamage_init", function(se
 			if skill and type(skill) == "table" and damage_info and damage_info.col_ray and damage_info.col_ray.unit and alive(damage_info.col_ray.unit) then
 				
 				-- bullet dmg type check, if electric bullets are active allow it as well
-				if not ((damage_info and damage_info.result and damage_info.result.variant == "bullet") or damage_info.bullet_taze) then
+				if not (damage_info and damage_info.result and damage_info.result.variant == "bullet") then
 					return
 				end
 				
@@ -1367,6 +1367,12 @@ Hooks:OverrideFunction(PlayerDamage, "consume_armor_stored_health", function (se
 		self:clear_armor_stored_health()
 	end
 	
+end)
+
+-- prevent combat medic basic from activating damage reist whenever we as player are revived, since its suppose to help other players, not self
+-- idk if it was an oversight or bad description, but either way we already have self DR on revive in fugitive in vanilla, so this shouldnt exist
+Hooks:OverrideFunction(PlayerDamage, "_activate_combat_medic_damage_reduction", function (self)
+	-- do nothing
 end)
 
 Gilza.files_loaded.playerdamage = true

@@ -256,6 +256,7 @@ local function Gilza_set_new_health(self)
 	self.hector_boss.Gilza_boss_tag = true
 	self.drug_lord_boss.Gilza_boss_tag = true
 	self.triad_boss.Gilza_boss_tag = true
+	self.auctioneer_boss.Gilza_boss_tag = true
 	self.snowman_boss.Gilza_boss_tag = true
 	self.deep_boss.Gilza_boss_tag_deep = true
 	self.tank_hw.Gilza_headless_dozer_tag = true

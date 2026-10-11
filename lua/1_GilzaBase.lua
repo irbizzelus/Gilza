@@ -11,7 +11,6 @@ _G.Gilza = {
 		blackmarket_weapon_sorting = 2,
 		shotgun_skill_notification = true,
 		menace_points_notification = true,
-		designated_marksman_zoom = 2,
 		melee_charge_tilt = 3,
 		melee_gui = 4,
 		flash_color_R = 255,
@@ -47,6 +46,7 @@ _G.Gilza = {
 		vhud_compat_new_sicario = true,
 		vhud_compat_new_aced_running_from_death = true,
 		vhud_compat_offhand_reload = true,
+		vhud_compat_new_aced_shotgunCQB = true,
 	},
 	grenade_multipliers = {
 		dada_com = 33,
@@ -69,6 +69,7 @@ _G.Gilza = {
 	shotgun_minimal_damage_multipliers = {},
 	current_shotgun_shot_id = 0,
 	weapon_shot_id = 0,
+	zoomleveloffset = {[1] = 0, [2] = 0},
 	intimidated_enemies = {},
 	customWeaponFactoryIDs = {}
 }
@@ -148,19 +149,34 @@ function Gilza:modCompatibility()
 end
 Gilza:modCompatibility()
 
+function Gilza:first_time_user_message()
+	DelayedCalls:Add("Gilza_show_newbie_welcome_msg__delayed", 0.8, function()
+		if not Gilza.settings.first_time_user_message_shown then
+			local menu_options = {}
+			menu_options[#menu_options+1] = {text = "Ok", is_cancel_button = true}
+			local header = managers.localization:text("menu_Gilza_newbie_welcome_header")
+			local message = managers.localization:text("menu_Gilza_newbie_welcome")
+			local menu = QuickMenu:new(header, message, menu_options)
+			menu:Show()
+			Gilza.settings.first_time_user_message_shown = true
+			Gilza.Save()
+		end
+	end)
+end
+
 function Gilza:changelog_message()
 	local function Gilza_linkchangelog()
 		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Gilza/releases")
 	end
 	DelayedCalls:Add("Gilza_showchangelogmsg_delayed", 1, function()
-		if not Gilza.settings.version or Gilza.settings.version < 2.812 then
+		if not Gilza.settings.version or Gilza.settings.version < 2.82 then
 			local menu_options = {}
 			menu_options[#menu_options+1] ={text = "Check full changelog", data = nil, callback = Gilza_linkchangelog}
 			menu_options[#menu_options+1] = {text = "Cancel", is_cancel_button = true}
-			local message = "2.8.12 Changelog:\n\n- Compatibility with update 248 and new content.\n- Shotguns now have roughly 20% more ammo pickup by default, but all ammunition options now have higher ammo pickup penalties with the end pickup value being the same as before this patch. This should make default shotgun ammunition a more appleaing choice and allow for greater build variety, as skills that deal with body armor and shields can now be valuable on default round shotguns."
+			local message = "2.8.2 Changelog:\n\nThis update includes a few skill updates, most of them being minor, a lot of localization updates, and a couple of fixes. Notable not-so-minor skill updates:\n- Designated marksman now allows to tweak weapon zoom level on the fly in-game using custom keybinds.\n- Overkill aced now allows for all weapons to gain bonuses from shotgun-specific skills while active.\n-Fully Loaded aced now provides bulletstorm effect for 1 second every time an ammo pack is picked up."
 			local menu = QuickMenu:new("Gilza", message, menu_options)
 			menu:Show()
-			Gilza.settings.version = 2.812
+			Gilza.settings.version = 2.82
 			Gilza.Save()
 		end
 	end)

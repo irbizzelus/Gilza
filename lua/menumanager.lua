@@ -8,6 +8,7 @@ local LMG_STEELSIGHTS_warned = false -- only warn about LMG_STEELSIGHTS once per
 -- warnings about mod compatibility
 Hooks:PostHook(MenuManager, "_node_selected", "Gilza_patch_notification", function(self, menu_name, node)
 	if type(node) == "table" and node._parameters.name == "main" then
+		Gilza:first_time_user_message()
 		Gilza:changelog_message()
 		if Gilza.VHP_enabled then
 			if VHUDPlus:getSetting({"EQUIPMENT", "ENABLE_BURSTMODE"}, true) then
@@ -106,17 +107,6 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 	MenuCallbackHandler.Gilza_shotgun_skill_notification = function(this, item)
 		Gilza.settings.shotgun_skill_notification = item:value() == 'on'
 		Gilza:Save()
-	end
-	
-	MenuCallbackHandler.Gilza_designated_marksman_zoom = function(this, item)
-		Gilza.settings.designated_marksman_zoom = tonumber(item:value())
-		Gilza:Save()
-		tweak_data.upgrades.values.assault_rifle.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
-		tweak_data.upgrades.values.smg.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
-		tweak_data.upgrades.values.lmg.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
-		tweak_data.upgrades.values.snp.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
-		tweak_data.upgrades.values.pistol.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
-		tweak_data.upgrades.values.assault_rifle.zoom_increase = {Gilza.settings.designated_marksman_zoom - 1}
 	end
 	
 	MenuCallbackHandler.Gilza_perk_reset = function(this, item)
@@ -554,6 +544,14 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		Gilza.settings.vhud_compat_new_aced_running_from_death = item:value() == 'on'
 		if managers.hud and managers.hud.change_bufflist_setting then
 			managers.hud:change_bufflist_setting("new_aced_running_from_death", Gilza.settings.vhud_compat_new_aced_running_from_death)
+		end
+		Gilza:Save()
+	end
+	
+	MenuCallbackHandler.Gilza_vhud_compat_new_aced_shotgunCQB = function(this, item)
+		Gilza.settings.vhud_compat_new_aced_shotgunCQB = item:value() == 'on'
+		if managers.hud and managers.hud.change_bufflist_setting then
+			managers.hud:change_bufflist_setting("new_aced_shotgunCQB", Gilza.settings.vhud_compat_new_aced_shotgunCQB)
 		end
 		Gilza:Save()
 	end

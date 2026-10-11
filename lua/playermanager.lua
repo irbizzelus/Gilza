@@ -201,7 +201,11 @@ Hooks:OverrideFunction(PlayerManager, "skill_dodge_chance", function (self, runn
 	local result = gilza_orig_pm_skill_dodge_chance(self, running, crouching, on_zipline, override_armor, detection_risk)
 	if managers.player:has_category_upgrade("player", "speed_junkie_meter") then
 		self._Gilza_junkie_counter = self._Gilza_junkie_counter or 0
-		local junkie_adds_dodge = self._Gilza_junkie_counter / 100 * 0.45 -- up to 45% dodge max. probably should make this tweakable from upgradestweaks, but lazyness
+		local max_junkie_dodge = 0.45 -- up to 45% dodge max. probably should make this tweakable from upgradestweaks, but lazyness
+		if self:has_category_upgrade("player", "copycat_9th_card_identifier") then
+			max_junkie_dodge = 0.3
+		end
+		local junkie_adds_dodge = self._Gilza_junkie_counter / 100 * max_junkie_dodge 
 		result = result + junkie_adds_dodge
 	end
 	-- new gambler 9th card
@@ -283,13 +287,33 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 			end
 		end
 		
+		-- shotgun CQB aced - activation
+		if self:has_category_upgrade("temporary", "instant_melee_kill_after_shotgun_kill") and variant ~= "melee" then
+			local equipped_unit = self:get_current_state()._equipped_unit:base()
+			local held_weapon = weapon_id == equipped_unit.name_id
+			local valid_weapon = equipped_unit:is_category("shotgun")
+			-- ovk aced allows all weapons
+			if self:has_category_upgrade("temporary", "overkill_damage_multiplier") and self:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 and self:has_category_upgrade("player", "overkill_all_weapons") then
+				valid_weapon = true
+			end
+			local valid_range = mvector3.distance(player_unit:position(), killed_unit:position()) <= 500
+			if held_weapon and valid_weapon and valid_range then
+				Gilza.NSI:activated_new_shotgunCQB_aced()
+				managers.player:activate_temporary_upgrade("temporary", "instant_melee_kill_after_shotgun_kill")
+			end
+		end
+		
 		-- shotgun suppression on kill from fearmonger
 		local shotgun_panic_on_kill = self:has_category_upgrade("shotgun", "panic_when_kill")
 		if shotgun_panic_on_kill and variant ~= "melee" then
 			local equipped_unit = self:get_current_state()._equipped_unit:base()
 			local held_weapon = weapon_id == equipped_unit.name_id
-			-- only for shotguns with threat of 35 and above (idk where the extra 0.2 comes from yet)
-			if held_weapon and equipped_unit:is_category("shotgun") and equipped_unit._suppression >= 3.7 then
+			local valid_weapon = equipped_unit:is_category("shotgun")
+			-- ovk aced allows all weapons
+			if self:has_category_upgrade("temporary", "overkill_damage_multiplier") and self:temporary_upgrade_value("temporary", "overkill_damage_multiplier", 1) > 1 and self:has_category_upgrade("player", "overkill_all_weapons") then
+				valid_weapon = true
+			end
+			if held_weapon and valid_weapon and equipped_unit._suppression >= 3.7 then -- only for weapons with threat of 35 and above (idk where the extra base 0.2 comes from ngl)
 				local pos = player_unit:position()
 				local skill = self:upgrade_value("shotgun", "panic_when_kill")
 
@@ -2274,4 +2298,9 @@ function PlayerManager:Gilza_locknload_aced_bullet_refund_on_hit_trigger(skill_d
 		end
 	end
 	
+end
+
+-- new func needed for fully loaded temporary bulletstorm buff
+function PlayerManager:get_property_end_time(name)
+	return self._temporary_properties:get_property_end_time(name)
 end

@@ -19,9 +19,14 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			self.values.player.revive_damage_reduction = {
 				0.75
 			}
-			-- new on revive bonus
+			-- new bonuses to self on revival of another player
 			self.values.player.revive_action_self_heal = {
-				0.35
+				{
+					instant_health_percent = 0.35,
+					armor_percent_per_tick = 0.1,
+					armor_tick_delay = 0.5,
+					armor_ticks_total = 10,
+				}
 			}
 			---- CONTROLLER
 			-- new murder hobo skill
@@ -46,20 +51,25 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			self.values.player.less_start_recoil_for_longer = {
 				true
 			}
+			-- new zoom skill
+			self.values.player.adjustable_zoom_level = {
+				true
+			}
+			-- clear vanilla zoom skills to avoid conflicts
 			self.values.smg.zoom_increase = {
-				(Gilza.settings.designated_marksman_zoom - 1) or 2
+				0
 			}
 			self.values.assault_rifle.zoom_increase = {
-				(Gilza.settings.designated_marksman_zoom - 1) or 2
+				0
 			}
 			self.values.lmg.zoom_increase = {
-				(Gilza.settings.designated_marksman_zoom - 1) or 2
+				0
 			}
 			self.values.snp.zoom_increase = {
-				(Gilza.settings.designated_marksman_zoom - 1) or 2
+				0
 			}
 			self.values.pistol.zoom_increase = {
-				(Gilza.settings.designated_marksman_zoom - 1) or 2
+				0
 			}
 			-- new slow and steady skill - dmg resist if not moving
 			self.values.player.not_moving_damage_reduction_bonus = {
@@ -132,10 +142,17 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 					5
 				}
 			}
+			-- new shotgun CQB aced
+			self.values.temporary.instant_melee_kill_after_shotgun_kill = {
+				{
+					true,
+					5
+				}
+			}
 			-- new shotgun expert skill
 			self.values.shotgun.recoil_multiplier = {
-				0.8,
-				0.4
+				0.85,
+				0.55
 			}
 			self.values.shotgun.steelsight_accuracy_inc = {
 				0.5
@@ -148,20 +165,20 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			-- fearmonger's shotgun panic spread
 			self.values.shotgun.panic_when_kill = {
 				{
-					chance = 0.75,
-					area = 1500,
+					chance = 0.666,
+					area = 1000,
 					amount = 750
 				}
 			}
 			-- shotgun panic - speed boost
 			self.values.temporary.speed_boost_on_panic_kill = {
 				{
-					0.25,
+					0.2,
 					20
 				}
 			}
 			-- overkill
-			self.values.temporary.overkill_damage_multiplier = {{1.40,30}}
+			self.values.temporary.overkill_damage_multiplier = {{1.40,15}}
 			
 			---- TANK
 			-- interaction dmg resist reduced for new dmg resist properties
@@ -170,6 +187,8 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			}
 			-- Sprint with any bag
 			self.values.player.sprint_any_bag = {true}
+			-- shield knockdown easier to achieve dmg value (is it even suppose to be 2k damage in vanilla?)
+			self.values.player.shield_knock_bullet.max_damage = 50
 			-- bullseye aced
 			self.values.player.headshot_regen_armor_shorter_cooldown = {true}
 			
@@ -184,7 +203,11 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			}
 			-- fully loaded aced pickup. basic version is noramlly under perks, but no more - its fucking annoying
 			self.values.player.pick_up_ammo_multiplier = {
-				1.25,
+				1.2,
+				1
+			}
+			-- fully loaded aced provides temp bulletstorm effect for this amount of seconds to make it more fun
+			self.values.player.temp_bulletstorm_from_ammo_pick_ups = {
 				1
 			}
 			-- make old fully loaded aced grenade pick up base kit with perks, buff the skill values. nerf grenade pick ups depending on the grenade
@@ -441,9 +464,9 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			-- new akimbo skill
 			self.values.akimbo.pistol_improved_handling = {
 				{
-				recoil = 4,
-				accuracy = 3,
-				reload = 1.35,
+				recoil = 5,
+				accuracy = 4,
+				reload = 1.5,
 				swap_speed = 2
 				},
 			}
@@ -1674,6 +1697,15 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 			}
 		}
 		-- new stuff
+		self.definitions.player_adjustable_zoom_level = {
+			name_id = "menu_player_adjustable_zoom_level",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "adjustable_zoom_level",
+				category = "player"
+			}
+		}
 		self.definitions.player_less_start_recoil = {
 			name_id = "menu_player_less_start_recoil",
 			category = "feature",
@@ -1765,6 +1797,16 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 	
 	---- ENFORCER
 	local function New_Enforcer_definitions()
+		-- aced shotgun cqb
+		self.definitions.temporary_instant_melee_kill_after_shotgun_kill = {
+			name_id = "menu_temporary_instant_melee_kill_after_shotgun_kill",
+			category = "temporary",
+			upgrade = {
+				value = 1,
+				upgrade = "instant_melee_kill_after_shotgun_kill",
+				category = "temporary"
+			}
+		}
 		-- fearmonger
 		self.definitions.player_speed_boost_on_panic_kill = {
 			name_id = "menu_player_speed_boost_on_panic_kill",
@@ -1812,6 +1854,16 @@ Hooks:PostHook(UpgradesTweakData, "_player_definitions", "Gilza_skill_definition
 			upgrade = {
 				value = 2,
 				upgrade = "regain_throwable_from_ammo",
+				category = "player"
+			}
+		}
+		-- new temp upgrade for fully loaded to make it less boring
+		self.definitions.player_temp_bulletstorm_from_ammo_pick_ups = {
+			name_id = "player_temp_bulletstorm_from_ammo_pick_ups",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "temp_bulletstorm_from_ammo_pick_ups",
 				category = "player"
 			}
 		}
