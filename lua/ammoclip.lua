@@ -57,7 +57,13 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 								managers.achievment:award_progress(tweak_data.achievement.pickup_sticks.stat)
 							end
 						end
-					elseif is_guardian_in_zone then -- guardian picks up boxes in waves
+					elseif is_guardian_in_zone and self._ammo_box and player_manager._gilza_guardian_remotepickups then -- guardian picks up boxes in waves
+						
+						player_manager._gilza_guardian_remotepickups.amount.total = (player_manager._gilza_guardian_remotepickups.amount.total or 0) + 1
+						if player_manager._gilza_guardian_remotepickups.amount.total == 1 then
+							player_manager._gilza_guardian_remotepickups.refil_at = Application:time() + 5
+						end
+						
 						player_manager:Gilza_guardian_remote_ammo_pickup(weapon.unit:base():selection_index())
 						picked_up = true
 						add_amount = 9999
@@ -218,7 +224,7 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 				managers.network:session():send_to_host("sync_pickup", self._unit)
 			end
 			
-			if not is_guardian_in_zone then
+			if not is_guardian_in_zone or not self._ammo_box then
 				unit:sound():play(self._pickup_event or "pickup_ammo", nil, true)
 			end
 			self:consume()

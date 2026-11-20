@@ -742,11 +742,7 @@ Hooks:OverrideFunction(CopDamage, "chk_killshot", function (self, attacker_unit,
 
 					if pickups and #pickups >= 1 then
 						for _, pickup in ipairs(pickups) do
-							if pickup:pickup() and pickup:pickup():pickup(player_unit) then
-								self._gilza_guardian_remotepickups.amount.total = (self._gilza_guardian_remotepickups.amount.total or 0) + 1
-								if self._gilza_guardian_remotepickups.amount.total == 1 then
-									self._gilza_guardian_remotepickups.refil_at = Application:time() + 5
-								end
+							if pickup:pickup() and pickup:pickup()._ammo_box and pickup:pickup():pickup(player_unit) then
 								return true
 							end
 						end

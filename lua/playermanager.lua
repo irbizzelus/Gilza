@@ -661,11 +661,7 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 
 					if pickups and #pickups >= 1 then
 						for _, pickup in ipairs(pickups) do
-							if pickup:pickup() and pickup:pickup():pickup(player_unit) then
-								self._gilza_guardian_remotepickups.amount.total = (self._gilza_guardian_remotepickups.amount.total or 0) + 1
-								if self._gilza_guardian_remotepickups.amount.total == 1 then
-									self._gilza_guardian_remotepickups.refil_at = Application:time() + 5
-								end
+							if pickup:pickup() and pickup:pickup()._ammo_box and pickup:pickup():pickup(player_unit) then
 								return true
 							end
 						end
@@ -2193,12 +2189,12 @@ function PlayerManager:Gilza_is_guardian_zone_active()
 	return self.Gilza_guardian_area.is_active
 end
 
--- add 1 ammo box refil to a singular weapon. has to be seprated between guns because bows' pickup is only refilling ammo for itself
+-- add 1 ammo box refil to a singular weapon. has to be seprated between guns because bows' pickups exist
 function PlayerManager:Gilza_guardian_remote_ammo_pickup(weapon_index)
 	self._gilza_guardian_remotepickups.amount[weapon_index] = (self._gilza_guardian_remotepickups.amount[weapon_index] or 0) + 1
 end
 
--- actual ammo refil and new buff?
+-- actual ammo refil and new buff
 local CABLE_TIE_GET_CHANCE = 0.2
 local CABLE_TIE_GET_AMOUNT = 1
 function PlayerManager:Gilza_guardian_remote_ammo_refil()
@@ -2216,7 +2212,7 @@ function PlayerManager:Gilza_guardian_remote_ammo_refil()
 		end
 		
 		for _, weapon in ipairs(available_selections) do
-			for i=1, self._gilza_guardian_remotepickups.amount[weapon.unit:base():selection_index()] do
+			for i=1, (self._gilza_guardian_remotepickups.amount[weapon.unit:base():selection_index()] or 0) do
 				weapon.unit:base():add_ammo(1)
 			end
 		end
@@ -2283,7 +2279,9 @@ function PlayerManager:Gilza_guardian_remote_ammo_should_refil()
 end
 
 Hooks:PostHook(PlayerManager, "update", "Gilza_post_PlayerManager_update", function(self, t, dt)
-	self:Gilza_guardian_remote_ammo_should_refil()
+	if self:has_category_upgrade("player", "guardian_auto_ammo_pickup_on_kill") then
+		self:Gilza_guardian_remote_ammo_should_refil()
+	end
 end)
 
 -- ui/sound updates + nearby teammates scanner
