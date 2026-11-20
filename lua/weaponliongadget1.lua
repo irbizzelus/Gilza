@@ -17,10 +17,13 @@ Hooks:OverrideFunction(WeaponLionGadget1, "check_state", function (self, request
 
 	local bipod_deployable = self:_is_deployable()
 	
-	if request and request == "entry_automatic" then
+	local auto_req = request and request == "entry_automatic"
+	if auto_req and Gilza.settings.bipod_behaviour <= 2 then
 		self._bipod_entry_type = "entry_automatic"
-	else
+	elseif not auto_req and Gilza.settings.bipod_behaviour ~= 2 then
 		self._bipod_entry_type = "entry_standard"
+	else
+		return false
 	end
 
 	if not bipod_deployable and not self:is_deployed() and (not request or request == "entry_standard") then

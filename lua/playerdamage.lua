@@ -157,8 +157,9 @@ Hooks:PreHook(PlayerDamage, "damage_bullet", "Gilza_pre_player_damage_bullet", f
 	
 	-- porcupine "reflect", for the most part code copied from copycat richochet
 	if managers.player:has_category_upgrade("player", "guardian_heavy_armor_ricochet") then
-		local chance_mul = managers.player:upgrade_value("player", "guardian_heavy_armor_ricochet", 0)
-		local required_roll = math.floor(self:_raw_max_armor()) * chance_mul * 0.01
+		local base_chance_mul = managers.player:upgrade_value("player", "guardian_heavy_armor_ricochet", 0)
+		local remote_pickup_bonus_mul = (managers.player.Gilza_is_guardian_zone_active and managers.player._gilza_guardian_remotepickups.last_total > 0 and managers.player._gilza_guardian_remotepickups.last_total or 0) * 0.25
+		local required_roll = math.floor(self:_raw_max_armor()) * (base_chance_mul + remote_pickup_bonus_mul) * 0.01
 		if math.random() <= required_roll then
 			local from = Vector3()
 			local to = Vector3()
@@ -193,16 +194,29 @@ Hooks:PreHook(PlayerDamage, "damage_bullet", "Gilza_pre_player_damage_bullet", f
 				local hit_dmg_ext = nil
 
 				for _, col_ray in ipairs(ray_hits) do
-					hit_dmg_ext = col_ray.unit:character_damage()
+					
+					local hit_unit = col_ray.unit
+					if hit_unit:damage() and hit_unit:in_slot(managers.slot:get_mask("enemy_shield_check")) and managers.player:has_category_upgrade("player", "shield_knock") then
+						hit_unit = hit_unit:parent()
+					end
+					
+					hit_dmg_ext = alive(hit_unit) and hit_unit:character_damage()
 
-					if hit_dmg_ext and hit_dmg_ext.damage_simple then
-						hit_dmg_ext:damage_simple({
-							variant = "bullet",
-							damage = attack_data.damage,
-							attacker_unit = player_unit,
-							pos = col_ray.position,
-							attack_dir = dir
-						})
+					if hit_dmg_ext and hit_dmg_ext.damage_simple_knock then
+						-- if stagger causing richochet lands instantly it makes enemy's upper body animation to glitch out, probably because they are currently shooting
+						-- to avoid this problem as much as possible, richochet has a tiny delay. this also sorta simulates bullet traveling from enemy to player and then back, so its also cool i guess
+						local rng =  math.random( math.random(0,55555), math.random(55555,99999) ) -- since its based on enemy and not player shots, need extra rng to avoid delayed call overlap
+						DelayedCalls:Add("Gilza_guardian_richochet_delay_for_shot_"..tostring(Gilza.weapon_shot_id).."_rng_"..tostring(rng), 0.05, function()
+							local unit_dmg = alive(hit_unit) and hit_unit:character_damage()
+							unit_dmg:damage_simple_knock({
+								variant = "bullet",
+								damage = attack_data.damage,
+								attacker_unit = player_unit,
+								pos = col_ray.position,
+								knock_down = true,
+								attack_dir = dir
+							})
+						end)
 						managers.game_play_central:play_impact_flesh({
 							col_ray = col_ray
 						})
@@ -571,6 +585,7 @@ Hooks:PostHook(PlayerDamage, "init", "Gilza_post_PlayerDamage_init", function(se
 		-- guardian
 		if managers.player:has_category_upgrade("player", "guardian_area_passive") then
 			AddDefaultPerkGUI("Gilza_guardian_GUI_icon", false, "guis/dlcs/Gilza/textures/pd2/specialization/guardian_icon")
+			AddDefaultPerkGUITextAddon("_Gilza_guardian_counter_GUI", "Gilza_guardian_GUI_counter")
 			managers.player:Gilza_start_guardian_tracking()
 		end
 		

@@ -1,3 +1,7 @@
+if not Gilza then
+	dofile("mods/Gilza/lua/1_GilzaBase.lua")
+end
+
 -- changes to all weapon attachments and addition of some new ones
 Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", function(self, ...)
 	
@@ -668,6 +672,15 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		
 		-- Miscellaneous
 		local function general_MISC()
+			
+			-- new bipod descs
+			local descs = {
+				[0] = "bm_wp_upg_lmg_lionbipod_desc_pc",
+				[1] = "bm_wp_upg_lmg_bipod_gilza_desc_combined",
+				[2] = "bm_wp_upg_lmg_bipod_gilza_desc_auto",
+				[3] = "bm_wp_upg_lmg_bipod_gilza_desc_manual"
+			}
+			self.parts.wpn_fps_upg_bp_lmg_lionbipod.desc_id = descs[Gilza.settings.bipod_behaviour]
 			
 			-- select fire mods
 			-- remove vanilla burst attachments, cuz we only add it to supported weapons

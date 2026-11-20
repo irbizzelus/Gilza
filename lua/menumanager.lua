@@ -99,6 +99,18 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		Gilza:Save()
 	end
 	
+	MenuCallbackHandler.Gilza_bipod_behaviour = function(this, item)
+		Gilza.settings.bipod_behaviour = tonumber(item:value())
+		local descs = {
+			[0] = "bm_wp_upg_lmg_lionbipod_desc_pc",
+			[1] = "bm_wp_upg_lmg_bipod_gilza_desc_combined",
+			[2] = "bm_wp_upg_lmg_bipod_gilza_desc_auto",
+			[3] = "bm_wp_upg_lmg_bipod_gilza_desc_manual"
+		}
+		tweak_data.weapon.factory.parts.wpn_fps_upg_bp_lmg_lionbipod.desc_id = descs[Gilza.settings.bipod_behaviour]
+		Gilza:Save()
+	end
+	
 	MenuCallbackHandler.Gilza_menace_points_notification = function(this, item)
 		Gilza.settings.menace_points_notification = item:value() == 'on'
 		Gilza:Save()
@@ -173,7 +185,11 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		if managers.player:has_category_upgrade("player", "guardian_area_passive") then
 			icon_panel = hud.panel:child("Gilza_guardian_GUI_icon")
 			panel_class = managers.player._Gilza_guardian_GUI_icon
-			text_panel = nil
+			if managers.player:has_category_upgrade("player", "guardian_heavy_armor_ricochet") then
+				text_panel = hud.panel:child("Gilza_guardian_GUI_counter")
+			else
+				text_panel = nil
+			end
 		end
 		if managers.player:has_category_upgrade("temporary", "loose_ammo_restore_health") then
 			icon_panel = hud.panel:child("Gilza_new_gambler_GUI_icon")
@@ -237,7 +253,11 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		if managers.player:has_category_upgrade("player", "guardian_area_passive") then
 			icon_panel = hud.panel:child("Gilza_guardian_GUI_icon")
 			panel_class = managers.player._Gilza_guardian_GUI_icon
-			text_panel = nil
+			if managers.player:has_category_upgrade("player", "guardian_heavy_armor_ricochet") then
+				text_panel = hud.panel:child("Gilza_guardian_GUI_counter")
+			else
+				text_panel = nil
+			end
 		end
 		if managers.player:has_category_upgrade("temporary", "loose_ammo_restore_health") then
 			icon_panel = hud.panel:child("Gilza_new_gambler_GUI_icon")
@@ -284,7 +304,11 @@ Hooks:Add('MenuManagerInitialize', 'Gilza_init_menu', function(menu_manager)
 		if managers.player:has_category_upgrade("player", "guardian_area_passive") then
 			icon_panel = hud.panel:child("Gilza_guardian_GUI_icon")
 			panel_class = managers.player._Gilza_guardian_GUI_icon
-			text_panel = nil
+			if managers.player:has_category_upgrade("player", "guardian_heavy_armor_ricochet") then
+				text_panel = hud.panel:child("Gilza_guardian_GUI_counter")
+			else
+				text_panel = nil
+			end
 		end
 		if managers.player:has_category_upgrade("temporary", "loose_ammo_restore_health") then
 			icon_panel = hud.panel:child("Gilza_new_gambler_GUI_icon")

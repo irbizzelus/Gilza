@@ -143,7 +143,8 @@ Hooks:OverrideFunction(PlayerBipod, "exit", function (self, state_data, new_stat
 
 	self._state_data.previous_state = "bipod"
 	
-	managers.player._gilza_flag_bipod_redeploy_delay = Application:time() + (1.2 * (1 / managers.player:upgrade_value("player", "bipod_deploy_speed", 1)))
+	local setting_mul = (Gilza.settings.bipod_behaviour == 2 and 0.5) or 1
+	managers.player._gilza_flag_bipod_redeploy_delay = Application:time() + (setting_mul * 1.2 * (1 / managers.player:upgrade_value("player", "bipod_deploy_speed", 1)))
 	return exit_data
 end)
 
@@ -194,7 +195,8 @@ Hooks:OverrideFunction(PlayerBipod, "_update_movement", function (self, t, dt)
 			self:_unmount_bipod()
 			
 			-- if we quit auto-bipod by moving, reduce redeploy delay in half
-			managers.player._gilza_flag_bipod_redeploy_delay = Application:time() + (0.6 * (1 / managers.player:upgrade_value("player", "bipod_deploy_speed", 1)))
+			local setting_mul = (Gilza.settings.bipod_behaviour == 2 and 0.5) or 1
+			managers.player._gilza_flag_bipod_redeploy_delay = Application:time() + (setting_mul * 0.6 * (1 / managers.player:upgrade_value("player", "bipod_deploy_speed", 1)))
 			local current_state = managers.player:get_current_state()
 
 			if current_state then
@@ -221,19 +223,26 @@ end)
 
 -- if we auto deployed while crouched, uncrouch input unmounts
 Hooks:OverrideFunction(PlayerBipod, "_check_action_duck", function (self, t, input)
-	if input and input.btn_duck_press and not self._unit:base():stats_screen_visible() then
+	if input and not self._unit:base():stats_screen_visible() and self._bipod_flag_entry_type == "entry_automatic" and (self._setting_hold_to_duck and input.btn_duck_release or input.btn_duck_press) then
 		
-		if self._bipod_flag_lean_type == "crouched" and self._bipod_flag_entry_type == "entry_automatic" then
-			self:_unmount_bipod()
-			
-			local current_state = managers.player:get_current_state()
-
-			if current_state then
+		self:_unmount_bipod()
+		
+		local current_state = managers.player:get_current_state()
+		
+		if current_state._setting_hold_to_duck and input.btn_duck_release then
+			if current_state._state_data.ducking then
 				current_state:_end_action_ducking(t)
 			end
-			
-			return true
+		else
+			if not current_state._state_data.ducking then
+				current_state:_start_action_ducking(t)
+			elseif current_state._state_data.ducking then
+				current_state:_end_action_ducking(t)
+			end
 		end
+		
+		return true
+		
 	end
 end)
 

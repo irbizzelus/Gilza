@@ -53,6 +53,20 @@
 			"default_value" : 2
 		},
 		{
+			"type" : "multiple_choice",
+			"id" : "Gilza_bipod_behaviour",
+			"title" : "Gilza_bipod_behaviour",
+			"description" : "Gilza_bipod_behaviour_desc",
+			"callback" : "Gilza_bipod_behaviour",
+			"items" : [
+				"Gilza_bipod_behaviour_choise_1",
+				"Gilza_bipod_behaviour_choise_2",
+				"Gilza_bipod_behaviour_choise_3",
+			],
+			"value" : "bipod_behaviour",
+			"default_value" : 1
+		},
+		{
 			"type" : "divider",
 			"size" : 22
 		},

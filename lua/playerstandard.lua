@@ -37,7 +37,8 @@ Hooks:OverrideFunction(PlayerStandard, "_check_change_weapon", function (self, .
 end)
 
 Hooks:PostHook(PlayerStandard, "enter", "Gilza_posthook_PlayerStandard_enter", function(self, state_data, enter_data)
-	managers.player._gilza_flag_bipod_redeploy_delay = Application:time() + (1.2 * (1 / managers.player:upgrade_value("player", "bipod_deploy_speed", 1)))
+	local setting_mul = (Gilza.settings.bipod_behaviour == 2 and 0.5) or 1
+	managers.player._gilza_flag_bipod_redeploy_delay = Application:time() + (setting_mul * 1.2 * (1 / managers.player:upgrade_value("player", "bipod_deploy_speed", 1)))
 end)
 
 Hooks:OverrideFunction(PlayerStandard, "_check_action_deploy_bipod", function (self, t, input, ...)

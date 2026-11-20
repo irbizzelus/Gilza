@@ -27,6 +27,7 @@ _G.Gilza = {
 		melee_toggle_mode_icon_x_pos = 30,
 		melee_toggle_mode_icon_y_pos = 380,
 		single_fire_input_buffering = true,
+		bipod_behaviour = 1,
 		-- VHUD STUFF
 		vhud_compat_new_melee_zerk = false,
 		vhud_compat_new_weapon_zerk = true,

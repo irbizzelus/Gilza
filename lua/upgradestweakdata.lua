@@ -1281,7 +1281,7 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 			local function Guardian_updates()
 				---- Guardian deck stuff
 				self.values.player.guardian_movement_penalty = {
-					0.8
+					0.75
 				}
 				self.values.player.guardian_interaction_speed_penalty = {
 					1.5
@@ -1337,9 +1337,9 @@ Hooks:PostHook(UpgradesTweakData, "_init_pd2_values", "Gilza_UpgradesTweakData_i
 					2,
 					2.5
 				}
-				-- for 10 points of armor you get a chance multiplier for ricochet. so for 216 armor with current mul you get 21 x 3 = 63%
+				-- for 10 points of armor you get a chance multiplier for ricochet. so for 216 armor with current mul you get 21 x 2.5 = 52.5%
 				self.values.player.guardian_heavy_armor_ricochet = {
-					3
+					2.5
 				}
 				self.values.player.guardian_activate_area_on_kill = {
 					true

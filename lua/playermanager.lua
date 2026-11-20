@@ -636,7 +636,7 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 					local icon = info_hud.panel:child("Gilza_guardian_GUI_icon")
 					if icon then
 						icon:set_visible(true)
-						icon:set_color(Color(1, 1, 1, 1))
+						icon:set_color(Color(1, 0.06, 0.65, 0.27))
 					end
 					player_unit:sound():play("perkdeck_activate", nil, false)
 				end
@@ -658,22 +658,13 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 					local desync_compensation = desync_compensation or 0
 					local skill_range_increase = managers.player:upgrade_value("player", "increased_pickup_area", 1)
 					local pickups = World:find_units_quick("sphere", death_spot, (20 * skill_range_increase) + desync_compensation, managers.slot:get_mask("pickups"))
-					local grenade_tweak = tweak_data.blackmarket.projectiles[managers.blackmarket:equipped_grenade()]
-					local may_find_grenade = not grenade_tweak.base_cooldown and managers.player:has_category_upgrade("player", "regain_throwable_from_ammo")
-					
+
 					if pickups and #pickups >= 1 then
 						for _, pickup in ipairs(pickups) do
 							if pickup:pickup() and pickup:pickup():pickup(player_unit) then
-								if may_find_grenade then
-									local data = managers.player:upgrade_value("player", "regain_throwable_from_ammo", nil)
-
-									if data and not managers.player:got_max_grenades() then
-										managers.player:add_coroutine("regain_throwable_from_ammo", PlayerAction.FullyLoaded, managers.player, data.chance, data.chance_inc)
-									end
-								end
-
-								for id, weapon in pairs(player_unit:inventory():available_selections()) do
-									managers.hud:set_ammo_amount(id, weapon.unit:base():ammo_info())
+								self._gilza_guardian_remotepickups.amount.total = (self._gilza_guardian_remotepickups.amount.total or 0) + 1
+								if self._gilza_guardian_remotepickups.amount.total == 1 then
+									self._gilza_guardian_remotepickups.refil_at = Application:time() + 5
 								end
 								return true
 							end
@@ -683,26 +674,28 @@ Hooks:PostHook(PlayerManager, "on_killshot", "Gilza_PlayerManager_post_on_killsh
 				end
 				local death_spot = Vector3(0,0,0)
 				mvector3.set(death_spot,killed_unit:movement():m_pos())
-				if Network and Network:is_client() then
-					local max_attempts = 0 -- 3 seconds tops
-					local function ammo_loop(death_spot)
-						-- whenever we kill more then 1 enemy unit in one shot, this func will trigger for each dead enemy. if delayedcall name was the same, it would override
-						-- first kill's delayed call with the second kill's delayed call, giving less ammo, so we are adding shot id to the name. on top of that, we add randomised number,
-						-- because grenade launcher's shots fired tracker is more complex. for that case a RNG should help in cases where we get <10-20 kills per explosion. otherwise there would be higher chance for RNG to repeat itself
-						DelayedCalls:Add("Gilza_try_finding_ammo_pickups_with_client_ping_compensation_for_shot_"..tostring(Gilza.weapon_shot_id).."_rng_"..tostring( math.random( math.random(0,55555), math.random(55555,99999) ) ), 0.05, function()
-							if player_unit and alive(player_unit) then
-								max_attempts = max_attempts + 1
-								local ammo_found = find_pickups_at_death_location(death_spot,max_attempts*1.5)
-								if max_attempts < 60 and not ammo_found then
-									ammo_loop(death_spot)
-								end
+				local max_pickups = (self._target_kills_double_drop and self._num_kills % self._target_kills_double_drop == 0) and 2 or 1
+				local max_attempts = 0 -- 3 seconds tops
+				
+				local function ammo_loop(death_spot)
+					-- whenever we kill more than 1 enemy unit in one shot, this func will trigger for each dead enemy. if delayedcall name was the same, it would override
+					-- first kill's delayed call with the second kill's delayed call, giving less ammo, so we are adding shot id to the name. on top of that, we add randomised number,
+					-- because grenade launcher's shots fired tracker is more complex. for that case a RNG should help in cases where we get <10-20 kills per explosion. otherwise there would be higher chance for RNG to repeat itself
+					DelayedCalls:Add("Gilza_try_finding_ammo_pickups_for_killshot_"..tostring(Gilza.weapon_shot_id).."_rng_"..tostring( math.random( math.random(0,55555), math.random(55555,99999) ) ), 0.01, function()
+						if player_unit and alive(player_unit) then
+							max_attempts = max_attempts + 1
+							local ammo_found = find_pickups_at_death_location(death_spot,max_attempts*1.5)
+							if ammo_found then
+								max_pickups = max_pickups - 1
 							end
-						end)
-					end
-					ammo_loop(death_spot)
-				else
-					find_pickups_at_death_location(death_spot)
+							if max_attempts < 300 and (not ammo_found or max_pickups > 0) then
+								ammo_loop(death_spot)
+							end
+						end
+					end)
 				end
+				ammo_loop(death_spot)
+				
 			end
 			
 		end
@@ -2072,27 +2065,71 @@ function PlayerManager:Gilza_guardian_recursive_updater()
 			self._gilza_stopped_moving = false
 		end
 		
+		local function get_ricochet_text()
+			if not managers.player:has_category_upgrade("player", "guardian_heavy_armor_ricochet") then
+				return ""
+			end
+			local base_chance_mul = self:upgrade_value("player", "guardian_heavy_armor_ricochet", 0)
+			local remote_pickup_bonus_mul = (self.Gilza_is_guardian_zone_active and self._gilza_guardian_remotepickups.last_total > 0 and self._gilza_guardian_remotepickups.last_total or 0) * 0.2
+			local required_roll = math.floor(managers.player:player_unit():character_damage():_raw_max_armor()) * (base_chance_mul + remote_pickup_bonus_mul) * 0.01
+			required_roll = math.min(required_roll,1)
+			return string.format("%.1f", required_roll*100).."%"
+		end
+		
 		-- if area is active, check how far away player is, and update that info. remove zone is far away for long
 		if area.is_active then
 			-- set vertical axis for both positions to 0 to make this area effectively an endless vertical cylinder instead of a sphere
 			local player_pos = mvector3.copy(player_unit:position())
 			player_pos = Vector3(player_pos.x,player_pos.y,0)
 			local area_pos = Vector3(area.position.x,area.position.y,0)
+			
 			if mvector3.distance(player_pos, area_pos) <= area.radius then
 				area.is_player_inside = true
 				area.last_attended_time = Application:time()
 				
 				icon:set_visible(true)
-				icon:set_color(Color(1, 1, 1, 1))
+				icon:set_color(Color(1, 0.06, 0.65, 0.27))
+				
+				self._Gilza_guardian_counter_GUI:set_text(get_ricochet_text())
+				self._Gilza_guardian_counter_GUI:set_visible(true)
+				self._Gilza_guardian_counter_GUI:set_outlines_visible(true)
+				self._Gilza_guardian_counter_GUI:show()
+				self._Gilza_guardian_counter_GUI:set_color(Color(1, 1, 1, 1))
 			else
 				area.is_player_inside = false
 				
-				icon:set_color(Color(0.2, 1, 1, 1)) -- low ui transperancy while ouside the area, which is still active
+				icon:set_color(Color(0.2, 0.06, 0.65, 0.27)) -- low ui transperancy while ouside the area, which is still active
+				
+				self._Gilza_guardian_counter_GUI:set_text(get_ricochet_text())
+				self._Gilza_guardian_counter_GUI:set_visible(true)
+				self._Gilza_guardian_counter_GUI:set_outlines_visible(false)
+				self._Gilza_guardian_counter_GUI:show()
+				self._Gilza_guardian_counter_GUI:set_color(Color(0.2, 1, 1, 1)) -- low ui transperancy while ouside the area, which is still active
 			end
 			if not area.is_player_inside and (Application:time() - area.last_attended_time) >= 8 then
 				area.is_active = false
+				self._gilza_guardian_remotepickups.last_total = 0
 				
-				icon:set_visible(false)
+				icon:set_color(Color(0.2, 0.73, 0.24, 0))
+				self._Gilza_guardian_counter_GUI:set_text(get_ricochet_text())
+				self._Gilza_guardian_counter_GUI:set_outlines_visible(false)
+				self._Gilza_guardian_counter_GUI:set_visible(true)
+			end
+		else
+			if (Application:time() - area.last_attended_time) >= 16 then
+				icon:set_visible(true)
+				icon:set_color(Color(0.2, 1, 1, 1))
+				self._Gilza_guardian_counter_GUI:set_text(get_ricochet_text())
+				self._Gilza_guardian_counter_GUI:set_outlines_visible(false)
+				self._Gilza_guardian_counter_GUI:set_visible(true)
+				self._Gilza_guardian_counter_GUI:set_color(Color(0.2, 1, 1, 1))
+			else
+				icon:set_visible(true)
+				icon:set_color(Color(0.2, 0.73, 0.24, 0))
+				self._Gilza_guardian_counter_GUI:set_text(get_ricochet_text())
+				self._Gilza_guardian_counter_GUI:set_outlines_visible(false)
+				self._Gilza_guardian_counter_GUI:set_visible(true)
+				self._Gilza_guardian_counter_GUI:set_color(Color(0.2, 1, 1, 1))
 			end
 		end
 		
@@ -2105,7 +2142,7 @@ function PlayerManager:Gilza_guardian_recursive_updater()
 				area.last_attended_time = Application:time()
 				
 				icon:set_visible(true)
-				icon:set_color(Color(1, 1, 1, 1))
+				icon:set_color(Color(1, 0.06, 0.65, 0.27))
 				player_unit:sound():play("perkdeck_activate", nil, false)
 			end
 		end
@@ -2121,8 +2158,6 @@ function PlayerManager:Gilza_guardian_recursive_updater()
 			icon:set_visible(false)
 		end
 	end
-	
-	--log("Area info: Location: "..tostring(area.position).."; Active: "..tostring(area.is_active).."; Radius: "..tostring(area.radius).."; Player inside: "..tostring(area.is_player_inside).."; Last inside at: "..tostring(area.last_attended_time))
 	
 	DelayedCalls:Add("Gilza_guardian_recursive_updater", 0.1, function(self)
 		managers.player:Gilza_guardian_recursive_updater()
@@ -2157,6 +2192,99 @@ end
 function PlayerManager:Gilza_is_guardian_zone_active()
 	return self.Gilza_guardian_area.is_active
 end
+
+-- add 1 ammo box refil to a singular weapon. has to be seprated between guns because bows' pickup is only refilling ammo for itself
+function PlayerManager:Gilza_guardian_remote_ammo_pickup(weapon_index)
+	self._gilza_guardian_remotepickups.amount[weapon_index] = (self._gilza_guardian_remotepickups.amount[weapon_index] or 0) + 1
+end
+
+-- actual ammo refil and new buff?
+local CABLE_TIE_GET_CHANCE = 0.2
+local CABLE_TIE_GET_AMOUNT = 1
+function PlayerManager:Gilza_guardian_remote_ammo_refil()
+	
+	local inventory = self:player_unit():inventory()
+	
+	if not self:player_unit():character_damage():dead() and inventory then
+		local available_selections = {}
+		for i, weapon in pairs(inventory:available_selections()) do
+			if inventory:is_equipped(i) then
+				table.insert(available_selections, 1, weapon)
+			else
+				table.insert(available_selections, weapon)
+			end
+		end
+		
+		for _, weapon in ipairs(available_selections) do
+			for i=1, self._gilza_guardian_remotepickups.amount[weapon.unit:base():selection_index()] do
+				weapon.unit:base():add_ammo(1)
+			end
+		end
+		
+		for id, weapon in pairs(inventory:available_selections()) do
+			managers.hud:set_ammo_amount(id, weapon.unit:base():ammo_info())
+		end
+		
+		for i=1, self._gilza_guardian_remotepickups.amount.total do
+			
+			local grenade_tweak = tweak_data.blackmarket.projectiles[managers.blackmarket:equipped_grenade()]
+			local may_find_grenade = not grenade_tweak.base_cooldown and managers.player:has_category_upgrade("player", "regain_throwable_from_ammo")
+			
+			if may_find_grenade then
+				local data = managers.player:upgrade_value("player", "regain_throwable_from_ammo", nil)
+
+				if data and not managers.player:got_max_grenades() then
+					managers.player:add_coroutine("regain_throwable_from_ammo", PlayerAction.FullyLoaded, managers.player, data.chance, data.chance_inc)
+				end
+			end
+			
+			local rand = math.random()
+
+			if rand <= CABLE_TIE_GET_CHANCE then
+				self:add_cable_ties(CABLE_TIE_GET_AMOUNT)
+			end
+			
+			-- new fully loaded aced
+			if self:has_category_upgrade("player", "temp_bulletstorm_from_ammo_pick_ups") then
+				local skill_duration = self:upgrade_value("player", "temp_bulletstorm_from_ammo_pick_ups")
+				local time_to_add = self:upgrade_value("player", "temp_bulletstorm_from_ammo_pick_ups")
+				if self:has_active_temporary_property("bullet_storm") then
+					local remained = self:get_property_end_time("bullet_storm") - Application:time()
+					if remained >= skill_duration then
+						time_to_add = 0
+					elseif remained < skill_duration then
+						time_to_add = skill_duration - remained
+					end
+				end
+				if time_to_add > 0 then
+					self:add_to_temporary_property("bullet_storm", time_to_add, 1)
+					Gilza.NSI:updated_bulletstorm(skill_duration)
+				end
+			end
+			
+		end
+		
+		self:player_unit():sound():play(self._pickup_event or "pickup_ammo", nil, true)
+		
+	end
+	
+	-- reset
+	self._gilza_guardian_remotepickups.last_total = self._gilza_guardian_remotepickups.amount.total
+	self._gilza_guardian_remotepickups.refil_at = 0
+	self._gilza_guardian_remotepickups.amount = {total = 0}
+end
+
+-- checks if refil should happen via updater
+function PlayerManager:Gilza_guardian_remote_ammo_should_refil()
+	self._gilza_guardian_remotepickups = self._gilza_guardian_remotepickups or {last_total = 0, refil_at = 0,amount = {total = 0}}
+	if Application:time() > self._gilza_guardian_remotepickups.refil_at and self._gilza_guardian_remotepickups.amount.total > 0 then
+		self:Gilza_guardian_remote_ammo_refil()
+	end
+end
+
+Hooks:PostHook(PlayerManager, "update", "Gilza_post_PlayerManager_update", function(self, t, dt)
+	self:Gilza_guardian_remote_ammo_should_refil()
+end)
 
 -- ui/sound updates + nearby teammates scanner
 function PlayerManager:Gilza_brawler_recursive_updater()

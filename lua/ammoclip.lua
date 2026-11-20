@@ -11,6 +11,8 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 
 	local player_manager = managers.player
 	local inventory = unit:inventory()
+	
+	local is_guardian_in_zone = player_manager:has_category_upgrade("player", "guardian_auto_ammo_pickup_on_kill") and alive(player_manager:player_unit()) and player_manager:Gilza_is_player_in_guardian_zone()
 
 	if not unit:character_damage():dead() and inventory then
 		local picked_up = false
@@ -31,7 +33,7 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 					table.insert(available_selections, weapon)
 				end
 			end
-
+			
 			local success, add_amount = nil
 			for _, weapon in ipairs(available_selections) do
 				if not self._weapon_category or self._weapon_category == weapon.unit:base():categories()[1] then
@@ -55,6 +57,18 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 								managers.achievment:award_progress(tweak_data.achievement.pickup_sticks.stat)
 							end
 						end
+					elseif is_guardian_in_zone then -- guardian picks up boxes in waves
+						player_manager:Gilza_guardian_remote_ammo_pickup(weapon.unit:base():selection_index())
+						picked_up = true
+						add_amount = 9999
+
+						if self._ammo_count then
+							self._ammo_count = math.max(math.floor(self._ammo_count - add_amount), 0)
+						end
+
+						if picked_up and tweak_data.achievement.pickup_sticks and self._weapon_category == tweak_data.achievement.pickup_sticks.weapon_category then
+							managers.achievment:award_progress(tweak_data.achievement.pickup_sticks.stat)
+						end
 					else
 						success, add_amount = weapon.unit:base():add_ammo(1, self._ammo_count)
 						picked_up = success or picked_up
@@ -75,12 +89,12 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 			self._picked_up = true
 			local rand = math.random()
 
-			if rand <= CABLE_TIE_GET_CHANCE and self._ammo_box then
+			if rand <= CABLE_TIE_GET_CHANCE and self._ammo_box and not is_guardian_in_zone then
 				player_manager:add_cable_ties(CABLE_TIE_GET_AMOUNT)
 			end
 			
 			-- new fully loaded aced
-			if player_manager:has_category_upgrade("player", "temp_bulletstorm_from_ammo_pick_ups") then
+			if player_manager:has_category_upgrade("player", "temp_bulletstorm_from_ammo_pick_ups") and not is_guardian_in_zone then
 				local skill_duration = player_manager:upgrade_value("player", "temp_bulletstorm_from_ammo_pick_ups")
 				local time_to_add = player_manager:upgrade_value("player", "temp_bulletstorm_from_ammo_pick_ups")
 				if player_manager:has_active_temporary_property("bullet_storm") then
@@ -203,8 +217,10 @@ Hooks:OverrideFunction(AmmoClip, "_pickup", function(self, unit)
 			if Network:is_client() then
 				managers.network:session():send_to_host("sync_pickup", self._unit)
 			end
-
-			unit:sound():play(self._pickup_event or "pickup_ammo", nil, true)
+			
+			if not is_guardian_in_zone then
+				unit:sound():play(self._pickup_event or "pickup_ammo", nil, true)
+			end
 			self:consume()
 
 			if self._ammo_box then

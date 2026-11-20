@@ -739,22 +739,13 @@ Hooks:OverrideFunction(CopDamage, "chk_killshot", function (self, attacker_unit,
 					local desync_compensation = desync_compensation or 0
 					local skill_range_increase = managers.player:upgrade_value("player", "increased_pickup_area", 1)
 					local pickups = World:find_units_quick("sphere", death_spot, (20 * skill_range_increase) + desync_compensation, managers.slot:get_mask("pickups"))
-					local grenade_tweak = tweak_data.blackmarket.projectiles[managers.blackmarket:equipped_grenade()]
-					local may_find_grenade = not grenade_tweak.base_cooldown and managers.player:has_category_upgrade("player", "regain_throwable_from_ammo")
-					
+
 					if pickups and #pickups >= 1 then
 						for _, pickup in ipairs(pickups) do
 							if pickup:pickup() and pickup:pickup():pickup(player_unit) then
-								if may_find_grenade then
-									local data = managers.player:upgrade_value("player", "regain_throwable_from_ammo", nil)
-
-									if data and not managers.player:got_max_grenades() then
-										managers.player:add_coroutine("regain_throwable_from_ammo", PlayerAction.FullyLoaded, managers.player, data.chance, data.chance_inc)
-									end
-								end
-
-								for id, weapon in pairs(player_unit:inventory():available_selections()) do
-									managers.hud:set_ammo_amount(id, weapon.unit:base():ammo_info())
+								self._gilza_guardian_remotepickups.amount.total = (self._gilza_guardian_remotepickups.amount.total or 0) + 1
+								if self._gilza_guardian_remotepickups.amount.total == 1 then
+									self._gilza_guardian_remotepickups.refil_at = Application:time() + 5
 								end
 								return true
 							end
@@ -764,26 +755,27 @@ Hooks:OverrideFunction(CopDamage, "chk_killshot", function (self, attacker_unit,
 				end
 				local death_spot = Vector3(0,0,0)
 				mvector3.set(death_spot,self._unit:movement():m_pos())
-				if Network and Network:is_client() then
-					local max_attempts = 0 -- 3 seconds tops
-					local function ammo_loop(death_spot)
-						-- whenever we kill more then 1 enemy unit in one shot, this func will trigger for each dead enemy. if delayedcall name was the same, it would override
-						-- first kill's delayed call with the second kill's delayed call, giving less ammo, so we are adding shot id to the name. on top of that, we add randomised number,
-						-- because grenade launcher's shots fired tracker is more complex. for that case a RNG should help in cases where we get <10-20 kills per explosion. otherwise there would be higher chance for RNG to repeat itself
-						DelayedCalls:Add("Gilza_try_finding_ammo_pickups_with_client_ping_compensation_for_shot_"..tostring(Gilza.weapon_shot_id).."_rng_"..tostring( math.random( math.random(0,55555), math.random(55555,99999) ) ), 0.05, function()
-							if player_unit and alive(player_unit) then
-								max_attempts = max_attempts + 1
-								local ammo_found = find_pickups_at_death_location(death_spot,max_attempts*1.5)
-								if max_attempts < 60 and not ammo_found then
-									ammo_loop(death_spot)
-								end
+				local max_pickups = (self._target_kills_double_drop and self._num_kills % self._target_kills_double_drop == 0) and 2 or 1
+				local max_attempts = 0 -- 3 seconds tops
+				
+				local function ammo_loop(death_spot)
+					-- whenever we kill more than 1 enemy unit in one shot, this func will trigger for each dead enemy. if delayedcall name was the same, it would override
+					-- first kill's delayed call with the second kill's delayed call, giving less ammo, so we are adding shot id to the name. on top of that, we add randomised number,
+					-- because grenade launcher's shots fired tracker is more complex. for that case a RNG should help in cases where we get <10-20 kills per explosion. otherwise there would be higher chance for RNG to repeat itself
+					DelayedCalls:Add("Gilza_try_finding_ammo_pickups_for_killshot_"..tostring(Gilza.weapon_shot_id).."_rng_"..tostring( math.random( math.random(0,55555), math.random(55555,99999) ) ), 0.01, function()
+						if player_unit and alive(player_unit) then
+							max_attempts = max_attempts + 1
+							local ammo_found = find_pickups_at_death_location(death_spot,max_attempts*1.5)
+							if ammo_found then
+								max_pickups = max_pickups - 1
 							end
-						end)
-					end
-					ammo_loop(death_spot)
-				else
-					find_pickups_at_death_location(death_spot)
+							if max_attempts < 300 and (not ammo_found or max_pickups > 0) then
+								ammo_loop(death_spot)
+							end
+						end
+					end)
 				end
+				ammo_loop(death_spot)
 			end
 			
 			-- sentry new ammo on kill skill
@@ -885,6 +877,133 @@ Hooks:OverrideFunction(CopDamage, "damage_simple", function (self, attack_data)
 	
 	return res
 end)
+
+-- copy-paste of vanilla function but with guranteed stagger. used by guardian deck
+function CopDamage:damage_simple_knock(attack_data)
+	if self._dead or self._invulnerable then
+		return
+	end
+
+	if self:chk_immune_to_attacker(attack_data.attacker_unit) then
+		return
+	end
+
+	local is_civilian = CopDamage.is_civilian(self._unit:base()._tweak_table)
+	local result
+	local damage = attack_data.damage
+
+	if self._unit:base():char_tweak().DAMAGE_CLAMP_SHOCK then
+		damage = math.min(damage, self._unit:base():char_tweak().DAMAGE_CLAMP_SHOCK)
+	end
+
+	damage = math.clamp(damage, 0, self._HEALTH_INIT)
+
+	local damage_percent = math.ceil(damage / self._HEALTH_INIT_PRECENT)
+
+	damage = damage_percent * self._HEALTH_INIT_PRECENT
+	damage, damage_percent = self:_apply_min_health_limit(damage, damage_percent)
+
+	if self._immortal then
+		damage = math.min(damage, self._health - 1)
+	end
+
+	if damage >= self._health then
+		if self:check_medic_heal() then
+			attack_data.variant = "healed"
+			result = {
+				type = "healed",
+				variant = attack_data.variant
+			}
+		else
+			attack_data.damage = self._health
+			result = {
+				type = "death",
+				variant = attack_data.variant
+			}
+
+			self:die(attack_data)
+		end
+	else
+		attack_data.damage = damage
+		
+		-- this is the only change
+		local result_type = not self._char_tweak.immune_to_knock_down and (attack_data.knock_down and "knock_down") or self:get_damage_type(damage_percent)
+
+		result = {
+			type = result_type,
+			variant = attack_data.variant
+		}
+
+		self:_apply_damage_to_health(damage)
+	end
+
+	attack_data.result = result
+
+	local attacker = attack_data.attacker_unit
+
+	if not attacker or attacker:id() == -1 then
+		attacker = self._unit
+	end
+
+	if result.type == "death" then
+		local data = {
+			name = self._unit:base()._tweak_table,
+			stats_name = self._unit:base()._stats_name,
+			owner = attack_data.owner,
+			weapon_unit = attack_data.weapon_unit,
+			variant = attack_data.variant
+		}
+
+		managers.statistics:killed_by_anyone(data)
+
+		local attacker_unit = attack_data.attacker_unit
+
+		if attacker_unit and attacker_unit:base() and attacker_unit:base().thrower_unit then
+			attacker_unit = attacker_unit:base():thrower_unit()
+			data.weapon_unit = attack_data.attacker_unit
+		end
+
+		if not is_civilian and managers.player:has_category_upgrade("temporary", "overkill_damage_multiplier") and attacker_unit == managers.player:player_unit() and attack_data.weapon_unit and attack_data.weapon_unit:base().weapon_tweak_data and not attack_data.weapon_unit:base().thrower_unit and attack_data.weapon_unit:base():is_category("shotgun", "saw") then
+			managers.player:activate_temporary_upgrade("temporary", "overkill_damage_multiplier")
+		end
+
+		self:chk_killshot(attacker_unit, "shock", false, attack_data.weapon_unit and attack_data.weapon_unit:base():get_name_id())
+
+		if attacker_unit == managers.player:player_unit() then
+			if alive(attacker_unit) then
+				self:_comment_death(attacker_unit, self._unit)
+			end
+
+			self:_show_death_hint(self._unit:base()._tweak_table)
+			managers.statistics:killed(data)
+
+			if is_civilian then
+				managers.money:civilian_killed()
+			end
+
+			self:_check_damage_achievements(attack_data, false)
+		end
+	end
+
+	if not self._no_blood then
+		managers.game_play_central:sync_play_impact_flesh(attack_data.pos, attack_data.attack_dir)
+	end
+
+	local i_result = ({
+		healed = 3,
+		knock_down = 1,
+		stagger = 2
+	})[result.type] or 0
+
+	self:_send_simple_attack_result(attacker, damage_percent, self:_get_attack_variant_index(attack_data.result.variant), i_result)
+	self:_on_damage_received(attack_data)
+
+	if not is_civilian and attack_data.attacker_unit and alive(attack_data.attacker_unit) then
+		managers.player:send_message(Message.OnEnemyShot, nil, self._unit, attack_data)
+	end
+
+	return result
+end
 
 -- reduce incoming damage from projectile explosives for certain enemies to avoid confusion between host/client play, since host always handles projectile dmg, causing conflicts with new health
 Hooks:PreHook(CopDamage, "damage_explosion", "Gilza_CopDamage_damage_explosion_pre", function(self, attack_data)

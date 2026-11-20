@@ -17,6 +17,11 @@
 	"Gilza_weapon_sorting_choise_1": "Disabled",
 	"Gilza_weapon_sorting_choise_2": "Descending",
 	"Gilza_weapon_sorting_choise_3": "Ascending",
+	"Gilza_bipod_behaviour": "Bipod Behaviour",
+	"Gilza_bipod_behaviour_desc": "Adjust bipod deploy behaviour. Combined mode tries to auto-deploy at all times, while also allowing for manual deploy. Auto-only mode prevents manual deploy, but has shorter re-deploy timers. Manual-only mode is vanilla PD2 deploy style.",
+	"Gilza_bipod_behaviour_choise_1": "Combined (Default)",
+	"Gilza_bipod_behaviour_choise_2": "Auto only",
+	"Gilza_bipod_behaviour_choise_3": "Manual only",
 	
 	"Gilza_melee_header": "----- Melee -----",
 	"Gilza_melee_toggle_mode_keybind": "Melee toggle Keybind",
