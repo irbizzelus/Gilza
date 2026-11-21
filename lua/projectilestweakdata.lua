@@ -1,4 +1,7 @@
--- spoof high velocity grenades so we dont send incorrect indexes to the host and start throwing hand grenades from our launchers
+-- swap high velocity grenade indexes so that we dont send incorrect ones to a vanilla host, making us throw hand grenades from the launcher
+-- while hosting index is only used to tell clients what projectile was fired while the actual id is used for velocity calculations, and explosion is also host sided
+-- the only desync with vanilla players is that the projectile itself from client's POV would have standard velocity and would land before the explosion, but its not that eye catchy
+-- the way vanilla proj sync is setup is unironically perfect for this HV implementation ngl
 Hooks:OverrideFunction(BlackMarketTweakData, "get_index_from_projectile_id", function (self, projectile_id)
 	local Gilza_projectiles = {
 		launcher_velocity = "launcher_frag",
@@ -10,7 +13,9 @@ Hooks:OverrideFunction(BlackMarketTweakData, "get_index_from_projectile_id", fun
 	}
 	
 	if Gilza_projectiles[projectile_id] then
-		projectile_id = Gilza_projectiles[projectile_id]
+		if Network:is_server() or (Network:is_client() and not Gilza.peers_with_mod[1]) then
+			projectile_id = Gilza_projectiles[projectile_id]
+		end
 	end
 	
 	-- base game code

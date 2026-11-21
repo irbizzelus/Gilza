@@ -728,8 +728,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					bm_wpn_fps_upg_100_smg_ap_kit = "9x19mm Pst gzh",
 					-- GL section
 					bm_wp_upg_a_grenade_launcher_velocity = "High Velocity Round",
-					bm_wp_upg_a_grenade_launcher_velocity_desc = "Fragmentation grenade with tripled projectile velocity. Reduces ammo pick up by 20%.\n\nNote: only works if you are the lobby host, otherwise acts like a normal grenade with normal ammo pick up.",
-					bm_wp_upg_a_underbarrel_velocity_frag_desc = "Fragmentation round with tripled projectile velocity. Max damage: 1300. Reduces underbarrel ammo pick up by 20%.\n\nNote: only works if you are the lobby host, otherwise acts like a normal frag round with normal ammo pick up.",
+					bm_wp_upg_a_grenade_launcher_velocity_desc = "Fragmentation grenade with tripled projectile velocity. Reduces ammo pick up by 20%.\n\nNote: only works if you are the lobby host, or if lobby host also has Gilza installed. Otherwise acts like a normal grenade with standard ammo pick up.",
+					bm_wp_upg_a_underbarrel_velocity_frag_desc = "Fragmentation round with tripled projectile velocity. Max damage: 1300. Reduces underbarrel ammo pick up by 20%.\n\nNote: only works if you are the lobby host, or if lobby host also has Gilza installed. Otherwise acts like a normal frag round with standard ammo pick up.",
 					bm_menu_mag_limiter = "Mag Limiter",
 					bm_menu_mag_limiter_plural = "Mag Limiters",
 					bm_wp_wpn_fps_gre_ms3gl_ml_double_round = "2 round limit",
@@ -885,6 +885,11 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				Gilza_LMG_STEELSIGHTS_warning_str = "\"LMG Steelsights\" mod detected - please uninstall it to avoid issues while running Gilza.",
 				-- armor based ammo pick up description
 				bm_menu_armor_pickup_desc = "Ammo and throwables pick up rate: $amount;",
+				-- peer 2 peer sync messages
+				Gilza_nofify_host_has_gilza = " (host) also has Gilza installed: high velocity grenades will function correctly in this lobby!",
+				Gilza_nofify_peer_equipped_gilza_deck_brawler = " swapped to Gilza's \"Brawler\" perk deck. Stay close to them to reduce your chances of being targeted by enemies!",
+				Gilza_nofify_peer_equipped_gilza_deck_junkie = " swapped to Gilza's \"Speed Junkie\" perk deck. Good luck catching them!",
+				Gilza_nofify_peer_equipped_gilza_deck_guardian = " swapped to Gilza's \"Guardian\" perk deck. Where-ever they setup should be a safer area for your team, but don't forget to cover them whenever they change their position!",
 				-- VHUD compatibility with burst warning
 				Gilza_vhud_burst_warning_str = "It seems like you have \"Burst Fire\" setting enabled in VanillaHUD. Please disable it for Gilza's burst fire feature to work correctly.\n\nYou can do so in Options->Mod options->VanillaHUD Plus Settings->Equipment Tweaks->Enable Burst Fire.",
 				-- VHUD compatibility for buffinfo
@@ -1632,8 +1637,8 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 					bm_wpn_fps_upg_100_smg_ap_kit = "9x19мм Пст гж",
 					-- GL section
 					bm_wp_upg_a_grenade_launcher_velocity = "Высокоскоростной снаряд",
-					bm_wp_upg_a_grenade_launcher_velocity_desc = "Разрывная граната с утроенной скоростью полета снаряда. Подбор боеприпасов уменьшен на 20%.\n\nПометка: работает только если вы лидер лобби, в противном случае будет работать как обычная граната со стандартным подбором боеприпасов.",
-					bm_wp_upg_a_underbarrel_velocity_frag_desc = "Разрывная граната с утроенной скоростью полета снаряда. Максимальный урон: 1300. Подбор боеприпасов для подствольного гранатомета уменьшен на 20%.\n\nПометка: работает только если вы лидер лобби, в противном случае будет работать как обычная граната со стандартным подбором боеприпасов.",
+					bm_wp_upg_a_grenade_launcher_velocity_desc = "Разрывная граната с утроенной скоростью полета снаряда. Подбор боеприпасов уменьшен на 20%.\n\nПометка: работает только если вы лидер лобби, или если у лидера лобби также установленна Gilza. В противном случае будет работать как обычная граната со стандартным подбором боеприпасов.",
+					bm_wp_upg_a_underbarrel_velocity_frag_desc = "Разрывная граната с утроенной скоростью полета снаряда. Максимальный урон: 1300. Подбор боеприпасов для подствольного гранатомета уменьшен на 20%.\n\nПометка: работает только если вы лидер лобби, или если у лидера лобби также установленна Gilza. В противном случае будет работать как обычная граната со стандартным подбором боеприпасов.",
 					bm_menu_mag_limiter = "Ограничитель",
 					bm_menu_mag_limiter_plural = "Ограничители",
 					bm_wp_wpn_fps_gre_ms3gl_ml_double_round = "Двух-зарядный",
@@ -1786,6 +1791,11 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				Gilza_LMG_STEELSIGHTS_warning_str = "Был найден мод \"LMG Steelsights\" - пожалуйста, удалите его дабы мод Gilza нормально работал.",
 				-- armor based ammo pick up description
 				bm_menu_armor_pickup_desc = "Множитель подбора боезапаса и метательного оружия: $amount;",
+				-- peer 2 peer sync messages
+				Gilza_nofify_host_has_gilza = " (хост) также имеет мод Gilza: высокоскоростные снаряды гранатометов будут работать корректно в данном лобби!",
+				Gilza_nofify_peer_equipped_gilza_deck_brawler = " переключился(-ась) на набор перков \"Дебошир\" из мода Gilza. Находясь рядом с ними шансы что враги будут стрелять по вам будут уменьшены!",
+				Gilza_nofify_peer_equipped_gilza_deck_junkie = " переключился(-ась) на набор перков \"Под Спидами\" из мода Gilza. Удачи их поймать!",
+				Gilza_nofify_peer_equipped_gilza_deck_guardian = " переключился(-ась) на набор перков \"Страж\" из мода Gilza. Место которое они охраняют должно быть безопаснее для вашей команды, но не забывайте прикрывать их когда они меняют позицию!",
 				-- VHUD compatibility with burst warning
 				Gilza_vhud_burst_warning_str = "У вас включена опция \"Стрельба Очередями\" в моде VanillaHUD. Пожалуйста, выключите данную опцию дабы стрельба очередями мода Gilza работала без проблем.\n\nВы можете сделать это перейдя в Настройки->Настройки модов->VanillaHUD Plus Настройки->Настройки снаряжения->Включить стрельбу очередями.",
 				-- VHUD compatibility for buffinfo

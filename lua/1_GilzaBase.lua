@@ -72,7 +72,9 @@ _G.Gilza = {
 	weapon_shot_id = 0,
 	zoomleveloffset = {[1] = 0, [2] = 0},
 	intimidated_enemies = {},
-	customWeaponFactoryIDs = {}
+	customWeaponFactoryIDs = {},
+	peers_with_mod = {[1] = false, [2] = false, [3] = false, [4] = false},
+	peers_with_Gilza_perks = {[1] = false, [2] = false, [3] = false, [4] = false}
 }
 
 -- Add a posthook to beardlib's WeaponModule init to grab factory ids of custom weapons directly from the source,

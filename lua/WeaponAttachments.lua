@@ -202,7 +202,7 @@ Hooks:PostHook(WeaponFactoryTweakData, "init", "Gilza_weapon_attachments_data", 
 		self.parts.wpn_fps_upg_a_underbarrel_velocity_frag.name_id = "bm_wp_upg_a_grenade_launcher_velocity"
 		self.parts.wpn_fps_upg_a_underbarrel_velocity_frag.sub_type = "ammo_explosive"
 		self.parts.wpn_fps_upg_a_underbarrel_velocity_frag.desc_id = "bm_wp_upg_a_underbarrel_velocity_frag_desc"
-		self.parts.wpn_fps_upg_a_underbarrel_velocity_frag.custom_stats = {launcher_grenade = "underbarrel_velocity_frag", ammo_pickup_min_mul = 0.799986, ammo_pickup_max_mul = 0.799986}
+		self.parts.wpn_fps_upg_a_underbarrel_velocity_frag.custom_stats = {launcher_grenade = "underbarrel_velocity_frag", ammo_pickup_min_mul = 0.8, ammo_pickup_max_mul = 0.8}
 		local weapons_withGL = {
 			"wpn_fps_ass_groza",
 			"wpn_fps_ass_contraband"

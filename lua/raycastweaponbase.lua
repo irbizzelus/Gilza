@@ -42,7 +42,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "replenish", function (self)
 	self:update_damage()
 end)
 
--- ammo pickup - brawler, saw. all High velocity GL rounds will use standard ammo pick up if user is a network client
+-- ammo pickup - brawler, saw, etc; High velocity GL rounds use standard ammo pick up if user is a network client without a Gilza host
 Hooks:OverrideFunction(RaycastWeaponBase, "add_ammo", function (self, ratio, add_amount_override)
 	local mul_1 = managers.player:upgrade_value("player", "pick_up_ammo_multiplier", 1) - 1
 	local mul_2 = managers.player:upgrade_value("player", "pick_up_ammo_multiplier_2", 1) - 1
@@ -66,29 +66,21 @@ Hooks:OverrideFunction(RaycastWeaponBase, "add_ammo", function (self, ratio, add
 			-- if we have custom ammo pick up
 			if ammo_base._ammo_data and (ammo_base._ammo_data.ammo_pickup_min_mul or ammo_base._ammo_data.ammo_pickup_max_mul) then
 				local HV_launchers = {
-					contraband_m203 = true,
-					groza_underbarrel = true,
-					gre_m79 = true,
-					m32 = true,
-					china = true,
-					slap = true
+					contraband_m203 = "underbarrel_velocity_frag",
+					groza_underbarrel = "underbarrel_velocity_frag",
+					gre_m79 = "launcher_velocity",
+					m32 = "launcher_velocity",
+					china = "launcher_velocity",
+					slap = "launcher_velocity"
 				}
-				-- and used weapon is one of the launchers that has high velocity rounds
-				if ammo_base._name_id and HV_launchers[ammo_base._name_id] then
+				-- and used weapon is a launcher that has high velocity rounds equipped
+				if ammo_base._name_id and HV_launchers[ammo_base._name_id] and HV_launchers[ammo_base._name_id] == ammo_base._ammo_data.launcher_grenade then
 					-- and we are a client, remove ammo pick up penalty because grenade velocity change would not work
-					if Network and Network:is_client() then
-						-- underbarrels
-						if ammo_base._ammo_data.ammo_pickup_min_mul == tweak_data.weapon.factory.parts.wpn_fps_upg_a_underbarrel_velocity_frag.custom_stats.ammo_pickup_min_mul then
-							ammo_base._ammo_data.ammo_pickup_min_mul = 1
-							ammo_base._ammo_data.ammo_pickup_max_mul = 1
-						-- other GL's
-						elseif ammo_base._ammo_data.ammo_pickup_min_mul == tweak_data.weapon.factory.parts.wpn_fps_upg_a_grenade_launcher_velocity.custom_stats.ammo_pickup_min_mul then
-							ammo_base._ammo_data.ammo_pickup_min_mul = 1
-							ammo_base._ammo_data.ammo_pickup_max_mul = 1
-						end
+					if Network:is_client() and not Gilza.peers_with_mod[1] then
+						ammo_base._ammo_data.ammo_pickup_min_mul = 1
+						ammo_base._ammo_data.ammo_pickup_max_mul = 1
 					end
 				end
-				-- P.S. techincally could break if another ammo has identical ammo pick up stat, but we can just make sure that never happens by tweaking attachment's data :)
 				min_pickup = min_pickup * (ammo_base._ammo_data.ammo_pickup_min_mul or 1)
 				max_pickup = max_pickup * (ammo_base._ammo_data.ammo_pickup_max_mul or 1)
 			end

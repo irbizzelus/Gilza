@@ -1,25 +1,45 @@
 -- Spoof our custom perk decks if desired
 local orig_skilltreemanager_pack_string = Hooks:GetFunction(SkillTreeManager, "pack_to_string")
 Hooks:OverrideFunction(SkillTreeManager, "pack_to_string", function (self)
-	if not Gilza.custom_specialization_indexes or not Gilza.settings.spoof_custom_perks then
+	
+	-- failsafe
+	if not Gilza.custom_specialization_indexes then
+		return orig_skilltreemanager_pack_string(self)
+	end
+	
+	-- figure out what we have and prepare spoof ids
+	local current_specialization = self:digest_value(self._global.specializations.current_specialization, false, 1)
+	local spoof_as = 3 -- armorer
+	local deck_sync_str = ""
+	if current_specialization == Gilza.custom_specialization_indexes.brawler then
+		deck_sync_str = "brawler"
+	elseif current_specialization == Gilza.custom_specialization_indexes.junkie then
+		deck_sync_str = "junkie"
+		spoof_as = 6 -- crook
+	elseif current_specialization == Gilza.custom_specialization_indexes.guardian then
+		deck_sync_str = "guardian"
+		spoof_as = 2 -- muscle
+	end
+	
+	-- gilza to gilza player sync, always happens
+	for i=1, 4 do
+		if Gilza.peers_with_mod[i] and not Gilza.peers_with_mod[managers.network:session():local_peer():id()] then
+			LuaNetworking:SendToPeer(i, "Gilza_peer_sync", "Equipped_custom_deck_"..tostring(deck_sync_str))
+		end
+	end
+	
+	-- if spoof is disabled return standard string
+	if not Gilza.settings.spoof_custom_perks then
 		return orig_skilltreemanager_pack_string(self)
 	end
 
-	local current_specialization = self:digest_value(self._global.specializations.current_specialization, false, 1)
+	-- if non-gilza or vanilla deck is used return standard string
 	if current_specialization ~= Gilza.custom_specialization_indexes.brawler and current_specialization ~= Gilza.custom_specialization_indexes.junkie and current_specialization ~= Gilza.custom_specialization_indexes.guardian then
 		return orig_skilltreemanager_pack_string(self)
 	end
 	
-	if current_specialization == Gilza.custom_specialization_indexes.brawler then
-		current_specialization = 3
-	elseif current_specialization == Gilza.custom_specialization_indexes.junkie then
-		current_specialization = 6
-	elseif current_specialization == Gilza.custom_specialization_indexes.guardian then
-		current_specialization = 2
-	end
-
+	-- otherwise spoof
 	local packed_string = ""
-
 	for tree, data in ipairs(tweak_data.skilltree.trees) do
 		local points, num_skills = managers.skilltree:get_tree_progress_new(tree)
 		packed_string = packed_string .. tostring(points)
@@ -29,7 +49,7 @@ Hooks:OverrideFunction(SkillTreeManager, "pack_to_string", function (self)
 		end
 	end
 
-	local tree_data = self._global.specializations[current_specialization]
+	local tree_data = self._global.specializations[spoof_as]
 
 	if tree_data then
 		local tier_data = tree_data.tiers
@@ -37,9 +57,9 @@ Hooks:OverrideFunction(SkillTreeManager, "pack_to_string", function (self)
 		if tier_data then
 			local current_tier = self:digest_value(tier_data.current_tier, false)
 			if current_tier ~= 9 then
-				current_tier = 9
+				current_tier = 9 -- always spoof it to be maxed out. ngl idk why i added this
 			end
-			packed_string = packed_string .. "-" .. tostring(current_specialization) .. "_" .. tostring(current_tier)
+			packed_string = packed_string .. "-" .. tostring(spoof_as) .. "_" .. tostring(current_tier)
 		end
 	end
 
