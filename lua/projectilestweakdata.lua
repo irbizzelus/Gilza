@@ -3,6 +3,7 @@
 -- the only desync with vanilla players is that the projectile itself from client's POV would have standard velocity and would land before the explosion, but its not that eye catchy
 -- the way vanilla proj sync is setup is unironically perfect for this HV implementation ngl
 Hooks:OverrideFunction(BlackMarketTweakData, "get_index_from_projectile_id", function (self, projectile_id)
+	
 	local Gilza_projectiles = {
 		launcher_velocity = "launcher_frag",
 		launcher_velocity_china = "launcher_frag_china",
@@ -46,4 +47,12 @@ Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "Gilza_post_BlackMarke
 	self.projectiles.underbarrel_velocity_frag_groza = deep_clone(self.projectiles.underbarrel_velocity_frag)
 	self.projectiles.underbarrel_velocity_frag_groza.unit = "units/pd2_dlc_sawp/weapons/wpn_launcher_electric/wpn_underbarrel_m203_groza"
 	self.projectiles.underbarrel_velocity_frag_groza.weapon_id = "groza"
+	
+	-- custom projectile indexes used by Gilza clients to send throw requests to host if they got Gilza installed. 1st number is based on Gilza's modworkshop id :D
+	self._projectiles_index[39854] = "launcher_velocity"
+	self._projectiles_index[39855] = "launcher_velocity_china"
+	self._projectiles_index[39856] = "launcher_velocity_m32"
+	self._projectiles_index[39857] = "launcher_velocity_slap"
+	self._projectiles_index[39858] = "underbarrel_velocity_frag"
+	self._projectiles_index[39859] = "underbarrel_velocity_frag_groza"
 end)

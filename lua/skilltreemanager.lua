@@ -9,9 +9,10 @@ Hooks:OverrideFunction(SkillTreeManager, "pack_to_string", function (self)
 	
 	-- figure out what we have and prepare spoof ids
 	local current_specialization = self:digest_value(self._global.specializations.current_specialization, false, 1)
-	local spoof_as = 3 -- armorer
+	local spoof_as = -1
 	local deck_sync_str = ""
 	if current_specialization == Gilza.custom_specialization_indexes.brawler then
+		spoof_as = 3 -- armorer
 		deck_sync_str = "brawler"
 	elseif current_specialization == Gilza.custom_specialization_indexes.junkie then
 		deck_sync_str = "junkie"
@@ -22,9 +23,11 @@ Hooks:OverrideFunction(SkillTreeManager, "pack_to_string", function (self)
 	end
 	
 	-- gilza to gilza player sync, always happens
-	for i=1, 4 do
-		if Gilza.peers_with_mod[i] and not Gilza.peers_with_mod[managers.network:session():local_peer():id()] then
-			LuaNetworking:SendToPeer(i, "Gilza_peer_sync", "Equipped_custom_deck_"..tostring(deck_sync_str))
+	if spoof_as > 0 then
+		for i=1, 4 do
+			if Gilza.peers_with_mod[i] and not Gilza.peers_with_mod[managers.network:session():local_peer():id()] then
+				LuaNetworking:SendToPeer(i, "Gilza_peer_sync", "Equipped_custom_deck_"..tostring(deck_sync_str))
+			end
 		end
 	end
 	
