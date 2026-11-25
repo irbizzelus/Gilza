@@ -16,6 +16,18 @@ Hooks:OverrideFunction(BlackMarketTweakData, "get_index_from_projectile_id", fun
 	if Gilza_projectiles[projectile_id] then
 		if Network:is_server() or (Network:is_client() and not Gilza.peers_with_mod[1]) then
 			projectile_id = Gilza_projectiles[projectile_id]
+		else
+			local Gilza_projectile_indexes = {
+				launcher_velocity = 127,
+				launcher_velocity_china = 126,
+				launcher_velocity_m32 = 125,
+				launcher_velocity_slap = 124,
+				underbarrel_velocity_frag = 123,
+				underbarrel_velocity_frag_groza = 122
+			}
+			if Gilza_projectile_indexes[projectile_id] then
+				return Gilza_projectile_indexes[projectile_id]
+			end
 		end
 	end
 	
@@ -48,11 +60,11 @@ Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "Gilza_post_BlackMarke
 	self.projectiles.underbarrel_velocity_frag_groza.unit = "units/pd2_dlc_sawp/weapons/wpn_launcher_electric/wpn_underbarrel_m203_groza"
 	self.projectiles.underbarrel_velocity_frag_groza.weapon_id = "groza"
 	
-	-- custom projectile indexes used by Gilza clients to send throw requests to host if they got Gilza installed. 1st number is based on Gilza's modworkshop id :D
-	self._projectiles_index[39854] = "launcher_velocity"
-	self._projectiles_index[39855] = "launcher_velocity_china"
-	self._projectiles_index[39856] = "launcher_velocity_m32"
-	self._projectiles_index[39857] = "launcher_velocity_slap"
-	self._projectiles_index[39858] = "underbarrel_velocity_frag"
-	self._projectiles_index[39859] = "underbarrel_velocity_frag_groza"
+	-- custom projectile indexes used by Gilza clients to send throw requests to host if they got Gilza installed
+	self._projectiles_index[127] = "launcher_velocity"
+	self._projectiles_index[126] = "launcher_velocity_china"
+	self._projectiles_index[125] = "launcher_velocity_m32"
+	self._projectiles_index[124] = "launcher_velocity_slap"
+	self._projectiles_index[123] = "underbarrel_velocity_frag"
+	self._projectiles_index[122] = "underbarrel_velocity_frag_groza"
 end)
