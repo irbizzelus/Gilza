@@ -55,8 +55,7 @@ Hooks:Add("NetworkReceivedData", "Gilza_NetworkReceivedData", function(sender, m
 			junkie = true,
 			guardian = true
 		}
-		if allowed_decks[deck_str] and not (Gilza.peers_with_mod[sender].used_deck == deck_str) then
-			
+		if allowed_decks[deck_str] then
 			-- anti notification spam
 			local function notify_self(peer_id,deck)
 				Gilza.peers_with_mod[peer_id].deck_sync_timer = Application:time() + 5
@@ -107,6 +106,9 @@ end)
 Hooks:PreHook(BaseNetworkSession, "load", "Gilza_BaseNetworkSession_post_load", function(self, data)
 	if Gilza and data.Gilza_peers_table then
 		Gilza.peers_with_mod = deep_clone(data.Gilza_peers_table)
+		for i=1,4 do
+			Gilza.peers_with_mod[i].deck_sync_timer = 10 -- since application:timer is reset on load, reset timers for notification spam preventions. set to >10 in case of slow load times
+		end
 	end
 end)
 Hooks:PostHook(BaseNetworkSession, "save", "Gilza_BaseNetworkSession_post_save", function(self, data)
