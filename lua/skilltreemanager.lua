@@ -1,4 +1,5 @@
 -- Spoof our custom perk decks if desired
+local last_sent_perk_sync = "vanilla"
 local orig_skilltreemanager_pack_string = Hooks:GetFunction(SkillTreeManager, "pack_to_string")
 Hooks:OverrideFunction(SkillTreeManager, "pack_to_string", function (self)
 	
@@ -9,8 +10,8 @@ Hooks:OverrideFunction(SkillTreeManager, "pack_to_string", function (self)
 	
 	-- figure out what we have and prepare spoof ids
 	local current_specialization = self:digest_value(self._global.specializations.current_specialization, false, 1)
-	local spoof_as = -1
-	local deck_sync_str = ""
+	local spoof_as = current_specialization
+	local deck_sync_str = "vanilla"
 	if current_specialization == Gilza.custom_specialization_indexes.brawler then
 		spoof_as = 3 -- armorer
 		deck_sync_str = "brawler"
@@ -23,10 +24,11 @@ Hooks:OverrideFunction(SkillTreeManager, "pack_to_string", function (self)
 	end
 	
 	-- gilza to gilza player sync, always happens
-	if spoof_as > 0 then
+	if last_sent_perk_sync ~= deck_sync_str then
+		last_sent_perk_sync = deck_sync_str
 		for i=1, 4 do
-			if Gilza.peers_with_mod[i] and not Gilza.peers_with_mod[managers.network:session():local_peer():id()] then
-				LuaNetworking:SendToPeer(i, "Gilza_peer_sync", "Equipped_custom_deck_"..tostring(deck_sync_str))
+			if Gilza.peers_with_mod[i].has_Gilza and not (managers.network:session():local_peer():id() == i) then
+				LuaNetworking:SendToPeer(i, "Gilza_peer_sync", "Equipped_perk_deck_"..tostring(deck_sync_str))
 			end
 		end
 	end

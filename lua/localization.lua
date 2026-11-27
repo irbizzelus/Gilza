@@ -887,6 +887,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				bm_menu_armor_pickup_desc = "Ammo and throwables pick up rate: $amount;",
 				-- peer 2 peer sync messages
 				Gilza_nofify_host_has_gilza = " (host) also has Gilza installed: high velocity grenades will function correctly in this lobby!",
+				Gilza_nofify_peer_equipped_gilza_deck_vanilla = " swapped back to one of the standard perk decks.",
 				Gilza_nofify_peer_equipped_gilza_deck_brawler = " swapped to Gilza's \"Brawler\" perk deck. Stay close to them to reduce your chances of being targeted by enemies!",
 				Gilza_nofify_peer_equipped_gilza_deck_junkie = " swapped to Gilza's \"Speed Junkie\" perk deck. Good luck catching them!",
 				Gilza_nofify_peer_equipped_gilza_deck_guardian = " swapped to Gilza's \"Guardian\" perk deck. Where-ever they setup should be a safer area for your team, but don't forget to cover them whenever they change their position!",
@@ -1793,6 +1794,7 @@ Hooks:Add('LocalizationManagerPostInit', 'Gilza_localizations', function(loc)
 				bm_menu_armor_pickup_desc = "Множитель подбора боезапаса и метательного оружия: $amount;",
 				-- peer 2 peer sync messages
 				Gilza_nofify_host_has_gilza = " (хост) также имеет мод Gilza: высокоскоростные снаряды гранатометов будут работать корректно в данном лобби!",
+				Gilza_nofify_peer_equipped_gilza_deck_vanilla = " переключился(-ась) на один из стандартных наборов перков.",
 				Gilza_nofify_peer_equipped_gilza_deck_brawler = " переключился(-ась) на набор перков \"Дебошир\" из мода Gilza. Находясь рядом с ними шансы что враги будут стрелять по вам будут уменьшены!",
 				Gilza_nofify_peer_equipped_gilza_deck_junkie = " переключился(-ась) на набор перков \"Под Спидами\" из мода Gilza. Удачи их поймать!",
 				Gilza_nofify_peer_equipped_gilza_deck_guardian = " переключился(-ась) на набор перков \"Страж\" из мода Gilza. Место которое они охраняют должно быть безопаснее для вашей команды, но не забывайте прикрывать их когда они меняют позицию!",

@@ -73,9 +73,16 @@ _G.Gilza = {
 	zoomleveloffset = {[1] = 0, [2] = 0},
 	intimidated_enemies = {},
 	customWeaponFactoryIDs = {},
-	peers_with_mod = {[1] = false, [2] = false, [3] = false, [4] = false},
-	peers_with_Gilza_perks = {[1] = false, [2] = false, [3] = false, [4] = false}
+	peers_with_mod = {}
 }
+
+for i=1,4 do
+	Gilza.peers_with_mod[i] = {
+		has_Gilza = false,
+		used_deck = "vanilla",
+		deck_sync_timer = 0
+	}
+end
 
 -- Add a posthook to beardlib's WeaponModule init to grab factory ids of custom weapons directly from the source,
 -- because they are needed during factory tweak data load. Normaly you can get factory id from normal id only after upgradestweak file is loaded,

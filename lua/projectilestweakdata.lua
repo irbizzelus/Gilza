@@ -1,7 +1,7 @@
 -- swap high velocity grenade indexes so that we dont send incorrect ones to a vanilla host, making us throw hand grenades from the launcher
--- while hosting index is only used to tell clients what projectile was fired while the actual id is used for velocity calculations, and explosion is also host sided
--- the only desync with vanilla players is that the projectile itself from client's POV would have standard velocity and would land before the explosion, but its not that eye catchy
--- the way vanilla proj sync is setup is unironically perfect for this HV implementation ngl
+-- while hosting index is only used to tell clients what projectile was fired while the actual id is used for velocity calculations, and explosion is also host controlled
+-- the only desync with vanilla players is that the projectile itself from client's POV might(?) have standard velocity and would land before the explosion, but it prob wouldn't be that eye catchy
+-- the way vanilla proj sync is setup is almost perfect for this HV implementation ngl
 Hooks:OverrideFunction(BlackMarketTweakData, "get_index_from_projectile_id", function (self, projectile_id)
 	
 	local Gilza_projectiles = {
@@ -14,7 +14,7 @@ Hooks:OverrideFunction(BlackMarketTweakData, "get_index_from_projectile_id", fun
 	}
 	
 	if Gilza_projectiles[projectile_id] then
-		if Network:is_server() or (Network:is_client() and not Gilza.peers_with_mod[1]) then
+		if Network:is_server() or (Network:is_client() and not Gilza.peers_with_mod[1].has_Gilza) then
 			projectile_id = Gilza_projectiles[projectile_id]
 		else
 			local Gilza_projectile_indexes = {
@@ -60,7 +60,9 @@ Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "Gilza_post_BlackMarke
 	self.projectiles.underbarrel_velocity_frag_groza.unit = "units/pd2_dlc_sawp/weapons/wpn_launcher_electric/wpn_underbarrel_m203_groza"
 	self.projectiles.underbarrel_velocity_frag_groza.weapon_id = "groza"
 	
-	-- custom projectile indexes used by Gilza clients to send throw requests to host if they got Gilza installed
+	-- custom projectile indexes used by Gilza clients to send throw requests to hosts who also got Gilza installed
+	-- the reason why id's are setup from 127 is because during client->host request sending the client seems to always limit the id to a number between 0 and 128
+	-- i cba to fix that partiular part, so let's just hope that sidetrack don't add a fuck ton of new projectiles in the near future. currently vanilla occupies 80/128 slots
 	self._projectiles_index[127] = "launcher_velocity"
 	self._projectiles_index[126] = "launcher_velocity_china"
 	self._projectiles_index[125] = "launcher_velocity_m32"

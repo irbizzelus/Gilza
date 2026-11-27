@@ -76,7 +76,7 @@ Hooks:OverrideFunction(RaycastWeaponBase, "add_ammo", function (self, ratio, add
 				-- and used weapon is a launcher that has high velocity rounds equipped
 				if ammo_base._name_id and HV_launchers[ammo_base._name_id] and HV_launchers[ammo_base._name_id] == ammo_base._ammo_data.launcher_grenade then
 					-- and we are a client, remove ammo pick up penalty because grenade velocity change would not work
-					if Network:is_client() and not Gilza.peers_with_mod[1] then
+					if Network:is_client() and not Gilza.peers_with_mod[1].has_Gilza then
 						ammo_base._ammo_data.ammo_pickup_min_mul = 1
 						ammo_base._ammo_data.ammo_pickup_max_mul = 1
 					end
